@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { getUserPlanId } from "@/lib/plans";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { OnboardingChecklist, type OnboardingStepId } from "@/components/onboarding-checklist";
 import {
   FileText, Briefcase, Users, Building2,
   ArrowRight, Plus, Download, TrendingUp,
@@ -37,9 +38,25 @@ export default async function HomePage() {
 
   const firstName = user?.name?.split(" ")[0] || "there";
 
+  // Determine completed onboarding steps from server data
+  const completedOnboardingSteps: OnboardingStepId[] = [];
+  if (plan !== "none") completedOnboardingSteps.push("activate_plan");
+  if (resumeCount > 0) completedOnboardingSteps.push("create_resume");
+  // "analyze_jd" — we approximate: if user has any resume, they likely tried it (or we leave it until they come back)
+  if (appCount > 0) completedOnboardingSteps.push("track_application");
+  if (contactCount > 0) completedOnboardingSteps.push("add_contact");
+
+  // Only show onboarding when user still has things to complete (not all 5 done)
+  const showOnboarding = completedOnboardingSteps.length < 5;
+
   return (
     <DashboardShell email={session.email} pageTitle="Dashboard">
       <div className="space-y-8">
+        {/* ── Onboarding checklist ── */}
+        {showOnboarding && (
+          <OnboardingChecklist completedSteps={completedOnboardingSteps} />
+        )}
+
         {plan === "none" ? (
           <div className="flex flex-col gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
