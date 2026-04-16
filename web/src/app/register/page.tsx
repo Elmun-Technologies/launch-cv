@@ -3,11 +3,13 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowRight, Gift } from "lucide-react";
+import { AuthLayout } from "@/components/auth-layout";
 
 function RegisterPageInner() {
   const sp = useSearchParams();
   const referralCode = sp.get("ref")?.trim() || "";
+  const next = sp.get("next") || "/dashboard";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +19,8 @@ function RegisterPageInner() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true); setError(null);
+    setLoading(true);
+    setError(null);
     const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -29,55 +32,121 @@ function RegisterPageInner() {
       }),
     });
     setLoading(false);
-    if (!res.ok) { const j = await res.json().catch(() => ({})); setError(j.error ?? "Error"); return; }
-    window.location.href = "/dashboard";
+    if (!res.ok) {
+      const j = await res.json().catch(() => ({}));
+      setError(j.error ?? "Something went wrong. Please try again.");
+      return;
+    }
+    window.location.href = next;
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#FAFAFA] px-4 py-16">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#7C5CFC] text-sm font-bold text-white">L</span>
+    <AuthLayout mode="register">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="font-display text-[28px] font-bold tracking-tight text-[#0F172A]">Create your account</h1>
+        <p className="mt-2 font-body text-[14px] text-[#64748B]">
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold text-[#1A56DB] hover:underline">
+            Sign in
           </Link>
-          <h1 className="mt-4 text-[28px] font-bold text-gray-900">Create account</h1>
-          <p className="mt-1 text-[13px] text-gray-500">
-            Already have an account? <Link className="font-medium text-[#7C5CFC] hover:underline" href="/login">Sign in</Link>
-          </p>
-          {referralCode ? (
-            <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-violet-50 px-3 py-1 text-[11px] font-semibold text-[#7C5CFC]">
-              Referral code applied: {referralCode}
+        </p>
+        {referralCode ? (
+          <div className="mt-4 flex items-center gap-2 rounded-xl bg-violet-50 px-4 py-2.5">
+            <Gift className="h-4 w-4 shrink-0 text-violet-600" />
+            <p className="font-body text-[12px] font-semibold text-violet-700">
+              Referral code applied: <span className="font-bold">{referralCode}</span>
             </p>
-          ) : null}
-        </div>
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <form onSubmit={onSubmit} className="space-y-5">
-            <div>
-              <label className="text-[13px] font-semibold text-gray-900">Name (optional)</label>
-              <input className="soha-input mt-1.5" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ali" />
-            </div>
-            <div>
-              <label className="text-[13px] font-semibold text-gray-900">Email</label>
-              <input type="email" required className="soha-input mt-1.5" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@email.com" />
-            </div>
-            <div>
-              <label className="text-[13px] font-semibold text-gray-900">Password (min 8)</label>
-              <div className="relative mt-1.5">
-                <input type={showPw ? "text" : "password"} required minLength={8} className="soha-input pr-10" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="button" tabIndex={-1} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onClick={() => setShowPw((s) => !s)}>
-                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-            {error ? <p className="text-[13px] text-red-600">{error}</p> : null}
-            <button type="submit" disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)]">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {loading ? "Please wait..." : "Sign up"}
-            </button>
-          </form>
-        </div>
+          </div>
+        ) : null}
       </div>
-    </main>
+
+      {/* Form */}
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">
+            Full name <span className="font-normal text-[#94A3B8]">(optional)</span>
+          </label>
+          <input
+            className="soha-input"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Alex Johnson"
+            autoComplete="name"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">Email address</label>
+          <input
+            type="email"
+            required
+            className="soha-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+          />
+        </div>
+
+        <div>
+          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">
+            Password <span className="font-normal text-[#94A3B8]">(min 8 characters)</span>
+          </label>
+          <div className="relative">
+            <input
+              type={showPw ? "text" : "password"}
+              required
+              minLength={8}
+              className="soha-input pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+            />
+            <button
+              type="button"
+              tabIndex={-1}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#64748B]"
+              onClick={() => setShowPw((s) => !s)}
+            >
+              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+        </div>
+
+        {error ? (
+          <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+            <p className="font-body text-[13px] text-red-600">{error}</p>
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A56DB] py-3 font-body text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 disabled:opacity-60"
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <ArrowRight className="h-4 w-4" />
+          )}
+          {loading ? "Creating account…" : "Create account"}
+        </button>
+      </form>
+
+      {/* Footer note */}
+      <p className="mt-6 font-body text-[12px] leading-relaxed text-[#94A3B8]">
+        By creating an account you agree to our{" "}
+        <Link href="/legal/terms" className="underline underline-offset-2 hover:text-[#64748B]">
+          Terms of Service
+        </Link>{" "}
+        and{" "}
+        <Link href="/legal/privacy" className="underline underline-offset-2 hover:text-[#64748B]">
+          Privacy Policy
+        </Link>
+        .
+      </p>
+    </AuthLayout>
   );
 }
 
@@ -85,9 +154,9 @@ export default function RegisterPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-[#FAFAFA] px-4 py-16">
-          <Loader2 className="h-8 w-8 animate-spin text-[#7C5CFC]" aria-label="Loading" />
-        </main>
+        <div className="flex min-h-screen items-center justify-center bg-[#0F172A]">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        </div>
       }
     >
       <RegisterPageInner />

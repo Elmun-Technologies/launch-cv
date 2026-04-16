@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Eye, EyeOff } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { AuthLayout } from "@/components/auth-layout";
 
 export function LoginForm() {
   const sp = useSearchParams();
@@ -17,58 +18,119 @@ export function LoginForm() {
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true); setError(null); setNeedVerify(false);
-    const res = await fetch("/api/auth/login", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.trim(), password }) });
+    setLoading(true);
+    setError(null);
+    setNeedVerify(false);
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim(), password }),
+    });
     setLoading(false);
     if (!res.ok) {
       const j = await res.json().catch(() => ({}));
-      if (res.status === 403 && j.code === "email_not_verified") { setNeedVerify(true); setError(j.error ?? "Email not verified"); }
-      else setError(typeof j.error === "string" ? j.error : "Error");
+      if (res.status === 403 && j.code === "email_not_verified") {
+        setNeedVerify(true);
+        setError(j.error ?? "Email not verified");
+      } else {
+        setError(typeof j.error === "string" ? j.error : "Incorrect email or password.");
+      }
       return;
     }
     window.location.href = next;
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#FAFAFA] px-4 py-16">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-2">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#7C5CFC] text-sm font-bold text-white">L</span>
+    <AuthLayout mode="login">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="font-display text-[28px] font-bold tracking-tight text-[#0F172A]">Sign in to Launch CV</h1>
+        <p className="mt-2 font-body text-[14px] text-[#64748B]">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="font-semibold text-[#1A56DB] hover:underline">
+            Create one free
           </Link>
-          <h1 className="mt-4 text-[28px] font-bold text-gray-900">Sign in</h1>
-          <p className="mt-1 text-[13px] text-gray-500">
-            Don&apos;t have an account? <Link className="font-medium text-[#7C5CFC] hover:underline" href="/register">Sign up</Link>
-          </p>
+        </p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={onSubmit} className="space-y-4">
+        <div>
+          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">Email address</label>
+          <input
+            type="email"
+            required
+            className="soha-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            autoComplete="email"
+          />
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <form onSubmit={onSubmit} className="space-y-5">
-            <div>
-              <label className="text-[13px] font-semibold text-gray-900">Email</label>
-              <input type="email" required className="soha-input mt-1.5" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="name@email.com" />
-            </div>
-            <div>
-              <div className="flex items-center justify-between">
-                <label className="text-[13px] font-semibold text-gray-900">Password</label>
-                <Link className="text-[11px] text-gray-400 hover:text-[#7C5CFC]" href="/auth/forgot-password">Forgot password?</Link>
-              </div>
-              <div className="relative mt-1.5">
-                <input type={showPw ? "text" : "password"} required minLength={8} className="soha-input pr-10" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button type="button" tabIndex={-1} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" onClick={() => setShowPw((s) => !s)}>
-                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-            {error ? <p className="text-[13px] text-red-600">{error}</p> : null}
-            {needVerify ? <p className="text-[13px] text-amber-600"><Link className="font-medium underline" href="/auth/resend-verify">Resend verification email</Link></p> : null}
-            <button type="submit" disabled={loading} className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)]">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {loading ? "Please wait..." : "Sign in"}
+        <div>
+          <div className="mb-1.5 flex items-center justify-between">
+            <label className="font-body text-[13px] font-semibold text-[#334155]">Password</label>
+            <Link
+              href="/auth/forgot-password"
+              className="font-body text-[12px] text-[#64748B] transition hover:text-[#1A56DB]"
+            >
+              Forgot password?
+            </Link>
+          </div>
+          <div className="relative">
+            <input
+              type={showPw ? "text" : "password"}
+              required
+              minLength={8}
+              className="soha-input pr-10"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              tabIndex={-1}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#64748B]"
+              onClick={() => setShowPw((s) => !s)}
+            >
+              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
             </button>
-          </form>
+          </div>
         </div>
-      </div>
-    </main>
+
+        {error ? (
+          <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+            <p className="font-body text-[13px] text-red-600">{error}</p>
+            {needVerify ? (
+              <Link
+                href="/auth/resend-verify"
+                className="mt-1 block font-body text-[12px] font-semibold text-red-700 underline underline-offset-2"
+              >
+                Resend verification email →
+              </Link>
+            ) : null}
+          </div>
+        ) : null}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A56DB] py-3 font-body text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 disabled:opacity-60"
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <ArrowRight className="h-4 w-4" />
+          )}
+          {loading ? "Signing in…" : "Sign in"}
+        </button>
+      </form>
+
+      <p className="mt-6 font-body text-[12px] text-[#94A3B8]">
+        Secure sign-in. Your data is encrypted and never shared.
+      </p>
+    </AuthLayout>
   );
 }
