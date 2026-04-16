@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+defaults:
+  run:
+    working-directory: web
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    env:
+      AUTH_SECRET: ci-ci-ci-ci-ci-ci-ci-ci-ci-ci-ci-ci-12chars
+      DATABASE_URL: file:./prisma/ci.db
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - run: npm ci
+      - run: npx prisma db push && npx prisma generate
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright install chromium --with-deps
+      - run: npm run test:e2e

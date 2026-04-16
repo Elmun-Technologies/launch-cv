@@ -1,0 +1,555 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  min-height: 100%;
+  background-color: #f9fafb;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(124, 92, 252, 0.25);
+  color: #111827;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(156, 163, 175, 0.4); }
+::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.6); }
+
+/* ── Inputs ── */
+.soha-input {
+  display: block;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: #1a1a2e;
+  outline: none;
+  transition: all 0.2s;
+}
+.soha-input::placeholder { color: #b0b0b0; }
+.soha-input:hover { border-color: #e0e0e0; }
+.soha-input:focus { border-color: #7C5CFC; box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.08); }
+.soha-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.soha-select {
+  display: block;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+  padding: 0.625rem 2rem 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: #1a1a2e;
+  outline: none;
+  transition: all 0.2s;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%239ca3af%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22m4.427%206.427%203.396%203.396a.25.25%200%200%200%20.354%200l3.396-3.396A.25.25%200%200%200%2011.396%206H4.604a.25.25%200%200%200-.177.427Z%22%2F%3E%3C%2Fsvg%3E');
+  background-size: 16px;
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+}
+.soha-select:hover { border-color: #e0e0e0; }
+.soha-select:focus { border-color: #7C5CFC; box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.08); }
+
+.soha-textarea {
+  display: block;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: #1a1a2e;
+  outline: none;
+  transition: all 0.2s;
+  min-height: 80px;
+  resize: vertical;
+}
+.soha-textarea::placeholder { color: #b0b0b0; }
+.soha-textarea:hover { border-color: #e0e0e0; }
+.soha-textarea:focus { border-color: #7C5CFC; box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.08); }
+
+.soha-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  letter-spacing: 0.01em;
+}
+
+/* ── Buttons ── */
+.soha-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  background: #7C5CFC;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #fff;
+  outline: none;
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+.soha-btn-primary:hover { background: #6B4CE0; box-shadow: 0 2px 8px rgba(124, 92, 252, 0.2); }
+.soha-btn-primary:focus-visible { box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.2); }
+.soha-btn-primary:active { transform: scale(0.98); }
+.soha-btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+
+.soha-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #1a1a2e;
+  outline: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.soha-btn-secondary:hover { background: #fafafa; border-color: #e0e0e0; }
+.soha-btn-secondary:focus-visible { box-shadow: 0 0 0 3px rgba(124, 92, 252, 0.1); }
+
+.soha-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  outline: none;
+  transition: all 0.15s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.soha-btn-ghost:hover { background: #f3f4f6; color: #111827; }
+
+.soha-btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #dc2626;
+  outline: none;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.soha-btn-danger:hover { background: #fee2e2; border-color: #fca5a5; }
+
+/* ── Cards & Surfaces ── */
+.soha-card {
+  border-radius: 1rem;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+  padding: 1.25rem;
+  transition: all 0.2s;
+}
+.soha-card:hover {
+  border-color: #e0e0e0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+.soha-section {
+  border-radius: 0.75rem;
+  border: 1px solid #f3f4f6;
+  background: #fff;
+  padding: 1.25rem;
+}
+
+/* ── Badge ── */
+.soha-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+.soha-badge-blue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  border: 1px solid #ddd6fe;
+  background: #f5f3ff;
+  padding: 0.125rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: #7C5CFC;
+}
+.soha-badge-emerald {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid #a7f3d0;
+  background: #ecfdf5;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #059669;
+}
+.soha-badge-amber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid #fde68a;
+  background: #fffbeb;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #d97706;
+}
+.soha-badge-red {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: #dc2626;
+}
+
+/* ── Toolbar ── */
+.soha-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 0.25rem;
+}
+.soha-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.15s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.soha-toolbar-btn:hover { background: #f3f4f6; color: #111827; }
+
+/* ── Empty state ── */
+.soha-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border: 2px dashed #f0f0f0;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+/* ── A4 Paper ── */
+.soha-a4 {
+  aspect-ratio: 210 / 297;
+  width: 100%;
+  border-radius: 0.25rem;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e7eb;
+}
+
+/* ── Skeleton ── */
+.soha-skeleton {
+  border-radius: 0.375rem;
+  background: #f3f4f6;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Sidebar ── */
+.soha-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.soha-sidebar-item:hover { background: #f3f4f6; color: #111827; }
+.soha-sidebar-item-active {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #fff;
+  background: #7C5CFC;
+  box-shadow: 0 2px 8px rgba(124, 92, 252, 0.2);
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.soha-sidebar-item-active:hover { background: #6B4CE0; }
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-12px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+.animate-slideIn { animation: slideIn 0.25s ease-out; }
+.animate-slideUp { animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+.animate-fadeOverlay { animation: fadeOverlay 0.2s ease-out; }
+.animate-toastIn { animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+
+/* ── Modal backdrop + content ── */
+.soha-modal-overlay {
+  animation: fadeOverlay 0.2s ease-out;
+}
+.soha-modal-content {
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Skeleton shimmer ── */
+.soha-skeleton {
+  border-radius: 0.375rem;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.soha-skeleton-text { height: 0.75rem; border-radius: 0.25rem; }
+.soha-skeleton-title { height: 1.25rem; width: 60%; border-radius: 0.25rem; }
+.soha-skeleton-avatar { height: 2rem; width: 2rem; border-radius: 9999px; }
+.soha-skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+}
+
+/* ── Toast ── */
+.soha-toast {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  animation: toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.soha-toast-success { background: #059669; }
+.soha-toast-error { background: #dc2626; }
+.soha-toast-info { background: #2563eb; }
+
+/* ── Micro-interactions ── */
+.soha-btn-primary:hover { background: #6B4CE0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124, 92, 252, 0.25); }
+.soha-btn-primary:active { transform: translateY(0) scale(0.98); box-shadow: none; }
+.soha-btn-secondary:hover { background: #f9fafb; border-color: #d1d5db; transform: translateY(-1px); }
+.soha-btn-secondary:active { transform: translateY(0); }
+
+/* ── Sidebar tooltip ── */
+.soha-sidebar-item { position: relative; }
+.soha-sidebar-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.9);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  background: #1f2937;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.15s;
+  z-index: 50;
+}
+.soha-sidebar-item:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+.soha-sidebar-item-active { position: relative; }
+.soha-sidebar-item-active::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.9);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  background: #1f2937;
+  color: #fff;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.15s;
+  z-index: 50;
+}
+.soha-sidebar-item-active:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 1023px) {
+  .soha-sidebar-item::after,
+  .soha-sidebar-item-active::after {
+    display: none;
+  }
+}
+
+/* ── Table row hover ── */
+table tbody tr {
+  transition: background-color 0.15s;
+}
+table tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* ── Focus ring for accessibility ── */
+*:focus-visible {
+  outline: 2px solid #7C5CFC;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* ── Global cursor pointer for all interactive elements ── */
+button, [role="button"], a, select, label[for], input[type="checkbox"], input[type="radio"],
+.soha-sidebar-item, .soha-sidebar-item-active,
+.soha-badge-blue, .soha-badge-emerald, .soha-badge-amber {
+  cursor: pointer;
+}
+button:hover, [role="button"]:hover, a:hover {
+  cursor: pointer;
+}
+
+/* ── Rounded violet CTA button (used across all pages) ── */
+.soha-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  background: #7C5CFC;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.soha-cta:hover {
+  background: #6B4CE0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(124, 92, 252, 0.3);
+}
+.soha-cta:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: none;
+}
+.soha-cta-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  border: 1px solid #7C5CFC;
+  background: #fff;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #7C5CFC;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.soha-cta-outline:hover {
+  background: #F5F3FF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(124, 92, 252, 0.15);
+}
+.soha-cta-outline:active {
+  transform: translateY(0);
+}

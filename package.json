@@ -1,0 +1,9 @@
+{
+  "name": "sohacv",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "setup": "npm install --prefix web && npm --prefix web exec prisma db push"
+  }
+}

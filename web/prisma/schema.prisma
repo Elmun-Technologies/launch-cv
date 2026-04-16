@@ -1,0 +1,235 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// For production: change provider to "postgresql" and update DATABASE_URL
+// provider = "postgresql"
+// DATABASE_URL = "postgresql://user:pass@host:5432/sohacv?schema=public"
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  passwordHash      String
+  name              String?
+  role              String    @default("user")
+  emailVerifiedAt   DateTime?
+  /// Billing provider customer id (Lemon Squeezy customer id as string).
+  stripeCustomerId  String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  resumes           Resume[]
+  events            AnalyticsEvent[]
+  authTokens        AuthToken[]
+  subscription      Subscription?
+  usageMonths       UsageMonth[]
+  jobApplications   JobApplication[]
+  contacts          Contact[]
+  companies         Company[]
+  notes             Note[]
+  referrals         Referral[]
+  emailTemplates    EmailTemplate[]
+}
+
+model UsageMonth {
+  id           String @id @default(cuid())
+  userId       String
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  month        String
+  jdCount      Int    @default(0)
+  packetCount  Int    @default(0)
+  roleFitCount Int    @default(0)
+
+  @@unique([userId, month])
+}
+
+model JobApplication {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId       String
+  resume         Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  jdRunId        String?  @unique
+  jdRun          JdRun?   @relation(fields: [jdRunId], references: [id], onDelete: SetNull)
+  jdText         String
+  title          String?
+  company        String?
+  status         String   @default("draft")
+  checklist      Json?
+  fitSnapshot    Json?
+  packetSnapshot Json?
+  notes          Note[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model AuthToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String // email_verify | password_reset
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, type])
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Lemon Squeezy `customer_id` (legacy column name).
+  stripeCustomerId     String
+  /// Lemon Squeezy subscription id (legacy column name).
+  stripeSubscriptionId String    @unique
+  /// Lemon Squeezy `variant_id` (legacy column name).
+  stripePriceId        String
+  status               String
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean   @default(false)
+  updatedAt            DateTime  @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([name, createdAt])
+  @@index([userId, createdAt])
+}
+
+model Resume {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  vertical   String
+  regionMode String   @default("us")
+  content    Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  jdRuns          JdRun[]
+  snapshots       ResumeSnapshot[]
+  jobApplications JobApplication[]
+
+  @@index([userId, updatedAt])
+}
+
+model ResumeSnapshot {
+  id        String   @id @default(cuid())
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  label     String?
+  content   Json
+  createdAt DateTime @default(now())
+
+  @@index([resumeId, createdAt])
+}
+
+model JdRun {
+  id            String            @id @default(cuid())
+  resumeId      String
+  resume        Resume            @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  jdText        String
+  result        Json?
+  createdAt     DateTime          @default(now())
+  application   JobApplication?
+
+  @@index([resumeId, createdAt])
+}
+
+model Contact {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name          String
+  email         String?
+  phone         String?
+  company       String?
+  role          String?
+  relationship  String?
+  goal          String?
+  status        String    @default("active")
+  linkedinUrl   String?
+  lastContactAt DateTime?
+  followUpAt    DateTime?
+  notes         Note[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  industry    String?
+  location    String?
+  size        String?
+  type        String?
+  website     String?
+  foundedYear String?
+  description String?
+  notes       Note[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model Note {
+  id            String          @id @default(cuid())
+  userId        String
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content       String
+  contactId     String?
+  contact       Contact?        @relation(fields: [contactId], references: [id], onDelete: SetNull)
+  companyId     String?
+  company       Company?        @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  applicationId String?
+  application   JobApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  @@index([userId, createdAt])
+}
+
+model Referral {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  code          String   @unique
+  referredEmail String?
+  status        String   @default("pending")
+  creditAmount  Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  subject   String
+  body      String
+  category  String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}

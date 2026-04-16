@@ -1,0 +1,13 @@
+# Lokal navbat (Redis) va kelajakdagi worker uchun.
+# Ishga tushirish: docker compose up -d
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis-data:
