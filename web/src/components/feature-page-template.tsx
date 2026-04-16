@@ -1,7 +1,4 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -52,22 +49,6 @@ const ACCENT: Record<FeatureAccent, { iconBg: string; iconText: string; badge: s
   slate: { iconBg: "bg-slate-100", iconText: "text-slate-600", badge: "bg-slate-100", badgeText: "text-slate-600", btnBg: "bg-slate-700", btnHover: "hover:bg-slate-800", btnShadow: "shadow-slate-500/20", gradFrom: "from-slate-700", gradTo: "to-slate-900", stepBg: "bg-slate-700", checkText: "text-slate-600" },
 };
 
-function useReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.1 },
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return { ref, visible };
-}
-
 export function FeaturePageLayout(props: FeaturePageProps) {
   const {
     icon: Icon,
@@ -90,11 +71,6 @@ export function FeaturePageLayout(props: FeaturePageProps) {
   } = props;
 
   const a = ACCENT[accent];
-
-  const { ref: benefitsRef, visible: benefitsVisible } = useReveal();
-  const { ref: stepsRef, visible: stepsVisible } = useReveal();
-  const { ref: baRef, visible: baVisible } = useReveal();
-  const { ref: testRef, visible: testVisible } = useReveal();
 
   const allTestimonials = testimonials ?? (testimonial ? [testimonial] : []);
 
@@ -172,10 +148,10 @@ export function FeaturePageLayout(props: FeaturePageProps) {
 
       {/* ──── BENEFITS GRID ──── */}
       <section className="py-20">
-        <div ref={benefitsRef} className="mx-auto max-w-[1280px] px-6">
+        <div className="mx-auto max-w-[1280px] px-6">
           <div className="text-center">
             <span className="lc-eyebrow">{title} — Key Features</span>
-            <h2 className={`lc-h2 mx-auto mt-3 max-w-[520px] transition-all duration-700 ${benefitsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            <h2 className="lc-h2 mx-auto mt-3 max-w-[520px]">
               Everything You Need to Succeed
             </h2>
           </div>
@@ -183,7 +159,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
             {benefits.map((b, i) => (
               <div
                 key={b}
-                className={`lc-card flex items-start gap-4 p-6 transition-all duration-500 ${benefitsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                className="lc-card flex items-start gap-4 p-6"
                 style={{ transitionDelay: `${i * 60}ms` }}
               >
                 <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${a.iconBg}`}>
@@ -198,10 +174,10 @@ export function FeaturePageLayout(props: FeaturePageProps) {
 
       {/* ──── HOW IT WORKS ──── */}
       <section id="how-it-works" className="bg-[#F8FAFC] py-20">
-        <div ref={stepsRef} className="mx-auto max-w-[1280px] px-6">
+        <div className="mx-auto max-w-[1280px] px-6">
           <div className="text-center">
             <span className="lc-eyebrow">Step by Step</span>
-            <h2 className={`lc-h2 mx-auto mt-3 max-w-[480px] transition-all duration-700 ${stepsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+            <h2 className="lc-h2 mx-auto mt-3 max-w-[480px]">
               How {title} Works
             </h2>
           </div>
@@ -209,8 +185,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
             {steps.map((step, i) => (
               <div
                 key={step.title}
-                className={`flex flex-col gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-500 ${stepsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                style={{ transitionDelay: `${i * 80}ms` }}
+                className="flex flex-col gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
               >
                 <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${a.stepBg} shadow-sm`}>
                   <span className="font-display text-[15px] font-bold text-white">
@@ -230,14 +205,14 @@ export function FeaturePageLayout(props: FeaturePageProps) {
       {/* ──── BEFORE / AFTER (optional) ──── */}
       {beforeAfter && (
         <section className="py-20">
-          <div ref={baRef} className="mx-auto max-w-[900px] px-6">
+          <div className="mx-auto max-w-[900px] px-6">
             <div className="text-center">
               <span className="lc-eyebrow">Transformation</span>
-              <h2 className={`lc-h2 mx-auto mt-3 max-w-[480px] transition-all duration-700 ${baVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}>
+              <h2 className="lc-h2 mx-auto mt-3 max-w-[480px]">
                 See the Difference AI Makes
               </h2>
             </div>
-            <div className={`mt-10 grid gap-6 sm:grid-cols-2 transition-all duration-700 ${baVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl border border-red-100 bg-white p-6 shadow-sm">
                 <p className="font-body text-[11px] font-bold uppercase tracking-wide text-red-500">Before</p>
                 <p className="mt-3 font-body text-[15px] leading-[1.7] text-[#475569]">&ldquo;{beforeAfter.beforeText}&rdquo;</p>
@@ -273,14 +248,10 @@ export function FeaturePageLayout(props: FeaturePageProps) {
       {/* ──── TESTIMONIALS ──── */}
       {allTestimonials.length > 0 && (
         <section className={`py-20 ${beforeAfter ? "bg-[#F8FAFC]" : ""}`}>
-          <div ref={testRef} className="mx-auto max-w-[900px] px-6">
+          <div className="mx-auto max-w-[900px] px-6">
             <div className="grid gap-6 sm:grid-cols-2">
-              {allTestimonials.map((t, i) => (
-                <div
-                  key={t.name}
-                  className={`lc-card p-7 transition-all duration-500 ${testVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                  style={{ transitionDelay: `${i * 100}ms` }}
-                >
+              {allTestimonials.map((t) => (
+                <div key={t.name} className="lc-card p-7">
                   <div className="flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, j) => (
                       <svg key={j} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" viewBox="0 0 20 20">
