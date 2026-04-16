@@ -7,6 +7,7 @@ import { HomeClient } from "@/components/home-client";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
+import { AnimatedGrid } from "@/components/animated-grid";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import {
   Check,
@@ -106,7 +107,8 @@ export default function Home() {
 
             {/* H1 */}
             <h1 className="lc-motion-fade lc-s2 font-display text-[48px] font-[800] leading-[1.08] tracking-[-0.03em] text-white sm:text-[64px] lg:text-[72px]">
-              Build the Resume<br />That Gets You Hired.
+              Build the Resume<br />
+              <span className="lc-gradient-text-animated">That Gets You Hired.</span>
             </h1>
 
             {/* Subheadline */}
@@ -118,7 +120,7 @@ export default function Home() {
             <div className="lc-motion-fade lc-s4 mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
                 href="/register"
-                className="lc-btn-primary px-8 py-4 text-[16px]"
+                className="lc-btn-primary lc-ripple lc-pulse-glow px-8 py-4 text-[16px]"
               >
                 View plans & get started <ArrowRight className="h-4 w-4" />
               </Link>
@@ -139,7 +141,7 @@ export default function Home() {
 
           {/* Hero visual — resume mockup */}
           <div className="lc-motion-fade lc-s5 mx-auto mt-16 max-w-[640px]">
-            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_32px_80px_rgba(0,0,0,0.4)] backdrop-blur-sm">
+            <div className="lc-float relative rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_32px_80px_rgba(0,0,0,0.4)] backdrop-blur-sm">
               <div className="rounded-xl bg-white p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
@@ -213,12 +215,12 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatedGrid className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
               <Link
                 key={f.href}
                 href={f.href}
-                className="lc-card group p-8"
+                className="lc-card lc-spotlight group p-8"
               >
                 <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-105 ${accentMap[f.accent]}`}>
                   <f.icon className="h-6 w-6" />
@@ -230,7 +232,7 @@ export default function Home() {
                 </span>
               </Link>
             ))}
-          </div>
+          </AnimatedGrid>
         </div>
       </section>
 
@@ -479,7 +481,7 @@ export default function Home() {
           </div>
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((t) => (
-              <div key={t.name} className="lc-card flex flex-col p-6">
+              <div key={t.name} className="lc-card lc-spotlight flex flex-col p-6">
                 <div className="flex gap-0.5">
                   {Array.from({ length: t.rating }).map((_, j) => (
                     <Star key={j} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />

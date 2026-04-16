@@ -892,3 +892,196 @@ button:hover, [role="button"]:hover, a:hover {
 @media (min-width: 768px) {
   .lc-sticky-cta { display: none; }
 }
+
+/* ════════════════════════════════════════════
+   ANIMATIONS — PROFESSIONAL MOTION SYSTEM
+   ════════════════════════════════════════════ */
+
+/* ── Float: hero card gentle up/down ── */
+@keyframes lc-float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-float { animation: lc-float 6s ease-in-out infinite; }
+  .lc-float-slow { animation: lc-float 9s ease-in-out infinite; }
+  .lc-float-delay { animation: lc-float 6s ease-in-out 2s infinite; }
+}
+
+/* ── Gradient border: animated glow around cards ── */
+@keyframes lc-gradient-border {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.lc-gradient-border {
+  position: relative;
+  border-radius: 18px;
+}
+.lc-gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1A56DB, #7C3AED, #0D9488, #1A56DB);
+  background-size: 300% 300%;
+  animation: lc-gradient-border 4s ease infinite;
+  z-index: -1;
+}
+
+/* ── Pulse glow: CTA buttons & badges ── */
+@keyframes lc-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(26, 86, 219, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(26, 86, 219, 0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-pulse-glow { animation: lc-pulse-glow 2.5s ease-in-out infinite; }
+}
+
+/* ── Slide-in from bottom: section entries ── */
+@keyframes lc-slide-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-animate-in {
+    animation: lc-slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .lc-animate-in-d1 { animation-delay: 0.1s; }
+  .lc-animate-in-d2 { animation-delay: 0.2s; }
+  .lc-animate-in-d3 { animation-delay: 0.3s; }
+  .lc-animate-in-d4 { animation-delay: 0.4s; }
+  .lc-animate-in-d5 { animation-delay: 0.5s; }
+  .lc-animate-in-d6 { animation-delay: 0.6s; }
+}
+
+/* ── Animated gradient text ── */
+@keyframes lc-gradient-text-move {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.lc-gradient-text-animated {
+  background: linear-gradient(270deg, #1A56DB, #7C3AED, #0D9488, #1A56DB);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-gradient-text-animated {
+    animation: lc-gradient-text-move 5s ease infinite;
+  }
+}
+
+/* ── Typewriter cursor blink ── */
+@keyframes lc-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.lc-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: #1A56DB;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: lc-blink 1s step-end infinite;
+}
+
+/* ── Scale in: for icons and badges appearing ── */
+@keyframes lc-scale-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-scale-in { animation: lc-scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .lc-scale-in-d1 { animation: lc-scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both; }
+  .lc-scale-in-d2 { animation: lc-scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both; }
+}
+
+/* ── Rotating gradient background (hero) ── */
+@keyframes lc-rotate-gradient {
+  0% { transform: rotate(0deg) scale(1.5); }
+  100% { transform: rotate(360deg) scale(1.5); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-rotate-gradient { animation: lc-rotate-gradient 20s linear infinite; }
+}
+
+/* ── Staggered grid reveal ── */
+.lc-grid-reveal > * {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lc-grid-reveal.revealed > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.0s; }
+.lc-grid-reveal.revealed > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.08s; }
+.lc-grid-reveal.revealed > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.16s; }
+.lc-grid-reveal.revealed > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.24s; }
+.lc-grid-reveal.revealed > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.32s; }
+.lc-grid-reveal.revealed > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.40s; }
+@media (prefers-reduced-motion: reduce) {
+  .lc-grid-reveal > * { opacity: 1; transform: none; }
+}
+
+/* ── Spinner ── */
+@keyframes lc-spin {
+  to { transform: rotate(360deg); }
+}
+.lc-spin { animation: lc-spin 1s linear infinite; }
+
+/* ── Check mark draw ── */
+@keyframes lc-draw-check {
+  from { stroke-dashoffset: 40; }
+  to { stroke-dashoffset: 0; }
+}
+.lc-draw-check {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: lc-draw-check 0.4s ease-out 0.2s forwards;
+}
+
+/* ── Bounce subtle ── */
+@keyframes lc-bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-bounce-subtle { animation: lc-bounce-subtle 2s ease-in-out infinite; }
+}
+
+/* ── Ripple on click ── */
+.lc-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.lc-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255,255,255,0.15);
+  transform: scale(0);
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+  opacity: 0;
+}
+.lc-ripple:active::after {
+  transform: scale(2);
+  opacity: 1;
+  transition: 0s;
+}
+
+/* ── Spotlight hover (cards) ── */
+.lc-spotlight {
+  position: relative;
+  overflow: hidden;
+}
+.lc-spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(26,86,219,0.06), transparent 70%);
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.lc-spotlight:hover::after { opacity: 1; }
