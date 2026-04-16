@@ -99,7 +99,7 @@ export default function PricingPage() {
         </section>
 
         <section className="py-16 sm:py-20">
-          <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mx-auto grid max-w-4xl gap-6 px-4 sm:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const bullets = planMarketingBullets(key);

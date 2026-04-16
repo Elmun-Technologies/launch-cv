@@ -19,9 +19,6 @@ import {
   BarChart3,
   Mic,
   Zap,
-  Shield,
-  Clock,
-  TrendingUp,
   Star,
 } from "lucide-react";
 
@@ -466,53 +463,50 @@ export default function Home() {
         <div className="mx-auto max-w-[1280px] px-6">
           <div className="text-center">
             <p className="lc-eyebrow">Pricing</p>
-            <h2 className="lc-h2 mx-auto mt-4 max-w-[480px]">Plans That Match Your Search Intensity</h2>
+            <h2 className="lc-h2 mx-auto mt-4 max-w-[480px]">Simple Plans. No Surprises.</h2>
             <p className="mx-auto mt-3 font-body text-[15px] text-[#64748B]">
-              No free tier. Paid-first AI with honest limits. Cancel subscriptions anytime — Lifetime never renews.
+              Monthly, annual, or pay once — pick what matches your job search.
             </p>
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-12 grid gap-6 sm:grid-cols-3 max-w-[900px] mx-auto">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
+              const tagline: Record<string, string> = {
+                starter: "Try it monthly, cancel anytime",
+                professional: "Best value for a full job search",
+                lifetime: "Pay once, use forever",
+              };
               return (
                 <div
                   key={key}
-                  className={`flex flex-col rounded-2xl border-2 bg-white p-7 ${popular ? "border-[#1A56DB] shadow-xl shadow-blue-500/10" : "border-[#E2E8F0]"}`}
+                  className={`relative flex flex-col rounded-2xl border-2 bg-white p-7 ${popular ? "border-[#1A56DB] shadow-xl shadow-blue-500/10 scale-[1.02]" : "border-[#E2E8F0]"}`}
                 >
                   {popular && (
-                    <span className="mb-4 self-start rounded-full bg-[#1A56DB] px-3 py-1 font-body text-[11px] font-bold uppercase tracking-wide text-white">
+                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#1A56DB] px-4 py-1 font-body text-[11px] font-bold uppercase tracking-wide text-white whitespace-nowrap">
                       Most Popular
                     </span>
                   )}
-                  <p className="font-display text-[15px] font-bold text-[#0F172A]">{cfg.title}</p>
-                  <p className="mt-3 flex flex-wrap items-baseline gap-1">
-                    <span className="font-display text-[36px] font-bold text-[#0F172A]">{cfg.priceDisplay}</span>
+                  <p className="font-display text-[16px] font-bold text-[#0F172A]">{cfg.title}</p>
+                  <p className="mt-1 font-body text-[12px] text-[#94A3B8]">{tagline[key]}</p>
+                  <p className="mt-4 flex flex-wrap items-baseline gap-1">
+                    <span className="font-display text-[40px] font-bold text-[#0F172A]">{cfg.priceDisplay}</span>
                     <span className="font-body text-[14px] text-[#94A3B8]">{cfg.periodLabel}</span>
                   </p>
-                  <p className="mt-2 font-body text-[12px] leading-snug text-[#94A3B8]">{cfg.valueLine}</p>
+                  <p className="mt-2 font-body text-[12px] leading-snug text-[#64748B]">{cfg.billingExplainer}</p>
                   <Link
                     href="/pricing"
-                    className={`mt-6 flex w-full items-center justify-center rounded-[10px] py-3 font-body text-[13px] font-bold transition ${popular ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8]" : "border border-[#E2E8F0] text-[#334155] hover:bg-[#F8FAFC]"}`}
+                    className={`mt-6 flex w-full items-center justify-center rounded-xl py-3 font-body text-[14px] font-bold transition ${popular ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8] shadow-lg shadow-blue-500/20" : "border-2 border-[#E2E8F0] text-[#334155] hover:border-[#1A56DB] hover:text-[#1A56DB]"}`}
                   >
-                    Choose {cfg.title}
+                    {key === "lifetime" ? "Get Lifetime →" : `Start ${cfg.title} →`}
                   </Link>
                 </div>
               );
             })}
           </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
-            {[
-              { Icon: Shield, text: "Cancel subscriptions anytime" },
-              { Icon: Clock, text: "Lifetime — pay once, keep forever" },
-              { Icon: TrendingUp, text: "Monthly AI limits scale with plan" },
-            ].map(({ Icon, text }) => (
-              <div key={text} className="flex items-center gap-2 font-body text-[13px] text-[#64748B]">
-                <Icon className="h-4 w-4 text-[#059669]" />
-                {text}
-              </div>
-            ))}
-          </div>
+          <p className="mt-8 text-center font-body text-[13px] text-[#94A3B8]">
+            ✓ Cancel subscriptions anytime &nbsp;·&nbsp; ✓ Lifetime — pay once, keep forever &nbsp;·&nbsp; ✓ No hidden fees
+          </p>
           <p className="mt-6 text-center">
             <Link href="/pricing" className="font-body text-[14px] font-semibold text-[#1A56DB] hover:underline">
               View full pricing & compare plans →
