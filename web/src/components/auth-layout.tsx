@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Check, Star } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 const SOCIAL_PROOF = [
   { name: "Sarah K.", role: "Software Engineer → Stripe", text: "From 0 interviews in 3 months to 4 in one week.", rating: 5 },
@@ -31,12 +32,9 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
         </div>
 
         {/* Logo */}
-        <Link href="/" className="relative flex items-center gap-2.5">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1A56DB] text-[14px] font-bold text-white shadow-lg shadow-blue-500/30">
-            L
-          </span>
-          <span className="font-display text-[17px] font-bold text-white">Launch CV</span>
-        </Link>
+        <div className="relative">
+          <Logo variant="dark" size="md" />
+        </div>
 
         {/* Main content */}
         <div className="relative">
@@ -106,10 +104,9 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
       {/* ── Right panel — form ── */}
       <div className="flex flex-1 flex-col items-center justify-center bg-[#F8FAFC] px-5 py-14 sm:px-10">
         {/* Mobile logo */}
-        <Link href="/" className="mb-8 flex items-center gap-2 lg:hidden">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1A56DB] text-[13px] font-bold text-white">L</span>
-          <span className="font-display text-[16px] font-bold text-[#0F172A]">Launch CV</span>
-        </Link>
+        <div className="mb-8 lg:hidden">
+          <Logo variant="light" size="md" />
+        </div>
 
         <div className="w-full max-w-[400px]">
           {children}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { Logo } from "@/components/logo";
 
 const productLinks = [
   { label: "JD Alignment", href: "/features/jd-alignment" },
@@ -56,12 +57,7 @@ export function LandingFooter() {
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
             {/* Col 1 — Brand */}
             <div>
-              <Link href="/" className="flex items-center gap-2.5">
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1A56DB] text-[13px] font-bold text-white">
-                  L
-                </span>
-                <span className="font-display text-[16px] font-bold text-white">Launch CV</span>
-              </Link>
+              <Logo variant="dark" size="md" />
               <p className="mt-4 font-body text-[14px] leading-relaxed text-[#94A3B8]">
                 AI-powered resume and job search platform for modern job seekers. Built to help you get interviews — not just
                 build a resume.

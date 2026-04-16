@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import { Logo } from "@/components/logo";
 import {
   Target, FileText, Mail, Mic, BarChart3, MessageSquare,
   ChevronDown, Menu, X, ArrowRight,
@@ -67,18 +68,7 @@ export function LandingNav() {
       >
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1A56DB] text-[13px] font-bold text-white shadow-sm shadow-blue-500/25">
-              L
-            </span>
-            <span
-              className={`text-[16px] font-bold tracking-tight font-display transition-colors ${
-                isDark ? "text-white" : "text-[#0F172A]"
-              }`}
-            >
-              Launch CV
-            </span>
-          </Link>
+          <Logo variant={isDark ? "dark" : "light"} size="md" />
 
           {/* Desktop center nav */}
           <nav className="hidden items-center gap-1 lg:flex">
