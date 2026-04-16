@@ -15,26 +15,35 @@ export default async function HomePage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const [user, plan, resumeCount, appCount, contactCount, companyCount, recentResumes, recentApps] = await Promise.all([
+  const [
+    user,
+    plan,
+    resumeCount,
+    appCount,
+    contactCount,
+    companyCount,
+  ] = await Promise.all([
     prisma.user.findUnique({ where: { id: session.sub }, select: { name: true } }),
     getUserPlanId(session.sub),
     prisma.resume.count({ where: { userId: session.sub } }),
     prisma.jobApplication.count({ where: { userId: session.sub } }),
     prisma.contact.count({ where: { userId: session.sub } }),
     prisma.company.count({ where: { userId: session.sub } }),
-    prisma.resume.findMany({
-      where: { userId: session.sub },
-      orderBy: { updatedAt: "desc" },
-      take: 5,
-      select: { id: true, title: true, vertical: true, updatedAt: true },
-    }) as Promise<{ id: string; title: string; vertical: string | null; updatedAt: Date }[]>,
-    prisma.jobApplication.findMany({
-      where: { userId: session.sub },
-      orderBy: { updatedAt: "desc" },
-      take: 5,
-      select: { id: true, title: true, company: true, status: true, createdAt: true },
-    }) as Promise<{ id: string; title: string | null; company: string | null; status: string; createdAt: Date }[]>,
   ]);
+
+  const recentResumes = await prisma.resume.findMany({
+    where: { userId: session.sub },
+    orderBy: { updatedAt: "desc" },
+    take: 5,
+    select: { id: true, title: true, vertical: true, updatedAt: true },
+  });
+
+  const recentApps = await prisma.jobApplication.findMany({
+    where: { userId: session.sub },
+    orderBy: { updatedAt: "desc" },
+    take: 5,
+    select: { id: true, title: true, company: true, status: true, createdAt: true },
+  });
 
   const firstName = user?.name?.split(" ")[0] || "there";
 
