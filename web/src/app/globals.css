@@ -3,6 +3,20 @@
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  /* ── Landing design tokens ── */
+  --lc-primary: #1A56DB;
+  --lc-primary-dark: #1D4ED8;
+  --lc-secondary: #7C3AED;
+  --lc-dark: #0F172A;
+  --lc-gray-700: #334155;
+  --lc-gray-500: #64748B;
+  --lc-gray-200: #E2E8F0;
+  --lc-gray-50: #F8FAFC;
+  --lc-success: #059669;
+  --lc-warning: #D97706;
 }
 
 html {
@@ -591,4 +605,290 @@ button:hover, [role="button"]:hover, a:hover {
   .lc-motion-fade {
     animation: none !important;
   }
+}
+
+/* ════════════════════════════════════════════
+   LANDING — NEW DESIGN SYSTEM
+   ════════════════════════════════════════════ */
+
+/* ── Font helpers ── */
+.font-display {
+  font-family: var(--font-display), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+.font-body {
+  font-family: var(--font-body), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Mesh blob animation (hero background) ── */
+@keyframes lc-blob-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.08); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+@keyframes lc-blob-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(-50px, 30px) scale(1.1); }
+  70% { transform: translate(30px, -20px) scale(0.92); }
+}
+@keyframes lc-blob-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(20px, 40px) scale(1.05); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lc-blob-1 { animation: lc-blob-1 20s ease-in-out infinite; }
+  .lc-blob-2 { animation: lc-blob-2 25s ease-in-out infinite; }
+  .lc-blob-3 { animation: lc-blob-3 18s ease-in-out infinite; }
+}
+
+/* ── Logo ticker / marquee ── */
+@keyframes lc-ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.lc-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: lc-ticker 40s linear infinite;
+}
+.lc-ticker-track:hover { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-ticker-track { animation: none; }
+}
+
+/* ── Counter / stat number animation ── */
+@keyframes lc-count-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.lc-stat-visible {
+  animation: lc-count-in 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Scroll reveal (extended stagger) ── */
+@media (prefers-reduced-motion: no-preference) {
+  .lc-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .lc-reveal.is-visible { opacity: 1; transform: translateY(0); }
+  .lc-stagger-1 { transition-delay: 0.08s; }
+  .lc-stagger-2 { transition-delay: 0.16s; }
+  .lc-stagger-3 { transition-delay: 0.24s; }
+  .lc-stagger-4 { transition-delay: 0.32s; }
+  .lc-stagger-5 { transition-delay: 0.40s; }
+  .lc-stagger-6 { transition-delay: 0.48s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lc-reveal { opacity: 1; transform: none; }
+}
+
+/* ── Primary CTA button (landing, new blue) ── */
+.lc-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 10px;
+  background: #1A56DB;
+  padding: 14px 28px;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lc-btn-primary:hover { background: #1D4ED8; transform: scale(1.02); box-shadow: 0 4px 20px rgba(26,86,219,0.35); }
+.lc-btn-primary:active { transform: scale(0.98); }
+.lc-btn-primary:focus-visible { outline: 2px solid #1A56DB; outline-offset: 2px; }
+
+/* ── Secondary / outline CTA ── */
+.lc-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 10px;
+  background: transparent;
+  padding: 14px 28px;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1A56DB;
+  border: 2px solid #1A56DB;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lc-btn-secondary:hover { background: #EFF6FF; transform: scale(1.02); }
+.lc-btn-secondary:active { transform: scale(0.98); }
+
+/* ── Ghost button ── */
+.lc-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 10px;
+  background: transparent;
+  padding: 14px 28px;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lc-btn-ghost:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+/* ── AI badge ── */
+.lc-badge-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  background: #EDE9FE;
+  color: #6D28D9;
+  padding: 4px 12px;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── Landing card ── */
+.lc-card {
+  background: #fff;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+}
+.lc-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.10); transform: translateY(-2px); }
+
+/* ── Progress bar ── */
+.lc-progress-bar {
+  height: 8px;
+  border-radius: 9999px;
+  background: #E2E8F0;
+  overflow: hidden;
+}
+.lc-progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #1A56DB 0%, #7C3AED 100%);
+  transition: width 1s ease-out;
+}
+
+/* ── FAQ accordion ── */
+.lc-accordion-item {
+  border-bottom: 1px solid #E2E8F0;
+}
+.lc-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0F172A;
+  text-align: left;
+  transition: color 0.2s;
+}
+.lc-accordion-trigger:hover { color: #1A56DB; }
+.lc-accordion-chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.25s ease;
+  color: #64748B;
+}
+.lc-accordion-chevron.open { transform: rotate(180deg); }
+.lc-accordion-body {
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 0;
+  opacity: 0;
+}
+.lc-accordion-body.open { max-height: 400px; opacity: 1; }
+.lc-accordion-content {
+  padding-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #475569;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Section heading helpers ── */
+.lc-eyebrow {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1A56DB;
+}
+.lc-h2 {
+  font-family: var(--font-display), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: #0F172A;
+}
+.lc-h1 {
+  font-family: var(--font-display), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+/* ── Gradient text ── */
+.lc-gradient-text {
+  background: linear-gradient(135deg, #1A56DB 0%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Shimmer badge animation ── */
+@keyframes lc-shimmer-badge {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.lc-shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 75%);
+  background-size: 200% auto;
+  animation: lc-shimmer-badge 2.5s linear infinite;
+}
+
+/* ── Mobile sticky CTA bar (feature pages) ── */
+.lc-sticky-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: #fff;
+  border-top: 1px solid #E2E8F0;
+  padding: 12px 16px;
+  display: flex;
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .lc-sticky-cta { display: none; }
 }

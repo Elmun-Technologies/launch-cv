@@ -3,54 +3,66 @@ import { FeaturePageLayout } from "@/components/feature-page-template";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 
 export const metadata = buildMarketingMetadata({
-  title: "JD Alignment Tool",
+  title: "JD Alignment Match — Resume & Job Description Matching",
   description:
-    "Match your resume to any job description instantly with AI-powered gap analysis, keyword optimization, and tailored bullet rewrites.",
+    "Instantly match your resume to any job description with AI. Get keyword gap analysis, ATS optimization tips, and AI-rewritten bullet points tailored to the role. Try free.",
   pathname: "/features/jd-alignment",
-  keywords: ["JD alignment", "resume keywords", "ATS", "job description", "tailored resume", "Launch CV"],
+  keywords: ["JD alignment", "resume job description match", "keyword gap analysis", "resume ATS optimization", "job description resume checker"],
 });
 
 export default function JDAlignmentPage() {
   return (
     <FeaturePageLayout
       canonicalPath="/features/jd-alignment"
-      accent="violet"
+      accent="blue"
       icon={Target}
+      eyebrow="AI-Powered Job Matching"
       title="JD Alignment"
-      tagline="Match your resume to any job description instantly"
-      description="Paste any job description and let our AI analyze the gaps between your resume and the role requirements. Get a detailed gap map, keyword matching report, and AI-powered bullet rewrites — all tailored to help you pass ATS filters and impress hiring managers."
+      tagline="Match Your Resume to Any Job — Instantly."
+      h1="Match Your Resume to Any Job — Instantly."
+      description="Paste a job description and our AI highlights every gap, missing keyword, and optimization opportunity — then rewrites your bullets to score up to 95% match against any role."
       steps={[
-        {
-          title: "Paste the Job Description",
-          description: "Copy and paste any job posting. Our AI parses requirements, skills, and keywords in seconds.",
-        },
-        {
-          title: "AI Analyzes the Gaps",
-          description: "Get a comprehensive gap map showing what's missing, what matches, and where to improve your resume.",
-        },
-        {
-          title: "Get Your Tailored Resume",
-          description: "Receive AI-rewritten bullet points, keyword suggestions, and a resume optimized for the specific role.",
-        },
+        { title: "Upload or Paste Your Resume", description: "Upload PDF, DOCX, or paste plain text. Your existing content is imported in seconds." },
+        { title: "Paste the Job Description", description: "Copy any job posting from LinkedIn, Indeed, or any source. URL or raw text both work." },
+        { title: "Click Analyze — 10 Seconds", description: "Our AI processes both documents, extracts all requirements, and builds your gap map in under 10 seconds." },
+        { title: "Review Your Match Score", description: "See your match percentage, missing keywords ranked by importance, and AI-flagged gaps." },
+        { title: "Accept AI Bullet Rewrites", description: "One-click to accept AI suggestions — your resume updates live and your score climbs in real time." },
+        { title: "Download & Apply", description: "Export your optimized resume as PDF or send directly to the cover letter generator." },
       ]}
       benefits={[
-        "Instant gap analysis between your resume and any job description",
-        "AI-powered keyword matching to beat ATS filters",
-        "Smart bullet point rewrites that preserve your real experience",
-        "Visual gap map highlighting missing skills and qualifications",
-        "Priority ranking of improvements for maximum impact",
-        "Side-by-side comparison of original vs. optimized resume",
+        "Keyword extraction: AI scans the JD for all hard skills, soft skills, and role-specific terms",
+        "Gap analysis: side-by-side comparison shows exactly what your resume has vs. what's missing",
+        "AI bullet rewrites: missing keywords inserted naturally — never sounds robotic",
+        "Real-time score: match percentage updates live as you edit, watch it climb from 40% to 90%+",
+        "Multi-job tracking: save and compare match scores across multiple applications",
+        "ATS simulation: tested against Workday, Greenhouse, Lever, iCIMS, and 11 other platforms",
       ]}
-      testimonial={{
-        text: "The JD alignment feature is a game-changer. I went from a 40% match rate to over 85% on most applications. Within two weeks, I had three interview callbacks from companies I'd been rejected by before.",
-        name: "Sarah C.",
-        role: "Software engineer · tech",
+      beforeAfter={{
+        beforeText: "Helped team complete projects on time.",
+        beforeScore: "34%",
+        afterText: "Led cross-functional delivery of 3 enterprise SaaS migrations, reducing time-to-deploy by 40% using Agile/Scrum methodologies.",
+        afterScore: "91%",
       }}
+      testimonials={[
+        {
+          text: "I was applying to the same type of role for months with no callbacks. Launch CV showed me I was missing 14 critical keywords. After fixing it, I had 5 interviews in 10 days.",
+          name: "Rachel M.",
+          role: "Product Manager",
+        },
+        {
+          text: "The JD alignment tool is worth the subscription alone. It's like having a recruiter tell you exactly what to change.",
+          name: "Tom H.",
+          role: "Software Engineer",
+        },
+      ]}
       relatedFeatures={[
         { title: "AI Resume Builder", href: "/features/resume-builder" },
         { title: "ATS Score Checker", href: "/features/ats-score" },
         { title: "Cover Letter Generator", href: "/features/cover-letter" },
       ]}
+      ctaHeadline="Stop Guessing What Recruiters Want."
+      ctaSubtitle="Let AI show you exactly how to match the job — and rewrite your resume to prove it."
+      ctaButton="Analyze My Resume Free"
     />
   );
 }

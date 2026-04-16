@@ -93,6 +93,23 @@ const rootStructuredData = {
       },
     },
     {
+      "@type": "SiteNavigationElement",
+      name: ["Home", "Features", "JD Alignment", "Resume Builder", "Cover Letter", "Interview Prep", "ATS Score", "Voice Input", "Pricing", "Blog", "About"],
+      url: [
+        siteUrl,
+        `${siteUrl}/features`,
+        `${siteUrl}/features/jd-alignment`,
+        `${siteUrl}/features/resume-builder`,
+        `${siteUrl}/features/cover-letter`,
+        `${siteUrl}/features/interview-prep`,
+        `${siteUrl}/features/ats-score`,
+        `${siteUrl}/features/voice-input`,
+        `${siteUrl}/pricing`,
+        `${siteUrl}/blog`,
+        `${siteUrl}/about`,
+      ],
+    },
+    {
       "@type": "SoftwareApplication",
       name: "Launch CV",
       url: siteUrl,

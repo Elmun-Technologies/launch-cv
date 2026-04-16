@@ -114,9 +114,22 @@ export function FeaturePageLayout(props: FeaturePageProps) {
     ],
   };
 
+  const howToLd = steps.length > 0 ? {
+    "@type": "HowTo",
+    name: `How to use ${title} — Launch CV`,
+    description: description,
+    url: absoluteUrl(canonicalPath),
+    step: steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.title,
+      text: s.description,
+    })),
+  } : null;
+
   return (
     <div className="flex min-h-screen flex-col bg-white">
-      <JsonLd data={{ "@context": "https://schema.org", "@graph": [webPageLd, breadcrumbLd] }} />
+      <JsonLd data={{ "@context": "https://schema.org", "@graph": [webPageLd, breadcrumbLd, ...(howToLd ? [howToLd] : [])] }} />
       <LandingNav />
 
       {/* ──── HERO ──── */}

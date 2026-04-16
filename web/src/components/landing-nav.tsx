@@ -1,135 +1,243 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ChevronDown, ArrowRight, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import {
+  Target, FileText, Mail, Mic, BarChart3, MessageSquare,
+  ChevronDown, Menu, X, ArrowRight,
+} from "lucide-react";
 
 const featureItems = [
-  { href: "/features/jd-alignment", icon: Target, title: "JD Alignment", desc: "Match resume to any job description" },
-  { href: "/features/resume-builder", icon: FileText, title: "Resume Builder", desc: "Create professional resumes with AI" },
-  { href: "/features/cover-letter", icon: Mail, title: "Cover Letter", desc: "Tailored cover letters in seconds" },
-  { href: "/features/interview-prep", icon: MessageSquare, title: "Interview Prep", desc: "AI-generated practice questions" },
-  { href: "/features/ats-score", icon: BarChart3, title: "ATS Score", desc: "Optimize for tracking systems" },
-  { href: "/features/voice-input", icon: Mic, title: "Voice Input", desc: "Speak your experience, we type it" },
+  { href: "/features/jd-alignment", icon: Target, label: "JD Alignment", desc: "Match resume to any job description" },
+  { href: "/features/resume-builder", icon: FileText, label: "Resume Builder", desc: "AI-powered with 12+ templates" },
+  { href: "/features/cover-letter", icon: Mail, label: "Cover Letter", desc: "Personalized letters in 60 seconds" },
+  { href: "/features/interview-prep", icon: MessageSquare, label: "Interview Prep", desc: "Role-specific AI practice" },
+  { href: "/features/ats-score", icon: BarChart3, label: "ATS Score", desc: "See how ATS reads your resume" },
+  { href: "/features/voice-input", icon: Mic, label: "Voice Input", desc: "Speak — AI writes it for you" },
+];
+
+const navLinks = [
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
 ];
 
 export function LandingNav() {
-  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const megaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 8); }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) { if (e.key === "Escape") { setMegaOpen(false); setMobileOpen(false); } }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (megaRef.current && !megaRef.current.contains(e.target as Node)) setMegaOpen(false);
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => { setMobileOpen(false); setMegaOpen(false); }, [pathname]);
+
+  const isDark = !scrolled && !mobileOpen && (pathname === "/" || pathname === "");
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#f0f0f0] bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-[1120px] items-center justify-between px-6 py-3">
-        <div className="flex min-w-0 flex-1 items-center gap-4 md:gap-8">
-          <Link href="/" className="flex shrink-0 items-center gap-2.5" onClick={() => setMobileOpen(false)}>
-            <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0a0a0a] text-[12px] font-bold text-white">L</span>
-            <span className="text-[15px] font-bold text-[#0a0a0a]">Launch CV</span>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled || mobileOpen
+            ? "bg-white/95 backdrop-blur-[12px] border-b border-[#E2E8F0] shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
+            : isDark
+            ? "bg-transparent"
+            : "bg-white/95 backdrop-blur-[12px] border-b border-[#E2E8F0]"
+        }`}
+      >
+        <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2.5 shrink-0">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#1A56DB] text-[13px] font-bold text-white shadow-sm shadow-blue-500/25">
+              L
+            </span>
+            <span
+              className={`text-[16px] font-bold tracking-tight font-display transition-colors ${
+                isDark ? "text-white" : "text-[#0F172A]"
+              }`}
+            >
+              Launch CV
+            </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
-            <div
-              className="relative"
-              onMouseEnter={() => setOpen(true)}
-              onMouseLeave={() => setOpen(false)}
-            >
+          {/* Desktop center nav */}
+          <nav className="hidden items-center gap-1 lg:flex">
+            {/* Features mega-menu trigger */}
+            <div ref={megaRef} className="relative">
               <button
                 type="button"
-                className="flex items-center gap-1 rounded-md px-3 py-1.5 text-[14px] font-medium text-[#666] transition hover:text-[#0a0a0a]"
+                onClick={() => setMegaOpen((v) => !v)}
+                aria-expanded={megaOpen}
+                className={`flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
+                  isDark
+                    ? "text-white/80 hover:text-white hover:bg-white/10"
+                    : "text-[#334155] hover:text-[#1A56DB] hover:bg-[#EFF6FF]"
+                }`}
               >
                 Features
-                <ChevronDown className={`h-3 w-3 transition ${open ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`h-4 w-4 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`}
+                />
               </button>
 
-              {open ? (
-                <div className="absolute left-0 top-full z-50 w-[480px] pt-2">
-                  <div className="animate-fadeIn rounded-xl border border-[#e5e5e5] bg-white p-3 shadow-xl shadow-black/5">
-                    <div className="grid grid-cols-2 gap-0.5">
-                      {featureItems.map((f) => (
-                        <Link
-                          key={f.href}
-                          href={f.href}
-                          className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition hover:bg-[#fafafa]"
-                        >
-                          <f.icon className="mt-0.5 h-4 w-4 shrink-0 text-[#999]" />
-                          <div>
-                            <p className="text-[13px] font-semibold text-[#0a0a0a]">{f.title}</p>
-                            <p className="mt-0.5 text-[12px] text-[#999]">{f.desc}</p>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                    <div className="mt-2 border-t border-[#f0f0f0] pt-2">
-                      <Link href="/features" className="flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium text-[#666] transition hover:text-[#0a0a0a]">
-                        All features <ArrowRight className="h-3 w-3" />
+              {/* Mega-menu */}
+              {megaOpen && (
+                <div className="absolute top-full left-1/2 mt-2 w-[480px] -translate-x-1/2 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
+                  <div className="grid grid-cols-2 gap-1">
+                    {featureItems.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-[#F8FAFC]"
+                      >
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB] group-hover:bg-[#1A56DB] group-hover:text-white transition-colors">
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <p className="text-[13px] font-semibold text-[#0F172A]">{item.label}</p>
+                          <p className="text-[12px] leading-snug text-[#64748B]">{item.desc}</p>
+                        </div>
                       </Link>
-                    </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 border-t border-[#E2E8F0] pt-3">
+                    <Link
+                      href="/features"
+                      className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A56DB] hover:underline"
+                    >
+                      View all features <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
                 </div>
-              ) : null}
+              )}
             </div>
 
-            <Link href="/pricing" className="rounded-md px-3 py-1.5 text-[14px] font-medium text-[#666] transition hover:text-[#0a0a0a]">Pricing</Link>
-            <Link href="/about" className="rounded-md px-3 py-1.5 text-[14px] font-medium text-[#666] transition hover:text-[#0a0a0a]">About</Link>
-          </nav>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2 md:gap-3">
-          <Link href="/login" className="hidden rounded-md px-3 py-1.5 text-[14px] font-medium text-[#666] transition hover:text-[#0a0a0a] md:inline-block">
-            Sign in
-          </Link>
-          <Link href="/register" className="hidden rounded-full bg-[#0a0a0a] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#333] md:inline-block">
-            Get started
-          </Link>
-          <button
-            type="button"
-            aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-[#0a0a0a] transition hover:bg-[#f5f5f5] md:hidden"
-            onClick={() => setMobileOpen((v) => !v)}
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </div>
-      </div>
-
-      {mobileOpen ? (
-        <div className="border-t border-[#f0f0f0] bg-white px-6 py-4 md:hidden">
-          <nav className="flex flex-col gap-1">
-            <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-[#999]">Features</p>
-            {featureItems.map((f) => (
+            {navLinks.map((l) => (
               <Link
-                key={f.href}
-                href={f.href}
-                className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition hover:bg-[#fafafa]"
-                onClick={() => setMobileOpen(false)}
+                key={l.href}
+                href={l.href}
+                className={`rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
+                  pathname === l.href
+                    ? "text-[#1A56DB]"
+                    : isDark
+                    ? "text-white/80 hover:text-white hover:bg-white/10"
+                    : "text-[#334155] hover:text-[#1A56DB] hover:bg-[#EFF6FF]"
+                }`}
               >
-                {f.title}
+                {l.label}
               </Link>
             ))}
-            <Link href="/features" className="rounded-lg px-3 py-2 text-[13px] font-medium text-[#7C5CFC]" onClick={() => setMobileOpen(false)}>
-              All features →
-            </Link>
-            <div className="my-2 border-t border-[#f0f0f0]" />
-            <Link href="/pricing" className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition hover:bg-[#fafafa]" onClick={() => setMobileOpen(false)}>
-              Pricing
-            </Link>
-            <Link href="/about" className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition hover:bg-[#fafafa]" onClick={() => setMobileOpen(false)}>
-              About
-            </Link>
-            <div className="my-2 border-t border-[#f0f0f0]" />
-            <Link href="/login" className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#666]" onClick={() => setMobileOpen(false)}>
+          </nav>
+
+          {/* Desktop right CTAs */}
+          <div className="hidden items-center gap-2 lg:flex">
+            <Link
+              href="/login"
+              className={`rounded-lg px-4 py-2 text-[14px] font-semibold transition-colors font-body ${
+                isDark ? "text-white/80 hover:text-white hover:bg-white/10" : "text-[#334155] hover:text-[#1A56DB] hover:bg-[#F8FAFC]"
+              }`}
+            >
               Sign in
             </Link>
             <Link
               href="/register"
-              className="mt-1 rounded-full bg-[#0a0a0a] py-3 text-center text-[14px] font-semibold text-white"
-              onClick={() => setMobileOpen(false)}
+              className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#1A56DB] px-4 py-2 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 font-body"
             >
               Get started
             </Link>
-          </nav>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMobileOpen((v) => !v)}
+            className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors lg:hidden ${
+              isDark ? "text-white hover:bg-white/10" : "text-[#334155] hover:bg-[#F8FAFC]"
+            }`}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
-      ) : null}
-    </header>
+      </header>
+
+      {/* Mobile fullscreen menu */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-40 flex flex-col bg-white pt-[72px] lg:hidden">
+          <div className="flex-1 overflow-y-auto px-5 py-6">
+            {/* Features group */}
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#94A3B8] font-body">Features</p>
+            <div className="space-y-1">
+              {featureItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-[#F8FAFC]"
+                >
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                    <item.icon className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <p className="text-[14px] font-semibold text-[#0F172A] font-body">{item.label}</p>
+                    <p className="text-[12px] text-[#64748B] font-body">{item.desc}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="my-5 border-t border-[#E2E8F0]" />
+
+            {/* Other links */}
+            {navLinks.map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="flex items-center rounded-xl px-3 py-3 text-[15px] font-semibold text-[#334155] transition-colors hover:bg-[#F8FAFC] hover:text-[#1A56DB] font-body"
+              >
+                {l.label}
+              </Link>
+            ))}
+
+            <div className="my-5 border-t border-[#E2E8F0]" />
+
+            {/* Auth CTAs */}
+            <div className="space-y-3">
+              <Link
+                href="/login"
+                className="flex w-full items-center justify-center rounded-[10px] border-2 border-[#E2E8F0] py-3 text-[15px] font-bold text-[#334155] transition hover:border-[#1A56DB] hover:text-[#1A56DB] font-body"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/register"
+                className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#1A56DB] py-3 text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] font-body"
+              >
+                Get started <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

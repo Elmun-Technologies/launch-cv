@@ -3,54 +3,60 @@ import { FeaturePageLayout } from "@/components/feature-page-template";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Interview Prep",
+  title: "AI Interview Preparation — Practice with Role-Specific Questions",
   description:
-    "Practice with AI-generated interview questions tailored to the role, your resume, and the job description. Walk into every interview confident and prepared.",
+    "Practice job interviews with AI-generated questions based on your exact role, resume, and job description. Get scored feedback and model answers. Land your next interview.",
   pathname: "/features/interview-prep",
-  keywords: ["interview prep", "interview questions", "behavioral interview", "Launch CV"],
+  keywords: ["AI interview preparation", "interview practice AI", "job interview questions", "mock interview online", "interview coaching AI"],
 });
 
 export default function InterviewPrepPage() {
   return (
     <FeaturePageLayout
       canonicalPath="/features/interview-prep"
-      accent="amber"
+      accent="emerald"
       icon={MessageSquare}
-      title="Interview Preparation"
-      tagline="Practice with AI-generated questions based on the role"
-      description="Our AI analyzes the job description and your resume to generate role-specific interview questions — from behavioral to technical. Practice your answers, get feedback, and walk into every interview feeling confident and prepared."
+      eyebrow="Interview Preparation"
+      title="Interview Prep"
+      tagline="Walk Into Every Interview Fully Prepared."
+      h1="Walk Into Every Interview Fully Prepared."
+      description="Our AI generates interview questions tailored to your specific role, company, and resume — then evaluates your answers and gives you expert feedback. No more guessing what they'll ask."
       steps={[
-        {
-          title: "Provide the Context",
-          description: "Select your resume and paste the job description. The AI understands both to create relevant questions.",
-        },
-        {
-          title: "Practice Your Answers",
-          description: "Get behavioral, technical, and situational questions tailored to the specific role and your background.",
-        },
-        {
-          title: "Review and Improve",
-          description: "See suggested answer frameworks, key points to hit, and areas where your experience shines.",
-        },
+        { title: "Connect Your Resume & JD", description: "AI reads your resume and the target job description to build role-specific questions — not generic ones." },
+        { title: "Choose Question Category", description: "Select from Behavioral, Technical, Company & Culture, Situational, or Curveball question sets." },
+        { title: "Answer in Your Own Words", description: "Type your answer naturally. Think of it as a real interview — no scripts, just your honest response." },
+        { title: "Receive Scored Feedback", description: "Each answer scored 1–10 with breakdown: Clarity, Relevance, Impact, and STAR structure." },
+        { title: "Review Model Answer", description: "AI provides a benchmark answer for comparison — not to memorize, but to understand the standard." },
+        { title: "Track Your Progress", description: "Session history shows questions practiced, average score, and improvement over time." },
       ]}
       benefits={[
-        "Questions tailored to the specific job description and role",
-        "Behavioral, technical, and situational question types",
-        "Answer frameworks based on your actual experience",
-        "STAR method guidance for behavioral questions",
-        "Industry-specific question sets for 12+ verticals",
-        "Elevator pitch generator for networking and introductions",
+        "Behavioral questions: 'Tell me about a time…' — STAR-method questions generated from your resume experience",
+        "Technical / role-specific: pulled directly from the job description skills and requirements",
+        "Company & culture: based on company values, mission, and recent news",
+        "Situational questions: 'What would you do if…' — scenarios relevant to the exact role",
+        "AI scoring: each answer rated 1–10 with Clarity, Relevance, Impact, and STAR breakdown",
+        "Progress tracking: session history with average score and improvement trend over time",
       ]}
-      testimonial={{
-        text: "The interview questions were eerily similar to what I was actually asked. Being prepared with my own stories already mapped to potential questions gave me a huge confidence boost.",
-        name: "David Park",
-        role: "Engineering Manager at Stripe",
-      }}
+      testimonials={[
+        {
+          text: "The interview prep feature is underrated. Practicing with AI questions specific to the job made me so much more confident. I knew the answers before they asked.",
+          name: "James O.",
+          role: "Data Analyst",
+        },
+        {
+          text: "I failed 4 interviews before using Launch CV. The AI feedback showed me I wasn't using STAR structure properly. Fixed that — and got hired on the next one.",
+          name: "Nina P.",
+          role: "Business Analyst",
+        },
+      ]}
       relatedFeatures={[
         { title: "JD Alignment", href: "/features/jd-alignment" },
         { title: "Cover Letter Generator", href: "/features/cover-letter" },
-        { title: "AI Resume Builder", href: "/features/resume-builder" },
+        { title: "Resume Builder", href: "/features/resume-builder" },
       ]}
+      ctaHeadline="The Interview Won't Surprise You. We Make Sure of It."
+      ctaSubtitle="200+ role-specific questions · AI scoring · Instant feedback on every answer."
+      ctaButton="Practice My First Interview"
     />
   );
 }

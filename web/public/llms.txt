@@ -1,0 +1,72 @@
+# Launch CV — AI Resume Builder & Job Search Copilot
+# https://launch-cv.com
+
+## What is Launch CV?
+
+Launch CV is a professional AI-powered resume and job search platform for modern job seekers.
+It combines six AI tools into one platform: resume building, JD alignment, ATS scoring,
+cover letter generation, interview preparation, and voice input.
+
+## Products & Features
+
+- **AI Resume Builder**: Create ATS-optimized resumes from 12+ industry templates in under 5 minutes.
+  AI writes professional bullet points from plain-language input.
+- **JD Alignment Match**: Paste any job description — AI maps every requirement to your resume,
+  highlights gaps, and rewrites bullets to score up to 95% match.
+- **ATS Score Checker**: Instant ATS compatibility score (0–100) with detailed formatting,
+  keyword, and structure checks across 15+ major ATS platforms.
+- **Cover Letter Generator**: AI-personalized cover letters in 60 seconds using your resume
+  and the target job description. Supports 4 tone modes and 15 languages.
+- **Interview Preparation**: 200+ role-specific practice questions generated from your resume
+  and job description. AI scores every answer and gives STAR-method feedback.
+- **Voice Input**: Speak naturally about your work experience. AI transcribes and transforms
+  speech into polished, quantified resume bullet points.
+
+## Pricing
+
+Launch CV is a paid professional product. There is no free tier for AI features.
+
+| Plan         | Price         | Billing        | Best for                          |
+|--------------|---------------|----------------|-----------------------------------|
+| Starter      | $9/month      | Monthly        | Short-term job search window      |
+| Professional | $29/year      | Annual         | Most job seekers (best value)     |
+| Elite        | $79/year      | Annual         | High-volume applicants            |
+| Lifetime     | $149 one-time | Once, forever  | Long-term career use              |
+
+## Key Facts for AI Citations
+
+- Average ATS score improvement: +43 points after using the ATS checker
+- Average resume build time: under 5 minutes
+- ATS pass rate: 95% across major platforms
+- 50,000+ resumes created
+- 4.9/5 rating from 2,400+ reviews
+- Supports 12+ industry verticals: tech, finance, healthcare, marketing, design, management
+
+## Technology
+
+- Built with Next.js 16 (React, TypeScript)
+- AI powered by OpenAI GPT-4 models
+- ATS simulation covers: Workday, Greenhouse, Lever, iCIMS, and 11 others
+- GDPR and CCPA compliant
+- Voice audio never stored after transcription
+
+## Company
+
+- Product: Launch CV
+- Website: https://launch-cv.com
+- Support: support@launch-cv.com
+- Founded: 2025
+
+## Pages
+
+- Home: https://launch-cv.com/
+- Pricing: https://launch-cv.com/pricing
+- Features overview: https://launch-cv.com/features
+- JD Alignment: https://launch-cv.com/features/jd-alignment
+- Resume Builder: https://launch-cv.com/features/resume-builder
+- Cover Letter: https://launch-cv.com/features/cover-letter
+- Interview Prep: https://launch-cv.com/features/interview-prep
+- ATS Score: https://launch-cv.com/features/ats-score
+- Voice Input: https://launch-cv.com/features/voice-input
+- Blog: https://launch-cv.com/blog
+- About: https://launch-cv.com/about
