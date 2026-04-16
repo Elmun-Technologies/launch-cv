@@ -15,26 +15,26 @@ export default function Home() {
           <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#f8fafc_0%,#ffffff_100%)]" />
           <div className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 bg-[radial-gradient(circle,rgba(4,156,255,0.04),transparent_70%)]" />
 
-          <div className="relative mx-auto max-w-[980px] px-6 pb-32 pt-32 sm:pt-40">
-            <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">
+          <div className="relative mx-auto max-w-[980px] px-6 pb-24 pt-24 sm:pb-32 sm:pt-40">
+            <p className="text-[14px] font-medium tracking-wide text-[#7C5CFC] sm:text-[15px]">
               The resume platform for modern job seekers
             </p>
 
-            <h1 className="mt-5 text-[56px] font-[750] leading-[1.05] tracking-[-0.035em] text-[#0a0a0a] sm:text-[72px]">
+            <h1 className="mt-4 text-[40px] font-[750] leading-[1.08] tracking-[-0.035em] text-[#0a0a0a] sm:mt-5 sm:text-[56px] sm:leading-[1.05] lg:text-[72px]">
               Tailored resumes.<br />
               More interviews.
             </h1>
 
-            <p className="mt-8 max-w-[540px] text-[19px] leading-[1.7] text-[#666]">
+            <p className="mt-6 max-w-[540px] text-[17px] leading-[1.65] text-[#666] sm:mt-8 sm:text-[19px] sm:leading-[1.7]">
               Paste a job description. Launch CV rewrites your resume to match,
               scores it against ATS filters, and generates your cover letter.
               In under two minutes.
             </p>
 
-            <div className="mt-12 flex items-center gap-5">
+            <div className="mt-10 flex flex-col gap-4 sm:mt-12 sm:flex-row sm:items-center sm:gap-5">
               <Link
                 href="/register"
-                className="group inline-flex items-center gap-3 rounded-full bg-[#0a0a0a] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#333]"
+                className="group inline-flex w-fit items-center justify-center gap-3 rounded-full bg-[#0a0a0a] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#333]"
               >
                 Start building — free
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
@@ -42,6 +42,15 @@ export default function Home() {
 
               <span className="text-[14px] text-[#999]">No credit card required</span>
             </div>
+            <p className="mt-8 text-[12px] leading-relaxed text-[#aaa]">
+              <Link href="/legal/privacy" className="underline decoration-[#ccc] underline-offset-2 transition hover:text-[#666]">
+                Privacy
+              </Link>
+              <span className="mx-2 text-[#ddd]">·</span>
+              <Link href="/legal/terms" className="underline decoration-[#ccc] underline-offset-2 transition hover:text-[#666]">
+                Terms
+              </Link>
+            </p>
           </div>
         </section>
 
@@ -54,20 +63,23 @@ export default function Home() {
               { value: "3.2×", sub: "more interview callbacks" },
               { value: "12", sub: "industry rubrics" },
             ].map((m) => (
-              <div key={m.sub} className="bg-white px-8 py-10 text-center">
-                <p className="text-[36px] font-[750] tracking-[-0.02em] text-[#0a0a0a]">{m.value}</p>
-                <p className="mt-2 text-[13px] text-[#999]">{m.sub}</p>
+              <div key={m.sub} className="bg-white px-6 py-8 text-center sm:px-8 sm:py-10">
+                <p className="text-[28px] font-[750] tracking-[-0.02em] text-[#0a0a0a] sm:text-[36px]">{m.value}</p>
+                <p className="mt-2 text-[12px] text-[#999] sm:text-[13px]">{m.sub}</p>
               </div>
             ))}
           </div>
+          <p className="mx-auto max-w-[980px] px-6 pb-6 text-center text-[11px] leading-relaxed text-[#bbb]">
+            Illustrative benchmarks from internal tooling and beta feedback; your results depend on role, market, and how you apply.
+          </p>
         </section>
 
         {/* ── How it works ── */}
         <section className="mx-auto max-w-[980px] px-6 py-32">
           <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">How it works</p>
-          <h2 className="mt-4 text-[44px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a]">
-            Three steps. Two minutes.
-          </h2>
+            <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
+              Three steps. Two minutes.
+            </h2>
 
           <div className="mt-16 grid gap-12 sm:grid-cols-3">
             {[
@@ -88,7 +100,7 @@ export default function Home() {
         <section className="border-t border-[#f0f0f0] bg-[#fafafa]">
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Features</p>
-            <h2 className="mt-4 max-w-[600px] text-[44px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a]">
+            <h2 className="mt-4 max-w-[600px] text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
               Six tools that replace hours of manual work.
             </h2>
 
@@ -117,15 +129,18 @@ export default function Home() {
         <section className="border-t border-[#f0f0f0]">
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Testimonials</p>
-            <h2 className="mt-4 text-[44px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a]">
-              Real results from real people.
+            <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
+              Stories from active job seekers.
             </h2>
+            <p className="mt-3 max-w-[640px] text-[14px] leading-relaxed text-[#999]">
+              Composite quotes based on common outcomes we see in beta — not endorsements by any employer.
+            </p>
 
-            <div className="mt-16 grid gap-6 sm:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-3">
               {[
-                { name: "Sarah Chen", title: "Software Engineer", co: "Google", text: "I was sending 50+ applications with zero callbacks. After Launch CV, I got 3 interviews in the first week.", metric: "3 interviews / 7 days" },
-                { name: "Marcus Johnson", title: "Product Manager", co: "Meta", text: "My resume scored 38/100 before. After tailoring — 91. I got the interview on my second application.", metric: "38 → 91 ATS score" },
-                { name: "Emily Rodriguez", title: "UX Designer", co: "Apple", text: "The AI doesn\u2019t fabricate achievements. It took what I actually did and made it compelling. Hired in 3 weeks.", metric: "Hired in 3 weeks" },
+                { name: "Sarah C.", title: "Software Engineer", co: "Tech · US", text: "I was sending 50+ applications with zero callbacks. After Launch CV, I got 3 interviews in the first week.", metric: "3 interviews / 7 days" },
+                { name: "Marcus J.", title: "Product Manager", co: "B2B SaaS", text: "My resume scored 38/100 before. After tailoring — 91. I got the interview on my second application.", metric: "38 → 91 ATS score" },
+                { name: "Emily R.", title: "UX Designer", co: "Agency → in-house", text: "The AI doesn\u2019t fabricate achievements. It took what I actually did and made it compelling. Hired in 3 weeks.", metric: "Hired in 3 weeks" },
               ].map((t) => (
                 <div key={t.name} className="rounded-xl border border-[#e5e5e5] p-6">
                   <div className="flex gap-0.5">
@@ -137,7 +152,7 @@ export default function Home() {
                   <div className="mt-5 rounded-md bg-[#fafafa] px-3 py-2 text-center text-[13px] font-semibold text-[#0a0a0a]">{t.metric}</div>
                   <div className="mt-5">
                     <p className="text-[14px] font-semibold text-[#0a0a0a]">{t.name}</p>
-                    <p className="text-[13px] text-[#999]">{t.title} at {t.co}</p>
+                    <p className="text-[13px] text-[#999]">{t.title} · {t.co}</p>
                   </div>
                 </div>
               ))}
@@ -149,7 +164,7 @@ export default function Home() {
         <section className="border-t border-[#f0f0f0] bg-[#fafafa]">
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Pricing</p>
-            <h2 className="mt-4 text-[44px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a]">
+            <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
               Start free. Scale when ready.
             </h2>
 
@@ -202,7 +217,7 @@ export default function Home() {
         {/* ── Final CTA ── */}
         <section className="border-t border-[#f0f0f0]">
           <div className="mx-auto max-w-[980px] px-6 py-32 text-center">
-            <h2 className="text-[48px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[56px]">
+            <h2 className="text-[36px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[48px] lg:text-[56px]">
               Your next interview is<br />one resume away.
             </h2>
             <p className="mx-auto mt-6 max-w-[480px] text-[17px] leading-[1.7] text-[#666]">

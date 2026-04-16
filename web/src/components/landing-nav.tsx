@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ChevronDown, ArrowRight } from "lucide-react";
+import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ChevronDown, ArrowRight, Menu, X } from "lucide-react";
 
 const featureItems = [
   { href: "/features/jd-alignment", icon: Target, title: "JD Alignment", desc: "Match resume to any job description" },
@@ -15,12 +15,13 @@ const featureItems = [
 
 export function LandingNav() {
   const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#f0f0f0] bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex max-w-[1120px] items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2.5">
+        <div className="flex min-w-0 flex-1 items-center gap-4 md:gap-8">
+          <Link href="/" className="flex shrink-0 items-center gap-2.5" onClick={() => setMobileOpen(false)}>
             <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#0a0a0a] text-[12px] font-bold text-white">L</span>
             <span className="text-[15px] font-bold text-[#0a0a0a]">Launch CV</span>
           </Link>
@@ -72,11 +73,63 @@ export function LandingNav() {
           </nav>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link href="/login" className="rounded-md px-3 py-1.5 text-[14px] font-medium text-[#666] transition hover:text-[#0a0a0a]">Sign in</Link>
-          <Link href="/register" className="rounded-full bg-[#0a0a0a] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#333]">Get started</Link>
+        <div className="flex shrink-0 items-center gap-2 md:gap-3">
+          <Link href="/login" className="hidden rounded-md px-3 py-1.5 text-[14px] font-medium text-[#666] transition hover:text-[#0a0a0a] md:inline-block">
+            Sign in
+          </Link>
+          <Link href="/register" className="hidden rounded-full bg-[#0a0a0a] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#333] md:inline-block">
+            Get started
+          </Link>
+          <button
+            type="button"
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-[#0a0a0a] transition hover:bg-[#f5f5f5] md:hidden"
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
       </div>
+
+      {mobileOpen ? (
+        <div className="border-t border-[#f0f0f0] bg-white px-6 py-4 md:hidden">
+          <nav className="flex flex-col gap-1">
+            <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wide text-[#999]">Features</p>
+            {featureItems.map((f) => (
+              <Link
+                key={f.href}
+                href={f.href}
+                className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition hover:bg-[#fafafa]"
+                onClick={() => setMobileOpen(false)}
+              >
+                {f.title}
+              </Link>
+            ))}
+            <Link href="/features" className="rounded-lg px-3 py-2 text-[13px] font-medium text-[#7C5CFC]" onClick={() => setMobileOpen(false)}>
+              All features →
+            </Link>
+            <div className="my-2 border-t border-[#f0f0f0]" />
+            <Link href="/pricing" className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition hover:bg-[#fafafa]" onClick={() => setMobileOpen(false)}>
+              Pricing
+            </Link>
+            <Link href="/about" className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#0a0a0a] transition hover:bg-[#fafafa]" onClick={() => setMobileOpen(false)}>
+              About
+            </Link>
+            <div className="my-2 border-t border-[#f0f0f0]" />
+            <Link href="/login" className="rounded-lg px-3 py-2.5 text-[14px] font-medium text-[#666]" onClick={() => setMobileOpen(false)}>
+              Sign in
+            </Link>
+            <Link
+              href="/register"
+              className="mt-1 rounded-full bg-[#0a0a0a] py-3 text-center text-[14px] font-semibold text-white"
+              onClick={() => setMobileOpen(false)}
+            >
+              Get started
+            </Link>
+          </nav>
+        </div>
+      ) : null}
     </header>
   );
 }
