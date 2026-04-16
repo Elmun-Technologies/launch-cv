@@ -9,7 +9,7 @@
     "dev": "node scripts/dev-pick-port.cjs",
     "dev:webpack": "node scripts/dev-pick-port.cjs --webpack",
     "dev:3000": "next dev -H 0.0.0.0 -p 3000",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "prisma generate && prisma db push && next build",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
