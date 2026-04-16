@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 export type AiUsagePayload = {
   pro: boolean;
+  paid?: boolean;
+  plan?: string;
   month: string;
   limits: { jd: number; packet: number; roleFit: number };
   used: { jd: number; packet: number; roleFit: number };

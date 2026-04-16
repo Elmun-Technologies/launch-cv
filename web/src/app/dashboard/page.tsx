@@ -2,26 +2,37 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import { getUserPlanId } from "@/lib/plans";
 import { DashboardShell } from "@/components/dashboard-shell";
 import {
   FileText, Briefcase, Users, Building2,
   ArrowRight, Plus, Download, TrendingUp,
-  Calendar, MoreHorizontal,
+  MoreHorizontal, Sparkles,
 } from "lucide-react";
 
 export default async function HomePage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const user = await prisma.user.findUnique({ where: { id: session.sub }, select: { name: true } });
-
-  const [resumeCount, appCount, contactCount, companyCount, recentResumes, recentApps] = await Promise.all([
+  const [user, plan, resumeCount, appCount, contactCount, companyCount, recentResumes, recentApps] = await Promise.all([
+    prisma.user.findUnique({ where: { id: session.sub }, select: { name: true } }),
+    getUserPlanId(session.sub),
     prisma.resume.count({ where: { userId: session.sub } }),
     prisma.jobApplication.count({ where: { userId: session.sub } }),
     prisma.contact.count({ where: { userId: session.sub } }),
     prisma.company.count({ where: { userId: session.sub } }),
-    prisma.resume.findMany({ where: { userId: session.sub }, orderBy: { updatedAt: "desc" }, take: 5, select: { id: true, title: true, vertical: true, updatedAt: true } }),
-    prisma.jobApplication.findMany({ where: { userId: session.sub }, orderBy: { updatedAt: "desc" }, take: 5, select: { id: true, title: true, company: true, status: true, createdAt: true } }),
+    prisma.resume.findMany({
+      where: { userId: session.sub },
+      orderBy: { updatedAt: "desc" },
+      take: 5,
+      select: { id: true, title: true, vertical: true, updatedAt: true },
+    }),
+    prisma.jobApplication.findMany({
+      where: { userId: session.sub },
+      orderBy: { updatedAt: "desc" },
+      take: 5,
+      select: { id: true, title: true, company: true, status: true, createdAt: true },
+    }),
   ]);
 
   const firstName = user?.name?.split(" ")[0] || "there";
@@ -29,6 +40,29 @@ export default async function HomePage() {
   return (
     <DashboardShell email={session.email} pageTitle="Dashboard">
       <div className="space-y-8">
+        {plan === "none" ? (
+          <div className="flex flex-col gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] text-white">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-[14px] font-bold text-gray-900">Activate a plan to unlock AI</p>
+                <p className="mt-0.5 text-[13px] leading-relaxed text-gray-600">
+                  Launch CV is paid-only for AI features. Choose Starter, Professional, Elite, or Lifetime in subscription
+                  settings.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/dashboard/settings/subscription"
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#6B4CE0]"
+            >
+              Choose plan
+            </Link>
+          </div>
+        ) : null}
+
         {/* ── Greeting ── */}
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>

@@ -4,14 +4,18 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Check, Star } from "lucide-react";
-import { PUBLIC_PRICING, freePlanMarketingBullets, proPlanMarketingBullets } from "@/lib/monetization";
+import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER } from "@/lib/plans";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
+
+const SUB_NEXT = "/dashboard/settings/subscription";
+const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 
 export const metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Copilot",
   description:
-    "Paste a job description — Launch CV rewrites your resume, scores ATS fit, and generates your cover letter. Free to start, no credit card.",
+    "Paste a job description — Launch CV rewrites your resume, scores ATS fit, and generates your cover letter. Paid plans: Starter, Professional, Elite, or Lifetime.",
   pathname: "/",
   keywords: ["Launch CV", "resume builder", "ATS resume", "JD alignment", "cover letter AI", "interview prep"],
 });
@@ -60,14 +64,17 @@ export default function Home() {
 
             <div className="lc-motion-fade lc-s4 mt-10 flex flex-col gap-4 sm:mt-12 sm:flex-row sm:items-center sm:gap-5">
               <Link
-                href="/register"
+                href={registerHref}
                 className="group inline-flex w-fit items-center justify-center gap-3 rounded-full bg-[#0a0a0a] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#333] motion-safe:hover:shadow-lg"
               >
-                Start building — free
+                View plans & get started
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
 
-              <span className="text-[14px] text-[#999]">No credit card required</span>
+              <Link href="/pricing" className="text-[14px] font-medium text-[#7C5CFC] underline-offset-2 hover:underline">
+                From {PUBLIC_PLANS.starter.priceDisplay}
+                {PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+              </Link>
             </div>
             <p className="lc-motion-fade lc-s5 mt-8 text-[12px] leading-relaxed text-[#aaa]">
               <Link href="/legal/privacy" className="underline decoration-[#ccc] underline-offset-2 transition hover:text-[#666]">
@@ -201,51 +208,58 @@ export default function Home() {
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Pricing</p>
             <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
-              Start free. Scale when ready.
+              One job search. Pick your ceiling.
             </h2>
+            <p className="mt-3 max-w-[720px] text-[14px] leading-relaxed text-[#999]">
+              No free tier — you pay for professional-grade AI, templates, and limits that match how hard you are applying. Upgrade anytime; Lifetime removes renewals.
+            </p>
 
-            <div className="mt-16 grid gap-6 sm:grid-cols-2">
-              <div className="rounded-xl border border-[#e5e5e5] bg-white p-8">
-                <p className="text-[14px] font-semibold text-[#999]">Free</p>
-                <p className="mt-3 text-[48px] font-[750] leading-none tracking-[-0.03em] text-[#0a0a0a]">$0</p>
-                <p className="mt-3 text-[14px] text-[#999]">For getting started</p>
-                <ul className="mt-8 space-y-3">
-                  {freePlanMarketingBullets().map((t) => (
-                    <li key={t} className="flex items-center gap-3 text-[14px] text-[#666]">
-                      <Check className="h-4 w-4 shrink-0 text-[#0a0a0a]" />{t}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/register" className="mt-10 block rounded-full border border-[#e5e5e5] py-3 text-center text-[14px] font-semibold text-[#0a0a0a] transition hover:border-[#ccc] hover:bg-[#fafafa]">
-                  Get started
-                </Link>
-              </div>
-
-              <div className="rounded-xl border border-[#0a0a0a] bg-white p-8">
-                <div className="flex items-center justify-between">
-                  <p className="text-[14px] font-semibold text-[#999]">Pro</p>
-                  <span className="rounded-full bg-[#0a0a0a] px-3 py-1 text-[11px] font-bold text-white">POPULAR</span>
-                </div>
-                <p className="mt-3 text-[48px] font-[750] leading-none tracking-[-0.03em] text-[#0a0a0a]">
-                  {PUBLIC_PRICING.priceDisplay}
-                  <span className="text-[18px] font-normal text-[#999]">/year</span>
-                </p>
-                <p className="mt-2 text-[13px] leading-snug text-[#888]">{PUBLIC_PRICING.billingExplainer}</p>
-                <p className="mt-3 text-[14px] text-[#999]">For active job seekers</p>
-                <ul className="mt-8 space-y-3">
-                  {proPlanMarketingBullets().map((t) => (
-                    <li key={t} className="flex items-center gap-3 text-[14px] text-[#666]">
-                      <Check className="h-4 w-4 shrink-0 text-[#0a0a0a]" />{t}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/login?next=/dashboard/settings/subscription"
-                  className="mt-10 block rounded-full bg-[#0a0a0a] py-3 text-center text-[14px] font-semibold text-white transition hover:bg-[#333]"
-                >
-                  Get Pro — {PUBLIC_PRICING.priceDisplay}/year
-                </Link>
-              </div>
+            <div className="mt-16 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+              {CHECKOUT_PLAN_ORDER.map((key) => {
+                const cfg = PUBLIC_PLANS[key];
+                const bullets = planMarketingBullets(key);
+                const popular = !!cfg.popular;
+                return (
+                  <div
+                    key={key}
+                    className={`flex flex-col rounded-xl border bg-white p-6 sm:p-7 ${
+                      popular ? "border-[#0a0a0a] ring-1 ring-[#0a0a0a]" : "border-[#e5e5e5]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[13px] font-semibold text-[#999]">{cfg.title}</p>
+                      {popular ? (
+                        <span className="shrink-0 rounded-full bg-[#0a0a0a] px-2.5 py-0.5 text-[10px] font-bold text-white">
+                          POPULAR
+                        </span>
+                      ) : null}
+                    </div>
+                    <p className="mt-3 flex flex-wrap items-baseline gap-1 font-[750] tracking-[-0.03em] text-[#0a0a0a]">
+                      <span className="text-[36px] leading-none sm:text-[40px]">{cfg.priceDisplay}</span>
+                      <span className="text-[15px] font-semibold text-[#999]">{cfg.periodLabel}</span>
+                    </p>
+                    <p className="mt-2 text-[12px] leading-snug text-[#888]">{cfg.valueLine}</p>
+                    <ul className="mt-6 flex-1 space-y-2.5">
+                      {bullets.slice(0, 5).map((t) => (
+                        <li key={t} className="flex items-start gap-2.5 text-[13px] leading-snug text-[#666]">
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0a0a0a]" />
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                    <Link
+                      href={registerHref}
+                      className={`mt-8 block rounded-full py-2.5 text-center text-[13px] font-semibold transition ${
+                        popular
+                          ? "bg-[#0a0a0a] text-white hover:bg-[#333]"
+                          : "border border-[#e5e5e5] text-[#0a0a0a] hover:border-[#ccc] hover:bg-[#fafafa]"
+                      }`}
+                    >
+                      Choose {cfg.title}
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           </div>
           </RevealOnView>
@@ -264,10 +278,10 @@ export default function Home() {
             </p>
             <div className="mt-10">
               <Link
-                href="/register"
+                href="/pricing"
                 className="group inline-flex items-center gap-3 rounded-full bg-[#0a0a0a] px-8 py-4 text-[16px] font-semibold text-white transition hover:bg-[#333]"
               >
-                Build your resume — free
+                See pricing
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
             </div>

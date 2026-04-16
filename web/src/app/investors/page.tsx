@@ -53,8 +53,9 @@ const competitors = [
     coverLetter: true,
     interviewPrep: true,
     voiceInput: true,
-    freeCore: true,
-    price: "$9/mo",
+    /** Product-led: AI and premium workflows require an active plan (monthly, annual, or lifetime). */
+    paidFirstAi: true,
+    price: "$9/mo – $149 LT",
   },
   {
     name: "Teal",
@@ -64,7 +65,7 @@ const competitors = [
     coverLetter: false,
     interviewPrep: false,
     voiceInput: false,
-    freeCore: "partial",
+    paidFirstAi: "partial",
     price: "$29/mo",
   },
   {
@@ -75,7 +76,7 @@ const competitors = [
     coverLetter: true,
     interviewPrep: false,
     voiceInput: false,
-    freeCore: "partial",
+    paidFirstAi: "partial",
     price: "$29/mo",
   },
   {
@@ -86,7 +87,7 @@ const competitors = [
     coverLetter: false,
     interviewPrep: false,
     voiceInput: false,
-    freeCore: false,
+    paidFirstAi: "partial",
     price: "$50/mo",
   },
 ];
@@ -98,7 +99,7 @@ const featureLabels = [
   { key: "coverLetter" as const, label: "Cover Letter" },
   { key: "interviewPrep" as const, label: "Interview Prep" },
   { key: "voiceInput" as const, label: "Voice Input" },
-  { key: "freeCore" as const, label: "Free Core Product" },
+  { key: "paidFirstAi" as const, label: "Paid-first AI (no free AI tier)" },
 ];
 
 const techHighlights = [
@@ -253,20 +254,38 @@ export default function InvestorsPage() {
         <section className="bg-[#FAFBFD] py-20">
           <div className="mx-auto max-w-4xl px-4">
             <h2 className="text-center text-2xl font-bold text-gray-900">Business Model</h2>
-            <div className="mt-10 grid gap-8 sm:grid-cols-2">
-              <div className="rounded-2xl border border-gray-100 bg-white p-7 shadow-sm">
-                <p className="text-sm font-bold text-gray-400 uppercase tracking-wider">Freemium</p>
-                <p className="mt-3 text-[40px] font-bold text-gray-900">$0</p>
-                <p className="mt-2 text-sm text-gray-500">Core resume tools to build the user base. Generous free tier drives viral adoption and word-of-mouth.</p>
-              </div>
+            <p className="mx-auto mt-3 max-w-2xl text-center text-sm text-gray-500">
+              Paid-first consumer SaaS: AI and high-intent workflows unlock after checkout. Three recurring tiers plus Lifetime for
+              long-term retention without renewals.
+            </p>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl border-2 border-[#7C5CFC] bg-white p-7 shadow-lg shadow-blue-500/10">
-                <p className="text-sm font-bold text-[#7C5CFC] uppercase tracking-wider">Pro Subscription</p>
-                <p className="mt-3 text-[40px] font-bold text-gray-900">$9<span className="text-lg font-normal text-gray-400">/mo</span></p>
-                <p className="mt-2 text-sm text-gray-500">Unlimited AI tools, all templates, priority support. LTD (lifetime deal) channel planned for early revenue acceleration.</p>
+                <p className="text-sm font-bold text-[#7C5CFC] uppercase tracking-wider">Subscriptions</p>
+                <p className="mt-3 text-[40px] font-bold text-gray-900">
+                  $9<span className="text-lg font-normal text-gray-400">/mo</span>
+                </p>
+                <p className="mt-2 text-sm font-semibold text-gray-700">Starter · monthly</p>
+                <p className="mt-4 text-sm leading-relaxed text-gray-500">
+                  <span className="font-medium text-gray-800">Professional $29/yr</span> and{" "}
+                  <span className="font-medium text-gray-800">Elite $79/yr</span> — annual plans anchor LTV for active job
+                  searches. Lemon Squeezy handles checkout, tax, and receipts.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-gray-100 bg-white p-7 shadow-sm">
+                <p className="text-sm font-bold text-gray-400 uppercase tracking-wider">Lifetime</p>
+                <p className="mt-3 text-[40px] font-bold text-gray-900">
+                  $149<span className="text-lg font-normal text-gray-400"> once</span>
+                </p>
+                <p className="mt-2 text-sm font-semibold text-gray-700">One payment · ongoing access</p>
+                <p className="mt-4 text-sm leading-relaxed text-gray-500">
+                  Captures users who view a resume as a rare, high-stakes purchase. Paired with fair-use monthly AI caps to keep
+                  unit economics predictable.
+                </p>
               </div>
             </div>
             <p className="mt-8 text-center text-sm text-gray-500">
-              Target conversion rate: 8-12% free → Pro. Revenue expansion through enterprise/B2B and career coaching marketplace in 2027.
+              We optimize for paid activation and ARPA, not free-to-paid funnel dilution. Expansion: optional human reviews,
+              coaching marketplace, and selective B2B in 2027+.
             </p>
           </div>
         </section>
@@ -292,7 +311,8 @@ export default function InvestorsPage() {
           <div className="mx-auto max-w-5xl px-4">
             <h2 className="text-center text-2xl font-bold text-gray-900">Competitive Landscape</h2>
             <p className="mx-auto mt-3 max-w-lg text-center text-sm text-gray-500">
-              Launch CV is the only platform combining all six AI tools at a fraction of the price.
+              Launch CV combines JD-to-resume alignment, ATS scoring, packets, and prep in one stack — with a deliberate
+              paid-first AI posture vs. typical freemium resume tools.
             </p>
             <div className="mt-10 overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
               <table className="w-full min-w-[640px] text-sm">

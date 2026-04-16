@@ -124,12 +124,12 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
   const progressPct = Math.min(100, Math.round((progressCurrent / 5) * 100));
 
   const [inviteDescription, setInviteDescription] = useState(
-    `I've been using Launch CV to manage my job search. I've found it really helpful so far and think you might too! Get started for free here: ${referralLink}`,
+    `I've been using Launch CV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
   );
 
   useEffect(() => {
     setInviteDescription(
-      `I've been using Launch CV to manage my job search. I've found it really helpful so far and think you might too! Get started for free here: ${referralLink}`,
+      `I've been using Launch CV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
     );
   }, [referralLink]);
 
@@ -141,7 +141,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
 
   const steps = [
     { step: 1, icon: Link2, title: "Share your link", desc: "Send your unique referral link to friends" },
-    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "They create a free Launch CV account" },
+    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "They create a Launch CV account and activate a plan" },
     { step: 3, icon: Gift, title: "Earn credits", desc: "Get $9 for every 5 successful referrals" },
   ];
 

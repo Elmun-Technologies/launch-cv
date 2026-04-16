@@ -3,21 +3,32 @@ import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { appBaseUrl } from "@/lib/email";
+import { variantIdForCheckoutPlan, type CheckoutPlan } from "@/lib/plans";
 
 const LS_API = "https://api.lemonsqueezy.com/v1/checkouts";
 
-export async function POST() {
+const CHECKOUT_PLANS: CheckoutPlan[] = ["starter", "professional", "elite", "lifetime"];
+
+function parsePlan(body: unknown): CheckoutPlan {
+  if (!body || typeof body !== "object" || !("plan" in body)) return "professional";
+  const p = (body as { plan?: string }).plan;
+  if (typeof p === "string" && CHECKOUT_PLANS.includes(p as CheckoutPlan)) return p as CheckoutPlan;
+  return "professional";
+}
+
+export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const plan = parsePlan(await req.json().catch(() => ({})));
+
   const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
   const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
-  const variantId = process.env.LEMON_SQUEEZY_VARIANT_ID;
+  const variantId = variantIdForCheckoutPlan(plan);
   if (!apiKey || !storeId || !variantId) {
     return NextResponse.json(
       {
-        error:
-          "Configure LEMON_SQUEEZY_API_KEY, LEMON_SQUEEZY_STORE_ID, and LEMON_SQUEEZY_VARIANT_ID (subscription variant from Lemon Squeezy).",
+        error: `Configure LEMON_SQUEEZY_API_KEY, LEMON_SQUEEZY_STORE_ID, and variant for "${plan}" (e.g. LEMON_VARIANT_${plan.toUpperCase()} or LEMON_SQUEEZY_VARIANT_ID for professional).`,
       },
       { status: 501 },
     );
@@ -70,6 +81,6 @@ export async function POST() {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
-  await trackEvent("checkout_started", { userId: user.id, meta: { provider: "lemonsqueezy" } });
+  await trackEvent("checkout_started", { userId: user.id, meta: { provider: "lemonsqueezy", plan } });
   return NextResponse.json({ url: json.data.attributes.url });
 }

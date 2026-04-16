@@ -18,7 +18,9 @@ export function AiUsageBanner({ usage, kind }: { usage: AiUsagePayload | null; k
       {!usage.pro ? (
         <>
           {" "}
-          <Link href="/dashboard/settings" className="font-medium text-blue-600 underline">Pro subscription</Link>
+          <Link href="/dashboard/settings/subscription" className="font-medium text-blue-600 underline">
+            Choose a plan
+          </Link>
         </>
       ) : null}
     </div>

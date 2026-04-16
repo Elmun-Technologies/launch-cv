@@ -177,10 +177,10 @@ export function FeaturePageLayout({
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-gray-500">{description}</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
-                href="/register"
+                href="/pricing"
                 className={`inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-semibold text-white transition ${a.cta}`}
               >
-                Try it free <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                See pricing <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
               <Link
                 href="/features"
@@ -265,10 +265,10 @@ export function FeaturePageLayout({
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 px-4 text-center">
             <h2 className="text-2xl font-bold text-white">Ready to get started?</h2>
             <Link
-              href="/register"
+              href="/pricing"
               className={`inline-flex items-center gap-2 rounded-full bg-white px-8 py-3 text-sm font-semibold shadow-lg transition motion-safe:hover:scale-[1.02] ${a.footerCtaText}`}
             >
-              Create your free account <ArrowRight className="h-4 w-4" />
+              View plans <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </section>

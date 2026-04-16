@@ -8,14 +8,14 @@ import {
   User, Lock, Link2, Briefcase, Sparkles,
 } from "lucide-react";
 import { subscriptionRowGrantsPro } from "@/lib/entitlements";
-import { PUBLIC_PRICING } from "@/lib/monetization";
+import { PUBLIC_PLANS, PUBLIC_PRICING } from "@/lib/monetization";
 
 type Sub = { status: string; currentPeriodEnd: string | null } | null;
 
 const settingsNav = [
   { href: "/dashboard/settings", label: "Edit Profile", exact: true },
   { href: "/dashboard/settings/overview", label: "Overview" },
-  { href: "/dashboard/settings/subscription", label: "Pro Subscription" },
+  { href: "/dashboard/settings/subscription", label: "Subscription" },
   { href: "/dashboard/referrals", label: "Referrals" },
   { href: "/dashboard/settings/notifications", label: "Notification" },
 ];
@@ -122,7 +122,8 @@ export function SettingsClient({
               </div>
               <div>
                 <p className="text-[14px] font-bold text-gray-900">
-                  Pro — {PUBLIC_PRICING.priceDisplay} / year
+                  Plans from {PUBLIC_PLANS.starter.priceDisplay}
+                  {PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
                 </p>
                 <p className="mt-1 text-[12px] leading-relaxed text-gray-600">{PUBLIC_PRICING.upsellHook}</p>
               </div>

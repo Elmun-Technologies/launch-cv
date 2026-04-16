@@ -26,7 +26,8 @@ const values = [
   {
     icon: Lightbulb,
     title: "Accessible by Design",
-    description: "Professional resume tools shouldn't cost a fortune. Our free tier is genuinely useful — not a teaser for upsells.",
+    description:
+      "Professional tools should be priced honestly. Launch CV is a paid product so we can invest in reliable AI, support, and long-term product quality.",
   },
   {
     icon: Users,
@@ -177,10 +178,10 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-white sm:text-3xl">Join us on our mission</h2>
             <p className="text-base text-white/80">Help us make professional resume building accessible to everyone.</p>
             <Link
-              href="/register"
+              href="/pricing"
               className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#7C5CFC] shadow-lg transition hover:shadow-xl"
             >
-              Get started free <ArrowRight className="h-4 w-4" />
+              View pricing <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </section>

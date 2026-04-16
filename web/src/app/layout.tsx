@@ -25,7 +25,8 @@ export const metadata: Metadata = {
     default: "Launch CV — AI Resume Builder for 12+ Industries",
     template: "%s | Launch CV",
   },
-  description: "Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Free to start.",
+  description:
+    "Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Paid plans: Starter, Professional, Elite, or Lifetime.",
   keywords: ["resume builder", "AI resume", "job application", "JD alignment", "cover letter", "interview prep"],
   openGraph: {
     url: siteUrl,

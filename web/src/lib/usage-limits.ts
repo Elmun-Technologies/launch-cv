@@ -1,8 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { userHasProSubscription } from "@/lib/entitlements";
-
-export const FREE_MONTHLY = { jd: 5, packet: 2, roleFit: 5 } as const;
-export const PRO_MONTHLY = { jd: 200, packet: 100, roleFit: 200 } as const;
+import { getUserPlanId, limitsForPlan, type PlanId } from "@/lib/plans";
 
 export type UsageKind = "jd" | "packet" | "role_fit";
 
@@ -22,24 +19,26 @@ export async function getUsageRow(userId: string) {
 }
 
 export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
-  const pro = await userHasProSubscription(userId);
-  const limits = pro ? PRO_MONTHLY : FREE_MONTHLY;
+  const plan: PlanId = await getUserPlanId(userId);
+  const limits = limitsForPlan(plan);
   const row = await getUsageRow(userId);
   const used = kind === "jd" ? row.jdCount : kind === "packet" ? row.packetCount : row.roleFitCount;
   const max = kind === "jd" ? limits.jd : kind === "packet" ? limits.packet : limits.roleFit;
+  const paid = plan !== "none";
   if (used >= max) {
     return {
       ok: false as const,
-      pro,
+      plan,
+      paid,
       used,
       max,
       kind,
-      message: pro
-        ? "Monthly AI limit reached. Resets at the start of next month, or contact support."
-        : "Free plan limit reached. Upgrade to Pro in Account → Subscription.",
+      message: paid
+        ? "Monthly AI limit reached for your plan. Resets next month, or upgrade in Subscription."
+        : "Activate a plan to use AI features. Launch CV is paid-only — choose Starter, Professional, Elite, or Lifetime on the Pricing page.",
     };
   }
-  return { ok: true as const, pro, used, max, kind };
+  return { ok: true as const, plan, paid, used, max, kind };
 }
 
 export async function incrementAiUsage(userId: string, kind: UsageKind) {

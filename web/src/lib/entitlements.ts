@@ -8,8 +8,8 @@ export type SubscriptionGrantInput = {
   currentPeriodEnd: Date | null;
 };
 
-/** Pure helper for server + client (parsed dates). */
-export function subscriptionRowGrantsPro(sub: SubscriptionGrantInput | null): boolean {
+/** Active paid access (any Launch CV plan tier). */
+export function subscriptionRowGrantsPaid(sub: SubscriptionGrantInput | null): boolean {
   if (!sub) return false;
   if (PRO_STATUSES.has(sub.status)) return true;
   if (
@@ -22,12 +22,15 @@ export function subscriptionRowGrantsPro(sub: SubscriptionGrantInput | null): bo
   return false;
 }
 
+/** @deprecated Use `subscriptionRowGrantsPaid` — name kept for older call sites. */
+export const subscriptionRowGrantsPro = subscriptionRowGrantsPaid;
+
 export async function userHasProSubscription(userId: string): Promise<boolean> {
   const sub = await prisma.subscription.findUnique({
     where: { userId },
   });
   if (!sub) return false;
-  return subscriptionRowGrantsPro({
+  return subscriptionRowGrantsPaid({
     status: sub.status,
     currentPeriodEnd: sub.currentPeriodEnd,
   });

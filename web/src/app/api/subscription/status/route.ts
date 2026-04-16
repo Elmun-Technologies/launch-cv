@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
-import { subscriptionRowGrantsPro } from "@/lib/entitlements";
+import { getUserPlanId } from "@/lib/plans";
 
 export async function GET() {
   const session = await getSession();
@@ -12,12 +12,13 @@ export async function GET() {
     select: { status: true, currentPeriodEnd: true, cancelAtPeriodEnd: true },
   });
 
-  const row = sub
-    ? { status: sub.status, currentPeriodEnd: sub.currentPeriodEnd }
-    : null;
+  const plan = await getUserPlanId(session.sub);
+  const paid = plan !== "none";
 
   return NextResponse.json({
-    pro: subscriptionRowGrantsPro(row),
+    pro: paid,
+    paid,
+    plan,
     status: sub?.status ?? null,
     currentPeriodEnd: sub?.currentPeriodEnd?.toISOString() ?? null,
     cancelAtPeriodEnd: sub?.cancelAtPeriodEnd ?? false,

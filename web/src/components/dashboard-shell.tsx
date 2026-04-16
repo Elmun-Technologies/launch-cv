@@ -8,7 +8,7 @@ import {
   Home, FileText, Briefcase, Users, Building2, Target,
   Settings, Puzzle, Gift, HelpCircle, Menu, X, Zap, Sparkles,
 } from "lucide-react";
-import { PUBLIC_PRICING } from "@/lib/monetization";
+import { PUBLIC_PLANS, PUBLIC_PRICING } from "@/lib/monetization";
 
 const mainMenu = [
   { href: "/dashboard", label: "Dashboard", icon: Home, exact: true },
@@ -32,7 +32,10 @@ function UpgradeCard() {
       <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#7C5CFC] text-white shadow-sm">
         <Zap className="h-5 w-5" />
       </div>
-      <p className="mt-3 text-[13px] font-bold text-gray-900">Pro — {PUBLIC_PRICING.priceDisplay}/yr</p>
+      <p className="mt-3 text-[13px] font-bold text-gray-900">
+        Plans from {PUBLIC_PLANS.starter.priceDisplay}
+        {PUBLIC_PLANS.starter.periodLabel}
+      </p>
       <p className="mt-1 text-[11px] leading-snug text-gray-500">{PUBLIC_PRICING.upsellHook}</p>
       <Link
         href="/dashboard/settings/subscription"
@@ -55,8 +58,11 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
     (async () => {
       try {
         const r = await fetch("/api/subscription/status");
-        const j = (await r.json().catch(() => ({}))) as { pro?: boolean };
-        if (c && r.ok && typeof j.pro === "boolean") setIsPro(j.pro);
+        const j = (await r.json().catch(() => ({}))) as { pro?: boolean; paid?: boolean };
+        if (c && r.ok) {
+          const paid = typeof j.paid === "boolean" ? j.paid : !!j.pro;
+          setIsPro(paid);
+        }
       } finally {
         if (c) setPlanLoaded(true);
       }
@@ -188,8 +194,10 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
               <p className="flex items-start gap-2 text-[13px] text-gray-700 sm:items-center">
                 <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#7C5CFC] sm:mt-0" />
                 <span>
-                  <span className="font-bold text-gray-900">Pro</span> — {PUBLIC_PRICING.priceDisplay}{" "}
-                  {PUBLIC_PRICING.periodLabel}. {PUBLIC_PRICING.billingExplainer}
+                  <span className="font-bold text-gray-900">Activate a plan</span> — from{" "}
+                  {PUBLIC_PLANS.starter.priceDisplay}
+                  {PUBLIC_PLANS.starter.periodLabel} or {PUBLIC_PLANS.lifetime.title} {PUBLIC_PLANS.lifetime.priceDisplay}{" "}
+                  {PUBLIC_PLANS.lifetime.periodLabel}. {PUBLIC_PRICING.upsellHook}
                 </span>
               </p>
               <Link

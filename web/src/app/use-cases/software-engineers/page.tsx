@@ -65,8 +65,8 @@ export default function SoftwareEngineersPage() {
               Stop getting filtered out by ATS. Launch CV helps software engineers write resumes that showcase technical depth, quantify impact, and pass automated screens — so you can focus on what you do best: building great software.
             </p>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <Link href="/register" className="inline-flex items-center gap-2 rounded-full bg-[#7C5CFC] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-[#6B4CE0]">
-                Build your resume free <ArrowRight className="h-4 w-4" />
+              <Link href="/pricing" className="inline-flex items-center gap-2 rounded-full bg-[#7C5CFC] px-8 py-3.5 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:bg-[#6B4CE0]">
+                View plans <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="/features" className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-8 py-3.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">
                 See all features
@@ -162,10 +162,10 @@ export default function SoftwareEngineersPage() {
             <h2 className="text-2xl font-bold text-white sm:text-3xl">Ready to land your next engineering role?</h2>
             <p className="text-base text-white/80">Join thousands of engineers who use Launch CV to get past ATS and into interviews.</p>
             <Link
-              href="/register"
+              href="/pricing"
               className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#7C5CFC] shadow-lg transition hover:shadow-xl"
             >
-              Build your resume free <ArrowRight className="h-4 w-4" />
+              View plans <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </section>

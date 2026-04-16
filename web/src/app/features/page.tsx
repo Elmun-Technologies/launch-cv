@@ -136,10 +136,10 @@ export default function FeaturesPage() {
             <h2 className="text-2xl font-bold text-white sm:text-3xl">Ready to supercharge your job search?</h2>
             <p className="text-base text-white/80">Join thousands of professionals who trust Launch CV to build winning resumes.</p>
             <Link
-              href="/register"
+              href="/pricing"
               className="mt-2 inline-flex items-center gap-2 rounded-full bg-white px-8 py-3.5 text-sm font-semibold text-[#7C5CFC] shadow-lg transition hover:shadow-xl"
             >
-              Get started free <ArrowRight className="h-4 w-4" />
+              View pricing <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </section>
