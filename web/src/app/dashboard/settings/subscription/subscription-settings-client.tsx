@@ -14,7 +14,7 @@ import {
   Zap,
 } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plans";
+import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 
 type StatusPayload = {
   pro: boolean;

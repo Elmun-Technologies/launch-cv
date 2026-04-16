@@ -1,18 +1,31 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { RevealOnView } from "@/components/reveal-on-view";
-import { ArrowRight, Check, Star } from "lucide-react";
-import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER } from "@/lib/plans";
+import { HomeClient } from "@/components/home-client";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
+import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
+import {
+  Check,
+  ArrowRight,
+  ChevronDown,
+  Target,
+  FileText,
+  Mail,
+  MessageSquare,
+  BarChart3,
+  Mic,
+  Zap,
+  Shield,
+  Clock,
+  TrendingUp,
+  Star,
+} from "lucide-react";
 
-const SUB_NEXT = "/dashboard/settings/subscription";
-const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
-
-export const metadata = buildMarketingMetadata({
+export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Copilot",
   description:
     "Paste a job description — Launch CV rewrites your resume, scores ATS fit, and generates your cover letter. Paid plans: Starter, Professional, Elite, or Lifetime.",
@@ -34,261 +47,515 @@ const homeStructuredData = {
   ],
 };
 
+const features = [
+  { href: "/features/jd-alignment", icon: Target, title: "JD Alignment Match", accent: "blue", desc: "Paste any job description — AI highlights every gap, missing keyword, and optimization opportunity. Score up to 95% match." },
+  { href: "/features/resume-builder", icon: FileText, title: "AI Resume Builder", accent: "violet", desc: "12+ ATS-tested templates. AI writes professional bullet points from your raw input — no writing skills needed." },
+  { href: "/features/cover-letter", icon: Mail, title: "Cover Letter Generator", accent: "teal", desc: "Personalized, job-specific cover letters in 60 seconds. Professional tone, ready to send." },
+  { href: "/features/interview-prep", icon: MessageSquare, title: "Interview Preparation", accent: "green", desc: "AI generates questions based on your exact role, resume, and job description. Get scored feedback." },
+  { href: "/features/ats-score", icon: BarChart3, title: "ATS Score Checker", accent: "orange", desc: "See exactly how your resume scores against applicant tracking systems. Get an actionable fix checklist." },
+  { href: "/features/voice-input", icon: Mic, title: "Voice Input", accent: "pink", desc: "Just speak your experience naturally. AI transcribes and transforms your words into polished resume bullets." },
+];
+
+const accentMap: Record<string, string> = {
+  blue: "bg-[#EFF6FF] text-[#1A56DB]",
+  violet: "bg-[#EDE9FE] text-[#6D28D9]",
+  teal: "bg-[#F0FDFA] text-[#0D9488]",
+  green: "bg-[#DCFCE7] text-[#15803D]",
+  orange: "bg-[#FFF7ED] text-[#C2410C]",
+  pink: "bg-[#FDF2F8] text-[#9D174D]",
+};
+
+const testimonials = [
+  { name: "Sarah K.", role: "Software Engineer → Stripe", quote: "I went from 0 interviews in 3 months to 4 in one week after using Launch CV. The JD matching is a game changer.", rating: 5 },
+  { name: "Marcus T.", role: "Product Manager → Notion", quote: "My ATS score went from 38% to 93%. I had no idea how broken my resume was. Within 2 weeks I had 3 offers.", rating: 5 },
+  { name: "Priya N.", role: "Marketing Lead → HubSpot", quote: "The cover letter generator wrote better letters than I ever could. Saved me 2–3 hours per application.", rating: 5 },
+  { name: "David L.", role: "Operations Manager", quote: "Voice input is brilliant. I just talked about my job history and it came out polished and professional.", rating: 5 },
+  { name: "Emma R.", role: "UX Designer (career switch)", quote: "As a career changer, I was lost. Launch CV showed me exactly what keywords to add for a completely new field.", rating: 5 },
+  { name: "James O.", role: "Data Analyst", quote: "The interview prep feature is underrated. Practicing with AI questions specific to the job made me so much more confident.", rating: 5 },
+];
+
+const faqs = [
+  { q: "Is there a free plan?", a: "No — Launch CV is a paid professional product. AI features require an active plan (Starter, Professional, Elite, or Lifetime). You can create an account to explore settings, but AI workflows unlock after checkout." },
+  { q: "What is ATS and why does it matter?", a: "Applicant Tracking Systems scan and filter resumes before a human ever reads them. 75% of resumes are rejected by ATS. We help you pass every major platform." },
+  { q: "What file formats can I download?", a: "PDF and DOCX. Both are ATS-compatible. You can also copy plain text for email or LinkedIn." },
+  { q: "Is my data safe and private?", a: "Yes. We use 256-bit encryption. We never sell your data. GDPR and CCPA compliant. Your audio is never stored after voice transcription." },
+  { q: "How is this different from other resume builders?", a: "We combine resume building + JD matching + ATS scoring + cover letters + interview prep in one platform — all AI-powered with generous limits per plan." },
+  { q: "How long does it take to build a resume?", a: "Most users complete a polished resume in under 5 minutes with AI bullet suggestions and real-time preview." },
+  { q: "Does it work for all industries?", a: "Yes — we have templates and AI training data for 12+ verticals including tech, finance, healthcare, marketing, design, and management." },
+  { q: "What is the Lifetime plan?", a: "Lifetime is a one-time payment of $149 that gives you ongoing access without renewals. Monthly AI limits apply (generous fair-use caps) — pay once, use forever." },
+];
+
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <JsonLd data={homeStructuredData} />
       <LandingNav />
 
-      <main className="flex-1">
-        {/* ── Hero ── */}
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,#f8fafc_0%,#ffffff_100%)]" />
-          <div className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 bg-[radial-gradient(circle,rgba(4,156,255,0.04),transparent_70%)]" />
+      {/* ──────────────── 1. HERO ──────────────── */}
+      <section className="relative flex min-h-screen items-center overflow-hidden bg-[#0F172A] pt-[72px]">
+        {/* Mesh blobs */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div className="lc-blob-1 absolute left-[10%] top-[20%] h-[500px] w-[500px] rounded-full bg-[#1A56DB] opacity-[0.18] blur-[120px]" />
+          <div className="lc-blob-2 absolute right-[5%] top-[30%] h-[400px] w-[400px] rounded-full bg-[#7C3AED] opacity-[0.15] blur-[120px]" />
+          <div className="lc-blob-3 absolute bottom-[10%] left-[40%] h-[350px] w-[350px] rounded-full bg-[#0D9488] opacity-[0.12] blur-[100px]" />
+        </div>
 
-          <div className="relative mx-auto max-w-[980px] px-6 pb-24 pt-24 sm:pb-32 sm:pt-40">
-            <p className="lc-motion-fade lc-s1 text-[14px] font-medium tracking-wide text-[#7C5CFC] sm:text-[15px]">
-              The resume platform for modern job seekers
-            </p>
+        <div className="relative mx-auto w-full max-w-[1280px] px-6 py-24 sm:py-32">
+          <div className="mx-auto max-w-[720px] text-center">
+            {/* Top badge */}
+            <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-1.5 lc-shimmer">
+              <span className="font-body text-[13px] font-semibold text-white/90">✨ Rated #1 AI Resume Builder — 2025</span>
+            </div>
 
-            <h1 className="lc-motion-fade lc-s2 mt-4 text-[40px] font-[750] leading-[1.08] tracking-[-0.035em] text-[#0a0a0a] sm:mt-5 sm:text-[56px] sm:leading-[1.05] lg:text-[72px]">
-              Tailored resumes.<br />
-              More interviews.
+            {/* H1 */}
+            <h1 className="lc-motion-fade lc-s2 font-display text-[48px] font-[800] leading-[1.08] tracking-[-0.03em] text-white sm:text-[64px] lg:text-[72px]">
+              Build the Resume<br />That Gets You Hired.
             </h1>
 
-            <p className="lc-motion-fade lc-s3 mt-6 max-w-[540px] text-[17px] leading-[1.65] text-[#666] sm:mt-8 sm:text-[19px] sm:leading-[1.7]">
-              Paste a job description. Launch CV rewrites your resume to match,
-              scores it against ATS filters, and generates your cover letter.
-              In under two minutes.
+            {/* Subheadline */}
+            <p className="lc-motion-fade lc-s3 mx-auto mt-6 max-w-[560px] font-body text-[18px] leading-[1.75] text-[#94A3B8] sm:text-[20px]">
+              AI-powered. ATS-optimized. Ready in 5 minutes. Join professionals who landed interviews with Launch CV.
             </p>
 
-            <div className="lc-motion-fade lc-s4 mt-10 flex flex-col gap-4 sm:mt-12 sm:flex-row sm:items-center sm:gap-5">
+            {/* CTA group */}
+            <div className="lc-motion-fade lc-s4 mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link
-                href={registerHref}
-                className="group inline-flex w-fit items-center justify-center gap-3 rounded-full bg-[#0a0a0a] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#333] motion-safe:hover:shadow-lg"
+                href="/register"
+                className="lc-btn-primary px-8 py-4 text-[16px]"
               >
-                View plans & get started
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                View plans & get started <ArrowRight className="h-4 w-4" />
               </Link>
-
-              <Link href="/pricing" className="text-[14px] font-medium text-[#7C5CFC] underline-offset-2 hover:underline">
-                From {PUBLIC_PLANS.starter.priceDisplay}
-                {PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+              <Link href="/pricing" className="font-body text-[15px] font-semibold text-[#94A3B8] transition hover:text-white">
+                From {PUBLIC_PLANS.starter.priceDisplay}{PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
               </Link>
             </div>
-            <p className="lc-motion-fade lc-s5 mt-8 text-[12px] leading-relaxed text-[#aaa]">
-              <Link href="/legal/privacy" className="underline decoration-[#ccc] underline-offset-2 transition hover:text-[#666]">
-                Privacy
-              </Link>
-              <span className="mx-2 text-[#ddd]">·</span>
-              <Link href="/legal/terms" className="underline decoration-[#ccc] underline-offset-2 transition hover:text-[#666]">
-                Terms
-              </Link>
-            </p>
-          </div>
-        </section>
 
-        {/* ── Metrics ── */}
-        <section className="border-t border-[#f0f0f0]">
-          <RevealOnView>
-          <div className="mx-auto grid max-w-[980px] grid-cols-2 gap-px bg-[#f0f0f0] sm:grid-cols-4">
-            {[
-              { value: "85%", sub: "avg ATS match score" },
-              { value: "2 min", sub: "to tailor a resume" },
-              { value: "3.2×", sub: "more interview callbacks" },
-              { value: "12", sub: "industry rubrics" },
-            ].map((m) => (
-              <div key={m.sub} className="bg-white px-6 py-8 text-center sm:px-8 sm:py-10">
-                <p className="text-[28px] font-[750] tracking-[-0.02em] text-[#0a0a0a] sm:text-[36px]">{m.value}</p>
-                <p className="mt-2 text-[12px] text-[#999] sm:text-[13px]">{m.sub}</p>
-              </div>
-            ))}
-          </div>
-          <p className="mx-auto max-w-[980px] px-6 pb-6 text-center text-[11px] leading-relaxed text-[#bbb]">
-            Illustrative benchmarks from internal tooling and beta feedback; your results depend on role, market, and how you apply.
-          </p>
-          </RevealOnView>
-        </section>
-
-        {/* ── How it works ── */}
-        <section className="mx-auto max-w-[980px] px-6 py-32">
-          <RevealOnView>
-          <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">How it works</p>
-            <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
-              Three steps. Two minutes.
-            </h2>
-
-          <div className="mt-16 grid gap-12 sm:grid-cols-3">
-            {[
-              { n: "01", title: "Paste the job description", body: "Copy any job posting. Our AI maps every requirement, keyword, and skill automatically." },
-              { n: "02", title: "Review your tailored resume", body: "See your ATS match score, rewritten bullets, gap analysis, and skill coverage — all at once." },
-              { n: "03", title: "Download and apply", body: "Export your resume as PDF, grab your cover letter, and prep with 10 interview questions." },
-            ].map((s) => (
-              <div key={s.n}>
-                <p className="text-[13px] font-semibold text-[#ccc]">{s.n}</p>
-                <h3 className="mt-3 text-[20px] font-bold leading-snug text-[#0a0a0a]">{s.title}</h3>
-                <p className="mt-3 text-[15px] leading-[1.7] text-[#666]">{s.body}</p>
-              </div>
-            ))}
-          </div>
-          </RevealOnView>
-        </section>
-
-        {/* ── Features ── */}
-        <section className="border-t border-[#f0f0f0] bg-[#fafafa]">
-          <RevealOnView>
-          <div className="mx-auto max-w-[980px] px-6 py-32">
-            <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Features</p>
-            <h2 className="mt-4 max-w-[600px] text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
-              Six tools that replace hours of manual work.
-            </h2>
-
-            <div className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-[#e5e5e5] bg-[#e5e5e5] sm:grid-cols-2 lg:grid-cols-3">
-              {[
-                { title: "JD Alignment", body: "Maps every requirement to your experience. Shows gaps, suggests rewrites, highlights what to add.", href: "/features/jd-alignment" },
-                { title: "ATS Score", body: "A 0–100 score showing how ATS filters read your resume. Fix keyword gaps before they filter you out.", href: "/features/ats-score" },
-                { title: "Resume Builder", body: "12+ industry templates. Import from LinkedIn or PDF. Real-time preview. Voice input.", href: "/features/resume-builder" },
-                { title: "Cover Letter", body: "Personalized cover letter from the same JD. Matches the tone and keywords of your tailored resume.", href: "/features/cover-letter" },
-                { title: "Interview Prep", body: "10 role-specific questions with answer frameworks. Plus an elevator pitch you can memorize.", href: "/features/interview-prep" },
-                { title: "Voice Input", body: "Speak your work experience. AI converts your speech into polished, impact-driven resume bullets.", href: "/features/voice-input" },
-              ].map((f) => (
-                <Link key={f.title} href={f.href} className="group bg-white p-8 transition hover:bg-[#fafafa]">
-                  <h3 className="text-[16px] font-bold text-[#0a0a0a]">{f.title}</h3>
-                  <p className="mt-3 text-[14px] leading-[1.7] text-[#666]">{f.body}</p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC] opacity-0 transition group-hover:opacity-100">
-                    Learn more <ArrowRight className="h-3 w-3" />
-                  </span>
-                </Link>
-              ))}
+            {/* Social proof */}
+            <div className="lc-motion-fade lc-s5 mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
+              <span className="font-body text-[13px] text-[#94A3B8]">★★★★★ 4.9/5 from 2,400+ reviews</span>
+              <span className="text-[#475569]">·</span>
+              <span className="font-body text-[13px] text-[#94A3B8]">ATS-optimized</span>
+              <span className="text-[#475569]">·</span>
+              <span className="font-body text-[13px] text-[#94A3B8]">Lifetime plan available</span>
             </div>
           </div>
-          </RevealOnView>
-        </section>
 
-        {/* ── Testimonials ── */}
-        <section className="border-t border-[#f0f0f0]">
-          <RevealOnView>
-          <div className="mx-auto max-w-[980px] px-6 py-32">
-            <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Testimonials</p>
-            <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
-              Stories from active job seekers.
-            </h2>
-            <p className="mt-3 max-w-[640px] text-[14px] leading-relaxed text-[#999]">
-              Composite quotes based on common outcomes we see in beta — not endorsements by any employer.
-            </p>
-
-            <div className="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-3">
-              {[
-                { name: "Sarah C.", title: "Software Engineer", co: "Tech · US", text: "I was sending 50+ applications with zero callbacks. After Launch CV, I got 3 interviews in the first week.", metric: "3 interviews / 7 days" },
-                { name: "Marcus J.", title: "Product Manager", co: "B2B SaaS", text: "My resume scored 38/100 before. After tailoring — 91. I got the interview on my second application.", metric: "38 → 91 ATS score" },
-                { name: "Emily R.", title: "UX Designer", co: "Agency → in-house", text: "The AI doesn\u2019t fabricate achievements. It took what I actually did and made it compelling. Hired in 3 weeks.", metric: "Hired in 3 weeks" },
-              ].map((t) => (
-                <div key={t.name} className="rounded-xl border border-[#e5e5e5] p-6">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-3.5 w-3.5 fill-[#0a0a0a] text-[#0a0a0a]" />
-                    ))}
+          {/* Hero visual — resume mockup */}
+          <div className="lc-motion-fade lc-s5 mx-auto mt-16 max-w-[640px]">
+            <div className="relative rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_32px_80px_rgba(0,0,0,0.4)] backdrop-blur-sm">
+              <div className="rounded-xl bg-white p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="h-6 w-48 rounded bg-[#0F172A]" />
+                    <div className="mt-1.5 h-3.5 w-32 rounded bg-[#64748B]/40" />
+                    <div className="mt-1 h-3 w-56 rounded bg-[#94A3B8]/30" />
                   </div>
-                  <p className="mt-5 text-[14px] leading-[1.7] text-[#666]">&ldquo;{t.text}&rdquo;</p>
-                  <div className="mt-5 rounded-md bg-[#fafafa] px-3 py-2 text-center text-[13px] font-semibold text-[#0a0a0a]">{t.metric}</div>
-                  <div className="mt-5">
-                    <p className="text-[14px] font-semibold text-[#0a0a0a]">{t.name}</p>
-                    <p className="text-[13px] text-[#999]">{t.title} · {t.co}</p>
+                  <div className="flex items-center gap-1.5 rounded-full bg-[#DCFCE7] px-3 py-1.5">
+                    <span className="h-2 w-2 rounded-full bg-[#059669]" />
+                    <span className="font-body text-[12px] font-bold text-[#15803D]">ATS 94%</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-          </RevealOnView>
-        </section>
-
-        {/* ── Pricing ── */}
-        <section className="border-t border-[#f0f0f0] bg-[#fafafa]">
-          <RevealOnView>
-          <div className="mx-auto max-w-[980px] px-6 py-32">
-            <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Pricing</p>
-            <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
-              One job search. Pick your ceiling.
-            </h2>
-            <p className="mt-3 max-w-[720px] text-[14px] leading-relaxed text-[#999]">
-              No free tier — you pay for professional-grade AI, templates, and limits that match how hard you are applying. Upgrade anytime; Lifetime removes renewals.
-            </p>
-
-            <div className="mt-16 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-              {CHECKOUT_PLAN_ORDER.map((key) => {
-                const cfg = PUBLIC_PLANS[key];
-                const bullets = planMarketingBullets(key);
-                const popular = !!cfg.popular;
-                return (
-                  <div
-                    key={key}
-                    className={`flex flex-col rounded-xl border bg-white p-6 sm:p-7 ${
-                      popular ? "border-[#0a0a0a] ring-1 ring-[#0a0a0a]" : "border-[#e5e5e5]"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="text-[13px] font-semibold text-[#999]">{cfg.title}</p>
-                      {popular ? (
-                        <span className="shrink-0 rounded-full bg-[#0a0a0a] px-2.5 py-0.5 text-[10px] font-bold text-white">
-                          POPULAR
-                        </span>
-                      ) : null}
+                <div className="mt-5 space-y-3">
+                  {["Work Experience", "Skills", "Education"].map((s) => (
+                    <div key={s}>
+                      <div className="h-2.5 w-24 rounded bg-[#1A56DB]/60" />
+                      <div className="mt-2 space-y-1.5">
+                        <div className="h-2 w-full rounded bg-gray-100" />
+                        <div className="h-2 w-5/6 rounded bg-gray-100" />
+                        <div className="h-2 w-4/6 rounded bg-gray-100" />
+                      </div>
                     </div>
-                    <p className="mt-3 flex flex-wrap items-baseline gap-1 font-[750] tracking-[-0.03em] text-[#0a0a0a]">
-                      <span className="text-[36px] leading-none sm:text-[40px]">{cfg.priceDisplay}</span>
-                      <span className="text-[15px] font-semibold text-[#999]">{cfg.periodLabel}</span>
-                    </p>
-                    <p className="mt-2 text-[12px] leading-snug text-[#888]">{cfg.valueLine}</p>
-                    <ul className="mt-6 flex-1 space-y-2.5">
-                      {bullets.slice(0, 5).map((t) => (
-                        <li key={t} className="flex items-start gap-2.5 text-[13px] leading-snug text-[#666]">
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#0a0a0a]" />
-                          {t}
-                        </li>
-                      ))}
-                    </ul>
-                    <Link
-                      href={registerHref}
-                      className={`mt-8 block rounded-full py-2.5 text-center text-[13px] font-semibold transition ${
-                        popular
-                          ? "bg-[#0a0a0a] text-white hover:bg-[#333]"
-                          : "border border-[#e5e5e5] text-[#0a0a0a] hover:border-[#ccc] hover:bg-[#fafafa]"
-                      }`}
-                    >
-                      Choose {cfg.title}
-                    </Link>
-                  </div>
-                );
-              })}
+                  ))}
+                </div>
+              </div>
+              {/* Floating AI chip */}
+              <div className="absolute -right-4 top-8 flex items-center gap-2 rounded-xl bg-[#1A56DB] px-3 py-2 shadow-lg">
+                <Zap className="h-3.5 w-3.5 text-white" />
+                <span className="font-body text-[12px] font-bold text-white">AI Enhanced</span>
+              </div>
             </div>
           </div>
-          </RevealOnView>
-        </section>
+        </div>
 
-        {/* ── Final CTA ── */}
-        <section className="border-t border-[#f0f0f0]">
-          <RevealOnView>
-          <div className="mx-auto max-w-[980px] px-6 py-32 text-center">
-            <h2 className="text-[36px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[48px] lg:text-[56px]">
-              Your next interview is<br />one resume away.
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-[#475569]">
+          <ChevronDown className="h-5 w-5" />
+        </div>
+      </section>
+
+      {/* ──────────────── 2. TRUST / LOGO BAR ──────────────── */}
+      <section className="overflow-hidden border-y border-[#E2E8F0] bg-[#F8FAFC] py-10">
+        <p className="mb-6 text-center font-body text-[13px] font-medium text-[#94A3B8]">
+          Trusted by professionals from
+        </p>
+        <div className="overflow-hidden">
+          <div className="lc-ticker-track">
+            {[...Array(2)].map((_, pass) => (
+              <div key={pass} className="flex items-center gap-14 px-8">
+                {["Google", "Amazon", "Deloitte", "Meta", "Stripe", "Salesforce", "JPMorgan", "McKinsey"].map((name) => (
+                  <span key={name} className="shrink-0 font-display text-[16px] font-bold text-[#94A3B8] opacity-50 transition-opacity hover:opacity-100">
+                    {name}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 3. VALUE PROPOSITION ──────────────── */}
+      <section className="py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <div className="text-center">
+            <p className="lc-eyebrow">Everything you need</p>
+            <h2 className="lc-h2 mx-auto mt-4 max-w-[600px]">
+              One Platform. Every Tool You Need to Get Hired.
             </h2>
-            <p className="mx-auto mt-6 max-w-[480px] text-[17px] leading-[1.7] text-[#666]">
-              The average job posting receives 250 applications.
-              Make sure yours stands out.
+            <p className="mx-auto mt-4 max-w-[520px] font-body text-[16px] text-[#64748B]">
+              From resume creation to interview prep — Launch CV covers every step of your job search.
             </p>
-            <div className="mt-10">
+          </div>
+
+          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((f) => (
               <Link
-                href="/pricing"
-                className="group inline-flex items-center gap-3 rounded-full bg-[#0a0a0a] px-8 py-4 text-[16px] font-semibold text-white transition hover:bg-[#333]"
+                key={f.href}
+                href={f.href}
+                className="lc-card group p-8"
               >
-                See pricing
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-105 ${accentMap[f.accent]}`}>
+                  <f.icon className="h-6 w-6" />
+                </div>
+                <h3 className="mt-5 font-display text-[18px] font-bold text-[#0F172A]">{f.title}</h3>
+                <p className="mt-2 font-body text-[14px] leading-[1.7] text-[#475569]">{f.desc}</p>
+                <span className="mt-4 inline-flex items-center gap-1 font-body text-[13px] font-semibold text-[#1A56DB] opacity-0 transition-opacity group-hover:opacity-100">
+                  Learn more <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 4. HOW IT WORKS ──────────────── */}
+      <section className="bg-[#F8FAFC] py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <div className="text-center">
+            <p className="lc-eyebrow">How it works</p>
+            <h2 className="lc-h2 mx-auto mt-4 max-w-[520px]">
+              From Zero to Hired — In 3 Simple Steps
+            </h2>
+          </div>
+
+          <div className="relative mt-16 grid gap-12 lg:grid-cols-3">
+            <div className="pointer-events-none absolute left-[calc(33.3%+24px)] right-[calc(33.3%+24px)] top-8 hidden border-t-2 border-dashed border-[#E2E8F0] lg:block" />
+
+            {[
+              {
+                n: "01", title: "Tell Us About Yourself",
+                desc: "Enter your work history, skills, and target role. Or just speak — our voice AI handles the rest.",
+                visual: (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white p-3">
+                      <Mic className="h-4 w-4 text-[#1A56DB]" />
+                      <span className="font-body text-[13px] text-[#64748B]">Speak your experience…</span>
+                    </div>
+                    <div className="h-2 w-full rounded bg-[#EFF6FF]" />
+                    <div className="h-2 w-4/5 rounded bg-[#EFF6FF]" />
+                  </div>
+                ),
+              },
+              {
+                n: "02", title: "AI Builds & Optimizes",
+                desc: "Our AI analyzes thousands of successful resumes and the job description to craft ATS-perfect content.",
+                visual: (
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EFF6FF]">
+                      <Zap className="h-6 w-6 text-[#1A56DB]" />
+                    </div>
+                    <div className="flex items-end gap-1">
+                      {[40, 60, 80, 55, 90].map((h, i) => (
+                        <div key={i} className="w-4 rounded-t bg-[#1A56DB]" style={{ height: h / 3 }} />
+                      ))}
+                    </div>
+                    <span className="lc-badge-ai">AI Processing</span>
+                  </div>
+                ),
+              },
+              {
+                n: "03", title: "Apply with Confidence",
+                desc: "Download as PDF. See your ATS score. Generate a cover letter. Start applying immediately.",
+                visual: (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between rounded-lg border border-[#DCFCE7] bg-[#F0FDF4] p-3">
+                      <span className="font-body text-[13px] font-semibold text-[#15803D]">ATS Score</span>
+                      <span className="font-display text-[18px] font-bold text-[#15803D]">94%</span>
+                    </div>
+                    <div className="lc-progress-bar">
+                      <div className="lc-progress-fill" style={{ width: "94%" }} />
+                    </div>
+                  </div>
+                ),
+              },
+            ].map((step, i) => (
+              <div key={step.n} className={`flex flex-col lc-stagger-${i + 1}`}>
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#1A56DB] shadow-lg shadow-blue-500/20">
+                  <span className="font-display text-[20px] font-bold text-white">{step.n}</span>
+                </div>
+                <h3 className="font-display text-[20px] font-bold text-[#0F172A]">{step.title}</h3>
+                <p className="mt-2 font-body text-[15px] leading-[1.7] text-[#64748B]">{step.desc}</p>
+                <div className="mt-5 rounded-xl border border-[#E2E8F0] bg-white p-4">{step.visual}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 5. STATISTICS (client — counters) ──────────────── */}
+      <HomeClient />
+
+      {/* ──────────────── 6. FEATURE SPOTLIGHTS ──────────────── */}
+      <section className="py-24">
+        <div className="mx-auto max-w-[1280px] space-y-24 px-6">
+          {/* Spotlight 1 */}
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6 lg:order-1">
+              <div className="rounded-xl bg-white p-5 shadow-sm">
+                <div className="flex items-center gap-3 border-b border-[#E2E8F0] pb-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EFF6FF]">
+                    <FileText className="h-4 w-4 text-[#1A56DB]" />
+                  </div>
+                  <span className="font-display text-[14px] font-bold text-[#0F172A]">Resume Builder</span>
+                  <span className="ml-auto lc-badge-ai">AI</span>
+                </div>
+                <div className="mt-4 space-y-3">
+                  {[
+                    "Led cross-functional delivery of 3 SaaS migrations, reducing time-to-deploy by 40%",
+                    "Managed a team of 8 engineers across 2 time zones delivering $2M ARR product",
+                    "Designed and shipped 12 features increasing user retention by 34%",
+                  ].map((b) => (
+                    <div key={b} className="flex items-start gap-2">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#059669]" />
+                      <p className="font-body text-[13px] leading-snug text-[#334155]">{b}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="lg:order-2">
+              <p className="lc-eyebrow">AI Resume Builder</p>
+              <h2 className="lc-h2 mt-3">The AI Writes. You Just Direct.</h2>
+              <ul className="mt-6 space-y-3">
+                {["AI-written bullets from plain language input", "Real-time preview as you type", "12+ ATS-tested industry templates", "PDF & DOCX export in one click"].map((b) => (
+                  <li key={b} className="flex items-center gap-3 font-body text-[15px] text-[#334155]">
+                    <Check className="h-5 w-5 shrink-0 text-[#059669]" /> {b}
+                  </li>
+                ))}
+              </ul>
+              <Link href="/features/resume-builder" className="lc-btn-primary mt-8 inline-flex">
+                Start Building <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
-          </RevealOnView>
-        </section>
-      </main>
+
+          {/* Spotlight 2 */}
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div>
+              <p className="lc-eyebrow">JD Alignment</p>
+              <h2 className="lc-h2 mt-3">Match Any Job in Seconds.</h2>
+              <p className="mt-4 font-body text-[16px] leading-[1.7] text-[#64748B]">
+                Paste a job description — AI maps every requirement to your resume, flags gaps, and rewrites bullets to score up to 95% match.
+              </p>
+              <div className="mt-6 flex items-center gap-6">
+                <div className="text-center">
+                  <p className="font-display text-[32px] font-bold text-[#DC2626]">42%</p>
+                  <p className="font-body text-[12px] text-[#94A3B8]">Before</p>
+                </div>
+                <ArrowRight className="h-6 w-6 text-[#94A3B8]" />
+                <div className="text-center">
+                  <p className="font-display text-[32px] font-bold text-[#059669]">91%</p>
+                  <p className="font-body text-[12px] text-[#94A3B8]">After</p>
+                </div>
+                <span className="font-body text-[13px] text-[#64748B]">ATS match score</span>
+              </div>
+              <Link href="/features/jd-alignment" className="lc-btn-primary mt-8 inline-flex">
+                Try JD Alignment <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-xl border border-red-100 bg-white p-4">
+                  <p className="font-body text-[11px] font-bold uppercase tracking-wide text-red-500">Before</p>
+                  <p className="mt-2 font-body text-[12px] text-[#475569]">"Helped team complete projects on time."</p>
+                  <div className="mt-3 lc-progress-bar">
+                    <div className="h-full rounded-full bg-red-400" style={{ width: "34%" }} />
+                  </div>
+                  <p className="mt-1 font-body text-[11px] text-red-500">Match: 34%</p>
+                </div>
+                <div className="rounded-xl border border-green-100 bg-white p-4">
+                  <p className="font-body text-[11px] font-bold uppercase tracking-wide text-green-600">After</p>
+                  <p className="mt-2 font-body text-[12px] text-[#475569]">"Led delivery of 3 SaaS migrations, reducing deploy time by 40% using Agile."</p>
+                  <div className="mt-3 lc-progress-bar">
+                    <div className="lc-progress-fill" style={{ width: "91%" }} />
+                  </div>
+                  <p className="mt-1 font-body text-[11px] text-green-600">Match: 91%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Spotlight 3 */}
+          <div className="grid items-center gap-12 lg:grid-cols-2">
+            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6 lg:order-1">
+              <div className="flex flex-col gap-3">
+                <div className="self-start rounded-2xl rounded-tl-sm bg-[#1A56DB] px-4 py-3 text-white">
+                  <p className="font-body text-[12px] font-semibold text-white/70">AI:</p>
+                  <p className="font-body text-[13px]">Tell me about a time you led a cross-functional project under a tight deadline.</p>
+                </div>
+                <div className="self-end rounded-2xl rounded-tr-sm border border-[#E2E8F0] bg-white px-4 py-3">
+                  <p className="font-body text-[13px] text-[#334155]">In Q3 I led a 4-team sprint to ship the new onboarding…</p>
+                </div>
+                <div className="self-start rounded-2xl rounded-tl-sm bg-[#F0FDF4] px-4 py-3">
+                  <p className="font-body text-[12px] font-semibold text-[#15803D]">AI Feedback — Score: 8/10</p>
+                  <p className="font-body text-[12px] text-[#334155]">Strong STAR structure. Add quantified outcome (e.g. reduced time-to-activation by X%).</p>
+                </div>
+              </div>
+            </div>
+            <div className="lg:order-2">
+              <p className="lc-eyebrow">Interview Prep</p>
+              <h2 className="lc-h2 mt-3">Practice Until You're Unshakeable.</h2>
+              <p className="mt-4 font-body text-[16px] leading-[1.7] text-[#64748B]">
+                200+ role-specific questions generated from your resume and JD. AI scores every answer and gives expert feedback.
+              </p>
+              <Link href="/features/interview-prep" className="lc-btn-primary mt-8 inline-flex">
+                Start Practicing <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 7. TESTIMONIALS ──────────────── */}
+      <section className="bg-[#F8FAFC] py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <div className="text-center">
+            <p className="font-body text-[13px] text-[#94A3B8]">⭐ 4.9/5 average · 2,400+ reviews</p>
+            <h2 className="lc-h2 mx-auto mt-3 max-w-[480px]">Stories from Real Job Seekers</h2>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((t) => (
+              <div key={t.name} className="lc-card flex flex-col p-6">
+                <div className="flex gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
+                  ))}
+                </div>
+                <p className="mt-4 flex-1 font-body text-[14px] leading-[1.7] text-[#475569]">&ldquo;{t.quote}&rdquo;</p>
+                <div className="mt-5 border-t border-[#E2E8F0] pt-4">
+                  <p className="font-body text-[14px] font-semibold text-[#0F172A]">{t.name}</p>
+                  <p className="font-body text-[13px] text-[#94A3B8]">{t.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 8. PRICING PREVIEW ──────────────── */}
+      <section className="py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <div className="text-center">
+            <p className="lc-eyebrow">Pricing</p>
+            <h2 className="lc-h2 mx-auto mt-4 max-w-[480px]">Plans That Match Your Search Intensity</h2>
+            <p className="mx-auto mt-3 font-body text-[15px] text-[#64748B]">
+              No free tier. Paid-first AI with honest limits. Cancel subscriptions anytime — Lifetime never renews.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            {CHECKOUT_PLAN_ORDER.map((key) => {
+              const cfg = PUBLIC_PLANS[key];
+              const popular = !!cfg.popular;
+              return (
+                <div
+                  key={key}
+                  className={`flex flex-col rounded-2xl border-2 bg-white p-7 ${popular ? "border-[#1A56DB] shadow-xl shadow-blue-500/10" : "border-[#E2E8F0]"}`}
+                >
+                  {popular && (
+                    <span className="mb-4 self-start rounded-full bg-[#1A56DB] px-3 py-1 font-body text-[11px] font-bold uppercase tracking-wide text-white">
+                      Most Popular
+                    </span>
+                  )}
+                  <p className="font-display text-[15px] font-bold text-[#0F172A]">{cfg.title}</p>
+                  <p className="mt-3 flex flex-wrap items-baseline gap-1">
+                    <span className="font-display text-[36px] font-bold text-[#0F172A]">{cfg.priceDisplay}</span>
+                    <span className="font-body text-[14px] text-[#94A3B8]">{cfg.periodLabel}</span>
+                  </p>
+                  <p className="mt-2 font-body text-[12px] leading-snug text-[#94A3B8]">{cfg.valueLine}</p>
+                  <Link
+                    href="/pricing"
+                    className={`mt-6 flex w-full items-center justify-center rounded-[10px] py-3 font-body text-[13px] font-bold transition ${popular ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8]" : "border border-[#E2E8F0] text-[#334155] hover:bg-[#F8FAFC]"}`}
+                  >
+                    Choose {cfg.title}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6">
+            {[
+              { Icon: Shield, text: "Cancel subscriptions anytime" },
+              { Icon: Clock, text: "Lifetime — pay once, keep forever" },
+              { Icon: TrendingUp, text: "Monthly AI limits scale with plan" },
+            ].map(({ Icon, text }) => (
+              <div key={text} className="flex items-center gap-2 font-body text-[13px] text-[#64748B]">
+                <Icon className="h-4 w-4 text-[#059669]" />
+                {text}
+              </div>
+            ))}
+          </div>
+          <p className="mt-6 text-center">
+            <Link href="/pricing" className="font-body text-[14px] font-semibold text-[#1A56DB] hover:underline">
+              View full pricing & compare plans →
+            </Link>
+          </p>
+        </div>
+      </section>
+
+      {/* ──────────────── 9. FAQ (client — accordion) ──────────────── */}
+      <section className="bg-[#F8FAFC] py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <div className="text-center">
+            <p className="lc-eyebrow">FAQ</p>
+            <h2 className="lc-h2 mx-auto mt-4 max-w-[400px]">Frequently Asked Questions</h2>
+          </div>
+          {/* FAQ accordion is client-side — rendered via HomeClient */}
+          <HomeClient faqItems={faqs} />
+        </div>
+      </section>
+
+      {/* ──────────────── 10. FINAL CTA ──────────────── */}
+      <section className="bg-gradient-to-r from-[#1A56DB] to-[#7C3AED] py-20">
+        <div className="mx-auto flex max-w-[640px] flex-col items-center gap-5 px-6 text-center">
+          <h2 className="font-display text-[32px] font-bold leading-tight text-white sm:text-[40px]">
+            Ready to Land Your Dream Job?
+          </h2>
+          <p className="font-body text-[17px] text-white/80">
+            Create an account, choose a plan, and let AI build the resume that gets you hired.
+          </p>
+          <Link
+            href="/register"
+            className="mt-2 inline-flex items-center gap-2 rounded-[10px] bg-white px-8 py-4 font-body text-[16px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02] hover:shadow-xl"
+          >
+            Build My Resume <ArrowRight className="h-4 w-4" />
+          </Link>
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 font-body text-[13px] text-white/70">
+            <span>✓ ATS-optimized</span>
+            <span>✓ PDF & DOCX download</span>
+            <span>✓ Lifetime plan available</span>
+            <span>✓ Cancel anytime</span>
+          </div>
+        </div>
+      </section>
 
       <LandingFooter />
     </div>

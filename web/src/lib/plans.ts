@@ -1,22 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
 
-/** Paid checkout keys (Lemon variant mapping). */
-export type CheckoutPlan = "starter" | "professional" | "elite" | "lifetime";
-
-export const CHECKOUT_PLAN_ORDER: readonly CheckoutPlan[] = ["starter", "professional", "elite", "lifetime"];
-
-export type PlanId = "none" | CheckoutPlan;
-
-/** Monthly AI caps (fair use). Lifetime uses high caps — adjust in Lemon + here together. */
-export const PLAN_MONTHLY_LIMITS: Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }> = {
-  starter: { jd: 35, packet: 15, roleFit: 35 },
-  professional: { jd: 120, packet: 55, roleFit: 120 },
-  elite: { jd: 320, packet: 160, roleFit: 320 },
-  lifetime: { jd: 2000, packet: 1000, roleFit: 2000 },
-};
-
-export const NONE_LIMITS = { jd: 0, packet: 0, roleFit: 0 } as const;
+// Re-export pure config so server-only code can still import from here
+export type {
+  CheckoutPlan,
+  PlanId,
+} from "@/lib/plan-config";
+export {
+  CHECKOUT_PLAN_ORDER,
+  PLAN_MONTHLY_LIMITS,
+  NONE_LIMITS,
+} from "@/lib/plan-config";
 
 function envVariant(...keys: (string | undefined)[]): string | undefined {
   for (const k of keys) {

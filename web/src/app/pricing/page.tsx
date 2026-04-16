@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { Check, ArrowRight, Zap, HelpCircle } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plans";
+import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 

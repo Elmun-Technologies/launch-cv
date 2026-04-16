@@ -1,5 +1,5 @@
-import type { CheckoutPlan } from "@/lib/plans";
-import { PLAN_MONTHLY_LIMITS } from "@/lib/plans";
+import type { CheckoutPlan } from "@/lib/plan-config";
+import { PLAN_MONTHLY_LIMITS } from "@/lib/plan-config";
 
 /** Public marketing copy — align prices with Lemon product/variant amounts. */
 export const PUBLIC_PLANS: Record<
