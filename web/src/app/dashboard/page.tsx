@@ -27,13 +27,13 @@ export default async function HomePage() {
       orderBy: { updatedAt: "desc" },
       take: 5,
       select: { id: true, title: true, vertical: true, updatedAt: true },
-    }),
+    }) as Promise<{ id: string; title: string; vertical: string | null; updatedAt: Date }[]>,
     prisma.jobApplication.findMany({
       where: { userId: session.sub },
       orderBy: { updatedAt: "desc" },
       take: 5,
       select: { id: true, title: true, company: true, status: true, createdAt: true },
-    }),
+    }) as Promise<{ id: string; title: string | null; company: string | null; status: string; createdAt: Date }[]>,
   ]);
 
   const firstName = user?.name?.split(" ")[0] || "there";
