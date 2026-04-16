@@ -239,69 +239,107 @@ export default function Home() {
         <div className="mx-auto max-w-[1280px] px-6">
           <div className="text-center">
             <p className="lc-eyebrow">How it works</p>
-            <h2 className="lc-h2 mx-auto mt-4 max-w-[520px]">
-              From Zero to Hired — In 3 Simple Steps
+            <h2 className="lc-h2 mx-auto mt-4 max-w-[500px]">
+              From Zero to Hired — In 3 Steps
             </h2>
+            <p className="mx-auto mt-3 max-w-[480px] font-body text-[16px] text-[#64748B]">
+              Most users complete and apply with an AI-optimized resume in under 10 minutes.
+            </p>
           </div>
 
-          <div className="relative mt-16 grid gap-12 lg:grid-cols-3">
-            <div className="pointer-events-none absolute left-[calc(33.3%+24px)] right-[calc(33.3%+24px)] top-8 hidden border-t-2 border-dashed border-[#E2E8F0] lg:block" />
+          <div className="relative mt-16 grid gap-8 lg:grid-cols-3">
+            {/* Connector line — sits below the numbers, between cards */}
+            <div className="pointer-events-none absolute left-[calc(16.67%+8px)] right-[calc(16.67%+8px)] top-[52px] hidden h-px border-t-2 border-dashed border-[#CBD5E1] lg:block" />
 
             {[
               {
-                n: "01", title: "Tell Us About Yourself",
-                desc: "Enter your work history, skills, and target role. Or just speak — our voice AI handles the rest.",
+                n: "01",
+                badge: "You",
+                badgeColor: "bg-[#EFF6FF] text-[#1A56DB]",
+                title: "Paste your experience",
+                desc: "Enter your work history in plain language, or speak it with voice input. Takes 2 minutes.",
                 visual: (
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-white p-3">
-                      <Mic className="h-4 w-4 text-[#1A56DB]" />
-                      <span className="font-body text-[13px] text-[#64748B]">Speak your experience…</span>
+                  <div className="space-y-2.5">
+                    <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
+                      <Mic className="h-3.5 w-3.5 shrink-0 text-[#1A56DB]" />
+                      <span className="font-body text-[12px] text-[#64748B]">Managed a team of 5 doing support…</span>
                     </div>
-                    <div className="h-2 w-full rounded bg-[#EFF6FF]" />
-                    <div className="h-2 w-4/5 rounded bg-[#EFF6FF]" />
+                    <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
+                      <FileText className="h-3.5 w-3.5 shrink-0 text-[#1A56DB]" />
+                      <span className="font-body text-[12px] text-[#64748B]">Upload existing resume (PDF/DOCX)</span>
+                    </div>
                   </div>
                 ),
               },
               {
-                n: "02", title: "AI Builds & Optimizes",
-                desc: "Our AI analyzes thousands of successful resumes and the job description to craft ATS-perfect content.",
+                n: "02",
+                badge: "AI",
+                badgeColor: "bg-[#EDE9FE] text-[#7C3AED]",
+                title: "AI builds & scores it",
+                desc: "AI rewrites your bullets, maps keywords from the job description, and checks ATS compatibility.",
                 visual: (
-                  <div className="flex flex-col items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#EFF6FF]">
-                      <Zap className="h-6 w-6 text-[#1A56DB]" />
-                    </div>
-                    <div className="flex items-end gap-1">
-                      {[40, 60, 80, 55, 90].map((h, i) => (
-                        <div key={i} className="w-4 rounded-t bg-[#1A56DB]" style={{ height: h / 3 }} />
-                      ))}
-                    </div>
-                    <span className="lc-badge-ai">AI Processing</span>
+                  <div className="space-y-2">
+                    {[
+                      { label: "Keyword match", pct: 91, color: "bg-[#1A56DB]" },
+                      { label: "ATS score", pct: 94, color: "bg-[#059669]" },
+                      { label: "Readability", pct: 88, color: "bg-[#7C3AED]" },
+                    ].map((row) => (
+                      <div key={row.label}>
+                        <div className="mb-1 flex items-center justify-between">
+                          <span className="font-body text-[11px] text-[#64748B]">{row.label}</span>
+                          <span className="font-body text-[11px] font-semibold text-[#334155]">{row.pct}%</span>
+                        </div>
+                        <div className="h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]">
+                          <div className={`h-full rounded-full ${row.color}`} style={{ width: `${row.pct}%` }} />
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 ),
               },
               {
-                n: "03", title: "Apply with Confidence",
-                desc: "Download as PDF. See your ATS score. Generate a cover letter. Start applying immediately.",
+                n: "03",
+                badge: "Done",
+                badgeColor: "bg-[#DCFCE7] text-[#15803D]",
+                title: "Download & apply",
+                desc: "Export as PDF, generate a cover letter, and send. The whole process takes under 10 minutes.",
                 visual: (
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center justify-between rounded-lg border border-[#DCFCE7] bg-[#F0FDF4] p-3">
-                      <span className="font-body text-[13px] font-semibold text-[#15803D]">ATS Score</span>
-                      <span className="font-display text-[18px] font-bold text-[#15803D]">94%</span>
-                    </div>
-                    <div className="lc-progress-bar">
-                      <div className="lc-progress-fill" style={{ width: "94%" }} />
-                    </div>
+                  <div className="space-y-2">
+                    {[
+                      { icon: "📄", label: "resume_final.pdf", sub: "ATS-safe · 2 pages" },
+                      { icon: "✉️", label: "cover_letter.pdf", sub: "AI-personalized" },
+                    ].map((f) => (
+                      <div key={f.label} className="flex items-center gap-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
+                        <span className="text-[16px]">{f.icon}</span>
+                        <div>
+                          <p className="font-body text-[12px] font-semibold text-[#334155]">{f.label}</p>
+                          <p className="font-body text-[11px] text-[#94A3B8]">{f.sub}</p>
+                        </div>
+                        <span className="ml-auto font-body text-[11px] font-bold text-[#059669]">Ready</span>
+                      </div>
+                    ))}
                   </div>
                 ),
               },
-            ].map((step, i) => (
-              <div key={step.n} className={`flex flex-col lc-stagger-${i + 1}`}>
-                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#1A56DB] shadow-lg shadow-blue-500/20">
-                  <span className="font-display text-[20px] font-bold text-white">{step.n}</span>
+            ].map((step) => (
+              <div key={step.n} className="flex flex-col">
+                {/* Number + badge row */}
+                <div className="relative z-10 mb-5 flex items-center gap-3">
+                  <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-2xl bg-white border-2 border-[#E2E8F0] shadow-sm">
+                    <span className="font-display text-[18px] font-bold text-[#0F172A]">{step.n}</span>
+                  </div>
+                  <span className={`rounded-full px-2.5 py-1 font-body text-[11px] font-bold uppercase tracking-wide ${step.badgeColor}`}>
+                    {step.badge}
+                  </span>
                 </div>
-                <h3 className="font-display text-[20px] font-bold text-[#0F172A]">{step.title}</h3>
-                <p className="mt-2 font-body text-[15px] leading-[1.7] text-[#64748B]">{step.desc}</p>
-                <div className="mt-5 rounded-xl border border-[#E2E8F0] bg-white p-4">{step.visual}</div>
+                {/* Content card */}
+                <div className="flex-1 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
+                  <h3 className="font-display text-[18px] font-bold text-[#0F172A]">{step.title}</h3>
+                  <p className="mt-2 font-body text-[14px] leading-[1.65] text-[#64748B]">{step.desc}</p>
+                  <div className="mt-5 rounded-xl border border-[#F1F5F9] bg-[#F8FAFC] p-4">
+                    {step.visual}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
