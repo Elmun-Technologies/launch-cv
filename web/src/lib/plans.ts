@@ -1,16 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
+import type { CheckoutPlan, PlanId } from "@/lib/plan-config";
+import { NONE_LIMITS, PLAN_MONTHLY_LIMITS } from "@/lib/plan-config";
 
-// Re-export pure config so server-only code can still import from here
-export type {
-  CheckoutPlan,
-  PlanId,
-} from "@/lib/plan-config";
-export {
-  CHECKOUT_PLAN_ORDER,
-  PLAN_MONTHLY_LIMITS,
-  NONE_LIMITS,
-} from "@/lib/plan-config";
+// Re-export pure config so other modules can import from here
+export type { CheckoutPlan, PlanId } from "@/lib/plan-config";
+export { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, NONE_LIMITS } from "@/lib/plan-config";
 
 function envVariant(...keys: (string | undefined)[]): string | undefined {
   for (const k of keys) {
