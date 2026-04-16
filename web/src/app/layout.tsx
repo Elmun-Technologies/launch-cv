@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { CookieBanner } from "@/components/cookie-banner";
 import { ToastProvider } from "@/components/toast";
@@ -15,6 +15,20 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  display: "swap",
+});
+
+const inter = Inter({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const siteUrl = getSiteUrl();
@@ -45,6 +59,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  verification: {
+    google: "dz90Yv149kX83SmMMEE6jz4_gegmV8_owlAFe1MzOMw",
+  },
 };
 
 const rootStructuredData = {
@@ -72,7 +89,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${plusJakartaSans.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <JsonLd data={rootStructuredData} />
         <AppProviders>
