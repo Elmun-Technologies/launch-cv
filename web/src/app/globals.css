@@ -553,3 +553,42 @@ button:hover, [role="button"]:hover, a:hover {
 .soha-cta-outline:active {
   transform: translateY(0);
 }
+
+/* ── Marketing motion (respects prefers-reduced-motion) ── */
+@keyframes lc-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .lc-motion-fade {
+    animation: lc-fade-up 0.55s ease-out both;
+  }
+  .lc-s1 {
+    animation-delay: 0.05s;
+  }
+  .lc-s2 {
+    animation-delay: 0.11s;
+  }
+  .lc-s3 {
+    animation-delay: 0.17s;
+  }
+  .lc-s4 {
+    animation-delay: 0.24s;
+  }
+  .lc-s5 {
+    animation-delay: 0.3s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-motion-fade {
+    animation: none !important;
+  }
+}

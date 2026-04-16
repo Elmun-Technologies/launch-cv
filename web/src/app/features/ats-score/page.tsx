@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import { BarChart3 } from "lucide-react";
 import { FeaturePageLayout } from "@/components/feature-page-template";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "ATS Resume Score Checker | Launch CV",
-  description: "Check how your resume scores against applicant tracking systems. Get actionable tips to improve your ATS compatibility and pass automated screens.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "ATS Resume Score Checker",
+  description:
+    "Check how your resume scores against applicant tracking systems. Get actionable tips to improve your ATS compatibility and pass automated screens.",
+  pathname: "/features/ats-score",
+  keywords: ["ATS score", "resume checker", "applicant tracking system", "keyword optimization", "Launch CV"],
+});
 
 export default function ATSScorePage() {
   return (
     <FeaturePageLayout
+      canonicalPath="/features/ats-score"
+      accent="sky"
       icon={BarChart3}
       title="ATS Score Checker"
       tagline="See how your resume scores against ATS systems"

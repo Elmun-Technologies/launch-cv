@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import { Mic } from "lucide-react";
 import { FeaturePageLayout } from "@/components/feature-page-template";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "Voice to Resume | Launch CV",
-  description: "Speak your work experience naturally and let AI transform your words into polished, professional resume bullet points.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Voice to Resume",
+  description:
+    "Speak your work experience naturally and let AI transform your words into polished, professional resume bullet points.",
+  pathname: "/features/voice-input",
+  keywords: ["voice resume", "dictation resume", "AI bullets", "Launch CV"],
+});
 
 export default function VoiceInputPage() {
   return (
     <FeaturePageLayout
+      canonicalPath="/features/voice-input"
+      accent="slate"
       icon={Mic}
       title="Voice Input"
       tagline="Speak your experience — we turn it into polished bullets"

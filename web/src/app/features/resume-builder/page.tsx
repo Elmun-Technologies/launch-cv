@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import { FileText } from "lucide-react";
 import { FeaturePageLayout } from "@/components/feature-page-template";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "Free AI Resume Builder | Launch CV",
-  description: "Create professional, ATS-optimized resumes in minutes with 12+ industry-specific templates, real-time preview, and AI-powered content suggestions.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Free AI Resume Builder",
+  description:
+    "Create professional, ATS-optimized resumes in minutes with 12+ industry-specific templates, real-time preview, and AI-powered content suggestions.",
+  pathname: "/features/resume-builder",
+  keywords: ["AI resume builder", "resume templates", "PDF resume", "ATS resume", "Launch CV"],
+});
 
 export default function ResumeBuilderPage() {
   return (
     <FeaturePageLayout
+      canonicalPath="/features/resume-builder"
+      accent="emerald"
       icon={FileText}
       title="AI Resume Builder"
       tagline="Create professional resumes in minutes, not hours"

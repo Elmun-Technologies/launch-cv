@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
@@ -21,12 +20,16 @@ import {
   Code2,
   Mail,
 } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "Investor Relations | Launch CV",
-  description: "Launch CV is building the AI-powered career platform for the next generation of job seekers. Learn about our vision, traction, and investment opportunity.",
-  robots: { index: false },
-};
+export const metadata = buildMarketingMetadata({
+  title: "Investor Relations",
+  description:
+    "Launch CV is building the AI-powered career platform for the next generation of job seekers. Learn about our vision, traction, and investment opportunity.",
+  pathname: "/investors",
+  keywords: ["Launch CV", "investors", "career tech"],
+  robots: { index: false, follow: true },
+});
 
 const metrics = [
   { label: "Total Users", value: "10K+", icon: Users },

@@ -1,14 +1,18 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
+import { JsonLd } from "@/components/json-ld";
 import { Check, ArrowRight, Zap, HelpCircle } from "lucide-react";
 import { PUBLIC_PRICING, freePlanMarketingBullets, proPlanMarketingBullets } from "@/lib/monetization";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { absoluteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Pricing | Launch CV",
-  description: "Simple, transparent pricing for Launch CV. Start free and upgrade to annual Pro for $1.99/year.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Pricing",
+  description: "Simple, transparent pricing for Launch CV. Start free and upgrade to annual Pro when you need more power.",
+  pathname: "/pricing",
+  keywords: ["Launch CV pricing", "resume builder cost", "Pro plan", "free resume"],
+});
 
 const freePlan = {
   name: "Free",
@@ -55,9 +59,33 @@ const faqs = [
   },
 ];
 
+const pricingStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      name: "Pricing | Launch CV",
+      description: "Launch CV pricing — free and Pro plans.",
+      url: absoluteUrl("/pricing"),
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.a,
+        },
+      })),
+    },
+  ],
+};
+
 export default function PricingPage() {
   return (
     <div className="flex min-h-screen flex-col">
+      <JsonLd data={pricingStructuredData} />
       <LandingNav />
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-[#F0F7FF] to-white py-20">

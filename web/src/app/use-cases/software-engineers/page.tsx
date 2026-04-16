@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { ArrowRight, Code2, AlertTriangle, Sparkles, Check, Target, FileText, BarChart3 } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "Resume Builder for Software Engineers | Launch CV",
-  description: "Create ATS-optimized resumes tailored for software engineering roles. Highlight technical skills, quantify impact, and land more interviews.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Resume Builder for Software Engineers",
+  description:
+    "Create ATS-optimized resumes tailored for software engineering roles. Highlight technical skills, quantify impact, and land more interviews.",
+  pathname: "/use-cases/software-engineers",
+  keywords: ["software engineer resume", "developer resume", "ATS", "Launch CV"],
+});
 
 const painPoints = [
   {

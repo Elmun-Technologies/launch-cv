@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import { Mail } from "lucide-react";
 import { FeaturePageLayout } from "@/components/feature-page-template";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "AI Cover Letter Generator | Launch CV",
-  description: "Generate tailored, professional cover letters from your resume and job description in seconds with AI-powered personalization.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "AI Cover Letter Generator",
+  description:
+    "Generate tailored, professional cover letters from your resume and job description in seconds with AI-powered personalization.",
+  pathname: "/features/cover-letter",
+  keywords: ["cover letter generator", "tailored cover letter", "job application letter", "Launch CV"],
+});
 
 export default function CoverLetterPage() {
   return (
     <FeaturePageLayout
+      canonicalPath="/features/cover-letter"
+      accent="rose"
       icon={Mail}
       title="Cover Letter Generator"
       tagline="Tailored cover letters from your resume and JD"

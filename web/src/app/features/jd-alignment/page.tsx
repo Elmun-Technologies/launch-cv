@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import { Target } from "lucide-react";
 import { FeaturePageLayout } from "@/components/feature-page-template";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "JD Alignment Tool | Launch CV",
-  description: "Match your resume to any job description instantly with AI-powered gap analysis, keyword optimization, and tailored bullet rewrites.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "JD Alignment Tool",
+  description:
+    "Match your resume to any job description instantly with AI-powered gap analysis, keyword optimization, and tailored bullet rewrites.",
+  pathname: "/features/jd-alignment",
+  keywords: ["JD alignment", "resume keywords", "ATS", "job description", "tailored resume", "Launch CV"],
+});
 
 export default function JDAlignmentPage() {
   return (
     <FeaturePageLayout
+      canonicalPath="/features/jd-alignment"
+      accent="violet"
       icon={Target}
       title="JD Alignment"
       tagline="Match your resume to any job description instantly"
@@ -38,8 +43,8 @@ export default function JDAlignmentPage() {
       ]}
       testimonial={{
         text: "The JD alignment feature is a game-changer. I went from a 40% match rate to over 85% on most applications. Within two weeks, I had three interview callbacks from companies I'd been rejected by before.",
-        name: "Sarah Chen",
-        role: "Software Engineer at Google",
+        name: "Sarah C.",
+        role: "Software engineer · tech",
       }}
       relatedFeatures={[
         { title: "AI Resume Builder", href: "/features/resume-builder" },

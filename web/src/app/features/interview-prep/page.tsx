@@ -1,15 +1,20 @@
-import type { Metadata } from "next";
 import { MessageSquare } from "lucide-react";
 import { FeaturePageLayout } from "@/components/feature-page-template";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "AI Interview Prep | Launch CV",
-  description: "Practice with AI-generated interview questions tailored to the role, your resume, and the job description. Walk into every interview confident and prepared.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "AI Interview Prep",
+  description:
+    "Practice with AI-generated interview questions tailored to the role, your resume, and the job description. Walk into every interview confident and prepared.",
+  pathname: "/features/interview-prep",
+  keywords: ["interview prep", "interview questions", "behavioral interview", "Launch CV"],
+});
 
 export default function InterviewPrepPage() {
   return (
     <FeaturePageLayout
+      canonicalPath="/features/interview-prep"
+      accent="amber"
       icon={MessageSquare}
       title="Interview Preparation"
       tagline="Practice with AI-generated questions based on the role"

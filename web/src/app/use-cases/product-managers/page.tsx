@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { ArrowRight, Briefcase, AlertTriangle, Sparkles, Target, FileText, BarChart3 } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "Resume Builder for Product Managers | Launch CV",
-  description: "Create resumes tailored for product management roles. Showcase impact, leadership, and cross-functional collaboration to land PM interviews.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Resume Builder for Product Managers",
+  description:
+    "Create resumes tailored for product management roles. Showcase impact, leadership, and cross-functional collaboration to land PM interviews.",
+  pathname: "/use-cases/product-managers",
+  keywords: ["product manager resume", "PM resume", "Launch CV"],
+});
 
 const painPoints = [
   {

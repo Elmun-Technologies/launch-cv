@@ -1,13 +1,19 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
+import { JsonLd } from "@/components/json-ld";
+import { RevealOnView } from "@/components/reveal-on-view";
 import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { absoluteUrl } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Features | Launch CV",
-  description: "Explore all AI-powered features that help you land your dream job — from JD alignment and resume building to interview prep and ATS optimization.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Features",
+  description:
+    "Explore all AI-powered features that help you land your dream job — from JD alignment and resume building to interview prep and ATS optimization.",
+  pathname: "/features",
+  keywords: ["Launch CV features", "JD alignment", "ATS score", "interview prep", "cover letter AI"],
+});
 
 const features = [
   {
@@ -54,9 +60,31 @@ const features = [
   },
 ];
 
+const featuresStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      name: "Features | Launch CV",
+      description: "All Launch CV AI tools for job seekers.",
+      url: absoluteUrl("/features"),
+    },
+    {
+      "@type": "ItemList",
+      itemListElement: features.map((f, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: f.title,
+        url: absoluteUrl(f.href),
+      })),
+    },
+  ],
+};
+
 export default function FeaturesPage() {
   return (
     <div className="flex min-h-screen flex-col">
+      <JsonLd data={featuresStructuredData} />
       <LandingNav />
       <main className="flex-1">
         <section className="relative overflow-hidden bg-gradient-to-b from-[#F0F7FF] to-white py-20 sm:py-28">
@@ -79,26 +107,28 @@ export default function FeaturesPage() {
         </section>
 
         <section className="py-20">
-          <div className="mx-auto max-w-6xl px-4">
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {features.map((f) => (
-                <Link
-                  key={f.href}
-                  href={f.href}
-                  className="group rounded-2xl border border-gray-100 bg-white p-7 shadow-[0_1px_3px_rgba(16,24,40,0.04)] transition hover:border-[#7C5CFC]/20 hover:shadow-lg"
-                >
-                  <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.color} text-[#7C5CFC] transition group-hover:shadow-md`}>
-                    <f.icon className="h-7 w-7" />
-                  </div>
-                  <h3 className="mt-5 text-lg font-bold text-gray-900">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-500">{f.description}</p>
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#7C5CFC] transition group-hover:gap-2.5">
-                    Learn more <ArrowRight className="h-4 w-4" />
-                  </span>
-                </Link>
-              ))}
+          <RevealOnView>
+            <div className="mx-auto max-w-6xl px-4">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {features.map((f) => (
+                  <Link
+                    key={f.href}
+                    href={f.href}
+                    className="group rounded-2xl border border-gray-100 bg-white p-7 shadow-[0_1px_3px_rgba(16,24,40,0.04)] transition motion-safe:hover:-translate-y-0.5 motion-safe:hover:border-[#7C5CFC]/20 motion-safe:hover:shadow-lg"
+                  >
+                    <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${f.color} text-[#7C5CFC] transition group-hover:shadow-md`}>
+                      <f.icon className="h-7 w-7" />
+                    </div>
+                    <h3 className="mt-5 text-lg font-bold text-gray-900">{f.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-gray-500">{f.description}</p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[#7C5CFC] transition group-hover:gap-2.5">
+                      Learn more <ArrowRight className="h-4 w-4" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
+          </RevealOnView>
         </section>
 
         <section className="bg-gradient-to-r from-[#7C5CFC] to-[#7C3AED] py-16">

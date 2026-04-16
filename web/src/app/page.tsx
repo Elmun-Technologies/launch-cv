@@ -1,12 +1,39 @@
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
+import { JsonLd } from "@/components/json-ld";
+import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Check, Star } from "lucide-react";
 import { PUBLIC_PRICING, freePlanMarketingBullets, proPlanMarketingBullets } from "@/lib/monetization";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { absoluteUrl, getSiteUrl } from "@/lib/site";
+
+export const metadata = buildMarketingMetadata({
+  title: "AI Resume Builder & Job Search Copilot",
+  description:
+    "Paste a job description — Launch CV rewrites your resume, scores ATS fit, and generates your cover letter. Free to start, no credit card.",
+  pathname: "/",
+  keywords: ["Launch CV", "resume builder", "ATS resume", "JD alignment", "cover letter AI", "interview prep"],
+});
+
+const homeStructuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      name: "Launch CV — AI Resume Builder & Job Search Copilot",
+      description:
+        "Tailored resumes, ATS scoring, JD alignment, cover letters, and interview prep for modern job seekers.",
+      url: absoluteUrl("/"),
+      isPartOf: { "@type": "WebSite", name: "Launch CV", url: getSiteUrl() },
+    },
+  ],
+};
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
+      <JsonLd data={homeStructuredData} />
       <LandingNav />
 
       <main className="flex-1">
@@ -16,25 +43,25 @@ export default function Home() {
           <div className="absolute left-1/2 top-0 h-[800px] w-[800px] -translate-x-1/2 bg-[radial-gradient(circle,rgba(4,156,255,0.04),transparent_70%)]" />
 
           <div className="relative mx-auto max-w-[980px] px-6 pb-24 pt-24 sm:pb-32 sm:pt-40">
-            <p className="text-[14px] font-medium tracking-wide text-[#7C5CFC] sm:text-[15px]">
+            <p className="lc-motion-fade lc-s1 text-[14px] font-medium tracking-wide text-[#7C5CFC] sm:text-[15px]">
               The resume platform for modern job seekers
             </p>
 
-            <h1 className="mt-4 text-[40px] font-[750] leading-[1.08] tracking-[-0.035em] text-[#0a0a0a] sm:mt-5 sm:text-[56px] sm:leading-[1.05] lg:text-[72px]">
+            <h1 className="lc-motion-fade lc-s2 mt-4 text-[40px] font-[750] leading-[1.08] tracking-[-0.035em] text-[#0a0a0a] sm:mt-5 sm:text-[56px] sm:leading-[1.05] lg:text-[72px]">
               Tailored resumes.<br />
               More interviews.
             </h1>
 
-            <p className="mt-6 max-w-[540px] text-[17px] leading-[1.65] text-[#666] sm:mt-8 sm:text-[19px] sm:leading-[1.7]">
+            <p className="lc-motion-fade lc-s3 mt-6 max-w-[540px] text-[17px] leading-[1.65] text-[#666] sm:mt-8 sm:text-[19px] sm:leading-[1.7]">
               Paste a job description. Launch CV rewrites your resume to match,
               scores it against ATS filters, and generates your cover letter.
               In under two minutes.
             </p>
 
-            <div className="mt-10 flex flex-col gap-4 sm:mt-12 sm:flex-row sm:items-center sm:gap-5">
+            <div className="lc-motion-fade lc-s4 mt-10 flex flex-col gap-4 sm:mt-12 sm:flex-row sm:items-center sm:gap-5">
               <Link
                 href="/register"
-                className="group inline-flex w-fit items-center justify-center gap-3 rounded-full bg-[#0a0a0a] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#333]"
+                className="group inline-flex w-fit items-center justify-center gap-3 rounded-full bg-[#0a0a0a] px-7 py-3.5 text-[15px] font-semibold text-white transition hover:bg-[#333] motion-safe:hover:shadow-lg"
               >
                 Start building — free
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
@@ -42,7 +69,7 @@ export default function Home() {
 
               <span className="text-[14px] text-[#999]">No credit card required</span>
             </div>
-            <p className="mt-8 text-[12px] leading-relaxed text-[#aaa]">
+            <p className="lc-motion-fade lc-s5 mt-8 text-[12px] leading-relaxed text-[#aaa]">
               <Link href="/legal/privacy" className="underline decoration-[#ccc] underline-offset-2 transition hover:text-[#666]">
                 Privacy
               </Link>
@@ -56,6 +83,7 @@ export default function Home() {
 
         {/* ── Metrics ── */}
         <section className="border-t border-[#f0f0f0]">
+          <RevealOnView>
           <div className="mx-auto grid max-w-[980px] grid-cols-2 gap-px bg-[#f0f0f0] sm:grid-cols-4">
             {[
               { value: "85%", sub: "avg ATS match score" },
@@ -72,10 +100,12 @@ export default function Home() {
           <p className="mx-auto max-w-[980px] px-6 pb-6 text-center text-[11px] leading-relaxed text-[#bbb]">
             Illustrative benchmarks from internal tooling and beta feedback; your results depend on role, market, and how you apply.
           </p>
+          </RevealOnView>
         </section>
 
         {/* ── How it works ── */}
         <section className="mx-auto max-w-[980px] px-6 py-32">
+          <RevealOnView>
           <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">How it works</p>
             <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
               Three steps. Two minutes.
@@ -94,10 +124,12 @@ export default function Home() {
               </div>
             ))}
           </div>
+          </RevealOnView>
         </section>
 
         {/* ── Features ── */}
         <section className="border-t border-[#f0f0f0] bg-[#fafafa]">
+          <RevealOnView>
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Features</p>
             <h2 className="mt-4 max-w-[600px] text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
@@ -123,10 +155,12 @@ export default function Home() {
               ))}
             </div>
           </div>
+          </RevealOnView>
         </section>
 
         {/* ── Testimonials ── */}
         <section className="border-t border-[#f0f0f0]">
+          <RevealOnView>
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Testimonials</p>
             <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
@@ -158,10 +192,12 @@ export default function Home() {
               ))}
             </div>
           </div>
+          </RevealOnView>
         </section>
 
         {/* ── Pricing ── */}
         <section className="border-t border-[#f0f0f0] bg-[#fafafa]">
+          <RevealOnView>
           <div className="mx-auto max-w-[980px] px-6 py-32">
             <p className="text-[15px] font-medium tracking-wide text-[#7C5CFC]">Pricing</p>
             <h2 className="mt-4 text-[32px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[44px]">
@@ -212,10 +248,12 @@ export default function Home() {
               </div>
             </div>
           </div>
+          </RevealOnView>
         </section>
 
         {/* ── Final CTA ── */}
         <section className="border-t border-[#f0f0f0]">
+          <RevealOnView>
           <div className="mx-auto max-w-[980px] px-6 py-32 text-center">
             <h2 className="text-[36px] font-[750] leading-[1.1] tracking-[-0.03em] text-[#0a0a0a] sm:text-[48px] lg:text-[56px]">
               Your next interview is<br />one resume away.
@@ -234,6 +272,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
+          </RevealOnView>
         </section>
       </main>
 

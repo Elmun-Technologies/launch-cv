@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { ArrowRight, Heart, Shield, Lightbulb, Users, Sparkles, Code2, Database, Brain } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "About Us | Launch CV",
-  description: "Launch CV is built for job seekers, by job seekers. Learn about our mission to make professional resume building accessible to everyone.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "About Us",
+  description:
+    "Launch CV is built for job seekers, by job seekers. Learn about our mission to make professional resume building accessible to everyone.",
+  pathname: "/about",
+  keywords: ["Launch CV", "about", "mission", "resume AI"],
+});
 
 const values = [
   {

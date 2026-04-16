@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { ArrowRight, Palette, AlertTriangle, Sparkles, Target, FileText, BarChart3 } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 
-export const metadata: Metadata = {
-  title: "Resume Builder for UX Designers | Launch CV",
-  description: "Create ATS-optimized resumes for UX, UI, and product design roles. Showcase your design process, impact, and portfolio effectively.",
-};
+export const metadata = buildMarketingMetadata({
+  title: "Resume Builder for UX Designers",
+  description:
+    "Create ATS-optimized resumes for UX, UI, and product design roles. Showcase your design process, impact, and portfolio effectively.",
+  pathname: "/use-cases/designers",
+  keywords: ["UX designer resume", "UI resume", "portfolio resume", "Launch CV"],
+});
 
 const painPoints = [
   {
