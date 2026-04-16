@@ -60,9 +60,16 @@ Main variables:
 ## Deploying (Vercel)
 
 1. Create a Vercel project from this GitHub repo.
-2. Set **Root Directory** to **`web`**.
-3. Add all environment variables from `web/.env.example` in the Vercel dashboard.
-4. Point your domain (`launch-cv.com`) to Vercel and set `NEXT_PUBLIC_APP_URL` to the live URL.
+2. Set **Root Directory** to **`web`** (required — the Next.js app is not at the repo root).
+3. **Framework Preset:** choose **Next.js** if it does not auto-detect.
+4. **Build & Install:** prefer defaults. If you overrode them, either clear overrides or match `web/vercel.json` (`npm ci` + `npm run build`). Do **not** use a random “Other” preset.
+5. **Environment variables** (Vercel → Project → Settings → Environment Variables) — minimum for a working site after deploy:
+   - `DATABASE_URL` — use a **hosted PostgreSQL** URL in production (SQLite files are not reliable on Vercel serverless). Until Postgres is wired up, deploy may build but the app can error at runtime.
+   - `AUTH_SECRET` — long random string (session signing).
+   - `NEXT_PUBLIC_APP_URL` — your Vercel URL or custom domain, e.g. `https://launch-cv.vercel.app`.
+6. Point your domain (`launch-cv.com`) to Vercel when ready.
+
+If the deploy fails, open the failed deployment → **Building** log and read the first red error line (often wrong root directory, wrong Node version, or a missing env at build time).
 
 ## CI
 
