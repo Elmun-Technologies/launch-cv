@@ -2,11 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// For production: change provider to "postgresql" and update DATABASE_URL
-// provider = "postgresql"
-// DATABASE_URL = "postgresql://user:pass@host:5432/sohacv?schema=public"
+// Supports both SQLite (local dev) and PostgreSQL (production)
+// Set DATABASE_URL=file:./dev.db for local, postgres://... for production
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
