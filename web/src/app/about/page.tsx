@@ -7,9 +7,9 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 export const metadata = buildMarketingMetadata({
   title: "About Us",
   description:
-    "Launch CV is built for job seekers, by job seekers. Learn about our mission to make professional resume building accessible to everyone.",
+    "Launch CV is built by job seekers, for job seekers. We combine AI resume building, JD alignment, ATS scoring, and interview prep in one professional platform.",
   pathname: "/about",
-  keywords: ["Launch CV", "about", "mission", "resume AI"],
+  keywords: ["Launch CV", "about", "mission", "AI resume builder", "resume platform team"],
 });
 
 const values = [

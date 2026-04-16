@@ -32,6 +32,7 @@ export function buildMarketingMetadata(input: {
       card: "summary_large_image",
       title: ogTitle,
       description: input.description,
+      site: "@launchcv",
     },
     robots: input.robots ?? { index: true, follow: true },
   };
