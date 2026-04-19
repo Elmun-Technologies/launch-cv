@@ -5,6 +5,7 @@ import { CookieBanner } from "@/components/cookie-banner";
 import { ToastProvider } from "@/components/toast";
 import { AppProviders } from "@/app/providers";
 import { JsonLd } from "@/components/json-ld";
+import { GoogleAnalytics } from "@/components/google-analytics";
 import { getSiteUrl } from "@/lib/site";
 
 const geistSans = Geist({
@@ -94,7 +95,7 @@ const rootStructuredData = {
     },
     {
       "@type": "SiteNavigationElement",
-      name: ["Home", "Features", "JD Alignment", "Resume Builder", "Cover Letter", "Interview Prep", "ATS Score", "Voice Input", "Pricing", "Blog", "About"],
+      name: ["Home", "Features", "JD Alignment", "Resume Builder", "Cover Letter", "Interview Prep", "ATS Score", "Voice Input", "Pricing", "Blog", "Company Matcher", "About"],
       url: [
         siteUrl,
         `${siteUrl}/features`,
@@ -106,6 +107,7 @@ const rootStructuredData = {
         `${siteUrl}/features/voice-input`,
         `${siteUrl}/pricing`,
         `${siteUrl}/blog`,
+        `${siteUrl}/company-matcher`,
         `${siteUrl}/about`,
       ],
     },
@@ -173,6 +175,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${plusJakartaSans.variable} ${inter.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
+        <GoogleAnalytics />
         <JsonLd data={rootStructuredData} />
         <AppProviders>
           {children}
