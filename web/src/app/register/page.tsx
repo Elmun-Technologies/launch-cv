@@ -44,18 +44,18 @@ function RegisterPageInner() {
     <AuthLayout mode="register">
       {/* Header */}
       <div className="mb-7">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EFF6FF] px-2.5 py-1 font-body text-[11px] font-bold uppercase tracking-wider text-[#1A56DB]">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EFF6FF] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">
           <Sparkles className="h-3 w-3" /> Free to create
         </span>
-        <h1 className="mt-4 font-display text-[34px] font-extrabold leading-[1.05] tracking-[-0.02em] text-[#0F172A]">
-          Create your<br />Launch CV account.
+        <h1 className="mt-4 text-[28px] font-semibold leading-[1.1] tracking-tight text-[#0F172A]">
+          Create your Launch CV account
         </h1>
-        <p className="mt-3 font-body text-[14px] leading-[1.6] text-[#64748B]">
-          Account is free. Pick a plan after — Starter from <span className="font-bold text-[#0F172A]">$9/mo</span> or <span className="font-bold text-[#0F172A]">Lifetime $149</span>.
+        <p className="mt-3 text-[14px] leading-[1.6] text-[#64748B]">
+          Account is free. Pick a plan after — Starter from <span className="font-semibold text-[#0F172A]">$9/mo</span> or <span className="font-semibold text-[#0F172A]">Lifetime $149</span>.
         </p>
-        <p className="mt-2 font-body text-[13px] text-[#64748B]">
+        <p className="mt-2 text-[13px] text-[#64748B]">
           Already a user?{" "}
-          <Link href="/login" className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">Sign in</Link>
+          <Link href="/login" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">Sign in</Link>
         </p>
         {referralCode ? (
           <div className="mt-5 flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5">

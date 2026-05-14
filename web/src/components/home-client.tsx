@@ -38,14 +38,14 @@ function StatCard({ value, suffix, label, sub, delay }: { value: number; suffix:
   return (
     <div
       ref={ref}
-      className="flex flex-col items-center border-r border-white/10 px-8 py-8 last:border-r-0 max-sm:border-r-0 max-sm:border-b max-sm:last:border-b-0"
+      className="flex flex-col"
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <p className="font-display text-[48px] font-bold leading-none text-white sm:text-[56px]" style={{ animationDelay: `${delay}ms` }}>
+      <p className="text-[40px] font-bold leading-none tracking-tight text-[#0F172A] sm:text-[44px]" style={{ animationDelay: `${delay}ms` }}>
         {count}{suffix}
       </p>
-      <p className="mt-2 font-body text-[14px] font-semibold text-white">{label}</p>
-      <p className="mt-1 font-body text-[13px] text-[#94A3B8]">{sub}</p>
+      <p className="mt-3 text-[14px] font-semibold text-[#0F172A]">{label}</p>
+      <p className="mt-1 text-[13px] text-[#64748B]">{sub}</p>
     </div>
   );
 }
@@ -89,13 +89,13 @@ export function HomeClient({ faqItems }: HomeClientProps) {
 
   /* ── Stats mode ── */
   return (
-    <section className="bg-[#0F172A] py-20">
-      <div className="mx-auto max-w-[1280px] px-6">
-        <div className="grid divide-y divide-white/10 sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4">
-          <StatCard value={50000} suffix="+" label="Resumes Created" sub="And counting" delay={0} />
-          <StatCard value={3} suffix="×" label="More Interview Calls" sub="Vs. unoptimized resumes" delay={80} />
-          <StatCard value={95} suffix="%" label="ATS Pass Rate" sub="Across all major platforms" delay={160} />
-          <StatCard value={5} suffix=" min" label="Average Build Time" sub="From blank to download" delay={240} />
+    <section className="border-y border-[#E2E8F0] bg-white py-16">
+      <div className="mx-auto max-w-[1200px] px-6">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard value={50000} suffix="+" label="Resumes built" sub="And counting" delay={0} />
+          <StatCard value={3} suffix="×" label="More interview calls" sub="vs. unoptimized resumes" delay={80} />
+          <StatCard value={95} suffix="%" label="ATS pass rate" sub="across major platforms" delay={160} />
+          <StatCard value={5} suffix=" min" label="Average build time" sub="blank to download" delay={240} />
         </div>
       </div>
     </section>
