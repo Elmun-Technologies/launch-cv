@@ -13,9 +13,26 @@ defaults:
 jobs:
   ci:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: ci
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: launchcv_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ci -d launchcv_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
     env:
       AUTH_SECRET: ci-ci-ci-ci-ci-ci-ci-ci-ci-ci-ci-ci-12chars
-      DATABASE_URL: file:./prisma/ci.db
+      DATABASE_URL: postgresql://ci:ci@127.0.0.1:5432/launchcv_ci?schema=public
+
     steps:
       - uses: actions/checkout@v4
 
