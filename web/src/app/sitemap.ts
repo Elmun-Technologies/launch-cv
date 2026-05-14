@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
-import { BLOG_POSTS } from "@/lib/blog-posts";
+import { prisma } from "@/lib/prisma";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://launch-cv.com";
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/pricing`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.9 },
     { url: `${baseUrl}/blog`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
+    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.5 },
     { url: `${baseUrl}/use-cases/software-engineers`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/use-cases/product-managers`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/use-cases/designers`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.7 },
@@ -25,12 +26,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/legal/terms`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },
   ];
 
-  const blogRoutes: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
+  let blogRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { status: "published" },
+      select: { slug: true, publishedAt: true, updatedAt: true },
+    });
+    blogRoutes = posts.map((p) => ({
+      url: `${baseUrl}/blog/${p.slug}`,
+      lastModified: p.updatedAt ?? p.publishedAt ?? new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    }));
+  } catch {
+    // DB may be unreachable during build — fall back to no blog routes.
+  }
 
   return [...staticRoutes, ...blogRoutes];
 }
