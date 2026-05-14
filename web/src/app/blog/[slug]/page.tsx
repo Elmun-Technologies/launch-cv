@@ -7,8 +7,9 @@ import { JsonLd } from "@/components/json-ld";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getPostBySlug, getAllSlugs, BLOG_POSTS } from "@/lib/blog-posts";
-import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight, ChevronDown } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight } from "lucide-react";
 import { BlogFaq } from "@/components/blog-faq";
+import { BlogCover } from "@/components/blog-cover";
 
 type Params = { slug: string };
 
@@ -142,6 +143,11 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               {post.description}
             </p>
 
+            {/* Cover */}
+            <div className="mt-8">
+              <BlogCover post={post} size="hero" />
+            </div>
+
             {/* Author */}
             <div className="mt-6 flex items-center gap-3 border-t border-[#E2E8F0] pt-5">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EFF6FF] font-display text-[15px] font-bold text-[#1A56DB]">
@@ -243,13 +249,16 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
                   <Link
                     key={rp.slug}
                     href={`/blog/${rp.slug}`}
-                    className="group rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                    className="group flex flex-col overflow-hidden rounded-xl border border-[#E2E8F0] bg-white p-4 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
                   >
-                    <span className="font-body text-[11px] font-semibold uppercase tracking-wide text-[#1A56DB]">{rp.category}</span>
-                    <h3 className="mt-2 font-display text-[15px] font-bold leading-snug text-[#0F172A] group-hover:text-[#1A56DB] transition-colors">
-                      {rp.title}
-                    </h3>
-                    <p className="mt-1.5 font-body text-[12px] text-[#94A3B8]">{rp.readingTime} min read</p>
+                    <BlogCover post={rp} size="sm" />
+                    <div className="mt-4 px-1 pb-1">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">{rp.category}</span>
+                      <h3 className="mt-2 text-[15px] font-semibold leading-snug text-[#0F172A] transition-colors group-hover:text-[#1A56DB]">
+                        {rp.title}
+                      </h3>
+                      <p className="mt-1.5 text-[12px] text-[#94A3B8]">{rp.readingTime} min read</p>
+                    </div>
                   </Link>
                 ))}
               </div>

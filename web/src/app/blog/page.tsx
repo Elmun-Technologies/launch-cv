@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/json-ld";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { BLOG_POSTS } from "@/lib/blog-posts";
+import { BlogCover } from "@/components/blog-cover";
 import { ArrowRight, Clock } from "lucide-react";
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -94,18 +95,14 @@ export default function BlogPage() {
           {/* Featured */}
           <Link
             href={`/blog/${featured.slug}`}
-            className="group grid gap-8 rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)] lg:grid-cols-2 lg:items-center lg:p-10"
+            className="group grid gap-8 rounded-2xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)] lg:grid-cols-2 lg:items-center lg:gap-10 lg:p-6"
           >
-            <div className="flex h-[200px] items-center justify-center rounded-xl bg-gradient-to-br from-[#EFF6FF] to-[#EDE9FE] sm:h-[220px]">
-              <div className="text-center">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">Featured</p>
-                <p className="mt-2 text-[24px] font-semibold tracking-tight text-[#0F172A] sm:text-[28px]">
-                  {featured.category}
-                </p>
-              </div>
-            </div>
-            <div>
+            <BlogCover post={featured} size="lg" />
+            <div className="px-2 lg:px-4">
               <div className="flex items-center gap-3">
+                <span className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#1A56DB]">
+                  Featured
+                </span>
                 <span
                   className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
                     categoryClass[featured.category] ?? "bg-[#F1F5F9] text-[#475569]"
@@ -117,7 +114,7 @@ export default function BlogPage() {
                   <Clock className="h-3 w-3" /> {featured.readingTime} min read
                 </span>
               </div>
-              <h2 className="mt-4 text-[24px] font-semibold leading-tight tracking-tight text-[#0F172A] transition group-hover:text-[#1A56DB] sm:text-[26px]">
+              <h2 className="mt-4 text-[24px] font-semibold leading-tight tracking-tight text-[#0F172A] transition group-hover:text-[#1A56DB] sm:text-[28px]">
                 {featured.title}
               </h2>
               <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{featured.description}</p>
@@ -134,23 +131,13 @@ export default function BlogPage() {
               <Link
                 key={post.slug}
                 href={`/blog/${post.slug}`}
-                className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+                className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-4 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
               >
-                <span
-                  className={`h-1 w-full rounded-t-xl ${
-                    post.category === "Resume Tips"
-                      ? "bg-[#1A56DB]"
-                      : post.category === "Cover Letters"
-                      ? "bg-[#0D9488]"
-                      : post.category === "Interview Prep"
-                      ? "bg-[#059669]"
-                      : "bg-[#7C3AED]"
-                  }`}
-                />
-                <div className="flex flex-1 flex-col p-6">
+                <BlogCover post={post} size="md" />
+                <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                      className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${
                         categoryClass[post.category] ?? "bg-[#F1F5F9] text-[#475569]"
                       }`}
                     >
@@ -160,13 +147,13 @@ export default function BlogPage() {
                       <Clock className="h-3 w-3" /> {post.readingTime} min
                     </span>
                   </div>
-                  <h2 className="mt-4 text-[16px] font-semibold leading-snug tracking-tight text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                  <h2 className="mt-3 text-[16px] font-semibold leading-snug tracking-tight text-[#0F172A] transition group-hover:text-[#1A56DB]">
                     {post.title}
                   </h2>
-                  <p className="mt-2 line-clamp-3 flex-1 text-[13px] leading-[1.65] text-[#475569]">
+                  <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-[1.65] text-[#475569]">
                     {post.description}
                   </p>
-                  <div className="mt-5 flex items-center justify-between border-t border-[#E2E8F0] pt-3">
+                  <div className="mt-4 flex items-center justify-between border-t border-[#E2E8F0] pt-3">
                     <span className="text-[11px] text-[#94A3B8]">
                       {new Date(post.date).toLocaleDateString("en-US", {
                         month: "short",
