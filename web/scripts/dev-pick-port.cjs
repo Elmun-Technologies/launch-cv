@@ -5,6 +5,7 @@
  * Eski next dev tirik bo'lsa: `SOHA_DEV_KILL=1 npm run dev` (faqat o'z mashinangizda).
  * Ishlatish: node scripts/dev-pick-port.cjs [--webpack]
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");

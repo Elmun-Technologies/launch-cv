@@ -4,589 +4,705 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { HomeClient } from "@/components/home-client";
+import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
-import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
-import { AnimatedGrid } from "@/components/animated-grid";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import {
-  Check,
   ArrowRight,
-  ChevronDown,
+  ArrowUpRight,
+  Check,
+  Sparkles,
+  Star,
   Target,
   FileText,
   Mail,
   MessageSquare,
   BarChart3,
   Mic,
-  Zap,
-  Star,
 } from "lucide-react";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Copilot",
   description:
-    "Paste a job description — Launch CV rewrites your resume, scores ATS fit, and generates your cover letter. Paid plans: Starter, Professional, Elite, or Lifetime.",
+    "Paste a job description — Launch CV rewrites your resume, scores ATS fit, and writes your cover letter. Real interviews. Real offers. In real days.",
   pathname: "/",
-  keywords: ["Launch CV", "resume builder", "ATS resume", "JD alignment", "cover letter AI", "interview prep"],
+  keywords: ["Launch CV", "AI resume builder", "ATS resume", "JD alignment", "cover letter AI", "interview prep"],
 });
 
-const homeStructuredData = {
+const homeLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
       "@type": "WebPage",
       name: "Launch CV — AI Resume Builder & Job Search Copilot",
       description:
-        "Tailored resumes, ATS scoring, JD alignment, cover letters, and interview prep for modern job seekers.",
+        "Tailored resumes, ATS scoring, JD alignment, cover letters, and interview prep for serious job seekers.",
       url: absoluteUrl("/"),
       isPartOf: { "@type": "WebSite", name: "Launch CV", url: getSiteUrl() },
     },
   ],
 };
 
-const features = [
-  { href: "/features/jd-alignment", icon: Target, title: "JD Alignment Match", accent: "blue", desc: "Paste any job description — AI highlights every gap, missing keyword, and optimization opportunity. Score up to 95% match." },
-  { href: "/features/resume-builder", icon: FileText, title: "AI Resume Builder", accent: "violet", desc: "12+ ATS-tested templates. AI writes professional bullet points from your raw input — no writing skills needed." },
-  { href: "/features/cover-letter", icon: Mail, title: "Cover Letter Generator", accent: "teal", desc: "Personalized, job-specific cover letters in 60 seconds. Professional tone, ready to send." },
-  { href: "/features/interview-prep", icon: MessageSquare, title: "Interview Preparation", accent: "green", desc: "AI generates questions based on your exact role, resume, and job description. Get scored feedback." },
-  { href: "/features/ats-score", icon: BarChart3, title: "ATS Score Checker", accent: "orange", desc: "See exactly how your resume scores against applicant tracking systems. Get an actionable fix checklist." },
-  { href: "/features/voice-input", icon: Mic, title: "Voice Input", accent: "pink", desc: "Just speak your experience naturally. AI transcribes and transforms your words into polished resume bullets." },
+const featureGrid = [
+  {
+    href: "/features/jd-alignment",
+    eyebrow: "01 / Match",
+    title: "JD Alignment",
+    desc: "Paste a job ad. Get a side-by-side gap map and AI-rewritten bullets. Score climbs from 42% → 91% live.",
+    icon: Target,
+    accent: "bg-blue-50 text-blue-700",
+    span: "lg:col-span-2",
+  },
+  {
+    href: "/features/ats-score",
+    eyebrow: "02 / Score",
+    title: "ATS Scanner",
+    desc: "Workday, Greenhouse, Lever — every parser, simulated. 12 issue checks. One-click fix list.",
+    icon: BarChart3,
+    accent: "bg-orange-50 text-orange-700",
+    span: "",
+  },
+  {
+    href: "/features/resume-builder",
+    eyebrow: "03 / Write",
+    title: "AI Resume Builder",
+    desc: "12 ATS-tested templates. Plain-English in. Quantified, professional bullets out. 5-minute build.",
+    icon: FileText,
+    accent: "bg-violet-50 text-violet-700",
+    span: "",
+  },
+  {
+    href: "/features/cover-letter",
+    eyebrow: "04 / Send",
+    title: "Cover Letter Generator",
+    desc: "Pulls the company mission, tech stack, and hiring manager tone. Personalized letter in 60 seconds.",
+    icon: Mail,
+    accent: "bg-teal-50 text-teal-700",
+    span: "lg:col-span-2",
+  },
+  {
+    href: "/features/interview-prep",
+    eyebrow: "05 / Practice",
+    title: "Interview Prep",
+    desc: "200+ role-specific questions from your resume and the JD. Scored answers. Model responses.",
+    icon: MessageSquare,
+    accent: "bg-emerald-50 text-emerald-700",
+    span: "",
+  },
+  {
+    href: "/features/voice-input",
+    eyebrow: "06 / Speak",
+    title: "Voice Input",
+    desc: "Talk like you would to a friend. AI turns it into resume-grade bullet points. No blank page.",
+    icon: Mic,
+    accent: "bg-pink-50 text-pink-700",
+    span: "",
+  },
 ];
 
-const accentMap: Record<string, string> = {
-  blue: "bg-[#EFF6FF] text-[#1A56DB]",
-  violet: "bg-[#EDE9FE] text-[#6D28D9]",
-  teal: "bg-[#F0FDFA] text-[#0D9488]",
-  green: "bg-[#DCFCE7] text-[#15803D]",
-  orange: "bg-[#FFF7ED] text-[#C2410C]",
-  pink: "bg-[#FDF2F8] text-[#9D174D]",
-};
-
 const testimonials = [
-  { name: "Sarah K.", role: "Software Engineer → Stripe", quote: "I went from 0 interviews in 3 months to 4 in one week after using Launch CV. The JD matching is a game changer.", rating: 5 },
-  { name: "Marcus T.", role: "Product Manager → Notion", quote: "My ATS score went from 38% to 93%. I had no idea how broken my resume was. Within 2 weeks I had 3 offers.", rating: 5 },
-  { name: "Priya N.", role: "Marketing Lead → HubSpot", quote: "The cover letter generator wrote better letters than I ever could. Saved me 2–3 hours per application.", rating: 5 },
-  { name: "David L.", role: "Operations Manager", quote: "Voice input is brilliant. I just talked about my job history and it came out polished and professional.", rating: 5 },
-  { name: "Emma R.", role: "UX Designer (career switch)", quote: "As a career changer, I was lost. Launch CV showed me exactly what keywords to add for a completely new field.", rating: 5 },
-  { name: "James O.", role: "Data Analyst", quote: "The interview prep feature is underrated. Practicing with AI questions specific to the job made me so much more confident.", rating: 5 },
+  { name: "Sarah K.", role: "Software Engineer → Stripe", quote: "Zero interviews in 3 months. Four interviews in one week after Launch CV. The JD matching is unreal.", rating: 5 },
+  { name: "Marcus T.", role: "Product Manager → Notion", quote: "ATS score went 38 → 93. Within two weeks I had three offers. The fixes were embarrassingly obvious in hindsight.", rating: 5 },
+  { name: "Priya N.", role: "Marketing Lead → HubSpot", quote: "The cover letter generator writes better letters than I do. Two hours saved per application. Not an exaggeration.", rating: 5 },
+  { name: "David L.", role: "Operations Manager", quote: "Voice input is the only way I write bullets now. Speak the story, get a quantified resume line back.", rating: 5 },
+  { name: "Emma R.", role: "UX Designer (career switch)", quote: "Career changer here. Launch CV told me exactly which keywords I was missing for the new field. Hired in 6 weeks.", rating: 5 },
+  { name: "James O.", role: "Data Analyst", quote: "The AI mock interviews ruined every bad coaching course I've ever paid for. Cheaper. Better. Faster.", rating: 5 },
 ];
 
 const faqs = [
-  { q: "Is there a free plan?", a: "No — Launch CV is a paid professional product. AI features require an active plan (Starter, Professional, Elite, or Lifetime). You can create an account to explore settings, but AI workflows unlock after checkout." },
-  { q: "What is ATS and why does it matter?", a: "Applicant Tracking Systems scan and filter resumes before a human ever reads them. 75% of resumes are rejected by ATS. We help you pass every major platform." },
-  { q: "What file formats can I download?", a: "PDF and DOCX. Both are ATS-compatible. You can also copy plain text for email or LinkedIn." },
-  { q: "Is my data safe and private?", a: "Yes. We use 256-bit encryption. We never sell your data. GDPR and CCPA compliant. Your audio is never stored after voice transcription." },
-  { q: "How is this different from other resume builders?", a: "We combine resume building + JD matching + ATS scoring + cover letters + interview prep in one platform — all AI-powered with generous limits per plan." },
-  { q: "How long does it take to build a resume?", a: "Most users complete a polished resume in under 5 minutes with AI bullet suggestions and real-time preview." },
-  { q: "Does it work for all industries?", a: "Yes — we have templates and AI training data for 12+ verticals including tech, finance, healthcare, marketing, design, and management." },
-  { q: "What is the Lifetime plan?", a: "Lifetime is a one-time payment of $149 that gives you ongoing access without renewals. Monthly AI limits apply (generous fair-use caps) — pay once, use forever." },
+  { q: "Is there a free plan?", a: "No — Launch CV is a paid professional product. AI features require an active plan (Starter, Professional, Elite, or Lifetime). Create an account to manage billing; checkout unlocks the AI." },
+  { q: "What is ATS and why does it matter?", a: "Applicant Tracking Systems scan and filter resumes before any human sees them. 75% of resumes are rejected by ATS. Launch CV is tested against the 15 most common platforms — Workday, Greenhouse, Lever, iCIMS and more." },
+  { q: "What file formats can I download?", a: "PDF and DOCX — both ATS-clean. We also expose plain text for email pasting or LinkedIn import." },
+  { q: "Is my data safe and private?", a: "Yes. 256-bit encryption, GDPR + CCPA compliant, and we never sell user data. Voice audio is processed in-memory and discarded immediately after transcription." },
+  { q: "How is this different from other resume builders?", a: "We aren't a template gallery. We pair the builder with JD alignment, ATS scoring, cover letters and interview prep — under one paid plan with predictable AI limits." },
+  { q: "How long does a real resume take?", a: "Most users finish a polished, ATS-tested PDF in under 5 minutes — with AI suggestions, real-time preview, and zero formatting tinkering." },
+  { q: "Does it work for all industries?", a: "Yes — 12 templates across tech, finance, healthcare, marketing, design, operations and management. The AI is calibrated per vertical." },
+  { q: "What is the Lifetime plan?", a: "One payment of $149, no renewals. Generous monthly fair-use AI caps included. Pay once, keep using forever." },
 ];
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
-      <JsonLd data={homeStructuredData} />
+    <div className="flex min-h-screen flex-col bg-[#FAFAF7] text-[#0F172A]">
+      <JsonLd data={homeLd} />
       <LandingNav />
 
-      {/* ──────────────── 1. HERO ──────────────── */}
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-[#0F172A] pt-[72px]">
-        {/* Mesh blobs */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-          <div className="lc-blob-1 absolute left-[10%] top-[20%] h-[500px] w-[500px] rounded-full bg-[#1A56DB] opacity-[0.18] blur-[120px]" />
-          <div className="lc-blob-2 absolute right-[5%] top-[30%] h-[400px] w-[400px] rounded-full bg-[#7C3AED] opacity-[0.15] blur-[120px]" />
-          <div className="lc-blob-3 absolute bottom-[10%] left-[40%] h-[350px] w-[350px] rounded-full bg-[#0D9488] opacity-[0.12] blur-[100px]" />
+      {/* ═══════════════════════════════════════
+          1. EDITORIAL HERO (dark, mega type)
+          ═══════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-[#0B0F19] pt-[88px] text-white">
+        {/* subtle grid + glow */}
+        <div className="lc-grid-bg pointer-events-none absolute inset-0 opacity-[0.5]" aria-hidden />
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          <div className="lc-blob-1 absolute -left-32 top-10 h-[520px] w-[520px] rounded-full bg-[#1A56DB] opacity-[0.22] blur-[140px]" />
+          <div className="lc-blob-2 absolute -right-24 top-40 h-[420px] w-[420px] rounded-full bg-[#7C3AED] opacity-[0.20] blur-[140px]" />
+          <div className="lc-blob-3 absolute bottom-0 left-1/2 h-[380px] w-[380px] -translate-x-1/2 rounded-full bg-[#0D9488] opacity-[0.15] blur-[120px]" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-[1280px] px-6 py-24 sm:py-32">
-          <div className="mx-auto max-w-[720px] text-center">
-            {/* Top badge */}
-            <div className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-1.5 lc-shimmer">
-              <span className="font-body text-[13px] font-semibold text-white/90">✨ Rated #1 AI Resume Builder — 2025</span>
+        <div className="relative mx-auto grid max-w-[1320px] grid-cols-1 gap-12 px-6 pb-24 pt-16 lg:grid-cols-12 lg:gap-16 lg:pb-32 lg:pt-24">
+          {/* LEFT: massive editorial headline */}
+          <div className="lg:col-span-7">
+            <div className="lc-motion-fade flex items-center gap-3">
+              <span className="lc-overline text-white/60">Issue №25 · Spring 2026</span>
+              <span className="lc-rule" />
+              <span className="lc-overline text-white/40">The Job Search, Rebuilt</span>
             </div>
 
-            {/* H1 */}
-            <h1 className="lc-motion-fade lc-s2 font-display text-[48px] font-[800] leading-[1.08] tracking-[-0.03em] text-white sm:text-[64px] lg:text-[72px]">
-              Build the Resume<br />
-              <span className="lc-gradient-text-animated">That Gets You Hired.</span>
+            <h1 className="lc-motion-fade lc-s2 mt-6 font-display font-extrabold leading-[0.92] tracking-[-0.045em] text-white text-[64px] sm:text-[88px] lg:text-[112px]">
+              Stop applying.
+              <br />
+              <span className="lc-mega-italic text-white/90">Start</span>{" "}
+              <span className="lc-gradient-text-animated">getting hired.</span>
             </h1>
 
-            {/* Subheadline */}
-            <p className="lc-motion-fade lc-s3 mx-auto mt-6 max-w-[560px] font-body text-[18px] leading-[1.75] text-[#94A3B8] sm:text-[20px]">
-              AI-powered. ATS-optimized. Ready in 5 minutes. Join professionals who landed interviews with Launch CV.
+            <p className="lc-motion-fade lc-s3 mt-8 max-w-[560px] font-body text-[18px] leading-[1.65] text-white/70 sm:text-[20px]">
+              Launch CV is the AI job-search workroom for people who treat hiring like a project — not a hobby.
+              Paste a job ad. Get the resume, the cover letter, the interview prep — written, scored, and ready in minutes.
             </p>
 
-            {/* CTA group */}
-            <div className="lc-motion-fade lc-s4 mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+            <div className="lc-motion-fade lc-s4 mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Link
                 href="/register"
-                className="lc-btn-primary lc-ripple lc-pulse-glow px-8 py-4 text-[16px]"
+                className="lc-magnet inline-flex items-center gap-2 rounded-full bg-white px-7 py-4 text-[15px] font-bold text-[#0B0F19] shadow-[0_10px_30px_-10px_rgba(255,255,255,0.5)]"
               >
-                View plans & get started <ArrowRight className="h-4 w-4" />
+                See pricing & start <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link href="/pricing" className="font-body text-[15px] font-semibold text-[#94A3B8] transition hover:text-white">
-                From {PUBLIC_PLANS.starter.priceDisplay}{PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+              <Link
+                href="#showcase"
+                className="lc-link-underline inline-flex items-center gap-2 font-body text-[14px] font-semibold text-white/80"
+              >
+                Watch the workflow <ArrowUpRight className="h-4 w-4" />
               </Link>
             </div>
 
-            {/* Social proof */}
-            <div className="lc-motion-fade lc-s5 mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-              <span className="font-body text-[13px] text-[#94A3B8]">★★★★★ 4.9/5 from 2,400+ reviews</span>
-              <span className="text-[#475569]">·</span>
-              <span className="font-body text-[13px] text-[#94A3B8]">ATS-optimized</span>
-              <span className="text-[#475569]">·</span>
-              <span className="font-body text-[13px] text-[#94A3B8]">Lifetime plan available</span>
+            <div className="lc-motion-fade lc-s5 mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 text-[13px] text-white/55">
+              <div className="flex items-center gap-1.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 fill-[#F59E0B] text-[#F59E0B]" />
+                ))}
+                <span className="ml-2 font-semibold text-white">4.9/5</span>
+                <span>from 2,400+ reviews</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex h-2 w-2 rounded-full bg-[#34D399]" />
+                <span>Tested on 15 ATS engines</span>
+              </div>
+              <div className="hidden items-center gap-2 md:inline-flex">
+                <span className="inline-flex h-2 w-2 rounded-full bg-[#60A5FA]" />
+                <span>Pay once · Lifetime available</span>
+              </div>
             </div>
           </div>
 
-          {/* Hero visual — resume mockup */}
-          <div className="lc-motion-fade lc-s5 mx-auto mt-16 max-w-[640px]">
-            <div className="lc-float relative rounded-2xl border border-white/10 bg-white/5 p-4 shadow-[0_32px_80px_rgba(0,0,0,0.4)] backdrop-blur-sm">
-              <div className="rounded-xl bg-white p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="h-6 w-48 rounded bg-[#0F172A]" />
-                    <div className="mt-1.5 h-3.5 w-32 rounded bg-[#64748B]/40" />
-                    <div className="mt-1 h-3 w-56 rounded bg-[#94A3B8]/30" />
-                  </div>
-                  <div className="flex items-center gap-1.5 rounded-full bg-[#DCFCE7] px-3 py-1.5">
-                    <span className="h-2 w-2 rounded-full bg-[#059669]" />
-                    <span className="font-body text-[12px] font-bold text-[#15803D]">ATS 94%</span>
-                  </div>
+          {/* RIGHT: stacked resume + ATS callouts */}
+          <div className="relative lg:col-span-5">
+            <div className="lc-motion-fade lc-s5 relative">
+              {/* annotation chips */}
+              <div className="absolute -left-2 -top-4 z-20 hidden lg:block">
+                <div className="lc-glow-ring rounded-2xl bg-[#0F172A]/80 px-3 py-2 backdrop-blur">
+                  <p className="font-body text-[10px] uppercase tracking-[0.16em] text-white/60">Live score</p>
+                  <p className="mt-0.5 font-display text-[22px] font-bold text-[#34D399]">94 / 100</p>
                 </div>
-                <div className="mt-5 space-y-3">
-                  {["Work Experience", "Skills", "Education"].map((s) => (
-                    <div key={s}>
-                      <div className="h-2.5 w-24 rounded bg-[#1A56DB]/60" />
-                      <div className="mt-2 space-y-1.5">
-                        <div className="h-2 w-full rounded bg-gray-100" />
-                        <div className="h-2 w-5/6 rounded bg-gray-100" />
-                        <div className="h-2 w-4/6 rounded bg-gray-100" />
+              </div>
+              <div className="absolute -right-3 top-32 z-20 hidden lg:block">
+                <div className="rotate-3 rounded-2xl bg-[#7C3AED] px-3 py-2 shadow-[0_18px_40px_-12px_rgba(124,58,237,0.6)]">
+                  <p className="font-body text-[10px] uppercase tracking-[0.16em] text-white/70">Keywords</p>
+                  <p className="font-display text-[16px] font-bold text-white">+ 14 matched</p>
+                </div>
+              </div>
+
+              {/* layered resume mockup */}
+              <div className="relative">
+                {/* back card */}
+                <div className="absolute -right-4 top-6 hidden h-[88%] w-[92%] rotate-3 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur sm:block" />
+                {/* front mockup */}
+                <div className="lc-float relative lc-window rotate-[-2deg]">
+                  <div className="lc-window-bar">
+                    <span className="lc-window-dot bg-[#FF5F57]" />
+                    <span className="lc-window-dot bg-[#FEBC2E]" />
+                    <span className="lc-window-dot bg-[#28C840]" />
+                    <span className="ml-3 font-body text-[11px] font-semibold text-[#94A3B8]">resume_v3_final.pdf</span>
+                  </div>
+                  <div className="bg-white p-5 text-[#0F172A]">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-display text-[18px] font-bold leading-tight">Sarah Khan</p>
+                        <p className="mt-0.5 font-body text-[11px] font-semibold text-[#475569]">Senior Software Engineer · NYC</p>
+                        <div className="mt-1 flex gap-2 text-[10px] text-[#64748B]">
+                          <span>sarah@email.com</span><span>·</span><span>linkedin.com/in/sarahk</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5 rounded-full bg-[#DCFCE7] px-2.5 py-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
+                        <span className="font-body text-[10px] font-bold text-[#15803D]">ATS 94%</span>
                       </div>
                     </div>
+
+                    <div className="mt-4">
+                      <p className="font-body text-[10px] font-bold uppercase tracking-[0.1em] text-[#1A56DB]">Experience</p>
+                      <p className="mt-2 font-body text-[12px] font-bold text-[#0F172A]">Senior Engineer · Stripe</p>
+                      <p className="font-body text-[10px] text-[#94A3B8]">Jun 2022 — Present</p>
+                      <ul className="mt-2 space-y-1.5 font-body text-[11px] leading-snug text-[#334155]">
+                        <li className="flex gap-1.5">
+                          <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-[#1A56DB]" />
+                          <span><span className="lc-highlight-swipe">Led migration of 3 SaaS systems</span>, reducing deploy time by 40%.</span>
+                        </li>
+                        <li className="flex gap-1.5">
+                          <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-[#1A56DB]" />
+                          <span>Shipped 12 features, lifting retention by <span className="font-bold text-[#1A56DB]">34%</span> over 2 quarters.</span>
+                        </li>
+                        <li className="flex gap-1.5">
+                          <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-[#1A56DB]" />
+                          <span>Owned $2M ARR product line with 8 engineers across 2 timezones.</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div className="mt-4">
+                      <p className="font-body text-[10px] font-bold uppercase tracking-[0.1em] text-[#1A56DB]">Skills</p>
+                      <div className="mt-2 flex flex-wrap gap-1">
+                        {["TypeScript", "Go", "Postgres", "AWS", "K8s", "GraphQL"].map((k) => (
+                          <span key={k} className="lc-pill bg-[#F1F5F9] text-[#334155]">{k}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* marquee logo strip — at bottom of hero, contrasting */}
+        <div className="relative border-t border-white/10 bg-black/40 py-7">
+          <p className="mb-4 px-6 text-center font-body text-[11px] uppercase tracking-[0.18em] text-white/40">
+            Used by people now at
+          </p>
+          <div className="overflow-hidden">
+            <div className="lc-marquee-slow">
+              {[...Array(2)].map((_, p) => (
+                <div key={p} className="flex items-center gap-14 px-7">
+                  {["Stripe", "Notion", "Linear", "HubSpot", "Vercel", "Figma", "Airbnb", "Shopify", "Datadog", "OpenAI", "Anthropic", "Ramp"].map((n) => (
+                    <span key={n} className="shrink-0 font-display text-[20px] font-bold tracking-tight text-white/35">
+                      {n}
+                    </span>
                   ))}
                 </div>
-              </div>
-              {/* Floating AI chip */}
-              <div className="absolute -right-4 top-8 flex items-center gap-2 rounded-xl bg-[#1A56DB] px-3 py-2 shadow-lg">
-                <Zap className="h-3.5 w-3.5 text-white" />
-                <span className="font-body text-[12px] font-bold text-white">AI Enhanced</span>
-              </div>
+              ))}
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce text-[#475569]">
-          <ChevronDown className="h-5 w-5" />
-        </div>
       </section>
 
-      {/* ──────────────── 2. TRUST / LOGO BAR ──────────────── */}
-      <section className="overflow-hidden border-y border-[#E2E8F0] bg-[#F8FAFC] py-10">
-        <p className="mb-6 text-center font-body text-[13px] font-medium text-[#94A3B8]">
-          Trusted by professionals from
-        </p>
-        <div className="overflow-hidden">
-          <div className="lc-ticker-track">
-            {[...Array(2)].map((_, pass) => (
-              <div key={pass} className="flex items-center gap-14 px-8">
-                {["Google", "Amazon", "Deloitte", "Meta", "Stripe", "Salesforce", "JPMorgan", "McKinsey"].map((name) => (
-                  <span key={name} className="shrink-0 font-display text-[16px] font-bold text-[#94A3B8] opacity-50 transition-opacity hover:opacity-100">
-                    {name}
-                  </span>
-                ))}
+      {/* ═══════════════════════════════════════
+          2. EDITORIAL PROBLEM STATEMENT
+          ═══════════════════════════════════════ */}
+      <section className="bg-[#FAFAF7] py-24 sm:py-32">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <RevealOnView>
+            <div className="grid gap-12 lg:grid-cols-12 lg:items-start lg:gap-16">
+              <div className="lg:col-span-4">
+                <span className="lc-overline text-[#1A56DB]">A Note from the Editors</span>
+                <span className="lc-rule mt-3 block bg-[#1A56DB]" />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ──────────────── 3. VALUE PROPOSITION ──────────────── */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1280px] px-6">
-          <div className="text-center">
-            <p className="lc-eyebrow">Everything you need</p>
-            <h2 className="lc-h2 mx-auto mt-4 max-w-[600px]">
-              One Platform. Every Tool You Need to Get Hired.
-            </h2>
-            <p className="mx-auto mt-4 max-w-[520px] font-body text-[16px] text-[#64748B]">
-              From resume creation to interview prep — Launch CV covers every step of your job search.
-            </p>
-          </div>
-
-          <AnimatedGrid className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <Link
-                key={f.href}
-                href={f.href}
-                className="lc-card lc-spotlight group p-8"
-              >
-                <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-105 ${accentMap[f.accent]}`}>
-                  <f.icon className="h-6 w-6" />
-                </div>
-                <h3 className="mt-5 font-display text-[18px] font-bold text-[#0F172A]">{f.title}</h3>
-                <p className="mt-2 font-body text-[14px] leading-[1.7] text-[#475569]">{f.desc}</p>
-                <span className="mt-4 inline-flex items-center gap-1 font-body text-[13px] font-semibold text-[#1A56DB] opacity-0 transition-opacity group-hover:opacity-100">
-                  Learn more <ArrowRight className="h-3.5 w-3.5" />
-                </span>
-              </Link>
-            ))}
-          </AnimatedGrid>
-        </div>
-      </section>
-
-      {/* ──────────────── 4. HOW IT WORKS ──────────────── */}
-      <section className="bg-[#F8FAFC] py-24">
-        <div className="mx-auto max-w-[1280px] px-6">
-          <div className="text-center">
-            <p className="lc-eyebrow">How it works</p>
-            <h2 className="lc-h2 mx-auto mt-4 max-w-[500px]">
-              From Zero to Hired — In 3 Steps
-            </h2>
-            <p className="mx-auto mt-3 max-w-[480px] font-body text-[16px] text-[#64748B]">
-              Most users complete and apply with an AI-optimized resume in under 10 minutes.
-            </p>
-          </div>
-
-          <div className="relative mt-16 grid gap-8 lg:grid-cols-3">
-            {/* Connector line — sits below the numbers, between cards */}
-            <div className="pointer-events-none absolute left-[calc(16.67%+8px)] right-[calc(16.67%+8px)] top-[52px] hidden h-px border-t-2 border-dashed border-[#CBD5E1] lg:block" />
-
-            {[
-              {
-                n: "01",
-                badge: "You",
-                badgeColor: "bg-[#EFF6FF] text-[#1A56DB]",
-                title: "Paste your experience",
-                desc: "Enter your work history in plain language, or speak it with voice input. Takes 2 minutes.",
-                visual: (
-                  <div className="space-y-2.5">
-                    <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
-                      <Mic className="h-3.5 w-3.5 shrink-0 text-[#1A56DB]" />
-                      <span className="font-body text-[12px] text-[#64748B]">Managed a team of 5 doing support…</span>
-                    </div>
-                    <div className="flex items-center gap-2 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
-                      <FileText className="h-3.5 w-3.5 shrink-0 text-[#1A56DB]" />
-                      <span className="font-body text-[12px] text-[#64748B]">Upload existing resume (PDF/DOCX)</span>
-                    </div>
-                  </div>
-                ),
-              },
-              {
-                n: "02",
-                badge: "AI",
-                badgeColor: "bg-[#EDE9FE] text-[#7C3AED]",
-                title: "AI builds & scores it",
-                desc: "AI rewrites your bullets, maps keywords from the job description, and checks ATS compatibility.",
-                visual: (
-                  <div className="space-y-2">
-                    {[
-                      { label: "Keyword match", pct: 91, color: "bg-[#1A56DB]" },
-                      { label: "ATS score", pct: 94, color: "bg-[#059669]" },
-                      { label: "Readability", pct: 88, color: "bg-[#7C3AED]" },
-                    ].map((row) => (
-                      <div key={row.label}>
-                        <div className="mb-1 flex items-center justify-between">
-                          <span className="font-body text-[11px] text-[#64748B]">{row.label}</span>
-                          <span className="font-body text-[11px] font-semibold text-[#334155]">{row.pct}%</span>
-                        </div>
-                        <div className="h-1.5 overflow-hidden rounded-full bg-[#E2E8F0]">
-                          <div className={`h-full rounded-full ${row.color}`} style={{ width: `${row.pct}%` }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ),
-              },
-              {
-                n: "03",
-                badge: "Done",
-                badgeColor: "bg-[#DCFCE7] text-[#15803D]",
-                title: "Download & apply",
-                desc: "Export as PDF, generate a cover letter, and send. The whole process takes under 10 minutes.",
-                visual: (
-                  <div className="space-y-2">
-                    {[
-                      { icon: "📄", label: "resume_final.pdf", sub: "ATS-safe · 2 pages" },
-                      { icon: "✉️", label: "cover_letter.pdf", sub: "AI-personalized" },
-                    ].map((f) => (
-                      <div key={f.label} className="flex items-center gap-3 rounded-lg border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2.5">
-                        <span className="text-[16px]">{f.icon}</span>
-                        <div>
-                          <p className="font-body text-[12px] font-semibold text-[#334155]">{f.label}</p>
-                          <p className="font-body text-[11px] text-[#94A3B8]">{f.sub}</p>
-                        </div>
-                        <span className="ml-auto font-body text-[11px] font-bold text-[#059669]">Ready</span>
-                      </div>
-                    ))}
-                  </div>
-                ),
-              },
-            ].map((step) => (
-              <div key={step.n} className="flex flex-col">
-                {/* Number + badge row */}
-                <div className="relative z-10 mb-5 flex items-center gap-3">
-                  <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-2xl bg-white border-2 border-[#E2E8F0] shadow-sm">
-                    <span className="font-display text-[18px] font-bold text-[#0F172A]">{step.n}</span>
-                  </div>
-                  <span className={`rounded-full px-2.5 py-1 font-body text-[11px] font-bold uppercase tracking-wide ${step.badgeColor}`}>
-                    {step.badge}
-                  </span>
-                </div>
-                {/* Content card */}
-                <div className="flex-1 rounded-2xl border border-[#E2E8F0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-                  <h3 className="font-display text-[18px] font-bold text-[#0F172A]">{step.title}</h3>
-                  <p className="mt-2 font-body text-[14px] leading-[1.65] text-[#64748B]">{step.desc}</p>
-                  <div className="mt-5 rounded-xl border border-[#F1F5F9] bg-[#F8FAFC] p-4">
-                    {step.visual}
-                  </div>
+              <div className="lg:col-span-8">
+                <h2 className="font-display text-[40px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[56px] lg:text-[64px]">
+                  Hiring isn&apos;t hard because{" "}
+                  <span className="bg-[#FEF08A] px-2">you aren&apos;t qualified.</span>{" "}
+                  It&apos;s hard because nobody{" "}
+                  <span className="italic">reads</span> your resume.
+                </h2>
+                <p className="mt-7 max-w-[640px] font-body text-[18px] leading-[1.75] text-[#475569]">
+                  Recruiters spend 7 seconds per CV. Applicant Tracking Systems filter out 75% before any human glance.
+                  The problem isn&apos;t your career — it&apos;s the format, the keywords, and the time it takes to tailor 50 applications by hand.
+                  Launch CV fixes all three. Faster than you can finish your coffee.
+                </p>
+                <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+                  <Link href="/features" className="lc-link-underline font-body text-[14px] font-bold text-[#0F172A]">
+                    See the toolkit <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link href="/pricing" className="lc-link-underline font-body text-[14px] font-bold text-[#1A56DB]">
+                    View pricing <ArrowRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          </RevealOnView>
         </div>
       </section>
 
-      {/* ──────────────── 5. STATISTICS (client — counters) ──────────────── */}
+      {/* ═══════════════════════════════════════
+          3. BENTO SHOWCASE
+          ═══════════════════════════════════════ */}
+      <section id="showcase" className="relative bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <div className="mb-12 flex items-end justify-between gap-6">
+            <div>
+              <span className="lc-overline text-[#1A56DB]">The Toolkit</span>
+              <h2 className="mt-3 font-display text-[40px] font-bold leading-[1.05] tracking-[-0.02em] text-[#0F172A] sm:text-[56px]">
+                Six AI tools.<br />One job search.
+              </h2>
+            </div>
+            <Link href="/features" className="lc-link-underline hidden font-body text-[14px] font-bold text-[#0F172A] sm:inline-flex">
+              All features <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <RevealOnView>
+            <div className="grid gap-5 lg:grid-cols-3">
+              {featureGrid.map((f, i) => (
+                <Link
+                  key={f.href}
+                  href={f.href}
+                  className={`lc-bento group relative flex flex-col justify-between border border-[#E5E7EB] bg-white p-7 ${f.span}`}
+                  style={{
+                    minHeight: f.span ? 280 : 240,
+                    backgroundImage:
+                      i % 3 === 0
+                        ? "radial-gradient(circle at 88% 12%, rgba(26,86,219,0.08), transparent 38%)"
+                        : i % 3 === 1
+                        ? "radial-gradient(circle at 12% 88%, rgba(124,58,237,0.08), transparent 38%)"
+                        : "radial-gradient(circle at 50% 100%, rgba(13,148,136,0.08), transparent 42%)",
+                  }}
+                >
+                  <div>
+                    <p className="lc-overline text-[#94A3B8]">{f.eyebrow}</p>
+                    <h3 className="mt-3 font-display text-[26px] font-bold leading-tight tracking-tight text-[#0F172A]">
+                      {f.title}
+                    </h3>
+                    <p className="mt-3 max-w-[420px] font-body text-[14px] leading-[1.65] text-[#475569]">{f.desc}</p>
+                  </div>
+                  <div className="mt-6 flex items-center justify-between">
+                    <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${f.accent}`}>
+                      <f.icon className="h-5 w-5" />
+                    </span>
+                    <span className="inline-flex items-center gap-1 font-body text-[13px] font-bold text-[#0F172A] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 -translate-x-1">
+                      Read more <ArrowUpRight className="h-4 w-4" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          4. STATS WALL (dark — uses HomeClient counters)
+          ═══════════════════════════════════════ */}
       <HomeClient />
 
-      {/* ──────────────── 6. FEATURE SPOTLIGHTS ──────────────── */}
-      <section className="py-24">
-        <div className="mx-auto max-w-[1280px] space-y-24 px-6">
-          {/* Spotlight 1 */}
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6 lg:order-1">
-              <div className="rounded-xl bg-white p-5 shadow-sm">
-                <div className="flex items-center gap-3 border-b border-[#E2E8F0] pb-4">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#EFF6FF]">
-                    <FileText className="h-4 w-4 text-[#1A56DB]" />
-                  </div>
-                  <span className="font-display text-[14px] font-bold text-[#0F172A]">Resume Builder</span>
-                  <span className="ml-auto lc-badge-ai">AI</span>
-                </div>
-                <div className="mt-4 space-y-3">
-                  {[
-                    "Led cross-functional delivery of 3 SaaS migrations, reducing time-to-deploy by 40%",
-                    "Managed a team of 8 engineers across 2 time zones delivering $2M ARR product",
-                    "Designed and shipped 12 features increasing user retention by 34%",
-                  ].map((b) => (
-                    <div key={b} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#059669]" />
-                      <p className="font-body text-[13px] leading-snug text-[#334155]">{b}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="lg:order-2">
-              <p className="lc-eyebrow">AI Resume Builder</p>
-              <h2 className="lc-h2 mt-3">The AI Writes. You Just Direct.</h2>
-              <ul className="mt-6 space-y-3">
-                {["AI-written bullets from plain language input", "Real-time preview as you type", "12+ ATS-tested industry templates", "PDF & DOCX export in one click"].map((b) => (
-                  <li key={b} className="flex items-center gap-3 font-body text-[15px] text-[#334155]">
-                    <Check className="h-5 w-5 shrink-0 text-[#059669]" /> {b}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/features/resume-builder" className="lc-btn-primary mt-8 inline-flex">
-                Start Building <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Spotlight 2 */}
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <p className="lc-eyebrow">JD Alignment</p>
-              <h2 className="lc-h2 mt-3">Match Any Job in Seconds.</h2>
-              <p className="mt-4 font-body text-[16px] leading-[1.7] text-[#64748B]">
-                Paste a job description — AI maps every requirement to your resume, flags gaps, and rewrites bullets to score up to 95% match.
-              </p>
-              <div className="mt-6 flex items-center gap-6">
-                <div className="text-center">
-                  <p className="font-display text-[32px] font-bold text-[#DC2626]">42%</p>
-                  <p className="font-body text-[12px] text-[#94A3B8]">Before</p>
-                </div>
-                <ArrowRight className="h-6 w-6 text-[#94A3B8]" />
-                <div className="text-center">
-                  <p className="font-display text-[32px] font-bold text-[#059669]">91%</p>
-                  <p className="font-body text-[12px] text-[#94A3B8]">After</p>
-                </div>
-                <span className="font-body text-[13px] text-[#64748B]">ATS match score</span>
-              </div>
-              <Link href="/features/jd-alignment" className="lc-btn-primary mt-8 inline-flex">
-                Try JD Alignment <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-xl border border-red-100 bg-white p-4">
-                  <p className="font-body text-[11px] font-bold uppercase tracking-wide text-red-500">Before</p>
-                  <p className="mt-2 font-body text-[12px] text-[#475569]">"Helped team complete projects on time."</p>
-                  <div className="mt-3 lc-progress-bar">
-                    <div className="h-full rounded-full bg-red-400" style={{ width: "34%" }} />
-                  </div>
-                  <p className="mt-1 font-body text-[11px] text-red-500">Match: 34%</p>
-                </div>
-                <div className="rounded-xl border border-green-100 bg-white p-4">
-                  <p className="font-body text-[11px] font-bold uppercase tracking-wide text-green-600">After</p>
-                  <p className="mt-2 font-body text-[12px] text-[#475569]">"Led delivery of 3 SaaS migrations, reducing deploy time by 40% using Agile."</p>
-                  <div className="mt-3 lc-progress-bar">
-                    <div className="lc-progress-fill" style={{ width: "91%" }} />
-                  </div>
-                  <p className="mt-1 font-body text-[11px] text-green-600">Match: 91%</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Spotlight 3 */}
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-6 lg:order-1">
-              <div className="flex flex-col gap-3">
-                <div className="self-start rounded-2xl rounded-tl-sm bg-[#1A56DB] px-4 py-3 text-white">
-                  <p className="font-body text-[12px] font-semibold text-white/70">AI:</p>
-                  <p className="font-body text-[13px]">Tell me about a time you led a cross-functional project under a tight deadline.</p>
-                </div>
-                <div className="self-end rounded-2xl rounded-tr-sm border border-[#E2E8F0] bg-white px-4 py-3">
-                  <p className="font-body text-[13px] text-[#334155]">In Q3 I led a 4-team sprint to ship the new onboarding…</p>
-                </div>
-                <div className="self-start rounded-2xl rounded-tl-sm bg-[#F0FDF4] px-4 py-3">
-                  <p className="font-body text-[12px] font-semibold text-[#15803D]">AI Feedback — Score: 8/10</p>
-                  <p className="font-body text-[12px] text-[#334155]">Strong STAR structure. Add quantified outcome (e.g. reduced time-to-activation by X%).</p>
-                </div>
-              </div>
-            </div>
-            <div className="lg:order-2">
-              <p className="lc-eyebrow">Interview Prep</p>
-              <h2 className="lc-h2 mt-3">Practice Until You're Unshakeable.</h2>
-              <p className="mt-4 font-body text-[16px] leading-[1.7] text-[#64748B]">
-                200+ role-specific questions generated from your resume and JD. AI scores every answer and gives expert feedback.
-              </p>
-              <Link href="/features/interview-prep" className="lc-btn-primary mt-8 inline-flex">
-                Start Practicing <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ──────────────── 7. TESTIMONIALS ──────────────── */}
-      <section className="bg-[#F8FAFC] py-24">
+      {/* ═══════════════════════════════════════
+          5. WORKFLOW — EDITORIAL 3-ACT
+          ═══════════════════════════════════════ */}
+      <section className="bg-[#FAFAF7] py-24 sm:py-32">
         <div className="mx-auto max-w-[1280px] px-6">
-          <div className="text-center">
-            <p className="font-body text-[13px] text-[#94A3B8]">⭐ 4.9/5 average · 2,400+ reviews</p>
-            <h2 className="lc-h2 mx-auto mt-3 max-w-[480px]">Stories from Real Job Seekers</h2>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((t) => (
-              <div key={t.name} className="lc-card lc-spotlight flex flex-col p-6">
-                <div className="flex gap-0.5">
-                  {Array.from({ length: t.rating }).map((_, j) => (
-                    <Star key={j} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                  ))}
+          <RevealOnView>
+            <div className="text-center">
+              <span className="lc-overline text-[#1A56DB]">How It Works · 3 Acts</span>
+              <h2 className="mx-auto mt-4 max-w-[680px] font-display text-[42px] font-bold leading-[1.08] tracking-[-0.02em] text-[#0F172A] sm:text-[56px]">
+                A polished application, in less time than a coffee break.
+              </h2>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-16 space-y-20">
+            {[
+              {
+                step: "Act 01",
+                title: "Bring your raw material",
+                copy: "Paste an existing resume, type your experience plainly, or just speak it. No styling, no formatting, no anxiety. We meet you wherever your job history lives.",
+                badge: "You",
+                badgeClass: "bg-[#EFF6FF] text-[#1A56DB]",
+                visual: (
+                  <div className="lc-window">
+                    <div className="lc-window-bar"><span className="lc-window-dot bg-[#FF5F57]"/><span className="lc-window-dot bg-[#FEBC2E]"/><span className="lc-window-dot bg-[#28C840]"/></div>
+                    <div className="grid gap-3 p-6">
+                      <div className="rounded-xl border border-dashed border-[#1A56DB]/40 bg-[#EFF6FF]/60 p-4">
+                        <p className="font-body text-[12px] font-bold uppercase tracking-wider text-[#1A56DB]">Voice input</p>
+                        <p className="mt-2 font-body text-[15px] italic text-[#0F172A]">&ldquo;I managed a team of five doing customer support and trained six new hires last year.&rdquo;</p>
+                        <div className="mt-3 flex items-end gap-[3px]" aria-hidden>
+                          {[10, 22, 16, 28, 14, 30, 18, 22, 12, 24, 10, 18, 26, 14, 20].map((h, idx) => (
+                            <span key={idx} className="lc-wave-bar text-[#1A56DB]" style={{ height: h, animationDelay: `${idx * 0.08}s` }} />
+                          ))}
+                        </div>
+                      </div>
+                      <div className="rounded-xl bg-[#F8FAFC] p-4 font-body text-[13px] text-[#475569]">
+                        <p className="text-[11px] font-bold uppercase tracking-wider text-[#94A3B8]">Or upload</p>
+                        <p className="mt-2">resume_old.pdf · 142 KB</p>
+                      </div>
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                step: "Act 02",
+                title: "AI does the writing, scoring, matching",
+                copy: "Bullets get quantified. Keywords get embedded. Your resume gets cross-checked against the job description, the ATS, and the industry. You watch your score climb in real time.",
+                badge: "AI",
+                badgeClass: "bg-[#EDE9FE] text-[#6D28D9]",
+                visual: (
+                  <div className="lc-window">
+                    <div className="lc-window-bar"><span className="lc-window-dot bg-[#FF5F57]"/><span className="lc-window-dot bg-[#FEBC2E]"/><span className="lc-window-dot bg-[#28C840]"/></div>
+                    <div className="space-y-4 p-6">
+                      {[
+                        { l: "Keyword match", v: 91, c: "from-[#1A56DB] to-[#3B82F6]" },
+                        { l: "ATS compatibility", v: 94, c: "from-[#059669] to-[#10B981]" },
+                        { l: "Readability", v: 88, c: "from-[#7C3AED] to-[#A78BFA]" },
+                        { l: "Industry fit", v: 86, c: "from-[#EA580C] to-[#F97316]" },
+                      ].map((r) => (
+                        <div key={r.l}>
+                          <div className="mb-1.5 flex items-center justify-between font-body text-[12px]">
+                            <span className="font-semibold text-[#475569]">{r.l}</span>
+                            <span className="font-bold text-[#0F172A]">{r.v}%</span>
+                          </div>
+                          <div className="h-2 overflow-hidden rounded-full bg-[#E2E8F0]">
+                            <div className={`h-full rounded-full bg-gradient-to-r ${r.c} transition-[width] duration-700`} style={{ width: `${r.v}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
+              },
+              {
+                step: "Act 03",
+                title: "Ship the application that gets replies",
+                copy: "Export a PDF or DOCX that actually passes ATS. Generate the matched cover letter. Practice the interview before you book it. All from one screen, all under one plan.",
+                badge: "Done",
+                badgeClass: "bg-[#DCFCE7] text-[#15803D]",
+                visual: (
+                  <div className="lc-window">
+                    <div className="lc-window-bar"><span className="lc-window-dot bg-[#FF5F57]"/><span className="lc-window-dot bg-[#FEBC2E]"/><span className="lc-window-dot bg-[#28C840]"/></div>
+                    <div className="space-y-3 p-6">
+                      {[
+                        { i: "📄", t: "resume_stripe_2026.pdf", s: "ATS-safe · 2 pages · 142 KB" },
+                        { i: "✉️", t: "cover_letter_stripe.pdf", s: "Personalized · 312 words" },
+                        { i: "🎤", t: "interview_drill_session.md", s: "12 questions · scored 8.4/10" },
+                      ].map((f) => (
+                        <div key={f.t} className="flex items-center gap-3 rounded-xl border border-[#E2E8F0] bg-white p-3.5">
+                          <span className="text-[20px]">{f.i}</span>
+                          <div className="flex-1">
+                            <p className="font-body text-[13px] font-bold text-[#0F172A]">{f.t}</p>
+                            <p className="font-body text-[11px] text-[#94A3B8]">{f.s}</p>
+                          </div>
+                          <span className="rounded-full bg-[#DCFCE7] px-2.5 py-1 font-body text-[11px] font-bold text-[#15803D]">Ready</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ),
+              },
+            ].map((act, i) => (
+              <RevealOnView key={act.step}>
+                <div className={`grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-16 ${i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""}`}>
+                  <div className="lg:col-span-5">
+                    <div className="flex items-center gap-3">
+                      <span className="font-display text-[80px] font-extrabold leading-none tracking-tight text-[#0F172A]/10">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div>
+                        <span className="lc-overline text-[#475569]">{act.step}</span>
+                        <span className={`ml-2 rounded-full px-2.5 py-0.5 font-body text-[11px] font-bold uppercase tracking-wide ${act.badgeClass}`}>
+                          {act.badge}
+                        </span>
+                      </div>
+                    </div>
+                    <h3 className="mt-4 font-display text-[34px] font-bold leading-[1.12] tracking-[-0.02em] text-[#0F172A] sm:text-[42px]">
+                      {act.title}
+                    </h3>
+                    <p className="mt-4 max-w-[460px] font-body text-[17px] leading-[1.7] text-[#475569]">{act.copy}</p>
+                  </div>
+                  <div className="lg:col-span-7">{act.visual}</div>
                 </div>
-                <p className="mt-4 flex-1 font-body text-[14px] leading-[1.7] text-[#475569]">&ldquo;{t.quote}&rdquo;</p>
-                <div className="mt-5 border-t border-[#E2E8F0] pt-4">
-                  <p className="font-body text-[14px] font-semibold text-[#0F172A]">{t.name}</p>
-                  <p className="font-body text-[13px] text-[#94A3B8]">{t.role}</p>
-                </div>
-              </div>
+              </RevealOnView>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ──────────────── 8. PRICING PREVIEW ──────────────── */}
-      <section className="py-24">
+      {/* ═══════════════════════════════════════
+          6. PULL QUOTE + REVIEWS GRID
+          ═══════════════════════════════════════ */}
+      <section className="bg-[#0B0F19] py-24 text-white">
         <div className="mx-auto max-w-[1280px] px-6">
-          <div className="text-center">
-            <p className="lc-eyebrow">Pricing</p>
-            <h2 className="lc-h2 mx-auto mt-4 max-w-[480px]">Simple Plans. No Surprises.</h2>
-            <p className="mx-auto mt-3 font-body text-[15px] text-[#64748B]">
-              Monthly, annual, or pay once — pick what matches your job search.
-            </p>
-          </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-3 max-w-[900px] mx-auto">
+          <RevealOnView>
+            <div className="grid gap-14 lg:grid-cols-12">
+              <div className="lg:col-span-5">
+                <span className="lc-overline text-white/50">Reader Letters</span>
+                <span className="lc-rule mt-3 block bg-white/40" />
+                <p className="mt-8 font-display text-[34px] font-bold leading-[1.18] tracking-[-0.02em] sm:text-[44px]">
+                  &ldquo;I went from zero callbacks in three months to four interviews in seven days.&rdquo;
+                </p>
+                <p className="mt-6 font-body text-[14px] text-white/60">
+                  Sarah K. · Software Engineer · Hired at Stripe
+                </p>
+
+                <div className="mt-12 flex gap-8 border-t border-white/10 pt-8">
+                  <div>
+                    <p className="font-display text-[40px] font-extrabold leading-none">4.9</p>
+                    <p className="mt-1 font-body text-[12px] text-white/55">Avg rating · 2,400+ reviews</p>
+                  </div>
+                  <div>
+                    <p className="font-display text-[40px] font-extrabold leading-none">93%</p>
+                    <p className="mt-1 font-body text-[12px] text-white/55">Get an interview within 4 weeks</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-7">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {testimonials.map((t) => (
+                    <div key={t.name} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur transition hover:border-white/30 hover:bg-white/[0.07]">
+                      <div className="flex gap-0.5">
+                        {Array.from({ length: t.rating }).map((_, j) => (
+                          <Star key={j} className="h-3.5 w-3.5 fill-[#F59E0B] text-[#F59E0B]" />
+                        ))}
+                      </div>
+                      <p className="mt-3 font-body text-[14px] leading-[1.7] text-white/80">&ldquo;{t.quote}&rdquo;</p>
+                      <p className="mt-4 font-body text-[12px] font-bold text-white">{t.name}</p>
+                      <p className="font-body text-[11px] text-white/50">{t.role}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════
+          7. PRICING TEASER
+          ═══════════════════════════════════════ */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <RevealOnView>
+            <div className="mb-12 grid gap-10 lg:grid-cols-12 lg:items-end">
+              <div className="lg:col-span-7">
+                <span className="lc-overline text-[#1A56DB]">Pricing · Simple by Design</span>
+                <h2 className="mt-3 font-display text-[42px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[56px]">
+                  Pay monthly. Pay yearly. Or pay once — for life.
+                </h2>
+              </div>
+              <p className="font-body text-[16px] leading-[1.7] text-[#475569] lg:col-span-5">
+                No freemium, no data harvesting, no surprise upsells. Just three subscription tiers and a Lifetime option for people who&apos;d rather not think about renewals.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="grid gap-5 lg:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
               const tagline: Record<string, string> = {
-                starter: "Try it monthly, cancel anytime",
-                professional: "Best value for a full job search",
-                lifetime: "Pay once, use forever",
+                starter: "Try the workflow — monthly, cancel anytime.",
+                professional: "Best value for a full active job hunt.",
+                lifetime: "One payment. Forever access. Sleep well.",
               };
               return (
                 <div
                   key={key}
-                  className={`relative flex flex-col rounded-2xl border-2 bg-white p-7 ${popular ? "border-[#1A56DB] shadow-xl shadow-blue-500/10 scale-[1.02]" : "border-[#E2E8F0]"}`}
+                  className={`relative flex flex-col rounded-3xl border bg-white p-8 ${
+                    popular ? "border-[#0F172A] shadow-[0_20px_60px_-15px_rgba(15,23,42,0.18)]" : "border-[#E2E8F0]"
+                  }`}
                 >
                   {popular && (
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#1A56DB] px-4 py-1 font-body text-[11px] font-bold uppercase tracking-wide text-white whitespace-nowrap">
-                      Most Popular
+                    <span className="absolute -top-3 left-8 inline-flex items-center gap-1.5 rounded-full bg-[#0F172A] px-3 py-1 font-body text-[11px] font-bold uppercase tracking-wide text-white">
+                      <Sparkles className="h-3 w-3" /> Most chosen
                     </span>
                   )}
-                  <p className="font-display text-[16px] font-bold text-[#0F172A]">{cfg.title}</p>
-                  <p className="mt-1 font-body text-[12px] text-[#94A3B8]">{tagline[key]}</p>
-                  <p className="mt-4 flex flex-wrap items-baseline gap-1">
-                    <span className="font-display text-[40px] font-bold text-[#0F172A]">{cfg.priceDisplay}</span>
-                    <span className="font-body text-[14px] text-[#94A3B8]">{cfg.periodLabel}</span>
-                  </p>
-                  <p className="mt-2 font-body text-[12px] leading-snug text-[#64748B]">{cfg.billingExplainer}</p>
+                  <p className="font-display text-[20px] font-bold text-[#0F172A]">{cfg.title}</p>
+                  <p className="mt-1 font-body text-[13px] text-[#64748B]">{tagline[key]}</p>
+                  <div className="mt-6 flex items-baseline gap-1.5">
+                    <span className="font-display text-[56px] font-extrabold tracking-tight text-[#0F172A]">{cfg.priceDisplay}</span>
+                    <span className="font-body text-[15px] text-[#94A3B8]">{cfg.periodLabel}</span>
+                  </div>
+                  <p className="mt-2 font-body text-[12px] text-[#94A3B8]">{cfg.billingExplainer}</p>
+                  <ul className="mt-6 flex-1 space-y-3 font-body text-[14px] text-[#334155]">
+                    {[
+                      "All 6 AI tools",
+                      key === "starter" ? "Monthly AI limits — fair use" : "Generous AI ceilings",
+                      "PDF + DOCX export",
+                      key === "lifetime" ? "Lifetime updates" : "Cancel anytime",
+                    ].map((b) => (
+                      <li key={b} className="flex items-start gap-2.5">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
                   <Link
                     href="/pricing"
-                    className={`mt-6 flex w-full items-center justify-center rounded-xl py-3 font-body text-[14px] font-bold transition ${popular ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8] shadow-lg shadow-blue-500/20" : "border-2 border-[#E2E8F0] text-[#334155] hover:border-[#1A56DB] hover:text-[#1A56DB]"}`}
+                    className={`mt-8 inline-flex w-full items-center justify-center gap-1.5 rounded-full py-3.5 font-body text-[14px] font-bold transition ${
+                      popular
+                        ? "bg-[#0F172A] text-white hover:bg-[#1E293B]"
+                        : "border border-[#0F172A] text-[#0F172A] hover:bg-[#0F172A] hover:text-white"
+                    }`}
                   >
-                    {key === "lifetime" ? "Get Lifetime →" : `Start ${cfg.title} →`}
+                    {key === "lifetime" ? "Buy Lifetime" : `Get ${cfg.title}`} <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
               );
             })}
           </div>
           <p className="mt-8 text-center font-body text-[13px] text-[#94A3B8]">
-            ✓ Cancel subscriptions anytime &nbsp;·&nbsp; ✓ Lifetime — pay once, keep forever &nbsp;·&nbsp; ✓ No hidden fees
-          </p>
-          <p className="mt-6 text-center">
-            <Link href="/pricing" className="font-body text-[14px] font-semibold text-[#1A56DB] hover:underline">
-              View full pricing & compare plans →
-            </Link>
+            7-day money-back where Lemon Squeezy allows. View full comparison on <Link href="/pricing" className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">pricing</Link>.
           </p>
         </div>
       </section>
 
-      {/* ──────────────── 9. FAQ (client — accordion) ──────────────── */}
-      <section className="bg-[#F8FAFC] py-24">
+      {/* ═══════════════════════════════════════
+          8. FAQ
+          ═══════════════════════════════════════ */}
+      <section className="bg-[#FAFAF7] py-24">
         <div className="mx-auto max-w-[1280px] px-6">
-          <div className="text-center">
-            <p className="lc-eyebrow">FAQ</p>
-            <h2 className="lc-h2 mx-auto mt-4 max-w-[400px]">Frequently Asked Questions</h2>
+          <div className="grid gap-12 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <span className="lc-overline text-[#1A56DB]">FAQ</span>
+              <h2 className="mt-3 font-display text-[38px] font-bold leading-[1.1] tracking-[-0.02em] text-[#0F172A] sm:text-[44px]">
+                Frequently asked,<br /><span className="italic">honestly answered.</span>
+              </h2>
+              <p className="mt-5 font-body text-[15px] leading-[1.7] text-[#475569]">
+                Can&apos;t find what you need? <Link href="/dashboard/support" className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">Email the team</Link> — we reply in under a business day.
+              </p>
+            </div>
+            <div className="lg:col-span-8">
+              <HomeClient faqItems={faqs} />
+            </div>
           </div>
-          {/* FAQ accordion is client-side — rendered via HomeClient */}
-          <HomeClient faqItems={faqs} />
         </div>
       </section>
 
-      {/* ──────────────── 10. FINAL CTA ──────────────── */}
-      <section className="bg-gradient-to-r from-[#1A56DB] to-[#7C3AED] py-20">
-        <div className="mx-auto flex max-w-[640px] flex-col items-center gap-5 px-6 text-center">
-          <h2 className="font-display text-[32px] font-bold leading-tight text-white sm:text-[40px]">
-            Ready to Land Your Dream Job?
+      {/* ═══════════════════════════════════════
+          9. FINAL CTA — full-bleed editorial
+          ═══════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-[#0B0F19] py-24 text-white">
+        <div className="lc-dot-bg-dark pointer-events-none absolute inset-0 opacity-50" aria-hidden />
+        <div className="pointer-events-none absolute -left-32 top-0 h-[500px] w-[500px] rounded-full bg-[#1A56DB] opacity-20 blur-[140px]" aria-hidden />
+        <div className="pointer-events-none absolute -right-32 bottom-0 h-[500px] w-[500px] rounded-full bg-[#7C3AED] opacity-20 blur-[140px]" aria-hidden />
+        <div className="relative mx-auto max-w-[1100px] px-6 text-center">
+          <span className="lc-overline text-white/60">The Bottom Line</span>
+          <h2 className="mx-auto mt-5 max-w-[900px] font-display text-[56px] font-extrabold leading-[0.98] tracking-[-0.035em] sm:text-[80px] lg:text-[104px]">
+            Your next job is{" "}
+            <span className="lc-gradient-text-animated">one paste away.</span>
           </h2>
-          <p className="font-body text-[17px] text-white/80">
-            Create an account, choose a plan, and let AI build the resume that gets you hired.
+          <p className="mx-auto mt-7 max-w-[560px] font-body text-[18px] leading-[1.65] text-white/70">
+            Create your account, choose a plan, paste a job description. The first interview reply lands sooner than you think.
           </p>
-          <Link
-            href="/register"
-            className="mt-2 inline-flex items-center gap-2 rounded-[10px] bg-white px-8 py-4 font-body text-[16px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02] hover:shadow-xl"
-          >
-            Build My Resume <ArrowRight className="h-4 w-4" />
-          </Link>
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-1 font-body text-[13px] text-white/70">
-            <span>✓ ATS-optimized</span>
-            <span>✓ PDF & DOCX download</span>
-            <span>✓ Lifetime plan available</span>
-            <span>✓ Cancel anytime</span>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link
+              href="/register"
+              className="lc-magnet inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 font-body text-[16px] font-bold text-[#0B0F19] shadow-[0_20px_50px_-10px_rgba(255,255,255,0.45)]"
+            >
+              Get started <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/pricing"
+              className="lc-link-underline font-body text-[14px] font-semibold text-white/80"
+            >
+              From {PUBLIC_PLANS.starter.priceDisplay}{PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+            </Link>
           </div>
         </div>
       </section>

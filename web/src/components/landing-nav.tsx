@@ -51,6 +51,7 @@ export function LandingNav() {
   }, []);
 
   // Close mobile menu on route change
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMobileOpen(false); setMegaOpen(false); }, [pathname]);
 
   const isDark = !scrolled && !mobileOpen && (pathname === "/" || pathname === "");
