@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { Check, ArrowRight, ArrowUpRight, Sparkles, Infinity as InfinityIcon, Minus } from "lucide-react";
+import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
@@ -13,19 +13,34 @@ const SUB_NEXT = "/dashboard/settings/subscription";
 const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 
 export const metadata = buildMarketingMetadata({
-  title: "Pricing — Pay Monthly, Yearly, or Once for Life",
+  title: "Pricing — Monthly, Yearly, or Pay Once",
   description:
-    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Lifetime at $149 once. Every AI tool included. No freemium gimmicks.",
+    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Lifetime at $149 once. Every AI tool included on every plan. No freemium games.",
   pathname: "/pricing",
-  keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription"],
+  keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
 
 const faqs = [
-  { q: "Is there a free tier?", a: "No. Launch CV is a professional product. AI workflows unlock after you choose a paid plan (Starter, Professional, Elite, or Lifetime). You can create an account to manage billing, but checkout activates the AI." },
-  { q: "How does billing work?", a: "Starter is billed monthly. Professional and Elite are single annual payments through Lemon Squeezy. Lifetime is a one-time purchase. Receipts and renewals live in your Lemon customer portal." },
-  { q: "Can I change plans later?", a: "Yes. Upgrade any time for higher monthly ceilings. Cancel a subscription and you keep access until the paid period ends. Lifetime never renews — it stays active while the product is offered." },
-  { q: "Do you offer refunds?", a: "Yes — a 7-day money-back guarantee on subscription plans, where Lemon Squeezy policy allows. Email support and we'll coordinate with our payment provider." },
-  { q: "What's a 'fair-use cap' on Lifetime?", a: "Lifetime users get the same generous monthly AI limits as Elite (2,000 JD analyses, 1,000 packets, 2,000 role-fit checks). Pay once, use forever — within those healthy ceilings." },
+  {
+    q: "Is there a free tier?",
+    a: "No. Launch CV is a professional product. AI workflows unlock after you choose a paid plan: Starter, Professional, Elite, or Lifetime. You can create an account to manage billing — checkout activates the AI.",
+  },
+  {
+    q: "How does billing work?",
+    a: "Starter is billed monthly. Professional and Elite are single annual payments through Lemon Squeezy. Lifetime is a one-time purchase. Receipts and renewals live in your Lemon customer portal.",
+  },
+  {
+    q: "Can I change plans later?",
+    a: "Yes. Upgrade at any time for higher monthly ceilings. Cancel a subscription and you keep access until the paid period ends. Lifetime never renews — it stays active while the product is offered.",
+  },
+  {
+    q: "Do you offer refunds?",
+    a: "Yes — a 7-day money-back guarantee on subscription plans, where Lemon Squeezy policy allows. Email support and we&apos;ll coordinate with our payment provider.",
+  },
+  {
+    q: "What's the fair-use cap on Lifetime?",
+    a: "Lifetime users get the same generous monthly AI limits as Elite (2,000 JD analyses, 1,000 packets, 2,000 role-fit checks). Pay once, use forever — within those healthy ceilings.",
+  },
 ];
 
 const ld = {
@@ -58,11 +73,10 @@ function planCtaLabel(key: CheckoutPlan): string {
 const planTagline: Record<CheckoutPlan, string> = {
   starter: "For the one-shot, focused hunt",
   professional: "For most active job seekers",
-  elite: "For volume applicants & switchers",
-  lifetime: "Pay once. Sleep forever.",
+  lifetime: "Pay once, no renewals",
+  elite: "For volume applicants",
 };
 
-// Feature comparison table rows
 const compareGroups = [
   {
     g: "AI ceilings (per month)",
@@ -99,42 +113,43 @@ const compareGroups = [
 function CellValue({ v }: { v: boolean | string }) {
   if (v === true) return <Check className="mx-auto h-4 w-4 text-[#059669]" />;
   if (v === false) return <Minus className="mx-auto h-4 w-4 text-[#CBD5E1]" />;
-  return <span className="font-body text-[12px] font-bold text-[#0F172A]">{v}</span>;
+  return <span className="text-[12px] font-semibold text-[#0F172A]">{v}</span>;
 }
 
 export default function PricingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#FAFAF7] text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
       <JsonLd data={ld} />
       <LandingNav />
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[104px]">
-        <div className="pointer-events-none absolute inset-0" aria-hidden>
-          <div className="absolute -left-32 top-10 h-[500px] w-[500px] rounded-full bg-[#1A56DB] opacity-[0.10] blur-[140px]" />
-          <div className="absolute -right-20 top-40 h-[400px] w-[400px] rounded-full bg-[#7C3AED] opacity-[0.10] blur-[120px]" />
-        </div>
-
-        <div className="relative mx-auto max-w-[1280px] px-6 pb-20 pt-16">
-          <div className="max-w-[820px]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#0F172A]/15 bg-white px-3 py-1.5 font-body text-[12px] font-bold uppercase tracking-[0.1em] text-[#0F172A]">
-              <Sparkles className="h-3.5 w-3.5 text-[#1A56DB]" /> Pricing · Simple by design
+      <section className="relative overflow-hidden bg-white pt-[96px]">
+        <div
+          className="pointer-events-none absolute inset-0"
+          aria-hidden
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 20% 0%, rgba(59,130,246,0.06), transparent 45%)",
+          }}
+        />
+        <div className="relative mx-auto max-w-[1200px] px-6 pb-12 pt-12">
+          <div className="max-w-[760px]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
+              <Sparkles className="h-3.5 w-3.5 text-[#1A56DB]" /> Pricing
             </span>
-            <h1 className="mt-6 font-display text-[64px] font-extrabold leading-[0.94] tracking-[-0.04em] text-[#0F172A] sm:text-[88px] lg:text-[112px]">
-              Pay monthly.<br />
-              Pay yearly.<br />
-              <span className="lc-mega-italic text-[#1A56DB]">Or pay once</span>{" "}<span className="text-[#94A3B8]">— for life.</span>
+            <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
+              Pay monthly, yearly, or once — for life
             </h1>
-            <p className="mt-7 max-w-[640px] font-body text-[18px] leading-[1.65] text-[#475569] sm:text-[20px]">
-              No freemium games. No data harvesting. No surprise upgrades buried in modals. Three subscription tiers plus a Lifetime option for people who&apos;d rather not think about renewals.
+            <p className="mt-6 max-w-[640px] text-[17px] leading-[1.65] text-[#475569]">
+              Three subscription tiers plus a Lifetime option for people who&apos;d rather not think about renewals. No freemium games. No data harvesting. No surprise upgrades.
             </p>
           </div>
         </div>
       </section>
 
       {/* PLAN CARDS */}
-      <section className="relative bg-[#FAFAF7] py-16">
-        <div className="mx-auto max-w-[1280px] px-6">
+      <section className="pb-20 pt-8">
+        <div className="mx-auto max-w-[1200px] px-6">
           <div className="grid gap-5 lg:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
@@ -145,42 +160,36 @@ export default function PricingPage() {
               return (
                 <RevealOnView key={key}>
                   <div
-                    className={`relative flex h-full flex-col overflow-hidden rounded-3xl border bg-white p-8 transition ${
+                    className={`flex h-full flex-col rounded-2xl bg-white p-7 ${
                       popular
-                        ? "border-[#0F172A] shadow-[0_30px_80px_-20px_rgba(15,23,42,0.25)]"
-                        : isLifetime
-                        ? "border-[#1A56DB]/30 bg-gradient-to-b from-[#EFF6FF] to-white"
-                        : "border-[#E2E8F0]"
+                        ? "border-2 border-[#1A56DB] shadow-[0_20px_60px_-20px_rgba(26,86,219,0.25)]"
+                        : "border border-[#E2E8F0]"
                     }`}
                   >
-                    {popular && (
-                      <span className="absolute -top-3 left-8 inline-flex items-center gap-1.5 rounded-full bg-[#0F172A] px-3 py-1 font-body text-[11px] font-bold uppercase tracking-wider text-white">
-                        <Sparkles className="h-3 w-3" /> Most chosen
-                      </span>
-                    )}
-                    {isLifetime && (
-                      <span className="absolute -top-3 left-8 inline-flex items-center gap-1.5 rounded-full bg-[#1A56DB] px-3 py-1 font-body text-[11px] font-bold uppercase tracking-wider text-white">
-                        <InfinityIcon className="h-3 w-3" /> Pay once
-                      </span>
-                    )}
-
-                    <div>
-                      <p className="font-display text-[22px] font-bold tracking-tight text-[#0F172A]">{cfg.title}</p>
-                      <p className="mt-1 font-body text-[13px] text-[#64748B]">{planTagline[key]}</p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[17px] font-semibold text-[#0F172A]">{cfg.title}</p>
+                      {popular && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#1A56DB]">
+                          <Sparkles className="h-3 w-3" /> Most chosen
+                        </span>
+                      )}
+                      {isLifetime && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2 py-0.5 text-[11px] font-semibold text-[#15803D]">
+                          <InfinityIcon className="h-3 w-3" /> Pay once
+                        </span>
+                      )}
                     </div>
+                    <p className="mt-1 text-[13px] text-[#64748B]">{planTagline[key]}</p>
 
-                    <div className="mt-7 flex items-baseline gap-1.5">
-                      <span className="font-display text-[64px] font-extrabold leading-none tracking-tight text-[#0F172A]">{cfg.priceDisplay}</span>
-                      <span className="font-body text-[15px] font-semibold text-[#94A3B8]">{cfg.periodLabel}</span>
+                    <div className="mt-6 flex items-baseline gap-1.5">
+                      <span className="text-[48px] font-bold leading-none tracking-tight text-[#0F172A]">{cfg.priceDisplay}</span>
+                      <span className="text-[14px] font-medium text-[#94A3B8]">{cfg.periodLabel}</span>
                     </div>
-                    <p className="mt-2 font-body text-[12px] leading-relaxed text-[#94A3B8]">{cfg.billingExplainer}</p>
+                    <p className="mt-2 text-[12px] leading-relaxed text-[#94A3B8]">{cfg.billingExplainer}</p>
 
-                    <div className="my-6 h-px bg-gradient-to-r from-transparent via-[#E2E8F0] to-transparent" />
-
-                    <p className="font-body text-[13px] font-semibold text-[#475569]">{cfg.valueLine}</p>
-                    <ul className="mt-5 flex-1 space-y-3">
+                    <ul className="mt-6 flex-1 space-y-2.5">
                       {bullets.map((b) => (
-                        <li key={b} className="flex items-start gap-2.5 font-body text-[14px] leading-snug text-[#334155]">
+                        <li key={b} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#334155]">
                           <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
                           {b}
                         </li>
@@ -189,15 +198,14 @@ export default function PricingPage() {
 
                     <Link
                       href={registerHref}
-                      className={`mt-8 inline-flex w-full items-center justify-center gap-1.5 rounded-full py-3.5 font-body text-[14px] font-bold transition ${
+                      className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                         popular
-                          ? "bg-[#0F172A] text-white hover:bg-[#1E293B]"
-                          : isLifetime
                           ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8]"
-                          : "border border-[#0F172A] text-[#0F172A] hover:bg-[#0F172A] hover:text-white"
+                          : "border border-[#E2E8F0] bg-white text-[#0F172A] hover:bg-[#F8FAFC]"
                       }`}
                     >
-                      {planCtaLabel(key)} <ArrowRight className="h-4 w-4" />
+                      {planCtaLabel(key)}
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
                 </RevealOnView>
@@ -205,56 +213,62 @@ export default function PricingPage() {
             })}
           </div>
 
-          <p className="mx-auto mt-8 max-w-[720px] text-center font-body text-[13px] leading-relaxed text-[#94A3B8]">
+          <p className="mx-auto mt-8 max-w-[720px] text-center text-[13px] leading-relaxed text-[#94A3B8]">
             After signup, complete checkout in{" "}
-            <Link href={SUB_NEXT} className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">Subscription settings</Link>. Already have an account?{" "}
-            <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">Sign in</Link>.
-            7-day money-back where Lemon Squeezy allows.
+            <Link href={SUB_NEXT} className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              Subscription settings
+            </Link>
+            . Already have an account?{" "}
+            <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              Sign in
+            </Link>
+            . 7-day money-back where Lemon Squeezy allows.
           </p>
         </div>
       </section>
 
       {/* COMPARISON TABLE */}
-      <section className="bg-white py-24">
+      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
-            <div className="mb-12 max-w-[760px]">
-              <span className="lc-overline text-[#1A56DB]">Compare plans · line by line</span>
-              <h2 className="mt-3 font-display text-[40px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[52px]">
-                Every AI tool included.<br />
-                Only the <span className="italic">ceilings</span> change.
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#1A56DB]">Compare plans</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Every AI tool included — only the ceilings change
               </h2>
             </div>
           </RevealOnView>
 
-          <div className="overflow-hidden rounded-3xl border border-[#E2E8F0]">
-            <div className="grid grid-cols-[1.6fr_repeat(3,1fr)] bg-[#0F172A] text-white">
-              <div className="px-5 py-4 font-body text-[11px] font-bold uppercase tracking-wider text-white/60">Feature</div>
-              <div className="px-5 py-4 text-center">
-                <p className="font-display text-[14px] font-bold">Starter</p>
-                <p className="font-body text-[11px] text-white/55">$9/mo</p>
+          <div className="mt-10 overflow-hidden rounded-xl border border-[#E2E8F0]">
+            <div className="grid grid-cols-[1.6fr_repeat(3,1fr)] bg-white">
+              <div className="border-b border-[#E2E8F0] px-5 py-4 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+                Feature
               </div>
-              <div className="bg-[#1A56DB] px-5 py-4 text-center">
-                <p className="font-display text-[14px] font-bold">Professional</p>
-                <p className="font-body text-[11px] text-white/80">$29/yr · popular</p>
+              <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
+                <p className="text-[13px] font-semibold text-[#0F172A]">Starter</p>
+                <p className="text-[11px] text-[#94A3B8]">$9/mo</p>
               </div>
-              <div className="px-5 py-4 text-center">
-                <p className="font-display text-[14px] font-bold">Lifetime</p>
-                <p className="font-body text-[11px] text-white/55">$149 once</p>
+              <div className="border-b border-[#E2E8F0] bg-[#EFF6FF]/50 px-5 py-4 text-center">
+                <p className="text-[13px] font-semibold text-[#1A56DB]">Professional</p>
+                <p className="text-[11px] text-[#475569]">$29/yr · popular</p>
+              </div>
+              <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
+                <p className="text-[13px] font-semibold text-[#0F172A]">Lifetime</p>
+                <p className="text-[11px] text-[#94A3B8]">$149 once</p>
               </div>
             </div>
 
             <div className="divide-y divide-[#E2E8F0] bg-white">
               {compareGroups.map((g) => (
                 <div key={g.g}>
-                  <div className="bg-[#FAFAF7] px-5 py-3">
-                    <p className="font-body text-[11px] font-bold uppercase tracking-wider text-[#475569]">{g.g}</p>
+                  <div className="bg-[#FAFBFC] px-5 py-2.5">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-[#475569]">{g.g}</p>
                   </div>
                   {g.rows.map((r) => (
-                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(3,1fr)] items-center px-0 hover:bg-[#FAFAF7]">
-                      <div className="px-5 py-3 font-body text-[14px] text-[#0F172A]">{r.l}</div>
+                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(3,1fr)] items-center">
+                      <div className="px-5 py-3 text-[13px] text-[#0F172A]">{r.l}</div>
                       <div className="px-5 py-3 text-center"><CellValue v={r.v.starter} /></div>
-                      <div className="bg-[#EFF6FF]/40 px-5 py-3 text-center"><CellValue v={r.v.professional} /></div>
+                      <div className="bg-[#EFF6FF]/30 px-5 py-3 text-center"><CellValue v={r.v.professional} /></div>
                       <div className="px-5 py-3 text-center"><CellValue v={r.v.lifetime} /></div>
                     </div>
                   ))}
@@ -263,73 +277,74 @@ export default function PricingPage() {
             </div>
           </div>
 
-          <p className="mt-6 text-center font-body text-[13px] text-[#94A3B8]">
+          <p className="mt-6 text-center text-[13px] text-[#94A3B8]">
             Elite ($79/yr) sits between Professional and Lifetime — same tools, higher ceilings. Available at checkout.
           </p>
         </div>
       </section>
 
-      {/* VALUE STORY */}
-      <section className="bg-[#0B0F19] py-24 text-white">
-        <div className="mx-auto max-w-[1100px] px-6">
+      {/* VALUE GRID */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
-            <div className="grid gap-12 lg:grid-cols-12 lg:items-end">
-              <div className="lg:col-span-7">
-                <span className="lc-overline text-white/55">What you&apos;re actually paying for</span>
-                <h2 className="mt-3 font-display text-[44px] font-bold leading-[1.06] tracking-[-0.02em] sm:text-[56px]">
-                  A real product.<br />
-                  Run by real people.<br />
-                  <span className="lc-gradient-text-animated">Funded by users — not ads.</span>
-                </h2>
-              </div>
-              <p className="font-body text-[16px] leading-[1.7] text-white/70 lg:col-span-5">
-                Most resume tools monetize you. They sell your data, gate your downloads, or push you into upsells the moment you commit. Launch CV is the opposite: paid up front, transparent limits, zero ads, your data is yours.
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#1A56DB]">Why pay for resume software</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                A real product, funded by users — not ads
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Most resume tools monetize you instead. We charge up front so we can build something reliable, predictable, and continuously improved.
               </p>
             </div>
           </RevealOnView>
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { k: "No data sold", d: "Your resume, your applications, your interview practice — never shared, never sold, never used for ads." },
-              { k: "No watermarks", d: "Every PDF, every DOCX, every cover letter exports clean. No 'Made with Launch CV' baked in." },
+              { k: "No data sold", d: "Your resume, applications, and interview practice — never shared, never sold, never used for ads." },
+              { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No &lsquo;Made with Launch CV&rsquo; baked in." },
               { k: "Predictable limits", d: "Every plan publishes its monthly AI ceiling. No mystery throttling, no surprise paywalls." },
-              { k: "Real human support", d: "Reply in under a business day. Same email queue your founder reads, every morning." },
-              { k: "Cancel without drama", d: "One click in Lemon Squeezy. No retention pop-ups, no 'are you sure' dark patterns." },
-              { k: "Lifetime really is lifetime", d: "One payment. Updates included. Active while the product exists — and we're building it for the long haul." },
+              { k: "Real human support", d: "Reply in under a business day. Same email queue the founder reads." },
+              { k: "Cancel without drama", d: "One click in Lemon Squeezy. No retention pop-ups, no &lsquo;are you sure&rsquo; flows." },
+              { k: "Lifetime really is lifetime", d: "One payment. Updates included. Active while the product exists." },
             ].map((p) => (
-              <div key={p.k} className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
-                <Check className="h-5 w-5 text-emerald-300" />
-                <h3 className="mt-4 font-display text-[18px] font-bold tracking-tight">{p.k}</h3>
-                <p className="mt-2 font-body text-[14px] leading-[1.65] text-white/65">{p.d}</p>
-              </div>
+              <RevealOnView key={p.k}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <Check className="h-5 w-5 text-[#1A56DB]" />
+                  <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{p.k}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: p.d }} />
+                </div>
+              </RevealOnView>
             ))}
           </div>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="bg-white py-24">
+      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-12 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <span className="lc-overline text-[#1A56DB]">FAQ</span>
-              <h2 className="mt-3 font-display text-[38px] font-bold leading-[1.1] tracking-[-0.02em] text-[#0F172A] sm:text-[44px]">
-                Frequently asked,<br />
-                <span className="italic">honestly answered.</span>
+              <p className="lc-overline text-[#1A56DB]">FAQ</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Frequently asked questions
               </h2>
-              <p className="mt-5 font-body text-[14px] leading-[1.7] text-[#475569]">
-                Need something specific? <Link href="/dashboard/support" className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">Email us</Link> — reply in under a business day.
+              <p className="mt-4 text-[14px] leading-[1.7] text-[#475569]">
+                Need something specific?{" "}
+                <Link href="/dashboard/support" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                  Email support
+                </Link>{" "}
+                — we reply within one business day.
               </p>
             </div>
             <div className="lg:col-span-8">
-              <div className="divide-y divide-[#E2E8F0] rounded-3xl border border-[#E2E8F0] bg-[#FAFAF7]">
+              <div className="divide-y divide-[#E2E8F0] rounded-xl border border-[#E2E8F0] bg-white">
                 {faqs.map((f) => (
                   <details key={f.q} className="group px-6 py-5">
-                    <summary className="flex cursor-pointer items-center justify-between gap-4 font-display text-[17px] font-bold text-[#0F172A]">
+                    <summary className="flex cursor-pointer items-center justify-between gap-4 text-[15px] font-semibold text-[#0F172A]">
                       {f.q}
-                      <ArrowUpRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition-transform group-open:rotate-45" />
+                      <ChevronDown className="h-4 w-4 shrink-0 text-[#94A3B8] transition-transform group-open:rotate-180" />
                     </summary>
-                    <p className="mt-3 font-body text-[14px] leading-[1.7] text-[#475569]">{f.a}</p>
+                    <p className="mt-3 text-[14px] leading-[1.7] text-[#475569]" dangerouslySetInnerHTML={{ __html: f.a }} />
                   </details>
                 ))}
               </div>
@@ -339,17 +354,20 @@ export default function PricingPage() {
       </section>
 
       {/* CTA */}
-      <section className="bg-[#0B0F19] py-20 text-white">
-        <div className="mx-auto max-w-[1000px] px-6 text-center">
-          <h2 className="font-display text-[48px] font-extrabold leading-[1.04] tracking-[-0.03em] sm:text-[72px]">
-            Pick a plan.<br />
-            <span className="lc-gradient-text-animated">Start applying.</span>
+      <section className="bg-white py-20">
+        <div className="mx-auto max-w-[900px] px-6 text-center">
+          <h2 className="lc-section-headline text-[#0F172A]">
+            Pick a plan, start applying
           </h2>
-          <p className="mx-auto mt-6 max-w-[480px] font-body text-[17px] leading-[1.65] text-white/70">
+          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             One paste. Six AI tools. The job search you wish you&apos;d run a year ago.
           </p>
-          <Link href={registerHref} className="lc-magnet mt-10 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-[15px] font-bold text-[#0B0F19]">
-            Create my account <ArrowRight className="h-4 w-4" />
+          <Link
+            href={registerHref}
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+          >
+            Create my account
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
