@@ -23,10 +23,10 @@ type AuthLayoutProps = {
 
 export function AuthLayout({ children, mode }: AuthLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-[#FAFBFC]">
+    <div className="flex h-screen overflow-hidden bg-[#FAFBFC]">
       {/* LEFT PANEL */}
-      <div className="relative hidden flex-col bg-white lg:flex lg:w-[48%] lg:border-r lg:border-[#E2E8F0]">
-        <div className="flex flex-1 flex-col p-12">
+      <div className="relative hidden flex-col overflow-hidden bg-white lg:flex lg:w-[48%] lg:border-r lg:border-[#E2E8F0]">
+        <div className="flex flex-1 flex-col overflow-y-auto p-10 xl:p-12">
           <div className="shrink-0">
             <Logo variant="light" size="md" />
           </div>
@@ -34,24 +34,24 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
           <div className="flex flex-1 flex-col justify-center">
             <p className="lc-overline text-[#1A56DB]">{mode === "register" ? "Create your account" : "Sign in"}</p>
 
-            <h2 className="mt-4 text-[36px] font-semibold leading-[1.1] tracking-tight text-[#0F172A] sm:text-[44px]">
+            <h2 className="mt-3 text-[30px] font-semibold leading-[1.1] tracking-tight text-[#0F172A] xl:text-[36px]">
               {mode === "register"
                 ? "Start the job search that actually works"
                 : "Welcome back to Launch CV"}
             </h2>
 
-            <p className="mt-5 max-w-[440px] text-[15px] leading-[1.65] text-[#475569]">
+            <p className="mt-4 max-w-[440px] text-[14px] leading-[1.6] text-[#475569]">
               {mode === "register"
-                ? "Six AI tools, one paid plan. Match the resume, score the ATS, write the letter, drill the interview — all under one subscription."
+                ? "Six AI tools, one paid plan. Match the resume, score the ATS, write the letter, drill the interview."
                 : "Your resumes, drafts, applications, and AI tools are all where you left them."}
             </p>
 
             {mode === "register" && (
-              <ul className="mt-8 space-y-3">
+              <ul className="mt-6 space-y-2.5">
                 {FEATURES.map((f) => (
-                  <li key={f} className="flex items-center gap-3 text-[14px] text-[#334155]">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#EFF6FF]">
-                      <Check className="h-3 w-3 text-[#1A56DB]" />
+                  <li key={f} className="flex items-center gap-2.5 text-[13px] text-[#334155]">
+                    <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#EFF6FF]">
+                      <Check className="h-2.5 w-2.5 text-[#1A56DB]" />
                     </span>
                     {f}
                   </li>
@@ -59,13 +59,13 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
               </ul>
             )}
 
-            <figure className="mt-10 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-5">
+            <figure className="mt-7 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-5">
               <div className="flex gap-0.5">
                 {Array.from({ length: TESTIMONIAL.rating }).map((_, i) => (
                   <Star key={i} className="h-3.5 w-3.5 fill-[#F59E0B] text-[#F59E0B]" />
                 ))}
               </div>
-              <blockquote className="mt-3 text-[15px] leading-[1.55] text-[#0F172A]">
+              <blockquote className="mt-2.5 text-[14px] leading-[1.55] text-[#0F172A]">
                 &ldquo;{TESTIMONIAL.text}&rdquo;
               </blockquote>
               <figcaption className="mt-3 text-[12px] text-[#64748B]">
@@ -74,11 +74,11 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
             </figure>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-[#E2E8F0] pt-5">
-            <p className="text-[11px] font-medium uppercase tracking-wider text-[#94A3B8]">Trusted by people at</p>
+          <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[#E2E8F0] pt-4">
+            <p className="text-[10px] font-medium uppercase tracking-wider text-[#94A3B8]">Trusted by people at</p>
             <div className="flex flex-wrap gap-3">
               {["Stripe", "Notion", "Linear", "HubSpot"].map((n) => (
-                <span key={n} className="text-[13px] font-semibold text-[#64748B]">
+                <span key={n} className="text-[12px] font-semibold text-[#64748B]">
                   {n}
                 </span>
               ))}
@@ -88,15 +88,15 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
       </div>
 
       {/* RIGHT PANEL — FORM */}
-      <div className="flex flex-1 flex-col items-center justify-center bg-[#FAFBFC] px-5 py-12 sm:px-10">
-        <div className="mb-8 lg:hidden">
-          <Logo variant="light" size="md" />
-        </div>
-        <div className="w-full max-w-[420px]">
-          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-8 shadow-[0_24px_60px_-30px_rgba(15,23,42,0.18)] sm:p-10">
+      <div className="flex flex-1 flex-col overflow-y-auto bg-[#FAFBFC] px-5 sm:px-10">
+        <div className="mx-auto flex w-full max-w-[420px] flex-1 flex-col items-stretch justify-center py-8">
+          <div className="mb-6 lg:hidden">
+            <Logo variant="light" size="md" />
+          </div>
+          <div className="rounded-2xl border border-[#E2E8F0] bg-white p-7 shadow-[0_24px_60px_-30px_rgba(15,23,42,0.18)] sm:p-8">
             {children}
           </div>
-          <p className="mt-6 text-center text-[12px] text-[#94A3B8]">
+          <p className="mt-4 text-center text-[12px] text-[#94A3B8]">
             Need help?{" "}
             <a href="mailto:hello@launch-cv.com" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
               Email us
