@@ -1085,3 +1085,343 @@ button:hover, [role="button"]:hover, a:hover {
   pointer-events: none;
 }
 .lc-spotlight:hover::after { opacity: 1; }
+
+/* ════════════════════════════════════════════
+   EDITORIAL DESIGN SYSTEM v2 — REDESIGN
+   ════════════════════════════════════════════ */
+
+/* ── Editorial mega headline ── */
+.lc-mega {
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(56px, 10vw, 144px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  font-weight: 800;
+}
+.lc-mega-italic {
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+.lc-overline {
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.lc-rule {
+  height: 1px;
+  width: 56px;
+  background: currentColor;
+  opacity: 0.4;
+}
+
+/* ── Magnetic button (hover lift + glow) ── */
+.lc-magnet {
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+.lc-magnet:hover { transform: translateY(-2px); }
+.lc-magnet:active { transform: translateY(0); }
+
+/* ── Underline link draw on hover ── */
+.lc-link-underline {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lc-link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.lc-link-underline:hover::after { transform: scaleX(1); }
+
+/* ── Marquee — slow editorial ── */
+@keyframes lc-marquee-slow {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.lc-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: lc-marquee-slow 60s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lc-marquee-slow { animation: none; }
+}
+
+/* ── Marquee — reverse ── */
+@keyframes lc-marquee-rev {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+.lc-marquee-rev {
+  display: flex;
+  width: max-content;
+  animation: lc-marquee-rev 50s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lc-marquee-rev { animation: none; }
+}
+
+/* ── Typewriter "blinking caret" line ── */
+@keyframes lc-typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.lc-typewriter {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid currentColor;
+  animation: lc-typing 2.4s steps(36, end) both, lc-blink 0.9s step-end infinite;
+}
+
+/* ── Waveform (voice input theme) ── */
+@keyframes lc-wave {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+.lc-wave-bar {
+  display: inline-block;
+  width: 3px;
+  border-radius: 2px;
+  background: currentColor;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-wave-bar { animation: lc-wave 1.1s ease-in-out infinite; }
+}
+
+/* ── Gauge / meter sweep (ATS theme) ── */
+@keyframes lc-gauge-sweep {
+  from { stroke-dashoffset: 283; }
+  to { stroke-dashoffset: var(--lc-gauge-target, 70); }
+}
+.lc-gauge-arc {
+  stroke-dasharray: 283;
+  stroke-dashoffset: 283;
+  animation: lc-gauge-sweep 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+}
+
+/* ── Bento card (premium hover) ── */
+.lc-bento {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+.lc-bento:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px -20px rgba(15, 23, 42, 0.25);
+}
+
+/* ── Grid noise overlay (dark hero) ── */
+.lc-grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+}
+.lc-dot-bg {
+  background-image: radial-gradient(rgba(15,23,42,0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.lc-dot-bg-dark {
+  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* ── Tape stripe — editorial accent bar ── */
+.lc-tape {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: #FEF08A;
+  color: #0F172A;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  transform: rotate(-2deg);
+  box-shadow: 2px 2px 0 #0F172A;
+}
+
+/* ── Number ticker (counts up via key animation) ── */
+@keyframes lc-num-slide {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.lc-num-slide { animation: lc-num-slide 0.5s ease-out both; }
+
+/* ── Diff strikethrough (JD alignment / before-after) ── */
+.lc-strike {
+  text-decoration: line-through;
+  text-decoration-color: rgba(220, 38, 38, 0.65);
+  text-decoration-thickness: 2px;
+}
+
+/* ── Pill highlight (keyword tag) ── */
+.lc-pill {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ── Spotlight border glow on focus ── */
+.lc-glow-ring {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.08),
+    0 0 40px -8px rgba(26, 86, 219, 0.6),
+    0 24px 60px -20px rgba(124, 58, 237, 0.45);
+}
+
+/* ── Chat bubble bounce-in (interview prep theme) ── */
+@keyframes lc-bubble-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .lc-bubble-in { animation: lc-bubble-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .lc-bubble-in-d1 { animation-delay: 0.15s; }
+  .lc-bubble-in-d2 { animation-delay: 0.35s; }
+  .lc-bubble-in-d3 { animation-delay: 0.6s; }
+  .lc-bubble-in-d4 { animation-delay: 0.85s; }
+}
+
+/* ── Score number flip ── */
+@keyframes lc-flip {
+  0% { transform: rotateX(90deg); opacity: 0; }
+  100% { transform: rotateX(0deg); opacity: 1; }
+}
+.lc-flip { animation: lc-flip 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* ── Editorial section divider (with bullet) ── */
+.lc-section-mark::before {
+  content: "■";
+  display: inline-block;
+  margin-right: 8px;
+  color: #1A56DB;
+  font-size: 0.7em;
+  vertical-align: middle;
+}
+
+/* ── Mockup window chrome ── */
+.lc-window {
+  border-radius: 14px;
+  background: #fff;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.4) inset,
+    0 20px 60px -10px rgba(15,23,42,0.30),
+    0 8px 20px -8px rgba(15,23,42,0.20);
+  border: 1px solid rgba(15,23,42,0.06);
+  overflow: hidden;
+}
+.lc-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(15,23,42,0.06);
+  background: linear-gradient(to bottom, #FAFBFC, #F1F5F9);
+}
+.lc-window-dot { width: 11px; height: 11px; border-radius: 50%; }
+
+/* ── Highlight swipe (keyword "matched" reveal) ── */
+@keyframes lc-highlight-swipe {
+  from { background-size: 0% 100%; }
+  to { background-size: 100% 100%; }
+}
+.lc-highlight-swipe {
+  background-image: linear-gradient(120deg, rgba(132, 204, 22, 0.35) 0%, rgba(132, 204, 22, 0.35) 100%);
+  background-repeat: no-repeat;
+  background-position: 0 88%;
+  background-size: 0% 38%;
+  animation: lc-highlight-swipe 1.2s ease-out 0.4s forwards;
+}
+
+/* ── Page-section reveal observer base ── */
+.lc-fade-section {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lc-fade-section.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lc-fade-section { opacity: 1; transform: none; }
+}
+
+/* ── Editorial colorways ── */
+.lc-theme-blue { --lc-accent: #1A56DB; --lc-accent-soft: #DBEAFE; --lc-accent-deep: #1E3A8A; }
+.lc-theme-violet { --lc-accent: #7C3AED; --lc-accent-soft: #EDE9FE; --lc-accent-deep: #4C1D95; }
+.lc-theme-teal { --lc-accent: #0D9488; --lc-accent-soft: #CCFBF1; --lc-accent-deep: #134E4A; }
+.lc-theme-emerald { --lc-accent: #059669; --lc-accent-soft: #D1FAE5; --lc-accent-deep: #064E3B; }
+.lc-theme-orange { --lc-accent: #EA580C; --lc-accent-soft: #FFEDD5; --lc-accent-deep: #7C2D12; }
+.lc-theme-pink { --lc-accent: #DB2777; --lc-accent-soft: #FCE7F3; --lc-accent-deep: #831843; }
+
+/* ── Themed primary button ── */
+.lc-btn-accent {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  background: var(--lc-accent, #1A56DB);
+  padding: 14px 28px;
+  color: #fff;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lc-btn-accent:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -8px var(--lc-accent, #1A56DB); filter: brightness(1.05); }
+.lc-btn-accent:active { transform: translateY(0); }
+
+/* ── Outline themed button ── */
+.lc-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 13px 26px;
+  border: 1.5px solid #0F172A;
+  background: transparent;
+  color: #0F172A;
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.lc-btn-outline:hover { background: #0F172A; color: #fff; transform: translateY(-1px); }
+.lc-btn-outline-light {
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+}
+.lc-btn-outline-light:hover { background: #fff; color: #0F172A; }
+

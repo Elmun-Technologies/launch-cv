@@ -3,7 +3,7 @@
 import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Eye, EyeOff, ArrowRight, Gift } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowRight, Gift, Sparkles } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
 
 function RegisterPageInner() {
@@ -43,19 +43,25 @@ function RegisterPageInner() {
   return (
     <AuthLayout mode="register">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="font-display text-[28px] font-bold tracking-tight text-[#0F172A]">Create your account</h1>
-        <p className="mt-2 font-body text-[14px] text-[#64748B]">
-          Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-[#1A56DB] hover:underline">
-            Sign in
-          </Link>
+      <div className="mb-7">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#EFF6FF] px-2.5 py-1 font-body text-[11px] font-bold uppercase tracking-wider text-[#1A56DB]">
+          <Sparkles className="h-3 w-3" /> Free to create
+        </span>
+        <h1 className="mt-4 font-display text-[34px] font-extrabold leading-[1.05] tracking-[-0.02em] text-[#0F172A]">
+          Create your<br />Launch CV account.
+        </h1>
+        <p className="mt-3 font-body text-[14px] leading-[1.6] text-[#64748B]">
+          Account is free. Pick a plan after — Starter from <span className="font-bold text-[#0F172A]">$9/mo</span> or <span className="font-bold text-[#0F172A]">Lifetime $149</span>.
+        </p>
+        <p className="mt-2 font-body text-[13px] text-[#64748B]">
+          Already a user?{" "}
+          <Link href="/login" className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">Sign in</Link>
         </p>
         {referralCode ? (
-          <div className="mt-4 flex items-center gap-2 rounded-xl bg-violet-50 px-4 py-2.5">
+          <div className="mt-5 flex items-center gap-2 rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5">
             <Gift className="h-4 w-4 shrink-0 text-violet-600" />
             <p className="font-body text-[12px] font-semibold text-violet-700">
-              Referral code applied: <span className="font-bold">{referralCode}</span>
+              Referral applied: <span className="font-bold">{referralCode}</span>
             </p>
           </div>
         ) : null}
@@ -64,8 +70,8 @@ function RegisterPageInner() {
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">
-            Full name <span className="font-normal text-[#94A3B8]">(optional)</span>
+          <label className="mb-1.5 block font-body text-[12px] font-bold uppercase tracking-wider text-[#475569]">
+            Full name <span className="font-normal normal-case tracking-normal text-[#94A3B8]">(optional)</span>
           </label>
           <input
             className="soha-input"
@@ -77,21 +83,21 @@ function RegisterPageInner() {
         </div>
 
         <div>
-          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">Email address</label>
+          <label className="mb-1.5 block font-body text-[12px] font-bold uppercase tracking-wider text-[#475569]">Email</label>
           <input
             type="email"
             required
             className="soha-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            placeholder="you@email.com"
             autoComplete="email"
           />
         </div>
 
         <div>
-          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">
-            Password <span className="font-normal text-[#94A3B8]">(min 8 characters)</span>
+          <label className="mb-1.5 block font-body text-[12px] font-bold uppercase tracking-wider text-[#475569]">
+            Password <span className="font-normal normal-case tracking-normal text-[#94A3B8]">(min 8 chars)</span>
           </label>
           <div className="relative">
             <input
@@ -115,36 +121,45 @@ function RegisterPageInner() {
         </div>
 
         {error ? (
-          <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
-            <p className="font-body text-[13px] text-red-600">{error}</p>
+          <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+            <p className="font-body text-[13px] text-red-700">{error}</p>
           </div>
         ) : null}
 
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A56DB] py-3 font-body text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 disabled:opacity-60"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#0F172A] py-3.5 font-body text-[15px] font-bold text-white transition hover:bg-[#1E293B] disabled:opacity-60"
         >
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <ArrowRight className="h-4 w-4" />
-          )}
-          {loading ? "Creating account…" : "Create account"}
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+          {loading ? "Creating account…" : "Create my account"}
         </button>
       </form>
 
-      {/* Footer note */}
-      <p className="mt-6 font-body text-[12px] leading-relaxed text-[#94A3B8]">
+      <div className="my-7 flex items-center gap-3 text-[#94A3B8]">
+        <span className="h-px flex-1 bg-[#E2E8F0]" />
+        <span className="font-body text-[11px] font-bold uppercase tracking-wider">what happens next</span>
+        <span className="h-px flex-1 bg-[#E2E8F0]" />
+      </div>
+
+      <ol className="space-y-3 font-body text-[13px] leading-[1.55] text-[#475569]">
+        {[
+          "Verify your email — takes one click.",
+          "Pick a plan (Starter, Professional, Lifetime).",
+          "Paste a JD or upload a resume. The AI takes it from there.",
+        ].map((s, i) => (
+          <li key={s} className="flex gap-3">
+            <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#0F172A] font-body text-[10px] font-bold text-white">{i + 1}</span>
+            {s}
+          </li>
+        ))}
+      </ol>
+
+      <p className="mt-7 font-body text-[11px] leading-[1.65] text-[#94A3B8]">
         By creating an account you agree to our{" "}
-        <Link href="/legal/terms" className="underline underline-offset-2 hover:text-[#64748B]">
-          Terms of Service
-        </Link>{" "}
+        <Link href="/legal/terms" className="font-bold text-[#475569] underline underline-offset-2 hover:text-[#0F172A]">Terms</Link>{" "}
         and{" "}
-        <Link href="/legal/privacy" className="underline underline-offset-2 hover:text-[#64748B]">
-          Privacy Policy
-        </Link>
-        .
+        <Link href="/legal/privacy" className="font-bold text-[#475569] underline underline-offset-2 hover:text-[#0F172A]">Privacy Policy</Link>.
       </p>
     </AuthLayout>
   );

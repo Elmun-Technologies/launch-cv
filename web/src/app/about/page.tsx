@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
-import { ArrowRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { JsonLd } from "@/components/json-ld";
+import { RevealOnView } from "@/components/reveal-on-view";
+import { ArrowRight, ArrowUpRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "About Us",
+  title: "About — The Story Behind Launch CV",
   description:
-    "Launch CV is a professional AI platform for serious job seekers. We combine resume building, JD alignment, ATS scoring, and interview prep in one product.",
+    "Launch CV exists to level the playing field between job seekers and Applicant Tracking Systems. Built by people who got tired of watching qualified candidates lose to format errors.",
   pathname: "/about",
   keywords: ["Launch CV", "about", "mission", "AI resume builder", "resume platform team"],
 });
@@ -19,185 +20,264 @@ const aboutLd = {
   "@type": "AboutPage",
   name: "About Launch CV",
   url: absoluteUrl("/about"),
-  description: "Learn about Launch CV — the AI-powered resume and job search platform.",
+  description: "The story behind Launch CV — built to level the playing field between candidates and ATS.",
 };
 
 const values = [
-  {
-    icon: Target,
-    title: "Results, Not Resumes",
-    description: "We don't just help you build a resume — we help you get interviews. Every feature is measured by one outcome: more callbacks.",
-    color: "bg-[#EFF6FF] text-[#1A56DB]",
-  },
-  {
-    icon: Shield,
-    title: "Honest AI",
-    description: "Our AI never fabricates experience or metrics. It works with what you've actually done and presents it as compellingly as possible.",
-    color: "bg-[#DCFCE7] text-[#15803D]",
-  },
-  {
-    icon: Zap,
-    title: "Speed & Quality",
-    description: "A serious job search doesn't have time for slow tools. Launch CV is built for speed: from blank page to ATS-ready PDF in under 5 minutes.",
-    color: "bg-[#EDE9FE] text-[#7C3AED]",
-  },
-  {
-    icon: Users,
-    title: "Users Shape the Product",
-    description: "We talk to job seekers weekly. Feature priorities, UI changes, and AI improvements are driven directly by what real users tell us they need.",
-    color: "bg-[#FFF7ED] text-[#C2410C]",
-  },
+  { icon: Target, title: "Results, not resumes", d: "We don&apos;t measure success by signups. We measure it by interview replies in your inbox." },
+  { icon: Shield, title: "Honest AI", d: "Our AI never fabricates experience or numbers. It works with what you actually did — and tells your story sharper." },
+  { icon: Zap, title: "Speed & quality", d: "A real job search doesn&apos;t have time for slow tools. Five minutes, blank page to PDF, ATS-clean. Every time." },
+  { icon: Users, title: "Users shape the product", d: "We talk to job seekers weekly. Roadmap priorities are decided by the inbox, not the dashboard." },
 ];
 
 const techStack = [
-  { icon: Code2, name: "Next.js 16", description: "Server-first React framework with edge rendering, static generation, and built-in TypeScript." },
-  { icon: Brain, name: "OpenAI GPT-4", description: "Advanced language models for resume analysis, JD alignment, bullet rewriting, and content generation." },
-  { icon: Database, name: "Prisma + PostgreSQL", description: "Type-safe ORM with a managed PostgreSQL database. Reliable, fast, and scalable." },
+  { icon: Code2, name: "Next.js (App Router)", d: "Server-first React with streaming, edge rendering, and route-level caching. Fast everywhere." },
+  { icon: Brain, name: "OpenAI GPT-4 + custom prompts", d: "Each AI tool has its own evaluation harness. Quality regressions get caught before they ship." },
+  { icon: Database, name: "Prisma + PostgreSQL", d: "Type-safe schema, managed Postgres, predictable migrations. Boring tech that doesn&apos;t break." },
 ];
 
-const team = [
-  {
-    name: "Nazir Elmurodov",
-    role: "Founder & CEO",
-    bio: "Built Launch CV after watching hundreds of qualified candidates get filtered out by ATS. Obsessed with making job search fairer through better tools.",
-    avatar: "NE",
-  },
+const milestones = [
+  { y: "2024", t: "Founded", d: "Started after watching one too many qualified friends lose interviews to ATS filtering." },
+  { y: "2025", t: "Public launch", d: "First 1,000 paying users in 90 days. Featured in Product Hunt's resume category." },
+  { y: "2026", t: "Six tools, one product", d: "Voice input, JD alignment, ATS scanner, cover letter, interview prep — all under one subscription." },
+  { y: "Next", t: "Human review add-on", d: "Optional 1:1 reviews with vetted recruiters, layered onto the AI workflow." },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-[#FAFAF7] text-[#0F172A]">
       <JsonLd data={aboutLd} />
       <LandingNav />
 
-      <main className="flex-1 pt-[72px]">
-        {/* ── Hero ── */}
-        <section className="relative overflow-hidden bg-[#0F172A] pb-20 pt-20 sm:pt-28">
-          <div className="pointer-events-none absolute inset-0" aria-hidden>
-            <div className="absolute left-[-60px] top-[-60px] h-[400px] w-[400px] rounded-full bg-[#1A56DB] opacity-[0.15] blur-[100px]" />
-            <div className="absolute bottom-[-40px] right-[-40px] h-[300px] w-[300px] rounded-full bg-[#7C3AED] opacity-[0.12] blur-[80px]" />
-          </div>
-          <div className="relative mx-auto max-w-[800px] px-6 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-1.5 font-body text-[12px] font-semibold text-white/80">
-              Our Story
-            </span>
-            <h1 className="mt-6 font-display text-[40px] font-bold leading-[1.12] tracking-[-0.025em] text-white sm:text-[52px]">
-              Built for people who take their job search seriously.
-            </h1>
-            <p className="mx-auto mt-5 max-w-[580px] font-body text-[17px] leading-[1.75] text-[#94A3B8]">
-              75% of resumes never reach a human recruiter. Launch CV was built to fix that — with AI that aligns your resume to every job you apply for.
-            </p>
-          </div>
-        </section>
+      {/* HERO */}
+      <section className="relative overflow-hidden bg-[#0B0F19] pt-[104px] text-white">
+        <div className="lc-grid-bg pointer-events-none absolute inset-0 opacity-40" aria-hidden />
+        <div className="pointer-events-none absolute -left-32 top-10 h-[500px] w-[500px] rounded-full bg-[#1A56DB] opacity-[0.2] blur-[140px]" aria-hidden />
+        <div className="pointer-events-none absolute -right-20 top-40 h-[400px] w-[400px] rounded-full bg-[#7C3AED] opacity-[0.18] blur-[120px]" aria-hidden />
 
-        {/* ── Mission ── */}
-        <section className="py-20">
-          <div className="mx-auto max-w-[800px] px-6">
-            <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] p-8 sm:p-10">
-              <p className="lc-eyebrow">Our Mission</p>
-              <h2 className="lc-h2 mt-3 max-w-[520px]">Level the playing field between candidates and ATS.</h2>
-              <div className="mt-6 space-y-4 font-body text-[16px] leading-[1.8] text-[#475569]">
-                <p>
-                  The hiring process has a serious problem: qualified candidates are filtered out by automated software before a human ever reads their resume. Not because they lack the skills — because they lack the keywords, the format, or the time to tailor 50 applications by hand.
+        <div className="relative mx-auto max-w-[1280px] px-6 pb-24 pt-16">
+          <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+            <div className="lg:col-span-7">
+              <span className="lc-overline text-white/55">Our Story · Vol. 01</span>
+              <h1 className="mt-4 font-display text-[64px] font-extrabold leading-[0.94] tracking-[-0.04em] sm:text-[88px] lg:text-[108px]">
+                We built this<br />
+                because <span className="lc-mega-italic text-white/90">hiring</span><br />
+                <span className="lc-gradient-text-animated">is broken.</span>
+              </h1>
+              <p className="mt-7 max-w-[600px] font-body text-[18px] leading-[1.65] text-white/65 sm:text-[20px]">
+                75% of resumes are rejected by automated software before any human sees them. The reason is rarely talent — it&apos;s formatting, keywords, and time. Launch CV is the tool we wished existed when our friends, ourselves, and our students were stuck on the wrong side of that filter.
+              </p>
+            </div>
+
+            {/* Right — pull-quote card */}
+            <div className="lg:col-span-5">
+              <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur">
+                <p className="font-display text-[24px] font-bold leading-[1.4] text-white sm:text-[28px]">
+                  &quot;A resume should reflect what you can do — not how well you fight an ATS parser.&quot;
                 </p>
-                <p>
-                  Launch CV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover letter generation, and interview preparation into one professional platform. We charge for it because that's how we build something reliable, fast, and continuously improved — not a freemium tool that monetizes your data instead.
-                </p>
-                <p>
-                  Our goal is simple: give you the same advantage that top candidates with professional resume writers or career coaches have — delivered by AI, in minutes, at a fraction of the cost.
-                </p>
+                <div className="mt-6 flex items-center gap-3 border-t border-white/10 pt-5">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] font-display text-[16px] font-bold text-white">
+                    NE
+                  </div>
+                  <div>
+                    <p className="font-body text-[14px] font-bold text-white">Nazir Elmurodov</p>
+                    <p className="font-body text-[12px] text-white/55">Founder · Elmun Technologies</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── Values ── */}
-        <section className="bg-[#F8FAFC] py-20">
-          <div className="mx-auto max-w-[1280px] px-6">
-            <div className="text-center">
-              <p className="lc-eyebrow">What we stand for</p>
-              <h2 className="lc-h2 mx-auto mt-3 max-w-[400px]">Our Values</h2>
+      {/* MISSION — long-form editorial */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <span className="lc-overline text-[#1A56DB]">Mission</span>
+                <span className="lc-rule mt-3 block bg-[#1A56DB]" />
+                <h2 className="mt-6 font-display text-[40px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[48px]">
+                  Level the field<br />
+                  between candidates<br />
+                  and machines.
+                </h2>
+              </div>
+              <div className="lg:col-span-8 space-y-5 font-display text-[20px] leading-[1.55] text-[#1F2937] sm:text-[22px]">
+                <p>
+                  The hiring process has a problem that nobody talks about: <span className="bg-[#FEF08A] px-1">qualified people get filtered out by software</span> before any human ever reads their work. Not because they lack the skills. Because they lack the keywords, the format, the hours.
+                </p>
+                <p>
+                  Launch CV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover letter generation, and interview prep — into one professional platform. We charge for it, because that&apos;s how we build something reliable, fast, and continuously improved. Not a freemium tool that monetizes your data instead.
+                </p>
+                <p className="text-[#475569]">
+                  Our goal is brutally simple: give every job seeker the same advantage that candidates with $200/hour recruiters or $5,000 résumé writers have. Delivered by AI, in minutes, at the price of a small monthly subscription — or one Lifetime payment, if you&apos;d rather not think about it again.
+                </p>
+              </div>
             </div>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2">
-              {values.map((v) => (
-                <div key={v.title} className="lc-card flex items-start gap-5 p-7">
-                  <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${v.color}`}>
-                    <v.icon className="h-5 w-5" />
+          </RevealOnView>
+        </div>
+      </section>
+
+      {/* VALUES */}
+      <section className="bg-[#FAFAF7] py-24">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <RevealOnView>
+            <div className="mb-12 max-w-[700px]">
+              <span className="lc-overline text-[#1A56DB]">What we stand for</span>
+              <h2 className="mt-3 font-display text-[44px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[60px]">
+                Four principles.<br />
+                Carved into <span className="italic">every</span> decision.
+              </h2>
+            </div>
+          </RevealOnView>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            {values.map((v, i) => (
+              <RevealOnView key={v.title}>
+                <div className="lc-bento h-full bg-white p-7 ring-1 ring-[#E2E8F0]">
+                  <div className="flex items-center justify-between">
+                    <span className="font-display text-[40px] font-extrabold leading-none tracking-tight text-[#1A56DB]/15">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#1A56DB]">
+                      <v.icon className="h-5 w-5" />
+                    </span>
                   </div>
-                  <div>
-                    <h3 className="font-display text-[17px] font-bold text-[#0F172A]">{v.title}</h3>
-                    <p className="mt-2 font-body text-[14px] leading-[1.7] text-[#64748B]">{v.description}</p>
-                  </div>
+                  <h3 className="mt-5 font-display text-[22px] font-bold tracking-tight text-[#0F172A]">{v.title}</h3>
+                  <p className="mt-3 font-body text-[15px] leading-[1.7] text-[#475569]" dangerouslySetInnerHTML={{ __html: v.d }} />
                 </div>
+              </RevealOnView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TIMELINE */}
+      <section className="bg-white py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mb-12 max-w-[700px]">
+              <span className="lc-overline text-[#1A56DB]">Timeline</span>
+              <h2 className="mt-3 font-display text-[44px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[56px]">
+                Built in public.<br />
+                <span className="italic">Funded by users.</span>
+              </h2>
+            </div>
+          </RevealOnView>
+
+          <div className="relative">
+            <div className="absolute left-[27px] top-2 bottom-2 hidden w-px bg-gradient-to-b from-[#1A56DB] via-[#7C3AED] to-transparent sm:block" />
+            <div className="space-y-6">
+              {milestones.map((m) => (
+                <RevealOnView key={m.t}>
+                  <div className="relative flex gap-6 rounded-2xl border border-[#E2E8F0] bg-[#FAFAF7] p-6">
+                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] font-display text-[14px] font-bold text-white ring-4 ring-white">
+                      {m.y}
+                    </span>
+                    <div className="flex-1">
+                      <h3 className="font-display text-[20px] font-bold tracking-tight text-[#0F172A]">{m.t}</h3>
+                      <p className="mt-1.5 font-body text-[14px] leading-[1.7] text-[#475569]">{m.d}</p>
+                    </div>
+                  </div>
+                </RevealOnView>
               ))}
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── Tech Stack ── */}
-        <section className="py-20">
-          <div className="mx-auto max-w-[1280px] px-6">
-            <div className="text-center">
-              <p className="lc-eyebrow">Under the hood</p>
-              <h2 className="lc-h2 mx-auto mt-3 max-w-[400px]">Technology</h2>
-              <p className="mx-auto mt-3 max-w-[480px] font-body text-[15px] text-[#64748B]">
-                Modern, scalable architecture built for speed, reliability, and developer transparency.
-              </p>
+      {/* TECH */}
+      <section className="bg-[#0B0F19] py-24 text-white">
+        <div className="mx-auto max-w-[1280px] px-6">
+          <RevealOnView>
+            <div className="mb-12 max-w-[700px]">
+              <span className="lc-overline text-white/55">Under the hood</span>
+              <h2 className="mt-3 font-display text-[44px] font-bold leading-[1.06] tracking-[-0.02em] sm:text-[56px]">
+                Boring tech.<br />
+                <span className="lc-gradient-text-animated">Exciting outcomes.</span>
+              </h2>
             </div>
-            <div className="mt-12 grid gap-6 sm:grid-cols-3">
-              {techStack.map((t) => (
-                <div key={t.name} className="lc-card p-7 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EFF6FF] text-[#1A56DB]">
-                    <t.icon className="h-7 w-7" />
-                  </div>
-                  <h3 className="mt-4 font-display text-[16px] font-bold text-[#0F172A]">{t.name}</h3>
-                  <p className="mt-2 font-body text-[13px] leading-relaxed text-[#64748B]">{t.description}</p>
+          </RevealOnView>
+
+          <div className="grid gap-5 sm:grid-cols-3">
+            {techStack.map((t) => (
+              <RevealOnView key={t.name}>
+                <div className="h-full rounded-2xl border border-white/10 bg-white/[0.04] p-7 backdrop-blur">
+                  <t.icon className="h-6 w-6 text-[#60A5FA]" />
+                  <h3 className="mt-5 font-display text-[20px] font-bold tracking-tight">{t.name}</h3>
+                  <p className="mt-2 font-body text-[14px] leading-[1.65] text-white/65">{t.d}</p>
                 </div>
-              ))}
-            </div>
+              </RevealOnView>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── Team ── */}
-        <section className="bg-[#F8FAFC] py-20">
-          <div className="mx-auto max-w-[1280px] px-6">
-            <div className="text-center">
-              <p className="lc-eyebrow">Who we are</p>
-              <h2 className="lc-h2 mx-auto mt-3 max-w-[400px]">The Team</h2>
+      {/* TEAM */}
+      <section className="bg-[#FAFAF7] py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mb-12 max-w-[700px]">
+              <span className="lc-overline text-[#1A56DB]">Team</span>
+              <h2 className="mt-3 font-display text-[44px] font-bold leading-[1.06] tracking-[-0.02em] text-[#0F172A] sm:text-[56px]">
+                Small. Fast.<br />
+                <span className="italic">Hands-on.</span>
+              </h2>
             </div>
-            <div className="mx-auto mt-12 max-w-[400px]">
-              {team.map((m) => (
-                <div key={m.name} className="lc-card p-8 text-center">
-                  <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] font-display text-[22px] font-bold text-white shadow-lg shadow-blue-500/20">
-                    {m.avatar}
-                  </div>
-                  <h3 className="mt-5 font-display text-[20px] font-bold text-[#0F172A]">{m.name}</h3>
-                  <p className="font-body text-[14px] font-semibold text-[#1A56DB]">{m.role}</p>
-                  <p className="mt-3 font-body text-[14px] leading-[1.7] text-[#64748B]">{m.bio}</p>
+          </RevealOnView>
+
+          <div className="grid gap-6 sm:grid-cols-2">
+            <RevealOnView>
+              <div className="rounded-3xl border border-[#E2E8F0] bg-white p-8">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] font-display text-[24px] font-bold text-white shadow-[0_18px_40px_-10px_rgba(26,86,219,0.5)]">
+                  NE
                 </div>
-              ))}
-            </div>
+                <h3 className="mt-6 font-display text-[24px] font-bold tracking-tight text-[#0F172A]">Nazir Elmurodov</h3>
+                <p className="font-body text-[14px] font-bold text-[#1A56DB]">Founder · Building everything</p>
+                <p className="mt-3 font-body text-[15px] leading-[1.7] text-[#475569]">
+                  Built Launch CV after watching hundreds of qualified candidates get filtered out by ATS. Obsessed with making hiring fairer through better tools — and faster feedback loops than any other resume product.
+                </p>
+              </div>
+            </RevealOnView>
+            <RevealOnView>
+              <div className="rounded-3xl border-2 border-dashed border-[#E2E8F0] bg-white p-8">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#F8FAFC] font-display text-[24px] font-bold text-[#94A3B8] ring-1 ring-[#E2E8F0]">
+                  +
+                </div>
+                <h3 className="mt-6 font-display text-[24px] font-bold tracking-tight text-[#0F172A]">We&apos;re hiring</h3>
+                <p className="font-body text-[14px] font-bold text-[#94A3B8]">Engineers, designers, recruiters</p>
+                <p className="mt-3 font-body text-[15px] leading-[1.7] text-[#475569]">
+                  We&apos;re building a small, opinionated team. If you&apos;ve felt the friction of a modern job search and want to fix it for the next million people — email{" "}
+                  <a href="mailto:hello@launch-cv.com" className="font-bold text-[#1A56DB] underline-offset-2 hover:underline">hello@launch-cv.com</a>.
+                </p>
+              </div>
+            </RevealOnView>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ── CTA ── */}
-        <section className="bg-gradient-to-r from-[#1A56DB] to-[#7C3AED] py-16">
-          <div className="mx-auto flex max-w-[640px] flex-col items-center gap-4 px-6 text-center">
-            <h2 className="font-display text-[28px] font-bold text-white sm:text-[34px]">
-              Ready to run a serious job search?
-            </h2>
-            <p className="font-body text-[16px] text-white/80">
-              Create an account, choose a plan, and build the resume that gets you hired.
-            </p>
-            <Link
-              href="/pricing"
-              className="mt-2 inline-flex items-center gap-2 rounded-[10px] bg-white px-7 py-3.5 font-body text-[15px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02] hover:shadow-xl"
-            >
+      {/* CTA */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#1A56DB] via-[#1E40AF] to-[#0F172A] py-24 text-white">
+        <div className="lc-dot-bg-dark pointer-events-none absolute inset-0 opacity-50" aria-hidden />
+        <div className="relative mx-auto max-w-[900px] px-6 text-center">
+          <h2 className="font-display text-[48px] font-extrabold leading-[1.04] tracking-[-0.03em] sm:text-[72px]">
+            Run a serious<br /><span className="italic">job search.</span>
+          </h2>
+          <p className="mx-auto mt-7 max-w-[480px] font-body text-[17px] leading-[1.65] text-white/85">
+            Create an account, choose a plan, paste a JD. The whole hunt — match, write, score, send, practice — under one roof.
+          </p>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/pricing" className="lc-magnet inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-[15px] font-bold text-[#1A56DB] shadow-[0_18px_40px_-10px_rgba(0,0,0,0.3)]">
               View pricing <ArrowRight className="h-4 w-4" />
             </Link>
+            <Link href="/register" className="lc-link-underline font-body text-[14px] font-bold text-white/80">
+              Create account <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       <LandingFooter />
     </div>
