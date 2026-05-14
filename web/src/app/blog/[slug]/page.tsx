@@ -134,11 +134,11 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
               </span>
             </div>
 
-            <h1 className="mt-5 font-display text-[32px] font-bold leading-[1.18] tracking-[-0.02em] text-[#0F172A] sm:text-[38px]">
+            <h1 className="mt-5 text-[32px] font-semibold leading-[1.15] tracking-tight text-[#0F172A] sm:text-[40px]">
               {post.title}
             </h1>
 
-            <p className="speakable-description mt-5 font-body text-[18px] leading-[1.75] text-[#475569]">
+            <p className="speakable-description mt-5 text-[18px] leading-[1.75] text-[#475569]">
               {post.description}
             </p>
 
@@ -218,14 +218,17 @@ export default async function BlogPostPage({ params }: { params: Promise<Params>
           </div>
 
           {/* CTA */}
-          <div className="mt-12 rounded-2xl bg-gradient-to-r from-[#1A56DB] to-[#7C3AED] p-7 text-center">
-            <p className="font-display text-[20px] font-bold text-white">Apply these tips now</p>
-            <p className="mt-2 font-body text-[14px] text-white/80">Build your ATS-optimized resume with AI in under 5 minutes.</p>
+          <div className="mt-12 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-7 text-center">
+            <p className="text-[20px] font-semibold tracking-tight text-[#0F172A]">Apply these tips now</p>
+            <p className="mx-auto mt-2 max-w-[440px] text-[14px] leading-[1.65] text-[#475569]">
+              Build your ATS-optimized resume with AI in under five minutes.
+            </p>
             <Link
               href="/register"
-              className="mt-4 inline-flex items-center gap-2 rounded-[10px] bg-white px-6 py-3 font-body text-[14px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02]"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
-              Build my resume <ArrowRight className="h-4 w-4" />
+              Build my resume
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
