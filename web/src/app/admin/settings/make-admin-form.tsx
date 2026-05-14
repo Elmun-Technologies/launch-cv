@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { UserPlus } from "lucide-react";
+import { UserPlus, Loader2 } from "lucide-react";
+import { SectionCard } from "@/components/admin/section-card";
+import { FormField, AdminInput } from "@/components/admin/form-field";
 
 export function MakeAdminForm() {
   const router = useRouter();
@@ -39,37 +41,45 @@ export function MakeAdminForm() {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-      <div className="border-b border-gray-100 px-6 py-4 flex items-center gap-2">
-        <UserPlus className="h-4 w-4 text-[#7C5CFC]" />
-        <h3 className="text-[15px] font-semibold text-gray-900">Make User Admin</h3>
-      </div>
-      <form onSubmit={handleSubmit} className="p-6 space-y-4">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            setStatus("idle");
-          }}
-          placeholder="user@example.com"
-          className="w-full rounded-xl border border-gray-200 bg-white px-4 py-2 text-[13px] text-gray-900 outline-none focus:border-[#7C5CFC] focus:ring-2 focus:ring-[#7C5CFC]/20"
-          required
-        />
+    <SectionCard
+      title="Promote user to admin"
+      description="Sets the user.role field to &lsquo;admin&rsquo; in the database"
+      action={<UserPlus className="h-4 w-4 text-[#1A56DB]" />}
+    >
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <FormField label="User email" required>
+          <AdminInput
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setStatus("idle");
+            }}
+            placeholder="user@example.com"
+            required
+          />
+        </FormField>
+
         <button
           type="submit"
           disabled={status === "loading"}
-          className="w-full rounded-xl bg-[#7C5CFC] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#6B4FE0] disabled:opacity-40"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#0F172A] py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-40"
         >
-          {status === "loading" ? "Saving…" : "Promote to Admin"}
+          {status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+          {status === "loading" ? "Saving…" : "Promote to admin"}
         </button>
-        {status === "success" && (
-          <p className="text-[13px] text-emerald-600">{message}</p>
-        )}
-        {status === "error" && (
-          <p className="text-[13px] text-red-500">{message}</p>
-        )}
+
+        {status === "success" ? (
+          <p className="rounded-md bg-emerald-50 px-3 py-2 text-[12px] text-emerald-800 ring-1 ring-emerald-200">
+            {message}
+          </p>
+        ) : null}
+        {status === "error" ? (
+          <p className="rounded-md bg-red-50 px-3 py-2 text-[12px] text-red-700 ring-1 ring-red-200">
+            {message}
+          </p>
+        ) : null}
       </form>
-    </div>
+    </SectionCard>
   );
 }

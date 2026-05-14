@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { Trash2, FileText } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
+import { ResourceListPage } from "@/components/admin/resource-list-page";
+import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 
 interface ResumeRow {
   id: string;
@@ -13,25 +15,26 @@ interface ResumeRow {
   user: { name: string | null; email: string };
 }
 
+const PER_PAGE = 20;
+
 export default function AdminResumesPage() {
   const [resumes, setResumes] = useState<ResumeRow[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const perPage = 20;
 
   const fetchResumes = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page: String(page), perPage: String(perPage) });
+      const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
       if (search) params.set("search", search);
       const res = await fetch(`/api/admin/resumes?${params}`);
       const data = await res.json();
       setResumes(data.resumes ?? []);
       setTotal(data.total ?? 0);
     } catch {
-      /* ignore */
+      // ignore
     } finally {
       setLoading(false);
     }
@@ -41,103 +44,115 @@ export default function AdminResumesPage() {
     fetchResumes();
   }, [fetchResumes]);
 
-  const totalPages = Math.max(1, Math.ceil(total / perPage));
-
   async function handleDelete(id: string) {
     if (!confirm("Delete this resume?")) return;
     await fetch(`/api/admin/resumes/${id}`, { method: "DELETE" });
     fetchResumes();
   }
 
+  const columns: DataTableColumn<ResumeRow>[] = [
+    {
+      key: "title",
+      header: "Title",
+      truncate: "max-w-[280px]",
+      render: (r) => <span className="font-medium text-[#0F172A]">{r.title}</span>,
+    },
+    {
+      key: "user",
+      header: "User",
+      render: (r) => (
+        <div className="min-w-0">
+          <p className="truncate text-[12px] text-[#0F172A]">{r.user.name || "—"}</p>
+          <p className="truncate text-[11px] text-[#94A3B8]">{r.user.email}</p>
+        </div>
+      ),
+    },
+    { key: "vertical", header: "Vertical", render: (r) => <span className="text-[12px] text-[#475569]">{r.vertical}</span> },
+    { key: "region", header: "Region", render: (r) => <span className="text-[12px] text-[#475569]">{r.regionMode}</span> },
+    {
+      key: "updated",
+      header: "Updated",
+      render: (r) => <span className="text-[12px] text-[#64748B]">{new Date(r.updatedAt).toLocaleDateString()}</span>,
+    },
+    {
+      key: "actions",
+      header: "",
+      align: "right",
+      render: (r) => (
+        <button
+          type="button"
+          onClick={() => handleDelete(r.id)}
+          className="rounded-md p-1.5 text-[#94A3B8] transition hover:bg-red-50 hover:text-red-600"
+          aria-label="Delete resume"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      ),
+    },
+  ];
+
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+
   return (
     <AdminShell pageTitle="Resumes">
-      <div className="space-y-6">
-        <h2 className="text-[28px] font-bold text-gray-900">Resumes</h2>
-
-        <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+      <ResourceListPage
+        title="Resumes"
+        description={`${total.toLocaleString()} resume${total === 1 ? "" : "s"} across all users.`}
+      >
+        <div className="relative max-w-[360px]">
           <input
-            type="text"
+            type="search"
             placeholder="Search resumes…"
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="w-full rounded-xl border border-gray-200 bg-white py-2 pl-9 pr-4 text-[13px] text-gray-900 outline-none focus:border-[#7C5CFC] focus:ring-2 focus:ring-[#7C5CFC]/20"
+            className="block w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#1A56DB] focus:ring-2 focus:ring-[#1A56DB]/15"
           />
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/60">
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Title</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">User</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Vertical</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Region</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Updated</th>
-                <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-500">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-[13px] text-gray-400">Loading…</td>
-                </tr>
-              ) : resumes.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-[13px] text-gray-400">No resumes found</td>
-                </tr>
-              ) : (
-                resumes.map((r) => (
-                  <tr key={r.id} className="transition hover:bg-gray-50/60">
-                    <td className="px-5 py-3 text-[13px] font-medium text-gray-900">{r.title}</td>
-                    <td className="px-5 py-3">
-                      <p className="text-[13px] text-gray-900">{r.user.name || "—"}</p>
-                      <p className="text-[11px] text-gray-400">{r.user.email}</p>
-                    </td>
-                    <td className="px-5 py-3 text-[13px] text-gray-600">{r.vertical}</td>
-                    <td className="px-5 py-3 text-[13px] text-gray-600">{r.regionMode}</td>
-                    <td className="px-5 py-3 text-[13px] text-gray-500">
-                      {new Date(r.updatedAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-5 py-3 text-right">
-                      <button
-                        onClick={() => handleDelete(r.id)}
-                        className="rounded-lg p-1.5 text-gray-400 transition hover:bg-red-50 hover:text-red-500"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <p className="text-[13px] text-gray-500">{total} resume{total !== 1 ? "s" : ""} total</p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="rounded-lg border border-gray-200 p-1.5 text-gray-500 transition hover:bg-gray-50 disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="text-[13px] text-gray-600">Page {page} of {totalPages}</span>
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="rounded-lg border border-gray-200 p-1.5 text-gray-500 transition hover:bg-gray-50 disabled:opacity-40"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
+        {loading ? (
+          <div className="rounded-xl border border-[#E2E8F0] bg-white px-5 py-12 text-center text-[13px] text-[#94A3B8]">
+            Loading…
           </div>
-        </div>
-      </div>
+        ) : (
+          <>
+            <DataTable
+              columns={columns}
+              rows={resumes}
+              rowKey={(r) => r.id}
+              emptyTitle="No resumes match this search"
+              emptyDescription="Try a broader query or clear the search."
+            />
+            <div className="mt-4 flex items-center justify-between text-[12px] text-[#64748B]">
+              <p>
+                <FileText className="mr-1 inline h-3 w-3 align-text-bottom" />
+                {total.toLocaleString()} total
+              </p>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <span className="px-2">Page {page} of {totalPages}</span>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={page >= totalPages}
+                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </ResourceListPage>
     </AdminShell>
   );
 }

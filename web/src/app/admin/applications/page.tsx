@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { Briefcase } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
+import { ResourceListPage } from "@/components/admin/resource-list-page";
+import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
+import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
 
 interface AppRow {
   id: string;
@@ -14,14 +17,7 @@ interface AppRow {
 }
 
 const STATUS_OPTIONS = ["all", "draft", "applied", "interview", "offer", "rejected"];
-
-const statusColors: Record<string, string> = {
-  draft: "bg-gray-100 text-gray-600",
-  applied: "bg-blue-100 text-blue-700",
-  interview: "bg-amber-100 text-amber-700",
-  offer: "bg-emerald-100 text-emerald-700",
-  rejected: "bg-red-100 text-red-700",
-};
+const PER_PAGE = 20;
 
 export default function AdminApplicationsPage() {
   const [apps, setApps] = useState<AppRow[]>([]);
@@ -29,19 +25,18 @@ export default function AdminApplicationsPage() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const perPage = 20;
 
   const fetchApps = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page: String(page), perPage: String(perPage) });
+      const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
       if (statusFilter !== "all") params.set("status", statusFilter);
       const res = await fetch(`/api/admin/applications?${params}`);
       const data = await res.json();
       setApps(data.applications ?? []);
       setTotal(data.total ?? 0);
     } catch {
-      /* ignore */
+      // ignore
     } finally {
       setLoading(false);
     }
@@ -51,110 +46,112 @@ export default function AdminApplicationsPage() {
     fetchApps();
   }, [fetchApps]);
 
-  const totalPages = Math.max(1, Math.ceil(total / perPage));
+  const columns: DataTableColumn<AppRow>[] = [
+    {
+      key: "title",
+      header: "Role",
+      truncate: "max-w-[240px]",
+      render: (a) => <span className="font-medium text-[#0F172A]">{a.title || "Untitled"}</span>,
+    },
+    {
+      key: "company",
+      header: "Company",
+      render: (a) => <span className="text-[12px] text-[#475569]">{a.company || "—"}</span>,
+    },
+    {
+      key: "user",
+      header: "User",
+      render: (a) => (
+        <div className="min-w-0">
+          <p className="truncate text-[12px] text-[#0F172A]">{a.user.name || "—"}</p>
+          <p className="truncate text-[11px] text-[#94A3B8]">{a.user.email}</p>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (a) => <StatusBadge tone={statusToTone(a.status)}>{a.status}</StatusBadge>,
+    },
+    {
+      key: "created",
+      header: "Created",
+      render: (a) => (
+        <span className="text-[12px] text-[#64748B]">{new Date(a.createdAt).toLocaleDateString()}</span>
+      ),
+    },
+  ];
+
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   return (
     <AdminShell pageTitle="Applications">
-      <div className="space-y-6">
-        <h2 className="text-[28px] font-bold text-gray-900">Applications</h2>
-
-        {/* Filter */}
-        <div className="flex items-center gap-3">
-          <span className="text-[13px] font-medium text-gray-500">Status:</span>
-          <div className="flex gap-1">
+      <ResourceListPage
+        title="Applications"
+        description={`${total.toLocaleString()} application${total === 1 ? "" : "s"} tracked across all users.`}
+        filters={
+          <div className="flex flex-wrap gap-1">
             {STATUS_OPTIONS.map((s) => (
               <button
                 key={s}
+                type="button"
                 onClick={() => {
                   setStatusFilter(s);
                   setPage(1);
                 }}
-                className={`rounded-full px-3 py-1 text-[12px] font-medium capitalize transition ${
+                className={`rounded-full px-3 py-1 text-[12px] font-semibold capitalize transition ${
                   statusFilter === s
-                    ? "bg-[#7C5CFC] text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-[#0F172A] text-white"
+                    : "bg-[#F1F5F9] text-[#475569] hover:bg-[#E2E8F0]"
                 }`}
               >
                 {s}
               </button>
             ))}
           </div>
-        </div>
-
-        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-gray-100 bg-gray-50/60">
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Title</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Company</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">User</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Status</th>
-                <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-gray-500">Created</th>
-                <th className="px-5 py-3 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-500">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {loading ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-[13px] text-gray-400">Loading…</td>
-                </tr>
-              ) : apps.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="py-12 text-center text-[13px] text-gray-400">No applications found</td>
-                </tr>
-              ) : (
-                apps.map((a) => (
-                  <tr key={a.id} className="transition hover:bg-gray-50/60">
-                    <td className="px-5 py-3 text-[13px] font-medium text-gray-900">{a.title || "Untitled"}</td>
-                    <td className="px-5 py-3 text-[13px] text-gray-600">{a.company || "—"}</td>
-                    <td className="px-5 py-3">
-                      <p className="text-[13px] text-gray-900">{a.user.name || "—"}</p>
-                      <p className="text-[11px] text-gray-400">{a.user.email}</p>
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${statusColors[a.status] ?? "bg-gray-100 text-gray-600"}`}>
-                        {a.status}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 text-[13px] text-gray-500">
-                      {new Date(a.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="px-5 py-3 text-right">
-                      <a
-                        href={`/admin/users/${a.user ? "" : ""}`}
-                        className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-[#7C5CFC]"
-                      >
-                        <Eye className="h-4 w-4" />
-                      </a>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <p className="text-[13px] text-gray-500">{total} application{total !== 1 ? "s" : ""} total</p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={page === 1}
-              className="rounded-lg border border-gray-200 p-1.5 text-gray-500 transition hover:bg-gray-50 disabled:opacity-40"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            <span className="text-[13px] text-gray-600">Page {page} of {totalPages}</span>
-            <button
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={page === totalPages}
-              className="rounded-lg border border-gray-200 p-1.5 text-gray-500 transition hover:bg-gray-50 disabled:opacity-40"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
+        }
+      >
+        {loading ? (
+          <div className="rounded-xl border border-[#E2E8F0] bg-white px-5 py-12 text-center text-[13px] text-[#94A3B8]">
+            Loading…
           </div>
-        </div>
-      </div>
+        ) : (
+          <>
+            <DataTable
+              columns={columns}
+              rows={apps}
+              rowKey={(a) => a.id}
+              emptyTitle="No applications for this filter"
+              emptyDescription="Switch to a different status filter or All."
+            />
+            <div className="mt-4 flex items-center justify-between text-[12px] text-[#64748B]">
+              <p>
+                <Briefcase className="mr-1 inline h-3 w-3 align-text-bottom" />
+                {total.toLocaleString()} total
+              </p>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Previous
+                </button>
+                <span className="px-2">Page {page} of {totalPages}</span>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => p + 1)}
+                  disabled={page >= totalPages}
+                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </ResourceListPage>
     </AdminShell>
   );
 }
