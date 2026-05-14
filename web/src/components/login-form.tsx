@@ -44,11 +44,13 @@ export function LoginForm() {
   return (
     <AuthLayout mode="login">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="font-display text-[28px] font-bold tracking-tight text-[#0F172A]">Sign in to Launch CV</h1>
-        <p className="mt-2 font-body text-[14px] text-[#64748B]">
+      <div className="mb-7">
+        <h1 className="text-[28px] font-semibold leading-[1.1] tracking-tight text-[#0F172A]">
+          Sign in to Launch CV
+        </h1>
+        <p className="mt-2 text-[14px] text-[#64748B]">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-[#1A56DB] hover:underline">
+          <Link href="/register" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
             Create one free
           </Link>
         </p>
@@ -57,24 +59,28 @@ export function LoginForm() {
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="mb-1.5 block font-body text-[13px] font-semibold text-[#334155]">Email address</label>
+          <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
+            Email
+          </label>
           <input
             type="email"
             required
             className="soha-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
+            placeholder="you@email.com"
             autoComplete="email"
           />
         </div>
 
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="font-body text-[13px] font-semibold text-[#334155]">Password</label>
+            <label className="text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
+              Password
+            </label>
             <Link
               href="/auth/forgot-password"
-              className="font-body text-[12px] text-[#64748B] transition hover:text-[#1A56DB]"
+              className="text-[12px] font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
             >
               Forgot password?
             </Link>
@@ -92,7 +98,7 @@ export function LoginForm() {
             <button
               type="button"
               tabIndex={-1}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#64748B]"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#475569]"
               onClick={() => setShowPw((s) => !s)}
             >
               {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -101,12 +107,12 @@ export function LoginForm() {
         </div>
 
         {error ? (
-          <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
-            <p className="font-body text-[13px] text-red-600">{error}</p>
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
+            <p className="text-[13px] text-red-700">{error}</p>
             {needVerify ? (
               <Link
                 href="/auth/resend-verify"
-                className="mt-1 block font-body text-[12px] font-semibold text-red-700 underline underline-offset-2"
+                className="mt-1 block text-[12px] font-semibold text-red-700 underline underline-offset-2"
               >
                 Resend verification email →
               </Link>
@@ -117,18 +123,14 @@ export function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A56DB] py-3 font-body text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 disabled:opacity-60"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#0F172A] py-3 text-[15px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-60"
         >
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <ArrowRight className="h-4 w-4" />
-          )}
+          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
           {loading ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
-      <p className="mt-6 font-body text-[12px] text-[#94A3B8]">
+      <p className="mt-6 text-[12px] text-[#94A3B8]">
         Secure sign-in. Your data is encrypted and never shared.
       </p>
     </AuthLayout>
