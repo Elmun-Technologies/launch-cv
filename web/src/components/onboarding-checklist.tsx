@@ -102,6 +102,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
 
   useEffect(() => {
     const v = localStorage.getItem(DISMISSED_KEY);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDismissed(v === "1");
   }, []);
 

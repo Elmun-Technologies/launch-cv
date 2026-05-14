@@ -1,11 +1,12 @@
 import { test, expect } from "@playwright/test";
 
-test("bosh sahifa ochiladi", async ({ page }) => {
+test("home page renders", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Oddiy shablondan emas/i })).toBeVisible();
+  // Editorial hero copy — Stop applying. Start getting hired.
+  await expect(page.getByRole("heading", { name: /stop applying/i })).toBeVisible();
 });
 
-test("kirish sahifasi", async ({ page }) => {
+test("login page renders", async ({ page }) => {
   await page.goto("/login");
-  await expect(page.getByRole("heading", { name: "Kirish" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /sign in to launch cv/i })).toBeVisible();
 });
