@@ -1,5 +1,11 @@
 import { FileText, Mail, MessageSquare, Search, Sparkles } from "lucide-react";
-import type { BlogPost } from "@/lib/blog-posts";
+
+/** Minimal shape required by the cover — accepts either the static or DB BlogPost type. */
+type BlogPost = {
+  slug: string;
+  category: string;
+  readingTime: number;
+};
 
 type CoverConfig = {
   gradient: string;

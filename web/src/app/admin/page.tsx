@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import {
   Users,
   FileText,
@@ -8,10 +9,13 @@ import {
   CreditCard,
   Cpu,
   Activity,
+  ArrowRight,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
+import { KpiCard } from "@/components/admin/kpi-card";
+import { SectionCard } from "@/components/admin/section-card";
 
 export default async function AdminDashboardPage() {
   const admin = await requireAdmin();
@@ -42,12 +46,12 @@ export default async function AdminDashboardPage() {
     prisma.analyticsEvent.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
     prisma.user.findMany({
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 8,
       select: { id: true, name: true, email: true, createdAt: true },
     }),
     prisma.analyticsEvent.findMany({
       orderBy: { createdAt: "desc" },
-      take: 10,
+      take: 8,
       select: { id: true, name: true, userId: true, createdAt: true },
     }),
   ]);
@@ -57,88 +61,98 @@ export default async function AdminDashboardPage() {
     (aiRequests30d._sum.roleFitCount ?? 0) +
     (aiRequests30d._sum.packetCount ?? 0);
 
-  const stats = [
-    { label: "Total Users", value: totalUsers, icon: Users, color: "bg-violet-100 text-violet-600" },
-    { label: "Total Resumes", value: totalResumes, icon: FileText, color: "bg-blue-100 text-blue-600" },
-    { label: "Applications", value: totalApplications, icon: Briefcase, color: "bg-amber-100 text-amber-600" },
-    { label: "Contacts", value: totalContacts, icon: Mail, color: "bg-emerald-100 text-emerald-600" },
-    { label: "Companies", value: totalCompanies, icon: Building2, color: "bg-pink-100 text-pink-600" },
-    { label: "Active Subs", value: activeSubscriptions, icon: CreditCard, color: "bg-cyan-100 text-cyan-600" },
-    { label: "AI Requests", value: aiTotal, icon: Cpu, color: "bg-orange-100 text-orange-600" },
-    { label: "Events (30d)", value: events30d, icon: Activity, color: "bg-indigo-100 text-indigo-600" },
+  const stats: Array<{ label: string; value: number; icon: typeof Users; hint?: string }> = [
+    { label: "Total users", value: totalUsers, icon: Users },
+    { label: "Total resumes", value: totalResumes, icon: FileText },
+    { label: "Applications", value: totalApplications, icon: Briefcase },
+    { label: "Contacts", value: totalContacts, icon: Mail },
+    { label: "Companies", value: totalCompanies, icon: Building2 },
+    { label: "Active subscriptions", value: activeSubscriptions, icon: CreditCard },
+    { label: "AI requests · 30d", value: aiTotal, icon: Cpu, hint: "JD + RoleFit + Packet" },
+    { label: "Events · 30d", value: events30d, icon: Activity },
   ];
+
+  const dateFmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 
   return (
     <AdminShell email={admin.email} pageTitle="Dashboard">
-      <div className="space-y-8">
-        <h2 className="text-[28px] font-bold text-gray-900">Dashboard</h2>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Dashboard</h1>
+          <p className="mt-1 text-[13px] text-[#64748B]">
+            Live snapshot of platform activity. Cards below are real-time; lists show the last 8 entries.
+          </p>
+        </div>
 
-        {/* Stat cards */}
-        <div className="grid grid-cols-4 gap-4">
+        {/* KPIs */}
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s) => (
-            <div
-              key={s.label}
-              className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
-            >
-              <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${s.color}`}>
-                <s.icon className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[28px] font-bold leading-tight text-gray-900">
-                  {s.value.toLocaleString()}
-                </p>
-                <p className="text-[13px] text-gray-500">{s.label}</p>
-              </div>
-            </div>
+            <KpiCard key={s.label} label={s.label} value={s.value} icon={s.icon} hint={s.hint} />
           ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
-          {/* Recent Signups */}
-          <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            <div className="border-b border-gray-100 px-6 py-4">
-              <h3 className="text-[15px] font-semibold text-gray-900">Recent Signups</h3>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {recentUsers.map((u) => (
-                <div key={u.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50/60">
-                  <div>
-                    <p className="text-[13px] font-medium text-gray-900">{u.name || "—"}</p>
-                    <p className="text-[13px] text-gray-500">{u.email}</p>
-                  </div>
-                  <p className="text-[13px] text-gray-400">
-                    {u.createdAt.toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-              {recentUsers.length === 0 && (
-                <p className="px-6 py-8 text-center text-[13px] text-gray-400">No users yet</p>
-              )}
-            </div>
-          </div>
+        <div className="grid gap-5 lg:grid-cols-2">
+          <SectionCard
+            title="Recent signups"
+            description="Newest accounts"
+            flush
+            action={
+              <Link
+                href="/admin/users"
+                className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB] hover:underline"
+              >
+                View all <ArrowRight className="h-3 w-3" />
+              </Link>
+            }
+          >
+            {recentUsers.length === 0 ? (
+              <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">No users yet.</p>
+            ) : (
+              <ul className="divide-y divide-[#E2E8F0]">
+                {recentUsers.map((u) => (
+                  <li key={u.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
+                    <div className="min-w-0">
+                      <p className="truncate text-[13px] font-medium text-[#0F172A]">{u.name || "—"}</p>
+                      <p className="truncate text-[12px] text-[#64748B]">{u.email}</p>
+                    </div>
+                    <p className="shrink-0 text-[12px] text-[#94A3B8]">{dateFmt.format(u.createdAt)}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </SectionCard>
 
-          {/* Recent Activity */}
-          <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-            <div className="border-b border-gray-100 px-6 py-4">
-              <h3 className="text-[15px] font-semibold text-gray-900">Recent Activity</h3>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {recentEvents.map((e) => (
-                <div key={e.id} className="flex items-center justify-between px-6 py-3 hover:bg-gray-50/60">
-                  <div>
-                    <p className="text-[13px] font-medium text-gray-900">{e.name}</p>
-                    <p className="text-[13px] text-gray-500">User: {e.userId ?? "anonymous"}</p>
-                  </div>
-                  <p className="text-[13px] text-gray-400">
-                    {e.createdAt.toLocaleDateString()}
-                  </p>
-                </div>
-              ))}
-              {recentEvents.length === 0 && (
-                <p className="px-6 py-8 text-center text-[13px] text-gray-400">No events yet</p>
-              )}
-            </div>
-          </div>
+          <SectionCard
+            title="Recent activity"
+            description="Latest analytics events"
+            flush
+            action={
+              <Link
+                href="/admin/analytics"
+                className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB] hover:underline"
+              >
+                View all <ArrowRight className="h-3 w-3" />
+              </Link>
+            }
+          >
+            {recentEvents.length === 0 ? (
+              <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">No events yet.</p>
+            ) : (
+              <ul className="divide-y divide-[#E2E8F0]">
+                {recentEvents.map((e) => (
+                  <li key={e.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
+                    <div className="min-w-0">
+                      <p className="truncate font-mono text-[12px] font-semibold text-[#0F172A]">{e.name}</p>
+                      <p className="truncate text-[12px] text-[#64748B]">
+                        {e.userId ? `user ${e.userId.slice(0, 8)}…` : "anonymous"}
+                      </p>
+                    </div>
+                    <p className="shrink-0 text-[12px] text-[#94A3B8]">{dateFmt.format(e.createdAt)}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </SectionCard>
         </div>
       </div>
     </AdminShell>

@@ -5,9 +5,12 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
-import { BLOG_POSTS } from "@/lib/blog-posts";
+import { getPublishedPosts } from "@/lib/cms/blog";
 import { BlogCover } from "@/components/blog-cover";
 import { ArrowRight, Clock } from "lucide-react";
+
+// CMS-driven: re-render on every request (Postgres-backed)
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Career & Resume Blog",
@@ -45,10 +48,25 @@ const categoryClass: Record<string, string> = {
   "Job Search": "bg-violet-50 text-violet-700",
 };
 
-export default function BlogPage() {
-  const categories = Array.from(new Set(BLOG_POSTS.map((p) => p.category)));
-  const featured = BLOG_POSTS[0];
-  const rest = BLOG_POSTS.slice(1);
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
+  const categories = Array.from(new Set(posts.map((p) => p.category)));
+  const featured = posts[0];
+  const rest = posts.slice(1);
+
+  if (!featured) {
+    return (
+      <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+        <JsonLd data={blogLd} />
+        <LandingNav />
+        <main className="mx-auto max-w-[1100px] flex-1 px-6 py-32 text-center">
+          <h1 className="lc-hero-headline text-[#0F172A]">Career blog</h1>
+          <p className="mt-6 text-[16px] text-[#475569]">New articles coming soon. Check back shortly.</p>
+        </main>
+        <LandingFooter />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">

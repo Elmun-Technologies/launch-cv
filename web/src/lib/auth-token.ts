@@ -47,29 +47,37 @@ export async function verifySessionToken(token: string): Promise<SessionPayload 
  * (e.g. `next start` locally) the browser won't store the cookie and login "won't work".
  * `.env`: `NEXT_PUBLIC_APP_URL=https://...` or `COOKIE_SECURE=false`.
  */
-export function sessionCookieBase(): {
+export type SessionCookieBase = {
   httpOnly: true;
   sameSite: "lax";
   secure: boolean;
   path: string;
-} {
+  /** Optional `Domain=` attribute — set to `.launch-cv.com` to share the cookie
+   *  across apex (launch-cv.com) and admin (admin.launch-cv.com) subdomains. */
+  domain?: string;
+};
+
+export function sessionCookieBase(): SessionCookieBase {
   const explicit = process.env.COOKIE_SECURE;
+  const domainEnv = process.env.COOKIE_DOMAIN?.trim();
+  const domain = domainEnv ? domainEnv : undefined;
+
   if (explicit === "true") {
-    return { httpOnly: true, sameSite: "lax", secure: true, path: "/" };
+    return { httpOnly: true, sameSite: "lax", secure: true, path: "/", ...(domain ? { domain } : {}) };
   }
   if (explicit === "false") {
-    return { httpOnly: true, sameSite: "lax", secure: false, path: "/" };
+    return { httpOnly: true, sameSite: "lax", secure: false, path: "/", ...(domain ? { domain } : {}) };
   }
 
   if (process.env.NODE_ENV !== "production") {
-    return { httpOnly: true, sameSite: "lax", secure: false, path: "/" };
+    return { httpOnly: true, sameSite: "lax", secure: false, path: "/", ...(domain ? { domain } : {}) };
   }
 
   const base = String(process.env.NEXT_PUBLIC_APP_URL ?? "")
     .trim()
     .toLowerCase();
   const secure = base.startsWith("https://");
-  return { httpOnly: true, sameSite: "lax", secure, path: "/" };
+  return { httpOnly: true, sameSite: "lax", secure, path: "/", ...(domain ? { domain } : {}) };
 }
 
 export { COOKIE_NAME };
