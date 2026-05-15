@@ -26,7 +26,7 @@ const blank: BlogEditorData = {
 
 export default async function NewBlogPostPage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   return (
     <AdminShell email={admin.email} pageTitle="New blog post">

@@ -17,7 +17,7 @@ type UsageRow = {
 
 export default async function AdminAiUsagePage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const usageMonths = await prisma.usageMonth.findMany({
     orderBy: { month: "desc" },

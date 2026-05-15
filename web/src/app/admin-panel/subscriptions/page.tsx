@@ -19,7 +19,7 @@ type SubscriptionRow = {
 
 export default async function AdminSubscriptionsPage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const [activeSubs, totalSubs, cancelling, subscriptions] = await Promise.all([
     prisma.subscription.count({

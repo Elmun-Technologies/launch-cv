@@ -8,19 +8,21 @@ import { AuthLayout } from "@/components/auth-layout";
 
 /** Mirror of middleware's safeNextPath — blocks `//evil.com`, schemes, and
  * other off-site bounces that would let an attacker open-redirect users
- * via `/login?next=...`. Keep in sync with src/middleware.ts. */
-function safeNextPath(value: string | null): string {
-  if (!value) return "/dashboard";
-  if (value.length > 512) return "/dashboard";
-  if (!value.startsWith("/")) return "/dashboard";
-  if (value.startsWith("//") || value.startsWith("/\\")) return "/dashboard";
-  if (value.includes("://")) return "/dashboard";
+ * via `/login?next=...`. Keep in sync with src/middleware.ts.
+ * Returns null when the value is missing or unsafe so the caller can fall
+ * back to a role-aware default (admin → /admin-panel, otherwise /dashboard). */
+function safeNextPath(value: string | null): string | null {
+  if (!value) return null;
+  if (value.length > 512) return null;
+  if (!value.startsWith("/")) return null;
+  if (value.startsWith("//") || value.startsWith("/\\")) return null;
+  if (value.includes("://")) return null;
   return value;
 }
 
 export function LoginForm() {
   const sp = useSearchParams();
-  const next = safeNextPath(sp.get("next"));
+  const explicitNext = safeNextPath(sp.get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -50,7 +52,13 @@ export function LoginForm() {
       }
       return;
     }
-    window.location.href = next;
+    // Destination preference:
+    //   1. Explicit `?next=` query param (e.g. middleware-set after blocking /admin-panel)
+    //   2. /admin-panel if the user is an admin
+    //   3. /dashboard for regular customers
+    const json = (await res.json().catch(() => ({}))) as { isAdmin?: boolean };
+    const defaultNext = json.isAdmin ? "/admin-panel" : "/dashboard";
+    window.location.href = explicitNext || defaultNext;
   }
 
   return (

@@ -7,7 +7,7 @@ import { SectionCard } from "@/components/admin/section-card";
 
 export default async function AdminAnalyticsPage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const recentEvents = await prisma.analyticsEvent.findMany({
     orderBy: { createdAt: "desc" },

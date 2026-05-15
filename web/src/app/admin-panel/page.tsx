@@ -19,7 +19,7 @@ import { SectionCard } from "@/components/admin/section-card";
 
 export default async function AdminDashboardPage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);

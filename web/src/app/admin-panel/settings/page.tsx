@@ -8,7 +8,7 @@ import { MakeAdminForm } from "./make-admin-form";
 
 export default async function AdminSettingsPage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const adminEmails = (process.env.ADMIN_EMAILS ?? "")
     .split(",")

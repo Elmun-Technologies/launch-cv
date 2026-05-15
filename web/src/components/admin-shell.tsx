@@ -46,11 +46,11 @@ const groups: NavGroup[] = [
   {
     label: "Content",
     items: [
-      { href: "/admin-panel/cms/blog", label: "Blog posts", icon: FileEdit, badge: "new" },
-      { href: "/admin-panel/cms/testimonials", label: "Testimonials", icon: MessageSquare, badge: "soon" },
-      { href: "/admin-panel/cms/faqs", label: "FAQs", icon: HelpCircle, badge: "soon" },
-      { href: "/admin-panel/cms/pages", label: "Page copy", icon: Layers, badge: "soon" },
-      { href: "/admin-panel/cms/media", label: "Media library", icon: ImageIcon, badge: "soon" },
+      { href: "/admin-panel/cms/blog", label: "Blog posts", icon: FileEdit },
+      { href: "/admin-panel/cms/testimonials", label: "Testimonials", icon: MessageSquare },
+      { href: "/admin-panel/cms/faqs", label: "FAQs", icon: HelpCircle },
+      { href: "/admin-panel/cms/pages", label: "Page copy", icon: Layers },
+      { href: "/admin-panel/cms/media", label: "Media library", icon: ImageIcon },
     ],
   },
   {
@@ -73,8 +73,8 @@ const groups: NavGroup[] = [
   {
     label: "System",
     items: [
-      { href: "/admin-panel/audit", label: "Audit log", icon: ShieldCheck, badge: "soon" },
-      { href: "/admin-panel/roles", label: "Roles", icon: KeyRound, badge: "soon" },
+      { href: "/admin-panel/audit", label: "Audit log", icon: ShieldCheck },
+      { href: "/admin-panel/roles", label: "Roles", icon: KeyRound },
       { href: "/admin-panel/settings", label: "Settings", icon: Settings },
     ],
   },

@@ -84,23 +84,31 @@ async function promoteScheduled(): Promise<void> {
   }
 }
 
-/** Returns every published post, newest first. */
+/** Returns every published post, newest first. Empty array if DB unavailable. */
 export async function getPublishedPosts(): Promise<BlogPost[]> {
-  await promoteScheduled();
-  const rows = await prisma.blogPost.findMany({
-    where: { status: "published" },
-    orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
-  });
-  return rows.map(rowToBlogPost);
+  try {
+    await promoteScheduled();
+    const rows = await prisma.blogPost.findMany({
+      where: { status: "published" },
+      orderBy: [{ publishedAt: "desc" }, { createdAt: "desc" }],
+    });
+    return rows.map(rowToBlogPost);
+  } catch {
+    return [];
+  }
 }
 
 /** Returns slugs of every published post (for sitemap, generateStaticParams). */
 export async function getPublishedSlugs(): Promise<string[]> {
-  const rows = await prisma.blogPost.findMany({
-    where: { status: "published" },
-    select: { slug: true },
-  });
-  return rows.map((r) => r.slug);
+  try {
+    const rows = await prisma.blogPost.findMany({
+      where: { status: "published" },
+      select: { slug: true },
+    });
+    return rows.map((r) => r.slug);
+  } catch {
+    return [];
+  }
 }
 
 /**
@@ -113,9 +121,13 @@ export async function getPostBySlug(
   slug: string,
   opts: { previewAllowed?: boolean } = {},
 ): Promise<BlogPost | null> {
-  if (!opts.previewAllowed) await promoteScheduled();
-  const row = await prisma.blogPost.findUnique({ where: { slug } });
-  if (!row) return null;
-  if (!opts.previewAllowed && row.status !== "published") return null;
-  return rowToBlogPost(row);
+  try {
+    if (!opts.previewAllowed) await promoteScheduled();
+    const row = await prisma.blogPost.findUnique({ where: { slug } });
+    if (!row) return null;
+    if (!opts.previewAllowed && row.status !== "published") return null;
+    return rowToBlogPost(row);
+  } catch {
+    return null;
+  }
 }
