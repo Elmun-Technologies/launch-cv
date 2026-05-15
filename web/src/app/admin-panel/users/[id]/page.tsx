@@ -55,7 +55,7 @@ export default async function AdminUserDetailPage({
       <div className="space-y-6">
         <div className="flex items-start gap-3">
           <Link
-            href="/admin/users"
+            href="/admin-panel/users"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#475569] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
             aria-label="Back to users"
           >

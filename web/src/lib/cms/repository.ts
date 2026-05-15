@@ -4,7 +4,7 @@ import type { Prisma } from "@prisma/client";
 
 /**
  * Generic CRUD helpers that automatically emit audit-log entries.
- * Use these from /api/admin/cms/* routes — never call prisma directly there.
+ * Use these from /api/admin-panel/cms/* routes — never call prisma directly there.
  */
 
 type Actor = { id: string };

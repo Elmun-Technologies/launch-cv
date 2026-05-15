@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
     try {
       const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
       if (search) params.set("search", search);
-      const res = await fetch(`/api/admin/users?${params}`);
+      const res = await fetch(`/api/admin-panel/users?${params}`);
       const data = await res.json();
       setUsers(data.users ?? []);
       setTotal(data.total ?? 0);
@@ -48,7 +48,7 @@ export default function AdminUsersPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this user permanently?")) return;
-    await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
+    await fetch(`/api/admin-panel/users/${id}`, { method: "DELETE" });
     fetchUsers();
   }
 
@@ -103,7 +103,7 @@ export default function AdminUsersPage() {
       render: (u) => (
         <div className="flex items-center justify-end gap-1">
           <Link
-            href={`/admin/users/${u.id}`}
+            href={`/admin-panel/users/${u.id}`}
             className="rounded-md p-1.5 text-[#94A3B8] transition hover:bg-[#F1F5F9] hover:text-[#1A56DB]"
             aria-label="Edit user"
           >

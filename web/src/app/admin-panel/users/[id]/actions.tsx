@@ -21,7 +21,7 @@ export function UserDetailActions({
   async function handleSaveRole() {
     setSaving(true);
     try {
-      await fetch(`/api/admin/users/${userId}`, {
+      await fetch(`/api/admin-panel/users/${userId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role }),
@@ -35,8 +35,8 @@ export function UserDetailActions({
   async function handleDelete() {
     if (!confirm("Permanently delete this user and ALL their data? This cannot be undone.")) return;
     setDeleting(true);
-    await fetch(`/api/admin/users/${userId}`, { method: "DELETE" });
-    router.push("/admin/users");
+    await fetch(`/api/admin-panel/users/${userId}`, { method: "DELETE" });
+    router.push("/admin-panel/users");
   }
 
   return (

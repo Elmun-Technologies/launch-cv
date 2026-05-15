@@ -69,7 +69,7 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
         const formData = new FormData();
         formData.append("file", file);
         formData.append("alt", file.name);
-        const res = await fetch("/api/admin/media/upload", { method: "POST", body: formData });
+        const res = await fetch("/api/admin-panel/media/upload", { method: "POST", body: formData });
         const data = (await res.json()) as { asset?: { url: string }; error?: string };
         if (!res.ok || !data.asset) {
           alert(data.error ?? "Upload failed");
