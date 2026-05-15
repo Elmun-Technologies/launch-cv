@@ -316,13 +316,6 @@ body {
   border: 1px solid #e5e7eb;
 }
 
-/* ── Skeleton ── */
-.soha-skeleton {
-  border-radius: 0.375rem;
-  background: #f3f4f6;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
 /* ── Sidebar ── */
 .soha-sidebar-item {
   display: flex;

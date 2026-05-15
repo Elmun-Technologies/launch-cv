@@ -6,9 +6,23 @@ import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
 
+/** Mirror of middleware's safeNextPath — blocks `//evil.com`, schemes, and
+ * other off-site bounces that would let an attacker open-redirect users
+ * via `/login?next=...`. Keep in sync with src/middleware.ts.
+ * Returns null when the value is missing or unsafe so the caller can fall
+ * back to a role-aware default (admin → /admin-panel, otherwise /dashboard). */
+function safeNextPath(value: string | null): string | null {
+  if (!value) return null;
+  if (value.length > 512) return null;
+  if (!value.startsWith("/")) return null;
+  if (value.startsWith("//") || value.startsWith("/\\")) return null;
+  if (value.includes("://")) return null;
+  return value;
+}
+
 export function LoginForm() {
   const sp = useSearchParams();
-  const explicitNext = sp.get("next");
+  const explicitNext = safeNextPath(sp.get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);

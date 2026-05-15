@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/password";
-import { hashToken } from "@/lib/token-crypto";
+import { verifyAuthToken } from "@/lib/verify-auth-token";
 import { trackEvent } from "@/lib/analytics";
 
 const schema = z.object({
@@ -20,11 +20,8 @@ export async function POST(req: Request) {
   const parsed = schema.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: "Invalid request data" }, { status: 400 });
 
-  const tokenHash = hashToken(parsed.data.token);
-  const row = await prisma.authToken.findUnique({
-    where: { tokenHash },
-  });
-  if (!row || row.type !== "password_reset" || row.usedAt || row.expiresAt <= new Date()) {
+  const row = await verifyAuthToken(parsed.data.token, "password_reset");
+  if (!row) {
     return NextResponse.json({ error: "Link is invalid or expired" }, { status: 400 });
   }
   const passwordHash = await hashPassword(parsed.data.password);

@@ -49,7 +49,7 @@ export async function POST(req: Request, ctx: Ctx) {
   const snap = await prisma.resumeSnapshot.create({
     data: {
       resumeId: resume.id,
-      label: label ?? `Snapshot ${new Date().toLocaleString("uz-UZ")}`,
+      label: label ?? `Snapshot ${new Date().toISOString().replace("T", " ").slice(0, 16)} UTC`,
       content: resume.content as object,
     },
   });

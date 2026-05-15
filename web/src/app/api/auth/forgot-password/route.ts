@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     },
   });
 
-  const link = `${appBaseUrl()}/auth/reset-password?token=${raw}`;
+  const link = `${appBaseUrl()}/auth/reset-password?token=${encodeURIComponent(raw)}`;
   const html = `<p>Password reset link (valid for 1 hour):</p><p><a href="${link}">${link}</a></p>`;
   const sent = await sendTransactionalEmail({
     to: user.email,

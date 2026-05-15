@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { ArrowRight, Palette, Layers, Sparkles, Eye, Check } from "lucide-react";
+import { ArrowRight, Palette, Layers, Sparkles, Eye } from "lucide-react";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 

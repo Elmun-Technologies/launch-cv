@@ -19,9 +19,13 @@ export async function getUsageRow(userId: string) {
 }
 
 export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
-  const plan: PlanId = await getUserPlanId(userId);
+  /** Plan lookup and usage-row read are independent — run them in
+   *  parallel to halve the DB round-trips on this hot path. */
+  const [plan, row] = await Promise.all([
+    getUserPlanId(userId) as Promise<PlanId>,
+    getUsageRow(userId),
+  ]);
   const limits = limitsForPlan(plan);
-  const row = await getUsageRow(userId);
   const used = kind === "jd" ? row.jdCount : kind === "packet" ? row.packetCount : row.roleFitCount;
   const max = kind === "jd" ? limits.jd : kind === "packet" ? limits.packet : limits.roleFit;
   const paid = plan !== "none";

@@ -17,7 +17,7 @@ export async function sendEmailVerification(userId: string, email: string) {
       expiresAt: new Date(Date.now() + 48 * 60 * 60 * 1000),
     },
   });
-  const link = `${appBaseUrl()}/auth/verify-email?token=${raw}`;
+  const link = `${appBaseUrl()}/auth/verify-email?token=${encodeURIComponent(raw)}`;
   const html = `<p>Verify your Launch CV account.</p><p><a href="${link}">${link}</a></p><p>This link is valid for 48 hours.</p>`;
   const sent = await sendTransactionalEmail({
     to: email,

@@ -90,13 +90,19 @@ Rules:
   const userPrompt = `Parse this resume text into structured JSON:\n\n${text.slice(0, 12000)}`;
 
   try {
-    const result = await chatJson<ResumeContent>({ system, user: userPrompt });
+    const result = await chatJson<ResumeContent>({
+      system,
+      user: userPrompt,
+      maxTokens: 4000,
+    });
     if (!result || typeof result !== "object" || !result.contact) {
       return NextResponse.json({ error: "AI could not parse the resume" }, { status: 502 });
     }
     return NextResponse.json({ content: result });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Parse error";
-    return NextResponse.json({ error: msg }, { status: 502 });
+    /** Don't echo the raw upstream message — it can leak model names,
+     *  prompt fragments, or stack traces back to the browser. */
+    console.error("[import/resume-file] AI parse error:", e);
+    return NextResponse.json({ error: "Could not parse the resume. Please try a different file." }, { status: 502 });
   }
 }

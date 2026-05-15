@@ -9,6 +9,17 @@ function pathMatches(pathname: string, prefix: string): boolean {
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
 
+/** Only same-origin paths are safe to bounce a user back to. Blocks
+ * `//evil.com`, `/\evil.com`, full URLs, and anything with a scheme. */
+function safeNextPath(value: string | null): string | null {
+  if (!value) return null;
+  if (value.length > 512) return null;
+  if (!value.startsWith("/")) return null;
+  if (value.startsWith("//") || value.startsWith("/\\")) return null;
+  if (value.includes("://")) return null;
+  return value;
+}
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -20,7 +31,9 @@ export async function middleware(req: NextRequest) {
   if (!session) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("next", pathname);
+    url.search = "";
+    const next = safeNextPath(pathname);
+    if (next) url.searchParams.set("next", next);
     return NextResponse.redirect(url);
   }
   return NextResponse.next();

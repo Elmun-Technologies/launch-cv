@@ -91,24 +91,22 @@ export async function POST(req: Request) {
 
   const { contactId, companyId, applicationId, content } = parsed.data;
 
-  if (contactId) {
-    const c = await prisma.contact.findFirst({
-      where: { id: contactId, userId: session.sub },
-    });
-    if (!c) return NextResponse.json({ error: "Contact not found" }, { status: 404 });
-  }
-  if (companyId) {
-    const c = await prisma.company.findFirst({
-      where: { id: companyId, userId: session.sub },
-    });
-    if (!c) return NextResponse.json({ error: "Company not found" }, { status: 404 });
-  }
-  if (applicationId) {
-    const a = await prisma.jobApplication.findFirst({
-      where: { id: applicationId, userId: session.sub },
-    });
-    if (!a) return NextResponse.json({ error: "Application not found" }, { status: 404 });
-  }
+  /** All three ownership checks are independent — fan out so the
+   *  worst-case latency is one round-trip instead of three. */
+  const [contactOwn, companyOwn, appOwn] = await Promise.all([
+    contactId
+      ? prisma.contact.findFirst({ where: { id: contactId, userId: session.sub }, select: { id: true } })
+      : Promise.resolve(null),
+    companyId
+      ? prisma.company.findFirst({ where: { id: companyId, userId: session.sub }, select: { id: true } })
+      : Promise.resolve(null),
+    applicationId
+      ? prisma.jobApplication.findFirst({ where: { id: applicationId, userId: session.sub }, select: { id: true } })
+      : Promise.resolve(null),
+  ]);
+  if (contactId && !contactOwn) return NextResponse.json({ error: "Contact not found" }, { status: 404 });
+  if (companyId && !companyOwn) return NextResponse.json({ error: "Company not found" }, { status: 404 });
+  if (applicationId && !appOwn) return NextResponse.json({ error: "Application not found" }, { status: 404 });
 
   try {
     const note = await prisma.note.create({

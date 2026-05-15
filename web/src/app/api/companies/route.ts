@@ -100,10 +100,10 @@ export async function GET(req: Request) {
     ? {
         userId: session.sub,
         OR: [
-          { name: { contains: q } },
-          { industry: { contains: q } },
-          { location: { contains: q } },
-          { type: { contains: q } },
+          { name: { contains: q, mode: "insensitive" as const } },
+          { industry: { contains: q, mode: "insensitive" as const } },
+          { location: { contains: q, mode: "insensitive" as const } },
+          { type: { contains: q, mode: "insensitive" as const } },
         ],
       }
     : { userId: session.sub };

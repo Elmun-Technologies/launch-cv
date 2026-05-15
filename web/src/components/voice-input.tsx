@@ -190,6 +190,7 @@ export function VoiceInput({
           <button
             type="button"
             onClick={stopRecording}
+            aria-label="Stop recording"
             className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-600"
           >
             <MicOff className="h-5 w-5" />

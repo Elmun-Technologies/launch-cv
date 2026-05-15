@@ -30,9 +30,9 @@ export async function GET(req: Request) {
   const where = q
     ? {
         OR: [
-          { title: { contains: q } },
-          { user: { email: { contains: q } } },
-          { user: { name: { contains: q } } },
+          { title: { contains: q, mode: "insensitive" as const } },
+          { user: { email: { contains: q, mode: "insensitive" as const } } },
+          { user: { name: { contains: q, mode: "insensitive" as const } } },
         ],
       }
     : {};
