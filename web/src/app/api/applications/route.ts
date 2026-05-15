@@ -49,9 +49,9 @@ export async function GET(req: Request) {
     ...(q
       ? {
           OR: [
-            { title: { contains: q } },
-            { company: { contains: q } },
-            { jdText: { contains: q } },
+            { title: { contains: q, mode: "insensitive" as const } },
+            { company: { contains: q, mode: "insensitive" as const } },
+            { jdText: { contains: q, mode: "insensitive" as const } },
           ],
         }
       : {}),
@@ -95,22 +95,37 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 
-  const resume = await prisma.resume.findFirst({
-    where: { id: parsed.data.resumeId, userId: session.sub },
-  });
-  if (!resume) return NextResponse.json({ error: "Resume not found" }, { status: 404 });
-
   let jdText = parsed.data.jdText ?? "";
   const jdRunId: string | undefined = parsed.data.jdRunId;
 
+  /** Run resume ownership, JD-run lookup, and the "already linked"
+   *  conflict check concurrently — they don't depend on each other. */
+  const [resume, run, taken] = await Promise.all([
+    prisma.resume.findFirst({
+      where: { id: parsed.data.resumeId, userId: session.sub },
+      select: { id: true },
+    }),
+    jdRunId
+      ? prisma.jdRun.findFirst({
+          where: { id: jdRunId, resumeId: parsed.data.resumeId },
+          select: { jdText: true, resumeId: true },
+        })
+      : Promise.resolve(null),
+    jdRunId
+      ? prisma.jobApplication.findUnique({ where: { jdRunId }, select: { id: true } })
+      : Promise.resolve(null),
+  ]);
+
+  if (!resume) return NextResponse.json({ error: "Resume not found" }, { status: 404 });
+
   if (jdRunId) {
-    const run = await prisma.jdRun.findFirst({
-      where: { id: jdRunId, resumeId: resume.id },
-    });
-    if (!run) return NextResponse.json({ error: "JD analysis not found" }, { status: 404 });
+    if (!run || run.resumeId !== resume.id) {
+      return NextResponse.json({ error: "JD analysis not found" }, { status: 404 });
+    }
+    if (taken) {
+      return NextResponse.json({ error: "This JD analysis is already linked to an application" }, { status: 409 });
+    }
     jdText = run.jdText;
-    const taken = await prisma.jobApplication.findUnique({ where: { jdRunId } });
-    if (taken) return NextResponse.json({ error: "This JD analysis is already linked to an application" }, { status: 409 });
   } else if (!jdText || jdText.length < 40) {
     return NextResponse.json({ error: "JD text is too short" }, { status: 400 });
   }

@@ -58,7 +58,7 @@ export async function POST(req: Request) {
         heuristicIssues.push({
           severity: "med",
           bulletId: b.id,
-          message: "Bullet uchun dalil/manba bog'lanmagan.",
+          message: "Bullet has no linked evidence source.",
           suggestion: "Add a source in the evidence section or shorten the bullet.",
         });
       }
