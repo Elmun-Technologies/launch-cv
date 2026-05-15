@@ -29,7 +29,7 @@ export default function AdminResumesPage() {
     try {
       const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
       if (search) params.set("search", search);
-      const res = await fetch(`/api/admin/resumes?${params}`);
+      const res = await fetch(`/api/admin-panel/resumes?${params}`);
       const data = await res.json();
       setResumes(data.resumes ?? []);
       setTotal(data.total ?? 0);
@@ -46,7 +46,7 @@ export default function AdminResumesPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this resume?")) return;
-    await fetch(`/api/admin/resumes/${id}`, { method: "DELETE" });
+    await fetch(`/api/admin-panel/resumes/${id}`, { method: "DELETE" });
     fetchResumes();
   }
 

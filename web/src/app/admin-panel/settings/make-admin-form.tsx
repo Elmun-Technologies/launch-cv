@@ -18,7 +18,7 @@ export function MakeAdminForm() {
 
     setStatus("loading");
     try {
-      const res = await fetch("/api/admin/make-admin", {
+      const res = await fetch("/api/admin-panel/make-admin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),

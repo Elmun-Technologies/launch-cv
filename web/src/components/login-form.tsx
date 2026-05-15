@@ -1,56 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
 
-/**
- * On the admin subdomain we hide "Create one free" — public registration
- * is not allowed there. On the public host the usual CTA shows.
- */
-function AdminAwareSignupHint() {
-  const [onAdmin, setOnAdmin] = useState(false);
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setOnAdmin(isOnAdminHost());
-  }, []);
-
-  if (onAdmin) {
-    return (
-      <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
-        Admin access only. Need a customer account?{" "}
-        <a
-          href={`https://${process.env.NEXT_PUBLIC_APEX_HOST ?? "launch-cv.com"}/register`}
-          className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
-        >
-          Register at launch-cv.com
-        </a>
-      </p>
-    );
-  }
-  return (
-    <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
-      Don&apos;t have an account?{" "}
-      <Link href="/register" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
-        Create one free
-      </Link>
-    </p>
-  );
-}
-
-/** Detects whether the page is being served from the admin subdomain. */
-function isOnAdminHost(): boolean {
-  if (typeof window === "undefined") return false;
-  const adminHost = (process.env.NEXT_PUBLIC_ADMIN_HOST ?? "").toLowerCase();
-  if (!adminHost) return false;
-  return window.location.host.toLowerCase().split(":")[0] === adminHost;
-}
-
 export function LoginForm() {
   const sp = useSearchParams();
-  const explicitNext = sp.get("next");
+  const next = sp.get("next") || "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -80,11 +38,7 @@ export function LoginForm() {
       }
       return;
     }
-    // Default destination depends on the host:
-    //   admin.launch-cv.com → /admin
-    //   launch-cv.com       → /dashboard
-    const defaultNext = isOnAdminHost() ? "/admin" : "/dashboard";
-    window.location.href = explicitNext || defaultNext;
+    window.location.href = next;
   }
 
   return (
@@ -94,7 +48,12 @@ export function LoginForm() {
         <h1 className="text-[24px] font-semibold leading-[1.15] tracking-tight text-[#0F172A]">
           Sign in to Launch CV
         </h1>
-        <AdminAwareSignupHint />
+        <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            Create one free
+          </Link>
+        </p>
       </div>
 
       {/* Form */}

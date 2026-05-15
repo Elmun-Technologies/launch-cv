@@ -126,7 +126,7 @@ export default async function AdminBlogListPage({
       align: "right",
       render: (p) => (
         <Link
-          href={`/admin/cms/blog/${p.id}`}
+          href={`/admin-panel/cms/blog/${p.id}`}
           className="inline-flex items-center gap-1 rounded-md border border-[#E2E8F0] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC]"
         >
           <Pencil className="h-3 w-3" />
@@ -143,14 +143,14 @@ export default async function AdminBlogListPage({
         description={`${total.toLocaleString()} post${total === 1 ? "" : "s"}. Click Edit on a row to manage status, copy, and SEO.`}
         searchValue={q}
         searchPlaceholder="Search by title, slug, or category…"
-        primaryAction={{ href: "/admin/cms/blog/new", label: "New post" }}
+        primaryAction={{ href: "/admin-panel/cms/blog/new", label: "New post" }}
         filters={
           <div className="flex flex-wrap gap-1">
             {STATUS_OPTIONS.map((s) => {
               const params = new URLSearchParams();
               if (q) params.set("q", q);
               if (s !== "all") params.set("status", s);
-              const href = `/admin/cms/blog${params.size ? `?${params.toString()}` : ""}`;
+              const href = `/admin-panel/cms/blog${params.size ? `?${params.toString()}` : ""}`;
               const isActive = statusFilter === s;
               return (
                 <Link

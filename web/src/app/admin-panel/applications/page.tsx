@@ -31,7 +31,7 @@ export default function AdminApplicationsPage() {
     try {
       const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
       if (statusFilter !== "all") params.set("status", statusFilter);
-      const res = await fetch(`/api/admin/applications?${params}`);
+      const res = await fetch(`/api/admin-panel/applications?${params}`);
       const data = await res.json();
       setApps(data.applications ?? []);
       setTotal(data.total ?? 0);

@@ -77,7 +77,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
     startSaving(async () => {
       try {
         if (isNew) {
-          const res = await fetch("/api/admin/cms/blog", {
+          const res = await fetch("/api/admin-panel/cms/blog", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(buildPayload()),
@@ -88,9 +88,9 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
             return;
           }
           setSavedAt(new Date());
-          router.push(`/admin/cms/blog/${json.post.id}`);
+          router.push(`/admin-panel/cms/blog/${json.post.id}`);
         } else {
-          const res = await fetch(`/api/admin/cms/blog/${data.id}`, {
+          const res = await fetch(`/api/admin-panel/cms/blog/${data.id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(buildPayload()),
@@ -119,7 +119,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
     startSaving(async () => {
       const body: Record<string, unknown> = { status: next };
       if (next === "scheduled") body.scheduledFor = data.scheduledFor;
-      const res = await fetch(`/api/admin/cms/blog/${data.id}`, {
+      const res = await fetch(`/api/admin-panel/cms/blog/${data.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -138,8 +138,8 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
     if (!data.id) return;
     if (!confirm("Delete this post permanently?")) return;
     startDeleting(async () => {
-      const res = await fetch(`/api/admin/cms/blog/${data.id}`, { method: "DELETE" });
-      if (res.ok) router.push("/admin/cms/blog");
+      const res = await fetch(`/api/admin-panel/cms/blog/${data.id}`, { method: "DELETE" });
+      if (res.ok) router.push("/admin-panel/cms/blog");
       else setError("Failed to delete");
     });
   }
@@ -151,7 +151,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
     }
     setPreviewLoading(true);
     try {
-      const res = await fetch(`/api/admin/cms/blog/${data.id}/preview-token`);
+      const res = await fetch(`/api/admin-panel/cms/blog/${data.id}/preview-token`);
       const json = (await res.json()) as { path?: string; error?: string };
       if (!res.ok || !json.path) {
         setError(json.error ?? "Preview unavailable");
@@ -169,7 +169,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <Link
-            href="/admin/cms/blog"
+            href="/admin-panel/cms/blog"
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#475569] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
             aria-label="Back to blog list"
           >

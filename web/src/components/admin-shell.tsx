@@ -41,41 +41,41 @@ type NavGroup = {
 const groups: NavGroup[] = [
   {
     label: "Overview",
-    items: [{ href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true }],
+    items: [{ href: "/admin-panel", label: "Dashboard", icon: LayoutDashboard, exact: true }],
   },
   {
     label: "Content",
     items: [
-      { href: "/admin/cms/blog", label: "Blog posts", icon: FileEdit, badge: "new" },
-      { href: "/admin/cms/testimonials", label: "Testimonials", icon: MessageSquare, badge: "soon" },
-      { href: "/admin/cms/faqs", label: "FAQs", icon: HelpCircle, badge: "soon" },
-      { href: "/admin/cms/pages", label: "Page copy", icon: Layers, badge: "soon" },
-      { href: "/admin/cms/media", label: "Media library", icon: ImageIcon, badge: "soon" },
+      { href: "/admin-panel/cms/blog", label: "Blog posts", icon: FileEdit, badge: "new" },
+      { href: "/admin-panel/cms/testimonials", label: "Testimonials", icon: MessageSquare, badge: "soon" },
+      { href: "/admin-panel/cms/faqs", label: "FAQs", icon: HelpCircle, badge: "soon" },
+      { href: "/admin-panel/cms/pages", label: "Page copy", icon: Layers, badge: "soon" },
+      { href: "/admin-panel/cms/media", label: "Media library", icon: ImageIcon, badge: "soon" },
     ],
   },
   {
     label: "Users & billing",
     items: [
-      { href: "/admin/users", label: "Users", icon: Users },
-      { href: "/admin/subscriptions", label: "Subscriptions", icon: CreditCard },
+      { href: "/admin-panel/users", label: "Users", icon: Users },
+      { href: "/admin-panel/subscriptions", label: "Subscriptions", icon: CreditCard },
     ],
   },
   {
     label: "Operations",
     items: [
-      { href: "/admin/resumes", label: "Resumes", icon: FileText },
-      { href: "/admin/applications", label: "Applications", icon: Briefcase },
-      { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-      { href: "/admin/ai-usage", label: "AI usage", icon: Cpu },
-      { href: "/admin/content", label: "User CRM", icon: Database },
+      { href: "/admin-panel/resumes", label: "Resumes", icon: FileText },
+      { href: "/admin-panel/applications", label: "Applications", icon: Briefcase },
+      { href: "/admin-panel/analytics", label: "Analytics", icon: BarChart3 },
+      { href: "/admin-panel/ai-usage", label: "AI usage", icon: Cpu },
+      { href: "/admin-panel/content", label: "User CRM", icon: Database },
     ],
   },
   {
     label: "System",
     items: [
-      { href: "/admin/audit", label: "Audit log", icon: ShieldCheck, badge: "soon" },
-      { href: "/admin/roles", label: "Roles", icon: KeyRound, badge: "soon" },
-      { href: "/admin/settings", label: "Settings", icon: Settings },
+      { href: "/admin-panel/audit", label: "Audit log", icon: ShieldCheck, badge: "soon" },
+      { href: "/admin-panel/roles", label: "Roles", icon: KeyRound, badge: "soon" },
+      { href: "/admin-panel/settings", label: "Settings", icon: Settings },
     ],
   },
 ];
