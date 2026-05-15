@@ -8,7 +8,7 @@ import { AuthLayout } from "@/components/auth-layout";
 
 export function LoginForm() {
   const sp = useSearchParams();
-  const next = sp.get("next") || "/dashboard";
+  const explicitNext = sp.get("next");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -38,7 +38,13 @@ export function LoginForm() {
       }
       return;
     }
-    window.location.href = next;
+    // Destination preference:
+    //   1. Explicit `?next=` query param (e.g. middleware-set after blocking /admin-panel)
+    //   2. /admin-panel if the user is an admin
+    //   3. /dashboard for regular customers
+    const json = (await res.json().catch(() => ({}))) as { isAdmin?: boolean };
+    const defaultNext = json.isAdmin ? "/admin-panel" : "/dashboard";
+    window.location.href = explicitNext || defaultNext;
   }
 
   return (

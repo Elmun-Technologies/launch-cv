@@ -16,7 +16,7 @@ export default async function EditBlogPostPage({
   params: Promise<{ id: string }>;
 }) {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const { id } = await params;
   const post = await prisma.blogPost.findUnique({ where: { id } });

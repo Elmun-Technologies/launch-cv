@@ -9,8 +9,10 @@ import { getPublishedPosts } from "@/lib/cms/blog";
 import { BlogCover } from "@/components/blog-cover";
 import { ArrowRight, Clock } from "lucide-react";
 
-// CMS-driven: re-render on every request (Postgres-backed)
-export const dynamic = "force-dynamic";
+// CMS-driven via Postgres. ISR keeps the page snappy — published content is
+// served from cache for up to 5 minutes; the admin API calls revalidatePath()
+// after publish/update/delete so changes appear immediately.
+export const revalidate = 300;
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Career & Resume Blog",

@@ -37,7 +37,7 @@ export default async function AdminBlogListPage({
   searchParams: Promise<{ q?: string; status?: StatusFilter }>;
 }) {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const sp = await searchParams;
   const q = sp.q?.trim() ?? "";
