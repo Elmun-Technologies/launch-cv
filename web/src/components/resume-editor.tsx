@@ -9,9 +9,9 @@ import { VoiceInput } from "@/components/voice-input";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
-  Award, Edit3, Loader2, Check, MessageSquare, Plus, Send, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download, Save,
+  Award, Loader2, Check, MessageSquare, Plus, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download, Save,
   Home, FileText, Briefcase, Users, Building2, HelpCircle, Settings, Puzzle, Gift,
-  User, GraduationCap, AlignLeft, Wrench, Mic, ChevronRight, ChevronLeft,
+  User, GraduationCap, AlignLeft, Wrench, ChevronRight, ChevronLeft,
 } from "lucide-react";
 
 function uid() { return crypto.randomUUID(); }
@@ -94,7 +94,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [stateVal, setStateVal] = useState("");
   const [websiteVal, setWebsiteVal] = useState("");
   const [newSkill, setNewSkill] = useState("");
-  const [showSkillInput, setShowSkillInput] = useState(false);
+  const [, setShowSkillInput] = useState(false);
   const [template, setTemplate] = useState<TemplateStyle>("classic");
   const [previewFlipped, setPreviewFlipped] = useState(false);
   const [liveScore, setLiveScore] = useState<{ score: number; fixes: string[] } | null>(null);
@@ -103,14 +103,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [enhanceResult, setEnhanceResult] = useState<Array<{ experienceId: string; bulletId: string; original: string; improved: string; change_summary: string }> | null>(null);
   const [showOverwrite, setShowOverwrite] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [overwriteProfile, setOverwriteProfile] = useState("");
-  const [overwriteData, setOverwriteData] = useState("");
   const [deleteEmail, setDeleteEmail] = useState("");
   const [importing, setImporting] = useState(false);
   const [importErr, setImportErr] = useState<string | null>(null);
   const [linkedinText, setLinkedinText] = useState("");
   const [linkedinImporting, setLinkedinImporting] = useState(false);
-  const [bioNoteText, setBioNoteText] = useState("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const surveyDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -862,7 +859,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             {/* Tab Navigation */}
             <div className="rounded-2xl border border-gray-100 bg-white p-1.5 shadow-sm">
               <div className="flex items-center gap-1">
-                {TABS.map((t, idx) => {
+                {TABS.map((t) => {
                   const active = t.key === activeTab;
                   const Icon = t.icon;
                   return (
