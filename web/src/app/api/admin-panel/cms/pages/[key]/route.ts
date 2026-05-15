@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
+import { bustPageCopyCache } from "@/lib/cms/revalidate";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ key: string }> }) {
   const admin = await requireAdmin();
@@ -36,5 +37,6 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ key:
     diff: { key, before: before?.data ?? null, after: body.data as object },
   });
 
+  bustPageCopyCache(key);
   return NextResponse.json({ pageCopy: updated });
 }

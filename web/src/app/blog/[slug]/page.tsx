@@ -18,9 +18,8 @@ import { BlogCover } from "@/components/blog-cover";
 type Params = { slug: string };
 type SearchParams = { preview?: string };
 
-// CMS-driven: re-render on every request so newly published posts appear
-// without redeploy, and preview tokens always hit fresh data.
-export const dynamic = "force-dynamic";
+// ISR with revalidatePath() invalidation from admin mutations.
+export const revalidate = 300;
 
 export async function generateStaticParams(): Promise<Params[]> {
   try {

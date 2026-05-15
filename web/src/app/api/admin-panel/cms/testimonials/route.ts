@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
+import { bustTestimonialCache } from "@/lib/cms/revalidate";
 
 export async function GET(req: NextRequest) {
   const admin = await requireAdmin();
@@ -53,5 +54,6 @@ export async function POST(req: NextRequest) {
     diff: { created: { authorName: created.authorName } },
   });
 
+  bustTestimonialCache(created.placement);
   return NextResponse.json({ testimonial: created }, { status: 201 });
 }

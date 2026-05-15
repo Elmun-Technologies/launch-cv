@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
+import { bustTestimonialCache } from "@/lib/cms/revalidate";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
@@ -40,6 +41,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     entityId: id,
     diff: { before: { published: before.published }, after: { published: updated.published } },
   });
+  // Bust both old and new placements to handle reassignments.
+  bustTestimonialCache([...new Set([...before.placement, ...updated.placement])]);
   return NextResponse.json({ testimonial: updated });
 }
 
@@ -57,5 +60,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     entityId: id,
     diff: { deleted: { authorName: before.authorName } },
   });
+  bustTestimonialCache(before.placement);
   return NextResponse.json({ ok: true });
 }

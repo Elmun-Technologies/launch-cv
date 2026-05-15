@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
@@ -93,5 +94,9 @@ export async function POST(req: NextRequest) {
     diff: { created: { id: created.id, slug: created.slug, title: created.title } },
   });
 
+  // New post is a draft so /blog won't show it, but bust the list anyway in
+  // case the editor publishes immediately after create.
+  revalidatePath("/blog");
+  revalidatePath("/sitemap.xml");
   return NextResponse.json({ post: created }, { status: 201 });
 }

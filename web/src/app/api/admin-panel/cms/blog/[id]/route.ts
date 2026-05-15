@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit, type AuditAction } from "@/lib/cms/audit";
 import { slugify, uniqueSlug } from "@/lib/cms/slug";
+import { bustBlogCache } from "@/lib/cms/revalidate";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();
@@ -94,6 +95,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     },
   });
 
+  bustBlogCache(updated.slug, before.slug);
   return NextResponse.json({ post: updated });
 }
 
@@ -114,5 +116,6 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     diff: { deleted: { id, slug: before.slug, title: before.title } },
   });
 
+  bustBlogCache(before.slug);
   return NextResponse.json({ ok: true });
 }
