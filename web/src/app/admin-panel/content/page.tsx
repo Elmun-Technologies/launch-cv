@@ -17,7 +17,7 @@ type Section = {
 
 export default async function AdminContentPage() {
   const admin = await requireAdmin();
-  if (!admin) redirect("/dashboard");
+  if (!admin) redirect("/admin-panel/access-denied");
 
   const [
     contactCount,

@@ -5,6 +5,7 @@ import { verifyPassword } from "@/lib/password";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
 import { allowLoginAttempt } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
+import { isAdminUser } from "@/lib/admin-guard";
 
 const schema = z.object({
   email: z
@@ -53,7 +54,8 @@ export async function POST(req: Request) {
     );
   }
   await trackEvent("login_success", { userId: user.id });
-  const res = NextResponse.json({ ok: true });
+  const admin = isAdminUser({ role: user.role, email: user.email });
+  const res = NextResponse.json({ ok: true, isAdmin: admin });
   res.cookies.set(COOKIE_NAME, token, {
     ...sessionCookieBase(),
     maxAge: 60 * 60 * 24 * 14,
