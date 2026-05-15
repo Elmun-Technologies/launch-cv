@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { verifyPassword } from "@/lib/password";
+import { verifyPasswordTimingSafe } from "@/lib/password";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
 import { allowLoginAttempt } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
@@ -30,11 +30,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Too many attempts. Please try again in 15 minutes." }, { status: 429 });
   }
   const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) {
-    return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
-  }
-  const ok = await verifyPassword(parsed.data.password, user.passwordHash);
-  if (!ok) {
+  /** Always run bcrypt — even on missing users — so response time can't
+   *  be used to enumerate which emails are registered. */
+  const ok = await verifyPasswordTimingSafe(parsed.data.password, user?.passwordHash);
+  if (!user || !ok) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
   if (process.env.REQUIRE_EMAIL_VERIFICATION === "true" && !user.emailVerifiedAt) {

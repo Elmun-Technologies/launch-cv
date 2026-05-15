@@ -4,14 +4,19 @@ const COOKIE_NAME = "launchcv_session";
 
 const DEV_FALLBACK_SECRET = "dev-secret-change-me-in-production-32chars!!";
 
+/** Treat anything that's not literally `"development"` as production. This
+ *  prevents the dev fallback secret from being used when NODE_ENV is unset
+ *  or misspelled in a real deployment. */
+function isDevEnv(): boolean {
+  return process.env.NODE_ENV === "development";
+}
+
 function getSecret() {
   const raw = process.env.AUTH_SECRET;
   const trimmed = typeof raw === "string" ? raw.trim() : "";
   /** An empty `AUTH_SECRET=` in .env still counts as set — `??` won't help. */
   const fromEnv = trimmed.length >= 16 ? trimmed : "";
-  const s =
-    fromEnv ||
-    (process.env.NODE_ENV === "development" ? DEV_FALLBACK_SECRET : "");
+  const s = fromEnv || (isDevEnv() ? DEV_FALLBACK_SECRET : "");
   if (!s || s.length < 16) {
     throw new Error("AUTH_SECRET is required (min 16 characters)");
   }

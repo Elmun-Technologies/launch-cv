@@ -99,8 +99,10 @@ export async function POST(req: Request) {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("[register] error:", message);
+    /** Never echo the raw exception back to the client — it can leak
+     *  stack-frame hints, env-var names, or DB driver details. */
     return NextResponse.json(
-      { error: message.includes("AUTH_SECRET") ? "Server configuration error. Please contact support." : message },
+      { error: "Server error. Please try again or contact support." },
       { status: 500 },
     );
   }
