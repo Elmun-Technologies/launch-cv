@@ -10,31 +10,31 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(cuid())
-  email             String    @unique
-  passwordHash      String
-  name              String?
-  role              String    @default("user")
-  emailVerifiedAt   DateTime?
+  id               String           @id @default(cuid())
+  email            String           @unique
+  passwordHash     String
+  name             String?
+  role             String           @default("user")
+  emailVerifiedAt  DateTime?
   /// Billing provider customer id (Lemon Squeezy customer id as string).
-  stripeCustomerId  String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  resumes           Resume[]
-  events            AnalyticsEvent[]
-  authTokens        AuthToken[]
-  subscription      Subscription?
-  usageMonths       UsageMonth[]
-  jobApplications   JobApplication[]
-  contacts          Contact[]
-  companies         Company[]
-  notes             Note[]
-  referrals         Referral[]
-  emailTemplates    EmailTemplate[]
-  authoredPosts     BlogPost[]      @relation("BlogAuthor")
-  uploadedMedia     MediaAsset[]    @relation("MediaUploader")
-  auditLogs         AuditLog[]      @relation("AuditActor")
-  pageCopyEdits     PageCopy[]      @relation("PageCopyEditor")
+  stripeCustomerId String?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  resumes          Resume[]
+  events           AnalyticsEvent[]
+  authTokens       AuthToken[]
+  subscription     Subscription?
+  usageMonths      UsageMonth[]
+  jobApplications  JobApplication[]
+  contacts         Contact[]
+  companies        Company[]
+  notes            Note[]
+  referrals        Referral[]
+  emailTemplates   EmailTemplate[]
+  authoredPosts    BlogPost[]       @relation("BlogAuthor")
+  uploadedMedia    MediaAsset[]     @relation("MediaUploader")
+  auditLogs        AuditLog[]       @relation("AuditActor")
+  pageCopyEdits    PageCopy[]       @relation("PageCopyEditor")
 }
 
 model UsageMonth {
@@ -69,6 +69,7 @@ model JobApplication {
   updatedAt      DateTime @updatedAt
 
   @@index([userId, createdAt])
+  @@index([userId, updatedAt])
 }
 
 model AuthToken {
@@ -113,15 +114,15 @@ model AnalyticsEvent {
 }
 
 model Resume {
-  id         String   @id @default(cuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title      String
-  vertical   String
-  regionMode String   @default("us")
-  content    Json
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id              String           @id @default(cuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title           String
+  vertical        String
+  regionMode      String           @default("us")
+  content         Json
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   jdRuns          JdRun[]
   snapshots       ResumeSnapshot[]
   jobApplications JobApplication[]
@@ -141,13 +142,13 @@ model ResumeSnapshot {
 }
 
 model JdRun {
-  id            String            @id @default(cuid())
-  resumeId      String
-  resume        Resume            @relation(fields: [resumeId], references: [id], onDelete: Cascade)
-  jdText        String
-  result        Json?
-  createdAt     DateTime          @default(now())
-  application   JobApplication?
+  id          String          @id @default(cuid())
+  resumeId    String
+  resume      Resume          @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  jdText      String
+  result      Json?
+  createdAt   DateTime        @default(now())
+  application JobApplication?
 
   @@index([resumeId, createdAt])
 }
@@ -172,6 +173,7 @@ model Contact {
   updatedAt     DateTime  @updatedAt
 
   @@index([userId, createdAt])
+  @@index([userId, updatedAt])
 }
 
 model Company {
@@ -191,6 +193,7 @@ model Company {
   updatedAt   DateTime @updatedAt
 
   @@index([userId, createdAt])
+  @@index([userId, updatedAt])
 }
 
 model Note {
@@ -220,7 +223,7 @@ model Referral {
   creditAmount  Int      @default(0)
   createdAt     DateTime @default(now())
 
-  @@index([userId])
+  @@index([userId, createdAt])
 }
 
 model EmailTemplate {
@@ -234,7 +237,7 @@ model EmailTemplate {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([userId])
+  @@index([userId, updatedAt])
 }
 
 // ════════════════════════════════════════════
