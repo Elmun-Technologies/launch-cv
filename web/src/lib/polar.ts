@@ -58,26 +58,10 @@ export function planIdFromPolarProductId(productId: string | null | undefined): 
   return null;
 }
 
-/** Plans paid as a one-time purchase rather than a recurring subscription. */
+/**
+ * Plans paid as a one-time purchase rather than a recurring subscription.
+ * Starter and Professional are recurring (monthly / yearly); Lifetime is one-time.
+ */
 export function isOneTimePlan(plan: CheckoutPlan): boolean {
   return plan === "lifetime";
-}
-
-/**
- * All plans are sold as one-time purchases (no auto-renewal). Each grants a fixed
- * access window from the purchase date:
- *   starter  → 1 month
- *   professional / elite → 1 year
- *   lifetime → forever (null = never expires)
- */
-export function accessEndForPlan(plan: CheckoutPlan, from: Date): Date | null {
-  if (plan === "lifetime") return null;
-  const end = new Date(from.getTime());
-  if (plan === "starter") {
-    end.setMonth(end.getMonth() + 1);
-  } else {
-    // professional, elite
-    end.setFullYear(end.getFullYear() + 1);
-  }
-  return end;
 }

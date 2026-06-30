@@ -11,14 +11,18 @@ export type SubscriptionGrantInput = {
 /** Active paid access (any Launch CV plan tier). */
 export function subscriptionRowGrantsPaid(sub: SubscriptionGrantInput | null): boolean {
   if (!sub) return false;
-  // When an access-end date is set it governs absolutely. This covers Polar one-time
-  // purchases that grant a fixed window (Starter = 1 month, Professional = 1 year) and
-  // any subscription tracked with a renewal/expiry date.
-  if (sub.currentPeriodEnd) {
-    return sub.currentPeriodEnd.getTime() > Date.now();
+  // Recurring subscriptions (active/trialing) and the short past_due grace window grant
+  // access; Lifetime one-time orders are stored as "active" with no end date.
+  if (PRO_STATUSES.has(sub.status)) return true;
+  // Canceled but still within the paid period (cancel-at-period-end) keeps access.
+  if (
+    (sub.status === "cancelled" || sub.status === "canceled") &&
+    sub.currentPeriodEnd &&
+    sub.currentPeriodEnd.getTime() > Date.now()
+  ) {
+    return true;
   }
-  // No end date: open-ended access (e.g. Lifetime) — grant on a paid status.
-  return PRO_STATUSES.has(sub.status);
+  return false;
 }
 
 /** @deprecated Use `subscriptionRowGrantsPaid` — name kept for older call sites. */

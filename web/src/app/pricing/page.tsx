@@ -15,7 +15,7 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
   description:
-    "Launch CV pricing: Starter at $9 for 1 month, Professional at $29 for 1 year (most chosen), Lifetime at $79 once. One-time payments, no auto-renewal. Every AI tool included on every plan.",
+    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Lifetime at $79 once. Every AI tool included on every plan. No freemium games.",
   pathname: "/pricing",
   keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "How does billing work?",
-    a: "Starter is billed monthly. Professional and Elite are single annual payments through Polar. Lifetime is a one-time purchase. Receipts and renewals live in your Polar customer portal.",
+    a: "Starter is billed monthly and Professional is billed yearly — both renew automatically through Polar until you cancel. Lifetime is a one-time purchase. Receipts and renewals live in your Polar customer portal.",
   },
   {
     q: "Can I change plans later?",
