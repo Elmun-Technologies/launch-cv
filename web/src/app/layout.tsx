@@ -60,7 +60,7 @@ const rootStructuredData = {
       "@type": "Organization",
       name: "Launch CV",
       url: siteUrl,
-      logo: `${siteUrl}/icon.png`,
+      logo: `${siteUrl}/logo.png`,
       sameAs: ["https://twitter.com/launchcv", "https://linkedin.com/company/launchcv"],
       description: "AI-powered resume and job search platform for modern job seekers.",
       contactPoint: {
