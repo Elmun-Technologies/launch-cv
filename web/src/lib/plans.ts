@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
+import { planIdFromPolarProductId } from "@/lib/polar";
 import type { CheckoutPlan, PlanId } from "@/lib/plan-config";
 import { NONE_LIMITS, PLAN_MONTHLY_LIMITS } from "@/lib/plan-config";
 
@@ -15,10 +16,13 @@ function envVariant(...keys: (string | undefined)[]): string | undefined {
   return undefined;
 }
 
-/** Map Lemon `variant_id` (string) to internal plan. */
+/** Map a stored billing id (Lemon `variant_id` or Polar `product_id`) to internal plan. */
 export function planIdFromVariantId(variantId: string | null | undefined): PlanId {
   if (!variantId) return "none";
   const v = variantId.trim();
+  // Polar product ids are distinct from Lemon variant ids, so checking both is safe.
+  const polarPlan = planIdFromPolarProductId(v);
+  if (polarPlan) return polarPlan;
   const starter = envVariant(process.env.LEMON_VARIANT_STARTER);
   const professional = envVariant(process.env.LEMON_VARIANT_PROFESSIONAL, process.env.LEMON_SQUEEZY_VARIANT_ID);
   const elite = envVariant(process.env.LEMON_VARIANT_ELITE);

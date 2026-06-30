@@ -50,7 +50,8 @@ Main variables:
 - **`OPENAI_API_KEY`** — required for AI features.
 - **`RESEND_API_KEY`** / **`RESEND_FROM_EMAIL`** — transactional email (verification, password reset).
 - **`NEXT_PUBLIC_APP_URL`** — canonical site URL (e.g. `https://launch-cv.com`).
-- **Lemon Squeezy** — `LEMON_SQUEEZY_*`, `LEMON_WEBHOOK_SECRET` for subscriptions (see `.env.example`).
+- **Polar** (active payment provider) — `POLAR_ACCESS_TOKEN`, `POLAR_WEBHOOK_SECRET`, `POLAR_PRODUCT_*` for checkout/subscriptions where Stripe is unavailable (e.g. Uzbekistan). Webhook endpoint: `{APP_URL}/api/polar/webhook`. See `.env.example`.
+- **Lemon Squeezy** (legacy, kept as fallback) — `LEMON_SQUEEZY_*`, `LEMON_WEBHOOK_SECRET` (see `.env.example`).
 
 ## Database
 
