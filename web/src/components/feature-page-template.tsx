@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-reveal";
 import { absoluteUrl } from "@/lib/site";
 import { ArrowRight, Check, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -112,7 +113,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
       <section className="relative overflow-hidden bg-gradient-to-b from-[#F8FAFC] to-white pb-20 pt-[96px] sm:pt-[112px]">
         <div className={`pointer-events-none absolute inset-0 ${a.iconBg} opacity-40`} aria-hidden />
         <div className="relative mx-auto max-w-[1280px] px-6">
-          <div className="mx-auto max-w-[760px] text-center">
+          <MotionReveal className="mx-auto max-w-[760px] text-center">
             {/* Icon + eyebrow */}
             <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl shadow-sm shadow-black/5 transition-transform hover:scale-[1.03] duration-500 motion-reduce:transform-none">
               <div className={`flex h-full w-full items-center justify-center rounded-2xl ${a.iconBg}`}>
@@ -142,7 +143,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
                 See how it works ↓
               </Link>
             </div>
-          </div>
+          </MotionReveal>
         </div>
       </section>
 
@@ -155,20 +156,18 @@ export function FeaturePageLayout(props: FeaturePageProps) {
               Everything You Need to Succeed
             </h2>
           </div>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((b, i) => (
-              <div
-                key={b}
-                className="lc-card flex items-start gap-4 p-6"
-                style={{ transitionDelay: `${i * 60}ms` }}
-              >
-                <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${a.iconBg}`}>
-                  <Check className={`h-4 w-4 ${a.checkText}`} />
+          <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {benefits.map((b) => (
+              <MotionItem key={b} className="h-full">
+                <div className="lc-card flex h-full items-start gap-4 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.22)]">
+                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${a.iconBg}`}>
+                    <Check className={`h-4 w-4 ${a.checkText}`} />
+                  </div>
+                  <p className="font-body text-[14px] leading-[1.65] text-[#334155]">{b}</p>
                 </div>
-                <p className="font-body text-[14px] leading-[1.65] text-[#334155]">{b}</p>
-              </div>
+              </MotionItem>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -181,24 +180,23 @@ export function FeaturePageLayout(props: FeaturePageProps) {
               How {title} Works
             </h2>
           </div>
-          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <MotionStagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {steps.map((step, i) => (
-              <div
-                key={step.title}
-                className="flex flex-col gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)]"
-              >
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${a.stepBg} shadow-sm`}>
-                  <span className="font-display text-[15px] font-bold text-white">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+              <MotionItem key={step.title} className="h-full">
+                <div className="flex h-full flex-col gap-4 rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-[0_2px_12px_rgba(0,0,0,0.04)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.18)]">
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${a.stepBg} shadow-sm`}>
+                    <span className="font-display text-[15px] font-bold text-white">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-display text-[16px] font-bold text-[#0F172A]">{step.title}</h3>
+                    <p className="mt-1.5 font-body text-[14px] leading-[1.65] text-[#64748B]">{step.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-display text-[16px] font-bold text-[#0F172A]">{step.title}</h3>
-                  <p className="mt-1.5 font-body text-[14px] leading-[1.65] text-[#64748B]">{step.description}</p>
-                </div>
-              </div>
+              </MotionItem>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -249,9 +247,9 @@ export function FeaturePageLayout(props: FeaturePageProps) {
       {allTestimonials.length > 0 && (
         <section className={`py-20 ${beforeAfter ? "bg-[#F8FAFC]" : ""}`}>
           <div className="mx-auto max-w-[900px] px-6">
-            <div className="grid gap-6 sm:grid-cols-2">
+            <MotionStagger className="grid gap-6 sm:grid-cols-2">
               {allTestimonials.map((t) => (
-                <div key={t.name} className="lc-card p-7">
+                <MotionItem key={t.name} className="lc-card p-7">
                   <div className="flex gap-0.5">
                     {Array.from({ length: 5 }).map((_, j) => (
                       <svg key={j} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" viewBox="0 0 20 20">
@@ -264,9 +262,9 @@ export function FeaturePageLayout(props: FeaturePageProps) {
                     <p className="font-body text-[14px] font-semibold text-[#0F172A]">{t.name}</p>
                     <p className="font-body text-[13px] text-[#94A3B8]">{t.role}</p>
                   </div>
-                </div>
+                </MotionItem>
               ))}
-            </div>
+            </MotionStagger>
           </div>
         </section>
       )}
