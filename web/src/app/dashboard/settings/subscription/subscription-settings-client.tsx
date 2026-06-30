@@ -127,7 +127,7 @@ export function SubscriptionSettingsClient() {
 
       {paid && status?.currentPeriodEnd && currentPlan !== "lifetime" ? (
         <p className="text-[13px] text-gray-500">
-          {"Access until "}
+          {status.cancelAtPeriodEnd ? "Access until " : "Renews "}
           <span className="font-semibold text-gray-800">
             {new Date(status.currentPeriodEnd).toLocaleDateString(undefined, {
               year: "numeric",
@@ -135,7 +135,7 @@ export function SubscriptionSettingsClient() {
               day: "numeric",
             })}
           </span>
-          {" "}— one-time purchase, no auto-renewal. Receipts in your{" "}
+          . Manage billing in your{" "}
           <a
             href={PORTAL_URL}
             target="_blank"

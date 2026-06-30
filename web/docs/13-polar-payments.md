@@ -25,12 +25,10 @@ Polar product id.
 ## One-time setup in Polar
 
 1. **Create the organization** (you are here in onboarding).
-2. **Create one product per plan** (Products → New): Starter, Professional, Lifetime.
-   **All three are one-time prices** (no auto-renewal) — the app grants a fixed access
-   window per plan:
-   - Starter — **$9 one-time → 1 month** of access
-   - Professional — **$29 one-time → 1 year** of access
-   - Lifetime — **$79 one-time → forever**
+2. **Create one product per plan** (Products → New):
+   - Starter — **$9 recurring, monthly**
+   - Professional — **$29 recurring, yearly**
+   - Lifetime — **$79 one-time purchase** (no renewal)
 
    Copy each **Product ID**. (Elite is defined in code but not shown publicly — leave
    `POLAR_PRODUCT_ELITE` empty.)
@@ -40,8 +38,8 @@ Polar product id.
    - URL: `https://<your-domain>/api/polar/webhook`
    - Format: **Raw** (Standard Webhooks)
    - Subscribe to at least: `subscription.created`, `subscription.updated`,
-     `subscription.active`, `subscription.canceled`, `subscription.revoked`,
-     and `order.paid` (all plans are one-time orders).
+     `subscription.active`, `subscription.canceled`, `subscription.revoked`
+     (recurring Starter / Professional), and `order.paid` (one-time Lifetime).
    - Copy the signing **secret**.
 
 ## Environment variables
@@ -70,10 +68,12 @@ Set `POLAR_SERVER=sandbox` and use a token + products from
 
 ## How access is granted
 
-On `order.paid` the webhook upserts a `Subscription` row with `status = "active"`
-and `currentPeriodEnd` set to the access-window end (`now + 1 month` for Starter,
-`now + 1 year` for Professional, `null` for Lifetime). `getUserPlanId()` maps the
-stored product id back to a plan tier; `subscriptionRowGrantsPaid()` grants access
-while `currentPeriodEnd` is in the future, or indefinitely when it is `null`
-(Lifetime). There are no recurring subscriptions, so access simply lapses when the
-window ends until the customer buys again.
+- **Recurring (Starter, Professional):** Polar fires `subscription.*` events; the
+  webhook upserts a `Subscription` row with the Polar status and `currentPeriodEnd`
+  (the renewal date). Renewals extend it automatically. `subscriptionRowGrantsPaid()`
+  grants access while the status is active/trialing/past_due, or while a canceled
+  subscription is still within its paid period.
+- **One-time (Lifetime):** Polar fires `order.paid`; the webhook stores an
+  always-active row with no end date, so access never lapses.
+
+`getUserPlanId()` maps the stored product id back to a plan tier for usage limits.
