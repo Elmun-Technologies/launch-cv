@@ -25,6 +25,9 @@ type StatusPayload = {
   cancelAtPeriodEnd: boolean;
 };
 
+/** Polar customer portal — set NEXT_PUBLIC_POLAR_PORTAL_URL to your org portal URL. */
+const PORTAL_URL = process.env.NEXT_PUBLIC_POLAR_PORTAL_URL || "https://polar.sh/purchases";
+
 const PLAN_ICONS: Record<CheckoutPlan, typeof Sparkles> = {
   starter: Sparkles,
   professional: Crown,
@@ -74,7 +77,7 @@ export function SubscriptionSettingsClient() {
 
   async function startCheckout(plan: CheckoutPlan) {
     setLoadingPlan(plan);
-    const res = await fetch("/api/lemon/checkout", {
+    const res = await fetch("/api/polar/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ plan }),
@@ -134,12 +137,12 @@ export function SubscriptionSettingsClient() {
           </span>
           . Manage billing in your{" "}
           <a
-            href="https://app.lemonsqueezy.com/my-orders"
+            href={PORTAL_URL}
             target="_blank"
             rel="noreferrer"
             className="font-semibold text-[#7C5CFC] underline-offset-2 hover:underline"
           >
-            Lemon Squeezy orders
+            Polar customer portal
             <ExternalLink className="mb-0.5 ml-0.5 inline h-3 w-3" />
           </a>
           .
@@ -149,7 +152,7 @@ export function SubscriptionSettingsClient() {
       {paid && currentPlan === "lifetime" ? (
         <p className="text-[13px] text-gray-500">
           You are on <span className="font-semibold text-gray-800">Lifetime</span> — no renewals. Receipts are in your
-          Lemon Squeezy account.
+          Polar customer portal.
         </p>
       ) : null}
 
@@ -220,17 +223,17 @@ export function SubscriptionSettingsClient() {
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
             <Receipt className="h-5 w-5" />
           </div>
-          <p className="mt-3 text-[13px] font-medium text-gray-500">Invoices live in Lemon Squeezy</p>
+          <p className="mt-3 text-[13px] font-medium text-gray-500">Invoices live in Polar</p>
           <p className="mt-1 max-w-sm text-center text-[12px] text-gray-400">
-            After checkout, receipts and renewal history appear in your customer account on Lemon Squeezy.
+            After checkout, receipts and renewal history appear in your Polar customer portal.
           </p>
           <a
-            href="https://app.lemonsqueezy.com/my-orders"
+            href={PORTAL_URL}
             target="_blank"
             rel="noreferrer"
             className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC] hover:underline"
           >
-            Open my orders <ExternalLink className="h-3.5 w-3.5" />
+            Open customer portal <ExternalLink className="h-3.5 w-3.5" />
           </a>
         </div>
       </div>

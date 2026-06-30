@@ -27,7 +27,7 @@ const faqs = [
   },
   {
     q: "How does billing work?",
-    a: "Starter is billed monthly. Professional and Elite are single annual payments through Lemon Squeezy. Lifetime is a one-time purchase. Receipts and renewals live in your Lemon customer portal.",
+    a: "Starter is billed monthly. Professional and Elite are single annual payments through Polar. Lifetime is a one-time purchase. Receipts and renewals live in your Polar customer portal.",
   },
   {
     q: "Can I change plans later?",
@@ -35,7 +35,7 @@ const faqs = [
   },
   {
     q: "Do you offer refunds?",
-    a: "Yes — a 7-day money-back guarantee on subscription plans, where Lemon Squeezy policy allows. Email support and we&apos;ll coordinate with our payment provider.",
+    a: "Yes — a 7-day money-back guarantee on subscription plans, where Polar policy allows. Email support and we&apos;ll coordinate with our payment provider.",
   },
   {
     q: "What's the fair-use cap on Lifetime?",
@@ -222,7 +222,7 @@ export default function PricingPage() {
             <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
               Sign in
             </Link>
-            . 7-day money-back where Lemon Squeezy allows.
+            . 7-day money-back where Polar allows.
           </p>
         </div>
       </section>
@@ -304,7 +304,7 @@ export default function PricingPage() {
               { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No &lsquo;Made with Launch CV&rsquo; baked in." },
               { k: "Predictable limits", d: "Every plan publishes its monthly AI ceiling. No mystery throttling, no surprise paywalls." },
               { k: "Real human support", d: "Reply in under a business day. Same email queue the founder reads." },
-              { k: "Cancel without drama", d: "One click in Lemon Squeezy. No retention pop-ups, no &lsquo;are you sure&rsquo; flows." },
+              { k: "Cancel without drama", d: "One click in the Polar portal. No retention pop-ups, no &lsquo;are you sure&rsquo; flows." },
               { k: "Lifetime really is lifetime", d: "One payment. Updates included. Active while the product exists." },
             ].map((p) => (
               <RevealOnView key={p.k}>

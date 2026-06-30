@@ -17,7 +17,7 @@ export const PUBLIC_PLANS: Record<
     title: "Starter",
     priceDisplay: "$9",
     periodLabel: "/month",
-    billingExplainer: "Billed monthly through Lemon Squeezy. Cancel anytime.",
+    billingExplainer: "Billed monthly through Polar. Cancel anytime.",
     valueLine: "For one focused job search window — editor + core AI.",
   },
   professional: {
