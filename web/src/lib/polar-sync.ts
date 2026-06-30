@@ -64,10 +64,10 @@ export async function upsertSubscriptionFromPolar(sub: PolarSubscription, userId
 }
 
 /**
- * Record a one-time Polar order (e.g. Lifetime) as an always-active subscription row
- * with no renewal date.
+ * Record a one-time Polar order as an active subscription row.
+ * `accessEnd` is the access window end (null = never expires, e.g. Lifetime).
  */
-export async function upsertOrderFromPolar(order: PolarOrder, userId: string) {
+export async function upsertOrderFromPolar(order: PolarOrder, userId: string, accessEnd: Date | null) {
   const customerId = customerIdOf(order);
   const productId = String(order.product_id ?? "");
 
@@ -76,7 +76,7 @@ export async function upsertOrderFromPolar(order: PolarOrder, userId: string) {
     stripeSubscriptionId: `order:${order.id}`,
     stripePriceId: productId,
     status: "active",
-    currentPeriodEnd: null,
+    currentPeriodEnd: accessEnd,
     cancelAtPeriodEnd: false,
   };
 

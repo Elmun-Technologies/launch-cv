@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { trackEvent } from "@/lib/analytics";
-import { planIdFromPolarProductId } from "@/lib/polar";
+import { accessEndForPlan, planIdFromPolarProductId } from "@/lib/polar";
 import {
   resolvePolarUserId,
   upsertOrderFromPolar,
@@ -94,15 +94,16 @@ export async function POST(req: Request) {
         break;
       }
 
-      // One-time purchases (e.g. Lifetime). Only act on paid orders for one-time products
-      // so recurring renewals (also delivered as orders) don't overwrite the subscription row.
+      // One-time purchases. Every plan (Starter / Professional / Lifetime) is sold as a
+      // one-time order; access is granted for a fixed window from the purchase date.
       case "order.paid": {
         const order = data as unknown as PolarOrder;
         const plan = planIdFromPolarProductId(order.product_id ?? null);
-        if (plan !== "lifetime") break;
+        if (!plan) break; // unknown product — ignore
         const userId = await resolvePolarUserId(metadataOf(data), null);
         if (!userId) break;
-        await upsertOrderFromPolar(order, userId);
+        const accessEnd = accessEndForPlan(plan, new Date());
+        await upsertOrderFromPolar(order, userId, accessEnd);
         await trackEvent("pay_success", {
           userId,
           meta: { provider: "polar", orderId: order.id, plan },

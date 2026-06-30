@@ -15,7 +15,7 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
   description:
-    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Lifetime at $149 once. Every AI tool included on every plan. No freemium games.",
+    "Launch CV pricing: Starter at $9 for 1 month, Professional at $29 for 1 year (most chosen), Lifetime at $79 once. One-time payments, no auto-renewal. Every AI tool included on every plan.",
   pathname: "/pricing",
   keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
@@ -254,7 +254,7 @@ export default function PricingPage() {
               </div>
               <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
                 <p className="text-[13px] font-semibold text-[#0F172A]">Lifetime</p>
-                <p className="text-[11px] text-[#94A3B8]">$149 once</p>
+                <p className="text-[11px] text-[#94A3B8]">$79 once</p>
               </div>
             </div>
 
