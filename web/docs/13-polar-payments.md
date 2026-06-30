@@ -25,9 +25,15 @@ Polar product id.
 ## One-time setup in Polar
 
 1. **Create the organization** (you are here in onboarding).
-2. **Create one product per plan** (Products → New): Starter, Professional, Elite,
-   Lifetime. Starter is a monthly recurring price; Professional / Elite are yearly
-   recurring; **Lifetime is a one-time price**. Copy each **Product ID**.
+2. **Create one product per plan** (Products → New): Starter, Professional, Lifetime.
+   **All three are one-time prices** (no auto-renewal) — the app grants a fixed access
+   window per plan:
+   - Starter — **$9 one-time → 1 month** of access
+   - Professional — **$29 one-time → 1 year** of access
+   - Lifetime — **$79 one-time → forever**
+
+   Copy each **Product ID**. (Elite is defined in code but not shown publicly — leave
+   `POLAR_PRODUCT_ELITE` empty.)
 3. **Create an Organization Access Token** (Settings → Developers) with the
    `checkouts:write` scope. Copy it once — it is shown only once.
 4. **Create a webhook** (Settings → Webhooks):
@@ -35,7 +41,7 @@ Polar product id.
    - Format: **Raw** (Standard Webhooks)
    - Subscribe to at least: `subscription.created`, `subscription.updated`,
      `subscription.active`, `subscription.canceled`, `subscription.revoked`,
-     and `order.paid` (for Lifetime).
+     and `order.paid` (all plans are one-time orders).
    - Copy the signing **secret**.
 
 ## Environment variables
@@ -64,8 +70,10 @@ Set `POLAR_SERVER=sandbox` and use a token + products from
 
 ## How access is granted
 
-The webhook upserts a `Subscription` row. `getUserPlanId()` maps the stored
-product id back to a plan tier and `subscriptionRowGrantsPaid()` decides whether
-the status (active / trialing / past_due, or canceled-but-not-yet-expired) still
-grants access. Lifetime orders are stored as an always-active row with no renewal
-date.
+On `order.paid` the webhook upserts a `Subscription` row with `status = "active"`
+and `currentPeriodEnd` set to the access-window end (`now + 1 month` for Starter,
+`now + 1 year` for Professional, `null` for Lifetime). `getUserPlanId()` maps the
+stored product id back to a plan tier; `subscriptionRowGrantsPaid()` grants access
+while `currentPeriodEnd` is in the future, or indefinitely when it is `null`
+(Lifetime). There are no recurring subscriptions, so access simply lapses when the
+window ends until the customer buys again.

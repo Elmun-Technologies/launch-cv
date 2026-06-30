@@ -17,14 +17,14 @@ export const PUBLIC_PLANS: Record<
     title: "Starter",
     priceDisplay: "$9",
     periodLabel: "/month",
-    billingExplainer: "Billed monthly through Polar. Cancel anytime.",
+    billingExplainer: "One-time payment through Polar — 1 month of full access. No auto-renewal.",
     valueLine: "For one focused job search window — editor + core AI.",
   },
   professional: {
     title: "Professional",
     priceDisplay: "$29",
     periodLabel: "/year",
-    billingExplainer: "One annual payment — full access for 12 months.",
+    billingExplainer: "One-time payment — 12 months of full access. No auto-renewal.",
     valueLine: "Best balance of limits and price for most job seekers.",
     popular: true,
   },
@@ -37,9 +37,9 @@ export const PUBLIC_PLANS: Record<
   },
   lifetime: {
     title: "Lifetime",
-    priceDisplay: "$149",
+    priceDisplay: "$79",
     periodLabel: "once",
-    billingExplainer: "One-time payment — keep access without renewals.",
+    billingExplainer: "One-time payment — lifetime access, no renewals.",
     valueLine: "Long-term career insurance: generous fair-use AI limits every month.",
   },
 };

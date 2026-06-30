@@ -62,3 +62,22 @@ export function planIdFromPolarProductId(productId: string | null | undefined): 
 export function isOneTimePlan(plan: CheckoutPlan): boolean {
   return plan === "lifetime";
 }
+
+/**
+ * All plans are sold as one-time purchases (no auto-renewal). Each grants a fixed
+ * access window from the purchase date:
+ *   starter  → 1 month
+ *   professional / elite → 1 year
+ *   lifetime → forever (null = never expires)
+ */
+export function accessEndForPlan(plan: CheckoutPlan, from: Date): Date | null {
+  if (plan === "lifetime") return null;
+  const end = new Date(from.getTime());
+  if (plan === "starter") {
+    end.setMonth(end.getMonth() + 1);
+  } else {
+    // professional, elite
+    end.setFullYear(end.getFullYear() + 1);
+  }
+  return end;
+}
