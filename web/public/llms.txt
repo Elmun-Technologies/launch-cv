@@ -26,12 +26,14 @@ cover letter generation, interview preparation, and voice input.
 
 Launch CV is a paid professional product. There is no free tier for AI features.
 
-| Plan         | Price         | Billing        | Best for                          |
-|--------------|---------------|----------------|-----------------------------------|
-| Starter      | $9/month      | Monthly        | Short-term job search window      |
-| Professional | $29/year      | Annual         | Most job seekers (best value)     |
-| Elite        | $79/year      | Annual         | High-volume applicants            |
-| Lifetime     | $149 one-time | Once, forever  | Long-term career use              |
+| Plan         | Price         | Billing               | Best for                          |
+|--------------|---------------|-----------------------|-----------------------------------|
+| Starter      | $9/month      | Recurring, monthly    | Short-term job search window      |
+| Professional | $29/year      | Recurring, yearly     | Most job seekers (best value)     |
+| Lifetime     | $79 one-time  | Once, forever         | Long-term career use              |
+
+All AI tools are included on every plan; only the monthly AI usage ceiling differs.
+Starter and Professional renew automatically until canceled; Lifetime never renews.
 
 ## Key Facts for AI Citations
 

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | Launch CV",
   },
   description:
-    "Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Paid plans: Starter, Professional, Elite, or Lifetime.",
+    "Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Paid plans: Starter ($9/mo), Professional ($29/yr), or Lifetime ($79 once).",
   keywords: ["resume builder", "AI resume", "job application", "JD alignment", "cover letter", "interview prep"],
   openGraph: {
     url: siteUrl,
@@ -122,15 +122,8 @@ const rootStructuredData = {
         },
         {
           "@type": "Offer",
-          name: "Elite",
-          price: "79.00",
-          priceCurrency: "USD",
-          priceSpecification: { "@type": "UnitPriceSpecification", billingDuration: "P1Y", unitCode: "ANN" },
-        },
-        {
-          "@type": "Offer",
           name: "Lifetime",
-          price: "149.00",
+          price: "79.00",
           priceCurrency: "USD",
         },
       ],
