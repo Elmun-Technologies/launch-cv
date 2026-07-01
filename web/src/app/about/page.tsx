@@ -5,6 +5,8 @@ import { JsonLd } from "@/components/json-ld";
 import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-reveal";
 import { AboutHero } from "@/components/about/about-hero";
 import { AboutStats } from "@/components/about/about-stats";
+import { AboutTransformation } from "@/components/about/about-transformation";
+import { AboutTools } from "@/components/about/about-tools";
 import { ArrowRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
@@ -80,6 +82,12 @@ export default function AboutPage() {
 
       {/* STATS STRIP */}
       <AboutStats />
+
+      {/* TRANSFORMATION (before/after visual) */}
+      <AboutTransformation />
+
+      {/* SIX TOOLS BENTO */}
+      <AboutTools />
 
       {/* MISSION */}
       <section className="py-20 sm:py-24">

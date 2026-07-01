@@ -98,9 +98,27 @@ export function AboutHero() {
 
           {/* The 75% problem — animated ring */}
           <div className="lg:col-span-5">
+            <div ref={ringRef} className="relative mx-auto max-w-[360px]">
+              {/* floating chips */}
+              <motion.span
+                className="absolute -left-6 top-10 z-10 hidden rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-red-500 shadow-md sm:block"
+                initial={reduce ? false : { opacity: 0, x: -10, y: 6 }}
+                animate={inView ? { opacity: 1, x: 0, y: 0 } : undefined}
+                transition={{ duration: 0.5, ease: EASE, delay: 0.7 }}
+              >
+                ✕ Keyword missing
+              </motion.span>
+              <motion.span
+                className="absolute -right-5 bottom-16 z-10 hidden rounded-lg border border-emerald-200 bg-white px-3 py-1.5 text-[12px] font-semibold text-emerald-600 shadow-md sm:block"
+                initial={reduce ? false : { opacity: 0, x: 10, y: -6 }}
+                animate={inView ? { opacity: 1, x: 0, y: 0 } : undefined}
+                transition={{ duration: 0.5, ease: EASE, delay: 0.95 }}
+              >
+                ✓ ATS-clean
+              </motion.span>
+
             <motion.div
-              ref={ringRef}
-              className="relative mx-auto max-w-[360px] rounded-2xl border border-[#E2E8F0] bg-white p-8 shadow-[0_30px_60px_-25px_rgba(15,23,42,0.18)]"
+              className="relative rounded-2xl border border-[#E2E8F0] bg-white p-8 shadow-[0_30px_60px_-25px_rgba(15,23,42,0.18)]"
               initial={reduce ? false : { opacity: 0, y: 24, scale: 0.96 }}
               animate={inView ? { opacity: 1, y: 0, scale: 1 } : undefined}
               transition={{ duration: 0.7, ease: EASE }}
@@ -134,6 +152,7 @@ export function AboutHero() {
                 of qualified resumes never reach a human. <span className="font-semibold text-[#1A56DB]">Launch CV flips that.</span>
               </p>
             </motion.div>
+            </div>
           </div>
         </div>
       </div>
