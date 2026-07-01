@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { HomeClient } from "@/components/home-client";
 import { LandingHero } from "@/components/landing-hero";
+import { ProductShowcase } from "@/components/product-showcase";
 import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-reveal";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
@@ -189,6 +190,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* PRODUCT SHOWCASE */}
+      <ProductShowcase />
 
       {/* FEATURE GRID */}
       <section className="py-20 sm:py-24">

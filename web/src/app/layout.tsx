@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { CookieBanner } from "@/components/cookie-banner";
@@ -53,6 +53,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#1A56DB",
+};
+
 const rootStructuredData = {
   "@context": "https://schema.org",
   "@graph": [
@@ -60,7 +66,7 @@ const rootStructuredData = {
       "@type": "Organization",
       name: "Launch CV",
       url: siteUrl,
-      logo: `${siteUrl}/icon.png`,
+      logo: `${siteUrl}/logo.png`,
       sameAs: ["https://twitter.com/launchcv", "https://linkedin.com/company/launchcv"],
       description: "AI-powered resume and job search platform for modern job seekers.",
       contactPoint: {

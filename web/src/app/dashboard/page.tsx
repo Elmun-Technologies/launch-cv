@@ -5,9 +5,10 @@ import { getSession } from "@/lib/session";
 import { getUserPlanId } from "@/lib/plans";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { OnboardingChecklist, type OnboardingStepId } from "@/components/onboarding-checklist";
+import { DashboardStatCards } from "@/components/dashboard-stat-cards";
 import {
   FileText, Briefcase, Users, Building2,
-  ArrowRight, Plus, Download, TrendingUp,
+  ArrowRight, Plus, Download,
   MoreHorizontal, Sparkles,
 } from "lucide-react";
 
@@ -110,30 +111,14 @@ export default async function HomePage() {
         </div>
 
         {/* ── Stat Cards ── */}
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {[
+        <DashboardStatCards
+          stats={[
             { label: "Total Resumes", value: resumeCount, icon: FileText, color: "bg-violet-50 text-violet-600", trend: "+12%" },
             { label: "Applications", value: appCount, icon: Briefcase, color: "bg-amber-50 text-amber-600", trend: "+8%" },
             { label: "Contacts", value: contactCount, icon: Users, color: "bg-emerald-50 text-emerald-600", trend: "+5%" },
             { label: "Companies", value: companyCount, icon: Building2, color: "bg-blue-50 text-blue-600", trend: "+3%" },
-          ].map((s) => (
-            <div key={s.label} className="rounded-2xl border border-gray-100 bg-white p-5">
-              <div className="flex items-center justify-between">
-                <p className="text-[13px] font-medium text-gray-500">{s.label}</p>
-                <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${s.color}`}>
-                  <s.icon className="h-[18px] w-[18px]" />
-                </div>
-              </div>
-              <p className="mt-3 text-[32px] font-bold leading-none tracking-tight text-gray-900">{s.value.toLocaleString()}</p>
-              <div className="mt-2 flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-600">
-                  <TrendingUp className="h-3 w-3" />{s.trend}
-                </span>
-                <span className="text-[11px] text-gray-400">Last Update: {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+          ]}
+        />
 
         {/* ── Content Grid ── */}
         <div className="grid gap-5 lg:grid-cols-[1fr_380px]">
@@ -230,7 +215,7 @@ export default async function HomePage() {
             { href: "/dashboard/job-tracker", icon: Briefcase, label: "Track Applications", desc: "Manage your job pipeline", color: "bg-amber-50 text-amber-600" },
             { href: "/dashboard/contacts", icon: Users, label: "Manage Contacts", desc: "Build your network", color: "bg-emerald-50 text-emerald-600" },
           ].map((a) => (
-            <Link key={a.href} href={a.href} className="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 transition hover:border-gray-200 hover:shadow-sm">
+            <Link key={a.href} href={a.href} className="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-gray-200 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.15)]">
               <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${a.color}`}>
                 <a.icon className="h-5 w-5" />
               </div>

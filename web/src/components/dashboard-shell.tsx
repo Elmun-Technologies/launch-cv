@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/site-header";
 import {
   Home, FileText, Briefcase, Users, Building2, Target,
@@ -160,28 +161,43 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
         ) : null}
       </aside>
 
-      {mobileOpen ? (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <aside className="absolute left-0 top-0 flex h-full w-[260px] flex-col animate-slideIn overflow-y-auto bg-white shadow-xl">
-            <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
-              <div className="flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7C5CFC] text-[12px] font-bold text-white">L</span>
-                <span className="text-[15px] font-bold text-gray-900">Launch CV</span>
+      <AnimatePresence>
+        {mobileOpen ? (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <motion.div
+              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            />
+            <motion.aside
+              className="absolute left-0 top-0 flex h-full w-[260px] flex-col overflow-y-auto bg-white shadow-xl"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
+                <div className="flex items-center gap-2.5">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7C5CFC] text-[12px] font-bold text-white">L</span>
+                  <span className="text-[15px] font-bold text-gray-900">Launch CV</span>
+                </div>
+                <button type="button" onClick={() => setMobileOpen(false)} className="text-gray-400">
+                  <X className="h-5 w-5" />
+                </button>
               </div>
-              <button type="button" onClick={() => setMobileOpen(false)} className="text-gray-400">
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <nav className="flex-1 py-5">{renderNavItems()}</nav>
-            {showUpsell ? (
-              <div className="border-t border-gray-100 p-4">
-                <UpgradeCard />
-              </div>
-            ) : null}
-          </aside>
-        </div>
-      ) : null}
+              <nav className="flex-1 py-5">{renderNavItems()}</nav>
+              {showUpsell ? (
+                <div className="border-t border-gray-100 p-4">
+                  <UpgradeCard />
+                </div>
+              ) : null}
+            </motion.aside>
+          </div>
+        ) : null}
+      </AnimatePresence>
 
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex items-center">
