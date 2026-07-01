@@ -7,6 +7,7 @@ import { AboutHero } from "@/components/about/about-hero";
 import { AboutStats } from "@/components/about/about-stats";
 import { AboutTransformation } from "@/components/about/about-transformation";
 import { AboutTools } from "@/components/about/about-tools";
+import { ResumeTemplateGallery } from "@/components/resume-template-gallery";
 import { ArrowRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
@@ -85,6 +86,9 @@ export default function AboutPage() {
 
       {/* TRANSFORMATION (before/after visual) */}
       <AboutTransformation />
+
+      {/* RESUME TEMPLATE GALLERY (realistic template previews) */}
+      <ResumeTemplateGallery />
 
       {/* SIX TOOLS BENTO */}
       <AboutTools />
