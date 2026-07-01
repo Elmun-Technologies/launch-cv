@@ -10,7 +10,7 @@ export function buildMarketingMetadata(input: {
   description: string;
   pathname: string;
   keywords?: string[];
-  /** Override default indexing (e.g. investors / internal pages). */
+  /** Override default indexing (e.g. internal / utility pages). */
   robots?: Metadata["robots"];
 }): Metadata {
   const url = absoluteUrl(input.pathname);
