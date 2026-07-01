@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { CookieBanner } from "@/components/cookie-banner";
@@ -51,6 +51,12 @@ export const metadata: Metadata = {
   verification: {
     google: "dz90Yv149kX83SmMMEE6jz4_gegmV8_owlAFe1MzOMw",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#1A56DB",
 };
 
 const rootStructuredData = {
