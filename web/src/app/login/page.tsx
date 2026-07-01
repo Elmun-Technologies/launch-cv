@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/login-form";
+
+// Utility page — no search value; keep it out of the index (still crawlable/followable).
+export const metadata: Metadata = {
+  title: "Sign in",
+  robots: { index: false, follow: true },
+};
 
 export default function LoginPage() {
   return (
