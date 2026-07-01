@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import {
   CheckCircle2,
   Circle,
@@ -165,8 +166,17 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
         </div>
       </div>
 
+      <AnimatePresence initial={false}>
+        {!collapsed && (
+          <motion.div
+            key="onboarding-body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
       {/* Progress bar */}
-      {!collapsed && (
         <div className="px-5 pb-1">
           <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
             <div
@@ -175,10 +185,8 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
             />
           </div>
         </div>
-      )}
 
       {/* Steps list */}
-      {!collapsed && (
         <div className="divide-y divide-gray-50 px-3 pb-3 pt-2">
           {STEPS.map((step) => {
             const done = completedSteps.includes(step.id);
@@ -236,7 +244,9 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
             );
           })}
         </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* All done footer */}
       {allDone && !collapsed && (
