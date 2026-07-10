@@ -7,9 +7,9 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "Contact",
+  title: "Contact Launch CV — Support, Billing & Partnerships",
   description:
-    "Get in touch with Launch CV. Support, billing, partnerships, press, and security — every inbox replies within one business day.",
+    "Get in touch with Launch CV. Support, billing, partnerships, press, and security — every inbox replies within one business day. Reach the right team fast.",
   pathname: "/contact",
   keywords: ["Launch CV contact", "support", "press", "partnerships", "billing"],
 });

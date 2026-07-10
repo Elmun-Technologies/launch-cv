@@ -8,9 +8,9 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "Resume Builder for Designers",
+  title: "Designer Resume Builder — Turn Portfolio Into Offers",
   description:
-    "Your portfolio shows the work. Your resume should land the interview. Launch CV writes design bullets that quantify impact, system thinking, and shipping speed — ATS-clean.",
+    "Your portfolio shows the work — your resume should land the interview. Launch CV writes ATS-clean design bullets that quantify impact and shipping speed.",
   pathname: "/use-cases/designers",
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
 });

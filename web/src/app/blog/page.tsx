@@ -15,9 +15,9 @@ import { ArrowRight, Clock } from "lucide-react";
 export const revalidate = 300;
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: "Career & Resume Blog",
+  title: "Resume & Career Blog — ATS Tips, Templates & Guides",
   description:
-    "Evidence-based guides on resume writing, ATS optimization, cover letters, interview preparation, and AI-assisted job search.",
+    "Evidence-based guides on resume writing, ATS optimization, cover letters, and interview prep — actionable tactics to help you land the job faster.",
   pathname: "/blog",
   keywords: [
     "resume tips",

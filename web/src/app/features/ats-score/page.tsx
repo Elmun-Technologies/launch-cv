@@ -19,16 +19,18 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "ATS Score Checker — See Why Your Resume Is Getting Filtered",
+  title: "ATS Score Checker — Test Your Resume on 15 Engines",
   description:
-    "Upload your resume. Get a 0–100 ATS score in eight seconds, with every parser-breaking issue mapped to a one-click fix. The average user gains 43 points on the first pass.",
+    "Get a 0–100 ATS score in 8 seconds. We test your resume against 15 real ATS engines — Workday, Greenhouse, Lever — and map every fix. Average gain: +43 points.",
   pathname: "/features/ats-score",
   keywords: [
     "ATS score checker",
+    "test resume ATS",
     "resume ATS test",
     "applicant tracking system resume",
     "ATS resume checker",
     "resume pass ATS",
+    "check resume ATS score",
   ],
 });
 
