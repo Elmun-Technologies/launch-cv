@@ -15,7 +15,7 @@ import { absoluteUrl } from "@/lib/site";
 export const metadata = buildMarketingMetadata({
   title: "About — The Story Behind Launch CV",
   description:
-    "Launch CV exists to level the playing field between job seekers and Applicant Tracking Systems. Built by people who got tired of watching qualified candidates lose to format errors.",
+    "Launch CV levels the playing field between job seekers and Applicant Tracking Systems — built by people who watched great candidates lose to format errors.",
   pathname: "/about",
   keywords: ["Launch CV", "about", "mission", "AI resume builder", "resume platform team"],
 });

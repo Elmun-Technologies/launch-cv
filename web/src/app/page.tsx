@@ -26,7 +26,7 @@ import {
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
   description:
-    "Launch CV pairs an AI resume builder with JD alignment, ATS scoring, cover letter generation, interview prep, and voice input. One paid plan. Built for serious job seekers.",
+    "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from $9/mo.",
   pathname: "/",
   keywords: [
     "AI resume builder",

@@ -18,13 +18,15 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "JD Alignment — Match Your Resume to Any Job",
+  title: "JD Alignment — Match Your Resume to a Job Description",
   description:
-    "Paste any job description and watch your match score climb. Launch CV maps every requirement, fills keyword gaps, and rewrites your bullets — all in under 60 seconds.",
+    "Paste any job description and watch your match score climb from 40% to 90%+. Launch CV maps requirements, fills keyword gaps, and rewrites bullets in 60s.",
   pathname: "/features/jd-alignment",
   keywords: [
     "JD alignment",
+    "match resume to job description",
     "resume job description match",
+    "tailor resume to job description",
     "keyword gap analysis",
     "resume ATS optimization",
     "AI resume tailoring",

@@ -8,7 +8,7 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "Resume Builder for Product Managers",
+  title: "Product Manager Resume Builder — Show Roadmap Wins",
   description:
     "PM hiring is signal-starved. Launch CV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
   pathname: "/use-cases/product-managers",

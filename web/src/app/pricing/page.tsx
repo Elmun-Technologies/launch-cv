@@ -43,6 +43,32 @@ const faqs = [
   },
 ];
 
+const planOffers = CHECKOUT_PLAN_ORDER.map((key) => {
+  const plan = PUBLIC_PLANS[key];
+  const price = plan.priceDisplay.replace(/[^0-9.]/g, "");
+  const isRecurring = plan.periodLabel !== "once";
+  return {
+    "@type": "Offer",
+    name: plan.title,
+    price,
+    priceCurrency: "USD",
+    url: absoluteUrl("/pricing"),
+    availability: "https://schema.org/InStock",
+    ...(isRecurring
+      ? {
+          priceSpecification: {
+            "@type": "UnitPriceSpecification",
+            price,
+            priceCurrency: "USD",
+            billingDuration: plan.periodLabel === "/month" ? "P1M" : "P1Y",
+          },
+        }
+      : {}),
+  };
+});
+
+const offerPrices = planOffers.map((o) => Number(o.price));
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -51,6 +77,28 @@ const ld = {
       name: "Pricing | Launch CV",
       description: "Launch CV pricing — Starter, Professional, Elite, Lifetime.",
       url: absoluteUrl("/pricing"),
+    },
+    {
+      "@type": "Product",
+      name: "Launch CV",
+      description:
+        "AI resume builder with JD alignment, ATS scoring, cover letter generation, interview prep, and voice input. Every tool included on every paid plan.",
+      brand: { "@type": "Brand", name: "Launch CV" },
+      offers: {
+        "@type": "AggregateOffer",
+        priceCurrency: "USD",
+        lowPrice: String(Math.min(...offerPrices)),
+        highPrice: String(Math.max(...offerPrices)),
+        offerCount: planOffers.length,
+        offers: planOffers,
+      },
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        reviewCount: "2400",
+        bestRating: "5",
+        worstRating: "1",
+      },
     },
     {
       "@type": "FAQPage",

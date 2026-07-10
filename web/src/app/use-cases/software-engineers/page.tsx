@@ -8,7 +8,7 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "Resume Builder for Software Engineers",
+  title: "Software Engineer Resume Builder — Quantify Your Impact",
   description:
     "ATS-clean engineering resumes. AI rewrites your bullets to quantify latency, throughput, scope, and ownership — the signals hiring managers actually scan for.",
   pathname: "/use-cases/software-engineers",
