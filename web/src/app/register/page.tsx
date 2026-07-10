@@ -1,10 +1,11 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight, Gift } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
+import { trackSignUpStarted, trackSignUpCompleted } from "@/lib/analytics-client";
 
 function RegisterPageInner() {
   const sp = useSearchParams();
@@ -16,6 +17,11 @@ function RegisterPageInner() {
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Top of the sign-up funnel: the register page was opened.
+  useEffect(() => {
+    trackSignUpStarted({ has_referral: !!referralCode });
+  }, [referralCode]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +43,8 @@ function RegisterPageInner() {
       setError(j.error ?? "Something went wrong. Please try again.");
       return;
     }
+    // Account created — fire before the full-page redirect below.
+    trackSignUpCompleted({ has_referral: !!referralCode });
     window.location.href = next;
   }
 

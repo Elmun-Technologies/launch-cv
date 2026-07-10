@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { Logo } from "@/components/logo";
+import { trackFeatureCtaClicked } from "@/lib/analytics-client";
 import {
   Target, FileText, Mail, Mic, BarChart3, MessageSquare,
   ChevronDown, Menu, X, ArrowRight,
@@ -152,6 +153,7 @@ export function LandingNav() {
             </Link>
             <Link
               href="/register"
+              onClick={() => trackFeatureCtaClicked({ cta: "get_started", location: "landing_nav" })}
               className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#1A56DB] px-4 py-2 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 font-body"
             >
               Get started
@@ -221,6 +223,7 @@ export function LandingNav() {
               </Link>
               <Link
                 href="/register"
+                onClick={() => trackFeatureCtaClicked({ cta: "get_started", location: "landing_nav_mobile" })}
                 className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#1A56DB] py-3 text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] font-body"
               >
                 Get started <ArrowRight className="h-4 w-4" />

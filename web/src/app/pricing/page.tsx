@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -244,7 +245,10 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    <Link
+                    <CtaLink
+                      cta="choose_plan"
+                      plan={key}
+                      location="pricing_card"
                       href={registerHref}
                       className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                         popular
@@ -254,7 +258,7 @@ export default function PricingPage() {
                     >
                       {planCtaLabel(key)}
                       <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
+                    </CtaLink>
                   </div>
                 </RevealOnView>
               );
@@ -410,13 +414,15 @@ export default function PricingPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             One paste. Six AI tools. The job search you wish you&apos;d run a year ago.
           </p>
-          <Link
+          <CtaLink
+            cta="get_started"
+            location="pricing_footer"
             href={registerHref}
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Create my account
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { trackEvent } from "@/lib/analytics";
+import { trackPurchaseCompleted } from "@/lib/analytics-server";
 import { isOneTimePlan, planIdFromPolarProductId } from "@/lib/polar";
 import {
   resolvePolarUserId,
@@ -91,6 +92,16 @@ export async function POST(req: Request) {
             meta: { provider: "polar", subscriptionId: sub.id },
           });
         }
+        // External conversion: fire only on `active` (paid & live) to avoid the
+        // double count `created` + `active` would produce for one purchase.
+        if (eventType === "subscription.active") {
+          await trackPurchaseCompleted({
+            userId,
+            plan: planIdFromPolarProductId(sub.product_id ?? null),
+            provider: "polar",
+            subscriptionId: sub.id ?? null,
+          });
+        }
         break;
       }
 
@@ -107,6 +118,12 @@ export async function POST(req: Request) {
         await trackEvent("pay_success", {
           userId,
           meta: { provider: "polar", orderId: order.id, plan },
+        });
+        await trackPurchaseCompleted({
+          userId,
+          plan,
+          provider: "polar",
+          orderId: order.id ?? null,
         });
         break;
       }
