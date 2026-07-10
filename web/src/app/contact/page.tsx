@@ -31,7 +31,7 @@ const channels = [
   {
     icon: FileText,
     name: "Billing & refunds",
-    description: "Plan changes, invoices, refunds. We coordinate with Lemon Squeezy on your behalf.",
+    description: "Plan changes, invoices, refunds. We coordinate with Polar on your behalf.",
     email: "billing@launch-cv.com",
   },
   {
@@ -146,7 +146,7 @@ export default function ContactPage() {
           </h2>
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
             {[
-              { href: "/pricing", t: "Pricing & billing", d: "Plan limits, refunds, Lemon Squeezy details." },
+              { href: "/pricing", t: "Pricing & billing", d: "Plan limits, refunds, Polar details." },
               { href: "/features", t: "Feature overview", d: "What each AI tool does and when to use it." },
               { href: "/legal/privacy", t: "Privacy & data", d: "What we store, how long, and your rights." },
             ].map((r) => (

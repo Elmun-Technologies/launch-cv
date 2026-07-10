@@ -16,14 +16,21 @@ const STATS: Stat[] = [
 
 function StatItem({ stat, index, start }: { stat: Stat; index: number; start: boolean }) {
   const reduce = useReducedMotion();
-  const [v, setV] = useState(0);
+  // Initialise to the final value so the figure is never a frozen "0" during
+  // SSR, with JS disabled, or if the in-view trigger never fires.
+  const [v, setV] = useState(stat.value);
+  const [mounted, setMounted] = useState(false);
   const isFloat = !Number.isInteger(stat.value);
 
   useEffect(() => {
-    if (!start) return;
-    if (reduce) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!mounted || reduce) return; // no-JS / reduced-motion keep the final value
+    if (!start) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setV(stat.value);
+      setV(0); // armed off-screen → count up cleanly once in view
       return;
     }
     const c = animate(0, stat.value, {
@@ -32,7 +39,7 @@ function StatItem({ stat, index, start }: { stat: Stat; index: number; start: bo
       onUpdate: (x) => setV(isFloat ? Math.round(x * 10) / 10 : Math.round(x)),
     });
     return () => c.stop();
-  }, [start, stat.value, isFloat, reduce]);
+  }, [mounted, start, stat.value, isFloat, reduce]);
 
   const display = isFloat ? v.toFixed(1) : v.toLocaleString();
 

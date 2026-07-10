@@ -58,8 +58,8 @@ const sections = [
     h: "Payments",
     body: (
       <p>
-        Subscriptions and one-time purchases are processed by Lemon Squeezy. We do not store credit-card
-        details. Lemon Squeezy holds the payment record; you can manage billing in their customer portal.
+        Subscriptions and one-time purchases are processed by Polar. We do not store credit-card
+        details. Polar holds the payment record; you can manage billing in their customer portal.
       </p>
     ),
   },

@@ -7,18 +7,25 @@ import { XCircle, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
 function useCountUp(to: number, start: boolean, duration = 1.2) {
-  const [v, setV] = useState(0);
+  // Initialise to the final value so the figure is never a frozen "0" during
+  // SSR, with JS disabled, or if the in-view trigger never fires.
+  const [v, setV] = useState(to);
+  const [mounted, setMounted] = useState(false);
   const reduce = useReducedMotion();
   useEffect(() => {
-    if (!start) return;
-    if (reduce) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!mounted || reduce) return; // no-JS / reduced-motion keep the final value
+    if (!start) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setV(to);
+      setV(0); // armed off-screen → count up cleanly once in view
       return;
     }
     const c = animate(0, to, { duration, ease: "easeOut", onUpdate: (x) => setV(Math.round(x)) });
     return () => c.stop();
-  }, [start, to, duration, reduce]);
+  }, [mounted, start, to, duration, reduce]);
   return v;
 }
 

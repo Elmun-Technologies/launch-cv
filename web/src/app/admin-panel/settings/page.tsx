@@ -17,8 +17,8 @@ export default async function AdminSettingsPage() {
 
   const envChecks = [
     { name: "OpenAI", key: "OPENAI_API_KEY", configured: !!process.env.OPENAI_API_KEY },
-    { name: "Lemon Squeezy API", key: "LEMON_SQUEEZY_API_KEY", configured: !!process.env.LEMON_SQUEEZY_API_KEY },
-    { name: "Lemon webhook secret", key: "LEMON_WEBHOOK_SECRET", configured: !!process.env.LEMON_WEBHOOK_SECRET },
+    { name: "Polar access token", key: "POLAR_ACCESS_TOKEN", configured: !!process.env.POLAR_ACCESS_TOKEN },
+    { name: "Polar webhook secret", key: "POLAR_WEBHOOK_SECRET", configured: !!process.env.POLAR_WEBHOOK_SECRET },
     { name: "Resend", key: "RESEND_API_KEY", configured: !!process.env.RESEND_API_KEY },
     { name: "Database", key: "DATABASE_URL", configured: !!process.env.DATABASE_URL },
     { name: "Auth secret", key: "AUTH_SECRET", configured: !!process.env.AUTH_SECRET },

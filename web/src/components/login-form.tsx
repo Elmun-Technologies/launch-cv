@@ -71,7 +71,7 @@ export function LoginForm() {
         <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
-            Create one free
+            Create one
           </Link>
         </p>
       </div>

@@ -406,7 +406,7 @@ export default function Home() {
               </h2>
               <p className="mt-4 text-[14px] leading-[1.7] text-[#475569]">
                 Can&apos;t find what you need?{" "}
-                <Link href="/dashboard/support" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                <Link href="/contact" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
                   Email support
                 </Link>{" "}
                 — we reply within one business day.
