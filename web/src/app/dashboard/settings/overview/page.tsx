@@ -59,7 +59,7 @@ export default async function OverviewPage() {
       : null,
   )
     ? "Pro"
-    : "Free";
+    : "None";
   const storageUsed = 1.2;
   const storageTotal = 5;
   const storagePercent = Math.round((storageUsed / storageTotal) * 100);

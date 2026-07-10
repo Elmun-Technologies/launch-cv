@@ -1,13 +1,29 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 
-/* ── Counter hook ── */
+/* ── Counter hook ──
+ * Starts from the final value so the number is always meaningful: during SSR,
+ * with JavaScript disabled, or if the scroll trigger never fires, it shows the
+ * real figure instead of a frozen "0". Once mounted with motion enabled it
+ * resets to 0 and counts up when the card scrolls into view. */
 function useCounter(target: number, visible: boolean, duration = 1500) {
-  const [value, setValue] = useState(0);
+  const reduce = useReducedMotion();
+  const [value, setValue] = useState(target);
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    if (!visible) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!mounted || reduce) return; // no-JS / reduced-motion keep the final value
+    if (!visible) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setValue(0); // armed off-screen → count up cleanly once visible
+      return;
+    }
     let start = 0;
     const step = target / (duration / 16);
     const timer = setInterval(() => {
@@ -16,7 +32,7 @@ function useCounter(target: number, visible: boolean, duration = 1500) {
       else { setValue(Math.floor(start)); }
     }, 16);
     return () => clearInterval(timer);
-  }, [visible, target, duration]);
+  }, [mounted, visible, target, duration, reduce]);
   return value;
 }
 
@@ -26,13 +42,19 @@ function StatCard({ value, suffix, label, sub, delay }: { value: number; suffix:
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setVisible(true);
+      return;
+    }
     const obs = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
       { threshold: 0.2 },
     );
     obs.observe(el);
-    return () => obs.disconnect();
+    // Safety net: never leave the counter stuck if the observer never fires.
+    const fallback = setTimeout(() => setVisible(true), 1500);
+    return () => { obs.disconnect(); clearTimeout(fallback); };
   }, []);
   const count = useCounter(value, visible);
   return (
@@ -42,7 +64,7 @@ function StatCard({ value, suffix, label, sub, delay }: { value: number; suffix:
       style={{ transitionDelay: `${delay}ms` }}
     >
       <p className="text-[40px] font-bold leading-none tracking-tight text-[#0F172A] sm:text-[44px]" style={{ animationDelay: `${delay}ms` }}>
-        {count}{suffix}
+        {count.toLocaleString()}{suffix}
       </p>
       <p className="mt-3 text-[14px] font-semibold text-[#0F172A]">{label}</p>
       <p className="mt-1 text-[13px] text-[#64748B]">{sub}</p>

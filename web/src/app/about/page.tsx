@@ -291,7 +291,7 @@ export default function AboutPage() {
                 href="/register"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02]"
               >
-                Start free account
+                Create account
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link href="/pricing" className="text-[14px] font-semibold text-white/90 transition hover:text-white">

@@ -90,7 +90,7 @@ export default async function AdminSubscriptionsPage() {
         <div>
           <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Subscriptions</h1>
           <p className="mt-1 text-[13px] text-[#64748B]">
-            Lemon Squeezy subscription records, including pending cancellations.
+            Polar subscription records, including pending cancellations.
           </p>
         </div>
 
@@ -105,7 +105,7 @@ export default async function AdminSubscriptionsPage() {
           rows={subscriptions}
           rowKey={(s) => s.id}
           emptyTitle="No subscriptions yet"
-          emptyDescription="Subscriptions appear here once users complete checkout via Lemon Squeezy."
+          emptyDescription="Subscriptions appear here once users complete checkout via Polar."
         />
       </div>
     </AdminShell>

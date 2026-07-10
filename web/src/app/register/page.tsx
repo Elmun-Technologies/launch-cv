@@ -48,7 +48,7 @@ function RegisterPageInner() {
           Create your Launch CV account
         </h1>
         <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
-          Free to create. Pick a plan after sign-up.{" "}
+          Pick a plan after sign-up.{" "}
           <Link href="/login" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
             Sign in
           </Link>

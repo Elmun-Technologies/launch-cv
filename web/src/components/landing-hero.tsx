@@ -7,15 +7,22 @@ import { ArrowRight, Sparkles, Star } from "lucide-react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Counts up to `to` once the element scrolls into view. */
+/** Counts up to `to` once the element scrolls into view.
+ * Initialises to the final value so the figure is never a frozen "0" during
+ * SSR, with JS disabled, or if the in-view trigger never fires. */
 function useCountUp(to: number, start: boolean, duration = 1.1) {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(to);
+  const [mounted, setMounted] = useState(false);
   const reduce = useReducedMotion();
   useEffect(() => {
-    if (!start) return;
-    if (reduce) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!mounted || reduce) return; // no-JS / reduced-motion keep the final value
+    if (!start) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setValue(to);
+      setValue(0); // armed off-screen → count up cleanly once in view
       return;
     }
     const controls = animate(0, to, {
@@ -24,7 +31,7 @@ function useCountUp(to: number, start: boolean, duration = 1.1) {
       onUpdate: (v) => setValue(Math.round(v)),
     });
     return () => controls.stop();
-  }, [start, to, duration, reduce]);
+  }, [mounted, start, to, duration, reduce]);
   return value;
 }
 

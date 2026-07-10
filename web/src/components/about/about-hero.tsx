@@ -11,18 +11,25 @@ const CIRC = 2 * Math.PI * R;
 const REJECTED = 75;
 
 function useCountUp(to: number, start: boolean, duration = 1.2) {
-  const [v, setV] = useState(0);
+  // Initialise to the final value so the figure is never a frozen "0" during
+  // SSR, with JS disabled, or if the in-view trigger never fires.
+  const [v, setV] = useState(to);
+  const [mounted, setMounted] = useState(false);
   const reduce = useReducedMotion();
   useEffect(() => {
-    if (!start) return;
-    if (reduce) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  useEffect(() => {
+    if (!mounted || reduce) return; // no-JS / reduced-motion keep the final value
+    if (!start) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setV(to);
+      setV(0); // armed off-screen → count up cleanly once in view
       return;
     }
     const c = animate(0, to, { duration, ease: "easeOut", onUpdate: (x) => setV(Math.round(x)) });
     return () => c.stop();
-  }, [start, to, duration, reduce]);
+  }, [mounted, start, to, duration, reduce]);
   return v;
 }
 
@@ -36,6 +43,13 @@ export function AboutHero() {
   const item = {
     hidden: reduce ? {} : { opacity: 0, y: 16 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+  };
+  // The H1 must never render invisibly (critical for SEO + LCP): keep it fully
+  // opaque at all times and apply only a subtle slide, so the headline is
+  // readable on first paint even before JS hydrates or if motion never runs.
+  const headline = {
+    hidden: reduce ? {} : { opacity: 1, y: 12 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
   };
 
   return (
@@ -67,7 +81,7 @@ export function AboutHero() {
               Our story
             </motion.span>
 
-            <motion.h1 variants={item} className="mt-6 lc-hero-headline text-[#0F172A]">
+            <motion.h1 variants={headline} className="mt-6 lc-hero-headline text-[#0F172A]">
               We built Launch CV because hiring is broken.
             </motion.h1>
 
@@ -83,7 +97,7 @@ export function AboutHero() {
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
-                  Start free account
+                  Create account
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </motion.div>

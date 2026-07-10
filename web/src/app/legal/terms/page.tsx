@@ -65,8 +65,8 @@ const sections = [
     h: "Subscriptions, refunds, cancellations",
     body: (
       <p>
-        Subscriptions are processed by Lemon Squeezy. You can cancel anytime — access continues until the end of
-        the paid period. We honor a 7-day money-back guarantee on subscription plans where Lemon Squeezy policy
+        Subscriptions are processed by Polar. You can cancel anytime — access continues until the end of
+        the paid period. We honor a 7-day money-back guarantee on subscription plans where Polar policy
         allows. Lifetime is a one-time purchase and is non-refundable after 14 days.
       </p>
     ),
