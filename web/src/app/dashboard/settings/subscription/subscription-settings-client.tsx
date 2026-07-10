@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
+import { trackCheckoutStarted, trackFeatureCtaClicked } from "@/lib/analytics-client";
 
 type StatusPayload = {
   pro: boolean;
@@ -76,6 +77,8 @@ export function SubscriptionSettingsClient() {
   const currentPlan = (status?.plan as CheckoutPlan | "none" | undefined) ?? "none";
 
   async function startCheckout(plan: CheckoutPlan) {
+    // CTA click on a "Choose <plan>" button.
+    trackFeatureCtaClicked({ cta: "choose_plan", plan, location: "subscription_settings" });
     setLoadingPlan(plan);
     const res = await fetch("/api/polar/checkout", {
       method: "POST",
@@ -84,7 +87,11 @@ export function SubscriptionSettingsClient() {
     });
     const j = await res.json().catch(() => ({}));
     setLoadingPlan(null);
-    if (res.ok && j.url) window.location.href = j.url as string;
+    if (res.ok && j.url) {
+      // Polar checkout is opening — fire before the redirect leaves the page.
+      trackCheckoutStarted(plan);
+      window.location.href = j.url as string;
+    }
   }
 
   return (

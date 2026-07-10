@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -130,12 +131,14 @@ export function FeaturePageLayout(props: FeaturePageProps) {
               {description}
             </p>
             <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-              <Link
+              <CtaLink
+                cta="get_started"
+                location={`feature_hero:${canonicalPath}`}
                 href="/register"
                 className={`lc-btn-primary shadow-lg ${a.btnShadow} ${a.btnBg} ${a.btnHover}`}
               >
                 {ctaButton} <ArrowRight className="h-4 w-4" />
-              </Link>
+              </CtaLink>
               <Link
                 href="#how-it-works"
                 className="font-body text-[14px] font-semibold text-[#64748B] transition hover:text-[#0F172A]"
@@ -296,20 +299,22 @@ export function FeaturePageLayout(props: FeaturePageProps) {
           {ctaSubtitle && (
             <p className="font-body text-[16px] text-white/80">{ctaSubtitle}</p>
           )}
-          <Link
+          <CtaLink
+            cta="get_started"
+            location={`feature_footer:${canonicalPath}`}
             href="/register"
             className="mt-2 inline-flex items-center gap-2 rounded-[10px] bg-white px-7 py-3.5 font-body text-[15px] font-bold text-[#0F172A] shadow-lg transition hover:shadow-xl hover:scale-[1.02]"
           >
             {ctaButton} <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 
       {/* Mobile sticky CTA */}
       <div className="lc-sticky-cta md:hidden">
-        <Link href="/register" className={`flex flex-1 items-center justify-center gap-2 rounded-[10px] py-3 font-body text-[14px] font-bold text-white ${a.btnBg}`}>
+        <CtaLink cta="get_started" location={`feature_sticky:${canonicalPath}`} href="/register" className={`flex flex-1 items-center justify-center gap-2 rounded-[10px] py-3 font-body text-[14px] font-bold text-white ${a.btnBg}`}>
           {ctaButton} <ArrowRight className="h-4 w-4" />
-        </Link>
+        </CtaLink>
       </div>
 
       <LandingFooter />

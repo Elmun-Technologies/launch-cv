@@ -28,6 +28,10 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
         capture_pageview: true,
         capture_pageleave: true,
       });
+      // Expose the initialized client so `lib/analytics-client.ts` can dispatch
+      // events without a static `posthog-js` import (which would bloat the
+      // initial bundle this dynamic import is here to avoid).
+      (window as unknown as { posthog?: PostHog }).posthog = posthog;
       setProvider({ Provider: PostHogProvider, client: posthog });
     });
     return () => {
