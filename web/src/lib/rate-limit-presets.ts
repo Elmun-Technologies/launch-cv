@@ -34,3 +34,10 @@ export function allowPdfUser(userId: string) {
 export function allowForgotPasswordIp(req: Request) {
   return consumeRateLimit(`forgot:${getClientIp(req)}`, 6, 3_600_000);
 }
+
+/** Burst guard for the public free ATS check — cheap in-memory backstop in
+ *  front of the durable per-IP DB quota. Blocks rapid retries even when the
+ *  30-day DB row hasn't been written yet (or a cold serverless instance). */
+export function allowFreeAtsBurst(req: Request) {
+  return consumeRateLimit(`free-ats:${getClientIp(req)}`, 5, 3_600_000);
+}

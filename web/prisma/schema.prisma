@@ -334,6 +334,22 @@ model MediaAsset {
   @@index([createdAt])
 }
 
+/// One row per anonymous free ATS-score trial. Used to enforce a
+/// per-IP quota (1 trial / 30 days) without requiring an account.
+/// The IP is stored as a salted hash — never in plaintext — for GDPR.
+model FreeAtsTrial {
+  id          String   @id @default(cuid())
+  /// SHA-256(AUTH_SECRET + client IP). Not reversible to the raw IP.
+  ipHash      String
+  /// Optional client-provided fingerprint, secondary abuse signal.
+  fingerprint String?
+  /// The score we returned, for funnel analytics.
+  score       Int?
+  createdAt   DateTime @default(now())
+
+  @@index([ipHash, createdAt])
+}
+
 model AuditLog {
   id        String   @id @default(cuid())
   actorId   String?
