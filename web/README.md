@@ -20,6 +20,28 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Blog content (SEO)
+
+The `/blog` list and `/blog/[slug]` pages are CMS-driven from the `BlogPost`
+Postgres table. Pages read published rows at request time (ISR), `sitemap.xml`
+adds every published post automatically, and each post renders full metadata,
+JSON-LD `Article` / `BreadcrumbList` / `FAQPage` schema, an OG image, reading
+time, and internal links.
+
+Seed content lives as content-as-code in [`src/lib/blog-posts.ts`](src/lib/blog-posts.ts)
+and is published to the database with an idempotent seed (upsert by slug):
+
+```bash
+# from web/, with DATABASE_URL pointing at the target DB
+npm run db:seed
+```
+
+After seeding, `/blog` renders the posts and they appear in `sitemap.xml`. To
+add a post, append an entry to `BLOG_POSTS` and re-run the seed. Posts can also
+be created and edited through the admin panel (`/admin-panel/content`); the seed
+never runs automatically during `npm run build`, so it won't overwrite
+admin edits unless you invoke it.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
