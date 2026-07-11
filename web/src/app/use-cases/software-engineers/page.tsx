@@ -17,9 +17,22 @@ export const metadata = buildMarketingMetadata({
 
 const ld = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  url: absoluteUrl("/use-cases/software-engineers"),
-  name: "Resume for Software Engineers | Launch CV",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      url: absoluteUrl("/use-cases/software-engineers"),
+      name: "Resume for Software Engineers | Launch CV",
+      description:
+        "ATS-clean engineering resumes. AI quantifies latency, throughput, scope, and ownership — the signals hiring managers scan for.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
+      ],
+    },
+  ],
 };
 
 const stack = [

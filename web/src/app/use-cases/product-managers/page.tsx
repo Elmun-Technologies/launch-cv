@@ -17,9 +17,22 @@ export const metadata = buildMarketingMetadata({
 
 const ld = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  url: absoluteUrl("/use-cases/product-managers"),
-  name: "Resume for Product Managers | Launch CV",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      url: absoluteUrl("/use-cases/product-managers"),
+      name: "Resume for Product Managers | Launch CV",
+      description:
+        "Launch CV turns your roadmaps, OKRs, and A/B tests into the quantified, ATS-clean language recruiters scan for.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Product Manager Resume", item: absoluteUrl("/use-cases/product-managers") },
+      ],
+    },
+  ],
 };
 
 const pmKeywords = [
