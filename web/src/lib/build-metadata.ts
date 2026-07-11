@@ -38,7 +38,10 @@ export function buildMarketingMetadata(input: {
   const url = absoluteUrl(input.pathname);
   const canonical = input.canonicalUrl?.trim() || url;
   const ogTitle = `${input.title} | Launch CV`;
-  const images = input.image ? [{ url: input.image, alt: input.title }] : undefined;
+  // Only include an `images` key when we have one. Passing `images: undefined`
+  // would suppress the nearest file-based `opengraph-image` that Next.js would
+  // otherwise merge in, breaking social cards on pages without an explicit image.
+  const imageProp = input.image ? { images: [{ url: input.image, alt: input.title }] } : {};
 
   const openGraph: Metadata["openGraph"] =
     input.type === "article"
@@ -49,7 +52,7 @@ export function buildMarketingMetadata(input: {
           type: "article",
           siteName: "Launch CV",
           locale: "en_US",
-          images,
+          ...imageProp,
           publishedTime: input.article?.publishedTime,
           modifiedTime: input.article?.modifiedTime ?? input.article?.publishedTime,
           authors: input.article?.authors,
@@ -63,7 +66,7 @@ export function buildMarketingMetadata(input: {
           type: "website",
           siteName: "Launch CV",
           locale: "en_US",
-          images,
+          ...imageProp,
         };
 
   return {
@@ -77,7 +80,7 @@ export function buildMarketingMetadata(input: {
       title: ogTitle,
       description: input.description,
       site: "@launchcv",
-      images: images?.map((i) => i.url),
+      ...imageProp,
     },
     robots: input.robots ?? { index: true, follow: true },
   };
