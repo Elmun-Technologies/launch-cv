@@ -80,7 +80,7 @@ export function buildMarketingMetadata(input: {
       title: ogTitle,
       description: input.description,
       site: "@launchcv",
-      ...(input.image ? { images: [input.image] } : {}),
+      ...imageProp,
     },
     robots: input.robots ?? { index: true, follow: true },
   };
