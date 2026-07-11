@@ -41,8 +41,9 @@ export default function NotFound() {
             </Link>
           </div>
 
-          <div className="mt-10 grid gap-3 text-left sm:grid-cols-3">
+          <div className="mt-10 grid gap-3 text-left sm:grid-cols-2">
             {[
+              { href: "/features", t: "Features" },
               { href: "/pricing", t: "Pricing" },
               { href: "/blog", t: "Blog" },
               { href: "/contact", t: "Contact" },

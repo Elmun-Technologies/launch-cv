@@ -494,7 +494,7 @@ export default async function Home() {
               href="/pricing"
               className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]"
             >
-              From {PUBLIC_PLANS.starter.priceDisplay}{PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+              From {PUBLIC_PLANS.starter.priceDisplay} a month · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
             </Link>
           </div>
         </div>
