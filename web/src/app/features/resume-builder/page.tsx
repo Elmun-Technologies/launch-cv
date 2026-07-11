@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -8,7 +9,6 @@ import { absoluteUrl } from "@/lib/site";
 import {
   FileText,
   ArrowRight,
-  Check,
   Star,
   Wand2,
   Layers,
@@ -118,13 +118,13 @@ export default function ResumeBuilderPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_resume_builder"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(124,58,237,0.4)] transition hover:bg-[#6D28D9]"
                 >
                   Build my resume
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#templates"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -266,9 +266,9 @@ export default function ResumeBuilderPage() {
 
           <p className="mt-10 text-center text-[14px] text-[#64748B]">
             + six more templates inside the app.{" "}
-            <Link href="/register" className="font-semibold text-[#7C3AED] underline-offset-2 hover:underline">
+            <CtaLink cta="get_started" location="feature_resume_builder" href="/register" className="font-semibold text-[#7C3AED] underline-offset-2 hover:underline">
               See them all
-            </Link>
+            </CtaLink>
           </p>
         </div>
       </section>
@@ -393,13 +393,13 @@ export default function ResumeBuilderPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             No writing skills required. Tell the AI what you did — it handles the rest.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_resume_builder"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#6D28D9]"
           >
             Build my resume
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 

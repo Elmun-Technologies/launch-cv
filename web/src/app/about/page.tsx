@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -288,13 +289,13 @@ export default function AboutPage() {
               Create an account, choose a plan, paste your first JD. The whole hunt under one roof.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
+              <CtaLink cta="get_started" location="about"
                 href="/register"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02]"
               >
                 Create account
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </CtaLink>
               <Link href="/pricing" className="text-[14px] font-semibold text-white/90 transition hover:text-white">
                 View pricing
               </Link>

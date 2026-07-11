@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -125,13 +126,13 @@ export default function CoverLetterPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_cover_letter"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0D9488] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(13,148,136,0.4)] transition hover:bg-[#0F766E]"
                 >
                   Write my first letter
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#preview"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -384,13 +385,13 @@ export default function CoverLetterPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             Personalized, professional, and ready in 60 seconds. No blank-page anxiety.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_cover_letter"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#0D9488] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#0F766E]"
           >
             Write my first letter
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 

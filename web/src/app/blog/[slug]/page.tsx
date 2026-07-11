@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LandingNav } from "@/components/landing-nav";
@@ -303,13 +304,13 @@ export default async function BlogPostPage({
             <p className="mx-auto mt-2 max-w-[440px] text-[14px] leading-[1.65] text-[#475569]">
               Build your ATS-optimized resume with AI in under five minutes.
             </p>
-            <Link
+            <CtaLink cta="get_started" location="blog_post"
               href="/register"
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Build my resume
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </CtaLink>
           </div>
 
           {newerPost || olderPost ? (

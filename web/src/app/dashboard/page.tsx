@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -81,12 +82,14 @@ export default async function HomePage() {
                 </p>
               </div>
             </div>
-            <Link
+            <CtaLink
+              cta="choose_plan"
+              location="dashboard_no_plan"
               href="/dashboard/settings/subscription"
               className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#6B4CE0]"
             >
               Choose plan
-            </Link>
+            </CtaLink>
           </div>
         ) : null}
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -75,13 +76,13 @@ export default function DesignersPage() {
                 Most designers under-sell themselves on paper. Launch CV quantifies your hand-off impact, system contributions, research depth, and shipping speed — without making it sound like a banker wrote it.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="usecase_designer"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#DB2777] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(219,39,119,0.4)] transition hover:bg-[#BE185D]"
                 >
                   Build my design resume
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="/features/resume-builder"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -242,13 +243,13 @@ export default function DesignersPage() {
           <h2 className="lc-section-headline text-[#0F172A]">
             The taste is yours. Let the resume keep up.
           </h2>
-          <Link
+          <CtaLink cta="get_started" location="usecase_designer"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#DB2777] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#BE185D]"
           >
             Build my design resume
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 
