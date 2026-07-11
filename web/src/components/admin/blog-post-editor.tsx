@@ -8,6 +8,8 @@ import { FormField, AdminInput, AdminTextarea, AdminSelect } from "@/components/
 import { SectionCard } from "@/components/admin/section-card";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { MarkdownEditor } from "@/components/admin/markdown-editor";
+import { ImageUploadField } from "@/components/admin/image-upload-field";
+import { SeoChecklist } from "@/components/admin/seo-checklist";
 
 export type BlogEditorData = {
   id: string | null;
@@ -26,6 +28,8 @@ export type BlogEditorData = {
   seoTitle: string;
   seoDescription: string;
   ogImageUrl: string;
+  canonicalUrl: string;
+  focusKeyword: string;
   status: "draft" | "scheduled" | "published" | "archived";
   scheduledFor: string;
 };
@@ -64,6 +68,8 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
       seoTitle: data.seoTitle || null,
       seoDescription: data.seoDescription || null,
       ogImageUrl: data.ogImageUrl || null,
+      canonicalUrl: data.canonicalUrl || null,
+      focusKeyword: data.focusKeyword || null,
     };
     if (!isNew) {
       payload.status = data.status;
@@ -358,8 +364,12 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
 
           <SectionCard title="Cover image">
             <div className="space-y-3">
-              <FormField label="Cover URL" hint="Optional — falls back to category gradient">
-                <AdminInput value={data.coverUrl} onChange={(e) => update("coverUrl", e.target.value)} placeholder="/uploads/cms/…" />
+              <FormField label="Cover image" hint="Optional — falls back to category gradient">
+                <ImageUploadField
+                  value={data.coverUrl}
+                  onChange={(v) => update("coverUrl", v)}
+                  alt={data.coverAlt || data.title}
+                />
               </FormField>
               <FormField label="Cover alt text">
                 <AdminInput value={data.coverAlt} onChange={(e) => update("coverAlt", e.target.value)} />
@@ -369,14 +379,43 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
 
           <SectionCard title="SEO" description="Overrides defaults derived from title/description">
             <div className="space-y-3">
+              <FormField label="Focus keyword" hint="The primary term this post should rank for">
+                <AdminInput
+                  value={data.focusKeyword}
+                  onChange={(e) => update("focusKeyword", e.target.value)}
+                  placeholder="e.g. ATS resume format"
+                />
+              </FormField>
+
+              <div className="rounded-lg border border-[#E2E8F0] bg-[#FAFBFC] p-3">
+                <SeoChecklist
+                  focusKeyword={data.focusKeyword}
+                  title={data.seoTitle || data.title}
+                  metaDescription={data.seoDescription || data.description}
+                  slug={data.slug}
+                  bodyMd={data.bodyMd}
+                />
+              </div>
+
               <FormField label="SEO title" hint="Recommended ≤ 60 chars">
                 <AdminInput value={data.seoTitle} onChange={(e) => update("seoTitle", e.target.value)} />
               </FormField>
               <FormField label="Meta description" hint="Recommended ≤ 160 chars">
                 <AdminTextarea rows={2} value={data.seoDescription} onChange={(e) => update("seoDescription", e.target.value)} />
               </FormField>
-              <FormField label="Open-graph image URL">
-                <AdminInput value={data.ogImageUrl} onChange={(e) => update("ogImageUrl", e.target.value)} placeholder="/uploads/cms/…" />
+              <FormField label="Canonical URL" hint="Optional — defaults to this post's own URL">
+                <AdminInput
+                  value={data.canonicalUrl}
+                  onChange={(e) => update("canonicalUrl", e.target.value)}
+                  placeholder="https://launch-cv.com/blog/…"
+                />
+              </FormField>
+              <FormField label="Open-graph image" hint="Shown when shared on social / search">
+                <ImageUploadField
+                  value={data.ogImageUrl}
+                  onChange={(v) => update("ogImageUrl", v)}
+                  alt={data.title}
+                />
               </FormField>
             </div>
           </SectionCard>

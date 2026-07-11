@@ -81,6 +81,8 @@ export async function POST(req: NextRequest) {
       seoTitle: body.seoTitle != null ? String(body.seoTitle) : null,
       seoDescription: body.seoDescription != null ? String(body.seoDescription) : null,
       ogImageUrl: body.ogImageUrl != null ? String(body.ogImageUrl) : null,
+      canonicalUrl: body.canonicalUrl != null ? String(body.canonicalUrl) : null,
+      focusKeyword: body.focusKeyword != null ? String(body.focusKeyword) : null,
       status: "draft",
       authorId: admin.sub,
     },

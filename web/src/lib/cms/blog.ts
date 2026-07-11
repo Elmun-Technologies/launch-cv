@@ -10,6 +10,8 @@ export type BlogPost = {
   title: string;
   description: string;
   date: string;
+  /** Last-updated timestamp (ISO date), used for Article dateModified. */
+  dateModified: string;
   readingTime: number;
   category: string;
   tags: string[];
@@ -26,6 +28,10 @@ export type BlogPost = {
   seoTitle?: string | null;
   seoDescription?: string | null;
   ogImageUrl?: string | null;
+  /** Optional canonical URL override. Defaults to the post's own URL. */
+  canonicalUrl?: string | null;
+  /** Target keyword the post is optimized for (admin-only SEO aid). */
+  focusKeyword?: string | null;
 };
 
 function isFaqArray(v: unknown): v is Array<{ q: string; a: string }> {
@@ -48,6 +54,7 @@ export function rowToBlogPost(row: DbBlogPost): BlogPost {
     title: row.title,
     description: row.description,
     date: dateSource.toISOString().slice(0, 10),
+    dateModified: row.updatedAt.toISOString().slice(0, 10),
     readingTime: row.readingTime,
     category: row.category,
     tags: row.tags,
@@ -63,6 +70,8 @@ export function rowToBlogPost(row: DbBlogPost): BlogPost {
     seoTitle: row.seoTitle,
     seoDescription: row.seoDescription,
     ogImageUrl: row.ogImageUrl,
+    canonicalUrl: row.canonicalUrl,
+    focusKeyword: row.focusKeyword,
   };
 }
 

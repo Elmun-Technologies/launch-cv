@@ -44,6 +44,8 @@ export default async function EditBlogPostPage({
     seoTitle: post.seoTitle ?? "",
     seoDescription: post.seoDescription ?? "",
     ogImageUrl: post.ogImageUrl ?? "",
+    canonicalUrl: post.canonicalUrl ?? "",
+    focusKeyword: post.focusKeyword ?? "",
     status,
     scheduledFor: toLocalInputValue(post.scheduledFor),
   };
