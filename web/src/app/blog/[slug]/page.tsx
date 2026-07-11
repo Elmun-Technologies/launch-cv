@@ -317,22 +317,28 @@ export default async function BlogPostPage({
               {newerPost ? (
                 <Link
                   href={`/blog/${newerPost.slug}`}
-                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
+                  className={`group flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] ${
+                    olderPost ? "" : "sm:col-span-2"
+                  }`}
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Newer article</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+                    <ArrowLeft className="h-3 w-3" /> Newer article
+                  </span>
                   <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
                     {newerPost.title}
                   </p>
                 </Link>
-              ) : (
-                <span className="hidden sm:block" />
-              )}
+              ) : null}
               {olderPost ? (
                 <Link
                   href={`/blog/${olderPost.slug}`}
-                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 text-right transition hover:border-[#CBD5E1] sm:col-start-2"
+                  className={`group flex flex-col items-end rounded-xl border border-[#E2E8F0] bg-white p-5 text-right transition hover:border-[#CBD5E1] ${
+                    newerPost ? "sm:col-start-2" : "sm:col-span-2"
+                  }`}
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Older article</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+                    Older article <ArrowRight className="h-3 w-3" />
+                  </span>
                   <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
                     {olderPost.title}
                   </p>
