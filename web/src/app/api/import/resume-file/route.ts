@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { chatJson } from "@/lib/openai-client";
+import { extractResumeText } from "@/lib/resume-parse";
 import type { ResumeContent } from "@/types/resume";
-
-const MAX_FILE_SIZE = 4 * 1024 * 1024;
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -17,58 +16,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
   }
 
-  if (file.size > MAX_FILE_SIZE) {
-    return NextResponse.json({ error: "File too large (max 4MB)" }, { status: 400 });
+  const parsed = await extractResumeText(file);
+  if (!parsed.ok) {
+    return NextResponse.json({ error: parsed.error }, { status: parsed.status });
   }
-
-  const name = file.name.toLowerCase();
-  const isPdf = name.endsWith(".pdf");
-  const isDocx = name.endsWith(".docx") || name.endsWith(".doc");
-
-  if (!isPdf && !isDocx) {
-    return NextResponse.json({ error: "Only PDF and DOCX files are supported" }, { status: 400 });
-  }
-
-  let text: string;
-  try {
-    const arrayBuf = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuf);
-
-    if (isDocx) {
-      const mammoth = await import("mammoth");
-      const result = await mammoth.extractRawText({ buffer });
-      text = result.value;
-    } else {
-      // For PDF: use dynamic require with error handling
-      try {
-        const pdfMod = (await import("pdf-parse")) as Record<string, unknown>;
-        const pdfParse = (
-          typeof pdfMod.default === "function" ? pdfMod.default : pdfMod
-        ) as (buf: Buffer) => Promise<{ text: string }>;
-        const result = await pdfParse(buffer);
-        text = result.text;
-      } catch {
-        // Fallback: convert buffer to string and try to extract readable text
-        const rawText = buffer.toString("utf-8");
-        // Extract readable ASCII text from PDF binary
-        const readable = rawText
-          .replace(/[^\x20-\x7E\n\r\t]/g, " ")
-          .replace(/\s{3,}/g, "\n")
-          .trim();
-        if (readable.length > 100) {
-          text = readable;
-        } else {
-          return NextResponse.json({ error: "Could not parse PDF. Try uploading a DOCX file instead." }, { status: 422 });
-        }
-      }
-    }
-  } catch {
-    return NextResponse.json({ error: "Could not parse file" }, { status: 422 });
-  }
-
-  if (text.trim().length < 30) {
-    return NextResponse.json({ error: "File appears to be empty or unreadable. Try a different file." }, { status: 422 });
-  }
+  const text = parsed.text;
 
   const system = `You are an expert resume parser. Extract structured data from raw resume text. Return JSON only.
 Return a ResumeContent object with these exact keys:

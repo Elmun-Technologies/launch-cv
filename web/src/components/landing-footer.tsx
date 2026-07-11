@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 
 const productLinks = [
+  { label: "Free ATS Check", href: "/free-ats-check" },
   { label: "JD Alignment", href: "/features/jd-alignment" },
   { label: "Resume Builder", href: "/features/resume-builder" },
   { label: "Cover Letter", href: "/features/cover-letter" },

@@ -125,7 +125,7 @@ const testimonials = [
 const faqs = [
   {
     q: "Is there a free plan?",
-    a: "No. Launch CV is a paid professional product. AI features require an active plan: Starter, Professional, Elite, or Lifetime. You can create an account first; checkout unlocks the AI.",
+    a: "You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: Starter, Professional, Elite, or Lifetime.",
   },
   {
     q: "Why does ATS matter?",

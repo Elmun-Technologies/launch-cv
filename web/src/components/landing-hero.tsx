@@ -101,11 +101,11 @@ export function LandingHero() {
             <motion.div variants={item} className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <motion.div whileHover={reduce ? undefined : { scale: 1.025 }} whileTap={{ scale: 0.98 }}>
                 <Link
-                  href="/register"
-                  onClick={() => trackFeatureCtaClicked({ cta: "get_started", location: "landing_hero" })}
+                  href="/free-ats-check"
+                  onClick={() => trackFeatureCtaClicked({ cta: "free_ats_check", location: "landing_hero" })}
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
-                  Get started
+                  Check your ATS score free
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </motion.div>

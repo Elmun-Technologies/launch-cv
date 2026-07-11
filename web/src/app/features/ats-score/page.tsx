@@ -126,10 +126,10 @@ export default function AtsScorePage() {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  href="/register"
+                  href="/free-ats-check"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(234,88,12,0.4)] transition hover:bg-[#C2410C]"
                 >
-                  Check my score
+                  Check my score free
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
@@ -387,10 +387,10 @@ export default function AtsScorePage() {
             More score means more human eyes on your resume — and more interview replies in your inbox.
           </p>
           <Link
-            href="/register"
+            href="/free-ats-check"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#C2410C]"
           >
-            Check my ATS score
+            Check my ATS score free
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

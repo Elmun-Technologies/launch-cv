@@ -31,6 +31,16 @@ export type RoleFitResult = {
   prioritized_fixes: string[];
 };
 
+/** Public, gated result returned by the anonymous free ATS check. The
+ *  aha-moment data (score + breakdown + issue counts) is exposed; the actual
+ *  fix text is intentionally withheld and unlocked behind registration. */
+export type FreeAtsResult = {
+  overall: number;
+  dimensions: { name: string; score: number }[];
+  issueCounts: { high: number; medium: number; low: number };
+  totalFixes: number;
+};
+
 export type PacketResult = {
   cover_letter: string;
   interview_questions: { question: string; answer_outline: string }[];

@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Eye, EyeOff, ArrowRight, Gift } from "lucide-react";
+import { Loader2, Eye, EyeOff, ArrowRight, Gift, BarChart3 } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
 import { trackSignUpStarted, trackSignUpCompleted } from "@/lib/analytics-client";
 
@@ -11,6 +11,8 @@ function RegisterPageInner() {
   const sp = useSearchParams();
   const referralCode = sp.get("ref")?.trim() || "";
   const next = sp.get("next") || "/dashboard";
+  const atsRaw = Number(sp.get("ats"));
+  const atsScore = Number.isFinite(atsRaw) && atsRaw > 0 && atsRaw <= 100 ? Math.round(atsRaw) : null;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -66,6 +68,15 @@ function RegisterPageInner() {
             <Gift className="h-3.5 w-3.5 shrink-0 text-violet-600" />
             <p className="text-[12px] font-semibold text-violet-700">
               Referral applied: <span className="font-bold">{referralCode}</span>
+            </p>
+          </div>
+        ) : null}
+        {atsScore !== null ? (
+          <div className="mt-4 flex items-center gap-2.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2.5">
+            <BarChart3 className="h-4 w-4 shrink-0 text-[#EA580C]" />
+            <p className="text-[12px] font-semibold leading-snug text-[#9A3412]">
+              Your ATS score: <span className="font-bold">{atsScore}/100</span>. Create your
+              account to unlock every prioritized fix and lift it.
             </p>
           </div>
         ) : null}

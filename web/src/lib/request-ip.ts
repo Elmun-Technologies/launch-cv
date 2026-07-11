@@ -6,3 +6,12 @@ export function getClientIp(req: Request): string {
   if (real) return real.trim();
   return "unknown";
 }
+
+/** Salted, non-reversible hash of the client IP. Used to enforce anonymous
+ *  per-IP quotas (e.g. the free ATS trial) without persisting raw IPs. */
+export async function hashClientIp(req: Request): Promise<string> {
+  const ip = getClientIp(req);
+  const salt = process.env.AUTH_SECRET ?? "launch-cv-fallback-salt";
+  const { createHash } = await import("crypto");
+  return createHash("sha256").update(`${salt}:${ip}`).digest("hex");
+}
