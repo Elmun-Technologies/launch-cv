@@ -29,7 +29,8 @@ const ld = {
       "@type": "BreadcrumbList",
       itemListElement: [
         { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-        { "@type": "ListItem", position: 2, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
+        { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
+        { "@type": "ListItem", position: 3, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
       ],
     },
   ],
