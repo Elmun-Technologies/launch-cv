@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 import {
   Mail,
   ArrowRight,
@@ -34,6 +35,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqEntry[] = [
+  {
+    q: "How does Launch CV personalize my cover letter?",
+    a: "Launch CV reads your resume and the job description, then extracts the company mission, tech stack, required skills, and hiring tone and weaves them in naturally. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the letter.",
+  },
+  {
+    q: "How long does it take to write a cover letter with Launch CV?",
+    a: "Launch CV generates a personalized cover letter in about 60 seconds. You connect a resume, paste the job description, optionally add personal context, then pick a tone and length. The AI returns three openings, one full body, and two closings, all editable inline before you send.",
+  },
+  {
+    q: "What tones can Launch CV's cover letter generator write in?",
+    a: "Launch CV writes in four tones: Professional, Enthusiastic, Concise, and Creative. Professional suits finance and enterprise, Enthusiastic fits startups, Concise keeps engineers to around 200 words, and Creative leads with a distinctive hook for design and marketing roles. You can preview each voice live before generating.",
+  },
+  {
+    q: "Can Launch CV write a cover letter in a language other than English?",
+    a: "Yes, Launch CV writes cover letters in fourteen languages, including English, German, French, Spanish, Portuguese, Dutch, and Italian, plus seven more. Pick your language and the AI still pulls the company mission and job-description details, so the personalization stays intact whichever language you apply in.",
+  },
+  {
+    q: "Are Launch CV cover letters ATS-safe?",
+    a: "Yes, every Launch CV cover letter uses plain-text, ATS-safe formatting that works in an email body, an ATS upload field, or a PDF attachment. There are no tables, columns, or graphics to break parsing, so your letter stays readable whether a human or software opens it first.",
+  },
+  {
+    q: "Can I control the length of my Launch CV cover letter?",
+    a: "Yes, Launch CV offers three lengths: Short at around 250 words, Standard at 400, and Detailed at 600. Choose the one that fits the role before generating. The AI also returns three opening hooks, so you can pick the first paragraph that sounds most like you.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -51,6 +79,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Cover Letter", item: absoluteUrl("/features/cover-letter") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -393,6 +422,8 @@ export default function CoverLetterPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#0D9488" />
 
       <LandingFooter />
     </div>

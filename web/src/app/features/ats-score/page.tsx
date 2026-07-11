@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 import {
   BarChart3,
   ArrowRight,
@@ -35,6 +36,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqEntry[] = [
+  {
+    q: "Is Launch CV's ATS score checker accurate?",
+    a: "Yes, Launch CV simulates 15 real applicant tracking systems, so your 0 to 100 score reflects how actual parsers read your resume. It tests formatting, keywords, structure, and readability, then names every issue by priority so you fix the exact problems recruiters' software would flag.",
+  },
+  {
+    q: "How long does an ATS scan take on Launch CV?",
+    a: "An ATS scan on Launch CV takes about eight seconds. You upload your resume and immediately get a 0 to 100 score, a breakdown across formatting, keywords, structure, and readability, plus a prioritized list of every fix. Most users gain 20 to 40 points on their first pass.",
+  },
+  {
+    q: "Which ATS engines does Launch CV test my resume against?",
+    a: "Launch CV tests your resume against 15 real ATS engines, including Workday, Greenhouse, Lever, iCIMS, Taleo, Bullhorn, BambooHR, JazzHR, SmartRecruiters, Recruitee, Jobvite, and Ashby. Each parser reads formatting differently, so simulating all 15 catches issues one system might miss and shows how your file performs everywhere.",
+  },
+  {
+    q: "What file formats can I upload to the ATS checker?",
+    a: "You can upload a PDF, a DOCX file, or pasted plain text to the Launch CV ATS checker. It parses your file in under two seconds, the same way 15 ATS engines would, then validates file type, size, encoding, and font embedding across every parser.",
+  },
+  {
+    q: "How much can Launch CV improve my ATS score?",
+    a: "The average Launch CV user gains 43 points on their first pass, with most improving 20 to 40 points after applying the recommended fixes. Because the checker names every parsing issue by High, Medium, or Low priority, you know exactly which changes move your score the most.",
+  },
+  {
+    q: "What resume problems does the Launch CV ATS checker catch?",
+    a: "The checker catches 12 categories of parsing failures, including text boxes, multi-column layouts, non-standard fonts, inconsistent date formats, and header graphics that block contact parsing. It audits formatting, keyword density, file compatibility, section structure, date consistency, and contact-info placement, tagging each issue High, Medium, or Low.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -52,6 +80,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "ATS Score", item: absoluteUrl("/features/ats-score") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -419,6 +448,8 @@ export default function AtsScorePage() {
           </div>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#EA580C" />
 
       <LandingFooter />
     </div>

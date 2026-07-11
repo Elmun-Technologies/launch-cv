@@ -6,6 +6,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Compass, BarChart3, Users, Target, Sparkles, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 
 export const metadata = buildMarketingMetadata({
   title: "Product Manager Resume Builder — Show Roadmap Wins",
@@ -15,6 +16,33 @@ export const metadata = buildMarketingMetadata({
   image: DEFAULT_OG_IMAGE,
   keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "Launch CV"],
 });
+
+const faqs: FaqEntry[] = [
+  {
+    q: "How do I write a resume for a product manager role?",
+    a: "Write a product manager resume around outcomes, not feature lists, giving every bullet scope, a metric, a delta, and a baseline. Launch CV turns your roadmaps, OKRs, and A/B tests into quantified, baselined lines recruiters scan for, then keeps the formatting ATS-clean so screeners actually see your wins.",
+  },
+  {
+    q: "What keywords do product manager resumes need?",
+    a: "Product manager resumes need keywords that match the track you are targeting, such as roadmap, OKRs, A/B testing, activation, retention, GTM, or RICE prioritization. Launch CV pre-loads a PM keyword library with over 120 terms across B2B, B2C, marketplace, and platform tracks, then aligns them to each job description.",
+  },
+  {
+    q: "How do I quantify product management impact on a resume?",
+    a: "Quantify product management impact by giving each achievement four parts: scope, the metric you moved, the before-to-after delta, and a baseline for comparison. Launch CV builds every PM bullet with all four, turning worked on pricing into a measured experiment that lifted net-new MRR 38% and conversion 2.4 times.",
+  },
+  {
+    q: "How should a PM resume show A/B tests and experiments?",
+    a: "A PM resume should show experiments in a dedicated section listing each A/B test's scope, lift, and statistical significance, noting failures honestly. Launch CV formats this for you, turning did user research into 24 generative interviews plus a 9-segment cluster analysis that reframed the ICP and changed the roadmap.",
+  },
+  {
+    q: "Does Launch CV work for B2B or platform product managers?",
+    a: "Yes, Launch CV works for B2B, B2C, marketplace, and platform product managers through track-specific keyword libraries totaling over 120 terms. It tailors bullets to the discipline your target role rewards, covering shipped products, experiments, discovery work, and stakeholder management so specialists in any PM track read as credible.",
+  },
+  {
+    q: "How do I put stakeholder management and discovery work on a PM resume?",
+    a: "Put stakeholder management and discovery work in their own sections, quantifying reach and decisions changed rather than listing meetings. Launch CV formats C-suite reviews, cross-functional partnerships, user interviews, and JTBD studies by their impact, so a line like ran discovery becomes interviews that killed two features and accelerated one.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -34,6 +62,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Product Manager Resume", item: absoluteUrl("/use-cases/product-managers") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -250,6 +279,8 @@ export default function ProductManagersPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#7C3AED" />
 
       <LandingFooter />
     </div>

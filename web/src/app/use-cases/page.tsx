@@ -6,6 +6,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { Code2, Compass, Palette, ArrowRight, Sparkles } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 
 export const metadata = buildMarketingMetadata({
   title: "Resume Builder by Role — Tailored for Your Job",
@@ -53,6 +54,33 @@ const roles = [
   },
 ];
 
+const faqs: FaqEntry[] = [
+  {
+    q: "Does Launch CV work for my profession?",
+    a: "Launch CV works across professions through 12 industry templates that are ATS-tested and quantified out of the box, plus dedicated guides for software engineers, product managers, and designers. Each track tunes the same AI toolkit to the signals recruiters scan for in that specific field.",
+  },
+  {
+    q: "Which Launch CV resume guide is right for my role?",
+    a: "Choose the software engineer guide for latency, throughput, and stack signals; the product manager guide for roadmaps, OKRs, and A/B tests; or the designer guide for portfolio and system work. Each tailors the same AI toolkit to how your specific role gets hired.",
+  },
+  {
+    q: "Why does a resume need to be tailored to a specific role?",
+    a: "A resume needs role-specific tailoring because recruiters scan for different signals in every field, and generic bullets miss them. Launch CV rewrites your experience into the quantified, ATS-clean language your particular role rewards, whether that means engineering scope, product metrics, or design impact, so screeners recognize the right proof.",
+  },
+  {
+    q: "What if my job isn't listed in Launch CV's use cases?",
+    a: "If your job is not listed, Launch CV still fits because it ships 12 industry templates that are ATS-tested and quantified out of the box. The role guides for engineers, PMs, and designers show the approach, but the same AI toolkit adapts your experience to any field you apply in.",
+  },
+  {
+    q: "How long does it take to build a role-specific resume with Launch CV?",
+    a: "Building a role-specific resume with Launch CV takes about five minutes from blank to PDF. You pick your track, and the AI rewrites your experience into quantified, ATS-clean bullets tuned to your field, using templates that are ATS-safe and metrics-first out of the box.",
+  },
+  {
+    q: "Do all Launch CV roles use the same tool or different ones?",
+    a: "All Launch CV roles use the same AI toolkit, just tuned to each field's hiring signals. Engineers, product managers, and designers get role-specific bullets and keyword libraries drawn from one product, so switching tracks never means learning a new tool or losing your ATS-clean formatting.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -78,6 +106,7 @@ const ld = {
         { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -195,6 +224,8 @@ export default function UseCasesPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <LandingFooter />
     </div>

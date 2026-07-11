@@ -6,6 +6,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Palette, Layers, Sparkles, Eye } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 
 export const metadata = buildMarketingMetadata({
   title: "Designer Resume Builder — Turn Portfolio Into Offers",
@@ -15,6 +16,33 @@ export const metadata = buildMarketingMetadata({
   image: DEFAULT_OG_IMAGE,
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
 });
+
+const faqs: FaqEntry[] = [
+  {
+    q: "How should designers show a portfolio on a resume?",
+    a: "Designers should link the portfolio from a dedicated, ATS-parseable Selected Work section that gives each project a live link, short context, and the metric that mattered. Launch CV auto-formats this section so a recruiter can click through, while the resume itself stays clean enough to pass ATS parsing.",
+  },
+  {
+    q: "How do I write a resume for a UX or product designer role?",
+    a: "Write a designer resume that quantifies hand-off impact, system contributions, research depth, and shipping speed instead of listing tools. Launch CV rewrites vague lines like redesigned the dashboard into measured outcomes such as lifting time-on-task 41% and cutting support tickets 28%, keeping the formatting ATS-clean throughout.",
+  },
+  {
+    q: "How do I show design system work on a resume?",
+    a: "Show design system work by quantifying tokens added, components shipped, and adoption across squads rather than saying built design system. Launch CV formats these contributions automatically, turning that phrase into shipped a v2 token library plus 84 Figma components adopted by 9 product squads, cutting ship time from 18 to 11 days.",
+  },
+  {
+    q: "What keywords should a designer resume include?",
+    a: "A designer resume should include the craft and process terms your target role names, such as design systems, Figma, prototyping, accessibility, user research, and hand-off. Launch CV pre-loads a design keyword library with over 100 terms across product, brand, motion, and service design, then aligns them to each posting.",
+  },
+  {
+    q: "How do I quantify user research on a designer resume?",
+    a: "Quantify user research by stating tests run, participants, decisions changed, and features killed instead of writing did user testing. Launch CV formats research depth for you, turning that line into ran 12 weekly moderated cycles that surfaced 14 critical issues before ship, so hiring designers see rigor at a glance.",
+  },
+  {
+    q: "Does a designer really need a resume if I have a portfolio?",
+    a: "Yes, designers still need a resume because it opens the door that the portfolio then walks through. Launch CV treats the portfolio as the main act and builds an ATS-clean resume with a Selected Work section, so recruiters and their parsers can find you before the visuals ever load.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -34,6 +62,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Designer Resume", item: absoluteUrl("/use-cases/designers") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -251,6 +280,8 @@ export default function DesignersPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#DB2777" />
 
       <LandingFooter />
     </div>

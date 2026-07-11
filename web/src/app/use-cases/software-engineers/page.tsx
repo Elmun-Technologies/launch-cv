@@ -6,6 +6,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Code2, Terminal, GitBranch, Cpu, Cloud, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 
 export const metadata = buildMarketingMetadata({
   title: "Software Engineer Resume Builder — Quantify Your Impact",
@@ -15,6 +16,33 @@ export const metadata = buildMarketingMetadata({
   image: DEFAULT_OG_IMAGE,
   keywords: ["software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],
 });
+
+const faqs: FaqEntry[] = [
+  {
+    q: "How do I write a resume for a software engineer role?",
+    a: "Write a software engineer resume with quantified bullets covering latency, throughput, scope, and ownership rather than task lists. Launch CV rewrites vague lines like fixed slow db queries into metric-driven achievements, keeps formatting ATS-clean for Workday, Greenhouse, Lever and more, and picks the right keywords per job description.",
+  },
+  {
+    q: "What technical keywords should a software engineer resume include?",
+    a: "A software engineer resume should include the specific languages, frameworks, cloud platforms, and datastores the job description names, such as TypeScript, Go, Kubernetes, or PostgreSQL. Launch CV ships a pre-loaded library of over 200 keywords across cloud, DevOps, security, ML, and mobile, then auto-selects the right subset per role.",
+  },
+  {
+    q: "How can I show open-source contributions on my engineering resume?",
+    a: "Show open-source contributions in a dedicated Projects section listing the repository name, stars, commits, and whether you were maintainer or contributor. Launch CV auto-detects these details from your linked GitHub account, so recruiters see real proof of your work without you formatting each entry by hand.",
+  },
+  {
+    q: "Will an ATS reject my software engineer resume?",
+    a: "An ATS is most likely to reject engineering resumes that use tables, graphics, or LaTeX-style sidebars that parsers cannot read. Launch CV uses engineering-tested templates with none of those elements and stays clean for Workday, Greenhouse, Lever, and 12 more systems, so your resume parses correctly every time.",
+  },
+  {
+    q: "How do I show senior or staff engineer impact on a resume?",
+    a: "Show senior engineering impact by surfacing scope signals like team size, system tier, on-call rotation, and RFC ownership instead of routine tasks. Launch CV highlights these details automatically, turning a line like did on-call work into led a 12-engineer tier-0 rotation that cut MTTR from 41 to 9 minutes.",
+  },
+  {
+    q: "How does Launch CV tailor my engineering resume to a specific job description?",
+    a: "Launch CV tailors your engineering resume by reading the pasted job description and selecting the right keywords, frameworks, and platforms from its pre-loaded library for that role. The JD Alignment feature matches your bullets to the posting, so each application emphasizes the latency, scope, and stack signals that specific team is screening for.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -34,6 +62,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -252,6 +281,8 @@ export default function SoftwareEngineersPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <LandingFooter />
     </div>

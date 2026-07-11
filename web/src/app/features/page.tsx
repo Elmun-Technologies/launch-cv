@@ -6,6 +6,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 
 export const metadata = buildMarketingMetadata({
   title: "Features — The Complete AI Job Search Toolkit",
@@ -66,6 +67,33 @@ const features = [
   },
 ];
 
+const faqs: FaqEntry[] = [
+  {
+    q: "What AI tools does Launch CV include?",
+    a: "Launch CV includes six AI tools under one subscription: JD Alignment, AI Resume Builder, ATS Score Checker, Cover Letter Generator, Interview Prep, and Voice Input. Together they cover every stage of the job hunt — match, write, score, send, practice, and speak — with each tool's output feeding the next.",
+  },
+  {
+    q: "Which Launch CV feature should I start with?",
+    a: "Start with the AI Resume Builder if you need a resume, since it turns plain English into ATS-tested, quantified bullets in about five minutes using 12 templates. Its output then feeds the ATS Score Checker and JD Alignment, so beginning there seeds the rest of the workflow automatically.",
+  },
+  {
+    q: "How much can Launch CV improve my ATS score?",
+    a: "Launch CV's ATS Score Checker raises the average user's score by 43 points on the first pass, naming and ranking every parser-breaking format issue across 15 ATS engines. Separately, JD Alignment lifts a job-match score from around 40% to over 90% in under a minute.",
+  },
+  {
+    q: "Is Launch CV one subscription or do I pay per tool?",
+    a: "Launch CV is one subscription that includes all six tools on every plan, so you never pay per tool or copy-paste between tabs. The AI usage ceilings scale with your tier, letting you pick whichever plan matches how hard you are currently applying.",
+  },
+  {
+    q: "Can Launch CV write a cover letter and prep me for interviews?",
+    a: "Yes, Launch CV's Cover Letter Generator personalizes letters to the company, role, and hiring manager in about 60 seconds with four tones and 14 languages. Interview Prep then serves 200-plus role-specific questions, scores your answers from 1 to 10, and shows model responses on tap.",
+  },
+  {
+    q: "Can I build my resume by voice with Launch CV?",
+    a: "Yes, Launch CV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished bullet in 12 languages. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -84,6 +112,7 @@ const ld = {
         url: absoluteUrl(f.href),
       })),
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -238,6 +267,8 @@ export default function FeaturesPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <LandingFooter />
     </div>

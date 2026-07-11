@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 import {
   FileText,
   ArrowRight,
@@ -34,6 +35,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqEntry[] = [
+  {
+    q: "How long does building a resume take with Launch CV?",
+    a: "Building a resume with Launch CV takes about five minutes from blank page to finished PDF. You type your work history in plain language, the AI returns quantified bullets, you pick one of 12 templates, and the live preview updates as you go before you export.",
+  },
+  {
+    q: "Do I need writing skills to use the Launch CV resume builder?",
+    a: "No, you do not need any writing skills to use the Launch CV resume builder. You describe your work in plain, everyday language, and the AI turns your rough notes into quantified, action-led bullets that each close with a measurable outcome. Non-native English speakers can start from casual phrasing too.",
+  },
+  {
+    q: "How many resume templates does Launch CV offer?",
+    a: "Launch CV offers 12 industry templates, including Atlas for tech, Nova for marketing and product, Pulse for design, Vector for engineering, Forge for leadership, and Quill for finance and legal. Every one is recruiter-designed and tested against the same parsers as the ATS Score Checker.",
+  },
+  {
+    q: "Can I export my Launch CV resume as PDF or DOCX?",
+    a: "Yes, you can export your Launch CV resume as both PDF and DOCX with one click. There is also a plain-text view designed for pasting into LinkedIn or an email body. The live preview is pixel-accurate, so what you see is exactly what exports, with no spacing or font surprises.",
+  },
+  {
+    q: "Are Launch CV resume templates ATS-friendly?",
+    a: "Yes, every Launch CV template is ATS-friendly and tested against 15 parsers, including Workday, Greenhouse, Lever, and iCIMS. There are no hidden tables, bad fonts, or zero-width spaces, so applicant tracking systems read your resume cleanly. All 12 templates run through the same parser farm as the ATS Score Checker.",
+  },
+  {
+    q: "Can I keep different resume versions for different jobs?",
+    a: "Yes, Launch CV versions every save automatically, so you can roll back any change and keep separate cuts of your resume for different roles. You can also reorder sections by dragging and add Projects, Certifications, Languages, Publications, or Awards, tailoring each version to the job you are targeting.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -51,6 +79,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Resume Builder", item: absoluteUrl("/features/resume-builder") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -402,6 +431,8 @@ export default function ResumeBuilderPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#7C3AED" />
 
       <LandingFooter />
     </div>

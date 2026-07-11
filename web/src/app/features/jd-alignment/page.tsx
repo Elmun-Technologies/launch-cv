@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 import {
   Target,
   ArrowRight,
@@ -34,6 +35,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqEntry[] = [
+  {
+    q: "How does Launch CV match my resume to a job description?",
+    a: "Launch CV extracts every hard skill, soft skill, tool, and seniority signal from the job description, then compares them against your resume in a ranked gap map. You paste the JD by URL or raw text, review a live match score, and approve AI bullet rewrites that lift your fit one click at a time.",
+  },
+  {
+    q: "How much can JD alignment raise my resume match score?",
+    a: "JD alignment typically lifts your match score from around 40% to 90% or higher, an average jump of roughly 49 points. The score updates live as you accept each AI rewrite, so you can keep refining until you clear 90% before submitting your application.",
+  },
+  {
+    q: "Does JD alignment help me beat ATS keyword filters?",
+    a: "Yes, JD alignment surfaces the exact keywords a role asks for and weaves the missing ones into your experience so applicant tracking systems rank you higher. Every template and rewrite is tested against 15 ATS engines, including Workday, Greenhouse, Lever, iCIMS, and Taleo, across 12 calibrated industries.",
+  },
+  {
+    q: "Will Launch CV add fake keywords to my resume?",
+    a: "No, Launch CV never fabricates experience or stuffs keywords. It weaves missing terms naturally into the real accomplishments already in your resume, rephrasing bullets so they read honestly while still matching the job description. You approve every suggested rewrite one at a time before it appears on your final document.",
+  },
+  {
+    q: "How long does a JD alignment scan take?",
+    a: "A JD alignment scan takes about 8 seconds to analyze the posting and produce your gap map. Launch CV parses your uploaded resume in under two seconds, and the full paste-to-match workflow usually finishes in under a minute, including approving rewrites and exporting to PDF or DOCX.",
+  },
+  {
+    q: "Can I track match scores across multiple job applications?",
+    a: "Yes, Launch CV saves your match score for every application so you can compare roles side by side and see which ones you fit best. Paste a new job description for each posting, run the alignment, and your tracked scores update, helping you prioritize where to apply first.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -52,6 +80,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "JD Alignment", item: absoluteUrl("/features/jd-alignment") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -409,6 +438,8 @@ export default function JDAlignmentPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <LandingFooter />
     </div>

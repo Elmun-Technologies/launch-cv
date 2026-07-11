@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
 import {
   MessageSquare,
   ArrowRight,
@@ -34,6 +35,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqEntry[] = [
+  {
+    q: "How does Launch CV know which interview questions to ask me?",
+    a: "Launch CV reads your resume and the target job description, then generates the exact questions you're likely to face for that role. It pulls behavioral prompts from your experience, technical questions from the JD's required skills, and asks resume-aware follow-ups that dig in like a real interviewer would.",
+  },
+  {
+    q: "How does Launch CV score my interview answers?",
+    a: "Launch CV scores every answer from 1 to 10 across four dimensions: Clarity, Relevance, Impact, and STAR structure. You get the breakdown, the reasoning behind each score, and a benchmark model answer beside yours to calibrate against, so you know exactly what to tighten next time.",
+  },
+  {
+    q: "What types of interview questions can I practice on Launch CV?",
+    a: "Launch CV offers six question banks: Behavioral, Technical, Company and culture, Situational, Curveball, and Salary and close. The AI picks the right mix automatically, or you can drill the single bank that worries you most. Behavioral uses STAR prompts from your resume; Technical comes from the JD's tools.",
+  },
+  {
+    q: "How many practice questions does Launch CV generate per role?",
+    a: "Launch CV generates 200+ role-specific questions per role, spread across six banks covering behavioral, technical, company, situational, curveball, and salary topics. Because each set is built from your resume and the job description, you practice the questions that actually matter for that job rather than generic filler.",
+  },
+  {
+    q: "Can Launch CV simulate a full multi-round interview?",
+    a: "Yes, Launch CV runs a multi-round simulation covering the recruiter screen, the hiring manager, and the panel, each with the right tone and question density. You can run a full mock from screener to panel, and a progress dashboard tracks your score trend across every session.",
+  },
+  {
+    q: "Can I answer Launch CV interview questions out loud?",
+    a: "Yes, Launch CV includes a voice answer option, so you can speak your responses just like a real interview instead of typing them. Each spoken answer is still scored from 1 to 10 on Clarity, Relevance, Impact, and STAR, with a model answer to compare against.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -51,6 +79,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Interview Prep", item: absoluteUrl("/features/interview-prep") },
       ],
     },
+    buildFaqPageLd(faqs),
   ],
 };
 
@@ -382,6 +411,8 @@ export default function InterviewPrepPage() {
           </Link>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#059669" />
 
       <LandingFooter />
     </div>
