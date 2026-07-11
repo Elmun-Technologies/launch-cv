@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -19,9 +21,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "Voice to Text Resume Builder — Speak Your Bullets",
+  title: "Voice-to-Text Resume Builder: Speak in 12 Languages",
   description:
-    "Speak your career instead of typing it. Launch CV's voice-to-text resume builder turns your words into quantified, ATS-ready bullets in 12 languages.",
+    "Modern resume builders let you talk, not type. Speak your career and AI turns it into quantified, ATS-ready bullets in 12 languages. Try voice free →",
   pathname: "/features/voice-input",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -112,13 +114,13 @@ export default function VoiceInputPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_voice_input"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#DB2777] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(219,39,119,0.4)] transition hover:bg-[#BE185D]"
                 >
                   Start speaking
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#privacy"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -366,13 +368,13 @@ export default function VoiceInputPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             You just need to say them out loud. AI takes the recording from there.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_voice_input"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#DB2777] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#BE185D]"
           >
             Start speaking
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 
@@ -398,6 +400,22 @@ export default function VoiceInputPage() {
           </div>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="pink"
+        useCases={[
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Talk through portfolio work and let AI shape it into polished design bullets.",
+          },
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Speak your projects and stack; AI writes quantified, ATS-ready engineering bullets.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Bell, ChevronDown, Search, LogOut, User, Settings } from "lucide-react";
 import { useState } from "react";
-import { trackFeatureCtaClicked } from "@/lib/analytics-client";
+import { trackFeatureCtaClicked, resetUser } from "@/lib/analytics-client";
 
 export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTitle?: string }) {
   const [showUser, setShowUser] = useState(false);
@@ -59,6 +59,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
                   className="flex w-full items-center gap-2.5 px-4 py-2.5 text-[13px] text-red-500 transition hover:bg-red-50"
                   onClick={async () => {
                     await fetch("/api/auth/logout", { method: "POST" });
+                    resetUser();
                     window.location.href = "/";
                   }}
                 >

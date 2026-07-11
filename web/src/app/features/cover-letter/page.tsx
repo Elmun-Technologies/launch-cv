@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -125,13 +127,13 @@ export default function CoverLetterPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_cover_letter"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0D9488] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(13,148,136,0.4)] transition hover:bg-[#0F766E]"
                 >
                   Write my first letter
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#preview"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -384,15 +386,48 @@ export default function CoverLetterPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             Personalized, professional, and ready in 60 seconds. No blank-page anxiety.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_cover_letter"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#0D9488] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#0F766E]"
           >
             Write my first letter
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="teal"
+        useCases={[
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Pair a tailored PM resume with a cover letter that speaks the company's language.",
+          },
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Send a design-focused resume and a letter that shows you understand the brief.",
+          },
+        ]}
+        reading={[
+          {
+            href: "/blog/cover-letter-tips-that-actually-work",
+            title: "7 cover letter tips that get interviews",
+            desc: "Evidence-based tips for letters hiring managers actually read.",
+          },
+          {
+            href: "/blog/how-to-tailor-your-resume-for-every-job",
+            title: "How to tailor your resume for every job",
+            desc: "Match your application to the job description in under ten minutes.",
+          },
+          {
+            href: "/blog/how-to-prepare-for-a-job-interview-with-ai",
+            title: "How to prepare for an interview with AI",
+            desc: "Turn a strong application into a confident, well-rehearsed interview.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

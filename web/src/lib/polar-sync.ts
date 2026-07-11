@@ -9,6 +9,8 @@ export type PolarSubscription = {
   cancel_at_period_end?: boolean | null;
   current_period_end?: string | null;
   ends_at?: string | null;
+  amount?: number | null; // minor units (cents)
+  currency?: string | null;
   metadata?: Record<string, unknown> | null;
   customer?: { id?: string | null; email?: string | null } | null;
 };
@@ -19,6 +21,9 @@ export type PolarOrder = {
   status?: string | null;
   customer_id?: string | null;
   product_id?: string | null;
+  amount?: number | null; // minor units (cents)
+  total_amount?: number | null; // minor units (cents), incl. tax
+  currency?: string | null;
   metadata?: Record<string, unknown> | null;
   customer?: { id?: string | null; email?: string | null } | null;
 };
