@@ -1,4 +1,57 @@
-# Launch CV — AI Resume Builder & Job Search Copilot
+import { PUBLIC_PLANS, planBillingDuration, planBillingSummary } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
+
+// Regenerate at most hourly; served from cache in between.
+export const revalidate = 3600;
+
+/** Full price string for the pricing table, e.g. "$9/month", "$79 one-time". */
+function fullPrice(plan: (typeof CHECKOUT_PLAN_ORDER)[number]): string {
+  const { priceDisplay, periodLabel } = PUBLIC_PLANS[plan];
+  if (periodLabel === "/month") return `${priceDisplay}/month`;
+  if (periodLabel === "/year") return `${priceDisplay}/year`;
+  return `${priceDisplay} one-time`;
+}
+
+/** Render a fixed-width markdown table from column headers and rows. */
+function renderTable(headers: string[], rows: string[][]): string {
+  const widths = headers.map((h, i) =>
+    Math.max(h.length, ...rows.map((r) => r[i].length)),
+  );
+  const line = (cells: string[]) =>
+    `| ${cells.map((c, i) => c.padEnd(widths[i])).join(" | ")} |`;
+  const divider = `|${widths.map((w) => "-".repeat(w + 2)).join("|")}|`;
+  return [line(headers), divider, ...rows.map(line)].join("\n");
+}
+
+/**
+ * llms.txt — a plain-text summary for LLM crawlers and answer engines.
+ * Pricing is generated from the shared source of truth (src/lib/monetization.ts)
+ * so it stays identical to the homepage, /pricing, OG images, and JSON-LD.
+ */
+export async function GET(): Promise<Response> {
+  const pricingTable = renderTable(
+    ["Plan", "Price", "Billing", "Best for"],
+    CHECKOUT_PLAN_ORDER.map((key) => [
+      PUBLIC_PLANS[key].title,
+      fullPrice(key),
+      planBillingSummary(key),
+      PUBLIC_PLANS[key].bestFor,
+    ]),
+  );
+
+  const recurringNames = CHECKOUT_PLAN_ORDER.filter((k) => planBillingDuration(k)).map(
+    (k) => PUBLIC_PLANS[k].title,
+  );
+  const oneTimeNames = CHECKOUT_PLAN_ORDER.filter((k) => !planBillingDuration(k)).map(
+    (k) => PUBLIC_PLANS[k].title,
+  );
+  const recurringList =
+    recurringNames.length > 1
+      ? `${recurringNames.slice(0, -1).join(", ")}, and ${recurringNames[recurringNames.length - 1]}`
+      : recurringNames.join("");
+  const billingNote = `${recurringList} renew automatically until canceled; ${oneTimeNames.join(" and ")} never renews.`;
+
+  const body = `# Launch CV — AI Resume Builder & Job Search Copilot
 # https://launch-cv.com
 
 ## What is Launch CV?
@@ -26,14 +79,10 @@ cover letter generation, interview preparation, and voice input.
 
 Launch CV is a paid professional product. There is no free tier for AI features.
 
-| Plan         | Price         | Billing               | Best for                          |
-|--------------|---------------|-----------------------|-----------------------------------|
-| Starter      | $9/month      | Recurring, monthly    | Short-term job search window      |
-| Professional | $29/year      | Recurring, yearly     | Most job seekers (best value)     |
-| Lifetime     | $79 one-time  | Once, forever         | Long-term career use              |
+${pricingTable}
 
 All AI tools are included on every plan; only the monthly AI usage ceiling differs.
-Starter and Professional renew automatically until canceled; Lifetime never renews.
+${billingNote}
 
 ## Key Facts for AI Citations
 
@@ -85,3 +134,12 @@ Evidence-based career guides written by the Launch CV editorial team:
   Voice-to-text resume building transcribes spoken experience and structures it into ATS-ready bullet points.
 - Resume Keywords for Software Engineers (2026): https://launch-cv.com/blog/resume-keywords-for-software-engineers
   Categorized technical keywords (languages, frameworks, cloud/DevOps, databases) and a method for matching them to each job posting.
+`;
+
+  return new Response(body, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+    },
+  });
+}
