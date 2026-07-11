@@ -178,6 +178,68 @@ Serverda `trackEvent()` (`lib/analytics.ts`) — Postgres/Prisma’ga yozadi: `s
 `checkout_started`, `pay_success` va h.k. Bu GA4/PostHog’dan mustaqil, BI/Metabase
 uchun. Yangi konversiya funneli ustidan qo‘shimcha; uni almashtirmaydi.
 
+## Ichki / jamoa trafigini tozalash (internal traffic)
+
+Analytics’ni jamoa va preview trafigidan toza ushlab turish uchun ikki qatlam bor:
+**(1) kodda yuklanishni cheklash** va **(2) GA4/PostHog UI’da filtr**.
+
+### 1-qatlam — kod (avtomatik, allaqachon o‘rnatilgan)
+
+`src/lib/analytics-enabled.ts` yagona qaror manbai. GA4 (`components/google-analytics.tsx`)
+va PostHog (`app/providers.tsx`) faqat quyidagi hollarda yuklanadi:
+
+- **Faqat production marketing sayti.** `NEXT_PUBLIC_VERCEL_ENV === "production"`
+  bo‘lganda (Vercel avtomatik beradi). Preview deploy (`preview`), local dev, va
+  `*.vercel.app` hostlar — yuklanmaydi. Bu “vercel.com preview referral” shovqinini
+  ildizidan kesadi.
+- **App sahifalarida emas.** `/admin-panel` va `/dashboard` (va ular ostidagi hamma
+  narsa) — hech qachon yuklanmaydi. SPA navigatsiyada ham: bu sahifalarga o‘tilganda
+  GA `ga-disable-<ID>` bilan, PostHog `opt_out_capturing()` bilan to‘xtaydi.
+
+### Internal flag (jamoa a’zolari)
+
+Jamoa a’zosi **production marketing saytini** ko‘rsa ham, uni `internal` deb belgilaymiz:
+
+- **Avtomatik:** admin/staff login qilganda (`api/auth/login`) `lcv_internal=1` cookie
+  o‘rnatiladi (non-httpOnly, 180 kun). Shu brauzer marketing saytga kirsa — internal.
+- **Qo‘lda:** istalgan qurilmada `?lcv_internal=1` bilan sahifa oching (localStorage’ga
+  saqlanadi). O‘chirish: `?lcv_internal=0`.
+
+Flag borligida:
+- GA4 → har bir hit `traffic_type: 'internal'` bilan ketadi.
+- PostHog → har bir eventda `is_internal: true` super-property bo‘ladi.
+
+### 2-qatlam — GA4 UI (bir marta sozlanadi)
+
+1. **Internal traffic (debug flag) filtri.** GA4 → **Admin → Data Streams** → web
+   stream → **Configure tag settings → Show all → Define internal traffic**.
+   - Yangi qoida: `traffic_type` **equals** `internal` (kod aynan shuni yuboradi).
+   - So‘ng **Admin → Data settings → Data filters** → “Internal Traffic” filtrini
+     **Testing** dan **Active** ga o‘tkazing (Exclude).
+2. **IP bo‘yicha (ixtiyoriy, qo‘shimcha).** O‘sha “Define internal traffic” oynasida
+   ofis/VPN IP’laringizni qo‘shing (IP address → equals/CIDR). Bu login qilmagan
+   jamoa trafigini ham ushlaydi.
+3. **Vercel preview domenlarini exclude qilish.** Kod preview’da GA’ni umuman
+   yuklamaydi, lekin qo‘shimcha himoya uchun **Admin → Data filters** da yoki
+   referral exclusion’da `vercel.app` va `vercel.com` ni qo‘shing
+   (**Admin → Data Streams → Configure tag settings → List unwanted referrals** →
+   `vercel.app`, `vercel.com`).
+
+### 2-qatlam — PostHog UI (bir marta sozlanadi)
+
+1. PostHog → **Settings → Project → Filter out internal and test users**.
+2. Test-account qoidasini qo‘shing (biror biri yetadi, ikkalasi tavsiya etiladi):
+   - `is_internal` **= `true`** — yuqoridagi super-property (login qilgan staff +
+     `?lcv_internal=1` bilan belgilangan brauzerlar).
+   - `email` **contains** `@launch-cv.com` — identifikatsiya qilingan staff uchun
+     (`posthog.identify` email bilan chaqirilganda ishlaydi).
+3. Insight/Dashboard/Funnel’larda **“Filter out internal and test users”** ni yoqing
+   (odatda default yoqilgan bo‘ladi). Shundan so‘ng jamoa trafigi hisob-kitobdan chiqadi.
+
+> Eslatma: kod qatlami preview va app trafigini butunlay **yubormaydi**, UI filtri esa
+> production marketing saytida yurgan jamoa a’zolarini hisobdan **chiqaradi**. Ikkalasi
+> birgalikda analytics’ni faqat haqiqiy foydalanuvchi trafigida ushlab turadi.
+
 ## QA
 
 `docs/12-qa-load-beta.md` va `npm run test:e2e`.
