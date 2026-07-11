@@ -40,6 +40,15 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     description: post.seoDescription || post.description,
     pathname: `/blog/${post.slug}`,
     keywords: post.tags,
+    image: post.ogImageUrl || undefined,
+    type: "article",
+    article: {
+      publishedTime: post.date,
+      modifiedTime: post.date,
+      authors: [post.author.name],
+      section: post.category,
+      tags: post.tags,
+    },
   });
 }
 

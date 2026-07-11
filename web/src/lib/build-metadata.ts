@@ -4,6 +4,10 @@ import { absoluteUrl } from "@/lib/site";
 /**
  * Consistent marketing-page metadata: canonical URL, Open Graph, Twitter.
  * Use a short `title` segment; root layout template adds " | Launch CV".
+ *
+ * Pass `type: "article"` (with `article` dates/author) for blog posts, and
+ * `image` for a page-specific social card. When `image` is omitted, Next.js
+ * falls back to the nearest file-based `opengraph-image`.
  */
 export function buildMarketingMetadata(input: {
   title: string;
@@ -12,27 +16,61 @@ export function buildMarketingMetadata(input: {
   keywords?: string[];
   /** Override default indexing (e.g. internal / utility pages). */
   robots?: Metadata["robots"];
+  /** Absolute or root-relative OG/Twitter image. Defaults to file-based opengraph-image. */
+  image?: string | null;
+  /** OG object type. Defaults to "website"; use "article" for blog posts. */
+  type?: "website" | "article";
+  /** Article metadata, applied when `type` is "article". */
+  article?: {
+    publishedTime?: string;
+    modifiedTime?: string;
+    authors?: string[];
+    section?: string;
+    tags?: string[];
+  };
 }): Metadata {
   const url = absoluteUrl(input.pathname);
   const ogTitle = `${input.title} | Launch CV`;
+  const images = input.image ? [{ url: input.image }] : undefined;
+
+  const openGraph: Metadata["openGraph"] =
+    input.type === "article"
+      ? {
+          url,
+          title: ogTitle,
+          description: input.description,
+          type: "article",
+          siteName: "Launch CV",
+          locale: "en_US",
+          images,
+          publishedTime: input.article?.publishedTime,
+          modifiedTime: input.article?.modifiedTime ?? input.article?.publishedTime,
+          authors: input.article?.authors,
+          section: input.article?.section,
+          tags: input.article?.tags,
+        }
+      : {
+          url,
+          title: ogTitle,
+          description: input.description,
+          type: "website",
+          siteName: "Launch CV",
+          locale: "en_US",
+          images,
+        };
+
   return {
     title: input.title,
     description: input.description,
     keywords: input.keywords,
     alternates: { canonical: url },
-    openGraph: {
-      url,
-      title: ogTitle,
-      description: input.description,
-      type: "website",
-      siteName: "Launch CV",
-      locale: "en_US",
-    },
+    openGraph,
     twitter: {
       card: "summary_large_image",
       title: ogTitle,
       description: input.description,
       site: "@launchcv",
+      images,
     },
     robots: input.robots ?? { index: true, follow: true },
   };
