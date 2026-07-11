@@ -19,6 +19,34 @@ import { BlogCover } from "@/components/blog-cover";
 type Params = { slug: string };
 type SearchParams = { preview?: string };
 
+type FeatureLink = { href: string; title: string; desc: string };
+
+// Contextual feature links per blog category, so every post points readers to
+// at least one relevant product feature with descriptive, keyword-rich anchors.
+const RELATED_FEATURES: Record<string, FeatureLink[]> = {
+  "Job Search": [
+    { href: "/features/ats-score", title: "ATS Score Checker", desc: "Test your resume against 15 ATS engines and fix what's filtering you out." },
+    { href: "/features/jd-alignment", title: "JD Alignment", desc: "Match your resume to any job description and close every keyword gap." },
+  ],
+  "Resume Tips": [
+    { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Turn plain-language notes into quantified, ATS-ready resume bullets." },
+    { href: "/features/ats-score", title: "ATS Score Checker", desc: "Get a 0–100 ATS score with a prioritized list of formatting fixes." },
+  ],
+  "Cover Letters": [
+    { href: "/features/cover-letter", title: "AI Cover Letter Generator", desc: "Write a personalized, company-specific cover letter in 60 seconds." },
+    { href: "/features/jd-alignment", title: "JD Alignment", desc: "Pull the job description's exact language into your application." },
+  ],
+  "Interview Prep": [
+    { href: "/features/interview-prep", title: "AI Interview Prep", desc: "Drill role-specific questions with scored feedback and model answers." },
+    { href: "/features/jd-alignment", title: "JD Alignment", desc: "Understand the role deeply before you walk into the interview." },
+  ],
+};
+
+const DEFAULT_RELATED_FEATURES: FeatureLink[] = [
+  { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Build an ATS-ready resume with AI-written bullets in minutes." },
+  { href: "/features/ats-score", title: "ATS Score Checker", desc: "Check your resume's ATS score before you apply." },
+];
+
 // ISR with revalidatePath() invalidation from admin mutations.
 export const revalidate = 300;
 
@@ -87,7 +115,7 @@ export default async function BlogPostPage({
   const post = await getPostBySlug(slug, { previewAllowed });
   if (!post) notFound();
 
-  // Related posts: same category, excluding current. Limit 3.
+  // Related posts: same category first, excluding current. Limit 3.
   const relatedRows = await prisma.blogPost.findMany({
     where: {
       status: "published",
@@ -97,7 +125,23 @@ export default async function BlogPostPage({
     orderBy: { publishedAt: "desc" },
     take: 3,
   });
-  const related = relatedRows.map(rowToBlogPost);
+  let related = relatedRows.map(rowToBlogPost);
+
+  // Guarantee at least 2 related posts even for thin or singleton categories
+  // (e.g. Cover Letters, Interview Prep) by topping up with the most recent
+  // posts from other categories.
+  if (related.length < 2) {
+    const excludeSlugs = [slug, ...related.map((r) => r.slug)];
+    const fillRows = await prisma.blogPost.findMany({
+      where: { status: "published", slug: { notIn: excludeSlugs } },
+      orderBy: { publishedAt: "desc" },
+      take: 3 - related.length,
+    });
+    related = [...related, ...fillRows.map(rowToBlogPost)];
+  }
+
+  // Every post links to at least one relevant feature, keyed by category.
+  const relatedFeatures = RELATED_FEATURES[post.category] ?? DEFAULT_RELATED_FEATURES;
 
   // Prev/next navigation across all posts (newest-first) for deeper crawlability.
   const allPosts = await getPublishedPosts();
@@ -341,6 +385,27 @@ export default async function BlogPostPage({
               ) : null}
             </nav>
           ) : null}
+
+          {/* Related features — every post points to at least one relevant tool */}
+          <section className="mt-12 border-t border-[#E2E8F0] pt-8">
+            <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+              Related features
+            </p>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {relatedFeatures.map((f) => (
+                <Link
+                  key={f.href}
+                  href={f.href}
+                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
+                >
+                  <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                    {f.title}
+                  </p>
+                  <p className="mt-1 text-[13px] text-[#64748B]">{f.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
         </div>
 
         {related.length > 0 ? (

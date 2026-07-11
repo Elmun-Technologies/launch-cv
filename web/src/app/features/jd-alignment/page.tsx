@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -410,6 +411,22 @@ export default function JDAlignmentPage() {
           </div>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="blue"
+        useCases={[
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Match your engineering resume to the exact stack each job description lists.",
+          },
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Align roadmap wins, OKRs, and metrics with what the PM role is asking for.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

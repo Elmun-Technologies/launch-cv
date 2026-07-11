@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -402,6 +403,39 @@ export default function ResumeBuilderPage() {
           </CtaLink>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="violet"
+        useCases={[
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Templates and AI bullets tuned for engineering scope, stack, and impact.",
+          },
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Clean, ATS-safe layouts that still make your design work stand out.",
+          },
+        ]}
+        reading={[
+          {
+            href: "/blog/ai-resume-builder-complete-guide",
+            title: "AI resume builder: the complete guide",
+            desc: "How AI writes bullet points, optimizes keywords, and formats for ATS.",
+          },
+          {
+            href: "/blog/how-to-write-an-ats-friendly-resume",
+            title: "How to write an ATS-friendly resume",
+            desc: "The formatting rules that keep parsers from dropping your experience.",
+          },
+          {
+            href: "/blog/voice-to-resume",
+            title: "Build your resume by speaking",
+            desc: "Beat the blank page — dictate your experience and let AI structure it.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

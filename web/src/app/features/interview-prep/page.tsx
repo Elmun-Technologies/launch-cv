@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -383,6 +384,39 @@ export default function InterviewPrepPage() {
           </CtaLink>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="emerald"
+        useCases={[
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Drill system-design and behavioral questions pulled from engineering JDs.",
+          },
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Practice roadmap, prioritization, and stakeholder questions for PM loops.",
+          },
+        ]}
+        reading={[
+          {
+            href: "/blog/how-to-prepare-for-a-job-interview-with-ai",
+            title: "How to prepare for an interview with AI",
+            desc: "Generate role-specific questions and score your answers before the call.",
+          },
+          {
+            href: "/blog/how-to-tailor-your-resume-for-every-job",
+            title: "How to tailor your resume for every job",
+            desc: "Know the role inside out so interview answers land against the JD.",
+          },
+          {
+            href: "/blog/what-is-an-ats-score",
+            title: "What is an ATS score?",
+            desc: "Get past the resume filter first — then the interview prep pays off.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -399,6 +400,22 @@ export default function VoiceInputPage() {
           </div>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="pink"
+        useCases={[
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Talk through portfolio work and let AI shape it into polished design bullets.",
+          },
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Speak your projects and stack; AI writes quantified, ATS-ready engineering bullets.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>
