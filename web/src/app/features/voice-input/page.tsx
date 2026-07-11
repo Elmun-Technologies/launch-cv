@@ -305,6 +305,124 @@ export default function VoiceInputPage() {
         </div>
       </section>
 
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#DB2777]">How it works</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Five steps from spoken words to ATS-ready bullets
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                The voice to text resume builder turns talking into writing. Speak-to-resume AI handles the formal framing, so a hands free resume builder is all it takes to fill the page.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { n: "01", t: "Click the mic", d: "Voice input is available in every section where a bullet lives — Experience, Skills, Projects, Summary, and more." },
+              { n: "02", t: "Speak naturally", d: "Describe the job the way you would tell a friend. Real-time transcription shows your words as you talk." },
+              { n: "03", t: "AI transforms your words", d: "The AI transcription resume engine turns plain speech into quantified, ATS-ready bullets." },
+              { n: "04", t: "Edit inline", d: "Fix any mistranscription, then accept the bullet or regenerate for a different angle." },
+              { n: "05", t: "Audio is discarded", d: "The recording is processed in-memory and never stored after transcription." },
+            ].map((s) => (
+              <RevealOnView key={s.n}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-pink-50 text-[13px] font-bold text-[#DB2777]">
+                    {s.n}
+                  </span>
+                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{s.d}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COMPARISON */}
+      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#DB2777]">Why speak it</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Typing vs. a voice resume builder
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                The hardest part of a resume is the blank page. A voice input resume skips it — you talk, the AI writes.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#DB2777]">Voice input</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Typing from scratch</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Input", a: "Speak naturally, hands free", b: "Fight a blank page and a blinking cursor" },
+                  { k: "Output", a: "Quantified, ATS-ready bullets", b: "Vague duties you rewrite five times" },
+                  { k: "Transcription", a: "Real-time and editable inline", b: "None" },
+                  { k: "Languages", a: "Speak in 12 languages", b: "Whatever you can type well" },
+                  { k: "Privacy", a: "Audio never stored after transcription", b: "Not applicable" },
+                  { k: "Setup", a: "Runs in the browser — no app, no plug-ins", b: "Install something or nothing at all" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#DB2777]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#DB2777]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Maria built a resume on her phone between shifts
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Maria had eight years of care work and no patience for writing about it. English is her second language, and formal resume phrasing had always felt like a wall. So the resume never got written.
+              </p>
+              <p>
+                On a break she opened the voice to resume tool on her phone, tapped the mic, and just talked: <span className="font-medium text-[#0F172A]">&ldquo;I managed a team of five doing customer support and we trained twelve new hires over three years.&rdquo;</span> The AI turned it into a quantified, ATS-ready bullet — resolution time down 30%, twelve hires onboarded — while her audio was discarded the moment it was transcribed.
+              </p>
+              <p>
+                Section by section, she spoke her whole history and let the speak-to-resume AI do the framing. What had felt impossible on a blank page took one afternoon of talking, and it came out in polished English she was proud to send.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/features/resume-builder" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Build the full resume <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Check the ATS score <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">

@@ -332,6 +332,157 @@ export default function ResumeBuilderPage() {
         </div>
       </section>
 
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="border-t border-[#E2E8F0] py-20 sm:py-24">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#7C3AED]">How it works</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                From blank page to ATS-ready resume in five steps
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                The Launch CV AI resume builder does the heavy lifting: you supply the facts, the AI writes the bullets, and the live preview keeps everything ATS-friendly from the first keystroke.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { n: "01", t: "Pick a template", d: "Choose from 12+ professional resume templates tuned for tech, finance, healthcare, marketing, design, and management." },
+              { n: "02", t: "Describe your work", d: "Type or speak plain-language notes. This resume generator AI turns them into quantified, action-led bullets." },
+              { n: "03", t: "Watch the live preview", d: "Every edit renders instantly — the WYSIWYG preview is exactly what exports, with no surprise spacing." },
+              { n: "04", t: "Run an ATS check", d: "Score your resume 0–100 against 15+ ATS platforms and fix anything that would break parsing." },
+              { n: "05", t: "Export and apply", d: "Download as PDF or DOCX in one click, or copy a plain-text version for LinkedIn." },
+            ].map((s) => (
+              <RevealOnView key={s.n}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#7C3AED]">
+                    {s.n}
+                  </span>
+                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{s.d}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COMPARISON */}
+      <section className="bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#7C3AED]">Why Launch CV</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                An AI resume builder vs. the old way
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                A generic online resume maker hands you a blank template and wishes you luck. Launch CV gives you writing, formatting, and ATS testing in one place.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">Launch CV</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">DIY or generic maker</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Time to first draft", a: "Under 5 minutes with AI-written bullets", b: "Hours staring at a blank page" },
+                  { k: "Templates", a: "12+ recruiter-designed, ATS-tested layouts", b: "Clever designs that break parsers" },
+                  { k: "Bullet quality", a: "Quantified, outcome-first, tailored", b: "Vague duties copied from the job post" },
+                  { k: "ATS coverage", a: "Tested across 15+ ATS platforms", b: "No visibility into how you parse" },
+                  { k: "Export", a: "PDF and DOCX, plain-text ready", b: "Locked or lossy formats" },
+                  { k: "Proof", a: "50,000+ resumes · 4.9/5 from 2,400+ reviews", b: "—" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#7C3AED]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Dana rebuilt a resume in one lunch break
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Dana spent three years in retail management and wanted to move into operations. Her old resume was a wall of duties — &ldquo;responsible for scheduling&rdquo;, &ldquo;handled customers&rdquo; — and it had gone unanswered for two months.
+              </p>
+              <p>
+                She opened the AI resume builder, picked a clean template, and typed what she actually did in plain language. The AI returned quantified bullets — <span className="font-medium text-[#0F172A]">&ldquo;Cut weekly scheduling time by 30% for a 22-person team&rdquo;</span> — in place of the vague originals, and the live preview stayed ATS-friendly throughout.
+              </p>
+              <p>
+                Before exporting, she ran the built-in ATS check, cleared two formatting flags, and downloaded a PDF. Total time: one lunch break, in line with the platform&apos;s under-five-minute average build time.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Check an ATS score <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/voice-input" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Speak your bullets <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#7C3AED]">FAQ</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
+          </RevealOnView>
+
+          <div className="mt-10 space-y-4">
+            {[
+              { q: "Is this an ATS friendly resume builder?", a: "Yes. Every one of the 12+ templates is tested across 15+ ATS platforms including Workday, Greenhouse, Lever, and iCIMS. You can also run a full ATS score check before you apply." },
+              { q: "Do I need writing skills?", a: "No. Describe your work in plain language — or speak it with voice input — and the resume generator AI writes quantified, professional bullets for you." },
+              { q: "What can I export?", a: "PDF and DOCX, plus a plain-text view for LinkedIn or email. Formatting stays identical to the live preview." },
+              { q: "How much does it cost?", a: "Plans start at $9/month, with a $29/year Professional plan and a $79 one-time Lifetime option." },
+            ].map((f) => (
+              <RevealOnView key={f.q}>
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+
+          <p className="mt-8 text-[14px] text-[#64748B]">
+            Explore{" "}
+            <Link href="/features/jd-alignment" className="font-semibold text-[#7C3AED] hover:underline">JD Alignment</Link>,{" "}
+            <Link href="/features/cover-letter" className="font-semibold text-[#7C3AED] hover:underline">Cover Letters</Link>, and{" "}
+            <Link href="/pricing" className="font-semibold text-[#7C3AED] hover:underline">pricing</Link>.
+          </p>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
