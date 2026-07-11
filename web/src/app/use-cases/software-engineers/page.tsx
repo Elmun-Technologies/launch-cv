@@ -9,12 +9,12 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "Software Engineer Resume Builder — Quantify Your Impact",
+  title: "Software Engineer Resume Writer: AI, 5-Min Build",
   description:
-    "ATS-clean engineering resumes. AI rewrites your bullets to quantify latency, throughput, scope, and ownership — the signals hiring managers actually scan for.",
+    "The AI resume writer for software engineers: rewrites your bullets to quantify latency, throughput, and scope — the signals recruiters scan. Try it free →",
   pathname: "/use-cases/software-engineers",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],
+  keywords: ["software engineer resume writer", "software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],
 });
 
 const ld = {

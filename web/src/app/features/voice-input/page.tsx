@@ -21,9 +21,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "Voice to Text Resume Builder — Speak Your Bullets",
+  title: "Voice-to-Text Resume Builder: Speak in 12 Languages",
   description:
-    "Speak your career instead of typing it. Launch CV's voice-to-text resume builder turns your words into quantified, ATS-ready bullets in 12 languages.",
+    "Modern resume builders let you talk, not type. Speak your career and AI turns it into quantified, ATS-ready bullets in 12 languages. Try voice free →",
   pathname: "/features/voice-input",
   image: FEATURES_OG_IMAGE,
   keywords: [
