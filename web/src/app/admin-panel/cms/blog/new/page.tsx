@@ -20,6 +20,8 @@ const blank: BlogEditorData = {
   seoTitle: "",
   seoDescription: "",
   ogImageUrl: "",
+  canonicalUrl: "",
+  focusKeyword: "",
   status: "draft",
   scheduledFor: "",
 };

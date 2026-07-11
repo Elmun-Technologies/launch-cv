@@ -44,6 +44,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (body.seoTitle === null || typeof body.seoTitle === "string") data.seoTitle = body.seoTitle;
   if (body.seoDescription === null || typeof body.seoDescription === "string") data.seoDescription = body.seoDescription;
   if (body.ogImageUrl === null || typeof body.ogImageUrl === "string") data.ogImageUrl = body.ogImageUrl;
+  if (body.canonicalUrl === null || typeof body.canonicalUrl === "string") data.canonicalUrl = body.canonicalUrl;
+  if (body.focusKeyword === null || typeof body.focusKeyword === "string") data.focusKeyword = body.focusKeyword;
 
   // Slug change: re-uniqueify
   if (typeof body.slug === "string" && body.slug.trim() && body.slug.trim() !== before.slug) {

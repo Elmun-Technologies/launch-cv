@@ -40,6 +40,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     description: post.seoDescription || post.description,
     pathname: `/blog/${post.slug}`,
     keywords: post.tags,
+    canonicalUrl: post.canonicalUrl || undefined,
+    image: post.ogImageUrl || post.coverUrl || undefined,
+    ogType: "article",
   });
 }
 
@@ -71,12 +74,14 @@ export default async function BlogPostPage({
 
   const wordCount = post.bodyMd.split(/\s+/).filter(Boolean).length;
 
+  const canonicalUrl = post.canonicalUrl?.trim() || absoluteUrl(`/blog/${post.slug}`);
+
   const articleLd = {
     "@type": "Article",
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.dateModified,
     url: absoluteUrl(`/blog/${post.slug}`),
     image: post.ogImageUrl || absoluteUrl("/opengraph-image"),
     author: { "@type": "Organization", name: post.author.name, url: absoluteUrl("/about") },
@@ -86,7 +91,7 @@ export default async function BlogPostPage({
       url: absoluteUrl("/"),
       logo: { "@type": "ImageObject", url: absoluteUrl("/icon.png") },
     },
-    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/blog/${post.slug}`) },
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
     keywords: post.tags.join(", "),
     articleSection: post.category,
     wordCount,

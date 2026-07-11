@@ -263,6 +263,8 @@ model BlogPost {
   seoTitle       String?
   seoDescription String?
   ogImageUrl     String?
+  canonicalUrl   String?
+  focusKeyword   String?
   /// draft | scheduled | published | archived
   status         String    @default("draft")
   publishedAt    DateTime?
