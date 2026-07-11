@@ -120,16 +120,34 @@ Funnel:
 5. **Breakdown**: `plan` bo‘yicha — qaysi reja ko‘proq konversiya beradi.
 6. Saqlang: “Signup → Purchase funnel”.
 
-> Muhim: `purchase_completed` PostHog’ga serverdan `distinct_id = userId` bilan
-> keladi. Brauzerda login’dan keyin `posthog.identify(userId)` chaqirilsa,
-> funnel bitta odam bo‘yicha to‘liq bog‘lanadi (keyingi qadam — pastga qarang).
+> `purchase_completed` PostHog’ga serverdan `distinct_id = userId` bilan keladi va
+> `identifyUser()` register/login’da chaqirilgani uchun funnel bitta odam bo‘yicha
+> to‘liq bog‘lanadi.
 
-## Keyingi tavsiya (ixtiyoriy)
+## User identity (o‘rnatilgan)
 
-- `posthog.identify(userId)` + GA4 `user_id` ni login/register’dan keyin o‘rnatish —
-  funnel qadamlarini bitta foydalanuvchi bo‘yicha aniq bog‘laydi.
-- Server `purchase_completed` uchun GA4 client_id sifatida asl brauzer `_ga`
-  cookie’sini uzatish — pre-purchase web session bilan ulash uchun.
+Funnel qadamlari bitta foydalanuvchi bo‘yicha bog‘lanishi uchun `identifyUser()`
+(`lib/analytics-client.ts`) chaqiriladi:
+
+- **register muvaffaqiyatli** — `app/register/page.tsx` (`identifyUser(userId)`)
+- **login muvaffaqiyatli** — `components/login-form.tsx` (login route endi `userId` qaytaradi)
+- **logout** — `components/site-header.tsx` → `resetUser()` (PostHog `reset()` + GA4 `user_id=null`)
+
+Bu `posthog.identify(userId)` + GA4 `gtag('set', { user_id })` ni bajaradi, shunda
+signup’gacha bo‘lgan anonim hodisalar identifikatsiyalangan foydalanuvchiga ulanadi.
+
+## GA4 session stitching (purchase, o‘rnatilgan)
+
+Webhook’dagi `purchase_completed` asl brauzer sessiyasiga ulanadi:
+
+1. Checkout paytida client `_ga` cookie’dan GA4 `client_id`ni o‘qiydi
+   (`getGaClientId()`) va `/api/polar/checkout`’ga yuboradi.
+2. Checkout route uni Polar `metadata.ga_client_id`ga yozadi.
+3. Webhook `metadata.ga_client_id`ni o‘qib, GA4 Measurement Protocol’ga haqiqiy
+   `client_id` + `user_id` bilan yuboradi (`lib/analytics-server.ts`).
+
+`ga_client_id` bo‘lmasa — sintetik `srv.<userId>` ishlatiladi (conversion baribir yoziladi,
+faqat pre-purchase sessiyaga ulanmaydi).
 
 ## Ichki hodisalar (`AnalyticsEvent`)
 

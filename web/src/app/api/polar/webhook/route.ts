@@ -49,6 +49,11 @@ function metadataOf(data: Record<string, unknown>): Record<string, unknown> | nu
   return m && typeof m === "object" ? (m as Record<string, unknown>) : null;
 }
 
+function gaClientIdOf(meta: Record<string, unknown> | null): string | null {
+  const v = meta?.ga_client_id;
+  return typeof v === "string" && v ? v : null;
+}
+
 export async function POST(req: Request) {
   const secret = process.env.POLAR_WEBHOOK_SECRET;
   if (!secret) {
@@ -100,6 +105,7 @@ export async function POST(req: Request) {
             plan: planIdFromPolarProductId(sub.product_id ?? null),
             provider: "polar",
             subscriptionId: sub.id ?? null,
+            gaClientId: gaClientIdOf(metadataOf(data)),
           });
         }
         break;
@@ -124,6 +130,7 @@ export async function POST(req: Request) {
           plan,
           provider: "polar",
           orderId: order.id ?? null,
+          gaClientId: gaClientIdOf(metadataOf(data)),
         });
         break;
       }

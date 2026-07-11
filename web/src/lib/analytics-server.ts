@@ -29,7 +29,12 @@ function resolveMeasurementId(): string | null {
 }
 
 /** GA4 Measurement Protocol. Silently skips when GA_API_SECRET is unset. */
-async function sendToGa4(event: AnalyticsEventName, params: Record<string, unknown>, clientId: string) {
+async function sendToGa4(
+  event: AnalyticsEventName,
+  params: Record<string, unknown>,
+  clientId: string,
+  userId?: string | null,
+) {
   const measurementId = resolveMeasurementId();
   const apiSecret = process.env.GA_API_SECRET?.trim();
   if (!measurementId || !apiSecret) return;
@@ -43,6 +48,7 @@ async function sendToGa4(event: AnalyticsEventName, params: Record<string, unkno
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       client_id: clientId,
+      ...(userId ? { user_id: userId } : {}),
       events: [{ name: event, params }],
     }),
   }).catch(() => undefined);
@@ -78,12 +84,17 @@ async function sendToPosthog(event: AnalyticsEventName, distinctId: string, prop
  */
 export async function trackServerEvent(
   event: AnalyticsEventName,
-  opts: { userId?: string | null; params?: Record<string, unknown> } = {},
+  opts: { userId?: string | null; gaClientId?: string | null; params?: Record<string, unknown> } = {},
 ) {
-  const { userId, params = {} } = opts;
+  const { userId, gaClientId, params = {} } = opts;
   const distinctId = userId ?? "anonymous";
-  const clientId = userId ? `srv.${userId}` : "srv.anonymous";
-  await Promise.all([sendToGa4(event, params, clientId), sendToPosthog(event, distinctId, params)]);
+  // Prefer the real browser GA client id (stitches to the pre-purchase session);
+  // fall back to a stable per-user synthetic id when it's unavailable.
+  const clientId = gaClientId ?? (userId ? `srv.${userId}` : "srv.anonymous");
+  await Promise.all([
+    sendToGa4(event, params, clientId, userId),
+    sendToPosthog(event, distinctId, params),
+  ]);
 }
 
 /** Convenience wrapper for the payment success case. */
@@ -95,10 +106,12 @@ export async function trackPurchaseCompleted(opts: {
   subscriptionId?: string | null;
   value?: number | null;
   currency?: string | null;
+  gaClientId?: string | null;
 }) {
-  const { userId, plan, provider, orderId, subscriptionId, value, currency } = opts;
+  const { userId, plan, provider, orderId, subscriptionId, value, currency, gaClientId } = opts;
   await trackServerEvent(ANALYTICS_EVENTS.purchaseCompleted, {
     userId,
+    gaClientId,
     params: {
       plan,
       provider,
