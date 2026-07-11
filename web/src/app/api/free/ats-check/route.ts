@@ -99,7 +99,42 @@ export async function POST(req: Request) {
       ? String(formData.get("fingerprint")).slice(0, 128)
       : null;
 
-  // 4. Score it.
+  // 4. Reserve the quota slot BEFORE the paid OpenAI call so two near-simultaneous
+  //    requests from one IP can't both score. The globally-oldest reservation for
+  //    this IP/window wins; any later one cancels itself.
+  const reservation = await prisma.freeAtsTrial
+    .create({ data: { ipHash, fingerprint } })
+    .catch(() => null);
+
+  if (reservation) {
+    const oldest = await prisma.freeAtsTrial
+      .findFirst({
+        where: { ipHash, createdAt: { gte: since } },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+        select: { id: true },
+      })
+      .catch(() => null);
+    if (oldest && oldest.id !== reservation.id) {
+      await prisma.freeAtsTrial.delete({ where: { id: reservation.id } }).catch(() => null);
+      return NextResponse.json(
+        {
+          error: "You've used your free ATS check. Create an account for unlimited scans and the full fix list.",
+          alreadyUsed: true,
+        },
+        { status: 429 },
+      );
+    }
+  }
+
+  /** Release the reserved slot when we couldn't produce a real result, so the
+   *  visitor keeps their one free scan. */
+  const releaseReservation = async () => {
+    if (reservation) {
+      await prisma.freeAtsTrial.delete({ where: { id: reservation.id } }).catch(() => null);
+    }
+  };
+
+  // 5. Score it.
   const system = `You are an ATS (Applicant Tracking System) resume evaluator. Return JSON only.
 Analyze the resume text for how well it parses and ranks in automated systems.
 JSON shape:
@@ -125,6 +160,7 @@ Rules:
     result = toPublicResult(raw);
   } catch (e) {
     console.error("[free/ats-check] scoring error:", e);
+    await releaseReservation();
     return NextResponse.json(
       { error: "Could not score the resume right now. Please try again." },
       { status: 502 },
@@ -138,16 +174,19 @@ Rules:
     result.totalFixes === 0 &&
     result.dimensions.every((d) => d.score === 0);
   if (emptyResult) {
+    await releaseReservation();
     return NextResponse.json(
       { error: "We couldn't read enough from that resume. Try a clearer PDF/DOCX or paste the text." },
       { status: 502 },
     );
   }
 
-  // 5. Record the trial (best-effort) and track the funnel event.
-  await prisma.freeAtsTrial
-    .create({ data: { ipHash, fingerprint, score: result.overall } })
-    .catch(() => null);
+  // 6. Finalize the reserved trial with the score and track the funnel event.
+  if (reservation) {
+    await prisma.freeAtsTrial
+      .update({ where: { id: reservation.id }, data: { score: result.overall } })
+      .catch(() => null);
+  }
   await trackEvent("free_ats_check", { meta: { score: result.overall, totalFixes: result.totalFixes } });
 
   return NextResponse.json({ result });
