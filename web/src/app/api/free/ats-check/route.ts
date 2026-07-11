@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { chatJson } from "@/lib/openai-client";
 import { extractResumeText } from "@/lib/resume-parse";
+import { analyzeAtsSignals } from "@/lib/ats-signals";
 import { hashClientIp } from "@/lib/request-ip";
 import { allowFreeAtsBurst } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
@@ -134,7 +135,9 @@ export async function POST(req: Request) {
     }
   };
 
-  // 5. Score it.
+  // 5. Score it — grounded on deterministic signals so results are consistent.
+  const signals = analyzeAtsSignals(resumeText);
+
   const system = `You are an ATS (Applicant Tracking System) resume evaluator. Return JSON only.
 Analyze the resume text for how well it parses and ranks in automated systems.
 JSON shape:
@@ -148,11 +151,22 @@ JSON shape:
   ],
   "fixes": [ { "priority": "High" | "Medium" | "Low", "title": string } ]
 }
+Scoring guidance:
+- Formatting: penalize columnOrTableHint and allCapsHeavy. Structure: reward the four
+  standard sections being present; penalize missing ones. Readability: reward a healthy
+  bullet count and quantifiedBulletRatio; penalize mixedDateFormats. Keywords: judge role
+  keyword richness from the text.
+- The SIGNALS below are deterministically detected and are ground truth. Do NOT contradict
+  them (e.g. never claim contact info is missing when hasEmail/hasPhone is true).
 Rules:
-- Provide 4-10 concrete fixes ranked by priority. Base every fix on the actual text.
+- Provide 4-10 concrete fixes ranked by priority. Base every fix on the actual text and signals.
 - Do not fabricate metrics. Be honest and specific.`;
 
-  const user = `Evaluate this resume for ATS readiness:\n\n${resumeText.slice(0, 12000)}`;
+  const user = `SIGNALS (deterministic, treat as ground truth):
+${JSON.stringify(signals)}
+
+RESUME TEXT:
+${resumeText.slice(0, 12000)}`;
 
   let result: FreeAtsResult;
   try {
@@ -187,7 +201,14 @@ Rules:
       .update({ where: { id: reservation.id }, data: { score: result.overall } })
       .catch(() => null);
   }
-  await trackEvent("free_ats_check", { meta: { score: result.overall, totalFixes: result.totalFixes } });
+  await trackEvent("free_ats_check", {
+    meta: {
+      score: result.overall,
+      totalFixes: result.totalFixes,
+      columnOrTableHint: signals.columnOrTableHint,
+      wordCount: signals.wordCount,
+    },
+  });
 
   return NextResponse.json({ result });
 }
