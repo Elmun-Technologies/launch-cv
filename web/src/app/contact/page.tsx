@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { ArrowRight, Mail, MessageSquare, FileText, ShieldCheck, Building2 } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -11,6 +11,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Get in touch with Launch CV. Support, billing, partnerships, press, and security — every inbox replies within one business day. Reach the right team fast.",
   pathname: "/contact",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["Launch CV contact", "support", "press", "partnerships", "billing"],
 });
 

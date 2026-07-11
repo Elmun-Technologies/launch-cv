@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Palette, Layers, Sparkles, Eye } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -12,6 +12,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Your portfolio shows the work — your resume should land the interview. Launch CV writes ATS-clean design bullets that quantify impact and shipping speed.",
   pathname: "/use-cases/designers",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
 });
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { BlogCover } from "@/components/blog-cover";
@@ -19,6 +19,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     "Evidence-based guides on resume writing, ATS optimization, cover letters, and interview prep — actionable tactics to help you land the job faster.",
   pathname: "/blog",
+  image: DEFAULT_OG_IMAGE,
   keywords: [
     "resume tips",
     "career advice",

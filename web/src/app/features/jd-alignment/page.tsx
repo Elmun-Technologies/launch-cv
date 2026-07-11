@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
   Target,
@@ -22,6 +22,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Paste any job description and watch your match score climb from 40% to 90%+. Launch CV maps requirements, fills keyword gaps, and rewrites bullets in 60s.",
   pathname: "/features/jd-alignment",
+  image: FEATURES_OG_IMAGE,
   keywords: [
     "JD alignment",
     "match resume to job description",

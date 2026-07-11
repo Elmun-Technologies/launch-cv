@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Compass, BarChart3, Users, Target, Sparkles, Check } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -12,6 +12,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "PM hiring is signal-starved. Launch CV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
   pathname: "/use-cases/product-managers",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "Launch CV"],
 });
 
