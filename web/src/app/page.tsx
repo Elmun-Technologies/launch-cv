@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -11,7 +12,7 @@ import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-rev
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import {
   ArrowRight,
@@ -27,8 +28,7 @@ import {
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
-  description:
-    "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from $9/mo.",
+  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from ${planPriceLabel("starter")}.`,
   pathname: "/",
   keywords: [
     "AI resume builder",
@@ -125,7 +125,7 @@ const testimonials = [
 const faqs = [
   {
     q: "Is there a free plan?",
-    a: "You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: Starter, Professional, Elite, or Lifetime.",
+    a: `You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: ${planNameList()}.`,
   },
   {
     q: "Why does ATS matter?",
@@ -153,7 +153,7 @@ const faqs = [
   },
   {
     q: "What is the Lifetime plan?",
-    a: "A one-time payment of $79 with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.",
+    a: `A one-time payment of ${PUBLIC_PLANS.lifetime.priceDisplay} with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.`,
   },
 ];
 
@@ -483,18 +483,18 @@ export default async function Home() {
             Create an account, choose a plan, and paste your first job description. The first interview reply often lands within days.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
+            <CtaLink cta="get_started" location="home"
               href="/register"
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Get started
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </CtaLink>
             <Link
               href="/pricing"
               className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]"
             >
-              From {PUBLIC_PLANS.starter.priceDisplay}{PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+              From {PUBLIC_PLANS.starter.priceDisplay} a month · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
             </Link>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useInView, animate } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -93,13 +94,13 @@ export function AboutHero() {
 
             <motion.div variants={item} className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <motion.div whileHover={reduce ? undefined : { scale: 1.025 }} whileTap={{ scale: 0.98 }}>
-                <Link
+                <CtaLink cta="get_started" location="about_hero"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Create account
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
               </motion.div>
               <Link
                 href="/pricing"

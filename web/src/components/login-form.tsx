@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
+import { identifyUser } from "@/lib/analytics-client";
 
 /** Mirror of middleware's safeNextPath — blocks `//evil.com`, schemes, and
  * other off-site bounces that would let an attacker open-redirect users
@@ -56,7 +57,8 @@ export function LoginForm() {
     //   1. Explicit `?next=` query param (e.g. middleware-set after blocking /admin-panel)
     //   2. /admin-panel if the user is an admin
     //   3. /dashboard for regular customers
-    const json = (await res.json().catch(() => ({}))) as { isAdmin?: boolean };
+    const json = (await res.json().catch(() => ({}))) as { isAdmin?: boolean; userId?: string };
+    if (json.userId) identifyUser(json.userId);
     const defaultNext = json.isAdmin ? "/admin-panel" : "/dashboard";
     window.location.href = explicitNext || defaultNext;
   }

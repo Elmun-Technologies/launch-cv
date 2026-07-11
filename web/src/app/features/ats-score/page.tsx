@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
@@ -20,13 +22,15 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "ATS Score Checker — Test Your Resume on 15 Engines",
+  title: "ATS Score Checker: Free 0–100 Rating in 8s",
   description:
-    "Get a 0–100 ATS score in 8 seconds. We test your resume against 15 real ATS engines — Workday, Greenhouse, Lever — and map every fix. Average gain: +43 points.",
+    "Check your ATS score against 15 real engines like Workday and Greenhouse. Get a 0–100 rating plus a prioritized fix list in 8 seconds. Try it free →",
   pathname: "/features/ats-score",
   image: FEATURES_OG_IMAGE,
   keywords: [
     "ATS score checker",
+    "ATS score",
+    "ATS assessment",
     "test resume ATS",
     "resume ATS test",
     "applicant tracking system resume",
@@ -155,13 +159,13 @@ export default function AtsScorePage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="free_ats_check" location="feature_ats_score"
                   href="/free-ats-check"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(234,88,12,0.4)] transition hover:bg-[#C2410C]"
                 >
                   Check my score free
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#issues"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -355,6 +359,87 @@ export default function AtsScorePage() {
         </div>
       </section>
 
+      {/* COMPARISON */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#EA580C]">Why check first</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Guessing vs. an ATS resume checker
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Most resumes are filtered by an applicant tracking system before a human ever opens them. A quick ATS resume test tells you exactly why — and how to fix it.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#EA580C]">ATS Score Checker</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Applying blind</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Score", a: "A 0–100 ATS score in 8 seconds", b: "No idea why you are filtered" },
+                  { k: "Coverage", a: "15+ ATS platforms simulated", b: "One black-box upload" },
+                  { k: "Issue list", a: "Every problem ranked High, Medium, Low", b: "Silent rejection, no reason given" },
+                  { k: "Fix path", a: "A specific fix for each flagged issue", b: "Trial and error across dozens of applications" },
+                  { k: "Typical result", a: "+43 points on the first pass", b: "Same resume, same silence" },
+                  { k: "Confidence", a: "Re-upload to confirm you pass ATS", b: "Never know if it worked" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#EA580C]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#EA580C]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Sam found out his resume never reached a human
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Sam had sent 40 applications for operations roles and gotten two rejections and 38 silences. The resume looked great to him — a polished two-column design with a header graphic and a custom font. That was the problem.
+              </p>
+              <p>
+                He uploaded it to the ATS score checker and got a score of <span className="font-medium text-[#0F172A]">54 out of 100</span> in eight seconds. The report named the culprits: a text box the parser could not read, a multi-column layout that scrambled the reading order, and contact details trapped in the header graphic on iCIMS.
+              </p>
+              <p>
+                He switched to a single-column ATS-tested template, moved his email and phone into the body, and standardized his dates. On the re-check his score jumped to 91 — a gain in line with the platform&apos;s +43-point average. The same experience, finally readable, started getting replies.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/free-ats-check" className="inline-flex items-center gap-1.5 rounded-lg bg-[#EA580C] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#C2410C]">
+                Check my score free <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/resume-builder" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
+                Start from an ATS-safe template <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
@@ -416,13 +501,13 @@ export default function AtsScorePage() {
           <p className="mx-auto mt-4 max-w-[560px] text-[16px] leading-[1.65] text-[#475569]">
             More score means more human eyes on your resume — and more interview replies in your inbox.
           </p>
-          <Link
+          <CtaLink cta="free_ats_check" location="feature_ats_score"
             href="/free-ats-check"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#C2410C]"
           >
             Check my ATS score free
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 
@@ -448,6 +533,22 @@ export default function AtsScorePage() {
           </div>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="orange"
+        useCases={[
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Get a clean ATS score on a PM resume packed with roadmap and metric keywords.",
+          },
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Pass ATS parsing while still showcasing portfolio and design-system impact.",
+          },
+        ]}
+      />
 
       <FaqSection items={faqs} accent="#EA580C" />
 

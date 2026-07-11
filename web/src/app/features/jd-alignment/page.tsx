@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
@@ -19,9 +21,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "JD Alignment — Match Your Resume to a Job Description",
+  title: "JD Alignment: Hit 90%+ Job Match in 60 Seconds",
   description:
-    "Paste any job description and watch your match score climb from 40% to 90%+. Launch CV maps requirements, fills keyword gaps, and rewrites bullets in 60s.",
+    "JD alignment scores your resume against any job description, then fills keyword gaps and rewrites bullets to lift match from 40% to 90%+. Start free →",
   pathname: "/features/jd-alignment",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -168,13 +170,13 @@ export default function JDAlignmentPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_jd_alignment"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Run my first alignment
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#how-it-works"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -337,6 +339,87 @@ export default function JDAlignmentPage() {
         </div>
       </section>
 
+      {/* COMPARISON */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#1A56DB]">Why it beats tailoring by hand</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Manual editing vs. AI resume tailoring
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Tailoring a resume to each job description by hand is slow and easy to get wrong. JD Alignment does the requirement mapping, keyword gap analysis, and rewrites for you.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#1A56DB]">JD Alignment</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Editing by hand</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Requirement mapping", a: "AI maps every JD requirement to your resume", b: "Guesswork and copy-paste" },
+                  { k: "Keyword gap analysis", a: "Ranked list of exactly what is missing", b: "You miss what you cannot see" },
+                  { k: "Bullet rewrites", a: "Reworded to match — no fabrication", b: "Rewritten manually for each role" },
+                  { k: "Match score", a: "Live score you can lift up to 95%", b: "No feedback before you submit" },
+                  { k: "ATS optimization", a: "Tuned for 15+ ATS platforms", b: "Formatting risk on every upload" },
+                  { k: "Time per job", a: "Seconds to match and export", b: "30–60 minutes per application" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#1A56DB]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Priya turned a 42% match into an interview
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Priya had applied to a dozen product roles with the same resume and heard nothing back. She pasted one job description into JD Alignment and saw the problem in seconds: a <span className="font-medium text-[#0F172A]">42% match</span>, with six required keywords — roadmapping, OKRs, A/B testing, cross-functional, SQL, and stakeholder management — missing entirely.
+              </p>
+              <p>
+                Instead of rewriting from scratch, she accepted the AI rewrites one at a time. Each suggestion wove a missing keyword into experience she already had, and the match score climbed with every click. The keyword gap analysis went from a red list to a clean one.
+              </p>
+              <p>
+                She exported the tailored version, ran it through the ATS score checker to confirm the formatting was clean, and applied. The point was never to game the system — it was to make sure a resume that already fit the role finally read that way to both the parser and the recruiter.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
+                Check your ATS score <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/cover-letter" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
+                Generate a matching cover letter <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
@@ -406,13 +489,13 @@ export default function JDAlignmentPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             Let AI show you exactly how to match the job — and rewrite your resume to prove it.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_jd_alignment"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Run my first alignment
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
 
@@ -438,6 +521,22 @@ export default function JDAlignmentPage() {
           </div>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="blue"
+        useCases={[
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Match your engineering resume to the exact stack each job description lists.",
+          },
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Align roadmap wins, OKRs, and metrics with what the PM role is asking for.",
+          },
+        ]}
+      />
 
       <FaqSection items={faqs} accent="#1A56DB" />
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import type { AiUsagePayload } from "@/hooks/use-ai-usage";
+import { trackFeatureCtaClicked } from "@/lib/analytics-client";
 
 type Kind = "jd" | "packet" | "roleFit";
 
@@ -18,7 +19,11 @@ export function AiUsageBanner({ usage, kind }: { usage: AiUsagePayload | null; k
       {!usage.pro ? (
         <>
           {" "}
-          <Link href="/dashboard/settings/subscription" className="font-medium text-blue-600 underline">
+          <Link
+            href="/dashboard/settings/subscription"
+            onClick={() => trackFeatureCtaClicked({ cta: "choose_plan", location: `ai_usage_banner:${kind}` })}
+            className="font-medium text-blue-600 underline"
+          >
             Choose a plan
           </Link>
         </>

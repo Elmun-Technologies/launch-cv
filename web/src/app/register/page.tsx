@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight, Gift, BarChart3 } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
-import { trackSignUpStarted, trackSignUpCompleted } from "@/lib/analytics-client";
+import { trackSignUpStarted, trackSignUpCompleted, identifyUser } from "@/lib/analytics-client";
 
 function RegisterPageInner() {
   const sp = useSearchParams();
@@ -45,7 +45,10 @@ function RegisterPageInner() {
       setError(j.error ?? "Something went wrong. Please try again.");
       return;
     }
-    // Account created — fire before the full-page redirect below.
+    // Account created — identify so this event (and later purchase) join one
+    // person, then fire before the full-page redirect below.
+    const j = (await res.json().catch(() => ({}))) as { userId?: string };
+    if (j.userId) identifyUser(j.userId);
     trackSignUpCompleted({ has_referral: !!referralCode });
     window.location.href = next;
   }
