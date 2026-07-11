@@ -319,6 +319,87 @@ export default function CoverLetterPage() {
         </div>
       </section>
 
+      {/* COMPARISON */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#0D9488]">Why not a template</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Blank page vs. an AI cover letter generator
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                A recycled template reads like a recycled template. A personalized cover letter — pulled from the company, the role, and your resume — reads like you meant it.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#0D9488]">Launch CV</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Template or blank page</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Starting point", a: "Pulls company, role, and tone from the JD", b: "An empty document and a deadline" },
+                  { k: "Personalization", a: "Company mission and tech stack woven in", b: "One generic paragraph for every job" },
+                  { k: "Tone", a: "4 tones to match the employer", b: "One stiff, one-size voice" },
+                  { k: "Languages", a: "14 languages", b: "English only" },
+                  { k: "Speed", a: "A finished letter in 60 seconds", b: "An hour of second-guessing" },
+                  { k: "Formatting", a: "ATS-safe, ready for email or PDF", b: "Formatting that breaks on upload" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0D9488]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#0D9488]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Noah stopped dreading the cover letter
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Noah wanted to apply to eight companies in a weekend, but every job application cover letter took him the better part of an hour. By Saturday afternoon he had written two and given up.
+              </p>
+              <p>
+                He connected his resume, pasted the first job description, and let the cover letter maker do the reading. The AI surfaced the company&apos;s mission and the exact stack in the posting, then offered three opening hooks. He picked the one that sounded like him, chose the <span className="font-medium text-[#0F172A]">Enthusiastic</span> tone, and had a tailored draft in under a minute.
+              </p>
+              <p>
+                Because each letter starts from the specific role instead of a blank page, the remaining six took a weekend afternoon instead of a week. Every one was a personalized cover letter — same voice, different company — and ready to paste straight into an email or attach as a clean PDF.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/features/jd-alignment" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Match the resume first <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/interview-prep" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Then drill the interview <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">

@@ -310,6 +310,120 @@ export default function JDAlignmentPage() {
         </div>
       </section>
 
+      {/* COMPARISON */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#1A56DB]">Why it beats tailoring by hand</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Manual editing vs. AI resume tailoring
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Tailoring a resume to each job description by hand is slow and easy to get wrong. JD Alignment does the requirement mapping, keyword gap analysis, and rewrites for you.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#1A56DB]">JD Alignment</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Editing by hand</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Requirement mapping", a: "AI maps every JD requirement to your resume", b: "Guesswork and copy-paste" },
+                  { k: "Keyword gap analysis", a: "Ranked list of exactly what is missing", b: "You miss what you cannot see" },
+                  { k: "Bullet rewrites", a: "Reworded to match — no fabrication", b: "Rewritten manually for each role" },
+                  { k: "Match score", a: "Live score you can lift up to 95%", b: "No feedback before you submit" },
+                  { k: "ATS optimization", a: "Tuned for 15+ ATS platforms", b: "Formatting risk on every upload" },
+                  { k: "Time per job", a: "Seconds to match and export", b: "30–60 minutes per application" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#1A56DB]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Priya turned a 42% match into an interview
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Priya had applied to a dozen product roles with the same resume and heard nothing back. She pasted one job description into JD Alignment and saw the problem in seconds: a <span className="font-medium text-[#0F172A]">42% match</span>, with six required keywords — roadmapping, OKRs, A/B testing, cross-functional, SQL, and stakeholder management — missing entirely.
+              </p>
+              <p>
+                Instead of rewriting from scratch, she accepted the AI rewrites one at a time. Each suggestion wove a missing keyword into experience she already had, and the match score climbed with every click. The keyword gap analysis went from a red list to a clean one.
+              </p>
+              <p>
+                She exported the tailored version, ran it through the ATS score checker to confirm the formatting was clean, and applied. The point was never to game the system — it was to make sure a resume that already fit the role finally read that way to both the parser and the recruiter.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
+                Check your ATS score <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/cover-letter" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
+                Generate a matching cover letter <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#1A56DB]">FAQ</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
+          </RevealOnView>
+
+          <div className="mt-10 space-y-4">
+            {[
+              { q: "How do I match my resume to a job description?", a: "Paste your resume and the job post. JD Alignment runs a keyword gap analysis, maps every requirement, and rewrites your bullets so the resume job description match climbs — up to a 95% match." },
+              { q: "Does it fabricate experience?", a: "No. AI resume tailoring only reweaves keywords into experience you already have. It never invents roles, employers, or numbers." },
+              { q: "Will the tailored resume still pass ATS?", a: "Yes. Every rewrite is checked for resume ATS optimization across 15+ ATS platforms, so tailoring never breaks parsing." },
+              { q: "Can I tailor for more than one job at a time?", a: "Yes. Save a match score per application and compare which roles you fit best before you invest time applying." },
+            ].map((f) => (
+              <RevealOnView key={f.q}>
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+
+          <p className="mt-8 text-[14px] text-[#64748B]">
+            Pair it with the{" "}
+            <Link href="/features/resume-builder" className="font-semibold text-[#1A56DB] hover:underline">resume builder</Link> and{" "}
+            <Link href="/features/interview-prep" className="font-semibold text-[#1A56DB] hover:underline">interview prep</Link>, or compare{" "}
+            <Link href="/pricing" className="font-semibold text-[#1A56DB] hover:underline">plans</Link>.
+          </p>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
