@@ -17,6 +17,7 @@ const companyLinks = [
 ];
 
 const resourceLinks = [
+  { label: "Use Cases", href: "/use-cases" },
   { label: "For Designers", href: "/use-cases/designers" },
   { label: "For Engineers", href: "/use-cases/software-engineers" },
   { label: "For PMs", href: "/use-cases/product-managers" },
