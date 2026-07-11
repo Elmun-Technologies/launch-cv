@@ -14,6 +14,9 @@ export type BlogPost = {
   /** Full article content as structured sections */
   sections: BlogSection[];
   faqs?: { q: string; a: string }[];
+  /** Optional SEO overrides. Fall back to `title` / `description` when unset. */
+  seoTitle?: string;
+  seoDescription?: string;
 };
 
 export type BlogSection = {
@@ -31,6 +34,9 @@ export const BLOG_POSTS: BlogPost[] = [
     readingTime: 8,
     category: "Job Search",
     tags: ["ats score", "ats score meaning", "what is ats score", "applicant tracking system", "resume optimization"],
+    seoTitle: "What Is an ATS Score? Meaning, Full Form & How to Improve It",
+    seoDescription:
+      "ATS score meaning explained: what it is, what ATS stands for, what a good score is, and how to raise yours so your resume reaches a human recruiter.",
     author: {
       name: "Launch CV Editorial",
       role: "Career Research Team",
@@ -143,6 +149,9 @@ Because the checker scores your resume *against the job description you paste in
     readingTime: 9,
     category: "Resume Tips",
     tags: ["how to check ats score", "resume ats score checker", "ats-friendly resume format", "align resume with job description", "ats resume"],
+    seoTitle: "How to Check Your Resume's ATS Score (Free Checker Guide)",
+    seoDescription:
+      "Check your resume's ATS score in 4 steps with a free ATS score checker, align it to the job description, and fix your formatting before you apply.",
     author: {
       name: "Launch CV Editorial",
       role: "Career Research Team",
@@ -257,6 +266,9 @@ Do this for each role and you stop guessing. Instead of blasting one resume at f
     readingTime: 8,
     category: "Resume Tips",
     tags: ["voice to resume", "voice to text resume", "resume builder", "ai resume", "resume writing"],
+    seoTitle: "Voice to Resume: Build Your Resume by Speaking (2026 Guide)",
+    seoDescription:
+      "How voice-to-text resume building works, why speaking beats the blank page, and how to turn what you say into an ATS-ready resume.",
     author: {
       name: "Launch CV Editorial",
       role: "Career Research Team",
@@ -368,6 +380,145 @@ You bring the experience; the tools handle the blank page, the formatting, and t
       { q: "Is a voice-to-text resume accurate?", a: "Modern speech-to-text is highly accurate, and you always review and edit the draft. It's best for capturing your experience quickly; you polish the wording afterward." },
       { q: "Will a resume I made by voice still pass ATS?", a: "Yes, as long as you align it to the job description and use a clean, ATS-friendly format. Run the final draft through an ATS score checker before applying." },
       { q: "Do I have to be a good writer to use voice-to-resume?", a: "No. That's the point — you speak naturally about your work, and the tool handles turning it into polished, professional bullet points." },
+    ],
+  },
+
+  {
+    slug: "resume-keywords-for-software-engineers",
+    title: "Resume Keywords for Software Engineers: The 2026 List (and How to Use Them)",
+    description:
+      "The resume keywords software engineers need to pass ATS filters and get recruiter callbacks — organized by category, with a method for choosing the right ones for each job.",
+    date: "2026-07-02",
+    readingTime: 9,
+    category: "Resume Tips",
+    tags: ["resume keywords for software engineers", "software engineer resume", "ats keywords", "tech resume", "resume optimization"],
+    seoTitle: "Resume Keywords for Software Engineers (2026 List + How to Use)",
+    seoDescription:
+      "A categorized list of resume keywords for software engineers plus a simple method to pick the right ones for each job description and pass ATS screening.",
+    author: {
+      name: "Launch CV Editorial",
+      role: "Career Research Team",
+      bio: "The Launch CV editorial team researches job search trends and resume best practices to help job seekers land more interviews.",
+    },
+    sections: [
+      {
+        heading: "Why keywords decide whether a software engineer's resume gets read",
+        body: `For software engineers, the resume keyword game has higher stakes than in most fields. Recruiters and Applicant Tracking Systems (ATS) search for very specific technical terms — a language, a framework, a cloud platform — and if your resume doesn't contain the exact words a role is built around, it can be filtered out before anyone reads a line of your experience.
+
+The good news: engineering resumes are also the easiest to optimize, because the keywords are concrete. You either shipped React or you didn't; you either deployed on AWS or you didn't. There's no guesswork about what a “Kubernetes” keyword means.
+
+This guide gives you a categorized list of the resume keywords software engineers need in 2026, and — more importantly — a method for choosing the right ones for each job instead of dumping every buzzword onto the page. If you're unsure how ATS scoring works first, read our primer on [what an ATS score is](/blog/what-is-an-ats-score).`,
+      },
+      {
+        heading: "How ATS keyword matching works for tech roles",
+        body: `An ATS parses your resume into structured text and compares it against the job description a recruiter loaded. For technical roles, recruiters often add exact-match filters: “must contain Python,” “must contain Kubernetes.” A resume that says “containerization” when the filter looks for “Docker” can be missed, even though you clearly have the skill.
+
+### Exact terms beat synonyms
+
+Write the specific technology, not a vague umbrella term. “CI/CD pipelines with GitHub Actions” is stronger than “automated deployment.” Where a term has both a common abbreviation and a full form — “CI/CD”, “Amazon Web Services (AWS)” — include both once so you match either search.
+
+Keyword matching is why two engineers with identical experience get very different callback rates: one mirrors the posting's exact vocabulary, the other doesn't.`,
+      },
+      {
+        heading: "Core resume keywords for software engineers (by category)",
+        body: `Here are the resume keywords software engineers should draw from, grouped by category. Only include the ones that are actually true for you.
+
+### Programming languages
+
+JavaScript, TypeScript, Python, Java, Go, Rust, C#, C++, Ruby, PHP, Kotlin, Swift, Scala, SQL.
+
+### Frameworks and libraries
+
+React, Next.js, Vue, Angular, Node.js, Express, Django, Flask, FastAPI, Spring Boot, .NET, Rails, Laravel, React Native.
+
+### Cloud and DevOps
+
+AWS, Azure, Google Cloud Platform (GCP), Docker, Kubernetes, Terraform, CI/CD, GitHub Actions, Jenkins, Ansible, serverless, Lambda.
+
+### Databases and data
+
+PostgreSQL, MySQL, MongoDB, Redis, DynamoDB, Elasticsearch, Kafka, GraphQL, REST APIs, ETL.
+
+### Engineering practices
+
+Microservices, distributed systems, system design, unit testing, integration testing, TDD, code review, Agile, Scrum, observability, performance optimization, scalability.
+
+### Tools
+
+Git, Jira, Datadog, Grafana, Prometheus, Sentry, Postman.
+
+These are the terms recruiters most commonly search for. Your job is not to include all of them — it's to include the ones that match your experience and the specific posting.`,
+      },
+      {
+        heading: "Role-specific keywords: frontend, backend, full-stack, mobile, data/ML",
+        body: `Different specialties emphasize different keywords. Weight your resume toward your target:
+
+### Frontend
+
+React, TypeScript, Next.js, state management (Redux, Zustand), accessibility (a11y, WCAG), responsive design, Web Vitals, component libraries, testing (Jest, Playwright).
+
+### Backend
+
+API design, REST, GraphQL, microservices, message queues, caching, database indexing, authentication/authorization (OAuth, JWT), rate limiting, concurrency.
+
+### Full-stack
+
+A balanced mix of the above, plus end-to-end ownership and the specific stack (e.g., “MERN”, “T3”, “Django + React”).
+
+### Mobile
+
+iOS (Swift, SwiftUI), Android (Kotlin, Jetpack Compose), React Native, Flutter, App Store deployment, push notifications.
+
+### Data / ML
+
+Python, pandas, NumPy, SQL, PyTorch, TensorFlow, scikit-learn, data pipelines, feature engineering, model deployment, MLOps, Airflow, Spark.
+
+Match your specialty's keywords to the posting, and you'll rank far higher than a generic “software engineer” resume that lists a little of everything.`,
+      },
+      {
+        heading: "Soft-skill and impact keywords that still matter",
+        body: `Technical keywords get you past the filter; impact language gets you the interview. Recruiters also scan for evidence of ownership and results:
+
+- **Ownership:** “led”, “owned”, “architected”, “designed”, “mentored”.
+- **Collaboration:** “cross-functional”, “stakeholder”, “code review”, “pair programming”.
+- **Impact:** “reduced latency”, “improved throughput”, “cut costs”, “increased reliability”, “scaled to N users”.
+
+Pair a technical keyword with a measurable result: “Optimized PostgreSQL queries, cutting p95 latency 40%” matches the keyword “PostgreSQL” and proves impact in one line. That's the format recruiters and ATS both reward.`,
+      },
+      {
+        heading: "How to choose the right keywords for each job (don't stuff)",
+        body: `Never paste the entire list above onto your resume. Keyword-stuffing is obvious to recruiters and penalized by modern ATS. Instead, use this method for each application:
+
+1. **Read the job description and extract its exact tech terms.** List every language, framework, tool, and practice it names.
+2. **Match against your real experience.** Keep the terms you've genuinely used; drop the rest.
+3. **Prioritize the posting's “required” section.** Those are the terms most likely to be filter-matched.
+4. **Use the exact wording.** If the posting says “TypeScript”, don't write “TS” only — write “TypeScript”.
+
+Doing this manually for every role is tedious. Our [JD alignment tool](/features/jd-alignment) reads the posting, compares it to your resume, and shows exactly which technical keywords you're missing — so you tailor in minutes. Then confirm your match with the [ATS Score Checker](/features/ats-score) before applying; see our guide on [how to check your resume's ATS score](/blog/how-to-check-ats-score-of-resume).`,
+      },
+      {
+        heading: "Where to place keywords on your resume",
+        body: `Where you put keywords matters as much as which ones you use. Distribute them naturally across:
+
+- **A skills section** — a clean, scannable list of your real technologies. This is the highest-density keyword zone and the first place recruiters look on a tech resume.
+- **The summary** — name your primary stack in the first two lines (“Full-stack engineer specializing in TypeScript, React, and Node.js”).
+- **Experience bullets** — embed the keyword in the accomplishment, tied to a result.
+- **Project entries** — list the stack used for each significant project.
+
+Avoid hiding keywords in images, skill-bar graphics, or a two-column sidebar — the ATS often can't read those. Keep everything as plain text in a single-column layout so every keyword is machine-readable.`,
+      },
+      {
+        heading: "Turn your keyword list into an interview",
+        body: `The fastest path from keyword list to interview is to build with the right terms baked in from the start. Draft your resume in the [resume builder](/features/resume-builder), align it to each posting with [JD alignment](/features/jd-alignment), and verify your keyword match with the [ATS Score Checker](/features/ats-score) before you apply.
+
+Keywords aren't about gaming the system — they're about making sure a recruiter searching for exactly your skills can actually find you. Use the real technologies you know, mirror each posting's vocabulary, and prove impact with numbers. That combination is what turns a software engineer's resume from filtered-out to shortlisted.`,
+      },
+    ],
+    faqs: [
+      { q: "What are the most important resume keywords for software engineers?", a: "The specific technologies you've used that also appear in the job description — languages (e.g., Python, TypeScript), frameworks (e.g., React, Spring), cloud/DevOps (e.g., AWS, Docker, Kubernetes), and databases (e.g., PostgreSQL). Exact matches to the posting matter most." },
+      { q: "How many keywords should a software engineer's resume have?", a: "There's no magic number. Include every relevant term from the job description that reflects your real experience — usually 10–20 technical keywords spread across your skills, summary, and bullets. Don't pad with skills you don't have." },
+      { q: "Should I list programming languages I barely know?", a: "No. Listing skills you can't back up in an interview is risky. Include languages and tools you can speak to confidently, and mirror the ones the posting actually requires." },
+      { q: "Where should keywords go on a software engineer resume?", a: "In a dedicated skills section, your summary, and woven into experience bullets tied to results. Keep everything as plain text in a single-column layout so the ATS can read it." },
     ],
   },
 

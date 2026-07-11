@@ -14,7 +14,7 @@ import { ArrowRight, Clock } from "lucide-react";
 // after publish/update/delete so changes appear immediately.
 export const revalidate = 300;
 
-export const metadata: Metadata = buildMarketingMetadata({
+const baseMetadata: Metadata = buildMarketingMetadata({
   title: "Resume & Career Blog — ATS Tips, Templates & Guides",
   description:
     "Evidence-based guides on resume writing, ATS optimization, cover letters, and interview prep — actionable tactics to help you land the job faster.",
@@ -28,6 +28,16 @@ export const metadata: Metadata = buildMarketingMetadata({
     "AI job search",
   ],
 });
+
+export const metadata: Metadata = {
+  ...baseMetadata,
+  alternates: {
+    ...baseMetadata.alternates,
+    types: {
+      "application/rss+xml": [{ url: absoluteUrl("/blog/feed.xml"), title: "Launch CV Career Blog" }],
+    },
+  },
+};
 
 const blogLd = {
   "@context": "https://schema.org",

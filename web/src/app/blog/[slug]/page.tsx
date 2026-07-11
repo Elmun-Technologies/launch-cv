@@ -9,7 +9,7 @@ import { JsonLd } from "@/components/json-ld";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
-import { getPostBySlug, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
+import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
 import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight } from "lucide-react";
 import { BlogFaq } from "@/components/blog-faq";
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
-  return buildMarketingMetadata({
+  const base = buildMarketingMetadata({
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.description,
     pathname: `/blog/${post.slug}`,
@@ -44,6 +44,25 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     image: post.ogImageUrl || post.coverUrl || undefined,
     ogType: "article",
   });
+  const publishedIso = new Date(post.date).toISOString();
+  // Type this route as an Article for richer social/search previews. The
+  // per-post opengraph-image.tsx in this segment is attached automatically.
+  return {
+    ...base,
+    openGraph: {
+      type: "article",
+      url: absoluteUrl(`/blog/${post.slug}`),
+      title: `${post.seoTitle || post.title} | Launch CV`,
+      description: post.seoDescription || post.description,
+      siteName: "Launch CV",
+      locale: "en_US",
+      publishedTime: publishedIso,
+      modifiedTime: publishedIso,
+      authors: [absoluteUrl("/about")],
+      section: post.category,
+      tags: post.tags,
+    },
+  };
 }
 
 export default async function BlogPostPage({
@@ -71,6 +90,13 @@ export default async function BlogPostPage({
     take: 3,
   });
   const related = relatedRows.map(rowToBlogPost);
+
+  // Prev/next navigation across all posts (newest-first) for deeper crawlability.
+  const allPosts = await getPublishedPosts();
+  const currentIndex = allPosts.findIndex((p) => p.slug === slug);
+  const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
+  const olderPost =
+    currentIndex >= 0 && currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
   const wordCount = post.bodyMd.split(/\s+/).filter(Boolean).length;
 
@@ -278,6 +304,35 @@ export default async function BlogPostPage({
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
+
+          {newerPost || olderPost ? (
+            <nav className="mt-12 grid gap-4 border-t border-[#E2E8F0] pt-8 sm:grid-cols-2">
+              {newerPost ? (
+                <Link
+                  href={`/blog/${newerPost.slug}`}
+                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
+                >
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Newer article</span>
+                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                    {newerPost.title}
+                  </p>
+                </Link>
+              ) : (
+                <span className="hidden sm:block" />
+              )}
+              {olderPost ? (
+                <Link
+                  href={`/blog/${olderPost.slug}`}
+                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 text-right transition hover:border-[#CBD5E1] sm:col-start-2"
+                >
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Older article</span>
+                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                    {olderPost.title}
+                  </p>
+                </Link>
+              ) : null}
+            </nav>
+          ) : null}
         </div>
 
         {related.length > 0 ? (

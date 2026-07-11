@@ -9,6 +9,7 @@ import { ProductShowcase } from "@/components/product-showcase";
 import { ResumeTemplateGallery } from "@/components/resume-template-gallery";
 import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-reveal";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
@@ -166,7 +167,12 @@ const faqLd = {
   })),
 };
 
-export default function Home() {
+// ISR: keep the homepage fast while surfacing the latest blog posts.
+export const revalidate = 300;
+
+export default async function Home() {
+  const latestPosts = (await getPublishedPosts()).slice(0, 3);
+
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
       <JsonLd data={homeLd} />
@@ -423,6 +429,49 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* BLOG */}
+      {latestPosts.length > 0 ? (
+        <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
+          <div className="mx-auto max-w-[1200px] px-6">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="lc-overline text-[#1A56DB]">From the blog</p>
+                <h2 className="mt-3 lc-section-headline text-[#0F172A]">Career &amp; resume guides</h2>
+              </div>
+              <Link
+                href="/blog"
+                className="hidden shrink-0 items-center gap-1 text-[14px] font-semibold text-[#1A56DB] hover:underline sm:inline-flex"
+              >
+                All articles <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <div className="mt-10 grid gap-5 sm:grid-cols-3">
+              {latestPosts.map((post) => (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+                >
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">
+                    {post.category}
+                  </span>
+                  <h3 className="mt-2 text-[16px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                    {post.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-[1.65] text-[#475569]">
+                    {post.description}
+                  </p>
+                  <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB]">
+                    Read article
+                    <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* CTA */}
       <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20">
