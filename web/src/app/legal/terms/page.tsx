@@ -4,7 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { ArrowLeft, Scale, Mail } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -12,6 +12,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     "Launch CV terms of service: service availability, AI-content responsibility, account security, prohibited use, and changes to the service.",
   pathname: "/legal/terms",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["Launch CV terms", "terms of service", "user agreement"],
 });
 

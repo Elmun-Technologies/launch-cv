@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
   MessageSquare,
@@ -24,6 +24,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face — with scored AI feedback and benchmark answers.",
   pathname: "/features/interview-prep",
+  image: FEATURES_OG_IMAGE,
   keywords: [
     "AI interview preparation",
     "interview practice AI",
