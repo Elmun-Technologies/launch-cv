@@ -42,7 +42,14 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     keywords: post.tags,
     canonicalUrl: post.canonicalUrl || undefined,
     image: post.ogImageUrl || post.coverUrl || undefined,
-    ogType: "article",
+    type: "article",
+    article: {
+      publishedTime: post.date,
+      modifiedTime: post.dateModified,
+      authors: [post.author.name],
+      section: post.category,
+      tags: post.tags,
+    },
   });
 }
 
