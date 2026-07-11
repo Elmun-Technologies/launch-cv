@@ -15,7 +15,7 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
   description:
-    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Lifetime at $79 once. Every AI tool included on every plan. No freemium games.",
+    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Elite at $49/yr, Lifetime at $79 once. Every AI tool included on every plan. No freemium games.",
   pathname: "/pricing",
   keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
@@ -39,7 +39,7 @@ const faqs = [
   },
   {
     q: "What's the fair-use cap on Lifetime?",
-    a: "Lifetime users get the same generous monthly AI limits as Elite (2,000 JD analyses, 1,000 packets, 2,000 role-fit checks). Pay once, use forever — within those healthy ceilings.",
+    a: "Lifetime users get the most generous monthly AI limits we offer: 2,000 JD analyses, 1,000 packets, 2,000 role-fit checks. Pay once, use forever — within those healthy ceilings.",
   },
 ];
 
@@ -81,31 +81,31 @@ const compareGroups = [
   {
     g: "AI ceilings (per month)",
     rows: [
-      { l: "JD analyses", v: { starter: "35", professional: "120", lifetime: "2,000" } },
-      { l: "Application packets", v: { starter: "15", professional: "55", lifetime: "1,000" } },
-      { l: "Role-fit checks", v: { starter: "35", professional: "120", lifetime: "2,000" } },
+      { l: "JD analyses", v: { starter: "35", professional: "120", elite: "320", lifetime: "2,000" } },
+      { l: "Application packets", v: { starter: "15", professional: "55", elite: "160", lifetime: "1,000" } },
+      { l: "Role-fit checks", v: { starter: "35", professional: "120", elite: "320", lifetime: "2,000" } },
     ],
   },
   {
     g: "Tools (all included)",
     rows: [
-      { l: "AI Resume Builder", v: { starter: true, professional: true, lifetime: true } },
-      { l: "JD Alignment", v: { starter: true, professional: true, lifetime: true } },
-      { l: "ATS Scanner", v: { starter: true, professional: true, lifetime: true } },
-      { l: "Cover Letter Generator", v: { starter: true, professional: true, lifetime: true } },
-      { l: "Interview Prep", v: { starter: true, professional: true, lifetime: true } },
-      { l: "Voice Input", v: { starter: false, professional: true, lifetime: true } },
-      { l: "Company Matcher", v: { starter: false, professional: true, lifetime: true } },
+      { l: "AI Resume Builder", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "JD Alignment", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "ATS Scanner", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "Cover Letter Generator", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "Interview Prep", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "Voice Input", v: { starter: false, professional: true, elite: true, lifetime: true } },
+      { l: "Company Matcher", v: { starter: false, professional: true, elite: true, lifetime: true } },
     ],
   },
   {
     g: "Export & extras",
     rows: [
-      { l: "PDF + DOCX export", v: { starter: true, professional: true, lifetime: true } },
-      { l: "All 12 templates", v: { starter: "Core only", professional: true, lifetime: true } },
-      { l: "Job tracker, contacts, companies", v: { starter: true, professional: true, lifetime: true } },
-      { l: "Email support", v: { starter: "Standard", professional: "Standard", lifetime: "Priority" } },
-      { l: "Priority feature rollouts", v: { starter: false, professional: false, lifetime: true } },
+      { l: "PDF + DOCX export", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "All 12 templates", v: { starter: "Core only", professional: true, elite: true, lifetime: true } },
+      { l: "Job tracker, contacts, companies", v: { starter: true, professional: true, elite: true, lifetime: true } },
+      { l: "Email support", v: { starter: "Standard", professional: "Standard", elite: "Priority", lifetime: "Priority" } },
+      { l: "Priority feature rollouts", v: { starter: false, professional: false, elite: true, lifetime: true } },
     ],
   },
 ];
@@ -150,7 +150,7 @@ export default function PricingPage() {
       {/* PLAN CARDS */}
       <section className="pb-20 pt-8">
         <div className="mx-auto max-w-[1200px] px-6">
-          <div className="grid gap-5 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
@@ -240,7 +240,7 @@ export default function PricingPage() {
           </RevealOnView>
 
           <div className="mt-10 overflow-hidden rounded-xl border border-[#E2E8F0]">
-            <div className="grid grid-cols-[1.6fr_repeat(3,1fr)] bg-white">
+            <div className="grid grid-cols-[1.6fr_repeat(4,1fr)] bg-white">
               <div className="border-b border-[#E2E8F0] px-5 py-4 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
                 Feature
               </div>
@@ -251,6 +251,10 @@ export default function PricingPage() {
               <div className="border-b border-[#E2E8F0] bg-[#EFF6FF]/50 px-5 py-4 text-center">
                 <p className="text-[13px] font-semibold text-[#1A56DB]">Professional</p>
                 <p className="text-[11px] text-[#475569]">$29/yr · popular</p>
+              </div>
+              <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
+                <p className="text-[13px] font-semibold text-[#0F172A]">Elite</p>
+                <p className="text-[11px] text-[#94A3B8]">$49/yr</p>
               </div>
               <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
                 <p className="text-[13px] font-semibold text-[#0F172A]">Lifetime</p>
@@ -265,10 +269,11 @@ export default function PricingPage() {
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-[#475569]">{g.g}</p>
                   </div>
                   {g.rows.map((r) => (
-                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(3,1fr)] items-center">
+                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(4,1fr)] items-center">
                       <div className="px-5 py-3 text-[13px] text-[#0F172A]">{r.l}</div>
                       <div className="px-5 py-3 text-center"><CellValue v={r.v.starter} /></div>
                       <div className="bg-[#EFF6FF]/30 px-5 py-3 text-center"><CellValue v={r.v.professional} /></div>
+                      <div className="px-5 py-3 text-center"><CellValue v={r.v.elite} /></div>
                       <div className="px-5 py-3 text-center"><CellValue v={r.v.lifetime} /></div>
                     </div>
                   ))}
@@ -278,7 +283,7 @@ export default function PricingPage() {
           </div>
 
           <p className="mt-6 text-center text-[13px] text-[#94A3B8]">
-            Elite ($79/yr) sits between Professional and Lifetime — same tools, higher ceilings. Available at checkout.
+            Every plan includes all six AI tools — only the monthly ceilings and support priority change.
           </p>
         </div>
       </section>

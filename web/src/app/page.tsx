@@ -123,7 +123,7 @@ const testimonials = [
 const faqs = [
   {
     q: "Is there a free plan?",
-    a: "No. Launch CV is a paid professional product. AI features require an active plan: Starter, Professional, or Lifetime. You can create an account first; checkout unlocks the AI.",
+    a: "No. Launch CV is a paid professional product. AI features require an active plan: Starter, Professional, Elite, or Lifetime. You can create an account first; checkout unlocks the AI.",
   },
   {
     q: "Why does ATS matter?",
@@ -334,13 +334,14 @@ export default function Home() {
             </div>
           </MotionReveal>
 
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
               const tagline: Record<string, string> = {
                 starter: "Try the workflow — monthly, cancel anytime.",
                 professional: "Best balance of limits and price.",
+                elite: "Higher ceilings + priority support, billed yearly.",
                 lifetime: "One payment. Forever access.",
               };
               return (

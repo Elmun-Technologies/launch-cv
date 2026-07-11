@@ -28,10 +28,12 @@ Polar product id.
 2. **Create one product per plan** (Products → New):
    - Starter — **$9 recurring, monthly**
    - Professional — **$29 recurring, yearly**
+   - Elite — **$49 recurring, yearly**
    - Lifetime — **$79 one-time purchase** (no renewal)
 
-   Copy each **Product ID**. (Elite is defined in code but not shown publicly — leave
-   `POLAR_PRODUCT_ELITE` empty.)
+   Copy each **Product ID**. Elite is a public tier shown on `/pricing`, so
+   `POLAR_PRODUCT_ELITE` must point at a **$49/year** product that matches the
+   displayed price.
 3. **Create an Organization Access Token** (Settings → Developers) with the
    `checkouts:write` scope. Copy it once — it is shown only once.
 4. **Create a webhook** (Settings → Webhooks):
