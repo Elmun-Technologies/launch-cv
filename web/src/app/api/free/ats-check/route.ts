@@ -131,6 +131,19 @@ Rules:
     );
   }
 
+  // Guard against a garbage/empty model response — don't spend the user's
+  // one free trial on a result we couldn't actually produce.
+  const emptyResult =
+    result.overall === 0 &&
+    result.totalFixes === 0 &&
+    result.dimensions.every((d) => d.score === 0);
+  if (emptyResult) {
+    return NextResponse.json(
+      { error: "We couldn't read enough from that resume. Try a clearer PDF/DOCX or paste the text." },
+      { status: 502 },
+    );
+  }
+
   // 5. Record the trial (best-effort) and track the funnel event.
   await prisma.freeAtsTrial
     .create({ data: { ipHash, fingerprint, score: result.overall } })

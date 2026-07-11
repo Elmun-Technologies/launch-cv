@@ -114,6 +114,18 @@ export function LandingNav() {
                   </div>
                   <div className="mt-3 border-t border-[#E2E8F0] pt-3">
                     <Link
+                      href="/free-ats-check"
+                      className="mb-2 flex items-center justify-between rounded-xl bg-[#FFF7ED] px-3 py-2.5 transition-colors hover:bg-[#FFEDD5]"
+                    >
+                      <span className="flex items-center gap-2">
+                        <BarChart3 className="h-4 w-4 text-[#EA580C]" />
+                        <span className="text-[13px] font-semibold text-[#9A3412]">
+                          Check your ATS score — free
+                        </span>
+                      </span>
+                      <ArrowRight className="h-3.5 w-3.5 text-[#EA580C]" />
+                    </Link>
+                    <Link
                       href="/features"
                       className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A56DB] hover:underline"
                     >
@@ -178,6 +190,20 @@ export function LandingNav() {
       {mobileOpen && (
         <div className="fixed inset-0 z-40 flex flex-col bg-white pt-[72px] lg:hidden">
           <div className="flex-1 overflow-y-auto px-5 py-6">
+            {/* Free ATS check — highlighted top-of-funnel CTA */}
+            <Link
+              href="/free-ats-check"
+              className="mb-4 flex items-center justify-between rounded-xl bg-[#FFF7ED] px-3 py-3 transition-colors hover:bg-[#FFEDD5]"
+            >
+              <span className="flex items-center gap-2.5">
+                <BarChart3 className="h-5 w-5 text-[#EA580C]" />
+                <span className="text-[14px] font-bold text-[#9A3412] font-body">
+                  Check your ATS score — free
+                </span>
+              </span>
+              <ArrowRight className="h-4 w-4 text-[#EA580C]" />
+            </Link>
+
             {/* Features group */}
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#94A3B8] font-body">Features</p>
             <div className="space-y-1">

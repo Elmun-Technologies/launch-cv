@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Upload,
   Loader2,
@@ -15,6 +15,16 @@ import type { FreeAtsResult } from "@/types/ai-results";
 
 type Mode = "upload" | "paste";
 type Status = "idle" | "loading" | "done" | "error";
+
+/** Fire-and-forget funnel event to GA4 (gtag) if analytics is loaded. */
+function fireEvent(name: string, params?: Record<string, unknown>): void {
+  try {
+    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+    w.gtag?.("event", name, params ?? {});
+  } catch {
+    /* analytics must never break the flow */
+  }
+}
 
 /** Lightweight, non-invasive client signal — a secondary abuse hint only. */
 function clientFingerprint(): string {
@@ -53,20 +63,49 @@ export function FreeAtsClient() {
   const [result, setResult] = useState<FreeAtsResult | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [pasted, setPasted] = useState("");
+  const [displayScore, setDisplayScore] = useState(0);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  // Animate the score count-up (respecting reduced-motion) once we have a result.
+  useEffect(() => {
+    if (status !== "done" || !result) return;
+    const target = result.overall;
+    fireEvent("free_ats_result", { score: target, fixes: result.totalFixes });
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduce) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDisplayScore(target);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const duration = 900;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setDisplayScore(Math.round(target * eased));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [status, result]);
+
   async function submit(fd: FormData) {
+    if (status === "loading") return;
     setStatus("loading");
     setError(null);
     setAlreadyUsed(false);
+    setDisplayScore(0);
     fd.append("fingerprint", clientFingerprint());
     try {
       const res = await fetch("/api/free/ats-check", { method: "POST", body: fd });
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.result) {
         setStatus("error");
-        setAlreadyUsed(Boolean(json.alreadyUsed));
+        const used = Boolean(json.alreadyUsed);
+        setAlreadyUsed(used);
         setError(json.error ?? "Something went wrong. Please try again.");
+        fireEvent(used ? "free_ats_quota_hit" : "free_ats_error");
         return;
       }
       setResult(json.result as FreeAtsResult);
@@ -74,11 +113,14 @@ export function FreeAtsClient() {
     } catch {
       setStatus("error");
       setError("Network error. Please try again.");
+      fireEvent("free_ats_error");
     }
   }
 
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
+    // Allow re-selecting the same file later by clearing the input value.
+    e.target.value = "";
     if (!file) return;
     setFileName(file.name);
     const fd = new FormData();
@@ -109,9 +151,9 @@ export function FreeAtsClient() {
   if (status === "done" && result) {
     const b = band(result.overall);
     const dash = 283;
-    const offset = dash - (dash * result.overall) / 100;
+    const offset = dash - (dash * displayScore) / 100;
     return (
-      <div className="mx-auto max-w-[720px]">
+      <div className="mx-auto max-w-[720px]" role="status" aria-live="polite">
         <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_30px_60px_-20px_rgba(15,23,42,0.18)]">
           <div className="grid sm:grid-cols-5">
             <div className="flex flex-col items-center justify-center border-b border-[#E2E8F0] bg-[#FFF7ED] p-6 sm:col-span-2 sm:border-b-0 sm:border-r">
@@ -132,7 +174,7 @@ export function FreeAtsClient() {
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <p className="text-[40px] font-bold leading-none tracking-tight text-[#0F172A]">
-                    {result.overall}
+                    {displayScore}
                   </p>
                   <p className="text-[10px] uppercase tracking-wider text-[#94A3B8]">of 100</p>
                 </div>
@@ -212,7 +254,8 @@ export function FreeAtsClient() {
               one-by-one, and rescore. Most users gain 20–40 points on the first pass.
             </p>
             <Link
-              href="/register"
+              href="/register?next=/resume/new"
+              onClick={() => fireEvent("free_ats_gate_cta_click", { score: result.overall })}
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(234,88,12,0.5)] transition hover:bg-[#C2410C]"
             >
               Unlock my fix list
@@ -254,7 +297,11 @@ export function FreeAtsClient() {
         </div>
 
         {status === "loading" ? (
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-[#E2E8F0] py-14">
+          <div
+            role="status"
+            aria-live="polite"
+            className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-[#E2E8F0] py-14"
+          >
             <Loader2 className="h-7 w-7 animate-spin text-[#EA580C]" />
             <p className="text-[14px] font-medium text-[#475569]">Scoring your resume…</p>
             <p className="text-[12px] text-[#94A3B8]">Usually under 10 seconds</p>
@@ -299,6 +346,7 @@ export function FreeAtsClient() {
 
         {status === "error" && error && (
           <div
+            role="alert"
             className={`mt-4 flex items-start gap-2 rounded-lg border p-3 text-[13px] ${
               alreadyUsed
                 ? "border-orange-200 bg-orange-50 text-[#9A3412]"
@@ -314,7 +362,8 @@ export function FreeAtsClient() {
               <p>{error}</p>
               {alreadyUsed && (
                 <Link
-                  href="/register"
+                  href="/register?next=/resume/new"
+                  onClick={() => fireEvent("free_ats_gate_cta_click", { source: "quota" })}
                   className="mt-1 inline-flex items-center gap-1 font-semibold underline underline-offset-2"
                 >
                   Create a free account <ArrowRight className="h-3.5 w-3.5" />
