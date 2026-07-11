@@ -3,6 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -419,6 +420,22 @@ export default function AtsScorePage() {
           </div>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="orange"
+        useCases={[
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Get a clean ATS score on a PM resume packed with roadmap and metric keywords.",
+          },
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Pass ATS parsing while still showcasing portfolio and design-system impact.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>
