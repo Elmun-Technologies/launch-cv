@@ -22,7 +22,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "AI Interview Prep — Practice Real, Role-Specific Questions",
   description:
-    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face — with scored AI feedback and benchmark answers.",
+    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
   pathname: "/features/interview-prep",
   image: FEATURES_OG_IMAGE,
   keywords: [

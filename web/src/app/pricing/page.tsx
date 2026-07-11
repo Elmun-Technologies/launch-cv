@@ -16,7 +16,7 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
   description:
-    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Elite at $49/yr, Lifetime at $79 once. Every AI tool included on every plan. No freemium games.",
+    "Launch CV pricing: Starter $9/mo, Professional $29/yr, Elite $49/yr, Lifetime $79 once. Every AI tool included on every plan. No freemium games.",
   pathname: "/pricing",
   keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });

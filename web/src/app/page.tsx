@@ -28,7 +28,7 @@ import {
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
   description:
-    "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from $9/mo.",
+    "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Plans from $9/mo.",
   pathname: "/",
   keywords: [
     "AI resume builder",

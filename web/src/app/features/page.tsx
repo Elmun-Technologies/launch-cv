@@ -10,7 +10,7 @@ import { absoluteUrl } from "@/lib/site";
 export const metadata = buildMarketingMetadata({
   title: "Features — The Complete AI Job Search Toolkit",
   description:
-    "Six AI tools in one product: JD alignment, AI resume builder, ATS scanner, cover letter generator, interview prep, voice input. One subscription, zero copy-pasting between tabs.",
+    "Six AI tools in one product: JD alignment, resume builder, ATS scanner, cover letters, interview prep, and voice input — one subscription, one workflow.",
   pathname: "/features",
   keywords: ["Launch CV features", "JD alignment", "ATS score", "interview prep", "cover letter AI", "AI resume builder"],
 });

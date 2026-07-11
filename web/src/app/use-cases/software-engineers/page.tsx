@@ -10,7 +10,7 @@ import { absoluteUrl } from "@/lib/site";
 export const metadata = buildMarketingMetadata({
   title: "Software Engineer Resume Builder — Quantify Your Impact",
   description:
-    "ATS-clean engineering resumes. AI rewrites your bullets to quantify latency, throughput, scope, and ownership — the signals hiring managers actually scan for.",
+    "ATS-clean engineering resumes. AI rewrites your bullets to quantify latency, throughput, scope, and ownership — what hiring managers scan for.",
   pathname: "/use-cases/software-engineers",
   image: DEFAULT_OG_IMAGE,
   keywords: ["software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],

@@ -21,7 +21,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "ATS Score Checker — Test Your Resume on 15 Engines",
   description:
-    "Get a 0–100 ATS score in 8 seconds. We test your resume against 15 real ATS engines — Workday, Greenhouse, Lever — and map every fix. Average gain: +43 points.",
+    "Get a 0–100 ATS score in 8 seconds. We test your resume against 15 real ATS engines — Workday, Greenhouse, Lever — and map every fix to make.",
   pathname: "/features/ats-score",
   image: FEATURES_OG_IMAGE,
   keywords: [
