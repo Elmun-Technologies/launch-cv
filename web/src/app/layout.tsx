@@ -89,7 +89,7 @@ const rootStructuredData = {
     },
     {
       "@type": "SiteNavigationElement",
-      name: ["Home", "Features", "JD Alignment", "Resume Builder", "Cover Letter", "Interview Prep", "ATS Score", "Voice Input", "Pricing", "Blog", "Company Matcher", "About"],
+      name: ["Home", "Features", "JD Alignment", "Resume Builder", "Cover Letter", "Interview Prep", "ATS Score", "Voice Input", "Use Cases", "Pricing", "Blog", "Company Matcher", "About"],
       url: [
         siteUrl,
         `${siteUrl}/features`,
@@ -99,6 +99,7 @@ const rootStructuredData = {
         `${siteUrl}/features/interview-prep`,
         `${siteUrl}/features/ats-score`,
         `${siteUrl}/features/voice-input`,
+        `${siteUrl}/use-cases`,
         `${siteUrl}/pricing`,
         `${siteUrl}/blog`,
         `${siteUrl}/company-matcher`,
