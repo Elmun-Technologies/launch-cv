@@ -149,6 +149,23 @@ Webhook’dagi `purchase_completed` asl brauzer sessiyasiga ulanadi:
 `ga_client_id` bo‘lmasa — sintetik `srv.<userId>` ishlatiladi (conversion baribir yoziladi,
 faqat pre-purchase sessiyaga ulanmaydi).
 
+## Purchase — qiymat va idempotency
+
+- **Pul qiymati**: webhook Polar `amount`/`total_amount` (sentlarda) ni major
+  birlikka aylantirib `value` + `currency` sifatida yuboradi, hamda GA4
+  `transaction_id` (order/subscription id) — GA4 revenue hisobotlari uchun.
+- **Idempotency** (Polar webhook’ni qayta yuborishi mumkin):
+  - Subscription: `purchase_completed` faqat `active`ga **birinchi o‘tishda** otiladi
+    (oldingi status `active` bo‘lmasa) — qayta yetkazish ikki marta sanamaydi.
+  - Order (bir martalik): agar order allaqachon yozilgan bo‘lsa, o‘tkazib yuboriladi.
+  - Qo‘shimcha: GA4 `transaction_id` orqali GA tomonda ham dedup bo‘ladi.
+
+## E2E test
+
+`e2e/analytics.spec.ts` — `sign_up_started` va `feature_cta_clicked` (reja bilan)
+event’lari GA4 (`dataLayer`) va PostHog’ga yetishini tekshiradi. Ishga tushirish:
+`npm run test:e2e` (production `next start`ga qarshi ishlaydi).
+
 ## Ichki hodisalar (`AnalyticsEvent`)
 
 Serverda `trackEvent()` (`lib/analytics.ts`) — Postgres/Prisma’ga yozadi: `signup`,

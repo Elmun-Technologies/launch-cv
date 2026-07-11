@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { trackPurchaseCompleted } from "@/lib/analytics-server";
 import { isOneTimePlan, planIdFromPolarProductId } from "@/lib/polar";
@@ -54,6 +55,11 @@ function gaClientIdOf(meta: Record<string, unknown> | null): string | null {
   return typeof v === "string" && v ? v : null;
 }
 
+/** Polar amounts are in minor units (cents); GA4 `value` wants major units. */
+function toMajorUnits(minor: number | null | undefined): number | null {
+  return typeof minor === "number" && Number.isFinite(minor) ? minor / 100 : null;
+}
+
 export async function POST(req: Request) {
   const secret = process.env.POLAR_WEBHOOK_SECRET;
   if (!secret) {
@@ -90,6 +96,11 @@ export async function POST(req: Request) {
         const sub = data as unknown as PolarSubscription;
         const userId = await resolvePolarUserId(metadataOf(data), sub.id ?? null);
         if (!userId) break;
+        // Capture prior state BEFORE the upsert so we can detect the transition
+        // into `active` and stay idempotent across Polar's webhook re-deliveries.
+        const priorStatus = (
+          await prisma.subscription.findUnique({ where: { userId }, select: { status: true } })
+        )?.status;
         await upsertSubscriptionFromPolar(sub, userId);
         if (eventType === "subscription.active" || eventType === "subscription.created") {
           await trackEvent("pay_success", {
@@ -97,15 +108,18 @@ export async function POST(req: Request) {
             meta: { provider: "polar", subscriptionId: sub.id },
           });
         }
-        // External conversion: fire only on `active` (paid & live) to avoid the
-        // double count `created` + `active` would produce for one purchase.
-        if (eventType === "subscription.active") {
+        // External conversion: fire only on the FIRST transition into `active`.
+        // Gating on `priorStatus !== "active"` de-dupes redelivered active events
+        // and avoids the `created` + `active` double count for one purchase.
+        if (eventType === "subscription.active" && priorStatus !== "active") {
           await trackPurchaseCompleted({
             userId,
             plan: planIdFromPolarProductId(sub.product_id ?? null),
             provider: "polar",
             subscriptionId: sub.id ?? null,
             gaClientId: gaClientIdOf(metadataOf(data)),
+            value: toMajorUnits(sub.amount),
+            currency: sub.currency ?? null,
           });
         }
         break;
@@ -120,18 +134,28 @@ export async function POST(req: Request) {
         if (!plan || !isOneTimePlan(plan)) break;
         const userId = await resolvePolarUserId(metadataOf(data), null);
         if (!userId) break;
+        // Idempotency: skip the conversion if this order was already recorded
+        // (Polar may redeliver `order.paid`).
+        const alreadyRecorded = !!(await prisma.subscription.findFirst({
+          where: { stripeSubscriptionId: `order:${order.id}` },
+          select: { id: true },
+        }));
         await upsertOrderFromPolar(order, userId);
         await trackEvent("pay_success", {
           userId,
           meta: { provider: "polar", orderId: order.id, plan },
         });
-        await trackPurchaseCompleted({
-          userId,
-          plan,
-          provider: "polar",
-          orderId: order.id ?? null,
-          gaClientId: gaClientIdOf(metadataOf(data)),
-        });
+        if (!alreadyRecorded) {
+          await trackPurchaseCompleted({
+            userId,
+            plan,
+            provider: "polar",
+            orderId: order.id ?? null,
+            gaClientId: gaClientIdOf(metadataOf(data)),
+            value: toMajorUnits(order.total_amount ?? order.amount),
+            currency: order.currency ?? null,
+          });
+        }
         break;
       }
 

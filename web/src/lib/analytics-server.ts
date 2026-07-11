@@ -117,6 +117,8 @@ export async function trackPurchaseCompleted(opts: {
       provider,
       order_id: orderId ?? undefined,
       subscription_id: subscriptionId ?? undefined,
+      // GA4 uses transaction_id to de-duplicate revenue across resends.
+      transaction_id: orderId ?? subscriptionId ?? undefined,
       // GA4 monetization: `value` requires `currency`.
       value: value ?? undefined,
       currency: value != null ? (currency ?? "USD") : undefined,
