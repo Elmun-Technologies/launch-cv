@@ -60,7 +60,7 @@ export function planIdFromPolarProductId(productId: string | null | undefined): 
 
 /**
  * Plans paid as a one-time purchase rather than a recurring subscription.
- * Starter and Professional are recurring (monthly / yearly); Lifetime is one-time.
+ * Starter is monthly; Professional and Elite are yearly recurring; Lifetime is one-time.
  */
 export function isOneTimePlan(plan: CheckoutPlan): boolean {
   return plan === "lifetime";

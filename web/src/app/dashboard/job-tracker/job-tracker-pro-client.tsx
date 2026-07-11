@@ -50,11 +50,11 @@ const STATUS_MAP: Record<string, PipelineKey> = {
 };
 
 const SKILLS_INITIAL = [
-  { name: "Sketch", value: 70, price: "$2.00" },
-  { name: "3D Modeling", value: 50, price: "$1.00" },
-  { name: "Drawing", value: 85, price: "$3.00" },
-  { name: "Eyes", value: 62, price: "$2.00" },
-  { name: "New Products", value: 40, price: "$1.00" },
+  { name: "UI Design", value: 90 },
+  { name: "Prototyping", value: 78 },
+  { name: "Design Systems", value: 85 },
+  { name: "User Research", value: 62 },
+  { name: "Interaction Design", value: 72 },
 ];
 
 type NoteRow = { id: string; content: string; createdAt: string };
@@ -62,13 +62,13 @@ type ExpEntry = { id: string; title: string; location: string; period: string; b
 type EduEntry = { id: string; degree: string; school: string; year: string };
 
 const DEFAULT_EXPERIENCES: ExpEntry[] = [
-  { id: "e1", title: "Senior Product Designer, Nimur - UI/UX Design Agency", location: "Dhaka, Bangladesh", period: "02/08/2021 - present", bullets: ["Designed high-fidelity visual designs.", "Created design specifications and documentation for development teams.", "Mentored junior designers and conducted design reviews to maintain design quality."] },
-  { id: "e2", title: "Product Designer - Lunchbox", location: "Dhaka, Bangladesh", period: "02/08/2021 - present", bullets: [] },
+  { id: "e1", title: "Senior Product Designer — Acme Design Studio", location: "Remote", period: "2021 — Present", bullets: ["Designed high-fidelity interfaces across web and mobile.", "Wrote design specifications and documentation for engineering teams.", "Ran design reviews and mentored junior designers to keep quality high."] },
+  { id: "e2", title: "Product Designer — Brightline", location: "Remote", period: "2019 — 2021", bullets: [] },
 ];
 const DEFAULT_EDUCATION: EduEntry[] = [
-  { id: "ed1", degree: "BFA Industrial Design - UX Design", school: "Rhode Island School", year: "2016" },
+  { id: "ed1", degree: "BFA, Interaction Design", school: "State University", year: "2016" },
 ];
-const DEFAULT_SKILLS = ["Adobe Photoshop", "Dashboard", "Interaction Design", "UI", "Date Visualization", "UX", "Graphic Design", "Information Architecture"];
+const DEFAULT_SKILLS = ["Adobe Photoshop", "Dashboards", "Interaction Design", "UI", "Data Visualization", "UX", "Graphic Design", "Information Architecture"];
 
 export function JobTrackerProClient({
   initial,
@@ -278,7 +278,7 @@ export function JobTrackerProClient({
               <X className="h-5 w-5 text-gray-400" />
             </div>
             <p className="mt-2 text-sm text-gray-400">
-              Lorem ipsum dolor sit amet consectetur. Porta enemy a rostrum nec vehicular
+              Add recruiters, hiring managers, and referrals tied to this role so every conversation stays in one place.
             </p>
             <div className="mt-4 space-y-3">
               <div>
@@ -287,7 +287,7 @@ export function JobTrackerProClient({
                   className="soha-input mt-1.5"
                   value={contactForm.name}
                   onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="Nimur"
+                  placeholder="Full name"
                 />
               </div>
               <div>
@@ -434,23 +434,23 @@ export function JobTrackerProClient({
         <div className="mt-4 space-y-3">
           <div>
             <label className="text-[14px] font-semibold text-gray-900">From Name *</label>
-            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="Mastermind Design Agency" readOnly />
+            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="Acme Design Studio" readOnly />
           </div>
           <div>
             <label className="text-[14px] font-semibold text-gray-900">From Address *</label>
-            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="nasin@musemind.agency" readOnly />
+            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="hello@example.com" readOnly />
           </div>
           <div>
             <label className="text-[14px] font-semibold text-gray-900">Subject Line *</label>
-            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="Notion Hive + Musemind" readOnly />
+            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="Introduction — Acme Design Studio" readOnly />
           </div>
           <div>
             <label className="text-[14px] font-semibold text-gray-900">Internal Email Name *</label>
-            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="Mastermind" readOnly />
+            <input className="soha-input mt-1 !h-11 !text-[14px] !text-[#ACB5C2]" value="Acme Design Studio" readOnly />
           </div>
         </div>
         <div className="mt-4 flex gap-2">
-          <button type="button" onClick={() => void navigator.clipboard.writeText("Notion Hive + Musemind")} className="rounded-full bg-[#7C5CFC] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#6B4CE0]">Copy Subject</button>
+          <button type="button" onClick={() => void navigator.clipboard.writeText("Introduction — Acme Design Studio")} className="rounded-full bg-[#7C5CFC] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#6B4CE0]">Copy Subject</button>
           <button type="button" className="rounded-full border border-[#7C5CFC] px-4 py-2 text-xs font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Copy Message</button>
         </div>
       </div>
@@ -514,7 +514,7 @@ export function JobTrackerProClient({
             <div key={s.name}>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-[16px] font-medium text-gray-900">{s.name}</span>
-                <span className="text-[13px] text-[#ACB5C2]">{s.price}</span>
+                <span className="text-[13px] text-[#ACB5C2]">{s.value}%</span>
               </div>
               <div className="relative mt-2 h-1.5 w-full rounded-full bg-[#E9F4FF]">
                 <div className="h-full rounded-full bg-[#7C5CFC]" style={{ width: `${s.value}%` }} />
@@ -737,9 +737,9 @@ export function JobTrackerProClient({
           <div className="space-y-4 px-5 py-4">
             <p className="text-[16px] font-medium text-[#9EA7B3]">{selected.title ?? "Senior Product Designer"}</p>
             <div className="flex flex-wrap gap-2 text-[12px] text-[#A7B0BC]">
-              <span className="rounded-md bg-[#F8FAFD] px-3 py-1.5">nimur24@gmail.com</span>
-              <span className="rounded-md bg-[#F8FAFD] px-3 py-1.5">+880 123 456 789</span>
-              <span className="rounded-md bg-[#F8FAFD] px-3 py-1.5">Rampur, Dhaka, Bangladesh</span>
+              <span className="rounded-md bg-[#F8FAFD] px-3 py-1.5">candidate@example.com</span>
+              <span className="rounded-md bg-[#F8FAFD] px-3 py-1.5">+1 (555) 123-4567</span>
+              <span className="rounded-md bg-[#F8FAFD] px-3 py-1.5">San Francisco, CA</span>
             </div>
             <h3 className="text-[32px] font-semibold tracking-[-0.02em] text-gray-900">About</h3>
             <p className="text-[14px] leading-6 text-[#8D98A8]">
@@ -938,9 +938,7 @@ export function JobTrackerProClient({
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div><label className="text-sm font-semibold text-gray-900">Job Title</label><input className="soha-input mt-1.5" value={createForm.title} onChange={(e) => setCreateForm((p) => ({ ...p, title: e.target.value }))} placeholder="Job Title" /></div>
-                  <div><label className="text-sm font-semibold text-gray-900">Url for Original Posting</label><input className="soha-input mt-1.5" placeholder="Url for original posting" /></div>
                   <div><label className="text-sm font-semibold text-gray-900">Company Name</label><input className="soha-input mt-1.5" value={createForm.company} onChange={(e) => setCreateForm((p) => ({ ...p, company: e.target.value }))} placeholder="Company Name" /></div>
-                  <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" placeholder="Location" /></div>
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-gray-900">Job Description</label>

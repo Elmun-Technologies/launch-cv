@@ -163,7 +163,7 @@ export function SubscriptionSettingsClient() {
         </p>
       ) : null}
 
-      <div className="grid gap-5 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {CHECKOUT_PLAN_ORDER.map((key) => {
           const cfg = PUBLIC_PLANS[key];
           const Icon = PLAN_ICONS[key];

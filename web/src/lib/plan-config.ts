@@ -9,6 +9,7 @@ export type PlanId = "none" | CheckoutPlan;
 export const CHECKOUT_PLAN_ORDER: readonly CheckoutPlan[] = [
   "starter",
   "professional",
+  "elite",
   "lifetime",
 ];
 

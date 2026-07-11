@@ -30,9 +30,9 @@ export const PUBLIC_PLANS: Record<
   },
   elite: {
     title: "Elite",
-    priceDisplay: "$79",
+    priceDisplay: "$49",
     periodLabel: "/year",
-    billingExplainer: "Annual plan with the highest monthly AI ceilings.",
+    billingExplainer: "Billed annually through Polar — renews yearly. Cancel anytime.",
     valueLine: "Heavy applicants, career switchers, and agency-style volume.",
   },
   lifetime: {

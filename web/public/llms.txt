@@ -16,7 +16,7 @@ cover letter generation, interview preparation, and voice input.
 - **ATS Score Checker**: Instant ATS compatibility score (0–100) with detailed formatting,
   keyword, and structure checks across 15+ major ATS platforms.
 - **Cover Letter Generator**: AI-personalized cover letters in 60 seconds using your resume
-  and the target job description. Supports 4 tone modes and 15 languages.
+  and the target job description. Supports 4 tone modes and 14 languages.
 - **Interview Preparation**: 200+ role-specific practice questions generated from your resume
   and job description. AI scores every answer and gives STAR-method feedback.
 - **Voice Input**: Speak naturally about your work experience. AI transcribes and transforms
