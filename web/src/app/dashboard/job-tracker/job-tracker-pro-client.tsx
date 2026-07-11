@@ -938,9 +938,7 @@ export function JobTrackerProClient({
               <div className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div><label className="text-sm font-semibold text-gray-900">Job Title</label><input className="soha-input mt-1.5" value={createForm.title} onChange={(e) => setCreateForm((p) => ({ ...p, title: e.target.value }))} placeholder="Job Title" /></div>
-                  <div><label className="text-sm font-semibold text-gray-900">Url for Original Posting</label><input className="soha-input mt-1.5" placeholder="Url for original posting" /></div>
                   <div><label className="text-sm font-semibold text-gray-900">Company Name</label><input className="soha-input mt-1.5" value={createForm.company} onChange={(e) => setCreateForm((p) => ({ ...p, company: e.target.value }))} placeholder="Company Name" /></div>
-                  <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" placeholder="Location" /></div>
                 </div>
                 <div>
                   <label className="text-sm font-semibold text-gray-900">Job Description</label>

@@ -9,7 +9,6 @@ import {
   Menu,
   Plus,
   Search,
-  Send,
   SlidersHorizontal,
   UploadCloud,
   X,
@@ -451,8 +450,8 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
             </div>
             <div className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
-                <div><label className="text-sm font-semibold text-gray-900">First Name*</label><input className="soha-input mt-1.5" value={createF.firstName} onChange={(e) => setCreateF((p) => ({ ...p, firstName: e.target.value }))} placeholder="Us Dollar" /></div>
-                <div><label className="text-sm font-semibold text-gray-900">Last Name*</label><input className="soha-input mt-1.5" value={createF.lastName} onChange={(e) => setCreateF((p) => ({ ...p, lastName: e.target.value }))} placeholder="1.000" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">First Name*</label><input className="soha-input mt-1.5" value={createF.firstName} onChange={(e) => setCreateF((p) => ({ ...p, firstName: e.target.value }))} placeholder="Jane" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">Last Name*</label><input className="soha-input mt-1.5" value={createF.lastName} onChange={(e) => setCreateF((p) => ({ ...p, lastName: e.target.value }))} placeholder="Cooper" /></div>
               </div>
               <div><label className="text-sm font-semibold text-gray-900">Job Title*</label><input className="soha-input mt-1.5" value={createF.jobTitle} onChange={(e) => setCreateF((p) => ({ ...p, jobTitle: e.target.value }))} placeholder="Product Designer" /></div>
               <div className="grid gap-4 sm:grid-cols-2">

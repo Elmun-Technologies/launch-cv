@@ -305,8 +305,8 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
             </div>
             <form className="space-y-4" onSubmit={(e) => void saveCompany(e)}>
               <div className="grid gap-4 sm:grid-cols-2">
-                <div><label className="text-sm font-semibold text-gray-900">Name*</label><input className="soha-input mt-1.5" value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Us Dollar" /></div>
-                <div><label className="text-sm font-semibold text-gray-900">Industry*</label><select className="soha-select mt-1.5" value={form.industry} onChange={(e) => setForm((p) => ({ ...p, industry: e.target.value }))}><option value="">Select</option><option>1.000</option><option>Design</option><option>Technology</option><option>Finance</option></select></div>
+                <div><label className="text-sm font-semibold text-gray-900">Name*</label><input className="soha-input mt-1.5" value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Acme Corp" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">Industry*</label><select className="soha-select mt-1.5" value={form.industry} onChange={(e) => setForm((p) => ({ ...p, industry: e.target.value }))}><option value="">Select</option><option>Design</option><option>Technology</option><option>Finance</option><option>Healthcare</option><option>Retail</option><option>Education</option><option>Other</option></select></div>
               </div>
               <div><label className="text-sm font-semibold text-gray-900">Company Size*</label><select className="soha-select mt-1.5" value={form.size} onChange={(e) => setForm((p) => ({ ...p, size: e.target.value }))}><option value="">Select</option><option>1-10</option><option>11-50</option><option>51-200</option><option>201-500</option><option>500+</option></select></div>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -315,8 +315,6 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                 <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" value={form.location} onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))} placeholder="City, Country" /></div>
                 <div><label className="text-sm font-semibold text-gray-900">Founded Year</label><input className="soha-input mt-1.5" value={form.foundedYear} onChange={(e) => setForm((p) => ({ ...p, foundedYear: e.target.value }))} placeholder="2015" /></div>
               </div>
-              <div><label className="text-sm font-semibold text-gray-900">Twitter</label><input className="soha-input mt-1.5" placeholder="https://twitter.com/username" /></div>
-              <label className="inline-flex items-center gap-2 text-sm text-gray-600"><input type="checkbox" defaultChecked className="h-4 w-4 rounded border-gray-300 text-blue-500" />I currently work here</label>
               {err ? <p className="text-sm text-red-600">{err}</p> : null}
               <div className="flex gap-3">
                 <button type="submit" disabled={saving} className="rounded-full bg-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70">{saving ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
