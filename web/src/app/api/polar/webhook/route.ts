@@ -102,16 +102,15 @@ export async function POST(req: Request) {
           await prisma.subscription.findUnique({ where: { userId }, select: { status: true } })
         )?.status;
         await upsertSubscriptionFromPolar(sub, userId);
-        if (eventType === "subscription.active" || eventType === "subscription.created") {
+        // Count the purchase exactly once — on the FIRST transition into `active`.
+        // Gating on `priorStatus !== "active"` de-dupes redelivered active events
+        // and avoids the `created` + `active` double count for one purchase, for
+        // both the internal DB event and the external GA4/PostHog conversion.
+        if (eventType === "subscription.active" && priorStatus !== "active") {
           await trackEvent("pay_success", {
             userId,
             meta: { provider: "polar", subscriptionId: sub.id },
           });
-        }
-        // External conversion: fire only on the FIRST transition into `active`.
-        // Gating on `priorStatus !== "active"` de-dupes redelivered active events
-        // and avoids the `created` + `active` double count for one purchase.
-        if (eventType === "subscription.active" && priorStatus !== "active") {
           await trackPurchaseCompleted({
             userId,
             plan: planIdFromPolarProductId(sub.product_id ?? null),
@@ -141,11 +140,12 @@ export async function POST(req: Request) {
           select: { id: true },
         }));
         await upsertOrderFromPolar(order, userId);
-        await trackEvent("pay_success", {
-          userId,
-          meta: { provider: "polar", orderId: order.id, plan },
-        });
+        // Count the one-time purchase exactly once (Polar may redeliver order.paid).
         if (!alreadyRecorded) {
+          await trackEvent("pay_success", {
+            userId,
+            meta: { provider: "polar", orderId: order.id, plan },
+          });
           await trackPurchaseCompleted({
             userId,
             plan,

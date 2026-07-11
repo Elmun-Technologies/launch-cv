@@ -35,6 +35,10 @@ Har bir hodisa GA4 **va** PostHog ikkalasiga ham yuboriladi.
 - Feature sahifa shabloni (hero / footer / sticky) — `components/feature-page-template.tsx`
 - Pricing kartalari — `app/pricing/page.tsx` (`choose_plan` + `plan`)
 - Subscription “Choose <plan>” — `subscription-settings-client.tsx` (`choose_plan` + `plan`, keyin `checkout_started`)
+- Paywall / limit CTA’lari (yuqori intent — checkout’ga olib boradi):
+  - AI limit banneri — `components/ai-usage-banner.tsx` (`choose_plan`)
+  - Role-fit / JD / Packet “Upgrade to Pro” — `resume/[id]/{fit,jd,packet}/ui.tsx` (`upgrade`)
+  - Dashboard “Choose plan” (reja yo‘q holatda) — `app/dashboard/page.tsx` (`choose_plan`)
 
 ## Env sozlamalari
 
@@ -159,6 +163,8 @@ faqat pre-purchase sessiyaga ulanmaydi).
     (oldingi status `active` bo‘lmasa) — qayta yetkazish ikki marta sanamaydi.
   - Order (bir martalik): agar order allaqachon yozilgan bo‘lsa, o‘tkazib yuboriladi.
   - Qo‘shimcha: GA4 `transaction_id` orqali GA tomonda ham dedup bo‘ladi.
+  - Ichki `pay_success` (DB) event ham xuddi shu shart bilan gate qilinadi —
+    endi `created`+`active` yoki qayta yetkazishda ikki marta yozilmaydi.
 
 ## E2E test
 

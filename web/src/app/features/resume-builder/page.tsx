@@ -9,7 +9,6 @@ import { absoluteUrl } from "@/lib/site";
 import {
   FileText,
   ArrowRight,
-  Check,
   Star,
   Wand2,
   Layers,
