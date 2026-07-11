@@ -278,7 +278,7 @@ export function JobTrackerProClient({
               <X className="h-5 w-5 text-gray-400" />
             </div>
             <p className="mt-2 text-sm text-gray-400">
-              Lorem ipsum dolor sit amet consectetur. Porta enemy a rostrum nec vehicular
+              Add recruiters, hiring managers, and referrals tied to this role so every conversation stays in one place.
             </p>
             <div className="mt-4 space-y-3">
               <div>
@@ -287,7 +287,7 @@ export function JobTrackerProClient({
                   className="soha-input mt-1.5"
                   value={contactForm.name}
                   onChange={(e) => setContactForm((p) => ({ ...p, name: e.target.value }))}
-                  placeholder="Nimur"
+                  placeholder="Full name"
                 />
               </div>
               <div>

@@ -167,11 +167,11 @@ export function SettingsClient({
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="text-[12px] font-semibold text-gray-700">First Name*</label>
-                    <input className="soha-input mt-1.5" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="Naimur" />
+                    <input className="soha-input mt-1.5" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" />
                   </div>
                   <div>
                     <label className="text-[12px] font-semibold text-gray-700">Last Name*</label>
-                    <input className="soha-input mt-1.5" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Rahman" />
+                    <input className="soha-input mt-1.5" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last name" />
                   </div>
                 </div>
 
