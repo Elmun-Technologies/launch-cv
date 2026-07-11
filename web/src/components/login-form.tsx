@@ -58,6 +58,8 @@ export function LoginForm() {
     //   2. /admin-panel if the user is an admin
     //   3. /dashboard for regular customers
     const json = (await res.json().catch(() => ({}))) as { isAdmin?: boolean; userId?: string };
+    // Identify the analytics session (internal id only, no PII) so funnel steps
+    // stitch to the same person across sessions and to server-side events.
     if (json.userId) identifyUser(json.userId);
     const defaultNext = json.isAdmin ? "/admin-panel" : "/dashboard";
     window.location.href = explicitNext || defaultNext;

@@ -3,38 +3,60 @@
 ## Konversiya funneli (asosiy hodisalar)
 
 Butun funnel bitta joyda belgilangan: **`src/lib/analytics-events.ts`**.
-Har bir hodisa GA4 **va** PostHog ikkalasiga ham yuboriladi.
+Har bir hodisa GA4 **va** PostHog ikkalasiga ham yuboriladi. Nomlar GA4 tavsiya
+etilgan event nomlariga moslangan (`purchase`, `sign_up_*`), shunda GA4 ning
+tayyor monetization/konversiya hisobotlari ishlaydi.
 
 | Event | Qachon | Qayerda (kod) | Yo‘nalish |
 |-------|--------|---------------|-----------|
-| `sign_up_started` | `/register` sahifa ochilganda | `app/register/page.tsx` (`useEffect`) | client |
-| `sign_up_completed` | akkaunt yaratilganda | `app/register/page.tsx` (register muvaffaqiyatli) | client |
-| `checkout_started` | Polar checkout ochilganda | `dashboard/settings/subscription/subscription-settings-client.tsx` | client |
-| `purchase_completed` | to‘lov muvaffaqiyatli | `app/api/polar/webhook/route.ts` | **server** (Polar webhook) |
-| `feature_cta_clicked` | har bir “Get started” / “Choose plan” tugmasi | ko‘p joyda (pastda) | client |
+| `sign_up_start` | `/register` sahifa ochilganda | `app/register/page.tsx` (`useEffect`) | client |
+| `sign_up_complete` | akkaunt yaratilganda | `app/register/page.tsx` (register muvaffaqiyatli) | client |
+| `plan_selected` | reja tanlanganda | `pricing/page.tsx` kartalari + `subscription-settings-client.tsx` | client |
+| `checkout_start` | Polar checkout ochilganda | `dashboard/settings/subscription/subscription-settings-client.tsx` | client |
+| `purchase` | to‘lov muvaffaqiyatli (`value` + `currency` bilan) | `app/api/polar/webhook/route.ts` | **server** (Polar webhook) |
+| `cta_click` | har bir “Get started” / “Choose plan” tugmasi | ko‘p joyda (pastda) | client |
 
-`feature_cta_clicked` parametrlari: `cta` (`get_started` yoki `choose_plan`), `plan`
-(qaysi reja — plan-specific CTA’larda), `location` (sahifadagi joy).
+- `plan_selected` parametrlari: `plan` (`starter`/`professional`/`elite`/`lifetime`), `location`.
+- `checkout_start` parametrlari: `plan`, `provider`.
+- `purchase` parametrlari: `plan`, `provider`, `value` (USD narx), `currency`,
+  `order_id`/`subscription_id`, hamda kampaniya atributlari (pastda “UTM” bo‘limi).
+- `cta_click` parametrlari: `cta` (`get_started` / `choose_plan` / …), `plan`
+  (plan-specific CTA’larda), `location` (sahifadagi joy).
+
+> **Key events (konversiyalar):** faqat **`sign_up_complete`** va **`purchase`**
+> GA4’da Key event qilib belgilanadi (`KEY_EVENT_NAMES`,
+> `src/lib/analytics-events.ts`). Qolganlari — funnel qadamlari, konversiya emas.
 
 ### Kod arxitekturasi
 
-- **`lib/analytics-events.ts`** — event nomlari va tiplar (yagona manba, izomorf).
-- **`lib/analytics-client.ts`** — brauzerda `track()` → `gtag()` + `window.posthog.capture()`.
+- **`lib/analytics-events.ts`** — event nomlari, `KEY_EVENT_NAMES` va tiplar
+  (yagona manba, izomorf).
+- **`lib/analytics-client.ts`** — brauzerda `track()` → `gtag()` +
+  `window.posthog.capture()`. Har bir hodisaga birinchi-teginish (first-touch)
+  UTM atributlari avtomatik qo‘shiladi. `identifyUser(userId)` — register/login’dan
+  keyin funnel’ni bitta odam bo‘yicha (server `purchase` bilan) bog‘laydi.
   `posthog-js` static import qilinmaydi (bundle o‘smasligi uchun); `window.posthog`
   `app/providers.tsx` da init’dan keyin ochib qo‘yiladi.
 - **`lib/analytics-server.ts`** — server dispatch: GA4 **Measurement Protocol** +
-  PostHog `/capture/` endpoint. Faqat `purchase_completed` (webhook) uchun.
+  PostHog `/capture/` endpoint. `purchase` (webhook) uchun. `value` berilmasa
+  reja narxidan (`PLAN_PRICE_USD`) olinadi; UTM atributlari GA4 traffic-source
+  (`source`/`medium`/`campaign`) va PostHog xususiyatlariga o‘tkaziladi.
+- **`lib/utm.ts`** — kampaniya atributsiyasi (UTM + `gclid`/`fbclid`/`msclkid`).
+  Birinchi-teginish `lc_attribution` cookie’siga yoziladi (90 kun).
+- **`components/attribution-tracker.tsx`** — `<AttributionTracker>` (layout’da) —
+  saytga birinchi kirishda UTM’ni cookie’ga yozadi.
 - **`components/cta-link.tsx`** — `<CtaLink>` — `next/link` o‘rniga; bosilganda
-  `feature_cta_clicked` yuboradi (server component sahifalarda ham ishlaydi).
+  `cta_click` (va pricing kartalarida `selectsPlan` bilan `plan_selected`) yuboradi.
 
 ### CTA tracking o‘rnatilgan joylar
 
-- Landing hero — `components/landing-hero.tsx` (`get_started`, `landing_hero`)
+- Landing hero — `components/landing-hero.tsx` (`free_ats_check`, `landing_hero`)
 - Landing nav (desktop + mobil) — `components/landing-nav.tsx`
 - Dashboard header — `components/site-header.tsx`
 - Feature sahifa shabloni (hero / footer / sticky) — `components/feature-page-template.tsx`
-- Pricing kartalari — `app/pricing/page.tsx` (`choose_plan` + `plan`)
-- Subscription “Choose <plan>” — `subscription-settings-client.tsx` (`choose_plan` + `plan`, keyin `checkout_started`)
+- Pricing kartalari — `app/pricing/page.tsx` (`choose_plan` + `plan` + `plan_selected`)
+- Subscription “Choose <plan>” — `subscription-settings-client.tsx`
+  (`choose_plan` + `plan_selected`, keyin `checkout_start`)
 - Paywall / limit CTA’lari (yuqori intent — checkout’ga olib boradi):
   - AI limit banneri — `components/ai-usage-banner.tsx` (`choose_plan`)
   - Role-fit / JD / Packet “Upgrade to Pro” — `resume/[id]/{fit,jd,packet}/ui.tsx` (`upgrade`)
@@ -45,7 +67,7 @@ Har bir hodisa GA4 **va** PostHog ikkalasiga ham yuboriladi.
 ```
 # GA4
 NEXT_PUBLIC_GA_MEASUREMENT_ID=""   # G-XXXX (bo‘sh bo‘lsa prod default, "false" = o‘chirish)
-GA_API_SECRET=""                   # FAQAT server (purchase_completed) uchun — Measurement Protocol secret
+GA_API_SECRET=""                   # FAQAT server (purchase) uchun — Measurement Protocol secret
 
 # PostHog
 NEXT_PUBLIC_POSTHOG_KEY=""
@@ -54,79 +76,120 @@ NEXT_PUBLIC_POSTHOG_HOST="https://us.i.posthog.com"
 
 `GA_API_SECRET` bo‘sh bo‘lsa server-side GA4 yuborish jim o‘tkazib yuboriladi
 (client hodisalar baribir ishlaydi). PostHog server capture uchun alohida secret
-kerak emas — `NEXT_PUBLIC_POSTHOG_KEY` yetarli.
+kerak emas — `NEXT_PUBLIC_POSTHOG_KEY` yetarli. UTM uchun qo‘shimcha env kerak
+emas (cookie asosida ishlaydi).
+
+---
+
+## UTM / kampaniya atributsiyasi
+
+Maqsad: reklama trafigini to‘g‘ri manbaga bog‘lash — hatto konversiya bir necha
+kun keyin bo‘lsa ham.
+
+Oqim (first-touch):
+
+1. Foydalanuvchi `?utm_source=…&utm_medium=…&utm_campaign=…` (yoki `gclid` va h.k.)
+   bilan kiradi → `<AttributionTracker>` bularni **`lc_attribution`** cookie’siga
+   bir marta yozadi (birinchi teginish g‘olib, 90 kun).
+2. Har bir client hodisa (`sign_up_start` … `cta_click`) shu atributlar bilan
+   yuboriladi. GA4 o‘zi sessiya source/medium’ini, PostHog esa `$initial_utm_*`ni
+   avtomatik yozadi — bu cookie ularni funnel bo‘ylab izchil ushlab turadi.
+3. **Checkout** (`/api/polar/checkout`) cookie’dan atributlarni o‘qib, Polar
+   `metadata`’siga qo‘shadi.
+4. **Webhook** (`/api/polar/webhook`) `metadata`’dan atributlarni oladi va
+   server `purchase` hodisasiga qo‘shadi: GA4 MP’da `source`/`medium`/`campaign`,
+   PostHog’da `utm_*`. Shu tariqa **server-side konversiya** ham to‘g‘ri kampaniyaga
+   yoziladi (webhookda brauzer sessiyasi yo‘q bo‘lsa ham).
+
+> PII yo‘q: faqat kampaniya metama’lumotlari (UTM tegi, click id). Email/ism
+> hech qachon event parametrlariga qo‘shilmaydi.
+
+Test: `/register?utm_source=google&utm_medium=cpc&utm_campaign=test` bilan kiring,
+DevTools → Application → Cookies’da `lc_attribution` paydo bo‘lishini,
+PostHog/GA4 DebugView’da event’larda `utm_*` borligini tekshiring.
 
 ---
 
 ## GA4’da Key events (conversions) qilib belgilash — qadam-baqadam
 
 > GA4’da event avtomatik “Key event” bo‘lmaydi — u kamida bir marta kelib turgach,
-> UI’da qo‘lda belgilanadi.
+> UI’da qo‘lda belgilanadi. Bizda **ikkita** konversiya bor.
 
 1. Sayt prodga chiqqandan keyin funnel’ni bir marta bosib o‘ting (register ochish →
-   akkaunt yaratish → checkout → CTA’lar). Yoki **DebugView** bilan tekshiring
-   (quyida).
+   akkaunt yaratish → plan tanlash → checkout → CTA’lar). Yoki **DebugView** bilan
+   tekshiring (quyida).
 2. GA4 → **Admin** (chapdagi tishli belgisi).
 3. **Property** ustunida → **Data display → Events**.
 4. Ro‘yxatda quyidagilar paydo bo‘lishini kuting (24–48 soatgacha kechikishi mumkin;
    real-time uchun DebugView’dan foydalaning):
-   - `sign_up_started`
-   - `sign_up_completed`
-   - `checkout_started`
-   - `purchase_completed`
-   - `feature_cta_clicked`
-5. Har bir event qatorining o‘ng tomonidagi **“Mark as key event”** tugmasini yoqing
-   (yoki **Admin → Key events → New key event** orqali aniq nomni yozib qo‘shing).
-6. Endi bu hodisalar **Reports → Engagement → Conversions** va Explore funnel’larida
-   “Key event” sifatida hisoblanadi.
+   - `sign_up_start`
+   - `sign_up_complete`
+   - `plan_selected`
+   - `checkout_start`
+   - `purchase`
+   - `cta_click`
+5. **Faqat** quyidagi ikkitasini Key event qiling — har bir qatorning o‘ng
+   tomonidagi **“Mark as key event”** tugmasini yoqing (yoki
+   **Admin → Key events → New key event** orqali aniq nomni yozib qo‘shing):
+   - ✅ `sign_up_complete`
+   - ✅ `purchase`
+6. `purchase` uchun `value` + `currency` kelayotganini tasdiqlang — monetization
+   hisobotlari shunda ishlaydi.
+7. Endi bu ikki hodisa **Reports → Engagement → Conversions** va Explore
+   funnel’larida “Key event” sifatida hisoblanadi.
 
 ### Tekshirish uchun (DebugView)
 
-- Brauzer: Google Analytics Debugger extension yoqilgan holda saytga kiring,
-  yoki URL’ga `?_dbg=1` (agar debug sozlangan bo‘lsa).
+- Brauzer: Google Analytics Debugger extension yoqilgan holda saytga kiring.
 - GA4 → **Admin → DebugView** — hodisalar real vaqtda ko‘rinadi.
-- Server-side `purchase_completed` uchun: test to‘lovni Polar **sandbox**’da qiling
+- Server-side `purchase` uchun: test to‘lovni Polar **sandbox**’da qiling
   (`POLAR_SERVER=sandbox`) va webhook kelganini kuzating; DebugView’da MP hodisasi
-  paydo bo‘ladi (client_id `srv.<userId>`).
+  paydo bo‘ladi (client_id `srv.<userId>`, `value`/`currency` bilan).
 
 ### Authorized URLs (Google tag → Configure your domains)
 
 “Key events = 0” muammosining tez-tez uchraydigan sababi — tag noto‘g‘ri domenda.
 
 1. GA4 → **Admin → Data Streams** → web stream’ni oching.
-2. **Configure tag settings → Show all → Configure your domains** (yoki
-   “List of domains”).
-3. Ruxsat etilgan domenlarni qo‘shing:
-   - `launch-cv.com`
-   - `www.launch-cv.com`
-   - staging domeni (agar bor bo‘lsa)
-4. Google Ads bilan bog‘lansangiz, **Google Ads → Tools → Conversions** da ham
-   import qilingan GA4 key event’lar “Authorized”/domen mos kelishini tekshiring.
+2. **Configure tag settings → Show all → Configure your domains**.
+3. Ruxsat etilgan domenlarni qo‘shing: `launch-cv.com`, `www.launch-cv.com`,
+   staging domeni (agar bor bo‘lsa).
+4. Google Ads bilan bog‘lansangiz, import qilingan GA4 key event’lar domeni
+   mos kelishini tekshiring.
 
 ---
 
 ## PostHog’da funnel qurish
 
 Hodisalar to‘g‘ri kelayotganini avval **Activity → Explore events** da tekshiring
-(yuqoridagi 5 event nomi bo‘yicha filtr).
+(yuqoridagi 6 event nomi bo‘yicha filtr).
 
-Funnel:
+### 1) Signup funnel
 
 1. PostHog → **Product analytics → Funnels → New funnel**.
-2. Qadamlarni tartib bilan qo‘shing:
-   1. `sign_up_started`
-   2. `sign_up_completed`
-   3. `checkout_started`
-   4. `purchase_completed`
-3. (ixtiyoriy) 0-qadam sifatida `feature_cta_clicked` qo‘yib, marketing CTA →
-   ro‘yxatdan o‘tish oqimini o‘lchang.
-4. Conversion window: 7 kun (yoki biznesga mos).
-5. **Breakdown**: `plan` bo‘yicha — qaysi reja ko‘proq konversiya beradi.
-6. Saqlang: “Signup → Purchase funnel”.
+2. Qadamlar:
+   1. `sign_up_start`
+   2. `sign_up_complete`
+3. (ixtiyoriy) 0-qadam sifatida `cta_click` qo‘yib, marketing CTA → ro‘yxatdan
+   o‘tish oqimini o‘lchang.
+4. Conversion window: 1 kun. **Breakdown**: `utm_source` yoki `utm_campaign`.
+5. Saqlang: **“Signup funnel”**.
 
-> `purchase_completed` PostHog’ga serverdan `distinct_id = userId` bilan keladi va
-> `identifyUser()` register/login’da chaqirilgani uchun funnel bitta odam bo‘yicha
-> to‘liq bog‘lanadi.
+### 2) Purchase funnel
+
+1. **Funnels → New funnel**.
+2. Qadamlar:
+   1. `sign_up_complete`
+   2. `plan_selected`
+   3. `checkout_start`
+   4. `purchase`
+3. Conversion window: 7 kun (yoki biznesga mos). **Breakdown**: `plan` — qaysi
+   reja ko‘proq konversiya beradi; yoki `utm_campaign` — qaysi kampaniya to‘laydi.
+4. Saqlang: **“Purchase funnel”**.
+
+> Muhim: `purchase` PostHog’ga serverdan `distinct_id = userId` bilan keladi.
+> Brauzerda register/login’dan keyin `identifyUser(userId)` chaqirilgani uchun
+> funnel bitta odam bo‘yicha to‘liq bog‘lanadi (client qadamlar → server `purchase`).
 
 ## User identity (o‘rnatilgan)
 
@@ -142,7 +205,7 @@ signup’gacha bo‘lgan anonim hodisalar identifikatsiyalangan foydalanuvchiga 
 
 ## GA4 session stitching (purchase, o‘rnatilgan)
 
-Webhook’dagi `purchase_completed` asl brauzer sessiyasiga ulanadi:
+Webhook’dagi `purchase` asl brauzer sessiyasiga ulanadi:
 
 1. Checkout paytida client `_ga` cookie’dan GA4 `client_id`ni o‘qiydi
    (`getGaClientId()`) va `/api/polar/checkout`’ga yuboradi.
@@ -157,9 +220,10 @@ faqat pre-purchase sessiyaga ulanmaydi).
 
 - **Pul qiymati**: webhook Polar `amount`/`total_amount` (sentlarda) ni major
   birlikka aylantirib `value` + `currency` sifatida yuboradi, hamda GA4
-  `transaction_id` (order/subscription id) — GA4 revenue hisobotlari uchun.
+  `transaction_id` (order/subscription id) — GA4 revenue hisobotlari uchun. Polar
+  summasi bo‘lmasa reja narxi (`PLAN_PRICE_USD`) zaxira sifatida ishlatiladi.
 - **Idempotency** (Polar webhook’ni qayta yuborishi mumkin):
-  - Subscription: `purchase_completed` faqat `active`ga **birinchi o‘tishda** otiladi
+  - Subscription: `purchase` faqat `active`ga **birinchi o‘tishda** otiladi
     (oldingi status `active` bo‘lmasa) — qayta yetkazish ikki marta sanamaydi.
   - Order (bir martalik): agar order allaqachon yozilgan bo‘lsa, o‘tkazib yuboriladi.
   - Qo‘shimcha: GA4 `transaction_id` orqali GA tomonda ham dedup bo‘ladi.
@@ -168,7 +232,7 @@ faqat pre-purchase sessiyaga ulanmaydi).
 
 ## E2E test
 
-`e2e/analytics.spec.ts` — `sign_up_started` va `feature_cta_clicked` (reja bilan)
+`e2e/analytics.spec.ts` — `sign_up_start` va `cta_click` (reja bilan)
 event’lari GA4 (`dataLayer`) va PostHog’ga yetishini tekshiradi. Ishga tushirish:
 `npm run test:e2e` (production `next start`ga qarshi ishlaydi).
 

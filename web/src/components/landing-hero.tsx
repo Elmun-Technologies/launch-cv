@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useInView, animate } from "motion/react";
 import { ArrowRight, Sparkles, Star } from "lucide-react";
-import { trackFeatureCtaClicked } from "@/lib/analytics-client";
+import { trackCtaClick } from "@/lib/analytics-client";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -102,7 +102,7 @@ export function LandingHero() {
               <motion.div whileHover={reduce ? undefined : { scale: 1.025 }} whileTap={{ scale: 0.98 }}>
                 <Link
                   href="/free-ats-check"
-                  onClick={() => trackFeatureCtaClicked({ cta: "free_ats_check", location: "landing_hero" })}
+                  onClick={() => trackCtaClick({ cta: "free_ats_check", location: "landing_hero" })}
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Check your ATS score free

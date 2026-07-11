@@ -55,6 +55,8 @@ export async function POST(req: Request) {
   }
   await trackEvent("login_success", { userId: user.id });
   const admin = isAdminUser({ role: user.role, email: user.email });
+  // `userId` (internal id, not PII) lets the client identify() the analytics
+  // session so the conversion funnel connects to server-side events.
   const res = NextResponse.json({ ok: true, isAdmin: admin, userId: user.id });
   const cookieBase = sessionCookieBase();
   res.cookies.set(COOKIE_NAME, token, {

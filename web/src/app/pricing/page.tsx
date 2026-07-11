@@ -250,6 +250,7 @@ export default function PricingPage() {
                       cta="choose_plan"
                       plan={key}
                       location="pricing_card"
+                      selectsPlan
                       href={registerHref}
                       className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                         popular
