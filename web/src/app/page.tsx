@@ -12,7 +12,7 @@ import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-rev
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import {
   ArrowRight,
@@ -28,8 +28,7 @@ import {
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
-  description:
-    "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from $9/mo.",
+  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from ${planPriceLabel("starter")}.`,
   pathname: "/",
   keywords: [
     "AI resume builder",
@@ -126,7 +125,7 @@ const testimonials = [
 const faqs = [
   {
     q: "Is there a free plan?",
-    a: "You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: Starter, Professional, Elite, or Lifetime.",
+    a: `You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: ${planNameList()}.`,
   },
   {
     q: "Why does ATS matter?",
@@ -154,7 +153,7 @@ const faqs = [
   },
   {
     q: "What is the Lifetime plan?",
-    a: "A one-time payment of $79 with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.",
+    a: `A one-time payment of ${PUBLIC_PLANS.lifetime.priceDisplay} with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.`,
   },
 ];
 
