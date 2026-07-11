@@ -221,7 +221,7 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                       </div>
                     </td>
                     <td className="px-4 py-4 font-medium text-gray-700">{row.industry ?? "Design"}</td>
-                    <td className="px-4 py-4 font-semibold text-[#2F7D67]">{row.location ?? "Bangladesh"}</td>
+                    <td className="px-4 py-4 font-semibold text-[#2F7D67]">{row.location ?? "—"}</td>
                     <td className="px-4 py-4 text-gray-500">{row.size ?? "11-50 Employees"}</td>
                     <td className="px-4 py-4 text-gray-500">{row.type ?? "Public Company"}</td>
                     <td className="px-4 py-4 text-right">
@@ -308,14 +308,14 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                 <div><label className="text-sm font-semibold text-gray-900">Name*</label><input className="soha-input mt-1.5" value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Us Dollar" /></div>
                 <div><label className="text-sm font-semibold text-gray-900">Industry*</label><select className="soha-select mt-1.5" value={form.industry} onChange={(e) => setForm((p) => ({ ...p, industry: e.target.value }))}><option value="">Select</option><option>1.000</option><option>Design</option><option>Technology</option><option>Finance</option></select></div>
               </div>
-              <div><label className="text-sm font-semibold text-gray-900">Company Size*</label><select className="soha-select mt-1.5" value={form.size} onChange={(e) => setForm((p) => ({ ...p, size: e.target.value }))}><option value="">Select</option><option>Product Designer</option><option>1-10</option><option>11-50</option><option>51-200</option><option>201-500</option></select></div>
+              <div><label className="text-sm font-semibold text-gray-900">Company Size*</label><select className="soha-select mt-1.5" value={form.size} onChange={(e) => setForm((p) => ({ ...p, size: e.target.value }))}><option value="">Select</option><option>1-10</option><option>11-50</option><option>51-200</option><option>201-500</option><option>500+</option></select></div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div><label className="text-sm font-semibold text-gray-900">Company Type*</label><select className="soha-select mt-1.5" value={form.type} onChange={(e) => setForm((p) => ({ ...p, type: e.target.value }))}><option>Public company</option><option>Private company</option><option>Startup</option><option>Agency</option></select></div>
-                <div><label className="text-sm font-semibold text-gray-900">Linkdin*</label><div className="mt-1.5 flex"><span className="flex items-center rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 px-3 text-sm text-gray-500">HTTPS://</span><input className="soha-input rounded-l-none" value={form.website} onChange={(e) => setForm((p) => ({ ...p, website: e.target.value }))} placeholder="www.linkdin.com" /></div></div>
-                <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" value={form.location} onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))} placeholder="Bangladesh" /></div>
-                <div><label className="text-sm font-semibold text-gray-900">Phone Number</label><input className="soha-input mt-1.5" value={form.foundedYear} onChange={(e) => setForm((p) => ({ ...p, foundedYear: e.target.value }))} placeholder="+8801988784435" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">LinkedIn*</label><div className="mt-1.5 flex"><span className="flex items-center rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 px-3 text-sm text-gray-500">HTTPS://</span><input className="soha-input rounded-l-none" value={form.website} onChange={(e) => setForm((p) => ({ ...p, website: e.target.value }))} placeholder="www.linkedin.com/company/…" /></div></div>
+                <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" value={form.location} onChange={(e) => setForm((p) => ({ ...p, location: e.target.value }))} placeholder="City, Country" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">Founded Year</label><input className="soha-input mt-1.5" value={form.foundedYear} onChange={(e) => setForm((p) => ({ ...p, foundedYear: e.target.value }))} placeholder="2015" /></div>
               </div>
-              <div><label className="text-sm font-semibold text-gray-900">Twitter</label><input className="soha-input mt-1.5" placeholder="https://twitter.com//naimur" /></div>
+              <div><label className="text-sm font-semibold text-gray-900">Twitter</label><input className="soha-input mt-1.5" placeholder="https://twitter.com/username" /></div>
               <label className="inline-flex items-center gap-2 text-sm text-gray-600"><input type="checkbox" defaultChecked className="h-4 w-4 rounded border-gray-300 text-blue-500" />I currently work here</label>
               {err ? <p className="text-sm text-red-600">{err}</p> : null}
               <div className="flex gap-3">

@@ -178,7 +178,7 @@ export function SettingsClient({
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
                     <label className="text-[12px] font-semibold text-gray-700">Email*</label>
-                    <input className="soha-input mt-1.5" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="naimurrohman@gmail.com" />
+                    <input className="soha-input mt-1.5" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
                   </div>
                   <div>
                     <label className="text-[12px] font-semibold text-gray-700">Phone*</label>

@@ -260,7 +260,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
                   <label className="text-sm font-semibold text-gray-900">Username*</label>
                   <div className="mt-1.5 flex">
                     <input className="soha-input w-16 rounded-r-none border-r-0 text-center" value={form.usernamePrefix} onChange={(e) => setForm({ ...form, usernamePrefix: e.target.value })} />
-                    <input className="soha-input rounded-l-none" value={form.usernameValue} onChange={(e) => setForm({ ...form, usernameValue: e.target.value })} placeholder="www.linkdin.com" />
+                    <input className="soha-input rounded-l-none" value={form.usernameValue} onChange={(e) => setForm({ ...form, usernameValue: e.target.value })} placeholder="www.linkedin.com" />
                   </div>
                 </div>
               </div>
@@ -295,7 +295,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
                 <label className="text-sm font-semibold text-gray-900">URL</label>
                 <div className="mt-1.5 flex">
                   <input className="soha-input w-16 rounded-r-none border-r-0 text-center" value={form.profilePrefix} onChange={(e) => setForm({ ...form, profilePrefix: e.target.value })} />
-                  <input className="soha-input rounded-l-none" value={form.profileValue} onChange={(e) => setForm({ ...form, profileValue: e.target.value })} placeholder="www.linkdin.com" />
+                  <input className="soha-input rounded-l-none" value={form.profileValue} onChange={(e) => setForm({ ...form, profileValue: e.target.value })} placeholder="www.linkedin.com" />
                 </div>
               </div>
               <div>
@@ -401,7 +401,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
                       </div>
                     </td>
                     <td className="px-4 py-4 text-gray-700">{row.company ?? "Acme Corp"}</td>
-                    <td className="px-4 py-4 text-gray-500">Bangladesh</td>
+                    <td className="px-4 py-4 text-gray-500">—</td>
                     <td className="px-4 py-4">
                       <span className="rounded-full bg-[#EAF8E8] px-3 py-1 text-xs font-semibold text-[#73B76A]">
                         {row.status === "active" ? "Add Status" : row.status}
@@ -457,11 +457,11 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
               <div><label className="text-sm font-semibold text-gray-900">Job Title*</label><input className="soha-input mt-1.5" value={createF.jobTitle} onChange={(e) => setCreateF((p) => ({ ...p, jobTitle: e.target.value }))} placeholder="Product Designer" /></div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div><label className="text-sm font-semibold text-gray-900">Company*</label><input className="soha-input mt-1.5" value={createF.company} onChange={(e) => setCreateF((p) => ({ ...p, company: e.target.value }))} placeholder="Webflow" /></div>
-                <div><label className="text-sm font-semibold text-gray-900">Website*</label><div className="mt-1.5 flex"><span className="flex items-center rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 px-3 text-sm text-gray-500">HTTPS://</span><input className="soha-input rounded-l-none" value={createF.website} onChange={(e) => setCreateF((p) => ({ ...p, website: e.target.value }))} placeholder="www.linkdin.com" /></div></div>
-                <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" value={createF.location} onChange={(e) => setCreateF((p) => ({ ...p, location: e.target.value }))} placeholder="Bangladesh" /></div>
-                <div><label className="text-sm font-semibold text-gray-900">Phone Number</label><input className="soha-input mt-1.5" value={createF.phone} onChange={(e) => setCreateF((p) => ({ ...p, phone: e.target.value }))} placeholder="+8801988784435" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">Website*</label><div className="mt-1.5 flex"><span className="flex items-center rounded-l-lg border border-r-0 border-gray-200 bg-gray-50 px-3 text-sm text-gray-500">HTTPS://</span><input className="soha-input rounded-l-none" value={createF.website} onChange={(e) => setCreateF((p) => ({ ...p, website: e.target.value }))} placeholder="www.linkedin.com" /></div></div>
+                <div><label className="text-sm font-semibold text-gray-900">Location</label><input className="soha-input mt-1.5" value={createF.location} onChange={(e) => setCreateF((p) => ({ ...p, location: e.target.value }))} placeholder="City, Country" /></div>
+                <div><label className="text-sm font-semibold text-gray-900">Phone Number</label><input className="soha-input mt-1.5" value={createF.phone} onChange={(e) => setCreateF((p) => ({ ...p, phone: e.target.value }))} placeholder="+1 (555) 123-4567" /></div>
               </div>
-              <div><label className="text-sm font-semibold text-gray-900">Twitter</label><input className="soha-input mt-1.5" value={createF.twitter} onChange={(e) => setCreateF((p) => ({ ...p, twitter: e.target.value }))} placeholder="https://twitter.com//naimur" /></div>
+              <div><label className="text-sm font-semibold text-gray-900">Twitter</label><input className="soha-input mt-1.5" value={createF.twitter} onChange={(e) => setCreateF((p) => ({ ...p, twitter: e.target.value }))} placeholder="https://twitter.com/username" /></div>
               <label className="inline-flex items-center gap-2 text-sm text-gray-600"><input type="checkbox" checked={createF.wantsEmails} onChange={(e) => setCreateF((p) => ({ ...p, wantsEmails: e.target.checked }))} className="h-4 w-4 rounded border-gray-300 text-blue-500" />Yes, I want to receive emails</label>
               {err ? <p className="text-sm text-red-600">{err}</p> : null}
               <div className="flex gap-3">
