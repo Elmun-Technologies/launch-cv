@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
@@ -216,6 +217,32 @@ export default function FeaturesPage() {
         </div>
       </section>
 
+      {/* EXPLORE MORE — keep the visitor moving */}
+      <section className="border-t border-[#E2E8F0] py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Keep exploring</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            {[
+              { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
+            ].map((r) => (
+              <Link
+                key={r.href}
+                href={r.href}
+                className="group flex items-start justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white p-6 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+              >
+                <div>
+                  <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
+                  <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20">
         <div className="mx-auto max-w-[900px] px-6 text-center">
@@ -239,6 +266,12 @@ export default function FeaturesPage() {
           </div>
         </div>
       </section>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="features_index"
+      />
 
       <LandingFooter />
     </div>

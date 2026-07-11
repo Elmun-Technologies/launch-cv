@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -534,6 +535,13 @@ export default function InterviewPrepPage() {
             desc: "Get past the resume filter first — then the interview prep pays off.",
           },
         ]}
+      />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#059669] hover:bg-[#047857]"
+        location="feature_interview_prep"
       />
 
       <LandingFooter />

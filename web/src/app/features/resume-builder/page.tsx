@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -19,6 +20,7 @@ import {
   Target,
   Mail,
   Mic,
+  Check,
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
@@ -587,6 +589,13 @@ export default function ResumeBuilderPage() {
             desc: "Beat the blank page — dictate your experience and let AI structure it.",
           },
         ]}
+      />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#7C3AED] hover:bg-[#6D28D9]"
+        location="feature_resume_builder"
       />
 
       <LandingFooter />

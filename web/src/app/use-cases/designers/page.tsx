@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Palette, Layers, Sparkles, Eye, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
@@ -462,6 +463,13 @@ export default function DesignersPage() {
           </CtaLink>
         </div>
       </section>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Build my design resume"
+        primaryClassName="bg-[#DB2777] hover:bg-[#BE185D]"
+        location="use_case_designers"
+      />
 
       <LandingFooter />
     </div>

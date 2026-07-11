@@ -18,6 +18,7 @@ import { BlogCover } from "@/components/blog-cover";
 import { BlogToc } from "@/components/blog-toc";
 import { SITE_AUTHOR } from "@/lib/author";
 import { extractToc, createSlugger } from "@/lib/toc";
+import { StickyCta } from "@/components/sticky-cta";
 
 type Params = { slug: string };
 type SearchParams = { preview?: string };
@@ -520,6 +521,13 @@ export default async function BlogPostPage({
           </section>
         ) : null}
       </main>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Build my resume"
+        location="blog_post"
+        revealAfter={900}
+      />
 
       <LandingFooter />
     </div>
