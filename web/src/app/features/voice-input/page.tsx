@@ -375,6 +375,29 @@ export default function VoiceInputPage() {
         </div>
       </section>
 
+      {/* FURTHER READING */}
+      <section className="border-t border-[#E2E8F0] bg-white py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Further reading</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            {[
+              { href: "/blog/voice-to-resume", t: "Voice to resume", d: "Build your resume by speaking — the full guide." },
+              { href: "/blog/how-to-check-ats-score-of-resume", t: "Check your ATS score", d: "Make your spoken resume ATS-ready before applying." },
+              { href: "/blog/what-is-an-ats-score", t: "What is an ATS score?", d: "Meaning, full form, and how to improve it." },
+            ].map((r) => (
+              <Link
+                key={r.href}
+                href={r.href}
+                className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
+              >
+                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">{r.t}</p>
+                <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <LandingFooter />
     </div>
   );

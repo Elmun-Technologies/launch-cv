@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const post = await getPostBySlug(slug);
   if (!post) return {};
-  return buildMarketingMetadata({
+  const base = buildMarketingMetadata({
     title: post.seoTitle || post.title,
     description: post.seoDescription || post.description,
     pathname: `/blog/${post.slug}`,
@@ -44,6 +44,25 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     image: post.ogImageUrl || post.coverUrl || undefined,
     ogType: "article",
   });
+  const publishedIso = new Date(post.date).toISOString();
+  // Type this route as an Article for richer social/search previews. The
+  // per-post opengraph-image.tsx in this segment is attached automatically.
+  return {
+    ...base,
+    openGraph: {
+      type: "article",
+      url: absoluteUrl(`/blog/${post.slug}`),
+      title: `${post.seoTitle || post.title} | Launch CV`,
+      description: post.seoDescription || post.description,
+      siteName: "Launch CV",
+      locale: "en_US",
+      publishedTime: publishedIso,
+      modifiedTime: publishedIso,
+      authors: [absoluteUrl("/about")],
+      section: post.category,
+      tags: post.tags,
+    },
+  };
 }
 
 export default async function BlogPostPage({
