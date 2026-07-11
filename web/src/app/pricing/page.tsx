@@ -16,8 +16,7 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
   description: `Launch CV pricing: ${CHECKOUT_PLAN_ORDER.map(
-    (key) =>
-      `${PUBLIC_PLANS[key].title} at ${planPriceLabel(key)}${PUBLIC_PLANS[key].popular ? " (most chosen)" : ""}`,
+    (key) => `${PUBLIC_PLANS[key].title} ${planPriceLabel(key)}`,
   ).join(", ")}. Every AI tool included on every plan. No freemium games.`,
   pathname: "/pricing",
   keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],

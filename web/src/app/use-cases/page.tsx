@@ -10,7 +10,7 @@ import { absoluteUrl } from "@/lib/site";
 export const metadata = buildMarketingMetadata({
   title: "Resume Builder by Role — Tailored for Your Job",
   description:
-    "See how Launch CV tailors your resume to your field. Role-specific AI bullets for software engineers, product managers, and designers — ATS-clean, in minutes.",
+    "See how Launch CV tailors your resume to your field. Role-specific AI bullets for engineers, product managers, and designers — ATS-clean, fast.",
   pathname: "/use-cases",
   image: DEFAULT_OG_IMAGE,
   keywords: [
