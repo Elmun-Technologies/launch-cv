@@ -35,6 +35,10 @@ Har bir hodisa GA4 **va** PostHog ikkalasiga ham yuboriladi.
 - Feature sahifa shabloni (hero / footer / sticky) — `components/feature-page-template.tsx`
 - Pricing kartalari — `app/pricing/page.tsx` (`choose_plan` + `plan`)
 - Subscription “Choose <plan>” — `subscription-settings-client.tsx` (`choose_plan` + `plan`, keyin `checkout_started`)
+- Paywall / limit CTA’lari (yuqori intent — checkout’ga olib boradi):
+  - AI limit banneri — `components/ai-usage-banner.tsx` (`choose_plan`)
+  - Role-fit / JD / Packet “Upgrade to Pro” — `resume/[id]/{fit,jd,packet}/ui.tsx` (`upgrade`)
+  - Dashboard “Choose plan” (reja yo‘q holatda) — `app/dashboard/page.tsx` (`choose_plan`)
 
 ## Env sozlamalari
 
@@ -120,16 +124,53 @@ Funnel:
 5. **Breakdown**: `plan` bo‘yicha — qaysi reja ko‘proq konversiya beradi.
 6. Saqlang: “Signup → Purchase funnel”.
 
-> Muhim: `purchase_completed` PostHog’ga serverdan `distinct_id = userId` bilan
-> keladi. Brauzerda login’dan keyin `posthog.identify(userId)` chaqirilsa,
-> funnel bitta odam bo‘yicha to‘liq bog‘lanadi (keyingi qadam — pastga qarang).
+> `purchase_completed` PostHog’ga serverdan `distinct_id = userId` bilan keladi va
+> `identifyUser()` register/login’da chaqirilgani uchun funnel bitta odam bo‘yicha
+> to‘liq bog‘lanadi.
 
-## Keyingi tavsiya (ixtiyoriy)
+## User identity (o‘rnatilgan)
 
-- `posthog.identify(userId)` + GA4 `user_id` ni login/register’dan keyin o‘rnatish —
-  funnel qadamlarini bitta foydalanuvchi bo‘yicha aniq bog‘laydi.
-- Server `purchase_completed` uchun GA4 client_id sifatida asl brauzer `_ga`
-  cookie’sini uzatish — pre-purchase web session bilan ulash uchun.
+Funnel qadamlari bitta foydalanuvchi bo‘yicha bog‘lanishi uchun `identifyUser()`
+(`lib/analytics-client.ts`) chaqiriladi:
+
+- **register muvaffaqiyatli** — `app/register/page.tsx` (`identifyUser(userId)`)
+- **login muvaffaqiyatli** — `components/login-form.tsx` (login route endi `userId` qaytaradi)
+- **logout** — `components/site-header.tsx` → `resetUser()` (PostHog `reset()` + GA4 `user_id=null`)
+
+Bu `posthog.identify(userId)` + GA4 `gtag('set', { user_id })` ni bajaradi, shunda
+signup’gacha bo‘lgan anonim hodisalar identifikatsiyalangan foydalanuvchiga ulanadi.
+
+## GA4 session stitching (purchase, o‘rnatilgan)
+
+Webhook’dagi `purchase_completed` asl brauzer sessiyasiga ulanadi:
+
+1. Checkout paytida client `_ga` cookie’dan GA4 `client_id`ni o‘qiydi
+   (`getGaClientId()`) va `/api/polar/checkout`’ga yuboradi.
+2. Checkout route uni Polar `metadata.ga_client_id`ga yozadi.
+3. Webhook `metadata.ga_client_id`ni o‘qib, GA4 Measurement Protocol’ga haqiqiy
+   `client_id` + `user_id` bilan yuboradi (`lib/analytics-server.ts`).
+
+`ga_client_id` bo‘lmasa — sintetik `srv.<userId>` ishlatiladi (conversion baribir yoziladi,
+faqat pre-purchase sessiyaga ulanmaydi).
+
+## Purchase — qiymat va idempotency
+
+- **Pul qiymati**: webhook Polar `amount`/`total_amount` (sentlarda) ni major
+  birlikka aylantirib `value` + `currency` sifatida yuboradi, hamda GA4
+  `transaction_id` (order/subscription id) — GA4 revenue hisobotlari uchun.
+- **Idempotency** (Polar webhook’ni qayta yuborishi mumkin):
+  - Subscription: `purchase_completed` faqat `active`ga **birinchi o‘tishda** otiladi
+    (oldingi status `active` bo‘lmasa) — qayta yetkazish ikki marta sanamaydi.
+  - Order (bir martalik): agar order allaqachon yozilgan bo‘lsa, o‘tkazib yuboriladi.
+  - Qo‘shimcha: GA4 `transaction_id` orqali GA tomonda ham dedup bo‘ladi.
+  - Ichki `pay_success` (DB) event ham xuddi shu shart bilan gate qilinadi —
+    endi `created`+`active` yoki qayta yetkazishda ikki marta yozilmaydi.
+
+## E2E test
+
+`e2e/analytics.spec.ts` — `sign_up_started` va `feature_cta_clicked` (reja bilan)
+event’lari GA4 (`dataLayer`) va PostHog’ga yetishini tekshiradi. Ishga tushirish:
+`npm run test:e2e` (production `next start`ga qarshi ishlaydi).
 
 ## Ichki hodisalar (`AnalyticsEvent`)
 

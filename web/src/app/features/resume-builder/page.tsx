@@ -1,14 +1,15 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
   FileText,
   ArrowRight,
-  Check,
   Star,
   Wand2,
   Layers,
@@ -21,11 +22,12 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Resume Builder — ATS-Ready Resumes in 5 Minutes",
+  title: "Resume Builder for Software Engineers, Free",
   description:
-    "Build an ATS-friendly resume in under five minutes. Twelve industry templates, AI-written bullets, live preview, and PDF or DOCX export.",
+    "The AI resume builder software engineers trust: 12 ATS-tested templates, quantified bullets, and PDF/DOCX export in under 5 minutes. Build yours free →",
   pathname: "/features/resume-builder",
   keywords: [
+    "resume builder software engineer",
     "AI resume builder",
     "ATS friendly resume builder",
     "professional resume templates",
@@ -118,13 +120,13 @@ export default function ResumeBuilderPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_resume_builder"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(124,58,237,0.4)] transition hover:bg-[#6D28D9]"
                 >
                   Build my resume
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#templates"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -266,9 +268,9 @@ export default function ResumeBuilderPage() {
 
           <p className="mt-10 text-center text-[14px] text-[#64748B]">
             + six more templates inside the app.{" "}
-            <Link href="/register" className="font-semibold text-[#7C3AED] underline-offset-2 hover:underline">
+            <CtaLink cta="get_started" location="feature_resume_builder" href="/register" className="font-semibold text-[#7C3AED] underline-offset-2 hover:underline">
               See them all
-            </Link>
+            </CtaLink>
           </p>
         </div>
       </section>
@@ -393,15 +395,48 @@ export default function ResumeBuilderPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             No writing skills required. Tell the AI what you did — it handles the rest.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_resume_builder"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#6D28D9]"
           >
             Build my resume
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="violet"
+        useCases={[
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Templates and AI bullets tuned for engineering scope, stack, and impact.",
+          },
+          {
+            href: "/use-cases/designers",
+            title: "Resumes for designers",
+            desc: "Clean, ATS-safe layouts that still make your design work stand out.",
+          },
+        ]}
+        reading={[
+          {
+            href: "/blog/ai-resume-builder-complete-guide",
+            title: "AI resume builder: the complete guide",
+            desc: "How AI writes bullet points, optimizes keywords, and formats for ATS.",
+          },
+          {
+            href: "/blog/how-to-write-an-ats-friendly-resume",
+            title: "How to write an ATS-friendly resume",
+            desc: "The formatting rules that keep parsers from dropping your experience.",
+          },
+          {
+            href: "/blog/voice-to-resume",
+            title: "Build your resume by speaking",
+            desc: "Beat the blank page — dictate your experience and let AI structure it.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

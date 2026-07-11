@@ -15,11 +15,20 @@ function parsePlan(body: unknown): CheckoutPlan {
   return "professional";
 }
 
+/** GA4 client id (`<digits>.<digits>`) forwarded by the browser at checkout. */
+function parseGaClientId(body: unknown): string | undefined {
+  if (!body || typeof body !== "object") return undefined;
+  const v = (body as { gaClientId?: unknown }).gaClientId;
+  return typeof v === "string" && /^\d+\.\d+$/.test(v) ? v : undefined;
+}
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const plan = parsePlan(await req.json().catch(() => ({})));
+  const rawBody = await req.json().catch(() => ({}));
+  const plan = parsePlan(rawBody);
+  const gaClientId = parseGaClientId(rawBody);
 
   const accessToken = process.env.POLAR_ACCESS_TOKEN;
   const productId = productIdForCheckoutPlan(plan);
@@ -43,8 +52,9 @@ export async function POST(req: Request) {
     customer_email: user.email,
     ...(user.name ? { customer_name: user.name } : {}),
     external_customer_id: user.id,
-    // Surfaced back on checkout/subscription/order webhooks so we can map to our user.
-    metadata: { user_id: user.id, plan },
+    // Surfaced back on checkout/subscription/order webhooks so we can map to our
+    // user and stitch the purchase to the originating GA4 browser session.
+    metadata: { user_id: user.id, plan, ...(gaClientId ? { ga_client_id: gaClientId } : {}) },
   };
 
   const res = await fetch(`${polarApiBase()}/v1/checkouts/`, {

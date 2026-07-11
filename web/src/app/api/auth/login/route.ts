@@ -55,7 +55,7 @@ export async function POST(req: Request) {
   }
   await trackEvent("login_success", { userId: user.id });
   const admin = isAdminUser({ role: user.role, email: user.email });
-  const res = NextResponse.json({ ok: true, isAdmin: admin });
+  const res = NextResponse.json({ ok: true, isAdmin: admin, userId: user.id });
   const cookieBase = sessionCookieBase();
   res.cookies.set(COOKIE_NAME, token, {
     ...cookieBase,
