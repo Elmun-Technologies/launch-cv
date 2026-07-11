@@ -7,6 +7,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   MessageSquare,
   ArrowRight,
@@ -215,6 +216,24 @@ export default function InterviewPrepPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#059669]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Practice with instant AI feedback</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/interview-prep.svg"
+            alt="The Launch CV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
+            caption="Answer role-specific questions and get scored on clarity, relevance, impact, and STAR structure."
+          />
         </div>
       </section>
 

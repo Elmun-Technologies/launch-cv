@@ -7,6 +7,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Target,
   ArrowRight,
@@ -236,6 +237,24 @@ export default function JDAlignmentPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Watch your match score climb</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/jd-alignment.svg"
+            alt="The Launch CV JD alignment view matching a resume to a job description, showing a 91% match score, the matched ATS keywords, and each requirement met."
+            caption="Paste a job description; watch the match score and matched keywords update as you tailor."
+          />
         </div>
       </section>
 

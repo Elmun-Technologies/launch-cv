@@ -7,6 +7,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   BarChart3,
   ArrowRight,
@@ -224,6 +225,24 @@ export default function AtsScorePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#EA580C]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Your ATS score, itemized</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/ats-score.svg"
+            alt="The Launch CV ATS score checker showing a 91 out of 100 ATS score with a formatting, keyword-match, structure, and readability breakdown and the top fix to apply."
+            caption="Every parser-breaking issue named and ranked — the highest-impact fix shown first."
+          />
         </div>
       </section>
 

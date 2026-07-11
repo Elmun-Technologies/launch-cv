@@ -1,0 +1,63 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', system-ui, -apple-system, Arial, sans-serif">
+  <rect width="1600" height="900" fill="#EFF6FF"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="#FFFFFF"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="none" stroke="#E2E8F0" stroke-width="2"/>
+  <path d="M60 94a24 24 0 0 1 24-24h1432a24 24 0 0 1 24 24v52H60z" fill="#FAFBFC"/>
+  <line x1="60" y1="146" x2="1540" y2="146" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="100" cy="108" r="8" fill="#FF5F57"/>
+  <circle cx="128" cy="108" r="8" fill="#FEBC2E"/>
+  <circle cx="156" cy="108" r="8" fill="#28C840"/>
+  <rect x="620" y="94" width="360" height="28" rx="14" fill="#EEF2F7"/>
+  <text x="800" y="113" text-anchor="middle" fill="#94A3B8" font-size="15" font-weight="500">app.launch-cv.com/jd-alignment</text>
+
+  <!-- Left: job description -->
+  <text x="112" y="210" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">JOB DESCRIPTION</text>
+  <rect x="112" y="232" width="560" height="500" rx="14" fill="#FAFBFC" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="140" y="278" fill="#0F172A" font-size="20" font-weight="700">Senior Backend Engineer</text>
+  <g fill="#64748B" font-size="17">
+    <text x="140" y="322">We're hiring an engineer with 5+ years building</text>
+    <text x="140" y="350">distributed systems at scale. You'll own</text>
+    <text x="140" y="378">services written in <tspan fill="#1A56DB" font-weight="600">Go</tspan> and <tspan fill="#1A56DB" font-weight="600">TypeScript</tspan>, deployed</text>
+    <text x="140" y="406">on <tspan fill="#1A56DB" font-weight="600">Kubernetes</tspan> across <tspan fill="#1A56DB" font-weight="600">AWS</tspan>. Experience with</text>
+    <text x="140" y="434"><tspan fill="#1A56DB" font-weight="600">GraphQL</tspan>, <tspan fill="#1A56DB" font-weight="600">Postgres</tspan>, and <tspan fill="#1A56DB" font-weight="600">CI/CD</tspan> pipelines is</text>
+    <text x="140" y="462">required. Team leadership a strong plus.</text>
+  </g>
+  <rect x="140" y="500" width="504" height="1" fill="#E2E8F0"/>
+  <text x="140" y="540" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">MATCHED KEYWORDS</text>
+  <g font-size="16" font-weight="600" fill="#1D4ED8">
+    <rect x="140" y="558" width="96" height="36" rx="18" fill="#DBEAFE"/><text x="188" y="582" text-anchor="middle">Kubernetes</text>
+    <rect x="248" y="558" width="84" height="36" rx="18" fill="#DBEAFE"/><text x="290" y="582" text-anchor="middle">GraphQL</text>
+    <rect x="344" y="558" width="80" height="36" rx="18" fill="#DBEAFE"/><text x="384" y="582" text-anchor="middle">Postgres</text>
+    <rect x="436" y="558" width="60" height="36" rx="18" fill="#DBEAFE"/><text x="466" y="582" text-anchor="middle">AWS</text>
+    <rect x="140" y="606" width="72" height="36" rx="18" fill="#DBEAFE"/><text x="176" y="630" text-anchor="middle">CI/CD</text>
+    <rect x="224" y="606" width="56" height="36" rx="18" fill="#DBEAFE"/><text x="252" y="630" text-anchor="middle">Go</text>
+  </g>
+
+  <!-- Right: match analysis -->
+  <text x="720" y="210" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">MATCH ANALYSIS</text>
+  <g transform="translate(880,340)">
+    <circle r="120" fill="none" stroke="#E2EAF5" stroke-width="26"/>
+    <circle r="120" fill="none" stroke="#22C55E" stroke-width="26" stroke-linecap="round"
+      stroke-dasharray="754" stroke-dashoffset="68" transform="rotate(-90)"/>
+    <text y="4" text-anchor="middle" fill="#0F172A" font-size="72" font-weight="700">91%</text>
+    <text y="50" text-anchor="middle" fill="#94A3B8" font-size="20" font-weight="600" letter-spacing="1">MATCH</text>
+  </g>
+  <g transform="translate(1060,270)">
+    <g font-size="19" fill="#0F172A">
+      <circle cx="14" cy="20" r="14" fill="#DCFCE7"/><path d="M8 20l4 4 8-8" stroke="#16A34A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="42" y="27">5+ years backend experience</text>
+      <circle cx="14" cy="70" r="14" fill="#DCFCE7"/><path d="M8 70l4 4 8-8" stroke="#16A34A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="42" y="77">Distributed systems at scale</text>
+      <circle cx="14" cy="120" r="14" fill="#DCFCE7"/><path d="M8 120l4 4 8-8" stroke="#16A34A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="42" y="127">Go / TypeScript proficiency</text>
+      <circle cx="14" cy="170" r="14" fill="#DCFCE7"/><path d="M8 170l4 4 8-8" stroke="#16A34A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="42" y="177">Team leadership</text>
+    </g>
+  </g>
+  <rect x="720" y="540" width="740" height="180" rx="16" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="752" y="586" fill="#1E3A8A" font-size="18" font-weight="700">AI suggestion · applied</text>
+  <text x="752" y="622" fill="#334155" font-size="18">Reworded a bullet to include “gRPC” and “deploy</text>
+  <text x="752" y="650" fill="#334155" font-size="18">time cut 40%,” lifting your match from 78% → 91%.</text>
+  <rect x="752" y="672" width="220" height="30" rx="15" fill="#1A56DB"/>
+  <text x="862" y="693" text-anchor="middle" fill="#FFFFFF" font-size="15" font-weight="600">Before: 78%  →  After: 91%</text>
+</svg>

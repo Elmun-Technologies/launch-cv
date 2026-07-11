@@ -1,0 +1,57 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', system-ui, -apple-system, Arial, sans-serif">
+  <rect width="1600" height="900" fill="#F0FDF4"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="#FFFFFF"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="none" stroke="#E2E8F0" stroke-width="2"/>
+  <path d="M60 94a24 24 0 0 1 24-24h1432a24 24 0 0 1 24 24v52H60z" fill="#FAFBFC"/>
+  <line x1="60" y1="146" x2="1540" y2="146" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="100" cy="108" r="8" fill="#FF5F57"/>
+  <circle cx="128" cy="108" r="8" fill="#FEBC2E"/>
+  <circle cx="156" cy="108" r="8" fill="#28C840"/>
+  <rect x="620" y="94" width="360" height="28" rx="14" fill="#EEF2F7"/>
+  <text x="800" y="113" text-anchor="middle" fill="#94A3B8" font-size="15" font-weight="500">app.launch-cv.com/interview-prep</text>
+
+  <!-- Question card -->
+  <text x="112" y="210" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">QUESTION 4 OF 15 · BEHAVIORAL</text>
+  <rect x="112" y="232" width="820" height="150" rx="16" fill="#FAFBFC" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="144" y="284" fill="#0F172A" font-size="23" font-weight="700">“Tell me about a time you managed a</text>
+  <text x="144" y="316" fill="#0F172A" font-size="23" font-weight="700">project under a tight deadline.”</text>
+  <rect x="144" y="336" width="180" height="30" rx="15" fill="#DCFCE7"/>
+  <text x="234" y="357" text-anchor="middle" fill="#15803D" font-size="15" font-weight="600">STAR framework</text>
+
+  <!-- Answer -->
+  <text x="112" y="430" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">YOUR ANSWER</text>
+  <rect x="112" y="450" width="820" height="290" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+  <g font-size="18">
+    <text x="144" y="494"><tspan fill="#059669" font-weight="700">Situation:</tspan> <tspan fill="#334155">In Q3, our lead engineer left two weeks</tspan></text>
+    <text x="144" y="522" fill="#334155">before a major product launch.</text>
+    <text x="144" y="566"><tspan fill="#059669" font-weight="700">Task:</tspan> <tspan fill="#334155">I took over delivery of the payments module.</tspan></text>
+    <text x="144" y="610"><tspan fill="#059669" font-weight="700">Action:</tspan> <tspan fill="#334155">I rebuilt the sprint plan, cut scope to core</tspan></text>
+    <text x="144" y="638" fill="#334155">features, and ran daily standups across 3 teams.</text>
+    <text x="144" y="682"><tspan fill="#059669" font-weight="700">Result:</tspan> <tspan fill="#334155">We shipped 2 days early and signed 500</tspan></text>
+    <text x="144" y="710" fill="#334155">customers in week one.</text>
+  </g>
+
+  <!-- AI scoring panel -->
+  <text x="972" y="210" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">AI FEEDBACK</text>
+  <rect x="972" y="232" width="488" height="508" rx="16" fill="#FAFBFC" stroke="#E2E8F0" stroke-width="2"/>
+  <g transform="translate(1216,340)">
+    <circle r="80" fill="none" stroke="#DCFCE7" stroke-width="18"/>
+    <circle r="80" fill="none" stroke="#059669" stroke-width="18" stroke-linecap="round"
+      stroke-dasharray="503" stroke-dashoffset="60" transform="rotate(-90)"/>
+    <text y="4" text-anchor="middle" fill="#0F172A" font-size="44" font-weight="700">9/10</text>
+  </g>
+  <g transform="translate(1004,450)">
+    <text x="0" y="0" fill="#0F172A" font-size="18" font-weight="600">Clarity</text>
+    <text x="424" y="0" text-anchor="end" fill="#15803D" font-size="18" font-weight="700">9</text>
+    <rect x="0" y="14" width="424" height="12" rx="6" fill="#E2E8F0"/><rect x="0" y="14" width="382" height="12" rx="6" fill="#059669"/>
+    <text x="0" y="66" fill="#0F172A" font-size="18" font-weight="600">Relevance</text>
+    <text x="424" y="66" text-anchor="end" fill="#15803D" font-size="18" font-weight="700">10</text>
+    <rect x="0" y="80" width="424" height="12" rx="6" fill="#E2E8F0"/><rect x="0" y="80" width="424" height="12" rx="6" fill="#059669"/>
+    <text x="0" y="132" fill="#0F172A" font-size="18" font-weight="600">Impact</text>
+    <text x="424" y="132" text-anchor="end" fill="#15803D" font-size="18" font-weight="700">9</text>
+    <rect x="0" y="146" width="424" height="12" rx="6" fill="#E2E8F0"/><rect x="0" y="146" width="382" height="12" rx="6" fill="#059669"/>
+    <text x="0" y="198" fill="#0F172A" font-size="18" font-weight="600">STAR structure</text>
+    <text x="424" y="198" text-anchor="end" fill="#15803D" font-size="18" font-weight="700">9</text>
+    <rect x="0" y="212" width="424" height="12" rx="6" fill="#E2E8F0"/><rect x="0" y="212" width="382" height="12" rx="6" fill="#059669"/>
+  </g>
+</svg>

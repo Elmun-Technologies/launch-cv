@@ -1,0 +1,68 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', system-ui, -apple-system, Arial, sans-serif">
+  <rect width="1600" height="900" fill="#FDF2F8"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="#FFFFFF"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="none" stroke="#E2E8F0" stroke-width="2"/>
+  <path d="M60 94a24 24 0 0 1 24-24h1432a24 24 0 0 1 24 24v52H60z" fill="#FAFBFC"/>
+  <line x1="60" y1="146" x2="1540" y2="146" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="100" cy="108" r="8" fill="#FF5F57"/>
+  <circle cx="128" cy="108" r="8" fill="#FEBC2E"/>
+  <circle cx="156" cy="108" r="8" fill="#28C840"/>
+  <rect x="640" y="94" width="320" height="28" rx="14" fill="#EEF2F7"/>
+  <text x="800" y="113" text-anchor="middle" fill="#94A3B8" font-size="15" font-weight="500">app.launch-cv.com/voice</text>
+
+  <!-- Mic + waveform -->
+  <text x="112" y="220" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">SPEAK YOUR EXPERIENCE</text>
+  <circle cx="180" cy="330" r="56" fill="#DB2777"/>
+  <rect x="164" y="300" width="32" height="48" rx="16" fill="#FFFFFF"/>
+  <path d="M152 336a28 28 0 0 0 56 0" stroke="#FFFFFF" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <line x1="180" y1="364" x2="180" y2="382" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#F472B6">
+    <rect x="270" y="310" width="8" height="40" rx="4"/>
+    <rect x="292" y="290" width="8" height="80" rx="4" fill="#DB2777"/>
+    <rect x="314" y="270" width="8" height="120" rx="4"/>
+    <rect x="336" y="300" width="8" height="60" rx="4" fill="#DB2777"/>
+    <rect x="358" y="278" width="8" height="104" rx="4"/>
+    <rect x="380" y="312" width="8" height="36" rx="4" fill="#DB2777"/>
+    <rect x="402" y="286" width="8" height="88" rx="4"/>
+    <rect x="424" y="266" width="8" height="128" rx="4" fill="#DB2777"/>
+    <rect x="446" y="298" width="8" height="64" rx="4"/>
+    <rect x="468" y="282" width="8" height="96" rx="4" fill="#DB2777"/>
+    <rect x="490" y="308" width="8" height="44" rx="4"/>
+    <rect x="512" y="288" width="8" height="84" rx="4" fill="#DB2777"/>
+    <rect x="534" y="272" width="8" height="116" rx="4"/>
+    <rect x="556" y="304" width="8" height="52" rx="4" fill="#DB2777"/>
+  </g>
+  <rect x="620" y="308" width="150" height="44" rx="22" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="2"/>
+  <circle cx="648" cy="330" r="6" fill="#DB2777"/>
+  <text x="666" y="336" fill="#9D174D" font-size="16" font-weight="600">Listening…</text>
+
+  <!-- transcript -->
+  <rect x="112" y="420" width="640" height="300" rx="16" fill="#FAFBFC" stroke="#E2E8F0" stroke-width="2"/>
+  <text x="140" y="462" fill="#94A3B8" font-size="14" font-weight="700" letter-spacing="1">TRANSCRIPT</text>
+  <g fill="#475569" font-size="20">
+    <text x="140" y="506">so I basically ran the whole onboarding</text>
+    <text x="140" y="538">redesign thing and signups went up like</text>
+    <text x="140" y="570">a third, and I also mentored a couple of</text>
+    <text x="140" y="602">the junior designers on the team</text>
+  </g>
+
+  <!-- arrow -->
+  <path d="M772 560h56m0 0l-18-18m18 18l-18 18" stroke="#DB2777" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="800" y="600" text-anchor="middle" fill="#DB2777" font-size="14" font-weight="700">AI</text>
+
+  <!-- resume bullet output -->
+  <rect x="848" y="420" width="612" height="300" rx="16" fill="#FFFFFF" stroke="#FBCFE8" stroke-width="2"/>
+  <text x="876" y="462" fill="#9D174D" font-size="14" font-weight="700" letter-spacing="1">RESUME BULLETS</text>
+  <g>
+    <circle cx="886" cy="508" r="4" fill="#DB2777"/>
+    <text x="908" y="504" fill="#0F172A" font-size="20">Led onboarding redesign, increasing</text>
+    <text x="908" y="532" fill="#0F172A" font-size="20">new-user signups <tspan fill="#BE185D" font-weight="700">33%</tspan>.</text>
+  </g>
+  <g>
+    <circle cx="886" cy="588" r="4" fill="#DB2777"/>
+    <text x="908" y="584" fill="#0F172A" font-size="20">Mentored 2 junior designers, improving</text>
+    <text x="908" y="612" fill="#0F172A" font-size="20">team delivery consistency.</text>
+  </g>
+  <rect x="876" y="654" width="150" height="42" rx="10" fill="#DB2777"/>
+  <text x="951" y="681" text-anchor="middle" fill="#FFFFFF" font-size="16" font-weight="600">Add to resume</text>
+</svg>

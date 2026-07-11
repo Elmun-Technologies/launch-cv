@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import { absoluteUrl } from "@/lib/site";
 import {
   FileText,
@@ -19,6 +20,7 @@ import {
   Target,
   Mail,
   Mic,
+  Check,
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
@@ -209,6 +211,24 @@ export default function ResumeBuilderPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#7C3AED]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">A look inside the resume builder</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-builder.svg"
+            alt="The Launch CV resume builder editor turning rough, plain-language notes into quantified, ATS-ready resume bullet points with a live preview."
+            caption="Type rough notes on the left; Launch CV returns quantified, ATS-ready bullets on the right."
+          />
         </div>
       </section>
 

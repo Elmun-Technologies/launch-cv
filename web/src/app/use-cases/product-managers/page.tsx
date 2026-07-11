@@ -7,6 +7,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Compass, BarChart3, Users, Target, Sparkles, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Product Manager Resume Builder — Show Roadmap Wins",
@@ -178,6 +179,24 @@ export default function ProductManagersPage() {
               </RevealOnView>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#7C3AED]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Roadmap wins, rewritten for recruiters</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-builder.svg"
+            alt="The Launch CV resume builder turning a product manager's rough notes into quantified, metrics-first resume bullet points with a live preview."
+            caption="Describe the launch; Launch CV returns quantified, metrics-first product manager bullets."
+          />
         </div>
       </section>
 

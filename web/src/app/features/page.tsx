@@ -7,6 +7,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Features — The Complete AI Job Search Toolkit",
@@ -132,6 +133,24 @@ export default function FeaturesPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">One workspace for the whole job search</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-builder.svg"
+            alt="The Launch CV workspace turning rough, plain-language work notes into quantified, ATS-ready resume bullet points with a live preview."
+            caption="From rough notes to ATS-ready bullets — every tool lives in one editor."
+          />
         </div>
       </section>
 
