@@ -2,6 +2,17 @@ import type { Metadata } from "next";
 import { absoluteUrl } from "@/lib/site";
 
 /**
+ * Default social-share image. In this Next.js build a file-based
+ * `opengraph-image` only attaches to its exact route (it does not cascade to
+ * descendants, and an authored `openGraph` object suppresses the fallback), so
+ * pages without their own segment image must pass one explicitly or share with
+ * a blank card. Use the root OG route as the site-wide default; feature detail
+ * pages reuse the richer features card.
+ */
+export const DEFAULT_OG_IMAGE = absoluteUrl("/opengraph-image");
+export const FEATURES_OG_IMAGE = absoluteUrl("/features/opengraph-image");
+
+/**
  * Consistent marketing-page metadata: canonical URL, Open Graph, Twitter.
  * Use a short `title` segment; root layout template adds " | Launch CV".
  *

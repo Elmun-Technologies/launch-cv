@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     description: post.seoDescription || post.description,
     pathname: `/blog/${post.slug}`,
     keywords: post.tags,
-    image: post.ogImageUrl || undefined,
+    image: post.ogImageUrl || DEFAULT_OG_IMAGE,
     type: "article",
     article: {
       publishedTime: post.date,

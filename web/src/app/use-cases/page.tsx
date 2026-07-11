@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { Code2, Compass, Palette, ArrowRight, Sparkles } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -12,6 +12,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "See how Launch CV tailors your resume to your field. Role-specific AI bullets for software engineers, product managers, and designers — ATS-clean, in minutes.",
   pathname: "/use-cases",
+  image: DEFAULT_OG_IMAGE,
   keywords: [
     "resume builder by role",
     "resume examples by job",
