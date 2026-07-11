@@ -17,9 +17,22 @@ export const metadata = buildMarketingMetadata({
 
 const ld = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  url: absoluteUrl("/use-cases/designers"),
-  name: "Resume for Designers | Launch CV",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      url: absoluteUrl("/use-cases/designers"),
+      name: "Resume for Designers | Launch CV",
+      description:
+        "Launch CV writes ATS-clean design bullets that quantify impact, systems thinking, and shipping speed — so your resume lands the interview.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Designer Resume", item: absoluteUrl("/use-cases/designers") },
+      ],
+    },
+  ],
 };
 
 const designKeywords = [

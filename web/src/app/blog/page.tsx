@@ -56,6 +56,21 @@ export default async function BlogPage() {
   const featured = posts[0];
   const rest = posts.slice(1);
 
+  // Enrich the Blog schema with the actual post listing so search engines can
+  // surface individual articles from the index page.
+  const blogLdWithPosts = {
+    ...blogLd,
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      url: absoluteUrl(`/blog/${post.slug}`),
+      datePublished: post.date,
+      image: post.ogImageUrl || undefined,
+      author: { "@type": "Organization", name: post.author.name },
+    })),
+  };
+
   if (!featured) {
     return (
       <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
@@ -72,7 +87,7 @@ export default async function BlogPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
-      <JsonLd data={blogLd} />
+      <JsonLd data={blogLdWithPosts} />
       <LandingNav />
 
       {/* HERO */}
