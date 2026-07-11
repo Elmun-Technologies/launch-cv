@@ -254,7 +254,7 @@ export function FreeAtsClient() {
               one-by-one, and rescore. Most users gain 20–40 points on the first pass.
             </p>
             <Link
-              href="/register?next=/resume/new"
+              href={`/register?next=/resume/new&ats=${result.overall}`}
               onClick={() => fireEvent("free_ats_gate_cta_click", { score: result.overall })}
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(234,88,12,0.5)] transition hover:bg-[#C2410C]"
             >
@@ -322,6 +322,7 @@ export function FreeAtsClient() {
               ref={fileRef}
               type="file"
               accept=".pdf,.doc,.docx"
+              aria-label="Upload your resume (PDF or DOCX)"
               className="hidden"
               onChange={onFile}
             />
@@ -331,6 +332,7 @@ export function FreeAtsClient() {
             <textarea
               value={pasted}
               onChange={(e) => setPasted(e.target.value)}
+              aria-label="Paste your resume text"
               placeholder="Paste your resume text here…"
               className="h-52 w-full resize-none rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-4 text-[14px] leading-[1.6] text-[#0F172A] outline-none transition focus:border-[#EA580C] focus:bg-white"
             />
