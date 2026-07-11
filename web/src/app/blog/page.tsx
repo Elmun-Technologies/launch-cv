@@ -3,7 +3,7 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { BlogCover } from "@/components/blog-cover";
@@ -19,6 +19,7 @@ const baseMetadata: Metadata = buildMarketingMetadata({
   description:
     "Evidence-based guides on resume writing, ATS optimization, cover letters, and interview prep — actionable tactics to help you land the job faster.",
   pathname: "/blog",
+  image: DEFAULT_OG_IMAGE,
   keywords: [
     "resume tips",
     "career advice",
@@ -66,6 +67,21 @@ export default async function BlogPage() {
   const featured = posts[0];
   const rest = posts.slice(1);
 
+  // Enrich the Blog schema with the actual post listing so search engines can
+  // surface individual articles from the index page.
+  const blogLdWithPosts = {
+    ...blogLd,
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      url: absoluteUrl(`/blog/${post.slug}`),
+      datePublished: post.date,
+      image: post.ogImageUrl || undefined,
+      author: { "@type": "Organization", name: post.author.name },
+    })),
+  };
+
   if (!featured) {
     return (
       <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
@@ -82,7 +98,7 @@ export default async function BlogPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
-      <JsonLd data={blogLd} />
+      <JsonLd data={blogLdWithPosts} />
       <LandingNav />
 
       {/* HERO */}

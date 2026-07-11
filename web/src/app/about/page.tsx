@@ -9,7 +9,7 @@ import { AboutTransformation } from "@/components/about/about-transformation";
 import { AboutTools } from "@/components/about/about-tools";
 import { ResumeTemplateGallery } from "@/components/resume-template-gallery";
 import { ArrowRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -17,6 +17,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Launch CV levels the playing field between job seekers and Applicant Tracking Systems — built by people who watched great candidates lose to format errors.",
   pathname: "/about",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["Launch CV", "about", "mission", "AI resume builder", "resume platform team"],
 });
 

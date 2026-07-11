@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
   BarChart3,
@@ -23,6 +23,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Get a 0–100 ATS score in 8 seconds. We test your resume against 15 real ATS engines — Workday, Greenhouse, Lever — and map every fix. Average gain: +43 points.",
   pathname: "/features/ats-score",
+  image: FEATURES_OG_IMAGE,
   keywords: [
     "ATS score checker",
     "test resume ATS",

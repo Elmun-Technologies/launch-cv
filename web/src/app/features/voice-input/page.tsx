@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
   Mic,
@@ -23,6 +23,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Speak your career instead of typing it. Launch CV's voice-to-text resume builder turns your words into quantified, ATS-ready bullets in 12 languages.",
   pathname: "/features/voice-input",
+  image: FEATURES_OG_IMAGE,
   keywords: [
     "voice to resume",
     "voice to text resume builder",

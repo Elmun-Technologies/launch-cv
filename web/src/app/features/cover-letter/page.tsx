@@ -3,7 +3,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
   Mail,
@@ -24,6 +24,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Generate a tailored, professional cover letter from your resume and job description in under a minute. Four tones, fourteen languages, ATS-safe formatting.",
   pathname: "/features/cover-letter",
+  image: FEATURES_OG_IMAGE,
   keywords: [
     "AI cover letter generator",
     "cover letter writer",

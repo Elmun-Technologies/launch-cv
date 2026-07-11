@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Compass, BarChart3, Users, Target, Sparkles, Check } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -12,14 +12,29 @@ export const metadata = buildMarketingMetadata({
   description:
     "PM hiring is signal-starved. Launch CV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
   pathname: "/use-cases/product-managers",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "Launch CV"],
 });
 
 const ld = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  url: absoluteUrl("/use-cases/product-managers"),
-  name: "Resume for Product Managers | Launch CV",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      url: absoluteUrl("/use-cases/product-managers"),
+      name: "Resume for Product Managers | Launch CV",
+      description:
+        "Launch CV turns your roadmaps, OKRs, and A/B tests into the quantified, ATS-clean language recruiters scan for.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
+        { "@type": "ListItem", position: 3, name: "Product Manager Resume", item: absoluteUrl("/use-cases/product-managers") },
+      ],
+    },
+  ],
 };
 
 const pmKeywords = [

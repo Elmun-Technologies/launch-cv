@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Palette, Layers, Sparkles, Eye } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -12,14 +12,29 @@ export const metadata = buildMarketingMetadata({
   description:
     "Your portfolio shows the work — your resume should land the interview. Launch CV writes ATS-clean design bullets that quantify impact and shipping speed.",
   pathname: "/use-cases/designers",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
 });
 
 const ld = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  url: absoluteUrl("/use-cases/designers"),
-  name: "Resume for Designers | Launch CV",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      url: absoluteUrl("/use-cases/designers"),
+      name: "Resume for Designers | Launch CV",
+      description:
+        "Launch CV writes ATS-clean design bullets that quantify impact, systems thinking, and shipping speed — so your resume lands the interview.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
+        { "@type": "ListItem", position: 3, name: "Designer Resume", item: absoluteUrl("/use-cases/designers") },
+      ],
+    },
+  ],
 };
 
 const designKeywords = [

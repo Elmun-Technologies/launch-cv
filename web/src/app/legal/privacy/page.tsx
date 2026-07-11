@@ -4,7 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { ArrowLeft, Mail, Shield } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = buildMarketingMetadata({
@@ -12,6 +12,7 @@ export const metadata: Metadata = buildMarketingMetadata({
   description:
     "How Launch CV collects, stores, and protects your data. Session cookies, AI processing, export and deletion rights.",
   pathname: "/legal/privacy",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["Launch CV privacy policy", "GDPR", "CCPA", "data protection"],
 });
 

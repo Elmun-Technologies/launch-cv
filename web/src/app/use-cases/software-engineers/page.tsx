@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Code2, Terminal, GitBranch, Cpu, Cloud, Check } from "lucide-react";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -12,14 +12,29 @@ export const metadata = buildMarketingMetadata({
   description:
     "ATS-clean engineering resumes. AI rewrites your bullets to quantify latency, throughput, scope, and ownership — the signals hiring managers actually scan for.",
   pathname: "/use-cases/software-engineers",
+  image: DEFAULT_OG_IMAGE,
   keywords: ["software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],
 });
 
 const ld = {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  url: absoluteUrl("/use-cases/software-engineers"),
-  name: "Resume for Software Engineers | Launch CV",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      url: absoluteUrl("/use-cases/software-engineers"),
+      name: "Resume for Software Engineers | Launch CV",
+      description:
+        "ATS-clean engineering resumes. AI quantifies latency, throughput, scope, and ownership — the signals hiring managers scan for.",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+        { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
+        { "@type": "ListItem", position: 3, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
+      ],
+    },
+  ],
 };
 
 const stack = [
