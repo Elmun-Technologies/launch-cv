@@ -21,11 +21,12 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Resume Builder — ATS-Ready Resumes in 5 Minutes",
+  title: "Resume Builder for Software Engineers, Free",
   description:
-    "Build an ATS-friendly resume in under five minutes. Twelve industry templates, AI-written bullets, live preview, and PDF or DOCX export.",
+    "The AI resume builder software engineers trust: 12 ATS-tested templates, quantified bullets, and PDF/DOCX export in under 5 minutes. Build yours free →",
   pathname: "/features/resume-builder",
   keywords: [
+    "resume builder software engineer",
     "AI resume builder",
     "ATS friendly resume builder",
     "professional resume templates",
