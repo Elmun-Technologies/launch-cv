@@ -2,8 +2,10 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import {
   Mic,
@@ -52,8 +54,16 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Voice Input", item: absoluteUrl("/features/voice-input") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
+
+const keyFacts = [
+  "Speak your experience and AI turns it into quantified, ATS-ready bullet points.",
+  "Real-time transcription you can edit inline before transforming.",
+  "Works in 12 languages, natively in Chrome, Edge, and Safari — no app to install.",
+  "Privacy-first: audio is processed in-memory and discarded after transcription.",
+];
 
 const langs = ["English", "Español", "Français", "Deutsch", "Português", "Italiano", "Nederlands", "Polski", "日本語", "中文", "한국어", "Türkçe"];
 
@@ -110,6 +120,12 @@ export default function VoiceInputPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 The hardest part of a resume isn&apos;t the layout — it&apos;s the blank page. Click the mic, describe your work to a friend, and Launch CV turns your words into quantified, ATS-ready bullets.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Voice Input lets you build a resume by speaking. The voice-to-text builder transcribes your words in real time and AI turns them into quantified, ATS-ready bullet points across every resume section. It works in 12 languages with no app to install, and audio is discarded in-memory after transcription."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link

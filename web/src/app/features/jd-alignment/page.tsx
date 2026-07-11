@@ -2,8 +2,10 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { howToLd, speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import {
   Target,
@@ -52,8 +54,31 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "JD Alignment", item: absoluteUrl("/features/jd-alignment") },
       ],
     },
+    howToLd({
+      name: "How to match your resume to a job description",
+      description:
+        "Paste a job description, review your match score and keyword gaps, approve AI bullet rewrites, and export a tailored resume.",
+      totalTime: "PT1M",
+      url: absoluteUrl("/features/jd-alignment"),
+      steps: [
+        { name: "Add your resume", text: "Upload a PDF or DOCX, or paste plain text. It is parsed in under two seconds." },
+        { name: "Paste the job description", text: "Add the JD from LinkedIn, Indeed, or any careers page — URL or raw text both work." },
+        { name: "Review your match score", text: "AI extracts every requirement and produces your ranked keyword gap map in under ten seconds." },
+        { name: "Approve rewrites", text: "Accept AI suggestions one click at a time; the match score updates as you go." },
+        { name: "Export and apply", text: "Download as PDF or DOCX, or push directly into the cover letter generator." },
+        { name: "Track across roles", text: "Save match scores per application and compare which roles you fit best." },
+      ],
+    }),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
+
+const keyFacts = [
+  "Typical match-score lift: ~40% to 90%+ in about 60 seconds.",
+  "Ranked keyword gap analysis maps every JD requirement to your resume.",
+  "AI rewrites weave keywords into your real experience — no fabrication or stuffing.",
+  "Tested on 15 ATS engines, including Workday, Greenhouse, and Lever.",
+];
 
 const missingKeywords = ["Agile/Scrum", "Roadmapping", "OKRs", "A/B testing", "Cross-functional", "SQL"];
 
@@ -137,6 +162,12 @@ export default function JDAlignmentPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Paste a job description. Launch CV scores your fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="JD Alignment reads any job description, scores your resume's fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+ in about 60 seconds. It weaves keywords into your real experience without fabrication or stuffing, and is tested on 15 ATS engines."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import {
   FileText,
@@ -51,8 +53,16 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Resume Builder", item: absoluteUrl("/features/resume-builder") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
+
+const keyFacts = [
+  "12 industry templates, each tested against 15 ATS engines.",
+  "AI writes quantified, action-led bullets from plain-language input.",
+  "Live pixel-accurate preview with PDF, DOCX, and plain-text export.",
+  "Average build time: under 5 minutes.",
+];
 
 const templates = [
   { n: "Atlas", c: "Modern minimal · Tech & SaaS" },
@@ -116,6 +126,12 @@ export default function ResumeBuilderPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Type your work history in plain language and Launch CV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="The AI Resume Builder turns plain-language work history into quantified, ATS-tuned bullet points. Choose from 12 industry templates, watch a live pixel-accurate preview, and export to PDF or DOCX — most people go from blank page to finished resume in about five minutes."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { howToLd, speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import {
   BarChart3,
@@ -52,8 +54,28 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "ATS Score", item: absoluteUrl("/features/ats-score") },
       ],
     },
+    howToLd({
+      name: "How to check your resume's ATS score",
+      description:
+        "Upload your resume to get a 0–100 ATS score and a prioritized fix list, then apply the fixes and re-score.",
+      totalTime: "PT8S",
+      url: absoluteUrl("/features/ats-score"),
+      steps: [
+        { name: "Upload your file", text: "Upload a PDF, DOCX, or pasted plain text. It is parsed in under two seconds — the same way 15 ATS engines would." },
+        { name: "Get every issue named", text: "12 categories of parsing failures are detected, each tagged High, Medium, or Low priority with a specific fix path." },
+        { name: "Apply the fixes and rescore", text: "Fix inside Launch CV or your own tool, then re-upload to confirm — most users gain 20–40 points on the first round." },
+      ],
+    }),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
+
+const keyFacts = [
+  "Score range: 0–100 across formatting, keywords, structure, and readability.",
+  "Tested against 15 ATS engines, including Workday, Greenhouse, Lever, and iCIMS.",
+  "Average improvement is +43 points on the first pass, in about 8 seconds.",
+  "Free to check — no account required.",
+];
 
 const issues = [
   { p: "High", t: "Embedded text box in Experience", d: "ATS parsers can&apos;t extract content from text boxes. Convert to plain paragraphs." },
@@ -124,6 +146,12 @@ export default function AtsScorePage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Upload your resume. In eight seconds you get a 0–100 ATS score, a breakdown by parser dimension, and a prioritized list of every fix. The average user gains <span className="font-semibold text-[#0F172A]">43 points</span> on the first pass.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV's ATS Score Checker returns a 0–100 ATS score in about 8 seconds, tested against 15 real ATS engines like Workday, Greenhouse, and Lever. It names every parsing issue by priority, and the average user gains 43 points on the first pass. Checking your score is free and needs no account."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link

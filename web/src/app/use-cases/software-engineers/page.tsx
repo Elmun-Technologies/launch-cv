@@ -4,7 +4,9 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { ArrowRight, Code2, Terminal, GitBranch, Cpu, Cloud, Check } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -34,6 +36,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
 
@@ -82,6 +85,18 @@ export default function SoftwareEngineersPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Most engineering resumes read like a ticket queue. Launch CV rewrites them with the language hiring managers actually scan for — latency, throughput, scope, ownership, baselines — and keeps formatting ATS-clean for Workday, Greenhouse, Lever, and 12 more.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV builds ATS-clean software engineer resumes that quantify latency, throughput, scope, and ownership — the signals hiring managers scan for. It rewrites ticket-style bullets into measurable impact, draws on a 200+ engineering keyword library, and keeps formatting parseable for Workday, Greenhouse, Lever, and 12 more ATS engines."
+                facts={[
+                  "Rewrites vague bullets into quantified impact (latency, throughput, scope, MTTR).",
+                  "200+ engineering keywords pre-loaded; AI picks the right subset per job.",
+                  "Engineering-tested templates — no tables, graphics, or sidebars that break ATS.",
+                  "Tested against 15 ATS engines, including Workday, Greenhouse, and Lever.",
+                ]}
+              />
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/register"

@@ -4,7 +4,9 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
@@ -84,6 +86,7 @@ const ld = {
         url: absoluteUrl(f.href),
       })),
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
 
@@ -114,6 +117,17 @@ export default function FeaturesPage() {
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
               Launch CV isn&apos;t a resume builder with a chatbot bolted on. It&apos;s six purpose-built AI tools for every stage of the job hunt — match, write, score, send, practice, speak — wired together under one paid plan.
             </p>
+
+            <KeyFacts
+              className="mt-8 max-w-[600px]"
+              lead="Launch CV combines six AI tools in one subscription: JD alignment, AI resume builder, ATS score checker, cover letter generator, interview prep, and voice input. Each tool's output feeds the next — the resume feeds the ATS scan, the JD match seeds the cover letter — so there's no copy-pasting between tabs."
+              facts={[
+                "Six tools, one paid plan — every tool included on every tier.",
+                "JD alignment lifts match scores from ~40% to 90%+ in about a minute.",
+                "ATS checker tests against 15 engines for an average +43-point gain.",
+                "Rated 4.9/5 by 2,400+ job seekers.",
+              ]}
+            />
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
