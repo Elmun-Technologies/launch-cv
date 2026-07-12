@@ -502,7 +502,7 @@ export default function ResumeBuilderPage() {
               { q: "Is this an ATS friendly resume builder?", a: "Yes. Every one of the 12+ templates is tested across 15+ ATS platforms including Workday, Greenhouse, Lever, and iCIMS. You can also run a full ATS score check before you apply." },
               { q: "Do I need writing skills?", a: "No. Describe your work in plain language — or speak it with voice input — and the resume generator AI writes quantified, professional bullets for you." },
               { q: "What can I export?", a: "PDF and DOCX, plus a plain-text view for LinkedIn or email. Formatting stays identical to the live preview." },
-              { q: "How much does it cost?", a: "Plans start at $9/month, with a $29/year Professional plan and a $79 one-time Lifetime option." },
+              { q: "How much does it cost?", a: "Plans start at $9/month, with a $29/month Professional plan and a $79 one-time Lifetime option." },
             ].map((f) => (
               <RevealOnView key={f.q}>
                 <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">

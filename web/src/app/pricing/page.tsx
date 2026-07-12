@@ -196,7 +196,7 @@ export default function PricingPage() {
       {/* PLAN CARDS */}
       <section className="pb-20 pt-8">
         <div className="mx-auto max-w-[1200px] px-6">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
@@ -290,7 +290,7 @@ export default function PricingPage() {
           </RevealOnView>
 
           <div className="mt-10 overflow-hidden rounded-xl border border-[#E2E8F0]">
-            <div className="grid grid-cols-[1.6fr_repeat(4,1fr)] bg-white">
+            <div className="grid grid-cols-[1.6fr_repeat(3,1fr)] bg-white">
               <div className="border-b border-[#E2E8F0] px-5 py-4 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
                 Feature
               </div>
@@ -320,11 +320,10 @@ export default function PricingPage() {
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-[#475569]">{g.g}</p>
                   </div>
                   {g.rows.map((r) => (
-                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(4,1fr)] items-center">
+                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(3,1fr)] items-center">
                       <div className="px-5 py-3 text-[13px] text-[#0F172A]">{r.l}</div>
                       <div className="px-5 py-3 text-center"><CellValue v={r.v.starter} /></div>
                       <div className="bg-[#EFF6FF]/30 px-5 py-3 text-center"><CellValue v={r.v.professional} /></div>
-                      <div className="px-5 py-3 text-center"><CellValue v={r.v.elite} /></div>
                       <div className="px-5 py-3 text-center"><CellValue v={r.v.lifetime} /></div>
                     </div>
                   ))}

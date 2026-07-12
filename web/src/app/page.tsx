@@ -423,7 +423,7 @@ export default async function Home() {
               <div className="lg:col-span-7">
                 <p className="lc-overline text-[#2563EB]">Pricing</p>
                 <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                  Pay monthly, yearly, or once
+                  Pay monthly or once
                 </h2>
               </div>
               <p className="text-[16px] leading-[1.65] text-[#475569] lg:col-span-5">
@@ -432,14 +432,13 @@ export default async function Home() {
             </div>
           </MotionReveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
               const tagline: Record<string, string> = {
                 starter: "Try the workflow — monthly, cancel anytime.",
                 professional: "Best balance of limits and price.",
-                elite: "Higher ceilings + priority support, billed yearly.",
                 lifetime: "One payment. Forever access.",
               };
               return (

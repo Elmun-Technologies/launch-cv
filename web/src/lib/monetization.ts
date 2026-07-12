@@ -41,18 +41,20 @@ export const PUBLIC_PLANS: Record<
     title: "Professional",
     priceDisplay: "$29",
     priceAmount: 29,
-    periodLabel: "/year",
-    billingExplainer: "Billed annually through Polar — renews yearly. Cancel anytime.",
+    periodLabel: "/month",
+    billingExplainer: "Billed monthly through Polar — renews monthly. Cancel anytime.",
     valueLine: "Best balance of limits and price for most job seekers.",
     bestFor: "Most job seekers (best value)",
     popular: true,
   },
+  // Elite is retained for legacy webhook/plan mapping only — it is intentionally
+  // excluded from CHECKOUT_PLAN_ORDER and never shown in marketing or checkout UI.
   elite: {
     title: "Elite",
     priceDisplay: "$49",
     priceAmount: 49,
-    periodLabel: "/year",
-    billingExplainer: "Billed annually through Polar — renews yearly. Cancel anytime.",
+    periodLabel: "/month",
+    billingExplainer: "Legacy plan — no longer offered to new customers.",
     valueLine: "Heavy applicants, career switchers, and agency-style volume.",
     bestFor: "Heavy applicants & career switchers",
   },
@@ -91,14 +93,14 @@ export function planBillingSummary(plan: CheckoutPlan): string {
   return "Once, forever";
 }
 
-/** Oxford-comma plan-name list, e.g. "Starter, Professional, Elite, or Lifetime". */
+/** Oxford-comma plan-name list, e.g. "Starter, Professional, or Lifetime". */
 export function planNameList(conjunction: "or" | "and" = "or"): string {
   const names = CHECKOUT_PLAN_ORDER.map((k) => PUBLIC_PLANS[k].title);
   if (names.length <= 1) return names.join("");
   return `${names.slice(0, -1).join(", ")}, ${conjunction} ${names[names.length - 1]}`;
 }
 
-/** Name + price summary, e.g. "Starter $9/mo, Professional $29/yr, Elite $49/yr, Lifetime $79 once". */
+/** Name + price summary, e.g. "Starter $9/mo, Professional $29/mo, Lifetime $79 once". */
 export function planPricingSummary(): string {
   return CHECKOUT_PLAN_ORDER.map(
     (k) => `${PUBLIC_PLANS[k].title} ${planPriceLabel(k)}`,
@@ -121,7 +123,7 @@ export function planMarketingBullets(plan: CheckoutPlan): string[] {
   if (plan === "elite") {
     return [...base, "Priority feature rollouts", "Company matcher & voice input", "Priority support"];
   }
-  return [...base, "All Elite features", "No renewal — pay once", "Fair-use monthly AI caps (see Terms)"];
+  return [...base, "All Professional features", "No renewal — pay once", "Fair-use monthly AI caps (see Terms)"];
 }
 
 /** Legacy single-price block — maps to Professional for old UI strings. */
@@ -132,5 +134,5 @@ export const PUBLIC_PRICING = {
   billingExplainer: PUBLIC_PLANS.professional.billingExplainer,
   valueLine: PUBLIC_PLANS.professional.valueLine,
   upsellHook: "Choose a plan to unlock AI — LaunchCV is a paid professional product.",
-  proUsdPerYear: PUBLIC_PLANS.professional.priceAmount,
+  proUsdPerMonth: PUBLIC_PLANS.professional.priceAmount,
 } as const;
