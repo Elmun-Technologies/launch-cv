@@ -6,6 +6,7 @@ import { ToastProvider } from "@/components/toast";
 import { AppProviders } from "@/app/providers";
 import { JsonLd } from "@/components/json-ld";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { AttributionTracker } from "@/components/attribution-tracker";
 import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
@@ -168,6 +169,7 @@ export default async function RootLayout({
     <html lang="en" className={`${inter.variable} ${geistMono.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
+        <AttributionTracker />
         <JsonLd data={rootStructuredData} />
         <AppProviders>
           {children}

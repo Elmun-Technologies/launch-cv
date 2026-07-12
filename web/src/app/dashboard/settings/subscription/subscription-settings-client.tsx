@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
-import { trackCheckoutStarted, trackFeatureCtaClicked, getGaClientId } from "@/lib/analytics-client";
+import { trackCheckoutStart, trackCtaClick, trackPlanSelected, getGaClientId } from "@/lib/analytics-client";
 
 type StatusPayload = {
   pro: boolean;
@@ -77,13 +77,14 @@ export function SubscriptionSettingsClient() {
   const currentPlan = (status?.plan as CheckoutPlan | "none" | undefined) ?? "none";
 
   async function startCheckout(plan: CheckoutPlan) {
-    // CTA click on a "Choose <plan>" button.
-    trackFeatureCtaClicked({ cta: "choose_plan", plan, location: "subscription_settings" });
+    // CTA click on a "Choose <plan>" button, and the funnel's plan-selection step.
+    trackCtaClick({ cta: "choose_plan", plan, location: "subscription_settings" });
+    trackPlanSelected(plan, { location: "subscription_settings" });
     setLoadingPlan(plan);
     const res = await fetch("/api/polar/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      // Pass the GA client id so the webhook-driven purchase_completed stitches
+      // Pass the GA client id so the webhook-driven purchase event stitches
       // back to this browser's GA4 session.
       body: JSON.stringify({ plan, gaClientId: getGaClientId() }),
     });
@@ -91,7 +92,7 @@ export function SubscriptionSettingsClient() {
     setLoadingPlan(null);
     if (res.ok && j.url) {
       // Polar checkout is opening — fire before the redirect leaves the page.
-      trackCheckoutStarted(plan);
+      trackCheckoutStart(plan);
       window.location.href = j.url as string;
     }
   }

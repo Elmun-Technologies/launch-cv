@@ -71,29 +71,29 @@ async function preventNavigation(page: Page) {
   );
 }
 
-test("sign_up_started fires on the register page to GA4 + PostHog", async ({ page }) => {
+test("sign_up_start fires on the register page to GA4 + PostHog", async ({ page }) => {
   await page.addInitScript(INIT);
   await page.goto("/register", { waitUntil: "domcontentloaded" });
-  await waitForEvent(page, "sign_up_started");
+  await waitForEvent(page, "sign_up_start");
 });
 
-test("feature_cta_clicked fires with plan from a pricing card", async ({ page }) => {
+test("cta_click fires with plan from a pricing card", async ({ page }) => {
   await page.addInitScript(INIT);
   await page.goto("/pricing", { waitUntil: "domcontentloaded" });
   await preventNavigation(page);
   await page.locator("a", { hasText: "Start with Starter" }).first().click();
-  await waitForEvent(page, "feature_cta_clicked");
+  await waitForEvent(page, "cta_click");
 
-  const gtag = (await gtagEvents(page)).filter((e) => e.name === "feature_cta_clicked");
-  const ph = (await phEvents(page)).filter((e) => e.name === "feature_cta_clicked");
+  const gtag = (await gtagEvents(page)).filter((e) => e.name === "cta_click");
+  const ph = (await phEvents(page)).filter((e) => e.name === "cta_click");
   expect((gtag[0].params as { plan?: string }).plan).toBe("starter");
   expect((ph[0].params as { plan?: string }).plan).toBe("starter");
 });
 
-test("feature_cta_clicked fires from a marketing CTA", async ({ page }) => {
+test("cta_click fires from a marketing CTA", async ({ page }) => {
   await page.addInitScript(INIT);
   await page.goto("/", { waitUntil: "domcontentloaded" });
   await preventNavigation(page);
   await page.locator('a[href="/register"]').first().click();
-  await waitForEvent(page, "feature_cta_clicked");
+  await waitForEvent(page, "cta_click");
 });
