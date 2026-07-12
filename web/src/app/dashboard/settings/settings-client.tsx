@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   ChevronRight, Loader2, X, Eye, EyeOff,
-  User, Lock, Link2, Briefcase, Sparkles,
+  User, Lock, Link2, Briefcase, Sparkles, Check,
 } from "lucide-react";
 import { subscriptionRowGrantsPro } from "@/lib/entitlements";
 import { PUBLIC_PLANS, PUBLIC_PRICING } from "@/lib/monetization";
@@ -24,8 +24,12 @@ export function SettingsClient({
   subscription,
   userName,
   userEmail,
+  hasPassword = true,
+  googleLinked = false,
 }: {
   emailVerified?: boolean;
+  hasPassword?: boolean;
+  googleLinked?: boolean;
   subscription: Sub;
   userName?: string | null;
   userEmail?: string | null;
@@ -248,14 +252,35 @@ export function SettingsClient({
                   <Lock className="h-3.5 w-3.5 text-[#7C5CFC]" />
                 </div>
                 <div>
-                  <h3 className="text-[15px] font-bold text-gray-900">Change Password</h3>
-                  <p className="mt-0.5 text-[12px] text-gray-400">Update your password to keep your account secure</p>
+                  <h3 className="text-[15px] font-bold text-gray-900">
+                    {hasPassword ? "Change Password" : "Set a Password"}
+                  </h3>
+                  <p className="mt-0.5 text-[12px] text-gray-400">
+                    {hasPassword
+                      ? "Update your password to keep your account secure"
+                      : "Add a password so you can also sign in with email — and delete your account later if you choose"}
+                  </p>
                 </div>
               </div>
 
+              {googleLinked ? (
+                <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-gray-100 bg-[#FAFAFA] px-4 py-3">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100">
+                    <Check className="h-3 w-3 text-emerald-600" />
+                  </span>
+                  <p className="text-[12px] text-gray-600">
+                    Connected to <span className="font-semibold text-gray-800">Google</span>
+                    {userEmail ? ` (${userEmail})` : ""}. You can sign in with Google
+                    {hasPassword ? " or your email password." : "."}
+                  </p>
+                </div>
+              ) : null}
+
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="text-[12px] font-semibold text-gray-700">New Password</label>
+                  <label className="text-[12px] font-semibold text-gray-700">
+                    {hasPassword ? "New Password" : "Password"}
+                  </label>
                   <div className="relative mt-1.5">
                     <input type={showNewPw ? "text" : "password"} className="soha-input pr-10" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="••••••••••" />
                     <button type="button" tabIndex={-1} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-600" onClick={() => setShowNewPw((s) => !s)}>
