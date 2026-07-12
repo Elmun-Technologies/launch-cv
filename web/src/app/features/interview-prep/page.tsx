@@ -28,7 +28,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "AI Interview Prep — Practice Real, Role-Specific Questions",
   description:
-    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
+    "LaunchCV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
   pathname: "/features/interview-prep",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -45,7 +45,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Interview Prep | Launch CV",
+      name: "Interview Prep | LaunchCV",
       url: absoluteUrl("/features/interview-prep"),
       description: "Role-specific AI interview practice with scored feedback.",
     },
@@ -93,7 +93,7 @@ const testimonials = [
     r: "Data Analyst at Snowflake",
   },
   {
-    q: "I failed four interviews before Launch CV. The AI feedback showed me I wasn&apos;t using STAR properly. Fixed that — hired on the very next one.",
+    q: "I failed four interviews before LaunchCV. The AI feedback showed me I wasn&apos;t using STAR properly. Fixed that — hired on the very next one.",
     n: "Nina P.",
     r: "Business Analyst",
   },
@@ -248,7 +248,7 @@ export default function InterviewPrepPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/interview-prep.svg"
-            alt="The Launch CV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
+            alt="The LaunchCV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
             caption="Answer role-specific questions and get scored on clarity, relevance, impact, and STAR structure."
           />
         </div>
@@ -407,7 +407,7 @@ export default function InterviewPrepPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#059669]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#059669]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Winging it</th>
                 </tr>
               </thead>

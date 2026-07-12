@@ -36,7 +36,7 @@ type StickyCtaProps = {
 export function StickyCta({
   primaryHref,
   primaryLabel,
-  primaryClassName = "bg-[#1A56DB] hover:bg-[#1D4ED8]",
+  primaryClassName = "bg-[#2563EB] hover:bg-[#1D4ED8]",
   primaryCta = "get_started",
   secondaryHref = "/pricing",
   secondaryLabel = "See pricing",

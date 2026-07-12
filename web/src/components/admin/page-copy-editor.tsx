@@ -95,7 +95,7 @@ export function PageCopyEditor({ pageKey, label, description, initialJson }: Pag
           value={text}
           onChange={(e) => setText(e.target.value)}
           spellCheck={false}
-          className="block min-h-[420px] w-full resize-y rounded-lg border border-[#E2E8F0] bg-white p-4 font-mono text-[13px] leading-[1.65] text-[#0F172A] outline-none focus:border-[#1A56DB] focus:ring-2 focus:ring-[#1A56DB]/15"
+          className="block min-h-[420px] w-full resize-y rounded-lg border border-[#E2E8F0] bg-white p-4 font-mono text-[13px] leading-[1.65] text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
         />
       </SectionCard>
     </div>

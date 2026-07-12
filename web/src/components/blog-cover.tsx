@@ -21,7 +21,7 @@ const coverByCategory: Record<string, CoverConfig> = {
   "Resume Tips": {
     gradient: "from-[#EFF6FF] via-[#DBEAFE] to-[#BFDBFE]",
     icon: FileText,
-    iconColor: "text-[#1A56DB]",
+    iconColor: "text-[#2563EB]",
   },
   "Cover Letters": {
     gradient: "from-[#F0FDFA] via-[#CCFBF1] to-[#99F6E4]",
@@ -71,7 +71,7 @@ export function BlogCover({ post, size = "md" }: { post: BlogPost; size?: "sm" |
       <div className={`relative overflow-hidden rounded-xl bg-[#F1F5F9] ${sizeClass}`}>
         <Image
           src={post.coverUrl}
-          alt={post.coverAlt?.trim() || `${post.category} — Launch CV product illustration`}
+          alt={post.coverAlt?.trim() || `${post.category} — LaunchCV product illustration`}
           width={1600}
           height={900}
           sizes={size === "hero" || size === "lg" ? "(max-width: 800px) 100vw, 800px" : "(max-width: 640px) 100vw, 400px"}
@@ -79,8 +79,8 @@ export function BlogCover({ post, size = "md" }: { post: BlogPost; size?: "sm" |
         />
         <div className="absolute left-3 top-3">
           <span className="inline-flex items-center gap-1 rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0F172A] shadow-sm backdrop-blur">
-            <Sparkles className="h-2.5 w-2.5 text-[#1A56DB]" />
-            Launch CV · {post.readingTime} min
+            <Sparkles className="h-2.5 w-2.5 text-[#2563EB]" />
+            LaunchCV · {post.readingTime} min
           </span>
         </div>
       </div>
@@ -111,8 +111,8 @@ export function BlogCover({ post, size = "md" }: { post: BlogPost; size?: "sm" |
       </div>
       <div className="absolute left-3 top-3">
         <span className="inline-flex items-center gap-1 rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0F172A] shadow-sm">
-          <Sparkles className="h-2.5 w-2.5 text-[#1A56DB]" />
-          Launch CV · {post.readingTime} min
+          <Sparkles className="h-2.5 w-2.5 text-[#2563EB]" />
+          LaunchCV · {post.readingTime} min
         </span>
       </div>
     </div>

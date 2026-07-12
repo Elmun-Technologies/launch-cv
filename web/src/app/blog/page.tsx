@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   alternates: {
     ...baseMetadata.alternates,
     types: {
-      "application/rss+xml": [{ url: absoluteUrl("/blog/feed.xml"), title: "Launch CV Career Blog" }],
+      "application/rss+xml": [{ url: absoluteUrl("/blog/feed.xml"), title: "LaunchCV Career Blog" }],
     },
   },
 };
@@ -45,12 +45,12 @@ export const metadata: Metadata = {
 const blogLd = {
   "@context": "https://schema.org",
   "@type": "Blog",
-  name: "Launch CV Career Blog",
+  name: "LaunchCV Career Blog",
   description: "Evidence-based guides on resume writing, ATS optimization, cover letters, and job search strategy.",
   url: absoluteUrl("/blog"),
   publisher: {
     "@type": "Organization",
-    name: "Launch CV",
+    name: "LaunchCV",
     url: absoluteUrl("/"),
     logo: { "@type": "ImageObject", url: absoluteUrl("/icon.png") },
   },
@@ -114,18 +114,18 @@ export default async function BlogPage() {
         />
         <div className="relative mx-auto max-w-[1200px] px-6 pb-12 pt-12">
           <div className="max-w-[760px]">
-            <p className="lc-overline text-[#1A56DB]">Career blog</p>
+            <p className="lc-overline text-[#2563EB]">Career blog</p>
             <h1 className="mt-3 lc-hero-headline text-[#0F172A]">
               Resume tips and career advice for modern job seekers
             </h1>
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
-              Evidence-based guides on ATS optimization, resume writing, cover letters, interview preparation, and AI-assisted job search — written by the team building Launch CV.
+              Evidence-based guides on ATS optimization, resume writing, cover letters, interview preparation, and AI-assisted job search — written by the team building LaunchCV.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
               >
                 Build my resume free
                 <ArrowRight className="h-4 w-4" />
@@ -164,7 +164,7 @@ export default async function BlogPage() {
             <BlogCover post={featured} size="lg" />
             <div className="px-2 lg:px-4">
               <div className="flex items-center gap-3">
-                <span className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#1A56DB]">
+                <span className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#2563EB]">
                   Featured
                 </span>
                 <span
@@ -178,11 +178,11 @@ export default async function BlogPage() {
                   <Clock className="h-3 w-3" /> {featured.readingTime} min read
                 </span>
               </div>
-              <h2 className="mt-4 text-[24px] font-semibold leading-tight tracking-tight text-[#0F172A] transition group-hover:text-[#1A56DB] sm:text-[28px]">
+              <h2 className="mt-4 text-[24px] font-semibold leading-tight tracking-tight text-[#0F172A] transition group-hover:text-[#2563EB] sm:text-[28px]">
                 {featured.title}
               </h2>
               <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{featured.description}</p>
-              <span className="mt-5 inline-flex items-center gap-1 text-[14px] font-semibold text-[#1A56DB]">
+              <span className="mt-5 inline-flex items-center gap-1 text-[14px] font-semibold text-[#2563EB]">
                 Read article
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </span>
@@ -211,7 +211,7 @@ export default async function BlogPage() {
                       <Clock className="h-3 w-3" /> {post.readingTime} min
                     </span>
                   </div>
-                  <h2 className="mt-3 text-[16px] font-semibold leading-snug tracking-tight text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                  <h2 className="mt-3 text-[16px] font-semibold leading-snug tracking-tight text-[#0F172A] transition group-hover:text-[#2563EB]">
                     {post.title}
                   </h2>
                   <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-[1.65] text-[#475569]">
@@ -225,7 +225,7 @@ export default async function BlogPage() {
                         year: "numeric",
                       })}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB]">
+                    <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563EB]">
                       Read
                       <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
                     </span>
@@ -246,7 +246,7 @@ export default async function BlogPage() {
           </p>
           <CtaLink cta="get_started" location="blog_index"
             href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Get started
             <ArrowRight className="h-4 w-4" />

@@ -58,7 +58,7 @@ export default function AdminUsersPage() {
       header: "User",
       render: (u) => (
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] text-[11px] font-semibold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[11px] font-semibold text-white">
             {(u.name || u.email)[0].toUpperCase()}
           </div>
           <div className="min-w-0">
@@ -104,7 +104,7 @@ export default function AdminUsersPage() {
         <div className="flex items-center justify-end gap-1">
           <Link
             href={`/admin-panel/users/${u.id}`}
-            className="rounded-md p-1.5 text-[#94A3B8] transition hover:bg-[#F1F5F9] hover:text-[#1A56DB]"
+            className="rounded-md p-1.5 text-[#94A3B8] transition hover:bg-[#F1F5F9] hover:text-[#2563EB]"
             aria-label="Edit user"
           >
             <Pencil className="h-4 w-4" />
@@ -138,7 +138,7 @@ export default function AdminUsersPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="block w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#1A56DB] focus:ring-2 focus:ring-[#1A56DB]/15"
+            className="block w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
           />
         </div>
 

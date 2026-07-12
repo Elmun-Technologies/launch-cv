@@ -16,17 +16,17 @@
   <!-- Template thumbnails -->
   <g>
     <!-- Atlas -->
-    <rect x="112" y="280" width="320" height="440" rx="14" fill="#FFFFFF" stroke="#1A56DB" stroke-width="3"/>
+    <rect x="112" y="280" width="320" height="440" rx="14" fill="#FFFFFF" stroke="#2563EB" stroke-width="3"/>
     <rect x="144" y="312" width="150" height="16" rx="8" fill="#0F172A"/>
     <rect x="144" y="336" width="100" height="10" rx="5" fill="#94A3B8"/>
     <rect x="144" y="372" width="256" height="8" rx="4" fill="#CBD5E1"/>
     <rect x="144" y="388" width="230" height="8" rx="4" fill="#CBD5E1"/>
     <rect x="144" y="404" width="248" height="8" rx="4" fill="#CBD5E1"/>
-    <rect x="144" y="440" width="120" height="10" rx="5" fill="#1A56DB"/>
+    <rect x="144" y="440" width="120" height="10" rx="5" fill="#2563EB"/>
     <rect x="144" y="464" width="256" height="8" rx="4" fill="#E2E8F0"/>
     <rect x="144" y="480" width="240" height="8" rx="4" fill="#E2E8F0"/>
     <rect x="144" y="496" width="250" height="8" rx="4" fill="#E2E8F0"/>
-    <rect x="144" y="532" width="120" height="10" rx="5" fill="#1A56DB"/>
+    <rect x="144" y="532" width="120" height="10" rx="5" fill="#2563EB"/>
     <rect x="144" y="556" width="256" height="8" rx="4" fill="#E2E8F0"/>
     <rect x="144" y="572" width="236" height="8" rx="4" fill="#E2E8F0"/>
     <g><rect x="144" y="606" width="56" height="20" rx="10" fill="#EFF6FF"/><rect x="208" y="606" width="56" height="20" rx="10" fill="#EFF6FF"/><rect x="272" y="606" width="56" height="20" rx="10" fill="#EFF6FF"/></g>

@@ -41,7 +41,7 @@ future content does not accidentally re-target an owned query.
 | `software engineer resume`, `developer resume` (commercial, persona) | `/use-cases/software-engineers` | Commercial / persona | `/features/resume-builder`, `/features/jd-alignment` |
 | `product manager resume` (commercial, persona) | `/use-cases/product-managers` | Commercial / persona | `/features/jd-alignment` |
 | `designer resume` (commercial, persona) | `/use-cases/designers` | Commercial / persona | `/features/resume-builder` |
-| `best ats resume checker`, `ats resume checker comparison`, `launch cv alternative` (commercial, comparison) | `/compare/ats-resume-checkers` | Commercial / comparison | `/features/ats-score`, `/features/jd-alignment` |
+| `best ats resume checker`, `ats resume checker comparison`, `launchcv alternative` (commercial, comparison) | `/compare/ats-resume-checkers` | Commercial / comparison | `/features/ats-score`, `/features/jd-alignment` |
 
 ## Cannibalization guardrails
 

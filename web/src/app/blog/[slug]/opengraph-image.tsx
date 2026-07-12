@@ -4,7 +4,7 @@ import { getPostBySlug } from "@/lib/cms/blog";
 
 // Node runtime (not edge): the shared blog lookup uses Prisma.
 export const runtime = "nodejs";
-export const alt = "Launch CV blog article";
+export const alt = "LaunchCV blog article";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 
@@ -18,8 +18,8 @@ type Params = { slug: string };
 export default async function Image({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
 
-  let title = "Career & resume advice from Launch CV";
-  let category = "Launch CV Blog";
+  let title = "Career & resume advice from LaunchCV";
+  let category = "LaunchCV Blog";
   try {
     const post = await getPostBySlug(slug);
     if (post) {

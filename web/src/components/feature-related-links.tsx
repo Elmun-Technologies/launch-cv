@@ -8,7 +8,7 @@ export type RelatedLink = { href: string; title: string; desc: string };
  * source scanner emits them (dynamic class interpolation would be purged).
  */
 const HOVER: Record<string, string> = {
-  blue: "group-hover:text-[#1A56DB]",
+  blue: "group-hover:text-[#2563EB]",
   orange: "group-hover:text-[#EA580C]",
   violet: "group-hover:text-[#7C3AED]",
   teal: "group-hover:text-[#0D9488]",

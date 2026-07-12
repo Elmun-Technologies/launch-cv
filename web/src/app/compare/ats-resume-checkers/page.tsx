@@ -29,7 +29,7 @@ export const metadata = buildMarketingMetadata({
     "best ATS resume checker",
     "ATS resume checker comparison",
     "ATS resume scanner",
-    "Launch CV alternative",
+    "LaunchCV alternative",
     "free ATS checker",
     "resume checker tool",
     "how to choose an ATS checker",
@@ -39,19 +39,19 @@ export const metadata = buildMarketingMetadata({
 const faqs: FaqItem[] = [
   {
     q: "What is the best ATS resume checker?",
-    a: "The best ATS resume checker is the one that parses your resume like real applicant tracking systems, scores it against a specific job description rather than a generic template, and returns fixes you can act on — not just a keyword count. Launch CV tests against 15 ATS engines, scores relative to the job you paste in, and lists every fix by priority.",
+    a: "The best ATS resume checker is the one that parses your resume like real applicant tracking systems, scores it against a specific job description rather than a generic template, and returns fixes you can act on — not just a keyword count. LaunchCV tests against 15 ATS engines, scores relative to the job you paste in, and lists every fix by priority.",
   },
   {
     q: "Are free ATS resume checkers accurate?",
-    a: "A free checker is accurate if it actually simulates parsing (extracting text, detecting sections, checking formatting) rather than just counting keyword overlap. Launch CV's ATS score and full parser breakdown are free with no account, so you can judge the accuracy before paying for anything.",
+    a: "A free checker is accurate if it actually simulates parsing (extracting text, detecting sections, checking formatting) rather than just counting keyword overlap. LaunchCV's ATS score and full parser breakdown are free with no account, so you can judge the accuracy before paying for anything.",
   },
   {
     q: "What should I look for in an ATS checker?",
     a: "Look for six things: parsing against real ATS engines, scoring against a specific job description, a prioritized and specific fix list, keyword gap analysis, safe handling of your data, and speed. A tool that only returns a number without telling you what to change will not move your ranking.",
   },
   {
-    q: "Is Launch CV a good alternative to other resume checkers?",
-    a: "Launch CV combines an ATS score checker, JD alignment, a resume builder, cover letters, and interview prep under one plan, with a free ATS score and no per-scan paywall. If you want scoring plus the tools to actually fix and tailor your resume in the same place, it is a strong alternative to single-purpose scanners.",
+    q: "Is LaunchCV a good alternative to other resume checkers?",
+    a: "LaunchCV combines an ATS score checker, JD alignment, a resume builder, cover letters, and interview prep under one plan, with a free ATS score and no per-scan paywall. If you want scoring plus the tools to actually fix and tailor your resume in the same place, it is a strong alternative to single-purpose scanners.",
   },
 ];
 
@@ -60,10 +60,10 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Best ATS Resume Checkers in 2026 — How to Choose | Launch CV",
+      name: "Best ATS Resume Checkers in 2026 — How to Choose | LaunchCV",
       url: absoluteUrl("/compare/ats-resume-checkers"),
       description:
-        "A buyer's guide to choosing an ATS resume checker: the six criteria that matter and how Launch CV measures up.",
+        "A buyer's guide to choosing an ATS resume checker: the six criteria that matter and how LaunchCV measures up.",
     },
     {
       "@type": "BreadcrumbList",
@@ -149,10 +149,10 @@ export default function AtsResumeCheckersComparePage() {
           <p className="mx-auto mt-6 max-w-[620px] text-[17px] leading-[1.7] text-[#475569]">
             Every resume tool claims to &ldquo;beat the ATS.&rdquo; Most just count keywords. This
             guide covers the six criteria that separate a real{" "}
-            <Link href="/features/ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               ATS score checker
             </Link>{" "}
-            from a glorified word counter — and how Launch CV measures up.
+            from a glorified word counter — and how LaunchCV measures up.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
@@ -223,7 +223,7 @@ export default function AtsResumeCheckersComparePage() {
                   <th className="py-4 pr-4 text-[13px] font-semibold uppercase tracking-wider text-[#94A3B8]">
                     Capability
                   </th>
-                  <th className="px-4 py-4 text-center text-[14px] font-bold text-[#EA580C]">Launch CV</th>
+                  <th className="px-4 py-4 text-center text-[14px] font-bold text-[#EA580C]">LaunchCV</th>
                   <th className="px-4 py-4 text-center text-[13px] font-semibold text-[#64748B]">
                     Keyword-count scanner
                   </th>
@@ -245,7 +245,7 @@ export default function AtsResumeCheckersComparePage() {
             </table>
           </div>
           <p className="mt-4 text-[12px] text-[#94A3B8]">
-            Comparison reflects Launch CV&apos;s capabilities versus the common &ldquo;keyword match
+            Comparison reflects LaunchCV&apos;s capabilities versus the common &ldquo;keyword match
             percentage&rdquo; category of resume scanners. Feature sets of individual competing
             products change often — always confirm current details on their own sites.
           </p>
@@ -270,22 +270,22 @@ export default function AtsResumeCheckersComparePage() {
               missing, it cannot lift your ranking.
             </p>
             <p>
-              That is why Launch CV pairs a free{" "}
-              <Link href="/features/ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              That is why LaunchCV pairs a free{" "}
+              <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 ATS score checker
               </Link>{" "}
               with{" "}
-              <Link href="/features/jd-alignment" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <Link href="/features/jd-alignment" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 JD alignment
               </Link>{" "}
               and a resume builder in one place: score your resume, see every fix ranked by
               priority, tailor it to the exact job, and re-score — without paying per scan or
               copy-pasting between tools. If you are still learning the fundamentals, start with{" "}
-              <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 what an ATS score is
               </Link>{" "}
               and{" "}
-              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 how to check your resume&apos;s ATS score
               </Link>
               .

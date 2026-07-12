@@ -23,7 +23,7 @@ const FAQ = [
 ];
 
 const ARTICLES = [
-  { title: "Getting Started with Launch CV", desc: "A quick-start guide for new users", icon: BookOpen },
+  { title: "Getting Started with LaunchCV", desc: "A quick-start guide for new users", icon: BookOpen },
   { title: "Resume Writing Best Practices", desc: "Tips to make your resume stand out", icon: FileText },
   { title: "Using AI to Match Job Descriptions", desc: "How JD alignment improves your chances", icon: MessageSquare },
   { title: "Managing Multiple Applications", desc: "Stay organized with Job Tracker", icon: MessageCircle },

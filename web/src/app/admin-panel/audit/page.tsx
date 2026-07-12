@@ -108,7 +108,7 @@ export default async function AdminAuditPage({
         intro={
           entityCounts.length > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[#1A56DB]" />
+              <ShieldCheck className="h-4 w-4 text-[#2563EB]" />
               <span className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">By entity</span>
               {entityCounts.map((e) => (
                 <span key={e.entity} className="rounded-full bg-[#F1F5F9] px-2.5 py-0.5 text-[12px] font-medium text-[#475569]">

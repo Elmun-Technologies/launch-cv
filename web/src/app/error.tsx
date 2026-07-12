@@ -21,7 +21,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
         </h1>
         <p className="mx-auto mt-4 max-w-[440px] text-[15px] leading-[1.65] text-[#475569]">
           An unexpected error occurred. Try refreshing the page — if it keeps happening, email{" "}
-          <a href="mailto:support@launch-cv.com" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+          <a href="mailto:support@launch-cv.com" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
             support@launch-cv.com
           </a>
           {error?.digest ? (
@@ -39,7 +39,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           <button
             type="button"
             onClick={reset}
-            className="inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+            className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             <RefreshCw className="h-4 w-4" />
             Try again

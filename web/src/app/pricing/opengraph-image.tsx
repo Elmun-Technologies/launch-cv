@@ -4,7 +4,7 @@ import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 
 export const runtime = "edge";
-export const alt = `Launch CV pricing — ${planNameList("and")}`;
+export const alt = `LaunchCV pricing — ${planNameList("and")}`;
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

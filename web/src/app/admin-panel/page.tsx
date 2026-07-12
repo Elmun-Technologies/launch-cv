@@ -99,7 +99,7 @@ export default async function AdminDashboardPage() {
             action={
               <Link
                 href="/admin-panel/users"
-                className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB] hover:underline"
+                className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563EB] hover:underline"
               >
                 View all <ArrowRight className="h-3 w-3" />
               </Link>
@@ -129,7 +129,7 @@ export default async function AdminDashboardPage() {
             action={
               <Link
                 href="/admin-panel/analytics"
-                className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB] hover:underline"
+                className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563EB] hover:underline"
               >
                 View all <ArrowRight className="h-3 w-3" />
               </Link>

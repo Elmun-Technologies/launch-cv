@@ -18,10 +18,10 @@ export async function sendEmailVerification(userId: string, email: string) {
     },
   });
   const link = `${appBaseUrl()}/auth/verify-email?token=${encodeURIComponent(raw)}`;
-  const html = `<p>Verify your Launch CV account.</p><p><a href="${link}">${link}</a></p><p>This link is valid for 48 hours.</p>`;
+  const html = `<p>Verify your LaunchCV account.</p><p><a href="${link}">${link}</a></p><p>This link is valid for 48 hours.</p>`;
   const sent = await sendTransactionalEmail({
     to: email,
-    subject: "Launch CV — verify your email",
+    subject: "LaunchCV — verify your email",
     html,
   });
   if (!sent.ok) {

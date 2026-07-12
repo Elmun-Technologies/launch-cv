@@ -11,7 +11,7 @@ export default function NotFound() {
       <main className="flex flex-1 items-center justify-center px-6 pt-[96px]">
         <div className="mx-auto max-w-[640px] py-20 text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-            <Search className="h-3.5 w-3.5 text-[#1A56DB]" />
+            <Search className="h-3.5 w-3.5 text-[#2563EB]" />
             Error 404
           </span>
 
@@ -28,7 +28,7 @@ export default function NotFound() {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Back to home
               <ArrowRight className="h-4 w-4" />

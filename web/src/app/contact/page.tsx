@@ -7,18 +7,18 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "Contact Launch CV — Support, Billing & Partnerships",
+  title: "Contact LaunchCV — Support, Billing & Partnerships",
   description:
-    "Get in touch with Launch CV. Support, billing, partnerships, press, and security — every inbox replies within one business day. Reach the right team fast.",
+    "Get in touch with LaunchCV. Support, billing, partnerships, press, and security — every inbox replies within one business day. Reach the right team fast.",
   pathname: "/contact",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["Launch CV contact", "support", "press", "partnerships", "billing"],
+  keywords: ["LaunchCV contact", "support", "press", "partnerships", "billing"],
 });
 
 const ld = {
   "@context": "https://schema.org",
   "@type": "ContactPage",
-  name: "Contact Launch CV",
+  name: "Contact LaunchCV",
   url: absoluteUrl("/contact"),
 };
 
@@ -67,11 +67,11 @@ export default function ContactPage() {
         <div className="relative mx-auto max-w-[1200px] px-6 pb-16 pt-12">
           <div className="max-w-[760px]">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Mail className="h-3.5 w-3.5 text-[#1A56DB]" />
+              <Mail className="h-3.5 w-3.5 text-[#2563EB]" />
               Contact
             </span>
             <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-              Talk to a real human at Launch CV
+              Talk to a real human at LaunchCV
             </h1>
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
               Pick the inbox that matches your need. Every queue is read every business day, with replies within one business day. No bots, no ticket triage layer — the team responds directly.
@@ -90,12 +90,12 @@ export default function ContactPage() {
                 href={`mailto:${c.email}`}
                 className="group flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                   <c.icon className="h-5 w-5" />
                 </span>
                 <h2 className="mt-5 text-[18px] font-semibold tracking-tight text-[#0F172A]">{c.name}</h2>
                 <p className="mt-2 flex-1 text-[14px] leading-[1.65] text-[#475569]">{c.description}</p>
-                <p className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#1A56DB]">
+                <p className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#2563EB]">
                   {c.email}
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                 </p>
@@ -110,7 +110,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <p className="lc-overline text-[#1A56DB]">What to expect</p>
+              <p className="lc-overline text-[#2563EB]">What to expect</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 One business day. Real human. No ticket loop.
               </h2>
@@ -141,7 +141,7 @@ export default function ContactPage() {
       {/* SUPPORT-FIRST POINTERS */}
       <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-16">
         <div className="mx-auto max-w-[1100px] px-6">
-          <p className="lc-overline text-[#1A56DB]">Self-serve first</p>
+          <p className="lc-overline text-[#2563EB]">Self-serve first</p>
           <h2 className="mt-3 lc-section-headline text-[#0F172A]">
             Many answers are on these pages
           </h2>
@@ -158,7 +158,7 @@ export default function ContactPage() {
               >
                 <p className="text-[15px] font-semibold text-[#0F172A]">{r.t}</p>
                 <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
                   Open
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                 </span>

@@ -107,7 +107,7 @@ export function FaqEditor({ initial }: { initial: FaqEditorData }) {
                 <AdminInput value={data.question} onChange={(e) => update("question", e.target.value)} placeholder="Is there a free tier?" />
               </FormField>
               <FormField label="Answer" required hint="Markdown is rendered on the public page">
-                <AdminTextarea rows={6} value={data.answer} onChange={(e) => update("answer", e.target.value)} placeholder="No. Launch CV is a professional product…" />
+                <AdminTextarea rows={6} value={data.answer} onChange={(e) => update("answer", e.target.value)} placeholder="No. LaunchCV is a professional product…" />
               </FormField>
             </div>
           </SectionCard>

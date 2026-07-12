@@ -59,7 +59,7 @@ export default async function AdminAnalyticsPage() {
         <SectionCard
           title="Daily signups · last 7 days"
           description="Counts of new user accounts created per UTC day"
-          action={<TrendingUp className="h-4 w-4 text-[#1A56DB]" />}
+          action={<TrendingUp className="h-4 w-4 text-[#2563EB]" />}
         >
           <div className="grid grid-cols-7 gap-2">
             {last7Days.map((d) => {
@@ -68,7 +68,7 @@ export default async function AdminAnalyticsPage() {
                 <div key={d.label} className="flex flex-col items-center gap-2">
                   <div className="flex h-[80px] w-full items-end overflow-hidden rounded-md bg-[#F8FAFC]">
                     <div
-                      className="w-full rounded-md bg-gradient-to-t from-[#1A56DB] to-[#60A5FA]"
+                      className="w-full rounded-md bg-gradient-to-t from-[#2563EB] to-[#60A5FA]"
                       style={{ height: `${heightPct}%`, minHeight: d.count > 0 ? 4 : 0 }}
                     />
                   </div>
@@ -88,7 +88,7 @@ export default async function AdminAnalyticsPage() {
           <SectionCard
             title="Top events"
             description="Most frequently tracked event names"
-            action={<BarChart3 className="h-4 w-4 text-[#1A56DB]" />}
+            action={<BarChart3 className="h-4 w-4 text-[#2563EB]" />}
           >
             {allEvents.length === 0 ? (
               <p className="py-8 text-center text-[13px] text-[#94A3B8]">No events recorded.</p>
@@ -104,7 +104,7 @@ export default async function AdminAnalyticsPage() {
                       </div>
                       <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[#F1F5F9]">
                         <div
-                          className="h-full rounded-full bg-[#1A56DB]"
+                          className="h-full rounded-full bg-[#2563EB]"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -118,7 +118,7 @@ export default async function AdminAnalyticsPage() {
           <SectionCard
             title="Recent events"
             description="Latest 20 tracked events"
-            action={<Clock className="h-4 w-4 text-[#1A56DB]" />}
+            action={<Clock className="h-4 w-4 text-[#2563EB]" />}
             flush
           >
             {recentEvents.length === 0 ? (

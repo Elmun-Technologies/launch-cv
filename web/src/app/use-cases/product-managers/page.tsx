@@ -15,10 +15,10 @@ import { ProductScreenshot } from "@/components/product-screenshot";
 export const metadata = buildMarketingMetadata({
   title: "Product Manager Resume Builder — Show Roadmap Wins",
   description:
-    "PM hiring is signal-starved. Launch CV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
+    "PM hiring is signal-starved. LaunchCV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
   pathname: "/use-cases/product-managers",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "Launch CV"],
+  keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "LaunchCV"],
 });
 
 const ld = {
@@ -27,9 +27,9 @@ const ld = {
     {
       "@type": "WebPage",
       url: absoluteUrl("/use-cases/product-managers"),
-      name: "Resume for Product Managers | Launch CV",
+      name: "Resume for Product Managers | LaunchCV",
       description:
-        "Launch CV turns your roadmaps, OKRs, and A/B tests into the quantified, ATS-clean language recruiters scan for.",
+        "LaunchCV turns your roadmaps, OKRs, and A/B tests into the quantified, ATS-clean language recruiters scan for.",
     },
     {
       "@type": "BreadcrumbList",
@@ -78,12 +78,12 @@ export default function ProductManagersPage() {
                 Stop listing features. Start landing interviews.
               </h1>
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                PM hiring is signal-starved: recruiters skim for roadmap scope, metric ownership, and cross-functional delta. Launch CV turns your wins into the exact language they screen for — quantified, baselined, ATS-clean.
+                PM hiring is signal-starved: recruiters skim for roadmap scope, metric ownership, and cross-functional delta. LaunchCV turns your wins into the exact language they screen for — quantified, baselined, ATS-clean.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="Launch CV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean across 15 tracking systems."
+                lead="LaunchCV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean across 15 tracking systems."
                 facts={[
                   "Rewrites PM wins into quantified, baselined outcomes (activation, retention, growth).",
                   "Surfaces roadmap scope, metric ownership, and cross-functional impact recruiters scan for.",
@@ -141,7 +141,7 @@ export default function ProductManagersPage() {
                 A product manager resume is scanned in seconds by people who see hundreds. &ldquo;Led product&rdquo; and &ldquo;drove growth&rdquo; tell them nothing; a quantified outcome against a baseline tells them everything.
               </p>
               <p>
-                Launch CV turns your work into the language a PM resume ATS screen and a hiring committee both reward. The product management resume AI holds three things true on every line:
+                LaunchCV turns your work into the language a PM resume ATS screen and a hiring committee both reward. The product management resume AI holds three things true on every line:
               </p>
             </div>
             <ul className="mt-5 space-y-2.5 text-[15px] leading-[1.6] text-[#475569]">
@@ -210,8 +210,8 @@ export default function ProductManagersPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/resume-builder.svg"
-            alt="The Launch CV resume builder turning a product manager's rough notes into quantified, metrics-first resume bullet points with a live preview."
-            caption="Describe the launch; Launch CV returns quantified, metrics-first product manager bullets."
+            alt="The LaunchCV resume builder turning a product manager's rough notes into quantified, metrics-first resume bullet points with a live preview."
+            caption="Describe the launch; LaunchCV returns quantified, metrics-first product manager bullets."
           />
         </div>
       </section>
@@ -290,7 +290,7 @@ export default function ProductManagersPage() {
                 Build a product manager resume in five steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Launch CV pairs an AI resume builder with JD matching and an ATS check, so your PM wins land as the language hiring committees actually screen for.
+                LaunchCV pairs an AI resume builder with JD matching and an ATS check, so your PM wins land as the language hiring committees actually screen for.
               </p>
             </div>
           </RevealOnView>
@@ -327,7 +327,7 @@ export default function ProductManagersPage() {
                 A generic builder vs. a PM resume ATS engine
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                PM hiring is signal-starved. A generic template leaves your scope and metrics implicit; Launch CV makes them the first thing a reviewer reads.
+                PM hiring is signal-starved. A generic template leaves your scope and metrics implicit; LaunchCV makes them the first thing a reviewer reads.
               </p>
             </div>
           </RevealOnView>
@@ -337,7 +337,7 @@ export default function ProductManagersPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What committees scan</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Generic resume builder</th>
                 </tr>
               </thead>

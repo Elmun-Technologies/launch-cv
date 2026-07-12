@@ -45,7 +45,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Cover Letter Generator | Launch CV",
+      name: "Cover Letter Generator | LaunchCV",
       url: absoluteUrl("/features/cover-letter"),
       description: "AI cover letters personalized to the company, role, and hiring manager.",
     },
@@ -64,7 +64,7 @@ const ld = {
       totalTime: "PT1M",
       url: absoluteUrl("/features/cover-letter"),
       steps: [
-        { name: "Connect a resume", text: "Use a Launch CV resume or paste an existing one — your career history is the foundation." },
+        { name: "Connect a resume", text: "Use a LaunchCV resume or paste an existing one — your career history is the foundation." },
         { name: "Paste the job description", text: "AI auto-extracts the company, role, tech stack, and hiring tone with no manual tagging." },
         { name: "Add optional personal context", text: "Add the hiring manager's name, a mutual connection, or a why-this-company line and AI weaves it in." },
         { name: "Pick tone and length", text: "Choose from four tones and three lengths, and preview the voice before generating." },
@@ -100,7 +100,7 @@ const benefits = [
 ];
 
 const steps = [
-  { i: FileText, t: "Connect a resume", d: "Use a Launch CV resume or paste an existing one. Your career history is the foundation." },
+  { i: FileText, t: "Connect a resume", d: "Use a LaunchCV resume or paste an existing one. Your career history is the foundation." },
   { i: Building2, t: "Paste the JD", d: "AI auto-extracts the company, role, tech stack, and hiring tone — no manual tagging." },
   { i: User, t: "Optional personal context", d: "Hiring manager name, mutual connection, why-this-company line. AI weaves it in." },
   { i: Sparkles, t: "Pick tone + length", d: "Choose from four tones and three lengths. Preview the voice before generating." },
@@ -150,7 +150,7 @@ export default function CoverLetterPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Stop opening the blank document. Launch CV pulls the company mission, the tech stack, and the hiring manager&apos;s tone — then writes a letter you&apos;d be proud to send.
+                Stop opening the blank document. LaunchCV pulls the company mission, the tech stack, and the hiring manager&apos;s tone — then writes a letter you&apos;d be proud to send.
               </p>
 
               <KeyFacts
@@ -241,7 +241,7 @@ export default function CoverLetterPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/cover-letter.svg"
-            alt="The Launch CV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
+            alt="The LaunchCV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
             caption="Pick a tone and language; get a company-specific, ready-to-send letter in under a minute."
           />
         </div>
@@ -390,7 +390,7 @@ export default function CoverLetterPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#0D9488]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#0D9488]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Template or blank page</th>
                 </tr>
               </thead>

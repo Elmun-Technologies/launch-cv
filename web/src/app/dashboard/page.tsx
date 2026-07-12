@@ -77,7 +77,7 @@ export default async function HomePage() {
               <div>
                 <p className="text-[14px] font-bold text-gray-900">Activate a plan to unlock AI</p>
                 <p className="mt-0.5 text-[13px] leading-relaxed text-gray-600">
-                  Launch CV is paid-only for AI features. Choose Starter, Professional, Elite, or Lifetime in subscription
+                  LaunchCV is paid-only for AI features. Choose Starter, Professional, Elite, or Lifetime in subscription
                   settings.
                 </p>
               </div>
@@ -99,7 +99,7 @@ export default async function HomePage() {
             <h1 className="text-[28px] font-bold tracking-tight text-gray-900">
               Hello, {firstName} <span className="inline-block animate-[wave_1.5s_ease-in-out_infinite]">👋</span>
             </h1>
-            <p className="mt-1 text-[15px] text-gray-500">Welcome to Launch CV. Manage your career data easily with us.</p>
+            <p className="mt-1 text-[15px] text-gray-500">Welcome to LaunchCV. Manage your career data easily with us.</p>
           </div>
           <div className="flex items-center gap-3">
             <select className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-[13px] font-medium text-gray-600">

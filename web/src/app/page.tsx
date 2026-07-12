@@ -45,11 +45,11 @@ const homeLd = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Launch CV — AI Resume Builder & Job Search Platform",
+      name: "LaunchCV — AI Resume Builder & Job Search Platform",
       description:
         "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep — under one subscription.",
       url: absoluteUrl("/"),
-      isPartOf: { "@type": "WebSite", name: "Launch CV", url: getSiteUrl() },
+      isPartOf: { "@type": "WebSite", name: "LaunchCV", url: getSiteUrl() },
     },
   ],
 };
@@ -93,7 +93,7 @@ const features = [
   {
     href: "/features/voice-input",
     title: "Voice Input",
-    desc: "Speak naturally and Launch CV turns your words into ATS-ready resume bullets. Twelve languages supported.",
+    desc: "Speak naturally and LaunchCV turns your words into ATS-ready resume bullets. Twelve languages supported.",
     icon: Mic,
     iconBg: "bg-pink-50 text-pink-700",
   },
@@ -105,7 +105,7 @@ const testimonials = [
   {
     name: "Sarah K.",
     role: "Software Engineer at Stripe",
-    quote: "Zero callbacks for three months. Four interviews in one week after Launch CV rewrote my bullets to match the JDs.",
+    quote: "Zero callbacks for three months. Four interviews in one week after LaunchCV rewrote my bullets to match the JDs.",
     rating: 5,
   },
   {
@@ -129,7 +129,7 @@ const faqs = [
   },
   {
     q: "Why does ATS matter?",
-    a: "Applicant Tracking Systems scan and filter resumes before a human reads them. Roughly 75% of resumes are auto-rejected. Launch CV is tested against the 15 most common ATS platforms.",
+    a: "Applicant Tracking Systems scan and filter resumes before a human reads them. Roughly 75% of resumes are auto-rejected. LaunchCV is tested against the 15 most common ATS platforms.",
   },
   {
     q: "What file formats can I download?",
@@ -137,7 +137,7 @@ const faqs = [
   },
   {
     q: "How is this different from other resume builders?",
-    a: "Launch CV pairs the builder with JD alignment, ATS scoring, cover letters, and interview prep — under one paid plan with predictable AI limits and no upsell modals.",
+    a: "LaunchCV pairs the builder with JD alignment, ATS scoring, cover letters, and interview prep — under one paid plan with predictable AI limits and no upsell modals.",
   },
   {
     q: "Is my data safe and private?",
@@ -209,7 +209,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">The toolkit</p>
+              <p className="lc-overline text-[#2563EB]">The toolkit</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Six AI tools for every stage of the job search
               </h2>
@@ -231,7 +231,7 @@ export default async function Home() {
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{f.title}</h3>
                   <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.desc}</p>
-                  <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                  <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
                     Learn more
                     <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                   </span>
@@ -247,7 +247,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Most popular</p>
+              <p className="lc-overline text-[#2563EB]">Most popular</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Start with the two tools job seekers use most
               </h2>
@@ -273,12 +273,12 @@ export default async function Home() {
                 <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
                   Upload your resume and get a 0–100 ATS score in eight seconds, with a
                   prioritized list of every formatting and keyword fix. See{" "}
-                  <span className="font-semibold text-[#1A56DB] underline-offset-2 group-hover:underline">
+                  <span className="font-semibold text-[#2563EB] underline-offset-2 group-hover:underline">
                     how to check your resume&apos;s ATS score
                   </span>
                   .
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
                   Check my ATS score
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                 </span>
@@ -299,12 +299,12 @@ export default async function Home() {
                 <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
                   Paste a job description and AI runs a keyword gap analysis, then rewrites your
                   bullets to lift your match score from around 40% to 90%+ —{" "}
-                  <span className="font-semibold text-[#1A56DB] underline-offset-2 group-hover:underline">
+                  <span className="font-semibold text-[#2563EB] underline-offset-2 group-hover:underline">
                     tailor your resume to the job
                   </span>{" "}
                   in under a minute.
                 </p>
-                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
                   Align my resume
                   <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                 </span>
@@ -314,16 +314,16 @@ export default async function Home() {
 
           <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] text-[#475569]">
             <span className="font-semibold text-[#94A3B8]">Popular guides:</span>
-            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               What is an ATS score?
             </Link>
-            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               How to check your ATS score
             </Link>
-            <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Resume keywords for software engineers
             </Link>
-            <Link href="/compare/ats-resume-checkers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href="/compare/ats-resume-checkers" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Best ATS resume checkers
             </Link>
           </div>
@@ -335,7 +335,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">How it works</p>
+              <p className="lc-overline text-[#2563EB]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 A complete application in three steps
               </h2>
@@ -365,7 +365,7 @@ export default async function Home() {
             ].map((s) => (
               <MotionReveal key={s.n}>
                 <div className="flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#1A56DB]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">{s.title}</h3>
@@ -385,7 +385,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Customer stories</p>
+              <p className="lc-overline text-[#2563EB]">Customer stories</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Trusted by people who landed offers
               </h2>
@@ -421,7 +421,7 @@ export default async function Home() {
           <MotionReveal>
             <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-7">
-                <p className="lc-overline text-[#1A56DB]">Pricing</p>
+                <p className="lc-overline text-[#2563EB]">Pricing</p>
                 <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                   Pay monthly, yearly, or once
                 </h2>
@@ -446,13 +446,13 @@ export default async function Home() {
                 <div
                   key={key}
                   className={`flex flex-col rounded-xl bg-white p-7 ${
-                    popular ? "border-2 border-[#1A56DB] shadow-[0_20px_40px_-20px_rgba(26,86,219,0.25)]" : "border border-[#E2E8F0]"
+                    popular ? "border-2 border-[#2563EB] shadow-[0_20px_40px_-20px_rgba(26,86,219,0.25)]" : "border border-[#E2E8F0]"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <p className="text-[16px] font-semibold text-[#0F172A]">{cfg.title}</p>
                     {popular && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#1A56DB]">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#2563EB]">
                         Most chosen
                       </span>
                     )}
@@ -471,7 +471,7 @@ export default async function Home() {
                       key === "lifetime" ? "Lifetime updates · no renewal" : "Cancel anytime",
                     ].map((b) => (
                       <li key={b} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                         {b}
                       </li>
                     ))}
@@ -480,7 +480,7 @@ export default async function Home() {
                     href="/pricing"
                     className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                       popular
-                        ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8]"
+                        ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
                         : "border border-[#E2E8F0] bg-white text-[#0F172A] hover:bg-[#F8FAFC]"
                     }`}
                   >
@@ -499,13 +499,13 @@ export default async function Home() {
         <div className="mx-auto max-w-[1200px] px-6">
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <p className="lc-overline text-[#1A56DB]">FAQ</p>
+              <p className="lc-overline text-[#2563EB]">FAQ</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Frequently asked questions
               </h2>
               <p className="mt-4 text-[14px] leading-[1.7] text-[#475569]">
                 Can&apos;t find what you need?{" "}
-                <Link href="/contact" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                <Link href="/contact" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                   Email support
                 </Link>{" "}
                 — we reply within one business day.
@@ -524,12 +524,12 @@ export default async function Home() {
           <div className="mx-auto max-w-[1200px] px-6">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="lc-overline text-[#1A56DB]">From the blog</p>
+                <p className="lc-overline text-[#2563EB]">From the blog</p>
                 <h2 className="mt-3 lc-section-headline text-[#0F172A]">Career &amp; resume guides</h2>
               </div>
               <Link
                 href="/blog"
-                className="hidden shrink-0 items-center gap-1 text-[14px] font-semibold text-[#1A56DB] hover:underline sm:inline-flex"
+                className="hidden shrink-0 items-center gap-1 text-[14px] font-semibold text-[#2563EB] hover:underline sm:inline-flex"
               >
                 All articles <ArrowRight className="h-4 w-4" />
               </Link>
@@ -541,16 +541,16 @@ export default async function Home() {
                   href={`/blog/${post.slug}`}
                   className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">
                     {post.category}
                   </span>
-                  <h3 className="mt-2 text-[16px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                  <h3 className="mt-2 text-[16px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#2563EB]">
                     {post.title}
                   </h3>
                   <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-[1.65] text-[#475569]">
                     {post.description}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-[#1A56DB]">
+                  <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563EB]">
                     Read article
                     <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
                   </span>
@@ -573,7 +573,7 @@ export default async function Home() {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <CtaLink cta="get_started" location="home"
               href="/register"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Get started
               <ArrowRight className="h-4 w-4" />

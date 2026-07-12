@@ -11,7 +11,7 @@ const blank: BlogEditorData = {
   category: "Resume Tips",
   tags: [],
   readingTime: 5,
-  authorName: "Launch CV Editorial",
+  authorName: "LaunchCV Editorial",
   authorRole: "Career Research Team",
   authorBio: "",
   bodyMd: "",

@@ -276,7 +276,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
                       type="button"
                       onClick={() => changeStatus("published")}
                       disabled={saving || data.status === "published"}
-                      className="rounded-md bg-[#1A56DB] px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-50"
+                      className="rounded-md bg-[#2563EB] px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-50"
                     >
                       Publish
                     </button>

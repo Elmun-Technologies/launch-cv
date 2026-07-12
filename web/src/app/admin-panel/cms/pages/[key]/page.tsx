@@ -12,7 +12,7 @@ const PAGE_KEYS: Record<string, { label: string; description: string; defaults: 
       eyebrow: "AI job-search platform · all six tools in one plan",
       headline: "The AI job search platform that lands more interviews.",
       subhead:
-        "Paste a job description and Launch CV rewrites your resume to match it, scores your ATS readiness, drafts the cover letter, and drills you on likely interview questions — all from one workspace.",
+        "Paste a job description and LaunchCV rewrites your resume to match it, scores your ATS readiness, drafts the cover letter, and drills you on likely interview questions — all from one workspace.",
       primaryCta: { label: "Get started", href: "/register" },
       secondaryCta: { label: "View pricing", href: "/pricing" },
     },
@@ -44,7 +44,7 @@ const PAGE_KEYS: Record<string, { label: string; description: string; defaults: 
       headline: "Level the field between candidates and machines",
       paragraphs: [
         "The hiring process has a problem nobody talks about: qualified people get filtered out by software before any human ever reads their work.",
-        "Launch CV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover letter generation, and interview prep into one professional platform.",
+        "LaunchCV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover letter generation, and interview prep into one professional platform.",
         "Our goal is simple: give every job seeker the same advantage that candidates with $200/hour recruiters have — delivered by AI, in minutes.",
       ],
     },
