@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CtaLink } from "@/components/cta-link";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LandingNav } from "@/components/landing-nav";
@@ -390,14 +391,17 @@ export default async function BlogPostPage({
                     {...props}
                   />
                 ),
-                img: ({ ...props }) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    {...props}
-                    alt={props.alt ?? ""}
-                    className="mt-6 rounded-xl border border-[#E2E8F0]"
-                  />
-                ),
+                img: ({ src, alt }) =>
+                  typeof src === "string" && src.length > 0 ? (
+                    <Image
+                      src={src}
+                      alt={alt ?? ""}
+                      width={1600}
+                      height={900}
+                      sizes="(max-width: 800px) 100vw, 800px"
+                      className="mt-6 h-auto w-full rounded-xl border border-[#E2E8F0]"
+                    />
+                  ) : null,
               }}
             >
               {post.bodyMd}

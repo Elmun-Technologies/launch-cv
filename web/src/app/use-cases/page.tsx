@@ -7,6 +7,7 @@ import { StickyCta } from "@/components/sticky-cta";
 import { Code2, Compass, Palette, ArrowRight, Sparkles } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Resume Builder by Role — Tailored for Your Job",
@@ -126,6 +127,24 @@ export default function UseCasesPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Tailored to the role you&apos;re targeting</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/jd-alignment.svg"
+            alt="The Launch CV JD alignment view matching a resume to a specific job description, showing a 91% match score and the role's matched keywords."
+            caption="Launch CV aligns every resume to the exact role — from the match score to the keywords."
+          />
         </div>
       </section>
 

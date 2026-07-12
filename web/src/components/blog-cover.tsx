@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { FileText, Mail, MessageSquare, Search, Sparkles } from "lucide-react";
 
 /** Minimal shape required by the cover — accepts either the static or DB BlogPost type. */
@@ -5,6 +6,9 @@ type BlogPost = {
   slug: string;
   category: string;
   readingTime: number;
+  /** Optional hero image. When set, a real screenshot renders instead of the gradient. */
+  coverUrl?: string | null;
+  coverAlt?: string | null;
 };
 
 type CoverConfig = {
@@ -57,6 +61,31 @@ export function BlogCover({ post, size = "md" }: { post: BlogPost; size?: "sm" |
       ? "aspect-[16/9]"
       : "aspect-[16/10]";
   const iconSize = size === "hero" ? "h-14 w-14" : size === "lg" ? "h-12 w-12" : "h-10 w-10";
+
+  // When the post has a real cover image, render it with next/image. Fixed
+  // intrinsic dimensions (all covers are authored 1600×900) reserve the aspect
+  // ratio; local `.svg` sources are served unoptimized and lazy-loaded by
+  // default. A descriptive `coverAlt` keeps the hero accessible.
+  if (post.coverUrl) {
+    return (
+      <div className={`relative overflow-hidden rounded-xl bg-[#F1F5F9] ${sizeClass}`}>
+        <Image
+          src={post.coverUrl}
+          alt={post.coverAlt?.trim() || `${post.category} — Launch CV product illustration`}
+          width={1600}
+          height={900}
+          sizes={size === "hero" || size === "lg" ? "(max-width: 800px) 100vw, 800px" : "(max-width: 640px) 100vw, 400px"}
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute left-3 top-3">
+          <span className="inline-flex items-center gap-1 rounded-md bg-white/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#0F172A] shadow-sm backdrop-blur">
+            <Sparkles className="h-2.5 w-2.5 text-[#1A56DB]" />
+            Launch CV · {post.readingTime} min
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

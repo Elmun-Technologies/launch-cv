@@ -8,6 +8,7 @@ import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Palette, Layers, Sparkles, Eye, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Designer Resume Builder — Turn Portfolio Into Offers",
@@ -176,6 +177,24 @@ export default function DesignersPage() {
               </RevealOnView>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#E11D48]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Clean, ATS-safe layouts for designers</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-templates.svg"
+            alt="A gallery of ATS-safe, single-column resume templates in Launch CV, giving designers a clean layout that still parses cleanly."
+            caption="Portfolio-worthy without the parser risk — every template is single-column and ATS-tested."
+          />
         </div>
       </section>
 

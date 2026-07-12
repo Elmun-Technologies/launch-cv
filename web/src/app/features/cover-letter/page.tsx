@@ -8,6 +8,7 @@ import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Mail,
   ArrowRight,
@@ -194,6 +195,24 @@ export default function CoverLetterPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#0D9488]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">A personalized letter in seconds</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/cover-letter.svg"
+            alt="The Launch CV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
+            caption="Pick a tone and language; get a company-specific, ready-to-send letter in under a minute."
+          />
         </div>
       </section>
 

@@ -8,6 +8,7 @@ import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Code2, Terminal, GitBranch, Cpu, Cloud, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Software Engineer Resume Writer: AI, 5-Min Build",
@@ -151,6 +152,24 @@ export default function SoftwareEngineersPage() {
               </li>
             </ul>
           </RevealOnView>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Matched to the exact engineering role</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/jd-alignment.svg"
+            alt="The Launch CV JD alignment view matching a software engineer resume to a backend job description, showing a 91% match and matched keywords like Kubernetes, GraphQL, and AWS."
+            caption="Paste a backend job description; Launch CV surfaces the exact keywords and gaps to close."
+          />
         </div>
       </section>
 

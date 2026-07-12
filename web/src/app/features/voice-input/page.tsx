@@ -8,6 +8,7 @@ import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Mic,
   ArrowRight,
@@ -200,6 +201,24 @@ export default function VoiceInputPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#DB2777]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Speak it. We structure it.</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/voice-input.svg"
+            alt="The Launch CV voice input feature transcribing spoken work experience and converting it into structured, quantified resume bullet points."
+            caption="Describe your work out loud; Launch CV turns the transcript into polished, ATS-ready bullets."
+          />
         </div>
       </section>
 
