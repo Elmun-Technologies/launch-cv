@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BrandMark } from "@/components/brand-mark";
 
 export const runtime = "edge";
 
@@ -16,15 +17,11 @@ export function GET() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #1A56DB 0%, #7C3AED 100%)",
-          fontFamily: "sans-serif",
-          fontSize: 300,
-          fontWeight: 800,
-          color: "#fff",
-          letterSpacing: "-12px",
+          borderRadius: 112,
+          background: "#2563EB",
         }}
       >
-        L
+        <BrandMark size={340} stroke="#FFFFFF" bar="#FFFFFF" lines="#BFDBFE" strokeWidth={2.6} />
       </div>
     ),
     { width: 512, height: 512 },

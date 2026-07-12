@@ -19,7 +19,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Six AI tools in one product: JD alignment, resume builder, ATS scanner, cover letters, interview prep, and voice input — one subscription, one workflow.",
   pathname: "/features",
-  keywords: ["Launch CV features", "JD alignment", "ATS score", "interview prep", "cover letter AI", "AI resume builder"],
+  keywords: ["LaunchCV features", "JD alignment", "ATS score", "interview prep", "cover letter AI", "AI resume builder"],
 });
 
 const features = [
@@ -75,28 +75,28 @@ const features = [
 
 const faqs: FaqItem[] = [
   {
-    q: "What AI tools does Launch CV include?",
-    a: "Launch CV includes six AI tools under one subscription: JD Alignment, AI Resume Builder, ATS Score Checker, Cover Letter Generator, Interview Prep, and Voice Input. Together they cover every stage of the job hunt — match, write, score, send, practice, and speak — with each tool's output feeding the next.",
+    q: "What AI tools does LaunchCV include?",
+    a: "LaunchCV includes six AI tools under one subscription: JD Alignment, AI Resume Builder, ATS Score Checker, Cover Letter Generator, Interview Prep, and Voice Input. Together they cover every stage of the job hunt — match, write, score, send, practice, and speak — with each tool's output feeding the next.",
   },
   {
-    q: "Which Launch CV feature should I start with?",
+    q: "Which LaunchCV feature should I start with?",
     a: "Start with the AI Resume Builder if you need a resume, since it turns plain English into ATS-tested, quantified bullets in about five minutes using 12 templates. Its output then feeds the ATS Score Checker and JD Alignment, so beginning there seeds the rest of the workflow automatically.",
   },
   {
-    q: "How much can Launch CV improve my ATS score?",
-    a: "Launch CV's ATS Score Checker raises the average user's score by 43 points on the first pass, naming and ranking every parser-breaking format issue across 15 ATS engines. Separately, JD Alignment lifts a job-match score from around 40% to over 90% in under a minute.",
+    q: "How much can LaunchCV improve my ATS score?",
+    a: "LaunchCV's ATS Score Checker raises the average user's score by 43 points on the first pass, naming and ranking every parser-breaking format issue across 15 ATS engines. Separately, JD Alignment lifts a job-match score from around 40% to over 90% in under a minute.",
   },
   {
-    q: "Is Launch CV one subscription or do I pay per tool?",
-    a: "Launch CV is one subscription that includes all six tools on every plan, so you never pay per tool or copy-paste between tabs. The AI usage ceilings scale with your tier, letting you pick whichever plan matches how hard you are currently applying.",
+    q: "Is LaunchCV one subscription or do I pay per tool?",
+    a: "LaunchCV is one subscription that includes all six tools on every plan, so you never pay per tool or copy-paste between tabs. The AI usage ceilings scale with your tier, letting you pick whichever plan matches how hard you are currently applying.",
   },
   {
-    q: "Can Launch CV write a cover letter and prep me for interviews?",
-    a: "Yes, Launch CV's Cover Letter Generator personalizes letters to the company, role, and hiring manager in about 60 seconds with four tones and 14 languages. Interview Prep then serves 200-plus role-specific questions, scores your answers from 1 to 10, and shows model responses on tap.",
+    q: "Can LaunchCV write a cover letter and prep me for interviews?",
+    a: "Yes, LaunchCV's Cover Letter Generator personalizes letters to the company, role, and hiring manager in about 60 seconds with four tones and 14 languages. Interview Prep then serves 200-plus role-specific questions, scores your answers from 1 to 10, and shows model responses on tap.",
   },
   {
-    q: "Can I build my resume by voice with Launch CV?",
-    a: "Yes, Launch CV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished bullet in 12 languages. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
+    q: "Can I build my resume by voice with LaunchCV?",
+    a: "Yes, LaunchCV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished bullet in 12 languages. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
   },
 ];
 
@@ -105,7 +105,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Features | Launch CV",
+      name: "Features | LaunchCV",
       description: "Six AI-powered tools for job seekers under one subscription.",
       url: absoluteUrl("/features"),
     },
@@ -142,18 +142,18 @@ export default function FeaturesPage() {
         <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-12">
           <div className="max-w-[760px]">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Sparkles className="h-3.5 w-3.5 text-[#1A56DB]" /> 6 tools · 1 subscription
+              <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" /> 6 tools · 1 subscription
             </span>
             <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
               The complete AI job search toolkit
             </h1>
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
-              Launch CV isn&apos;t a resume builder with a chatbot bolted on. It&apos;s six purpose-built AI tools for every stage of the job hunt — match, write, score, send, practice, speak — wired together under one paid plan.
+              LaunchCV isn&apos;t a resume builder with a chatbot bolted on. It&apos;s six purpose-built AI tools for every stage of the job hunt — match, write, score, send, practice, speak — wired together under one paid plan.
             </p>
 
             <KeyFacts
               className="mt-8 max-w-[600px]"
-              lead="Launch CV combines six AI tools in one subscription: JD alignment, AI resume builder, ATS score checker, cover letter generator, interview prep, and voice input. Each tool's output feeds the next — the resume feeds the ATS scan, the JD match seeds the cover letter — so there's no copy-pasting between tabs."
+              lead="LaunchCV combines six AI tools in one subscription: JD alignment, AI resume builder, ATS score checker, cover letter generator, interview prep, and voice input. Each tool's output feeds the next — the resume feeds the ATS scan, the JD match seeds the cover letter — so there's no copy-pasting between tabs."
               facts={[
                 "Six tools, one paid plan — every tool included on every tier.",
                 "JD alignment lifts match scores from ~40% to 90%+ in about a minute.",
@@ -165,7 +165,7 @@ export default function FeaturesPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <CtaLink cta="get_started" location="features_index"
                 href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
               >
                 Get started
                 <ArrowRight className="h-4 w-4" />
@@ -186,14 +186,14 @@ export default function FeaturesPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <p className="lc-overline text-[#2563EB]">Inside the product</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">One workspace for the whole job search</h2>
             </div>
           </RevealOnView>
           <ProductScreenshot
             className="mt-12"
             src="/images/product/resume-builder.svg"
-            alt="The Launch CV workspace turning rough, plain-language work notes into quantified, ATS-ready resume bullet points with a live preview."
+            alt="The LaunchCV workspace turning rough, plain-language work notes into quantified, ATS-ready resume bullet points with a live preview."
             caption="From rough notes to ATS-ready bullets — every tool lives in one editor."
           />
         </div>
@@ -225,7 +225,7 @@ export default function FeaturesPage() {
                         </div>
                       ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB] opacity-0 transition group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB] opacity-0 transition group-hover:opacity-100">
                       Learn more
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
@@ -242,7 +242,7 @@ export default function FeaturesPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">A single workflow</p>
+              <p className="lc-overline text-[#2563EB]">A single workflow</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Tools that don&apos;t just sit side by side — they hand off
               </h2>
@@ -299,7 +299,7 @@ export default function FeaturesPage() {
                   <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
                   <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#2563EB]" />
               </Link>
             ))}
           </div>
@@ -318,7 +318,7 @@ export default function FeaturesPage() {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               View pricing
               <ArrowRight className="h-4 w-4" />

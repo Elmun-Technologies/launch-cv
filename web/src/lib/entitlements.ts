@@ -8,7 +8,7 @@ export type SubscriptionGrantInput = {
   currentPeriodEnd: Date | null;
 };
 
-/** Active paid access (any Launch CV plan tier). */
+/** Active paid access (any LaunchCV plan tier). */
 export function subscriptionRowGrantsPaid(sub: SubscriptionGrantInput | null): boolean {
   if (!sub) return false;
   // Recurring subscriptions (active/trialing) and the short past_due grace window grant

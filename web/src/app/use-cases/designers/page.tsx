@@ -17,7 +17,7 @@ import { ProductScreenshot } from "@/components/product-screenshot";
 export const metadata = buildMarketingMetadata({
   title: "Designer Resume Builder — Turn Portfolio Into Offers",
   description:
-    "Your portfolio shows the work — your resume should land the interview. Launch CV writes ATS-clean design bullets that quantify impact and shipping speed.",
+    "Your portfolio shows the work — your resume should land the interview. LaunchCV writes ATS-clean design bullets that quantify impact and shipping speed.",
   pathname: "/use-cases/designers",
   image: DEFAULT_OG_IMAGE,
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
@@ -26,27 +26,27 @@ export const metadata = buildMarketingMetadata({
 const faqs: FaqItem[] = [
   {
     q: "How should designers show a portfolio on a resume?",
-    a: "Designers should link the portfolio from a dedicated, ATS-parseable Selected Work section that gives each project a live link, short context, and the metric that mattered. Launch CV auto-formats this section so a recruiter can click through, while the resume itself stays clean enough to pass ATS parsing.",
+    a: "Designers should link the portfolio from a dedicated, ATS-parseable Selected Work section that gives each project a live link, short context, and the metric that mattered. LaunchCV auto-formats this section so a recruiter can click through, while the resume itself stays clean enough to pass ATS parsing.",
   },
   {
     q: "How do I write a resume for a UX or product designer role?",
-    a: "Write a designer resume that quantifies hand-off impact, system contributions, research depth, and shipping speed instead of listing tools. Launch CV rewrites vague lines like redesigned the dashboard into measured outcomes such as lifting time-on-task 41% and cutting support tickets 28%, keeping the formatting ATS-clean throughout.",
+    a: "Write a designer resume that quantifies hand-off impact, system contributions, research depth, and shipping speed instead of listing tools. LaunchCV rewrites vague lines like redesigned the dashboard into measured outcomes such as lifting time-on-task 41% and cutting support tickets 28%, keeping the formatting ATS-clean throughout.",
   },
   {
     q: "How do I show design system work on a resume?",
-    a: "Show design system work by quantifying tokens added, components shipped, and adoption across squads rather than saying built design system. Launch CV formats these contributions automatically, turning that phrase into shipped a v2 token library plus 84 Figma components adopted by 9 product squads, cutting ship time from 18 to 11 days.",
+    a: "Show design system work by quantifying tokens added, components shipped, and adoption across squads rather than saying built design system. LaunchCV formats these contributions automatically, turning that phrase into shipped a v2 token library plus 84 Figma components adopted by 9 product squads, cutting ship time from 18 to 11 days.",
   },
   {
     q: "What keywords should a designer resume include?",
-    a: "A designer resume should include the craft and process terms your target role names, such as design systems, Figma, prototyping, accessibility, user research, and hand-off. Launch CV pre-loads a design keyword library with over 100 terms across product, brand, motion, and service design, then aligns them to each posting.",
+    a: "A designer resume should include the craft and process terms your target role names, such as design systems, Figma, prototyping, accessibility, user research, and hand-off. LaunchCV pre-loads a design keyword library with over 100 terms across product, brand, motion, and service design, then aligns them to each posting.",
   },
   {
     q: "How do I quantify user research on a designer resume?",
-    a: "Quantify user research by stating tests run, participants, decisions changed, and features killed instead of writing did user testing. Launch CV formats research depth for you, turning that line into ran 12 weekly moderated cycles that surfaced 14 critical issues before ship, so hiring designers see rigor at a glance.",
+    a: "Quantify user research by stating tests run, participants, decisions changed, and features killed instead of writing did user testing. LaunchCV formats research depth for you, turning that line into ran 12 weekly moderated cycles that surfaced 14 critical issues before ship, so hiring designers see rigor at a glance.",
   },
   {
     q: "Does a designer really need a resume if I have a portfolio?",
-    a: "Yes, designers still need a resume because it opens the door that the portfolio then walks through. Launch CV treats the portfolio as the main act and builds an ATS-clean resume with a Selected Work section, so recruiters and their parsers can find you before the visuals ever load.",
+    a: "Yes, designers still need a resume because it opens the door that the portfolio then walks through. LaunchCV treats the portfolio as the main act and builds an ATS-clean resume with a Selected Work section, so recruiters and their parsers can find you before the visuals ever load.",
   },
 ];
 
@@ -56,9 +56,9 @@ const ld = {
     {
       "@type": "WebPage",
       url: absoluteUrl("/use-cases/designers"),
-      name: "Resume for Designers | Launch CV",
+      name: "Resume for Designers | LaunchCV",
       description:
-        "Launch CV writes ATS-clean design bullets that quantify impact, systems thinking, and shipping speed — so your resume lands the interview.",
+        "LaunchCV writes ATS-clean design bullets that quantify impact, systems thinking, and shipping speed — so your resume lands the interview.",
     },
     {
       "@type": "BreadcrumbList",
@@ -108,12 +108,12 @@ export default function DesignersPage() {
                 Your portfolio shows the work. Your resume lands the room.
               </h1>
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Most designers under-sell themselves on paper. Launch CV quantifies your hand-off impact, system contributions, research depth, and shipping speed — without making it sound like a banker wrote it.
+                Most designers under-sell themselves on paper. LaunchCV quantifies your hand-off impact, system contributions, research depth, and shipping speed — without making it sound like a banker wrote it.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="Launch CV writes ATS-clean design resume bullets that quantify impact, design-system contributions, research depth, and shipping speed — so your resume lands the interview your portfolio deserves. It uses design-specific language (not banker-speak) and a design keyword library matched to each job description."
+                lead="LaunchCV writes ATS-clean design resume bullets that quantify impact, design-system contributions, research depth, and shipping speed — so your resume lands the interview your portfolio deserves. It uses design-specific language (not banker-speak) and a design keyword library matched to each job description."
                 facts={[
                   "Quantifies hand-off impact, design-system work, research depth, and shipping speed.",
                   "Design keyword library (Figma, design systems, WCAG, IA, prototyping) per job.",
@@ -171,7 +171,7 @@ export default function DesignersPage() {
                 Designers are trained to make the artifact gorgeous — so a UX designer resume ends up in two columns, with a custom typeface and links buried in a header graphic. That is exactly the layout an applicant tracking system fails to read.
               </p>
               <p>
-                Launch CV keeps the impact and drops the parsing risk. Your design portfolio resume stays clean and quantified, so the product designer resume ATS screen passes and a human actually sees the work. Three things stay true:
+                LaunchCV keeps the impact and drops the parsing risk. Your design portfolio resume stays clean and quantified, so the product designer resume ATS screen passes and a human actually sees the work. Three things stay true:
               </p>
             </div>
             <ul className="mt-5 space-y-2.5 text-[15px] leading-[1.6] text-[#475569]">
@@ -237,7 +237,7 @@ export default function DesignersPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/resume-templates.svg"
-            alt="A gallery of ATS-safe, single-column resume templates in Launch CV, giving designers a clean layout that still parses cleanly."
+            alt="A gallery of ATS-safe, single-column resume templates in LaunchCV, giving designers a clean layout that still parses cleanly."
             caption="Portfolio-worthy without the parser risk — every template is single-column and ATS-tested."
           />
         </div>
@@ -285,7 +285,7 @@ export default function DesignersPage() {
                   Your portfolio is the main act. The resume opens the door.
                 </h2>
                 <p className="mt-5 max-w-[440px] text-[15px] leading-[1.65] text-[#475569]">
-                  Every Launch CV resume includes a dedicated, ATS-parseable Selected Work section. Live links, short context, and the metric that mattered. The recruiter clicks. The portfolio takes over.
+                  Every LaunchCV resume includes a dedicated, ATS-parseable Selected Work section. Live links, short context, and the metric that mattered. The recruiter clicks. The portfolio takes over.
                 </p>
               </div>
               <div className="lg:col-span-6">
@@ -321,7 +321,7 @@ export default function DesignersPage() {
                 Build a designer resume in five steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Launch CV pairs an AI resume builder with JD matching and an ATS check, so your design portfolio resume opens the door your work deserves.
+                LaunchCV pairs an AI resume builder with JD matching and an ATS check, so your design portfolio resume opens the door your work deserves.
               </p>
             </div>
           </RevealOnView>
@@ -358,7 +358,7 @@ export default function DesignersPage() {
                 A generic builder vs. a product designer resume ATS engine
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Beautiful, portfolio-style resumes are exactly what applicant tracking systems choke on. Launch CV keeps the impact and drops the parsing risk.
+                Beautiful, portfolio-style resumes are exactly what applicant tracking systems choke on. LaunchCV keeps the impact and drops the parsing risk.
               </p>
             </div>
           </RevealOnView>
@@ -368,7 +368,7 @@ export default function DesignersPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What hiring designers scan</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#DB2777]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#DB2777]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Generic resume builder</th>
                 </tr>
               </thead>
@@ -411,7 +411,7 @@ export default function DesignersPage() {
                 Mara&apos;s resume was a designer&apos;s resume: two columns, a custom typeface, and her project links tucked into a beautiful header graphic. It looked great and never got a callback. The applicant tracking system could not read most of it.
               </p>
               <p>
-                She rebuilt it in Launch CV. The design portfolio resume kept a clean Selected Work section — live links, one line of context, and the metric that mattered. Her vague &ldquo;redesigned the dashboard&rdquo; became <span className="font-medium text-[#0F172A]">&ldquo;Led a 6-week dashboard rework, lifting daily time-on-task by 41% and cutting support tickets by 28%&rdquo;</span>.
+                She rebuilt it in LaunchCV. The design portfolio resume kept a clean Selected Work section — live links, one line of context, and the metric that mattered. Her vague &ldquo;redesigned the dashboard&rdquo; became <span className="font-medium text-[#0F172A]">&ldquo;Led a 6-week dashboard rework, lifting daily time-on-task by 41% and cutting support tickets by 28%&rdquo;</span>.
               </p>
               <p>
                 An ATS score check confirmed the new single-column layout parsed cleanly across the major platforms. The portfolio still did the closing; the resume finally opened the door — a first-pass gain in line with the platform&apos;s +43-point average.

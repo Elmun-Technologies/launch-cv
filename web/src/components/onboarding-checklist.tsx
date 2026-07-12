@@ -134,7 +134,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <p className="text-[15px] font-bold text-gray-900">
-              {allDone ? "You're all set! 🎉" : "Get started with Launch CV"}
+              {allDone ? "You're all set! 🎉" : "Get started with LaunchCV"}
             </p>
             <span className="rounded-full bg-violet-50 px-2.5 py-0.5 text-[12px] font-bold text-violet-700">
               {doneCount}/{totalCount}
@@ -143,7 +143,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
           <p className="mt-0.5 text-[12px] text-gray-500">
             {allDone
               ? "All setup steps complete. You're ready to land interviews."
-              : `Complete ${totalCount - doneCount} more step${totalCount - doneCount === 1 ? "" : "s"} to get the most out of Launch CV.`}
+              : `Complete ${totalCount - doneCount} more step${totalCount - doneCount === 1 ? "" : "s"} to get the most out of LaunchCV.`}
           </p>
         </div>
         <div className="flex items-center gap-1 shrink-0">

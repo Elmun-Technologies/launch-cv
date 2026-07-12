@@ -26,7 +26,7 @@ export default function ResendVerifyPage() {
   return (
     <AuthLayout mode="login">
       <div className="mb-7">
-        <Link href="/login" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1A56DB] hover:underline">
+        <Link href="/login" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline">
           <ArrowLeft className="h-3.5 w-3.5" /> Back to sign in
         </Link>
         <h1 className="mt-4 text-[28px] font-semibold leading-[1.1] tracking-tight text-[#0F172A]">

@@ -931,7 +931,7 @@ export function JobTrackerProClient({
               <h3 className="text-[20px] font-bold text-gray-900">Add a New Job Post</h3>
               <button type="button" onClick={() => setShowCreate(false)} className="text-gray-400 hover:text-gray-600"><X className="h-5 w-5" /></button>
             </div>
-            <p className="mb-5 text-sm text-[#7C5CFC]">Add jobs in one click with the Launch CV Extension</p>
+            <p className="mb-5 text-sm text-[#7C5CFC]">Add jobs in one click with the LaunchCV Extension</p>
             {resumes.length === 0 ? (
               <p className="text-sm text-gray-500">First, <Link href="/resume/new" className="text-blue-500 underline">create a resume</Link>.</p>
             ) : (

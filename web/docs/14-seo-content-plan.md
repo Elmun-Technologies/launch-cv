@@ -1,7 +1,7 @@
 # 14. SEO/GEO Content Plan — Resume / ATS / Job-Search (15 New Outlines)
 
 Goal: capture **high-intent, long-tail** search + generative (GEO/AI-answer)
-traffic in the resume, ATS, and job-search niche, and route it to the Launch CV
+traffic in the resume, ATS, and job-search niche, and route it to the LaunchCV
 features that solve each problem. Every outline below maps to at least one
 product surface (`/features/*`, `/free-ats-check`, `/use-cases/*`).
 
@@ -28,7 +28,7 @@ not duplicate them. New posts should be authored in the same `BlogPost` shape
 ### Prioritization (impact × intent × feature fit)
 
 Ship order is set by commercial intent and how directly the query implies a
-Launch CV action. **Tier 1** (weeks 1–3): #5, #12, #13, #1 — pure ATS-fix and
+LaunchCV action. **Tier 1** (weeks 1–3): #5, #12, #13, #1 — pure ATS-fix and
 role-keyword intent that maps 1:1 to the ATS checker and JD Alignment. **Tier 2**
 (weeks 4–7): #8, #9, #10, #7, #2 — resume-quality + situational fixes. **Tier 3**
 (weeks 8–11): #6, #11, #3, #4, #14, #15 — broader/informational, feeds the
@@ -48,7 +48,7 @@ back-link (reciprocal) to build cluster authority.
 - **Extractable structure**: definition sentences ("An ATS-friendly format
   is…"), numbered steps, comparison tables, and a bolded one-line takeaway per
   section. Cite concrete numbers/years (2026) for freshness signals.
-- **Entity clarity**: name the tool ("Launch CV's free ATS checker") once per
+- **Entity clarity**: name the tool ("LaunchCV's free ATS checker") once per
   post so generative engines attribute the recommendation.
 
 ### Author & metadata conventions
@@ -174,7 +174,7 @@ back-link (reciprocal) to build cluster authority.
   - H2: Functional — H3: Best for · H3: Why ATS struggles with it
   - H2: Hybrid/combination — H3: Best for · H3: How to build one
   - H2: Which to pick for gaps or a career change
-  - H2: Build any format in Launch CV
+  - H2: Build any format in LaunchCV
 - **FAQ**: Is a functional resume ATS-friendly? · Which format is best for career changers? · What's a hybrid resume? · Do recruiters dislike functional resumes?
 - **Links**: `/features/resume-builder`, `/free-ats-check`, blog: `how-to-write-an-ats-friendly-resume`, cross-link to #10 gaps & #11 career change (once live).
 
@@ -266,7 +266,7 @@ back-link (reciprocal) to build cluster authority.
   - H2: The 5-step keyword match method — H3: Pull terms from the JD · H3: Prioritize must-haves · H3: Use exact phrase + acronym · H3: Place naturally · H3: Add synonyms/variants
   - H2: White-hat vs. black-hat tricks (white text = instant reject)
   - H2: How many keywords is enough (match-rate targets)
-  - H2: Automate JD keyword matching with Launch CV
+  - H2: Automate JD keyword matching with LaunchCV
 - **FAQ**: Does white text fool an ATS? · What keyword match % should I aim for? · Should I copy the job description exactly? · Do acronyms and full terms both matter?
 - **Links**: `/features/jd-alignment`, `/features/ats-score`, `/free-ats-check`, blog: `how-to-tailor-your-resume-for-every-job`, `what-is-an-ats-score`.
 

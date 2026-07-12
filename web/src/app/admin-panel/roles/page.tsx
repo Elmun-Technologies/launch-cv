@@ -39,7 +39,7 @@ export default async function AdminRolesPage() {
             environment variable, or a User row in the database with{" "}
             <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[12px] text-[#0F172A]">role = &quot;admin&quot;</code>.
             Promote new admins from{" "}
-            <a href="/admin-panel/settings" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <a href="/admin-panel/settings" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Settings → Promote user to admin
             </a>
             .
@@ -55,13 +55,13 @@ export default async function AdminRolesPage() {
         <SectionCard
           title="Database admin users"
           description="These accounts have full admin access via their User row"
-          action={<ShieldCheck className="h-4 w-4 text-[#1A56DB]" />}
+          action={<ShieldCheck className="h-4 w-4 text-[#2563EB]" />}
           flush
         >
           {dbAdmins.length === 0 ? (
             <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">
               No DB admins yet. Promote via{" "}
-              <a href="/admin-panel/settings" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <a href="/admin-panel/settings" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 Settings
               </a>
               .
@@ -71,7 +71,7 @@ export default async function AdminRolesPage() {
               {dbAdmins.map((a) => (
                 <li key={a.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] text-[12px] font-semibold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[12px] font-semibold text-white">
                       {(a.name || a.email)[0].toUpperCase()}
                     </div>
                     <div className="min-w-0">
@@ -91,7 +91,7 @@ export default async function AdminRolesPage() {
         <SectionCard
           title="ADMIN_EMAILS · environment variable"
           description="Email allow-list from Vercel env. These users get admin access on login even without a role change."
-          action={<Mail className="h-4 w-4 text-[#1A56DB]" />}
+          action={<Mail className="h-4 w-4 text-[#2563EB]" />}
           flush
         >
           {envEmails.length === 0 ? (
@@ -120,7 +120,7 @@ export default async function AdminRolesPage() {
 
         <SectionCard
           title="How access works"
-          action={<KeyRound className="h-4 w-4 text-[#1A56DB]" />}
+          action={<KeyRound className="h-4 w-4 text-[#2563EB]" />}
         >
           <ol className="space-y-2 text-[13px] leading-[1.7] text-[#475569]">
             <li>

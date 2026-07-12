@@ -148,7 +148,7 @@ export function ProductShowcase() {
                     {keywords.map((k, i) => (
                       <motion.span
                         key={k}
-                        className="rounded-md bg-[#1A56DB]/15 px-2 py-1 text-[11px] font-medium text-[#93C5FD] ring-1 ring-inset ring-[#1A56DB]/30"
+                        className="rounded-md bg-[#2563EB]/15 px-2 py-1 text-[11px] font-medium text-[#93C5FD] ring-1 ring-inset ring-[#2563EB]/30"
                         initial={reduce ? false : { opacity: 0, scale: 0.8 }}
                         animate={inView ? { opacity: 1, scale: 1 } : undefined}
                         transition={{ duration: 0.35, ease: EASE, delay: 0.9 + i * 0.06 }}
@@ -169,7 +169,7 @@ export function ProductShowcase() {
             animate={inView ? { opacity: 1, scale: 1, y: 0 } : undefined}
             transition={{ duration: 0.5, ease: EASE, delay: 1.1 }}
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#1A56DB]/20">
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#2563EB]/20">
               <Sparkles className="h-4 w-4 text-[#60A5FA]" />
             </span>
             <div>

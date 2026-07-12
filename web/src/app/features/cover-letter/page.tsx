@@ -44,28 +44,28 @@ export const metadata = buildMarketingMetadata({
 
 const faqs: FaqItem[] = [
   {
-    q: "How does Launch CV personalize my cover letter?",
-    a: "Launch CV reads your resume and the job description, then extracts the company mission, tech stack, required skills, and hiring tone and weaves them in naturally. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the letter.",
+    q: "How does LaunchCV personalize my cover letter?",
+    a: "LaunchCV reads your resume and the job description, then extracts the company mission, tech stack, required skills, and hiring tone and weaves them in naturally. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the letter.",
   },
   {
-    q: "How long does it take to write a cover letter with Launch CV?",
-    a: "Launch CV generates a personalized cover letter in about 60 seconds. You connect a resume, paste the job description, optionally add personal context, then pick a tone and length. The AI returns three openings, one full body, and two closings, all editable inline before you send.",
+    q: "How long does it take to write a cover letter with LaunchCV?",
+    a: "LaunchCV generates a personalized cover letter in about 60 seconds. You connect a resume, paste the job description, optionally add personal context, then pick a tone and length. The AI returns three openings, one full body, and two closings, all editable inline before you send.",
   },
   {
-    q: "What tones can Launch CV's cover letter generator write in?",
-    a: "Launch CV writes in four tones: Professional, Enthusiastic, Concise, and Creative. Professional suits finance and enterprise, Enthusiastic fits startups, Concise keeps engineers to around 200 words, and Creative leads with a distinctive hook for design and marketing roles. You can preview each voice live before generating.",
+    q: "What tones can LaunchCV's cover letter generator write in?",
+    a: "LaunchCV writes in four tones: Professional, Enthusiastic, Concise, and Creative. Professional suits finance and enterprise, Enthusiastic fits startups, Concise keeps engineers to around 200 words, and Creative leads with a distinctive hook for design and marketing roles. You can preview each voice live before generating.",
   },
   {
-    q: "Can Launch CV write a cover letter in a language other than English?",
-    a: "Yes, Launch CV writes cover letters in fourteen languages, including English, German, French, Spanish, Portuguese, Dutch, and Italian, plus seven more. Pick your language and the AI still pulls the company mission and job-description details, so the personalization stays intact whichever language you apply in.",
+    q: "Can LaunchCV write a cover letter in a language other than English?",
+    a: "Yes, LaunchCV writes cover letters in fourteen languages, including English, German, French, Spanish, Portuguese, Dutch, and Italian, plus seven more. Pick your language and the AI still pulls the company mission and job-description details, so the personalization stays intact whichever language you apply in.",
   },
   {
-    q: "Are Launch CV cover letters ATS-safe?",
-    a: "Yes, every Launch CV cover letter uses plain-text, ATS-safe formatting that works in an email body, an ATS upload field, or a PDF attachment. There are no tables, columns, or graphics to break parsing, so your letter stays readable whether a human or software opens it first.",
+    q: "Are LaunchCV cover letters ATS-safe?",
+    a: "Yes, every LaunchCV cover letter uses plain-text, ATS-safe formatting that works in an email body, an ATS upload field, or a PDF attachment. There are no tables, columns, or graphics to break parsing, so your letter stays readable whether a human or software opens it first.",
   },
   {
-    q: "Can I control the length of my Launch CV cover letter?",
-    a: "Yes, Launch CV offers three lengths: Short at around 250 words, Standard at 400, and Detailed at 600. Choose the one that fits the role before generating. The AI also returns three opening hooks, so you can pick the first paragraph that sounds most like you.",
+    q: "Can I control the length of my LaunchCV cover letter?",
+    a: "Yes, LaunchCV offers three lengths: Short at around 250 words, Standard at 400, and Detailed at 600. Choose the one that fits the role before generating. The AI also returns three opening hooks, so you can pick the first paragraph that sounds most like you.",
   },
 ];
 
@@ -74,7 +74,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Cover Letter Generator | Launch CV",
+      name: "Cover Letter Generator | LaunchCV",
       url: absoluteUrl("/features/cover-letter"),
       description: "AI cover letters personalized to the company, role, and hiring manager.",
     },
@@ -93,7 +93,7 @@ const ld = {
       totalTime: "PT1M",
       url: absoluteUrl("/features/cover-letter"),
       steps: [
-        { name: "Connect a resume", text: "Use a Launch CV resume or paste an existing one — your career history is the foundation." },
+        { name: "Connect a resume", text: "Use a LaunchCV resume or paste an existing one — your career history is the foundation." },
         { name: "Paste the job description", text: "AI auto-extracts the company, role, tech stack, and hiring tone with no manual tagging." },
         { name: "Add optional personal context", text: "Add the hiring manager's name, a mutual connection, or a why-this-company line and AI weaves it in." },
         { name: "Pick tone and length", text: "Choose from four tones and three lengths, and preview the voice before generating." },
@@ -130,7 +130,7 @@ const benefits = [
 ];
 
 const steps = [
-  { i: FileText, t: "Connect a resume", d: "Use a Launch CV resume or paste an existing one. Your career history is the foundation." },
+  { i: FileText, t: "Connect a resume", d: "Use a LaunchCV resume or paste an existing one. Your career history is the foundation." },
   { i: Building2, t: "Paste the JD", d: "AI auto-extracts the company, role, tech stack, and hiring tone — no manual tagging." },
   { i: User, t: "Optional personal context", d: "Hiring manager name, mutual connection, why-this-company line. AI weaves it in." },
   { i: Sparkles, t: "Pick tone + length", d: "Choose from four tones and three lengths. Preview the voice before generating." },
@@ -180,7 +180,7 @@ export default function CoverLetterPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Stop opening the blank document. Launch CV pulls the company mission, the tech stack, and the hiring manager&apos;s tone — then writes a letter you&apos;d be proud to send.
+                Stop opening the blank document. LaunchCV pulls the company mission, the tech stack, and the hiring manager&apos;s tone — then writes a letter you&apos;d be proud to send.
               </p>
 
               <KeyFacts
@@ -271,7 +271,7 @@ export default function CoverLetterPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/cover-letter.svg"
-            alt="The Launch CV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
+            alt="The LaunchCV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
             caption="Pick a tone and language; get a company-specific, ready-to-send letter in under a minute."
           />
         </div>
@@ -420,7 +420,7 @@ export default function CoverLetterPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#0D9488]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#0D9488]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Template or blank page</th>
                 </tr>
               </thead>

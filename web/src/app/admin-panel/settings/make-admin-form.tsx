@@ -44,7 +44,7 @@ export function MakeAdminForm() {
     <SectionCard
       title="Promote user to admin"
       description="Sets the user.role field to &lsquo;admin&rsquo; in the database"
-      action={<UserPlus className="h-4 w-4 text-[#1A56DB]" />}
+      action={<UserPlus className="h-4 w-4 text-[#2563EB]" />}
     >
       <form onSubmit={handleSubmit} className="space-y-3">
         <FormField label="User email" required>

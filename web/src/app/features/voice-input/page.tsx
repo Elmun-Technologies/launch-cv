@@ -45,16 +45,16 @@ export const metadata = buildMarketingMetadata({
 
 const faqs: FaqItem[] = [
   {
-    q: "Can I build a resume by voice with Launch CV?",
-    a: "Yes, you can build a resume entirely by voice with Launch CV. Click the mic, describe your work the way you would to a friend, and the AI turns your spoken words into quantified, ATS-ready bullets. The mic is available in every section, from Experience to Skills and Projects.",
+    q: "Can I build a resume by voice with LaunchCV?",
+    a: "Yes, you can build a resume entirely by voice with LaunchCV. Click the mic, describe your work the way you would to a friend, and the AI turns your spoken words into quantified, ATS-ready bullets. The mic is available in every section, from Experience to Skills and Projects.",
   },
   {
-    q: "What languages does Launch CV voice input support?",
-    a: "Launch CV voice input supports 12 languages: English, Spanish, French, German, Portuguese, Italian, Dutch, Polish, Japanese, Mandarin, Korean, and Turkish. You can speak in your strongest language and the AI reframes your words into formal English bullets, which is ideal for non-native speakers.",
+    q: "What languages does LaunchCV voice input support?",
+    a: "LaunchCV voice input supports 12 languages: English, Spanish, French, German, Portuguese, Italian, Dutch, Polish, Japanese, Mandarin, Korean, and Turkish. You can speak in your strongest language and the AI reframes your words into formal English bullets, which is ideal for non-native speakers.",
   },
   {
-    q: "Does Launch CV store my voice recordings?",
-    a: "No, Launch CV never stores your voice recordings. Audio is streamed to transcription, processed in-memory, and discarded immediately, so no audio file is saved on our servers. Each request is scoped and dropped, with no fine-tuning on your voice. The feature is fully GDPR and CCPA compliant.",
+    q: "Does LaunchCV store my voice recordings?",
+    a: "No, LaunchCV never stores your voice recordings. Audio is streamed to transcription, processed in-memory, and discarded immediately, so no audio file is saved on our servers. Each request is scoped and dropped, with no fine-tuning on your voice. The feature is fully GDPR and CCPA compliant.",
   },
   {
     q: "Do I need to install an app to use voice input?",
@@ -75,7 +75,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Voice Input | Launch CV",
+      name: "Voice Input | LaunchCV",
       url: absoluteUrl("/features/voice-input"),
       description: "Speak your career. AI turns it into ATS-ready bullets.",
     },
@@ -152,7 +152,7 @@ export default function VoiceInputPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                The hardest part of a resume isn&apos;t the layout — it&apos;s the blank page. Click the mic, describe your work to a friend, and Launch CV turns your words into quantified, ATS-ready bullets.
+                The hardest part of a resume isn&apos;t the layout — it&apos;s the blank page. Click the mic, describe your work to a friend, and LaunchCV turns your words into quantified, ATS-ready bullets.
               </p>
 
               <KeyFacts
@@ -262,8 +262,8 @@ export default function VoiceInputPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/voice-input.svg"
-            alt="The Launch CV voice input feature transcribing spoken work experience and converting it into structured, quantified resume bullet points."
-            caption="Describe your work out loud; Launch CV turns the transcript into polished, ATS-ready bullets."
+            alt="The LaunchCV voice input feature transcribing spoken work experience and converting it into structured, quantified resume bullet points."
+            caption="Describe your work out loud; LaunchCV turns the transcript into polished, ATS-ready bullets."
           />
         </div>
       </section>
@@ -577,7 +577,7 @@ export default function VoiceInputPage() {
                 href={r.href}
                 className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
               >
-                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">{r.t}</p>
+                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">{r.t}</p>
                 <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
               </Link>
             ))}

@@ -44,7 +44,7 @@ export function UserDetailActions({
       <SectionCard
         title="Role"
         description="Promote or demote this user"
-        action={<Shield className="h-4 w-4 text-[#1A56DB]" />}
+        action={<Shield className="h-4 w-4 text-[#2563EB]" />}
       >
         <div className="space-y-3">
           <FormField label="Account role">

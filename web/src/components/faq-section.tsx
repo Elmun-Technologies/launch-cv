@@ -10,7 +10,7 @@ export function FaqSection({
   items,
   eyebrow = "FAQ",
   heading = "Frequently asked questions",
-  accent = "#1A56DB",
+  accent = "#2563EB",
 }: {
   items: FaqItem[];
   eyebrow?: string;

@@ -16,7 +16,7 @@ import { ProductScreenshot } from "@/components/product-screenshot";
 export const metadata = buildMarketingMetadata({
   title: "Resume Builder by Role — Tailored for Your Job",
   description:
-    "See how Launch CV tailors your resume to your field. Role-specific AI bullets for engineers, product managers, and designers — ATS-clean, fast.",
+    "See how LaunchCV tailors your resume to your field. Role-specific AI bullets for engineers, product managers, and designers — ATS-clean, fast.",
   pathname: "/use-cases",
   image: DEFAULT_OG_IMAGE,
   keywords: [
@@ -61,28 +61,28 @@ const roles = [
 
 const faqs: FaqItem[] = [
   {
-    q: "Does Launch CV work for my profession?",
-    a: "Launch CV works across professions through 12 industry templates that are ATS-tested and quantified out of the box, plus dedicated guides for software engineers, product managers, and designers. Each track tunes the same AI toolkit to the signals recruiters scan for in that specific field.",
+    q: "Does LaunchCV work for my profession?",
+    a: "LaunchCV works across professions through 12 industry templates that are ATS-tested and quantified out of the box, plus dedicated guides for software engineers, product managers, and designers. Each track tunes the same AI toolkit to the signals recruiters scan for in that specific field.",
   },
   {
-    q: "Which Launch CV resume guide is right for my role?",
+    q: "Which LaunchCV resume guide is right for my role?",
     a: "Choose the software engineer guide for latency, throughput, and stack signals; the product manager guide for roadmaps, OKRs, and A/B tests; or the designer guide for portfolio and system work. Each tailors the same AI toolkit to how your specific role gets hired.",
   },
   {
     q: "Why does a resume need to be tailored to a specific role?",
-    a: "A resume needs role-specific tailoring because recruiters scan for different signals in every field, and generic bullets miss them. Launch CV rewrites your experience into the quantified, ATS-clean language your particular role rewards, whether that means engineering scope, product metrics, or design impact, so screeners recognize the right proof.",
+    a: "A resume needs role-specific tailoring because recruiters scan for different signals in every field, and generic bullets miss them. LaunchCV rewrites your experience into the quantified, ATS-clean language your particular role rewards, whether that means engineering scope, product metrics, or design impact, so screeners recognize the right proof.",
   },
   {
-    q: "What if my job isn't listed in Launch CV's use cases?",
-    a: "If your job is not listed, Launch CV still fits because it ships 12 industry templates that are ATS-tested and quantified out of the box. The role guides for engineers, PMs, and designers show the approach, but the same AI toolkit adapts your experience to any field you apply in.",
+    q: "What if my job isn't listed in LaunchCV's use cases?",
+    a: "If your job is not listed, LaunchCV still fits because it ships 12 industry templates that are ATS-tested and quantified out of the box. The role guides for engineers, PMs, and designers show the approach, but the same AI toolkit adapts your experience to any field you apply in.",
   },
   {
-    q: "How long does it take to build a role-specific resume with Launch CV?",
-    a: "Building a role-specific resume with Launch CV takes about five minutes from blank to PDF. You pick your track, and the AI rewrites your experience into quantified, ATS-clean bullets tuned to your field, using templates that are ATS-safe and metrics-first out of the box.",
+    q: "How long does it take to build a role-specific resume with LaunchCV?",
+    a: "Building a role-specific resume with LaunchCV takes about five minutes from blank to PDF. You pick your track, and the AI rewrites your experience into quantified, ATS-clean bullets tuned to your field, using templates that are ATS-safe and metrics-first out of the box.",
   },
   {
-    q: "Do all Launch CV roles use the same tool or different ones?",
-    a: "All Launch CV roles use the same AI toolkit, just tuned to each field's hiring signals. Engineers, product managers, and designers get role-specific bullets and keyword libraries drawn from one product, so switching tracks never means learning a new tool or losing your ATS-clean formatting.",
+    q: "Do all LaunchCV roles use the same tool or different ones?",
+    a: "All LaunchCV roles use the same AI toolkit, just tuned to each field's hiring signals. Engineers, product managers, and designers get role-specific bullets and keyword libraries drawn from one product, so switching tracks never means learning a new tool or losing your ATS-clean formatting.",
   },
 ];
 
@@ -91,7 +91,7 @@ const ld = {
   "@graph": [
     {
       "@type": "CollectionPage",
-      name: "Resume Builder by Role | Launch CV",
+      name: "Resume Builder by Role | LaunchCV",
       description: "Role-specific resume guidance for software engineers, product managers, and designers.",
       url: absoluteUrl("/use-cases"),
     },
@@ -135,18 +135,18 @@ export default function UseCasesPage() {
         <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-12">
           <div className="max-w-[760px]">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Sparkles className="h-3.5 w-3.5 text-[#1A56DB]" /> Built for your field
+              <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" /> Built for your field
             </span>
             <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
               A resume tailored to how your role gets hired
             </h1>
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
-              Recruiters scan for different signals in every field. Launch CV rewrites your experience into the quantified, ATS-clean language your specific role rewards — pick your track below.
+              Recruiters scan for different signals in every field. LaunchCV rewrites your experience into the quantified, ATS-clean language your specific role rewards — pick your track below.
             </p>
 
             <KeyFacts
               className="mt-8 max-w-[600px]"
-              lead="Launch CV tailors resumes to how each role gets hired, with role-specific AI bullets for software engineers, product managers, and designers. It rewrites your experience into the quantified, ATS-clean language recruiters in your field scan for, matched to each job description."
+              lead="LaunchCV tailors resumes to how each role gets hired, with role-specific AI bullets for software engineers, product managers, and designers. It rewrites your experience into the quantified, ATS-clean language recruiters in your field scan for, matched to each job description."
               facts={[
                 "Dedicated tracks for software engineers, product managers, and designers.",
                 "Role-specific keyword libraries matched to each job description.",
@@ -158,7 +158,7 @@ export default function UseCasesPage() {
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
               >
                 Get started
                 <ArrowRight className="h-4 w-4" />
@@ -179,15 +179,15 @@ export default function UseCasesPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <p className="lc-overline text-[#2563EB]">Inside the product</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">Tailored to the role you&apos;re targeting</h2>
             </div>
           </RevealOnView>
           <ProductScreenshot
             className="mt-12"
             src="/images/product/jd-alignment.svg"
-            alt="The Launch CV JD alignment view matching a resume to a specific job description, showing a 91% match score and the role's matched keywords."
-            caption="Launch CV aligns every resume to the exact role — from the match score to the keywords."
+            alt="The LaunchCV JD alignment view matching a resume to a specific job description, showing a 91% match score and the role's matched keywords."
+            caption="LaunchCV aligns every resume to the exact role — from the match score to the keywords."
           />
         </div>
       </section>
@@ -218,7 +218,7 @@ export default function UseCasesPage() {
                         </div>
                       ))}
                     </div>
-                    <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB] opacity-0 transition group-hover:opacity-100">
+                    <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB] opacity-0 transition group-hover:opacity-100">
                       See guide
                       <ArrowRight className="h-3.5 w-3.5" />
                     </span>
@@ -230,7 +230,7 @@ export default function UseCasesPage() {
 
           <RevealOnView>
             <p className="mt-10 text-center text-[14px] text-[#94A3B8]">
-              Don&apos;t see your role? Launch CV ships 12 industry templates — every one is ATS-tested and quantified out of the box.
+              Don&apos;t see your role? LaunchCV ships 12 industry templates — every one is ATS-tested and quantified out of the box.
             </p>
           </RevealOnView>
         </div>
@@ -255,7 +255,7 @@ export default function UseCasesPage() {
                   <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
                   <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#2563EB]" />
               </Link>
             ))}
           </div>
@@ -274,7 +274,7 @@ export default function UseCasesPage() {
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               View pricing
               <ArrowRight className="h-4 w-4" />

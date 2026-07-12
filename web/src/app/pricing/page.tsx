@@ -16,17 +16,17 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
-  description: `Launch CV pricing: ${CHECKOUT_PLAN_ORDER.map(
+  description: `LaunchCV pricing: ${CHECKOUT_PLAN_ORDER.map(
     (key) => `${PUBLIC_PLANS[key].title} ${planPriceLabel(key)}`,
   ).join(", ")}. Every AI tool included on every plan. No freemium games.`,
   pathname: "/pricing",
-  keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
+  keywords: ["LaunchCV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
 
 const faqs = [
   {
     q: "Is there a free tier?",
-    a: `No. Launch CV is a professional product. AI workflows unlock after you choose a paid plan: ${planNameList()}. You can create an account to manage billing — checkout activates the AI.`,
+    a: `No. LaunchCV is a professional product. AI workflows unlock after you choose a paid plan: ${planNameList()}. You can create an account to manage billing — checkout activates the AI.`,
   },
   {
     q: "How does billing work?",
@@ -77,16 +77,16 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Pricing | Launch CV",
-      description: `Launch CV pricing — ${CHECKOUT_PLAN_ORDER.map((k) => PUBLIC_PLANS[k].title).join(", ")}.`,
+      name: "Pricing | LaunchCV",
+      description: `LaunchCV pricing — ${CHECKOUT_PLAN_ORDER.map((k) => PUBLIC_PLANS[k].title).join(", ")}.`,
       url: absoluteUrl("/pricing"),
     },
     {
       "@type": "Product",
-      name: "Launch CV",
+      name: "LaunchCV",
       description:
         "AI resume builder with JD alignment, ATS scoring, cover letter generation, interview prep, and voice input. Every tool included on every paid plan.",
-      brand: { "@type": "Brand", name: "Launch CV" },
+      brand: { "@type": "Brand", name: "LaunchCV" },
       offers: {
         "@type": "AggregateOffer",
         priceCurrency: "USD",
@@ -181,7 +181,7 @@ export default function PricingPage() {
         <div className="relative mx-auto max-w-[1200px] px-6 pb-12 pt-12">
           <div className="max-w-[760px]">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Sparkles className="h-3.5 w-3.5 text-[#1A56DB]" /> Pricing
+              <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" /> Pricing
             </span>
             <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
               Pay monthly, yearly, or once — for life
@@ -208,14 +208,14 @@ export default function PricingPage() {
                   <div
                     className={`flex h-full flex-col rounded-2xl bg-white p-7 ${
                       popular
-                        ? "border-2 border-[#1A56DB] shadow-[0_20px_60px_-20px_rgba(26,86,219,0.25)]"
+                        ? "border-2 border-[#2563EB] shadow-[0_20px_60px_-20px_rgba(26,86,219,0.25)]"
                         : "border border-[#E2E8F0]"
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <p className="text-[17px] font-semibold text-[#0F172A]">{cfg.title}</p>
                       {popular && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#1A56DB]">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#2563EB]">
                           <Sparkles className="h-3 w-3" /> Most chosen
                         </span>
                       )}
@@ -236,7 +236,7 @@ export default function PricingPage() {
                     <ul className="mt-6 flex-1 space-y-2.5">
                       {bullets.map((b) => (
                         <li key={b} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#334155]">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                           {b}
                         </li>
                       ))}
@@ -250,7 +250,7 @@ export default function PricingPage() {
                       href={registerHref}
                       className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                         popular
-                          ? "bg-[#1A56DB] text-white hover:bg-[#1D4ED8]"
+                          ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
                           : "border border-[#E2E8F0] bg-white text-[#0F172A] hover:bg-[#F8FAFC]"
                       }`}
                     >
@@ -265,11 +265,11 @@ export default function PricingPage() {
 
           <p className="mx-auto mt-8 max-w-[720px] text-center text-[13px] leading-relaxed text-[#94A3B8]">
             After signup, complete checkout in{" "}
-            <Link href={SUB_NEXT} className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href={SUB_NEXT} className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Subscription settings
             </Link>
             . Already have an account?{" "}
-            <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Sign in
             </Link>
             . 7-day money-back where Polar allows.
@@ -282,7 +282,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Compare plans</p>
+              <p className="lc-overline text-[#2563EB]">Compare plans</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Every AI tool included — only the ceilings change
               </h2>
@@ -301,7 +301,7 @@ export default function PricingPage() {
                     key={key}
                     className={`border-b border-[#E2E8F0] px-5 py-4 text-center ${cfg.popular ? "bg-[#EFF6FF]/50" : ""}`}
                   >
-                    <p className={`text-[13px] font-semibold ${cfg.popular ? "text-[#1A56DB]" : "text-[#0F172A]"}`}>
+                    <p className={`text-[13px] font-semibold ${cfg.popular ? "text-[#2563EB]" : "text-[#0F172A]"}`}>
                       {cfg.title}
                     </p>
                     <p className={`text-[11px] ${cfg.popular ? "text-[#475569]" : "text-[#94A3B8]"}`}>
@@ -344,7 +344,7 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Why pay for resume software</p>
+              <p className="lc-overline text-[#2563EB]">Why pay for resume software</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 A real product, funded by users — not ads
               </h2>
@@ -357,7 +357,7 @@ export default function PricingPage() {
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { k: "No data sold", d: "Your resume, applications, and interview practice — never shared, never sold, never used for ads." },
-              { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No &lsquo;Made with Launch CV&rsquo; baked in." },
+              { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No &lsquo;Made with LaunchCV&rsquo; baked in." },
               { k: "Predictable limits", d: "Every plan publishes its monthly AI ceiling. No mystery throttling, no surprise paywalls." },
               { k: "Real human support", d: "Reply in under a business day. Same email queue the founder reads." },
               { k: "Cancel without drama", d: "One click in the Polar portal. No retention pop-ups, no &lsquo;are you sure&rsquo; flows." },
@@ -365,7 +365,7 @@ export default function PricingPage() {
             ].map((p) => (
               <RevealOnView key={p.k}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#1A56DB]" />
+                  <Check className="h-5 w-5 text-[#2563EB]" />
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{p.k}</h3>
                   <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: p.d }} />
                 </div>
@@ -421,13 +421,13 @@ export default function PricingPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-12 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <p className="lc-overline text-[#1A56DB]">FAQ</p>
+              <p className="lc-overline text-[#2563EB]">FAQ</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Frequently asked questions
               </h2>
               <p className="mt-4 text-[14px] leading-[1.7] text-[#475569]">
                 Need something specific?{" "}
-                <Link href="/contact" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                <Link href="/contact" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                   Email support
                 </Link>{" "}
                 — we reply within one business day.
@@ -463,7 +463,7 @@ export default function PricingPage() {
             cta="get_started"
             location="pricing_footer"
             href={registerHref}
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Create my account
             <ArrowRight className="h-4 w-4" />

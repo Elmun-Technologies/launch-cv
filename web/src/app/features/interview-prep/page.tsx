@@ -30,7 +30,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "AI Interview Prep — Practice Real, Role-Specific Questions",
   description:
-    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
+    "LaunchCV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
   pathname: "/features/interview-prep",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -44,28 +44,28 @@ export const metadata = buildMarketingMetadata({
 
 const faqs: FaqItem[] = [
   {
-    q: "How does Launch CV know which interview questions to ask me?",
-    a: "Launch CV reads your resume and the target job description, then generates the exact questions you're likely to face for that role. It pulls behavioral prompts from your experience, technical questions from the JD's required skills, and asks resume-aware follow-ups that dig in like a real interviewer would.",
+    q: "How does LaunchCV know which interview questions to ask me?",
+    a: "LaunchCV reads your resume and the target job description, then generates the exact questions you're likely to face for that role. It pulls behavioral prompts from your experience, technical questions from the JD's required skills, and asks resume-aware follow-ups that dig in like a real interviewer would.",
   },
   {
-    q: "How does Launch CV score my interview answers?",
-    a: "Launch CV scores every answer from 1 to 10 across four dimensions: Clarity, Relevance, Impact, and STAR structure. You get the breakdown, the reasoning behind each score, and a benchmark model answer beside yours to calibrate against, so you know exactly what to tighten next time.",
+    q: "How does LaunchCV score my interview answers?",
+    a: "LaunchCV scores every answer from 1 to 10 across four dimensions: Clarity, Relevance, Impact, and STAR structure. You get the breakdown, the reasoning behind each score, and a benchmark model answer beside yours to calibrate against, so you know exactly what to tighten next time.",
   },
   {
-    q: "What types of interview questions can I practice on Launch CV?",
-    a: "Launch CV offers six question banks: Behavioral, Technical, Company and culture, Situational, Curveball, and Salary and close. The AI picks the right mix automatically, or you can drill the single bank that worries you most. Behavioral uses STAR prompts from your resume; Technical comes from the JD's tools.",
+    q: "What types of interview questions can I practice on LaunchCV?",
+    a: "LaunchCV offers six question banks: Behavioral, Technical, Company and culture, Situational, Curveball, and Salary and close. The AI picks the right mix automatically, or you can drill the single bank that worries you most. Behavioral uses STAR prompts from your resume; Technical comes from the JD's tools.",
   },
   {
-    q: "How many practice questions does Launch CV generate per role?",
-    a: "Launch CV generates 200+ role-specific questions per role, spread across six banks covering behavioral, technical, company, situational, curveball, and salary topics. Because each set is built from your resume and the job description, you practice the questions that actually matter for that job rather than generic filler.",
+    q: "How many practice questions does LaunchCV generate per role?",
+    a: "LaunchCV generates 200+ role-specific questions per role, spread across six banks covering behavioral, technical, company, situational, curveball, and salary topics. Because each set is built from your resume and the job description, you practice the questions that actually matter for that job rather than generic filler.",
   },
   {
-    q: "Can Launch CV simulate a full multi-round interview?",
-    a: "Yes, Launch CV runs a multi-round simulation covering the recruiter screen, the hiring manager, and the panel, each with the right tone and question density. You can run a full mock from screener to panel, and a progress dashboard tracks your score trend across every session.",
+    q: "Can LaunchCV simulate a full multi-round interview?",
+    a: "Yes, LaunchCV runs a multi-round simulation covering the recruiter screen, the hiring manager, and the panel, each with the right tone and question density. You can run a full mock from screener to panel, and a progress dashboard tracks your score trend across every session.",
   },
   {
-    q: "Can I answer Launch CV interview questions out loud?",
-    a: "Yes, Launch CV includes a voice answer option, so you can speak your responses just like a real interview instead of typing them. Each spoken answer is still scored from 1 to 10 on Clarity, Relevance, Impact, and STAR, with a model answer to compare against.",
+    q: "Can I answer LaunchCV interview questions out loud?",
+    a: "Yes, LaunchCV includes a voice answer option, so you can speak your responses just like a real interview instead of typing them. Each spoken answer is still scored from 1 to 10 on Clarity, Relevance, Impact, and STAR, with a model answer to compare against.",
   },
 ];
 
@@ -74,7 +74,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Interview Prep | Launch CV",
+      name: "Interview Prep | LaunchCV",
       url: absoluteUrl("/features/interview-prep"),
       description: "Role-specific AI interview practice with scored feedback.",
     },
@@ -123,7 +123,7 @@ const testimonials = [
     r: "Data Analyst at Snowflake",
   },
   {
-    q: "I failed four interviews before Launch CV. The AI feedback showed me I wasn&apos;t using STAR properly. Fixed that — hired on the very next one.",
+    q: "I failed four interviews before LaunchCV. The AI feedback showed me I wasn&apos;t using STAR properly. Fixed that — hired on the very next one.",
     n: "Nina P.",
     r: "Business Analyst",
   },
@@ -278,7 +278,7 @@ export default function InterviewPrepPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/interview-prep.svg"
-            alt="The Launch CV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
+            alt="The LaunchCV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
             caption="Answer role-specific questions and get scored on clarity, relevance, impact, and STAR structure."
           />
         </div>
@@ -437,7 +437,7 @@ export default function InterviewPrepPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#059669]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#059669]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Winging it</th>
                 </tr>
               </thead>

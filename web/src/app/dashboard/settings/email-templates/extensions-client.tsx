@@ -228,7 +228,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
       {tab === "quick-actions" ? (
         <div className="space-y-5">
           <h2 className="text-[17px] font-bold text-gray-900">Quick Actions</h2>
-          <p className="text-[13px] text-gray-500">One-click shortcuts to common tasks across Launch CV.</p>
+          <p className="text-[13px] text-gray-500">One-click shortcuts to common tasks across LaunchCV.</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { href: "/resume/new", label: "Create New Resume", desc: "Start from scratch or import", icon: Plus, color: "bg-violet-50 text-[#7C5CFC]" },
@@ -251,12 +251,12 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
       {tab === "integrations" ? (
         <div className="space-y-5">
           <h2 className="text-[17px] font-bold text-gray-900">Integrations</h2>
-          <p className="text-[13px] text-gray-500">Connect Launch CV with your favorite tools.</p>
+          <p className="text-[13px] text-gray-500">Connect LaunchCV with your favorite tools.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {[
               { name: "LinkedIn", desc: "Import profile data and sync connections", status: "active", icon: "in" },
               { name: "Google Docs", desc: "Export resumes directly to Google Docs", status: "coming", icon: "G" },
-              { name: "Gmail", desc: "Send emails directly from Launch CV", status: "coming", icon: "M" },
+              { name: "Gmail", desc: "Send emails directly from LaunchCV", status: "coming", icon: "M" },
               { name: "Notion", desc: "Sync job tracking data to Notion", status: "coming", icon: "N" },
               { name: "Slack", desc: "Get notifications for application updates", status: "coming", icon: "S" },
               { name: "Zapier", desc: "Connect with 5000+ apps", status: "coming", icon: "Z" },
@@ -277,7 +277,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
       {tab === "shortcuts" ? (
         <div className="space-y-5">
           <h2 className="text-[17px] font-bold text-gray-900">Keyboard Shortcuts</h2>
-          <p className="text-[13px] text-gray-500">Navigate Launch CV faster with keyboard shortcuts.</p>
+          <p className="text-[13px] text-gray-500">Navigate LaunchCV faster with keyboard shortcuts.</p>
           <div className="rounded-2xl border border-gray-100 bg-white divide-y divide-gray-50">
             {[
               { keys: ["⌘", "N"], action: "Create new resume" },
@@ -312,7 +312,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
             </div>
             <h2 className="mt-5 text-[20px] font-bold text-gray-900">Chrome Extension</h2>
             <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-gray-500">
-              Import LinkedIn profiles directly into Launch CV with one click.
+              Import LinkedIn profiles directly into LaunchCV with one click.
               Auto-fill job descriptions from any job board. Coming soon.
             </p>
             <div className="mt-8 flex flex-col items-center gap-3">
@@ -328,7 +328,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              { title: "One-Click Import", desc: "Import your LinkedIn profile into Launch CV without copy-pasting" },
+              { title: "One-Click Import", desc: "Import your LinkedIn profile into LaunchCV without copy-pasting" },
               { title: "Auto-Fill JD", desc: "Automatically capture job descriptions from LinkedIn, Indeed, Glassdoor" },
               { title: "Quick Apply", desc: "Generate tailored resumes right from the job posting page" },
             ].map((f) => (

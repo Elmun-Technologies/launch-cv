@@ -33,7 +33,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "what-is-an-ats-score",
     coverImage: "/images/product/ats-score.svg",
     coverAlt:
-      "Launch CV ATS score checker showing a 91 out of 100 ATS score with a breakdown of formatting, keyword match, structure, and readability.",
+      "LaunchCV ATS score checker showing a 91 out of 100 ATS score with a breakdown of formatting, keyword match, structure, and readability.",
     title: "What Is an ATS Score? Meaning, Full Form, and How to Improve It (2026)",
     description:
       "ATS score meaning, explained simply. Learn what an ATS score is, what “ATS” stands for, what a good score looks like, and how to raise yours so your resume reaches a human recruiter.",
@@ -46,8 +46,8 @@ export const BLOG_POSTS: BlogPost[] = [
       "ATS score meaning explained: what it is, what ATS stands for, what a good score is, and how to raise yours so your resume reaches a human recruiter.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -88,7 +88,7 @@ Parsers expect conventional sections: a clear contact block, *Work Experience*, 
 
 Consistent date formats, a sensible length (one to two pages for most roles), standard fonts, and complete contact information all help the system extract your details accurately.
 
-![Launch CV keyword-match view comparing a resume against a job description and listing the missing ATS keywords to add.](/images/product/jd-alignment.svg)`,
+![LaunchCV keyword-match view comparing a resume against a job description and listing the missing ATS keywords to add.](/images/product/jd-alignment.svg)`,
       },
       {
         heading: "What is a good ATS score?",
@@ -135,12 +135,12 @@ For a deeper formatting walkthrough, see our guide on [writing an ATS-friendly r
 Understanding what the score really represents — parsability plus relevance — keeps you focused on the changes that actually move the needle.`,
       },
       {
-        heading: "How Launch CV calculates your ATS score",
-        body: `Launch CV's [ATS Score Checker](/features/ats-score) simulates how major applicant tracking systems parse a resume and returns a 0–100 score broken into the four categories above: formatting, keywords, structure, and readability. Upload a PDF or DOCX and you get an instant, itemized report that lists the highest-impact fixes first — each with a specific, plain-English instruction rather than a vague warning.
+        heading: "How LaunchCV calculates your ATS score",
+        body: `LaunchCV's [ATS Score Checker](/features/ats-score) simulates how major applicant tracking systems parse a resume and returns a 0–100 score broken into the four categories above: formatting, keywords, structure, and readability. Upload a PDF or DOCX and you get an instant, itemized report that lists the highest-impact fixes first — each with a specific, plain-English instruction rather than a vague warning.
 
 Because the checker scores your resume *against the job description you paste in*, the feedback reflects the role you actually want, not a generic template. From there you can jump straight into the [resume builder](/features/resume-builder) to apply the fixes and re-score in the same place. The goal isn't to trick the software — it's to make sure a resume you're proud of actually reaches the human on the other side.
 
-![Launch CV AI resume builder rewriting a rough note into a quantified, ATS-optimized bullet point in the editor.](/images/product/resume-builder.svg)`,
+![LaunchCV AI resume builder rewriting a rough note into a quantified, ATS-optimized bullet point in the editor.](/images/product/resume-builder.svg)`,
       },
     ],
     faqs: [
@@ -157,7 +157,7 @@ Because the checker scores your resume *against the job description you paste in
     slug: "how-to-check-ats-score-of-resume",
     coverImage: "/images/product/jd-alignment.svg",
     coverAlt:
-      "Launch CV resume-to-job-description match analysis showing a 91% match score and the matched ATS keywords pulled from the posting.",
+      "LaunchCV resume-to-job-description match analysis showing a 91% match score and the matched ATS keywords pulled from the posting.",
     title: "How to Check the ATS Score of Your Resume (Free Resume ATS Score Checker Guide)",
     description:
       "A step-by-step guide to checking your resume's ATS score with a free resume ATS score checker — plus how to align your resume with the job description and fix ATS-friendly formatting.",
@@ -170,8 +170,8 @@ Because the checker scores your resume *against the job description you paste in
       "Check your resume's ATS score in 4 steps with a free ATS score checker, align it to the job description, and fix your formatting before you apply.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -190,13 +190,13 @@ ATS scoring is only meaningful against a specific role. Pick the exact job posti
 
 ### Step 2: Upload both to an ATS checker
 
-Paste the job description and upload your resume into a tool like the [Launch CV ATS Score Checker](/features/ats-score). It parses your resume the way real ATS platforms do.
+Paste the job description and upload your resume into a tool like the [LaunchCV ATS Score Checker](/features/ats-score). It parses your resume the way real ATS platforms do.
 
 ### Step 3: Read your score and the breakdown
 
 You'll get a 0–100 score split into formatting, keywords, structure, and readability, with the highest-impact issues listed first.
 
-![Launch CV ATS score checker returning a 0–100 resume score with the formatting, keyword, structure, and readability breakdown.](/images/product/ats-score.svg)
+![LaunchCV ATS score checker returning a 0–100 resume score with the formatting, keyword, structure, and readability breakdown.](/images/product/ats-score.svg)
 
 ### Step 4: Fix the top flags and re-check
 
@@ -268,7 +268,7 @@ Do this for each role and you stop guessing. Instead of blasting one resume at f
       },
     ],
     faqs: [
-      { q: "How can I check my resume's ATS score for free?", a: "Upload your resume and paste the target job description into a resume ATS score checker such as Launch CV's ATS Score Checker. It parses your resume the way real ATS platforms do and returns a 0 to 100 score with the specific formatting and keyword issues to fix first." },
+      { q: "How can I check my resume's ATS score for free?", a: "Upload your resume and paste the target job description into a resume ATS score checker such as LaunchCV's ATS Score Checker. It parses your resume the way real ATS platforms do and returns a 0 to 100 score with the specific formatting and keyword issues to fix first." },
       { q: "What's a good ATS score to aim for?", a: "Aim for 80 or above, measured against the specific job you're applying to. A score in the 80 to 100 range is highly likely to be parsed correctly and ranked well, while anything below 65 means your resume is at high risk of being filtered out before a recruiter sees it." },
       { q: "How do I align my resume with a job description?", a: "Pull the required skills, tools, and repeated phrases from the posting, then match each to your real experience using the posting's own wording. Prioritize your summary and top bullets, since parsers and recruiters weight those most, and keep it honest — don't claim skills you don't have or stuff keywords." },
       { q: "Does the ATS score change for every job?", a: "Yes. Because scoring depends heavily on how well your resume matches the specific job description, the same resume can score 90 for one role and 60 for another. Re-check your score for each application, especially for roles you really want, so you catch keyword gaps before you apply." },
@@ -281,7 +281,7 @@ Do this for each role and you stop guessing. Instead of blasting one resume at f
     slug: "voice-to-resume",
     coverImage: "/images/product/voice-input.svg",
     coverAlt:
-      "Launch CV voice-to-resume tool transcribing spoken work experience and turning it into structured, quantified resume bullet points.",
+      "LaunchCV voice-to-resume tool transcribing spoken work experience and turning it into structured, quantified resume bullet points.",
     title: "Voice to Resume: How to Build Your Resume by Speaking (Voice-to-Text Guide)",
     description:
       "Voice to resume, explained: how voice-to-text resume building works, why speaking your experience beats staring at a blank page, and how to turn what you say into an ATS-ready resume.",
@@ -294,8 +294,8 @@ Do this for each role and you stop guessing. Instead of blasting one resume at f
       "How voice-to-text resume building works, why speaking beats the blank page, and how to turn what you say into an ATS-ready resume.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -328,9 +328,9 @@ Most people speak far quicker than they type. A five-minute brain-dump about a r
 2. **Structure.** AI takes the messy transcript and organizes it into resume sections and bullet points, turning “so I basically ran the whole onboarding thing and signups went up a third” into “Led onboarding redesign, increasing new-user signups 33%.”
 3. **Refine.** You review, correct anything the AI misheard, and tighten the wording.
 
-Launch CV's [voice input feature](/features/voice-input) handles all three: speak your experience, and it drafts structured, professional bullet points you can edit — no blank page, no formatting fights.
+LaunchCV's [voice input feature](/features/voice-input) handles all three: speak your experience, and it drafts structured, professional bullet points you can edit — no blank page, no formatting fights.
 
-![Launch CV editor showing spoken experience transcribed and converted into structured, quantified resume bullets ready to edit.](/images/product/resume-builder.svg)`,
+![LaunchCV editor showing spoken experience transcribed and converted into structured, quantified resume bullets ready to edit.](/images/product/resume-builder.svg)`,
       },
       {
         heading: "Step by step: build a resume with your voice",
@@ -414,7 +414,7 @@ You bring the experience; the tools handle the blank page, the formatting, and t
     slug: "resume-keywords-for-software-engineers",
     coverImage: "/images/product/resume-builder.svg",
     coverAlt:
-      "Launch CV AI resume builder turning rough notes into quantified, ATS-friendly software engineer resume bullet points.",
+      "LaunchCV AI resume builder turning rough notes into quantified, ATS-friendly software engineer resume bullet points.",
     title: "Resume Keywords for Software Engineers: The 2026 List (and How to Use Them)",
     description:
       "The resume keywords software engineers need to pass ATS filters and get recruiter callbacks — organized by category, with a method for choosing the right ones for each job.",
@@ -427,8 +427,8 @@ You bring the experience; the tools handle the blank page, the formatting, and t
       "A categorized list of resume keywords for software engineers plus a simple method to pick the right ones for each job description and pass ATS screening.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -526,9 +526,9 @@ Pair a technical keyword with a measurable result: “Optimized PostgreSQL queri
 
 Doing this manually for every role is tedious. Our [JD alignment tool](/features/jd-alignment) reads the posting, compares it to your resume, and shows exactly which technical keywords you're missing — so you tailor in minutes.
 
-![Launch CV JD alignment matching a software engineer resume to a backend job description and surfacing missing technical keywords such as Kubernetes and gRPC.](/images/product/jd-alignment.svg) Then confirm your match with the [ATS Score Checker](/features/ats-score) before applying; see our guide on [how to check your resume's ATS score](/blog/how-to-check-ats-score-of-resume).
+![LaunchCV JD alignment matching a software engineer resume to a backend job description and surfacing missing technical keywords such as Kubernetes and gRPC.](/images/product/jd-alignment.svg) Then confirm your match with the [ATS Score Checker](/features/ats-score) before applying; see our guide on [how to check your resume's ATS score](/blog/how-to-check-ats-score-of-resume).
 
-![Launch CV ATS score checker confirming a strong keyword match for a software engineer resume before applying.](/images/product/ats-score.svg)`,
+![LaunchCV ATS score checker confirming a strong keyword match for a software engineer resume before applying.](/images/product/ats-score.svg)`,
       },
       {
         heading: "Where to place keywords on your resume",
@@ -562,7 +562,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     slug: "how-to-write-an-ats-friendly-resume",
     coverImage: "/images/product/resume-templates.svg",
     coverAlt:
-      "Gallery of ATS-friendly, single-column resume templates in Launch CV, each tested against major applicant tracking systems.",
+      "Gallery of ATS-friendly, single-column resume templates in LaunchCV, each tested against major applicant tracking systems.",
     title: "How to Write an ATS-Friendly Resume in 2025 (Complete Guide)",
     description:
       "75% of resumes are filtered out before a human sees them. Learn exactly how Applicant Tracking Systems work and how to optimize your resume to pass every ATS scan.",
@@ -574,8 +574,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "Learn how applicant tracking systems parse resumes and how to format yours to pass every ATS scan — a complete, up-to-date guide.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -595,8 +595,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
         body: "The most reliable method is to analyze the job description directly. Read it carefully and highlight: required skills (both technical and soft), specific tools or technologies, certifications mentioned, and role-specific verbs. Then compare these against your resume. Any gap is a potential rejection flag. Aim to include the top 10–15 keywords from the JD naturally throughout your resume — in your summary, work experience bullets, and skills section. Avoid keyword stuffing: ATS systems and human reviewers both penalize unnatural repetition.",
       },
       {
-        heading: "How Launch CV's ATS checker works",
-        body: "Launch CV's ATS Score Checker simulates how 15+ major applicant tracking systems parse your resume. Upload your PDF or DOCX and receive an instant score from 0–100, broken into four categories: Formatting (detects tables, columns, images), Keywords (measures density vs. industry benchmarks), Structure (checks for expected sections), and Readability (length, date formats, contact info parsing). The average user improves their score by 43 points after addressing the flagged issues. High-priority fixes are shown first, with specific instructions for each problem.\n\n![Launch CV ATS score checker scoring an uploaded resume and listing the highest-impact formatting and keyword fixes first.](/images/product/ats-score.svg)",
+        heading: "How LaunchCV's ATS checker works",
+        body: "LaunchCV's ATS Score Checker simulates how 15+ major applicant tracking systems parse your resume. Upload your PDF or DOCX and receive an instant score from 0–100, broken into four categories: Formatting (detects tables, columns, images), Keywords (measures density vs. industry benchmarks), Structure (checks for expected sections), and Readability (length, date formats, contact info parsing). The average user improves their score by 43 points after addressing the flagged issues. High-priority fixes are shown first, with specific instructions for each problem.\n\n![LaunchCV ATS score checker scoring an uploaded resume and listing the highest-impact formatting and keyword fixes first.](/images/product/ats-score.svg)",
       },
       {
         heading: "Quick checklist before submitting any application",
@@ -617,7 +617,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     slug: "how-to-tailor-your-resume-for-every-job",
     coverImage: "/images/product/jd-alignment.svg",
     coverAlt:
-      "Launch CV job-description alignment view highlighting matched keywords and a rising match score after tailoring a resume.",
+      "LaunchCV job-description alignment view highlighting matched keywords and a rising match score after tailoring a resume.",
     title: "How to Tailor Your Resume for Every Job Application (AI Method)",
     description:
       "Sending the same resume to every job? That's why you're not getting callbacks. Learn a systematic AI-assisted process to tailor your resume to each job description in under 10 minutes.",
@@ -629,8 +629,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "A systematic AI-assisted process to tailor your resume to each job description in under 10 minutes — and earn more interview callbacks.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -651,7 +651,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "Step 4 — Use AI to check your match score",
-        body: "After manually tailoring, run the JD alignment check in Launch CV. Paste the job description and your updated resume. The AI calculates your match percentage and shows any remaining gaps. This takes under 10 seconds and often surfaces 2–3 keywords you missed. Accept the AI-suggested rewrites with one click and your match score typically jumps from the 60s to the 80–90% range. At 85%+, your resume will pass most ATS filters and look highly relevant to a human reviewer.\n\n![Launch CV JD alignment check showing a resume's match score climbing into the high 80s after applying the AI-suggested keyword rewrites.](/images/product/jd-alignment.svg)",
+        body: "After manually tailoring, run the JD alignment check in LaunchCV. Paste the job description and your updated resume. The AI calculates your match percentage and shows any remaining gaps. This takes under 10 seconds and often surfaces 2–3 keywords you missed. Accept the AI-suggested rewrites with one click and your match score typically jumps from the 60s to the 80–90% range. At 85%+, your resume will pass most ATS filters and look highly relevant to a human reviewer.\n\n![LaunchCV JD alignment check showing a resume's match score climbing into the high 80s after applying the AI-suggested keyword rewrites.](/images/product/jd-alignment.svg)",
       },
     ],
     faqs: [
@@ -668,7 +668,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     slug: "cover-letter-tips-that-actually-work",
     coverImage: "/images/product/cover-letter.svg",
     coverAlt:
-      "Launch CV AI cover letter generator drafting a personalized, professional cover letter with an adjustable tone and language.",
+      "LaunchCV AI cover letter generator drafting a personalized, professional cover letter with an adjustable tone and language.",
     title: "7 Cover Letter Tips That Actually Get You Interviews in 2025",
     description:
       "Most cover letters are ignored. Here are 7 evidence-based tips to write cover letters that hiring managers actually read — plus how AI can generate them in 60 seconds.",
@@ -680,8 +680,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "7 evidence-based cover letter tips that get hiring managers to actually read your letter — plus how AI drafts one in 60 seconds.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -694,7 +694,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "Tip 2: Connect your experience to one specific company need",
-        body: "Identify the most important challenge the company is trying to solve in this role (usually mentioned first in the JD). Write one paragraph that connects a specific past achievement to that challenge. Use their language. If the JD says 'drive pipeline growth', don't say 'increase sales'. Mirror the exact phrasing. This signals that you understood the job description and thought about how you fit.\n\n![Launch CV job-description analysis surfacing the company's top need and exact phrasing so a cover letter can mirror the posting's language.](/images/product/jd-alignment.svg)",
+        body: "Identify the most important challenge the company is trying to solve in this role (usually mentioned first in the JD). Write one paragraph that connects a specific past achievement to that challenge. Use their language. If the JD says 'drive pipeline growth', don't say 'increase sales'. Mirror the exact phrasing. This signals that you understood the job description and thought about how you fit.\n\n![LaunchCV job-description analysis surfacing the company's top need and exact phrasing so a cover letter can mirror the posting's language.](/images/product/jd-alignment.svg)",
       },
       {
         heading: "Tip 3: Keep it under 400 words",
@@ -706,7 +706,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "Tips 5–7: Formatting, tone, and AI assistance",
-        body: "Tip 5: Use a professional but human tone. Avoid corporate jargon. Write like you speak in an interview, not like a legal document. Tip 6: End with a specific call to action: 'I would welcome the chance to discuss how my experience with [X] could contribute to [Y goal].' Tip 7: Use AI to generate the first draft. Launch CV's Cover Letter Generator reads your resume and the job description, personalizes the opening hook, selects tone (professional, enthusiastic, concise, creative), and produces a ready-to-send letter in under 60 seconds. Edit 2–3 sentences to add your own voice and it's ready.",
+        body: "Tip 5: Use a professional but human tone. Avoid corporate jargon. Write like you speak in an interview, not like a legal document. Tip 6: End with a specific call to action: 'I would welcome the chance to discuss how my experience with [X] could contribute to [Y goal].' Tip 7: Use AI to generate the first draft. LaunchCV's Cover Letter Generator reads your resume and the job description, personalizes the opening hook, selects tone (professional, enthusiastic, concise, creative), and produces a ready-to-send letter in under 60 seconds. Edit 2–3 sentences to add your own voice and it's ready.",
       },
     ],
     faqs: [
@@ -723,7 +723,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     slug: "how-to-prepare-for-a-job-interview-with-ai",
     coverImage: "/images/product/interview-prep.svg",
     coverAlt:
-      "Launch CV AI interview prep scoring a STAR-method answer to a behavioral question with clarity, relevance, impact, and structure ratings.",
+      "LaunchCV AI interview prep scoring a STAR-method answer to a behavioral question with clarity, relevance, impact, and structure ratings.",
     title: "How to Prepare for a Job Interview Using AI (2025 Method)",
     description:
       "AI interview preparation tools generate role-specific questions from your exact resume and job description. Learn how to use AI coaching to walk into every interview fully prepared.",
@@ -735,8 +735,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "Use AI to generate role-specific interview questions from your resume and the job description, and walk in fully prepared.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -749,7 +749,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "How AI generates role-specific questions",
-        body: "Launch CV's Interview Prep reads your resume and the target job description and generates questions in 5 categories: Behavioral (from your own experience), Technical/Role-Specific (pulled from JD requirements), Company & Culture (based on company values and mission), Situational (hypothetical role-relevant scenarios), and Curveballs (common tricky questions like 'What's your greatest weakness'). Each question is scored when you answer it, with feedback on Clarity, Relevance, Impact, and STAR structure. The AI also provides a model answer so you can benchmark your response.\n\n![Launch CV analyzing a job description to surface the role-specific requirements and keywords an interviewer is most likely to probe.](/images/product/jd-alignment.svg)",
+        body: "LaunchCV's Interview Prep reads your resume and the target job description and generates questions in 5 categories: Behavioral (from your own experience), Technical/Role-Specific (pulled from JD requirements), Company & Culture (based on company values and mission), Situational (hypothetical role-relevant scenarios), and Curveballs (common tricky questions like 'What's your greatest weakness'). Each question is scored when you answer it, with feedback on Clarity, Relevance, Impact, and STAR structure. The AI also provides a model answer so you can benchmark your response.\n\n![LaunchCV analyzing a job description to surface the role-specific requirements and keywords an interviewer is most likely to probe.](/images/product/jd-alignment.svg)",
       },
       {
         heading: "A 3-day interview preparation plan",
@@ -774,7 +774,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     slug: "what-is-ats-and-how-does-it-work",
     coverImage: "/images/product/ats-score.svg",
     coverAlt:
-      "Launch CV ATS score report explaining how an applicant tracking system parses and ranks a resume across four scoring categories.",
+      "LaunchCV ATS score report explaining how an applicant tracking system parses and ranks a resume across four scoring categories.",
     title: "What is an ATS? How Applicant Tracking Systems Work (Plain English)",
     description:
       "Applicant Tracking Systems decide whether a human ever sees your resume. Here's exactly how they work, why 75% of resumes fail, and how to beat them every time.",
@@ -786,8 +786,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "How applicant tracking systems work, why most resumes get filtered out, and how to format yours to reach a human recruiter.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -796,7 +796,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "How does ATS ranking work?",
-        body: "Most ATS systems use a combination of: (1) Keyword matching — the system compares words in your resume to the job description and counts matches. (2) Contextual parsing — newer systems use NLP to understand that 'led' and 'managed' are related, but explicit keywords still matter more. (3) Section recognition — the ATS looks for standard resume sections (Work Experience, Education, Skills) and may ignore content that appears outside expected structures. (4) Formatting parsing — tables, columns, headers, and images often break the parser, causing sections of your resume to disappear.\n\n![Launch CV keyword-match analysis comparing a resume against a job description the way an applicant tracking system ranks candidates.](/images/product/jd-alignment.svg)",
+        body: "Most ATS systems use a combination of: (1) Keyword matching — the system compares words in your resume to the job description and counts matches. (2) Contextual parsing — newer systems use NLP to understand that 'led' and 'managed' are related, but explicit keywords still matter more. (3) Section recognition — the ATS looks for standard resume sections (Work Experience, Education, Skills) and may ignore content that appears outside expected structures. (4) Formatting parsing — tables, columns, headers, and images often break the parser, causing sections of your resume to disappear.\n\n![LaunchCV keyword-match analysis comparing a resume against a job description the way an applicant tracking system ranks candidates.](/images/product/jd-alignment.svg)",
       },
       {
         heading: "The most common ATS platforms and their quirks",
@@ -804,7 +804,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "How to know if your resume passes ATS",
-        body: "The most reliable method is to use an ATS resume checker before applying. Upload your resume and paste the job description. The checker simulates how the ATS will parse your document and gives you a compatibility score. Launch CV's ATS Score Checker runs your resume against 15+ platform rules and returns a 0–100 score with specific issues: missing keywords, formatting problems, structure gaps, and date inconsistencies. The average unoptimized resume scores 45–60. After addressing the flagged issues, most users reach 80–90+.",
+        body: "The most reliable method is to use an ATS resume checker before applying. Upload your resume and paste the job description. The checker simulates how the ATS will parse your document and gives you a compatibility score. LaunchCV's ATS Score Checker runs your resume against 15+ platform rules and returns a 0–100 score with specific issues: missing keywords, formatting problems, structure gaps, and date inconsistencies. The average unoptimized resume scores 45–60. After addressing the flagged issues, most users reach 80–90+.",
       },
     ],
     faqs: [
@@ -821,7 +821,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     slug: "ai-resume-builder-complete-guide",
     coverImage: "/images/product/resume-builder.svg",
     coverAlt:
-      "Launch CV AI resume builder converting plain-language work history into polished, ATS-optimized resume bullet points.",
+      "LaunchCV AI resume builder converting plain-language work history into polished, ATS-optimized resume bullet points.",
     title: "AI Resume Builder: Complete Guide to Building Your Resume with AI (2025)",
     description:
       "AI resume builders write bullet points, optimize keywords, and format your resume for ATS — in minutes. Here's how they work, what to look for, and how to use one effectively.",
@@ -833,8 +833,8 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "How AI resume builders write bullet points, optimize keywords, and format for ATS — what to look for and how to use one well.",
     author: {
       name: "Nazir Elmurodov",
-      role: "Founder, Launch CV",
-      bio: "Nazir founded Launch CV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
     },
     sections: [
       {
@@ -847,11 +847,11 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "What to look for in an AI resume builder",
-        body: "The best AI resume builders share several key features. ATS optimization: templates must be structurally ATS-safe (no tables, no columns, standard fonts).\n\n![Launch CV template gallery of ATS-safe, single-column resume templates spanning tech, marketing, engineering, and executive roles.](/images/product/resume-templates.svg)\n\n JD alignment: the ability to paste a job description and get keyword gap analysis. Real-time preview: see exactly what the PDF will look like before downloading. Multiple export formats: PDF and DOCX, both ATS-compatible. Industry-specific templates: different verticals require different resume structures. Voice input: especially useful for professionals who find writing difficult. Privacy: your resume data should be encrypted and never used to train models without consent.",
+        body: "The best AI resume builders share several key features. ATS optimization: templates must be structurally ATS-safe (no tables, no columns, standard fonts).\n\n![LaunchCV template gallery of ATS-safe, single-column resume templates spanning tech, marketing, engineering, and executive roles.](/images/product/resume-templates.svg)\n\n JD alignment: the ability to paste a job description and get keyword gap analysis. Real-time preview: see exactly what the PDF will look like before downloading. Multiple export formats: PDF and DOCX, both ATS-compatible. Industry-specific templates: different verticals require different resume structures. Voice input: especially useful for professionals who find writing difficult. Privacy: your resume data should be encrypted and never used to train models without consent.",
       },
       {
         heading: "Step-by-step: building a resume with AI",
-        body: "Step 1: Choose a template suited to your industry. Tech and finance roles expect clean, information-dense formats. Creative roles can use slightly more visual layouts — but still ATS-safe. Step 2: Enter your basic information — name, contact details, and career objective. Step 3: For each work experience entry, describe what you did in plain language. Let the AI transform it. Review, edit, and accept suggestions. Step 4: Paste the target job description. Check your keyword match score and accept recommended improvements. Step 5: Export as PDF. Run the ATS score checker. Aim for 80+.\n\n![Launch CV ATS score checker verifying an AI-built resume scores above 80, with a category breakdown, before export.](/images/product/ats-score.svg)\n\nStep 6: Generate the matching cover letter from the same interface.",
+        body: "Step 1: Choose a template suited to your industry. Tech and finance roles expect clean, information-dense formats. Creative roles can use slightly more visual layouts — but still ATS-safe. Step 2: Enter your basic information — name, contact details, and career objective. Step 3: For each work experience entry, describe what you did in plain language. Let the AI transform it. Review, edit, and accept suggestions. Step 4: Paste the target job description. Check your keyword match score and accept recommended improvements. Step 5: Export as PDF. Run the ATS score checker. Aim for 80+.\n\n![LaunchCV ATS score checker verifying an AI-built resume scores above 80, with a category breakdown, before export.](/images/product/ats-score.svg)\n\nStep 6: Generate the matching cover letter from the same interface.",
       },
       {
         heading: "AI resume builders vs. human resume writers",

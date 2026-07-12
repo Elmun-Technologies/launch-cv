@@ -1,11 +1,12 @@
 import type { ReactElement } from "react";
+import { BrandMark } from "./brand-mark";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_CONTENT_TYPE = "image/png";
 
 /**
  * Shared Open Graph card used by the site's `opengraph-image` routes so every
- * social share carries consistent Launch CV branding.
+ * social share carries consistent LaunchCV branding.
  */
 export function OgImage({
   title,
@@ -40,7 +41,7 @@ export function OgImage({
           width: "600px",
           height: "600px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(26,86,219,0.28) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(37,99,235,0.28) 0%, transparent 70%)",
         }}
       />
       <div
@@ -51,7 +52,7 @@ export function OgImage({
           width: "520px",
           height: "520px",
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(124,58,237,0.22) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(96,165,250,0.20) 0%, transparent 70%)",
         }}
       />
 
@@ -61,18 +62,18 @@ export function OgImage({
             width: "60px",
             height: "60px",
             borderRadius: "14px",
-            background: "linear-gradient(135deg, #1A56DB 0%, #7C3AED 100%)",
+            background: "#2563EB",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "30px",
-            fontWeight: 800,
-            color: "#fff",
           }}
         >
-          L
+          <BrandMark size={40} stroke="#FFFFFF" bar="#FFFFFF" lines="#BFDBFE" strokeWidth={2.8} />
         </div>
-        <span style={{ fontSize: "32px", fontWeight: 700, color: "#fff" }}>Launch CV</span>
+        <span style={{ fontSize: "32px", fontWeight: 700, color: "#fff", display: "flex" }}>
+          <span>launch</span>
+          <span style={{ color: "#60A5FA" }}>cv</span>
+        </span>
       </div>
 
       <div

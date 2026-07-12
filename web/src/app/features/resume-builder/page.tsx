@@ -45,28 +45,28 @@ export const metadata = buildMarketingMetadata({
 
 const faqs: FaqItem[] = [
   {
-    q: "How long does building a resume take with Launch CV?",
-    a: "Building a resume with Launch CV takes about five minutes from blank page to finished PDF. You type your work history in plain language, the AI returns quantified bullets, you pick one of 12 templates, and the live preview updates as you go before you export.",
+    q: "How long does building a resume take with LaunchCV?",
+    a: "Building a resume with LaunchCV takes about five minutes from blank page to finished PDF. You type your work history in plain language, the AI returns quantified bullets, you pick one of 12 templates, and the live preview updates as you go before you export.",
   },
   {
-    q: "Do I need writing skills to use the Launch CV resume builder?",
-    a: "No, you do not need any writing skills to use the Launch CV resume builder. You describe your work in plain, everyday language, and the AI turns your rough notes into quantified, action-led bullets that each close with a measurable outcome. Non-native English speakers can start from casual phrasing too.",
+    q: "Do I need writing skills to use the LaunchCV resume builder?",
+    a: "No, you do not need any writing skills to use the LaunchCV resume builder. You describe your work in plain, everyday language, and the AI turns your rough notes into quantified, action-led bullets that each close with a measurable outcome. Non-native English speakers can start from casual phrasing too.",
   },
   {
-    q: "How many resume templates does Launch CV offer?",
-    a: "Launch CV offers 12 industry templates, including Atlas for tech, Nova for marketing and product, Pulse for design, Vector for engineering, Forge for leadership, and Quill for finance and legal. Every one is recruiter-designed and tested against the same parsers as the ATS Score Checker.",
+    q: "How many resume templates does LaunchCV offer?",
+    a: "LaunchCV offers 12 industry templates, including Atlas for tech, Nova for marketing and product, Pulse for design, Vector for engineering, Forge for leadership, and Quill for finance and legal. Every one is recruiter-designed and tested against the same parsers as the ATS Score Checker.",
   },
   {
-    q: "Can I export my Launch CV resume as PDF or DOCX?",
-    a: "Yes, you can export your Launch CV resume as both PDF and DOCX with one click. There is also a plain-text view designed for pasting into LinkedIn or an email body. The live preview is pixel-accurate, so what you see is exactly what exports, with no spacing or font surprises.",
+    q: "Can I export my LaunchCV resume as PDF or DOCX?",
+    a: "Yes, you can export your LaunchCV resume as both PDF and DOCX with one click. There is also a plain-text view designed for pasting into LinkedIn or an email body. The live preview is pixel-accurate, so what you see is exactly what exports, with no spacing or font surprises.",
   },
   {
-    q: "Are Launch CV resume templates ATS-friendly?",
-    a: "Yes, every Launch CV template is ATS-friendly and tested against 15 parsers, including Workday, Greenhouse, Lever, and iCIMS. There are no hidden tables, bad fonts, or zero-width spaces, so applicant tracking systems read your resume cleanly. All 12 templates run through the same parser farm as the ATS Score Checker.",
+    q: "Are LaunchCV resume templates ATS-friendly?",
+    a: "Yes, every LaunchCV template is ATS-friendly and tested against 15 parsers, including Workday, Greenhouse, Lever, and iCIMS. There are no hidden tables, bad fonts, or zero-width spaces, so applicant tracking systems read your resume cleanly. All 12 templates run through the same parser farm as the ATS Score Checker.",
   },
   {
     q: "Can I keep different resume versions for different jobs?",
-    a: "Yes, Launch CV versions every save automatically, so you can roll back any change and keep separate cuts of your resume for different roles. You can also reorder sections by dragging and add Projects, Certifications, Languages, Publications, or Awards, tailoring each version to the job you are targeting.",
+    a: "Yes, LaunchCV versions every save automatically, so you can roll back any change and keep separate cuts of your resume for different roles. You can also reorder sections by dragging and add Projects, Certifications, Languages, Publications, or Awards, tailoring each version to the job you are targeting.",
   },
 ];
 
@@ -75,7 +75,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Resume Builder | Launch CV",
+      name: "Resume Builder | LaunchCV",
       url: absoluteUrl("/features/resume-builder"),
       description: "AI-powered resume builder with 12 ATS-tested templates and quantified bullets.",
     },
@@ -159,7 +159,7 @@ export default function ResumeBuilderPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Type your work history in plain language and Launch CV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
+                Type your work history in plain language and LaunchCV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
               </p>
 
               <KeyFacts
@@ -205,7 +205,7 @@ export default function ResumeBuilderPage() {
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">Launch CV editor</span>
+                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">LaunchCV editor</span>
                   <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-semibold text-violet-700 ring-1 ring-violet-200">
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />
                     AI writing
@@ -273,8 +273,8 @@ export default function ResumeBuilderPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/resume-builder.svg"
-            alt="The Launch CV resume builder editor turning rough, plain-language notes into quantified, ATS-ready resume bullet points with a live preview."
-            caption="Type rough notes on the left; Launch CV returns quantified, ATS-ready bullets on the right."
+            alt="The LaunchCV resume builder editor turning rough, plain-language notes into quantified, ATS-ready resume bullet points with a live preview."
+            caption="Type rough notes on the left; LaunchCV returns quantified, ATS-ready bullets on the right."
           />
         </div>
       </section>
@@ -411,7 +411,7 @@ export default function ResumeBuilderPage() {
                 From blank page to ATS-ready resume in five steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                The Launch CV AI resume builder does the heavy lifting: you supply the facts, the AI writes the bullets, and the live preview keeps everything ATS-friendly from the first keystroke.
+                The LaunchCV AI resume builder does the heavy lifting: you supply the facts, the AI writes the bullets, and the live preview keeps everything ATS-friendly from the first keystroke.
               </p>
             </div>
           </RevealOnView>
@@ -443,12 +443,12 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Why Launch CV</p>
+              <p className="lc-overline text-[#7C3AED]">Why LaunchCV</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 An AI resume builder vs. the old way
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                A generic online resume maker hands you a blank template and wishes you luck. Launch CV gives you writing, formatting, and ATS testing in one place.
+                A generic online resume maker hands you a blank template and wishes you luck. LaunchCV gives you writing, formatting, and ATS testing in one place.
               </p>
             </div>
           </RevealOnView>
@@ -458,7 +458,7 @@ export default function ResumeBuilderPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">DIY or generic maker</th>
                 </tr>
               </thead>

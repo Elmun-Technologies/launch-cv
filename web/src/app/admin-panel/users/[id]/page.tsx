@@ -116,7 +116,7 @@ export default async function AdminUserDetailPage({
         <SectionCard
           title="Resumes"
           description={`${user.resumes.length} most recent`}
-          action={<FileText className="h-4 w-4 text-[#1A56DB]" />}
+          action={<FileText className="h-4 w-4 text-[#2563EB]" />}
           flush
         >
           {user.resumes.length === 0 ? (
@@ -139,7 +139,7 @@ export default async function AdminUserDetailPage({
         <SectionCard
           title="Applications"
           description={`${user.jobApplications.length} most recent`}
-          action={<Briefcase className="h-4 w-4 text-[#1A56DB]" />}
+          action={<Briefcase className="h-4 w-4 text-[#2563EB]" />}
           flush
         >
           {user.jobApplications.length === 0 ? (

@@ -14,7 +14,7 @@ const QUESTIONS: { title: string; subtitle?: string; type: "stars" | "nps" }[] =
   { title: "How would you rate your overall experience?", type: "stars" },
   { title: "How likely are you to recommend our site to others?", type: "stars" },
   {
-    title: "How likely are you to recommend Launch CV to your friends, family, and colleagues?",
+    title: "How likely are you to recommend LaunchCV to your friends, family, and colleagues?",
     subtitle: "0 = not at all likely · 10 = extremely likely",
     type: "nps",
   },
@@ -108,7 +108,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
         {step < 3 ? (
           <div className="p-8 pt-10">
             <p className="text-center text-[13px] leading-relaxed text-gray-500">
-              We&apos;re glad you&apos;re using Launch CV. Please take a moment to help us improve.
+              We&apos;re glad you&apos;re using LaunchCV. Please take a moment to help us improve.
             </p>
             <h2 id="exp-review-title" className="mt-5 text-center text-[17px] font-bold text-gray-900">
               {q.title}

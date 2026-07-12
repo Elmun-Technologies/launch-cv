@@ -49,7 +49,7 @@ export default async function AccessDeniedPage() {
         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
           <Link
             href="/dashboard"
-            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#1A56DB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Go to my dashboard

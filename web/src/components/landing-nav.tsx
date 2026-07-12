@@ -83,7 +83,7 @@ export function LandingNav() {
                 className={`flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
                   isDark
                     ? "text-white/80 hover:text-white hover:bg-white/10"
-                    : "text-[#334155] hover:text-[#1A56DB] hover:bg-[#EFF6FF]"
+                    : "text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
                 }`}
               >
                 Features
@@ -102,7 +102,7 @@ export function LandingNav() {
                         href={item.href}
                         className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-[#F8FAFC]"
                       >
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB] group-hover:bg-[#1A56DB] group-hover:text-white transition-colors">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
                           <item.icon className="h-4 w-4" />
                         </div>
                         <div>
@@ -127,7 +127,7 @@ export function LandingNav() {
                     </Link>
                     <Link
                       href="/features"
-                      className="flex items-center gap-1.5 text-[13px] font-semibold text-[#1A56DB] hover:underline"
+                      className="flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline"
                     >
                       View all features <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -142,10 +142,10 @@ export function LandingNav() {
                 href={l.href}
                 className={`rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
                   pathname === l.href
-                    ? "text-[#1A56DB]"
+                    ? "text-[#2563EB]"
                     : isDark
                     ? "text-white/80 hover:text-white hover:bg-white/10"
-                    : "text-[#334155] hover:text-[#1A56DB] hover:bg-[#EFF6FF]"
+                    : "text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
                 }`}
               >
                 {l.label}
@@ -158,7 +158,7 @@ export function LandingNav() {
             <Link
               href="/login"
               className={`rounded-lg px-4 py-2 text-[14px] font-semibold transition-colors font-body ${
-                isDark ? "text-white/80 hover:text-white hover:bg-white/10" : "text-[#334155] hover:text-[#1A56DB] hover:bg-[#F8FAFC]"
+                isDark ? "text-white/80 hover:text-white hover:bg-white/10" : "text-[#334155] hover:text-[#2563EB] hover:bg-[#F8FAFC]"
               }`}
             >
               Sign in
@@ -166,7 +166,7 @@ export function LandingNav() {
             <Link
               href="/register"
               onClick={() => trackCtaClick({ cta: "get_started", location: "landing_nav" })}
-              className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#1A56DB] px-4 py-2 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 font-body"
+              className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#2563EB] px-4 py-2 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 font-body"
             >
               Get started
             </Link>
@@ -213,7 +213,7 @@ export function LandingNav() {
                   href={item.href}
                   className="flex items-center gap-3 rounded-xl px-3 py-3 transition-colors hover:bg-[#F8FAFC]"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                     <item.icon className="h-4 w-4" />
                   </div>
                   <div>
@@ -231,7 +231,7 @@ export function LandingNav() {
               <Link
                 key={l.href}
                 href={l.href}
-                className="flex items-center rounded-xl px-3 py-3 text-[15px] font-semibold text-[#334155] transition-colors hover:bg-[#F8FAFC] hover:text-[#1A56DB] font-body"
+                className="flex items-center rounded-xl px-3 py-3 text-[15px] font-semibold text-[#334155] transition-colors hover:bg-[#F8FAFC] hover:text-[#2563EB] font-body"
               >
                 {l.label}
               </Link>
@@ -243,14 +243,14 @@ export function LandingNav() {
             <div className="space-y-3">
               <Link
                 href="/login"
-                className="flex w-full items-center justify-center rounded-[10px] border-2 border-[#E2E8F0] py-3 text-[15px] font-bold text-[#334155] transition hover:border-[#1A56DB] hover:text-[#1A56DB] font-body"
+                className="flex w-full items-center justify-center rounded-[10px] border-2 border-[#E2E8F0] py-3 text-[15px] font-bold text-[#334155] transition hover:border-[#2563EB] hover:text-[#2563EB] font-body"
               >
                 Sign in
               </Link>
               <Link
                 href="/register"
                 onClick={() => trackCtaClick({ cta: "get_started", location: "landing_nav_mobile" })}
-                className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#1A56DB] py-3 text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] font-body"
+                className="flex w-full items-center justify-center gap-2 rounded-[10px] bg-[#2563EB] py-3 text-[15px] font-bold text-white transition hover:bg-[#1D4ED8] font-body"
               >
                 Get started <ArrowRight className="h-4 w-4" />
               </Link>

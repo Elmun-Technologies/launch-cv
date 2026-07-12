@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
+import { BrandMark } from "@/components/brand-mark";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
   FileText, Loader2, UploadCloud, CheckCircle, AlertTriangle,
@@ -244,8 +245,11 @@ export default function NewResumePage() {
       {/* Header */}
       <header className="flex items-center justify-between border-b border-gray-100 bg-white px-6 py-3.5">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7C5CFC] text-[12px] font-bold text-white">L</span>
-          <span className="text-[15px] font-bold text-gray-900">Launch CV</span>
+          <BrandMark size={30} />
+          <span className="text-[15px] font-bold">
+            <span className="text-[#0F172A]">launch</span>
+            <span className="text-[#2563EB]">cv</span>
+          </span>
         </Link>
         <Link
           href="/dashboard"

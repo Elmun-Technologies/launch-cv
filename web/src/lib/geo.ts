@@ -41,7 +41,7 @@ export const SITE_REVIEWS: SiteReview[] = [
     role: "Software Engineer at Stripe",
     rating: 5,
     datePublished: "2026-05-14",
-    body: "Zero callbacks for three months. Four interviews in one week after Launch CV rewrote my bullets to match the JDs.",
+    body: "Zero callbacks for three months. Four interviews in one week after LaunchCV rewrote my bullets to match the JDs.",
   },
   {
     author: "Marcus T.",

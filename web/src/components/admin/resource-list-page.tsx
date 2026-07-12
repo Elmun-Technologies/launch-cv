@@ -63,7 +63,7 @@ export function ResourceListPage({
                 name="q"
                 defaultValue={searchValue}
                 placeholder={searchPlaceholder}
-                className="block w-full rounded-lg border border-[#E2E8F0] bg-white py-2 pl-9 pr-3 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#1A56DB] focus:ring-2 focus:ring-[#1A56DB]/15"
+                className="block w-full rounded-lg border border-[#E2E8F0] bg-white py-2 pl-9 pr-3 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
               />
             </form>
           ) : null}

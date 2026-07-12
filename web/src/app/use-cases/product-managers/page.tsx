@@ -17,36 +17,36 @@ import { ProductScreenshot } from "@/components/product-screenshot";
 export const metadata = buildMarketingMetadata({
   title: "Product Manager Resume Builder — Show Roadmap Wins",
   description:
-    "PM hiring is signal-starved. Launch CV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
+    "PM hiring is signal-starved. LaunchCV turns your roadmaps, OKRs, and A/B tests into the language recruiters scan for — quantified, baselined, ATS-clean.",
   pathname: "/use-cases/product-managers",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "Launch CV"],
+  keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "LaunchCV"],
 });
 
 const faqs: FaqItem[] = [
   {
     q: "How do I write a resume for a product manager role?",
-    a: "Write a product manager resume around outcomes, not feature lists, giving every bullet scope, a metric, a delta, and a baseline. Launch CV turns your roadmaps, OKRs, and A/B tests into quantified, baselined lines recruiters scan for, then keeps the formatting ATS-clean so screeners actually see your wins.",
+    a: "Write a product manager resume around outcomes, not feature lists, giving every bullet scope, a metric, a delta, and a baseline. LaunchCV turns your roadmaps, OKRs, and A/B tests into quantified, baselined lines recruiters scan for, then keeps the formatting ATS-clean so screeners actually see your wins.",
   },
   {
     q: "What keywords do product manager resumes need?",
-    a: "Product manager resumes need keywords that match the track you are targeting, such as roadmap, OKRs, A/B testing, activation, retention, GTM, or RICE prioritization. Launch CV pre-loads a PM keyword library with over 120 terms across B2B, B2C, marketplace, and platform tracks, then aligns them to each job description.",
+    a: "Product manager resumes need keywords that match the track you are targeting, such as roadmap, OKRs, A/B testing, activation, retention, GTM, or RICE prioritization. LaunchCV pre-loads a PM keyword library with over 120 terms across B2B, B2C, marketplace, and platform tracks, then aligns them to each job description.",
   },
   {
     q: "How do I quantify product management impact on a resume?",
-    a: "Quantify product management impact by giving each achievement four parts: scope, the metric you moved, the before-to-after delta, and a baseline for comparison. Launch CV builds every PM bullet with all four, turning worked on pricing into a measured experiment that lifted net-new MRR 38% and conversion 2.4 times.",
+    a: "Quantify product management impact by giving each achievement four parts: scope, the metric you moved, the before-to-after delta, and a baseline for comparison. LaunchCV builds every PM bullet with all four, turning worked on pricing into a measured experiment that lifted net-new MRR 38% and conversion 2.4 times.",
   },
   {
     q: "How should a PM resume show A/B tests and experiments?",
-    a: "A PM resume should show experiments in a dedicated section listing each A/B test's scope, lift, and statistical significance, noting failures honestly. Launch CV formats this for you, turning did user research into 24 generative interviews plus a 9-segment cluster analysis that reframed the ICP and changed the roadmap.",
+    a: "A PM resume should show experiments in a dedicated section listing each A/B test's scope, lift, and statistical significance, noting failures honestly. LaunchCV formats this for you, turning did user research into 24 generative interviews plus a 9-segment cluster analysis that reframed the ICP and changed the roadmap.",
   },
   {
-    q: "Does Launch CV work for B2B or platform product managers?",
-    a: "Yes, Launch CV works for B2B, B2C, marketplace, and platform product managers through track-specific keyword libraries totaling over 120 terms. It tailors bullets to the discipline your target role rewards, covering shipped products, experiments, discovery work, and stakeholder management so specialists in any PM track read as credible.",
+    q: "Does LaunchCV work for B2B or platform product managers?",
+    a: "Yes, LaunchCV works for B2B, B2C, marketplace, and platform product managers through track-specific keyword libraries totaling over 120 terms. It tailors bullets to the discipline your target role rewards, covering shipped products, experiments, discovery work, and stakeholder management so specialists in any PM track read as credible.",
   },
   {
     q: "How do I put stakeholder management and discovery work on a PM resume?",
-    a: "Put stakeholder management and discovery work in their own sections, quantifying reach and decisions changed rather than listing meetings. Launch CV formats C-suite reviews, cross-functional partnerships, user interviews, and JTBD studies by their impact, so a line like ran discovery becomes interviews that killed two features and accelerated one.",
+    a: "Put stakeholder management and discovery work in their own sections, quantifying reach and decisions changed rather than listing meetings. LaunchCV formats C-suite reviews, cross-functional partnerships, user interviews, and JTBD studies by their impact, so a line like ran discovery becomes interviews that killed two features and accelerated one.",
   },
 ];
 
@@ -56,9 +56,9 @@ const ld = {
     {
       "@type": "WebPage",
       url: absoluteUrl("/use-cases/product-managers"),
-      name: "Resume for Product Managers | Launch CV",
+      name: "Resume for Product Managers | LaunchCV",
       description:
-        "Launch CV turns your roadmaps, OKRs, and A/B tests into the quantified, ATS-clean language recruiters scan for.",
+        "LaunchCV turns your roadmaps, OKRs, and A/B tests into the quantified, ATS-clean language recruiters scan for.",
     },
     {
       "@type": "BreadcrumbList",
@@ -108,12 +108,12 @@ export default function ProductManagersPage() {
                 Stop listing features. Start landing interviews.
               </h1>
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                PM hiring is signal-starved: recruiters skim for roadmap scope, metric ownership, and cross-functional delta. Launch CV turns your wins into the exact language they screen for — quantified, baselined, ATS-clean.
+                PM hiring is signal-starved: recruiters skim for roadmap scope, metric ownership, and cross-functional delta. LaunchCV turns your wins into the exact language they screen for — quantified, baselined, ATS-clean.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="Launch CV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean across 15 tracking systems."
+                lead="LaunchCV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean across 15 tracking systems."
                 facts={[
                   "Rewrites PM wins into quantified, baselined outcomes (activation, retention, growth).",
                   "Surfaces roadmap scope, metric ownership, and cross-functional impact recruiters scan for.",
@@ -171,7 +171,7 @@ export default function ProductManagersPage() {
                 A product manager resume is scanned in seconds by people who see hundreds. &ldquo;Led product&rdquo; and &ldquo;drove growth&rdquo; tell them nothing; a quantified outcome against a baseline tells them everything.
               </p>
               <p>
-                Launch CV turns your work into the language a PM resume ATS screen and a hiring committee both reward. The product management resume AI holds three things true on every line:
+                LaunchCV turns your work into the language a PM resume ATS screen and a hiring committee both reward. The product management resume AI holds three things true on every line:
               </p>
             </div>
             <ul className="mt-5 space-y-2.5 text-[15px] leading-[1.6] text-[#475569]">
@@ -240,8 +240,8 @@ export default function ProductManagersPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/resume-builder.svg"
-            alt="The Launch CV resume builder turning a product manager's rough notes into quantified, metrics-first resume bullet points with a live preview."
-            caption="Describe the launch; Launch CV returns quantified, metrics-first product manager bullets."
+            alt="The LaunchCV resume builder turning a product manager's rough notes into quantified, metrics-first resume bullet points with a live preview."
+            caption="Describe the launch; LaunchCV returns quantified, metrics-first product manager bullets."
           />
         </div>
       </section>
@@ -320,7 +320,7 @@ export default function ProductManagersPage() {
                 Build a product manager resume in five steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Launch CV pairs an AI resume builder with JD matching and an ATS check, so your PM wins land as the language hiring committees actually screen for.
+                LaunchCV pairs an AI resume builder with JD matching and an ATS check, so your PM wins land as the language hiring committees actually screen for.
               </p>
             </div>
           </RevealOnView>
@@ -357,7 +357,7 @@ export default function ProductManagersPage() {
                 A generic builder vs. a PM resume ATS engine
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                PM hiring is signal-starved. A generic template leaves your scope and metrics implicit; Launch CV makes them the first thing a reviewer reads.
+                PM hiring is signal-starved. A generic template leaves your scope and metrics implicit; LaunchCV makes them the first thing a reviewer reads.
               </p>
             </div>
           </RevealOnView>
@@ -367,7 +367,7 @@ export default function ProductManagersPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What committees scan</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Generic resume builder</th>
                 </tr>
               </thead>

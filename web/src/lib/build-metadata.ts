@@ -15,7 +15,7 @@ export const FREE_ATS_OG_IMAGE = absoluteUrl("/free-ats-check/opengraph-image");
 
 /**
  * Consistent marketing-page metadata: canonical URL, Open Graph, Twitter.
- * Use a short `title` segment; root layout template adds " | Launch CV".
+ * Use a short `title` segment; root layout template adds " | LaunchCV".
  *
  * Pass `type: "article"` (with `article` dates/author) for blog posts, and
  * `image` for a page-specific social card. When `image` is omitted, Next.js
@@ -49,7 +49,7 @@ export function buildMarketingMetadata(input: {
 }): Metadata {
   const url = absoluteUrl(input.pathname);
   const canonical = input.canonicalUrl?.trim() || url;
-  const ogTitle = `${input.title} | Launch CV`;
+  const ogTitle = `${input.title} | LaunchCV`;
   // Only include an `images` key when we have one. Passing `images: undefined`
   // would suppress the nearest file-based `opengraph-image` that Next.js would
   // otherwise merge in, breaking social cards on pages without an explicit image.
@@ -62,7 +62,7 @@ export function buildMarketingMetadata(input: {
           title: ogTitle,
           description: input.description,
           type: "article",
-          siteName: "Launch CV",
+          siteName: "LaunchCV",
           locale: "en_US",
           ...imageProp,
           publishedTime: input.article?.publishedTime,
@@ -76,7 +76,7 @@ export function buildMarketingMetadata(input: {
           title: ogTitle,
           description: input.description,
           type: "website",
-          siteName: "Launch CV",
+          siteName: "LaunchCV",
           locale: "en_US",
           ...imageProp,
         };

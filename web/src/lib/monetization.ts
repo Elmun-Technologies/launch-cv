@@ -131,6 +131,6 @@ export const PUBLIC_PRICING = {
   periodLabel: PUBLIC_PLANS.professional.periodLabel,
   billingExplainer: PUBLIC_PLANS.professional.billingExplainer,
   valueLine: PUBLIC_PLANS.professional.valueLine,
-  upsellHook: "Choose a plan to unlock AI — Launch CV is a paid professional product.",
+  upsellHook: "Choose a plan to unlock AI — LaunchCV is a paid professional product.",
   proUsdPerYear: PUBLIC_PLANS.professional.priceAmount,
 } as const;
