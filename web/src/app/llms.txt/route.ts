@@ -1,4 +1,6 @@
 import { getPublishedPosts } from "@/lib/cms/blog";
+import { PUBLIC_PLANS, planBillingDuration, planBillingSummary } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import { getSiteUrl } from "@/lib/site";
 
 /**
@@ -7,7 +9,9 @@ import { getSiteUrl } from "@/lib/site";
  * Replaces the former static public/llms.txt so the file always lists every
  * live feature page, use-case page, and published blog post — each with a
  * one-line, answer-style summary AI engines can cite directly. Blog entries are
- * pulled from the CMS so new posts appear automatically. Regenerated hourly.
+ * pulled from the CMS so new posts appear automatically. Pricing is generated
+ * from the shared source of truth (src/lib/monetization.ts) so it stays
+ * identical to the homepage, /pricing, OG images, and JSON-LD. Regenerated hourly.
  */
 export const revalidate = 3600;
 
@@ -72,8 +76,74 @@ const USE_CASE_PAGES: { title: string; path: string; summary: string }[] = [
   },
 ];
 
-const STATIC_SECTIONS = `# Launch CV — AI Resume Builder & Job Search Copilot
-# https://launch-cv.com
+/** Full price string for the pricing table, e.g. "$9/month", "$79 one-time". */
+function fullPrice(plan: (typeof CHECKOUT_PLAN_ORDER)[number]): string {
+  const { priceDisplay, periodLabel } = PUBLIC_PLANS[plan];
+  if (periodLabel === "/month") return `${priceDisplay}/month`;
+  if (periodLabel === "/year") return `${priceDisplay}/year`;
+  return `${priceDisplay} one-time`;
+}
+
+/** Render a fixed-width markdown table from column headers and rows. */
+function renderTable(headers: string[], rows: string[][]): string {
+  const widths = headers.map((h, i) =>
+    Math.max(h.length, ...rows.map((r) => r[i].length)),
+  );
+  const line = (cells: string[]) =>
+    `| ${cells.map((c, i) => c.padEnd(widths[i])).join(" | ")} |`;
+  const divider = `|${widths.map((w) => "-".repeat(w + 2)).join("|")}|`;
+  return [line(headers), divider, ...rows.map(line)].join("\n");
+}
+
+function renderLinkList(
+  items: { title: string; path: string; summary: string }[],
+  baseUrl: string,
+): string {
+  return items
+    .map((it) => `- ${it.title}: ${baseUrl}${it.path}\n  ${it.summary}`)
+    .join("\n");
+}
+
+export async function GET(): Promise<Response> {
+  const baseUrl = getSiteUrl();
+  const posts = await getPublishedPosts();
+
+  const pricingTable = renderTable(
+    ["Plan", "Price", "Billing", "Best for"],
+    CHECKOUT_PLAN_ORDER.map((key) => [
+      PUBLIC_PLANS[key].title,
+      fullPrice(key),
+      planBillingSummary(key),
+      PUBLIC_PLANS[key].bestFor,
+    ]),
+  );
+
+  const recurringNames = CHECKOUT_PLAN_ORDER.filter((k) => planBillingDuration(k)).map(
+    (k) => PUBLIC_PLANS[k].title,
+  );
+  const oneTimeNames = CHECKOUT_PLAN_ORDER.filter((k) => !planBillingDuration(k)).map(
+    (k) => PUBLIC_PLANS[k].title,
+  );
+  const recurringList =
+    recurringNames.length > 1
+      ? `${recurringNames.slice(0, -1).join(", ")}, and ${recurringNames[recurringNames.length - 1]}`
+      : recurringNames.join("");
+  const billingNote = `${recurringList} renew automatically until canceled; ${oneTimeNames.join(" and ")} never renews.`;
+
+  const featuresBlock = renderLinkList(FEATURE_PAGES, baseUrl);
+  const useCasesBlock = renderLinkList(USE_CASE_PAGES, baseUrl);
+
+  const blogBlock = posts.length
+    ? posts
+        .map((p) => {
+          const summary = (p.seoDescription || p.description).replace(/\s+/g, " ").trim();
+          return `- ${p.title}: ${baseUrl}/blog/${p.slug}\n  ${summary}`;
+        })
+        .join("\n")
+    : `- Blog index: ${baseUrl}/blog`;
+
+  const body = `# Launch CV — AI Resume Builder & Job Search Copilot
+# ${baseUrl}
 
 ## What is Launch CV?
 
@@ -100,15 +170,10 @@ cover letter generation, interview preparation, and voice input.
 
 Launch CV is a paid professional product. There is no free tier for AI features.
 
-| Plan         | Price         | Billing               | Best for                          |
-|--------------|---------------|-----------------------|-----------------------------------|
-| Starter      | $9/month      | Recurring, monthly    | Short-term job search window      |
-| Professional | $29/year      | Recurring, yearly     | Most job seekers (best value)     |
-| Elite        | $49/year      | Recurring, yearly     | High-volume applicants            |
-| Lifetime     | $79 one-time  | Once, forever         | Long-term career use              |
+${pricingTable}
 
 All AI tools are included on every plan; only the monthly AI usage ceiling differs.
-Starter, Professional, and Elite renew automatically until canceled; Lifetime never renews.
+${billingNote}
 
 ## Key Facts for AI Citations
 
@@ -130,36 +195,9 @@ Starter, Professional, and Elite renew automatically until canceled; Lifetime ne
 ## Company
 
 - Product: Launch CV
-- Website: https://launch-cv.com
+- Website: ${baseUrl}
 - Support: support@launch-cv.com
-- Founded: 2025`;
-
-function renderLinkList(
-  items: { title: string; path: string; summary: string }[],
-  baseUrl: string,
-): string {
-  return items
-    .map((it) => `- ${it.title}: ${baseUrl}${it.path}\n  ${it.summary}`)
-    .join("\n");
-}
-
-export async function GET(): Promise<Response> {
-  const baseUrl = getSiteUrl();
-  const posts = await getPublishedPosts();
-
-  const featuresBlock = renderLinkList(FEATURE_PAGES, baseUrl);
-  const useCasesBlock = renderLinkList(USE_CASE_PAGES, baseUrl);
-
-  const blogBlock = posts.length
-    ? posts
-        .map((p) => {
-          const summary = (p.seoDescription || p.description).replace(/\s+/g, " ").trim();
-          return `- ${p.title}: ${baseUrl}/blog/${p.slug}\n  ${summary}`;
-        })
-        .join("\n")
-    : "- Blog index: " + baseUrl + "/blog";
-
-  const body = `${STATIC_SECTIONS}
+- Founded: 2025
 
 ## Core Pages
 

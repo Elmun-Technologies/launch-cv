@@ -1,18 +1,21 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
 import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Features — The Complete AI Job Search Toolkit",
   description:
-    "Six AI tools in one product: JD alignment, AI resume builder, ATS scanner, cover letter generator, interview prep, voice input. One subscription, zero copy-pasting between tabs.",
+    "Six AI tools in one product: JD alignment, resume builder, ATS scanner, cover letters, interview prep, and voice input — one subscription, one workflow.",
   pathname: "/features",
   keywords: ["Launch CV features", "JD alignment", "ATS score", "interview prep", "cover letter AI", "AI resume builder"],
 });
@@ -130,13 +133,13 @@ export default function FeaturesPage() {
             />
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
+              <CtaLink cta="get_started" location="features_index"
                 href="/register"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
               >
                 Get started
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </CtaLink>
               <Link
                 href="/pricing"
                 className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -145,6 +148,24 @@ export default function FeaturesPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">One workspace for the whole job search</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-builder.svg"
+            alt="The Launch CV workspace turning rough, plain-language work notes into quantified, ATS-ready resume bullet points with a live preview."
+            caption="From rough notes to ATS-ready bullets — every tool lives in one editor."
+          />
         </div>
       </section>
 
@@ -229,6 +250,32 @@ export default function FeaturesPage() {
         </div>
       </section>
 
+      {/* EXPLORE MORE — keep the visitor moving */}
+      <section className="border-t border-[#E2E8F0] py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Keep exploring</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            {[
+              { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
+            ].map((r) => (
+              <Link
+                key={r.href}
+                href={r.href}
+                className="group flex items-start justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white p-6 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+              >
+                <div>
+                  <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
+                  <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20">
         <div className="mx-auto max-w-[900px] px-6 text-center">
@@ -246,12 +293,18 @@ export default function FeaturesPage() {
               View pricing
               <ArrowRight className="h-4 w-4" />
             </Link>
-            <Link href="/register" className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]">
+            <CtaLink cta="get_started" location="features_index" href="/register" className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]">
               Or create an account
-            </Link>
+            </CtaLink>
           </div>
         </div>
       </section>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="features_index"
+      />
 
       <LandingFooter />
     </div>

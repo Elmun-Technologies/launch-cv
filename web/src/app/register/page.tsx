@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight, Gift, BarChart3 } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
-import { trackSignUpStarted, trackSignUpCompleted } from "@/lib/analytics-client";
+import { trackSignUpStart, trackSignUpComplete, identifyUser } from "@/lib/analytics-client";
 
 function RegisterPageInner() {
   const sp = useSearchParams();
@@ -22,7 +22,7 @@ function RegisterPageInner() {
 
   // Top of the sign-up funnel: the register page was opened.
   useEffect(() => {
-    trackSignUpStarted({ has_referral: !!referralCode });
+    trackSignUpStart({ has_referral: !!referralCode });
   }, [referralCode]);
 
   async function onSubmit(e: React.FormEvent) {
@@ -45,8 +45,12 @@ function RegisterPageInner() {
       setError(j.error ?? "Something went wrong. Please try again.");
       return;
     }
-    // Account created — fire before the full-page redirect below.
-    trackSignUpCompleted({ has_referral: !!referralCode });
+    // Account created — identify the browser session against our internal user
+    // id (no PII) so the purchase funnel later stitches to the server-side
+    // `purchase` event, then fire the conversion before the full-page redirect.
+    const created = (await res.json().catch(() => ({}))) as { userId?: string };
+    if (created.userId) identifyUser(created.userId);
+    trackSignUpComplete({ has_referral: !!referralCode });
     window.location.href = next;
   }
 

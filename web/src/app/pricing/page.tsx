@@ -5,7 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown, Star } from "lucide-react";
-import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
+import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel, planNameList, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { AGGREGATE_RATING, SITE_REVIEWS, aggregateRatingLd, reviewLdList } from "@/lib/geo";
@@ -16,8 +16,9 @@ const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Monthly, Yearly, or Pay Once",
-  description:
-    "Launch CV pricing: Starter at $9/mo, Professional at $29/yr (most chosen), Elite at $49/yr, Lifetime at $79 once. Every AI tool included on every plan. No freemium games.",
+  description: `Launch CV pricing: ${CHECKOUT_PLAN_ORDER.map(
+    (key) => `${PUBLIC_PLANS[key].title} ${planPriceLabel(key)}`,
+  ).join(", ")}. Every AI tool included on every plan. No freemium games.`,
   pathname: "/pricing",
   keywords: ["Launch CV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
@@ -25,7 +26,7 @@ export const metadata = buildMarketingMetadata({
 const faqs = [
   {
     q: "Is there a free tier?",
-    a: "No. Launch CV is a professional product. AI workflows unlock after you choose a paid plan: Starter, Professional, Elite, or Lifetime. You can create an account to manage billing — checkout activates the AI.",
+    a: `No. Launch CV is a professional product. AI workflows unlock after you choose a paid plan: ${planNameList()}. You can create an account to manage billing — checkout activates the AI.`,
   },
   {
     q: "How does billing work?",
@@ -47,8 +48,8 @@ const faqs = [
 
 const planOffers = CHECKOUT_PLAN_ORDER.map((key) => {
   const plan = PUBLIC_PLANS[key];
-  const price = plan.priceDisplay.replace(/[^0-9.]/g, "");
-  const isRecurring = plan.periodLabel !== "once";
+  const price = String(plan.priceAmount);
+  const billingDuration = planBillingDuration(key);
   return {
     "@type": "Offer",
     name: plan.title,
@@ -56,13 +57,13 @@ const planOffers = CHECKOUT_PLAN_ORDER.map((key) => {
     priceCurrency: "USD",
     url: absoluteUrl("/pricing"),
     availability: "https://schema.org/InStock",
-    ...(isRecurring
+    ...(billingDuration
       ? {
           priceSpecification: {
             "@type": "UnitPriceSpecification",
             price,
             priceCurrency: "USD",
-            billingDuration: plan.periodLabel === "/month" ? "P1M" : "P1Y",
+            billingDuration,
           },
         }
       : {}),
@@ -77,7 +78,7 @@ const ld = {
     {
       "@type": "WebPage",
       name: "Pricing | Launch CV",
-      description: "Launch CV pricing — Starter, Professional, Elite, Lifetime.",
+      description: `Launch CV pricing — ${CHECKOUT_PLAN_ORDER.map((k) => PUBLIC_PLANS[k].title).join(", ")}.`,
       url: absoluteUrl("/pricing"),
     },
     {
@@ -245,6 +246,7 @@ export default function PricingPage() {
                       cta="choose_plan"
                       plan={key}
                       location="pricing_card"
+                      selectsPlan
                       href={registerHref}
                       className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                         popular
@@ -292,22 +294,23 @@ export default function PricingPage() {
               <div className="border-b border-[#E2E8F0] px-5 py-4 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
                 Feature
               </div>
-              <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
-                <p className="text-[13px] font-semibold text-[#0F172A]">Starter</p>
-                <p className="text-[11px] text-[#94A3B8]">$9/mo</p>
-              </div>
-              <div className="border-b border-[#E2E8F0] bg-[#EFF6FF]/50 px-5 py-4 text-center">
-                <p className="text-[13px] font-semibold text-[#1A56DB]">Professional</p>
-                <p className="text-[11px] text-[#475569]">$29/yr · popular</p>
-              </div>
-              <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
-                <p className="text-[13px] font-semibold text-[#0F172A]">Elite</p>
-                <p className="text-[11px] text-[#94A3B8]">$49/yr</p>
-              </div>
-              <div className="border-b border-[#E2E8F0] px-5 py-4 text-center">
-                <p className="text-[13px] font-semibold text-[#0F172A]">Lifetime</p>
-                <p className="text-[11px] text-[#94A3B8]">$79 once</p>
-              </div>
+              {CHECKOUT_PLAN_ORDER.map((key) => {
+                const cfg = PUBLIC_PLANS[key];
+                return (
+                  <div
+                    key={key}
+                    className={`border-b border-[#E2E8F0] px-5 py-4 text-center ${cfg.popular ? "bg-[#EFF6FF]/50" : ""}`}
+                  >
+                    <p className={`text-[13px] font-semibold ${cfg.popular ? "text-[#1A56DB]" : "text-[#0F172A]"}`}>
+                      {cfg.title}
+                    </p>
+                    <p className={`text-[11px] ${cfg.popular ? "text-[#475569]" : "text-[#94A3B8]"}`}>
+                      {planPriceLabel(key)}
+                      {cfg.popular ? " · popular" : ""}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
 
             <div className="divide-y divide-[#E2E8F0] bg-white">

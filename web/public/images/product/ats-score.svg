@@ -1,0 +1,56 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" font-family="'Segoe UI', system-ui, -apple-system, Arial, sans-serif">
+  <rect width="1600" height="900" fill="#FFF7ED"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="#FFFFFF"/>
+  <rect x="60" y="70" width="1480" height="760" rx="24" fill="none" stroke="#E2E8F0" stroke-width="2"/>
+  <path d="M60 94a24 24 0 0 1 24-24h1432a24 24 0 0 1 24 24v52H60z" fill="#FAFBFC"/>
+  <line x1="60" y1="146" x2="1540" y2="146" stroke="#E2E8F0" stroke-width="2"/>
+  <circle cx="100" cy="108" r="8" fill="#FF5F57"/>
+  <circle cx="128" cy="108" r="8" fill="#FEBC2E"/>
+  <circle cx="156" cy="108" r="8" fill="#28C840"/>
+  <rect x="640" y="94" width="320" height="28" rx="14" fill="#EEF2F7"/>
+  <text x="800" y="113" text-anchor="middle" fill="#94A3B8" font-size="15" font-weight="500">app.launch-cv.com/ats-score</text>
+
+  <text x="112" y="210" fill="#94A3B8" font-size="15" font-weight="700" letter-spacing="1">ATS SCORE REPORT</text>
+
+  <!-- Gauge -->
+  <g transform="translate(300,430)">
+    <circle r="150" fill="none" stroke="#FEE2C7" stroke-width="30"/>
+    <circle r="150" fill="none" stroke="#EA580C" stroke-width="30" stroke-linecap="round"
+      stroke-dasharray="942" stroke-dashoffset="85" transform="rotate(-90)"/>
+    <text y="-6" text-anchor="middle" fill="#0F172A" font-size="84" font-weight="700">91</text>
+    <text y="44" text-anchor="middle" fill="#94A3B8" font-size="22" font-weight="600" letter-spacing="1">ATS SCORE</text>
+  </g>
+  <rect x="196" y="612" width="208" height="40" rx="20" fill="#DCFCE7"/>
+  <text x="300" y="639" text-anchor="middle" fill="#15803D" font-size="17" font-weight="600">Strong — ready to apply</text>
+
+  <!-- Breakdown bars -->
+  <g transform="translate(640,250)">
+    <text x="0" y="0" fill="#0F172A" font-size="20" font-weight="600">Formatting</text>
+    <text x="820" y="0" text-anchor="end" fill="#15803D" font-size="20" font-weight="700">96%</text>
+    <rect x="0" y="16" width="820" height="14" rx="7" fill="#F1F5F9"/>
+    <rect x="0" y="16" width="787" height="14" rx="7" fill="#059669"/>
+
+    <text x="0" y="84" fill="#0F172A" font-size="20" font-weight="600">Keyword match</text>
+    <text x="820" y="84" text-anchor="end" fill="#C2410C" font-size="20" font-weight="700">84%</text>
+    <rect x="0" y="100" width="820" height="14" rx="7" fill="#F1F5F9"/>
+    <rect x="0" y="100" width="689" height="14" rx="7" fill="#EA580C"/>
+
+    <text x="0" y="168" fill="#0F172A" font-size="20" font-weight="600">Structure</text>
+    <text x="820" y="168" text-anchor="end" fill="#15803D" font-size="20" font-weight="700">93%</text>
+    <rect x="0" y="184" width="820" height="14" rx="7" fill="#F1F5F9"/>
+    <rect x="0" y="184" width="763" height="14" rx="7" fill="#059669"/>
+
+    <text x="0" y="252" fill="#0F172A" font-size="20" font-weight="600">Readability</text>
+    <text x="820" y="252" text-anchor="end" fill="#15803D" font-size="20" font-weight="700">90%</text>
+    <rect x="0" y="268" width="820" height="14" rx="7" fill="#F1F5F9"/>
+    <rect x="0" y="268" width="738" height="14" rx="7" fill="#059669"/>
+  </g>
+
+  <!-- Top fix callout -->
+  <rect x="640" y="580" width="820" height="120" rx="14" fill="#FFF7ED" stroke="#FED7AA" stroke-width="2"/>
+  <circle cx="684" cy="620" r="14" fill="#EA580C"/>
+  <text x="684" y="627" text-anchor="middle" fill="#FFFFFF" font-size="18" font-weight="700">!</text>
+  <text x="716" y="616" fill="#9A3412" font-size="17" font-weight="700">Top fix · +7 points</text>
+  <text x="716" y="648" fill="#7C2D12" font-size="17">Add “Kubernetes” and “CI/CD” from the job description to</text>
+  <text x="716" y="674" fill="#7C2D12" font-size="17">your Skills section to raise keyword match to 95%.</text>
+</svg>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -8,6 +9,7 @@ import { AboutStats } from "@/components/about/about-stats";
 import { AboutTransformation } from "@/components/about/about-transformation";
 import { AboutTools } from "@/components/about/about-tools";
 import { ResumeTemplateGallery } from "@/components/resume-template-gallery";
+import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
@@ -269,8 +271,34 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* EXPLORE MORE — keep the visitor moving */}
+      <section className="border-t border-[#E2E8F0] py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Keep exploring</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            {[
+              { href: "/features", t: "All 6 tools", d: "The full AI toolkit under one subscription." },
+              { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
+              { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
+            ].map((r) => (
+              <Link
+                key={r.href}
+                href={r.href}
+                className="group flex items-start justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white p-6 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+              >
+                <div>
+                  <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
+                  <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="px-6 pb-20">
+      <section className="px-6 pb-20 pt-4">
         <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] px-6 py-16 text-center shadow-[0_30px_60px_-25px_rgba(26,86,219,0.5)]">
           <div
             className="pointer-events-none absolute inset-0 opacity-30"
@@ -288,13 +316,13 @@ export default function AboutPage() {
               Create an account, choose a plan, paste your first JD. The whole hunt under one roof.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
+              <CtaLink cta="get_started" location="about"
                 href="/register"
                 className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02]"
               >
                 Create account
                 <ArrowRight className="h-4 w-4" />
-              </Link>
+              </CtaLink>
               <Link href="/pricing" className="text-[14px] font-semibold text-white/90 transition hover:text-white">
                 View pricing
               </Link>
@@ -302,6 +330,12 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="about"
+      />
 
       <LandingFooter />
     </div>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LandingNav } from "@/components/landing-nav";
@@ -13,12 +15,53 @@ import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
-import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight, RefreshCw } from "lucide-react";
 import { BlogFaq } from "@/components/blog-faq";
 import { BlogCover } from "@/components/blog-cover";
+import { BlogToc } from "@/components/blog-toc";
+import { SITE_AUTHOR } from "@/lib/author";
+import { extractToc, createSlugger } from "@/lib/toc";
+import { StickyCta } from "@/components/sticky-cta";
 
 type Params = { slug: string };
 type SearchParams = { preview?: string };
+
+/** Recursively collect the plain text of a hast heading node (for anchor ids). */
+type HastNode = { type?: string; value?: string; children?: HastNode[] };
+function hastText(node: HastNode | undefined): string {
+  if (!node) return "";
+  if (node.type === "text") return node.value ?? "";
+  if (Array.isArray(node.children)) return node.children.map(hastText).join("");
+  return "";
+}
+
+type FeatureLink = { href: string; title: string; desc: string };
+
+// Contextual feature links per blog category, so every post points readers to
+// at least one relevant product feature with descriptive, keyword-rich anchors.
+const RELATED_FEATURES: Record<string, FeatureLink[]> = {
+  "Job Search": [
+    { href: "/features/ats-score", title: "ATS Score Checker", desc: "Test your resume against 15 ATS engines and fix what's filtering you out." },
+    { href: "/features/jd-alignment", title: "JD Alignment", desc: "Match your resume to any job description and close every keyword gap." },
+  ],
+  "Resume Tips": [
+    { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Turn plain-language notes into quantified, ATS-ready resume bullets." },
+    { href: "/features/ats-score", title: "ATS Score Checker", desc: "Get a 0–100 ATS score with a prioritized list of formatting fixes." },
+  ],
+  "Cover Letters": [
+    { href: "/features/cover-letter", title: "AI Cover Letter Generator", desc: "Write a personalized, company-specific cover letter in 60 seconds." },
+    { href: "/features/jd-alignment", title: "JD Alignment", desc: "Pull the job description's exact language into your application." },
+  ],
+  "Interview Prep": [
+    { href: "/features/interview-prep", title: "AI Interview Prep", desc: "Drill role-specific questions with scored feedback and model answers." },
+    { href: "/features/jd-alignment", title: "JD Alignment", desc: "Understand the role deeply before you walk into the interview." },
+  ],
+};
+
+const DEFAULT_RELATED_FEATURES: FeatureLink[] = [
+  { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Build an ATS-ready resume with AI-written bullets in minutes." },
+  { href: "/features/ats-score", title: "ATS Score Checker", desc: "Check your resume's ATS score before you apply." },
+];
 
 // ISR with revalidatePath() invalidation from admin mutations.
 export const revalidate = 300;
@@ -48,7 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     article: {
       publishedTime: post.date,
       modifiedTime: post.dateModified,
-      authors: [post.author.name],
+      authors: [SITE_AUTHOR.name],
       section: post.category,
       tags: post.tags,
     },
@@ -88,7 +131,7 @@ export default async function BlogPostPage({
   const post = await getPostBySlug(slug, { previewAllowed });
   if (!post) notFound();
 
-  // Related posts: same category, excluding current. Limit 3.
+  // Related posts: same category first, excluding current. Limit 3.
   const relatedRows = await prisma.blogPost.findMany({
     where: {
       status: "published",
@@ -98,7 +141,23 @@ export default async function BlogPostPage({
     orderBy: { publishedAt: "desc" },
     take: 3,
   });
-  const related = relatedRows.map(rowToBlogPost);
+  let related = relatedRows.map(rowToBlogPost);
+
+  // Guarantee at least 2 related posts even for thin or singleton categories
+  // (e.g. Cover Letters, Interview Prep) by topping up with the most recent
+  // posts from other categories.
+  if (related.length < 2) {
+    const excludeSlugs = [slug, ...related.map((r) => r.slug)];
+    const fillRows = await prisma.blogPost.findMany({
+      where: { status: "published", slug: { notIn: excludeSlugs } },
+      orderBy: { publishedAt: "desc" },
+      take: 3 - related.length,
+    });
+    related = [...related, ...fillRows.map(rowToBlogPost)];
+  }
+
+  // Every post links to at least one relevant feature, keyed by category.
+  const relatedFeatures = RELATED_FEATURES[post.category] ?? DEFAULT_RELATED_FEATURES;
 
   // Prev/next navigation across all posts (newest-first) for deeper crawlability.
   const allPosts = await getPublishedPosts();
@@ -111,6 +170,24 @@ export default async function BlogPostPage({
 
   const canonicalUrl = post.canonicalUrl?.trim() || absoluteUrl(`/blog/${post.slug}`);
 
+  // Table of contents (H2/H3). Only shown on longer posts; `slug` mirrors the
+  // slugger used when rendering the Markdown headings so anchors line up.
+  const toc = extractToc(post.bodyMd);
+  const showToc = toc.length >= 3;
+  const headingSlug = createSlugger();
+
+  const publishedLabel = new Date(post.date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const updatedLabel = new Date(post.dateModified).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const showUpdated = post.dateModified > post.date;
+
   const articleLd = {
     "@type": "Article",
     headline: post.title,
@@ -119,7 +196,14 @@ export default async function BlogPostPage({
     dateModified: post.dateModified,
     url: absoluteUrl(`/blog/${post.slug}`),
     image: post.ogImageUrl || absoluteUrl("/opengraph-image"),
-    author: { "@type": "Organization", name: post.author.name, url: absoluteUrl("/about") },
+    author: {
+      "@type": "Person",
+      name: SITE_AUTHOR.name,
+      url: SITE_AUTHOR.url,
+      image: SITE_AUTHOR.avatar,
+      jobTitle: SITE_AUTHOR.role,
+      description: SITE_AUTHOR.bio,
+    },
     publisher: {
       "@type": "Organization",
       name: "Launch CV",
@@ -221,8 +305,16 @@ export default async function BlogPostPage({
               </span>
               <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
                 <Calendar className="h-3.5 w-3.5" />
-                {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                Published{" "}
+                <time dateTime={post.date}>{publishedLabel}</time>
               </span>
+              {showUpdated ? (
+                <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Updated{" "}
+                  <time dateTime={post.dateModified}>{updatedLabel}</time>
+                </span>
+              ) : null}
               <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
                 <Clock className="h-3.5 w-3.5" /> {post.readingTime} min read
               </span>
@@ -241,15 +333,35 @@ export default async function BlogPostPage({
               <BlogCover post={post} size="hero" />
             </div>
 
-            <div className="mt-6 flex items-center gap-3 border-t border-[#E2E8F0] pt-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EFF6FF] text-[15px] font-bold text-[#1A56DB]">
-                L
-              </div>
+            <div className="mt-6 flex items-start gap-4 border-t border-[#E2E8F0] pt-5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={SITE_AUTHOR.avatar}
+                alt={SITE_AUTHOR.name}
+                width={44}
+                height={44}
+                className="h-11 w-11 flex-shrink-0 rounded-full"
+              />
               <div>
-                <p className="text-[13px] font-semibold text-[#0F172A]">{post.author.name}</p>
-                <p className="text-[12px] text-[#94A3B8]">{post.author.role}</p>
+                <p className="text-[13px] font-semibold text-[#0F172A]">
+                  <Link href="/about" className="transition hover:text-[#1A56DB]" rel="author">
+                    {SITE_AUTHOR.name}
+                  </Link>
+                </p>
+                <p className="text-[12px] text-[#94A3B8]">{SITE_AUTHOR.role}</p>
+                <p className="mt-1.5 max-w-[560px] text-[12px] leading-[1.6] text-[#64748B]">
+                  {SITE_AUTHOR.bio}{" "}
+                  <Link
+                    href="/about"
+                    className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+                  >
+                    More about the author
+                  </Link>
+                </p>
               </div>
             </div>
+
+            {showToc ? <BlogToc entries={toc} /> : null}
           </header>
 
           {/* Key facts / TL;DR — concise, liftable answer box near the top */}
@@ -261,23 +373,36 @@ export default async function BlogPostPage({
               remarkPlugins={[remarkGfm]}
               components={{
                 h1: ({ ...props }) => (
-                  <h2 className="mt-10 text-[24px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
+                  <h2 className="mt-10 scroll-mt-[96px] text-[24px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
                 ),
-                h2: ({ ...props }) => (
-                  <h2 className="mt-10 text-[22px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
+                h2: ({ node, ...props }) => (
+                  <h2
+                    id={headingSlug(hastText(node as HastNode | undefined))}
+                    className="mt-10 scroll-mt-[96px] text-[22px] font-semibold leading-snug tracking-tight text-[#0F172A]"
+                    {...props}
+                  />
                 ),
-                h3: ({ ...props }) => (
-                  <h3 className="mt-8 text-[18px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
+                h3: ({ node, ...props }) => (
+                  <h3
+                    id={headingSlug(hastText(node as HastNode | undefined))}
+                    className="mt-8 scroll-mt-[96px] text-[18px] font-semibold leading-snug tracking-tight text-[#0F172A]"
+                    {...props}
+                  />
                 ),
                 p: ({ ...props }) => <p className="mt-4" {...props} />,
                 ul: ({ ...props }) => <ul className="mt-4 list-disc space-y-1.5 pl-6" {...props} />,
                 ol: ({ ...props }) => <ol className="mt-4 list-decimal space-y-1.5 pl-6" {...props} />,
-                a: ({ ...props }) => (
-                  <a
-                    className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
-                    {...props}
-                  />
-                ),
+                a: ({ href, ...props }) => {
+                  const external = typeof href === "string" && /^https?:\/\//.test(href);
+                  return (
+                    <a
+                      href={href}
+                      className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      {...props}
+                    />
+                  );
+                },
                 code: ({ ...props }) => (
                   <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[14px] text-[#0F172A]" {...props} />
                 ),
@@ -287,14 +412,17 @@ export default async function BlogPostPage({
                     {...props}
                   />
                 ),
-                img: ({ ...props }) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    {...props}
-                    alt={props.alt ?? ""}
-                    className="mt-6 rounded-xl border border-[#E2E8F0]"
-                  />
-                ),
+                img: ({ src, alt }) =>
+                  typeof src === "string" && src.length > 0 ? (
+                    <Image
+                      src={src}
+                      alt={alt ?? ""}
+                      width={1600}
+                      height={900}
+                      sizes="(max-width: 800px) 100vw, 800px"
+                      className="mt-6 h-auto w-full rounded-xl border border-[#E2E8F0]"
+                    />
+                  ) : null,
               }}
             >
               {post.bodyMd}
@@ -324,13 +452,13 @@ export default async function BlogPostPage({
             <p className="mx-auto mt-2 max-w-[440px] text-[14px] leading-[1.65] text-[#475569]">
               Build your ATS-optimized resume with AI in under five minutes.
             </p>
-            <Link
+            <CtaLink cta="get_started" location="blog_post"
               href="/register"
               className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Build my resume
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </CtaLink>
           </div>
 
           {newerPost || olderPost ? (
@@ -338,22 +466,28 @@ export default async function BlogPostPage({
               {newerPost ? (
                 <Link
                   href={`/blog/${newerPost.slug}`}
-                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
+                  className={`group flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] ${
+                    olderPost ? "" : "sm:col-span-2"
+                  }`}
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Newer article</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+                    <ArrowLeft className="h-3 w-3" /> Newer article
+                  </span>
                   <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
                     {newerPost.title}
                   </p>
                 </Link>
-              ) : (
-                <span className="hidden sm:block" />
-              )}
+              ) : null}
               {olderPost ? (
                 <Link
                   href={`/blog/${olderPost.slug}`}
-                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 text-right transition hover:border-[#CBD5E1] sm:col-start-2"
+                  className={`group flex flex-col items-end rounded-xl border border-[#E2E8F0] bg-white p-5 text-right transition hover:border-[#CBD5E1] ${
+                    newerPost ? "sm:col-start-2" : "sm:col-span-2"
+                  }`}
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Older article</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+                    Older article <ArrowRight className="h-3 w-3" />
+                  </span>
                   <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
                     {olderPost.title}
                   </p>
@@ -361,6 +495,27 @@ export default async function BlogPostPage({
               ) : null}
             </nav>
           ) : null}
+
+          {/* Related features — every post points to at least one relevant tool */}
+          <section className="mt-12 border-t border-[#E2E8F0] pt-8">
+            <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+              Related features
+            </p>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              {relatedFeatures.map((f) => (
+                <Link
+                  key={f.href}
+                  href={f.href}
+                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
+                >
+                  <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                    {f.title}
+                  </p>
+                  <p className="mt-1 text-[13px] text-[#64748B]">{f.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </section>
         </div>
 
         {related.length > 0 ? (
@@ -391,6 +546,13 @@ export default async function BlogPostPage({
           </section>
         ) : null}
       </main>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Build my resume"
+        location="blog_post"
+        revealAfter={900}
+      />
 
       <LandingFooter />
     </div>

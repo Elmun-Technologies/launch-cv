@@ -2,7 +2,7 @@
  * Server-side analytics dispatch.
  *
  * Used where there is no browser to run gtag/posthog — currently the Polar
- * webhook, which is the source of truth for `purchase_completed`. Fans the
+ * webhook, which is the source of truth for the `purchase` event. Fans the
  * event out to BOTH destinations:
  *   - GA4 via the Measurement Protocol (needs a Measurement ID + an API secret)
  *   - PostHog via the /capture/ HTTP endpoint (uses the public project key)
@@ -12,7 +12,33 @@
  */
 
 import { ANALYTICS_EVENTS, type AnalyticsEventName } from "@/lib/analytics-events";
-import type { CheckoutPlan } from "@/lib/plan-config";
+import { PLAN_CURRENCY, PLAN_PRICE_USD, type CheckoutPlan } from "@/lib/plan-config";
+import { UTM_KEYS, type Attribution } from "@/lib/utm";
+
+/**
+ * Map first-touch attribution onto GA4 Measurement Protocol traffic-source
+ * params (`source`/`medium`/`campaign`/…) so a server-side conversion is
+ * credited to the campaign that brought the user in, and also keep the raw
+ * `utm_*` keys for PostHog. Attribution is campaign metadata only — no PII.
+ */
+function attributionParams(attribution?: Attribution | null): Record<string, string> {
+  if (!attribution) return {};
+  const gaKey: Record<(typeof UTM_KEYS)[number], string> = {
+    utm_source: "source",
+    utm_medium: "medium",
+    utm_campaign: "campaign",
+    utm_term: "term",
+    utm_content: "content",
+  };
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(attribution)) {
+    if (!v) continue;
+    out[k] = v; // raw utm_* / click id (PostHog + GA4 custom dimension)
+    const mapped = gaKey[k as (typeof UTM_KEYS)[number]];
+    if (mapped) out[mapped] = v; // GA4-recognised traffic-source param
+  }
+  return out;
+}
 
 /** Same resolution rules as `components/google-analytics.tsx`. */
 const DEFAULT_MEASUREMENT_ID = "G-BQJVBJ207Q";
@@ -29,7 +55,12 @@ function resolveMeasurementId(): string | null {
 }
 
 /** GA4 Measurement Protocol. Silently skips when GA_API_SECRET is unset. */
-async function sendToGa4(event: AnalyticsEventName, params: Record<string, unknown>, clientId: string) {
+async function sendToGa4(
+  event: AnalyticsEventName,
+  params: Record<string, unknown>,
+  clientId: string,
+  userId?: string | null,
+) {
   const measurementId = resolveMeasurementId();
   const apiSecret = process.env.GA_API_SECRET?.trim();
   if (!measurementId || !apiSecret) return;
@@ -43,6 +74,7 @@ async function sendToGa4(event: AnalyticsEventName, params: Record<string, unkno
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       client_id: clientId,
+      ...(userId ? { user_id: userId } : {}),
       events: [{ name: event, params }],
     }),
   }).catch(() => undefined);
@@ -78,12 +110,17 @@ async function sendToPosthog(event: AnalyticsEventName, distinctId: string, prop
  */
 export async function trackServerEvent(
   event: AnalyticsEventName,
-  opts: { userId?: string | null; params?: Record<string, unknown> } = {},
+  opts: { userId?: string | null; gaClientId?: string | null; params?: Record<string, unknown> } = {},
 ) {
-  const { userId, params = {} } = opts;
+  const { userId, gaClientId, params = {} } = opts;
   const distinctId = userId ?? "anonymous";
-  const clientId = userId ? `srv.${userId}` : "srv.anonymous";
-  await Promise.all([sendToGa4(event, params, clientId), sendToPosthog(event, distinctId, params)]);
+  // Prefer the real browser GA client id (stitches to the pre-purchase session);
+  // fall back to a stable per-user synthetic id when it's unavailable.
+  const clientId = gaClientId ?? (userId ? `srv.${userId}` : "srv.anonymous");
+  await Promise.all([
+    sendToGa4(event, params, clientId, userId),
+    sendToPosthog(event, distinctId, params),
+  ]);
 }
 
 /** Convenience wrapper for the payment success case. */
@@ -95,18 +132,26 @@ export async function trackPurchaseCompleted(opts: {
   subscriptionId?: string | null;
   value?: number | null;
   currency?: string | null;
+  gaClientId?: string | null;
+  attribution?: Attribution | null;
 }) {
-  const { userId, plan, provider, orderId, subscriptionId, value, currency } = opts;
-  await trackServerEvent(ANALYTICS_EVENTS.purchaseCompleted, {
+  const { userId, plan, provider, orderId, subscriptionId, value, currency, gaClientId, attribution } = opts;
+  // GA4 monetization needs a numeric `value` + `currency`. Prefer the provider's
+  // actual amount; fall back to the plan list price when it didn't carry one.
+  const resolvedValue = value ?? (plan ? PLAN_PRICE_USD[plan] : undefined);
+  await trackServerEvent(ANALYTICS_EVENTS.purchase, {
     userId,
+    gaClientId,
     params: {
       plan,
       provider,
       order_id: orderId ?? undefined,
       subscription_id: subscriptionId ?? undefined,
-      // GA4 monetization: `value` requires `currency`.
-      value: value ?? undefined,
-      currency: value != null ? (currency ?? "USD") : undefined,
+      // GA4 uses transaction_id to de-duplicate revenue across resends.
+      transaction_id: orderId ?? subscriptionId ?? undefined,
+      value: resolvedValue ?? undefined,
+      currency: resolvedValue != null ? (currency ?? PLAN_CURRENCY) : undefined,
+      ...attributionParams(attribution),
     },
   });
 }

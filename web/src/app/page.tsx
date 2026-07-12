@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
@@ -11,7 +12,7 @@ import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-rev
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import {
   ArrowRight,
@@ -27,8 +28,7 @@ import {
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
-  description:
-    "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from $9/mo.",
+  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Plans from ${planPriceLabel("starter")}.`,
   pathname: "/",
   keywords: [
     "AI resume builder",
@@ -125,7 +125,7 @@ const testimonials = [
 const faqs = [
   {
     q: "Is there a free plan?",
-    a: "You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: Starter, Professional, Elite, or Lifetime.",
+    a: `You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: ${planNameList()}.`,
   },
   {
     q: "Why does ATS matter?",
@@ -153,7 +153,7 @@ const faqs = [
   },
   {
     q: "What is the Lifetime plan?",
-    a: "A one-time payment of $79 with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.",
+    a: `A one-time payment of ${PUBLIC_PLANS.lifetime.priceDisplay} with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.`,
   },
 ];
 
@@ -239,6 +239,94 @@ export default async function Home() {
               </MotionItem>
             ))}
           </MotionStagger>
+        </div>
+      </section>
+
+      {/* POPULAR RESOURCES — keyword-rich internal linking hub */}
+      <section className="border-t border-[#E2E8F0] py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <MotionReveal>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#1A56DB]">Most popular</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Start with the two tools job seekers use most
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Two free-to-start tools do the heavy lifting: check whether your resume can pass
+                the software, then tailor it to the exact job you want.
+              </p>
+            </div>
+          </MotionReveal>
+
+          <div className="mt-10 grid gap-5 lg:grid-cols-2">
+            <MotionReveal>
+              <Link
+                href="/features/ats-score"
+                className="group flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2)]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
+                  <BarChart3 className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
+                  Free ATS score checker — test your resume on 15 engines
+                </h3>
+                <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
+                  Upload your resume and get a 0–100 ATS score in eight seconds, with a
+                  prioritized list of every formatting and keyword fix. See{" "}
+                  <span className="font-semibold text-[#1A56DB] underline-offset-2 group-hover:underline">
+                    how to check your resume&apos;s ATS score
+                  </span>
+                  .
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                  Check my ATS score
+                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </MotionReveal>
+
+            <MotionReveal>
+              <Link
+                href="/features/jd-alignment"
+                className="group flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2)]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                  <Target className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
+                  JD alignment — match your resume to any job description
+                </h3>
+                <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
+                  Paste a job description and AI runs a keyword gap analysis, then rewrites your
+                  bullets to lift your match score from around 40% to 90%+ —{" "}
+                  <span className="font-semibold text-[#1A56DB] underline-offset-2 group-hover:underline">
+                    tailor your resume to the job
+                  </span>{" "}
+                  in under a minute.
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                  Align my resume
+                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </MotionReveal>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] text-[#475569]">
+            <span className="font-semibold text-[#94A3B8]">Popular guides:</span>
+            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              What is an ATS score?
+            </Link>
+            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              How to check your ATS score
+            </Link>
+            <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              Resume keywords for software engineers
+            </Link>
+            <Link href="/compare/ats-resume-checkers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              Best ATS resume checkers
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -483,18 +571,18 @@ export default async function Home() {
             Create an account, choose a plan, and paste your first job description. The first interview reply often lands within days.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
+            <CtaLink cta="get_started" location="home"
               href="/register"
               className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Get started
               <ArrowRight className="h-4 w-4" />
-            </Link>
+            </CtaLink>
             <Link
               href="/pricing"
               className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]"
             >
-              From {PUBLIC_PLANS.starter.priceDisplay}{PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
+              From {PUBLIC_PLANS.starter.priceDisplay} a month · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
             </Link>
           </div>
         </div>

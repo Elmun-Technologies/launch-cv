@@ -7,7 +7,10 @@ import { AppProviders } from "@/app/providers";
 import { JsonLd } from "@/components/json-ld";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { aggregateRatingLd, reviewLdList } from "@/lib/geo";
+import { AttributionTracker } from "@/components/attribution-tracker";
 import { getSiteUrl } from "@/lib/site";
+import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,14 +26,19 @@ const geistMono = Geist_Mono({
 
 const siteUrl = getSiteUrl();
 
+// Derived from the single pricing source of truth so meta + schema never drift.
+const planListWithPrices = CHECKOUT_PLAN_ORDER.map(
+  (key, i) =>
+    `${i === CHECKOUT_PLAN_ORDER.length - 1 ? "or " : ""}${PUBLIC_PLANS[key].title} (${planPriceLabel(key)})`,
+).join(", ");
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Launch CV — AI Resume Builder for 12+ Industries",
     template: "%s | Launch CV",
   },
-  description:
-    "Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Paid plans: Starter ($9/mo), Professional ($29/yr), Elite ($49/yr), or Lifetime ($79 once).",
+  description: `Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Paid plans: ${planListWithPrices}.`,
   keywords: ["resume builder", "AI resume", "job application", "JD alignment", "cover letter", "interview prep"],
   openGraph: {
     url: siteUrl,
@@ -113,35 +121,25 @@ const rootStructuredData = {
       url: siteUrl,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
-      offers: [
-        {
+      offers: CHECKOUT_PLAN_ORDER.map((key) => {
+        const plan = PUBLIC_PLANS[key];
+        const billingDuration = planBillingDuration(key);
+        return {
           "@type": "Offer",
-          name: "Starter",
-          price: "9.00",
+          name: plan.title,
+          price: plan.priceAmount.toFixed(2),
           priceCurrency: "USD",
-          priceSpecification: { "@type": "UnitPriceSpecification", billingDuration: "P1M", unitCode: "MON" },
-        },
-        {
-          "@type": "Offer",
-          name: "Professional",
-          price: "29.00",
-          priceCurrency: "USD",
-          priceSpecification: { "@type": "UnitPriceSpecification", billingDuration: "P1Y", unitCode: "ANN" },
-        },
-        {
-          "@type": "Offer",
-          name: "Elite",
-          price: "49.00",
-          priceCurrency: "USD",
-          priceSpecification: { "@type": "UnitPriceSpecification", billingDuration: "P1Y", unitCode: "ANN" },
-        },
-        {
-          "@type": "Offer",
-          name: "Lifetime",
-          price: "79.00",
-          priceCurrency: "USD",
-        },
-      ],
+          ...(billingDuration
+            ? {
+                priceSpecification: {
+                  "@type": "UnitPriceSpecification",
+                  billingDuration,
+                  unitCode: billingDuration === "P1M" ? "MON" : "ANN",
+                },
+              }
+            : {}),
+        };
+      }),
       aggregateRating: aggregateRatingLd(),
       review: reviewLdList(),
       description:
@@ -167,6 +165,7 @@ export default async function RootLayout({
     <html lang="en" className={`${inter.variable} ${geistMono.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
+        <AttributionTracker />
         <JsonLd data={rootStructuredData} />
         <AppProviders>
           {children}

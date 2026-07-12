@@ -5,6 +5,7 @@ import { trackEvent } from "@/lib/analytics";
 import { appBaseUrl } from "@/lib/email";
 import { polarApiBase, productIdForCheckoutPlan } from "@/lib/polar";
 import type { CheckoutPlan } from "@/lib/plan-config";
+import { attributionFromCookieHeader, attributionToMetadata } from "@/lib/utm";
 
 const CHECKOUT_PLANS: CheckoutPlan[] = ["starter", "professional", "elite", "lifetime"];
 
@@ -15,11 +16,20 @@ function parsePlan(body: unknown): CheckoutPlan {
   return "professional";
 }
 
+/** GA4 client id (`<digits>.<digits>`) forwarded by the browser at checkout. */
+function parseGaClientId(body: unknown): string | undefined {
+  if (!body || typeof body !== "object") return undefined;
+  const v = (body as { gaClientId?: unknown }).gaClientId;
+  return typeof v === "string" && /^\d+\.\d+$/.test(v) ? v : undefined;
+}
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const plan = parsePlan(await req.json().catch(() => ({})));
+  const rawBody = await req.json().catch(() => ({}));
+  const plan = parsePlan(rawBody);
+  const gaClientId = parseGaClientId(rawBody);
 
   const accessToken = process.env.POLAR_ACCESS_TOKEN;
   const productId = productIdForCheckoutPlan(plan);
@@ -37,14 +47,26 @@ export async function POST(req: Request) {
 
   const base = appBaseUrl();
 
+  // Carry first-touch campaign attribution through checkout so the server-side
+  // `purchase` event (fired from the webhook, which has no browser) is still
+  // credited to the campaign that brought the user in. Non-PII metadata only.
+  const attribution = attributionToMetadata(attributionFromCookieHeader(req.headers.get("cookie")));
+
   const body = {
     products: [productId],
     success_url: `${base}/dashboard/settings?checkout=success`,
     customer_email: user.email,
     ...(user.name ? { customer_name: user.name } : {}),
     external_customer_id: user.id,
-    // Surfaced back on checkout/subscription/order webhooks so we can map to our user.
-    metadata: { user_id: user.id, plan },
+    // Surfaced back on checkout/subscription/order webhooks so we can map to our
+    // user, stitch the purchase to the originating GA4 browser session, and
+    // credit it to the campaign that brought the user in (non-PII metadata only).
+    metadata: {
+      user_id: user.id,
+      plan,
+      ...(gaClientId ? { ga_client_id: gaClientId } : {}),
+      ...attribution,
+    },
   };
 
   const res = await fetch(`${polarApiBase()}/v1/checkouts/`, {

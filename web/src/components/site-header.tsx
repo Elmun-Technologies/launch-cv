@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Bell, ChevronDown, Search, LogOut, User, Settings } from "lucide-react";
 import { useState } from "react";
-import { trackFeatureCtaClicked } from "@/lib/analytics-client";
+import { trackCtaClick, resetUser } from "@/lib/analytics-client";
 
 export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTitle?: string }) {
   const [showUser, setShowUser] = useState(false);
@@ -59,6 +59,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
                   className="flex w-full items-center gap-2.5 px-4 py-2.5 text-[13px] text-red-500 transition hover:bg-red-50"
                   onClick={async () => {
                     await fetch("/api/auth/logout", { method: "POST" });
+                    resetUser();
                     window.location.href = "/";
                   }}
                 >
@@ -70,7 +71,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
         ) : (
           <div className="flex items-center gap-2">
             <Link href="/login" className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-gray-600 transition hover:bg-gray-50">Sign in</Link>
-            <Link href="/register" onClick={() => trackFeatureCtaClicked({ cta: "get_started", location: "site_header" })} className="rounded-lg bg-[#7C5CFC] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Get started</Link>
+            <Link href="/register" onClick={() => trackCtaClick({ cta: "get_started", location: "site_header" })} className="rounded-lg bg-[#7C5CFC] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Get started</Link>
           </div>
         )}
       </div>

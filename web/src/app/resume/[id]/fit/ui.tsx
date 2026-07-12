@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { trackCtaClick } from "@/lib/analytics-client";
 import { useState } from "react";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
@@ -99,6 +100,7 @@ export function FitClient({ resumeId }: { resumeId: string }) {
             {upgrade ? (
               <Link
                 href="/dashboard/settings"
+                onClick={() => trackCtaClick({ cta: "upgrade", location: "role_fit_paywall" })}
                 className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
               >
                 <CreditCard className="h-3 w-3" /> Upgrade to Pro
