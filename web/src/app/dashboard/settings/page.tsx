@@ -15,6 +15,8 @@ export default async function SettingsPage() {
     <DashboardShell pageTitle="Overview" email={session.email}>
       <SettingsClient
         emailVerified={!!user?.emailVerifiedAt}
+        hasPassword={!!user?.passwordHash}
+        googleLinked={!!user?.googleId}
         subscription={sub ? { status: sub.status, currentPeriodEnd: sub.currentPeriodEnd?.toISOString() ?? null } : null}
         userName={user?.name}
         userEmail={user?.email}
