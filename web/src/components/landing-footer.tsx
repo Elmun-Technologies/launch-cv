@@ -22,6 +22,7 @@ const resourceLinks = [
   { label: "For Designers", href: "/use-cases/designers" },
   { label: "For Engineers", href: "/use-cases/software-engineers" },
   { label: "For PMs", href: "/use-cases/product-managers" },
+  { label: "Best ATS Checkers", href: "/compare/ats-resume-checkers" },
   { label: "Blog", href: "/blog" },
   { label: "Privacy Policy", href: "/legal/privacy" },
   { label: "Terms of Service", href: "/legal/terms" },

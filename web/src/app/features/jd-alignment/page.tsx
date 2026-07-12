@@ -7,6 +7,7 @@ import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { absoluteUrl } from "@/lib/site";
 import {
   Target,
@@ -37,6 +38,37 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+// Single source of truth for the FAQ: the visible section below and the
+// FAQPage JSON-LD both read from this array, so Google's rich result always
+// matches the on-page text verbatim. Questions map to exact Search Console
+// queries: "match resume to job description", "keyword gap analysis", etc.
+const faqs: FaqItem[] = [
+  {
+    q: "How do I match my resume to a job description?",
+    a: "Paste the job description into Launch CV alongside your resume. The AI extracts every hard skill, tool, and seniority signal in the posting, compares it to your resume, and shows a ranked list of the keywords and requirements you are missing — then rewrites your bullets to close the gap without fabricating experience.",
+  },
+  {
+    q: "What is a resume-to-job-description match score?",
+    a: "It is a percentage that estimates how closely your resume matches a specific job posting, based on the skills, keywords, and requirements the role asks for. Launch CV updates the score live as you accept AI rewrites, so you can lift a typical resume from around 40% to 90% or higher before you apply.",
+  },
+  {
+    q: "What is keyword gap analysis?",
+    a: "Keyword gap analysis is a side-by-side view of what your resume already contains versus what the job description requires, sorted by impact. It shows exactly which terms — like Agile/Scrum, roadmapping, SQL, or OKRs — are missing so you can add the ones you can honestly claim.",
+  },
+  {
+    q: "Does tailoring my resume to each job actually help?",
+    a: "Yes. Applicant tracking systems rank resumes against the exact job description, so a resume tuned to one posting scores far higher than a generic one. Tailoring the keywords and framing to each role is one of the highest-impact things you can do to get past the ATS filter and reach a recruiter.",
+  },
+  {
+    q: "Does it fabricate experience or keyword-stuff my resume?",
+    a: "No. Launch CV weaves missing keywords into your real, existing experience and flags anything it cannot support with your background. It never invents roles, employers, or numbers. Modern ATS software and human reviewers both penalize keyword stuffing, so the goal is an accurate resume that genuinely matches the role.",
+  },
+  {
+    q: "Can I tailor my resume for multiple jobs at once?",
+    a: "Yes. Launch CV saves a match score per application so you can compare which roles you fit best and reuse a strong base resume across postings, tailoring each one in about a minute instead of rewriting from scratch.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -55,6 +87,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "JD Alignment", item: absoluteUrl("/features/jd-alignment") },
       ],
     },
+    faqPageLd(faqs),
   ],
 };
 
@@ -311,6 +344,71 @@ export default function JDAlignmentPage() {
         </div>
       </section>
 
+      {/* DEEP DIVE — crawlable topical depth */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[760px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#1A56DB]">The complete guide</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How to match your resume to a job description
+            </h2>
+          </RevealOnView>
+
+          <div className="mt-8 space-y-6 text-[16px] leading-[1.8] text-[#334155]">
+            <p>
+              To <strong>match your resume to a job description</strong>, you first have to read
+              the posting the way an applicant tracking system does: as a list of required skills,
+              tools, and seniority signals. A recruiter using Workday or Greenhouse ranks every
+              applicant against that list, so two candidates with identical experience can land on
+              opposite sides of the filter purely based on how closely their resume mirrors the
+              language of the role. That is why a generic resume sent to fifty jobs underperforms a
+              tailored one sent to five.
+            </p>
+            <p>
+              Launch CV automates the tailoring. Paste any job description — from LinkedIn, Indeed,
+              or a careers page — and the AI runs a <strong>keyword gap analysis</strong>: a
+              side-by-side map of what your resume already contains versus what the role asks for,
+              ranked by impact. It then rewrites your existing bullets to fold in the missing terms
+              naturally, so your <strong>match score</strong> climbs from a typical 40% toward 90%
+              or higher. The score updates live as you accept each change, and nothing is fabricated
+              — anything the AI cannot support with your real background is flagged, not invented.
+            </p>
+
+            <h3 className="pt-2 text-[20px] font-semibold tracking-tight text-[#0F172A]">
+              Tailoring vs. keyword stuffing
+            </h3>
+            <p>
+              There is a real difference between <strong>tailoring a resume to a job description</strong>{" "}
+              and keyword stuffing. Stuffing means padding your resume with terms you cannot back up;
+              both modern ATS software and human reviewers penalize it. Tailoring means reframing the
+              genuine work you have already done in the vocabulary the role uses — calling a project
+              &ldquo;cross-functional delivery&rdquo; because it was, or surfacing the SQL you actually
+              wrote. The result is an accurate resume that also happens to rank well.
+            </p>
+
+            <h3 className="pt-2 text-[20px] font-semibold tracking-tight text-[#0F172A]">
+              Confirm the match before you apply
+            </h3>
+            <p>
+              A high JD match is only half the job — the resume still has to parse cleanly. After you
+              align, run it through the{" "}
+              <Link href="/features/ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                ATS score checker to test your resume against 15 ATS engines
+              </Link>{" "}
+              and catch any formatting issues. For the underlying method, see our guides on{" "}
+              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                checking your ATS score
+              </Link>{" "}
+              and{" "}
+              <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                choosing the right resume keywords
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* COMPARISON */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
@@ -401,12 +499,7 @@ export default function JDAlignmentPage() {
           </RevealOnView>
 
           <div className="mt-10 space-y-4">
-            {[
-              { q: "How do I match my resume to a job description?", a: "Paste your resume and the job post. JD Alignment runs a keyword gap analysis, maps every requirement, and rewrites your bullets so the resume job description match climbs — up to a 95% match." },
-              { q: "Does it fabricate experience?", a: "No. AI resume tailoring only reweaves keywords into experience you already have. It never invents roles, employers, or numbers." },
-              { q: "Will the tailored resume still pass ATS?", a: "Yes. Every rewrite is checked for resume ATS optimization across 15+ ATS platforms, so tailoring never breaks parsing." },
-              { q: "Can I tailor for more than one job at a time?", a: "Yes. Save a match score per application and compare which roles you fit best before you invest time applying." },
-            ].map((f) => (
+            {faqs.map((f) => (
               <RevealOnView key={f.q}>
                 <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
                   <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
