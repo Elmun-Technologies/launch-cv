@@ -22,7 +22,6 @@ import {
   Target,
   Mail,
   Mic,
-  Check,
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
