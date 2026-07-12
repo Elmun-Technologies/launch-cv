@@ -4,10 +4,11 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown } from "lucide-react";
+import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown, Star } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel, planNameList, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { AGGREGATE_RATING, SITE_REVIEWS, aggregateRatingLd, reviewLdList } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
@@ -94,13 +95,8 @@ const ld = {
         offerCount: planOffers.length,
         offers: planOffers,
       },
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "2400",
-        bestRating: "5",
-        worstRating: "1",
-      },
+      aggregateRating: aggregateRatingLd(),
+      review: reviewLdList(),
     },
     {
       "@type": "FAQPage",
@@ -373,6 +369,47 @@ export default function PricingPage() {
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{p.k}</h3>
                   <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: p.d }} />
                 </div>
+              </RevealOnView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SOCIAL PROOF — visible reviews backing the Product review schema */}
+      <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <div className="mx-auto max-w-[680px] text-center">
+            <div className="flex items-center justify-center gap-1.5">
+              <div className="flex gap-0.5">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
+                ))}
+              </div>
+              <span className="ml-1 text-[15px] font-semibold text-[#0F172A]">
+                {AGGREGATE_RATING.ratingValue}/5
+              </span>
+              <span className="text-[14px] text-[#64748B]">from 2,400+ reviews</span>
+            </div>
+            <h2 className="mt-4 lc-section-headline text-[#0F172A]">Loved by job seekers</h2>
+          </div>
+
+          <div className="mt-12 grid gap-5 lg:grid-cols-3">
+            {SITE_REVIEWS.map((r) => (
+              <RevealOnView key={r.author}>
+                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <div className="flex gap-0.5">
+                    {Array.from({ length: r.rating }).map((_, i) => (
+                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
+                    ))}
+                  </div>
+                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]">
+                    &ldquo;{r.body}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
+                    <p className="text-[14px] font-semibold text-[#0F172A]">{r.author}</p>
+                    <p className="text-[13px] text-[#64748B]">{r.role}</p>
+                  </figcaption>
+                </figure>
               </RevealOnView>
             ))}
           </div>

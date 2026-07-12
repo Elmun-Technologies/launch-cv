@@ -6,6 +6,7 @@ import { ToastProvider } from "@/components/toast";
 import { AppProviders } from "@/app/providers";
 import { JsonLd } from "@/components/json-ld";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { aggregateRatingLd, reviewLdList } from "@/lib/geo";
 import { AttributionTracker } from "@/components/attribution-tracker";
 import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
@@ -139,13 +140,8 @@ const rootStructuredData = {
             : {}),
         };
       }),
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "2400",
-        bestRating: "5",
-        worstRating: "1",
-      },
+      aggregateRating: aggregateRatingLd(),
+      review: reviewLdList(),
       description:
         "AI-powered resume builder with JD alignment, ATS scoring, cover letter generation, interview prep, and voice input. Paid plans for serious job seekers.",
       featureList: [

@@ -8,7 +8,9 @@ import remarkGfm from "remark-gfm";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { BLOG_HOWTO, blogKeyFacts, howToLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
@@ -237,15 +239,31 @@ export default async function BlogPostPage({
 
   const speakableLd = {
     "@type": "SpeakableSpecification",
-    cssSelector: ["h1", ".speakable-description"],
+    cssSelector: ["h1", ".speakable-description", ".lc-key-facts-lead"],
   };
+
+  // HowTo structured data for step-based guides. Steps mirror the visible
+  // step sections in the post body, so the schema always matches on-page copy.
+  const howtoDef = BLOG_HOWTO[post.slug];
+  const howtoLdNode = howtoDef
+    ? howToLd({ ...howtoDef, url: absoluteUrl(`/blog/${post.slug}`) })
+    : null;
+
+  // Key-facts / TL;DR answer box derived from the post's own description and FAQs.
+  const keyFacts = blogKeyFacts(post);
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@graph": [articleLd, breadcrumbLd, speakableLd, ...(faqLd ? [faqLd] : [])],
+          "@graph": [
+            articleLd,
+            breadcrumbLd,
+            speakableLd,
+            ...(howtoLdNode ? [howtoLdNode] : []),
+            ...(faqLd ? [faqLd] : []),
+          ],
         }}
       />
       <LandingNav />
@@ -345,6 +363,9 @@ export default async function BlogPostPage({
 
             {showToc ? <BlogToc entries={toc} /> : null}
           </header>
+
+          {/* Key facts / TL;DR — concise, liftable answer box near the top */}
+          <KeyFacts className="mt-10" title="Key facts" lead={keyFacts.lead} facts={keyFacts.facts} />
 
           {/* Article body */}
           <article className="prose-article mt-10 max-w-none text-[16px] leading-[1.85] text-[#334155]">

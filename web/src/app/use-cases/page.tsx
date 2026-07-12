@@ -5,7 +5,9 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { StickyCta } from "@/components/sticky-cta";
 import { Code2, Compass, Palette, ArrowRight, Sparkles } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
@@ -80,6 +82,7 @@ const ld = {
         { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
 
@@ -110,6 +113,17 @@ export default function UseCasesPage() {
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
               Recruiters scan for different signals in every field. Launch CV rewrites your experience into the quantified, ATS-clean language your specific role rewards — pick your track below.
             </p>
+
+            <KeyFacts
+              className="mt-8 max-w-[600px]"
+              lead="Launch CV tailors resumes to how each role gets hired, with role-specific AI bullets for software engineers, product managers, and designers. It rewrites your experience into the quantified, ATS-clean language recruiters in your field scan for, matched to each job description."
+              facts={[
+                "Dedicated tracks for software engineers, product managers, and designers.",
+                "Role-specific keyword libraries matched to each job description.",
+                "Quantified, baselined bullets in the language your field rewards.",
+                "ATS-clean formatting tested against 15 tracking systems.",
+              ]}
+            />
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link

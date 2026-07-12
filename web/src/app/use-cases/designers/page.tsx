@@ -6,7 +6,9 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Palette, Layers, Sparkles, Eye, Check } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
@@ -37,6 +39,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Designer Resume", item: absoluteUrl("/use-cases/designers") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
 
@@ -77,6 +80,18 @@ export default function DesignersPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Most designers under-sell themselves on paper. Launch CV quantifies your hand-off impact, system contributions, research depth, and shipping speed — without making it sound like a banker wrote it.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV writes ATS-clean design resume bullets that quantify impact, design-system contributions, research depth, and shipping speed — so your resume lands the interview your portfolio deserves. It uses design-specific language (not banker-speak) and a design keyword library matched to each job description."
+                facts={[
+                  "Quantifies hand-off impact, design-system work, research depth, and shipping speed.",
+                  "Design keyword library (Figma, design systems, WCAG, IA, prototyping) per job.",
+                  "Writes in design language, not corporate boilerplate.",
+                  "ATS-clean formatting tested against 15 tracking systems.",
+                ]}
+              />
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="usecase_designer"
                   href="/register"

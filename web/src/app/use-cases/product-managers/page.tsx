@@ -6,7 +6,9 @@ import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Compass, BarChart3, Users, Target, Sparkles, Check } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
@@ -37,6 +39,7 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Product Manager Resume", item: absoluteUrl("/use-cases/product-managers") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
 
@@ -77,6 +80,18 @@ export default function ProductManagersPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 PM hiring is signal-starved: recruiters skim for roadmap scope, metric ownership, and cross-functional delta. Launch CV turns your wins into the exact language they screen for — quantified, baselined, ATS-clean.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean across 15 tracking systems."
+                facts={[
+                  "Rewrites PM wins into quantified, baselined outcomes (activation, retention, growth).",
+                  "Surfaces roadmap scope, metric ownership, and cross-functional impact recruiters scan for.",
+                  "PM keyword library (OKRs, RICE, JTBD, PLG, GTM) matched to each job description.",
+                  "ATS-clean formatting tested against 15 tracking systems.",
+                ]}
+              />
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="usecase_pm"
                   href="/register"

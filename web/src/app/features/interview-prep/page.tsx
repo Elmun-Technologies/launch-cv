@@ -3,10 +3,12 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { ProductScreenshot } from "@/components/product-screenshot";
 import {
@@ -55,8 +57,16 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Interview Prep", item: absoluteUrl("/features/interview-prep") },
       ],
     },
+    speakableLd(["h1", ".lc-key-facts-lead"]),
   ],
 };
+
+const keyFacts = [
+  "Generates role-specific questions from your resume and the exact job description.",
+  "Every answer is scored 1–10 on Clarity, Relevance, Impact, and STAR structure.",
+  "Returns a benchmark model answer beside yours to calibrate against.",
+  "Covers behavioral, technical, company/culture, situational, and curveball rounds.",
+];
 
 const categories = [
   { k: "Behavioral", d: "STAR-method questions generated from your resume experience." },
@@ -120,6 +130,12 @@ export default function InterviewPrepPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 AI reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face. Every answer is scored, every weakness named, every model answer benchmarked.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Interview Prep reads your resume and the target job description, then generates the role-specific questions you're most likely to face. Every answer is scored 1–10 on clarity, relevance, impact, and STAR structure, with a benchmark model answer beside yours across behavioral, technical, company, situational, and curveball rounds."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_interview_prep"
