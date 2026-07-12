@@ -7,7 +7,7 @@
   --font-body: var(--font-inter);
 
   /* ── Landing design tokens ── */
-  --lc-primary: #1A56DB;
+  --lc-primary: #2563EB;
   --lc-primary-dark: #1D4ED8;
   --lc-secondary: #7C3AED;
   --lc-dark: #0F172A;
@@ -682,7 +682,7 @@ button:hover, [role="button"]:hover, a:hover {
   justify-content: center;
   gap: 0.5rem;
   border-radius: 10px;
-  background: #1A56DB;
+  background: #2563EB;
   padding: 14px 28px;
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
@@ -696,7 +696,7 @@ button:hover, [role="button"]:hover, a:hover {
 }
 .lc-btn-primary:hover { background: #1D4ED8; transform: scale(1.02); box-shadow: 0 4px 20px rgba(26,86,219,0.35); }
 .lc-btn-primary:active { transform: scale(0.98); }
-.lc-btn-primary:focus-visible { outline: 2px solid #1A56DB; outline-offset: 2px; }
+.lc-btn-primary:focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }
 
 /* ── Secondary / outline CTA ── */
 .lc-btn-secondary {
@@ -710,8 +710,8 @@ button:hover, [role="button"]:hover, a:hover {
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 700;
-  color: #1A56DB;
-  border: 2px solid #1A56DB;
+  color: #2563EB;
+  border: 2px solid #2563EB;
   cursor: pointer;
   transition: background-color 0.2s ease-out, transform 0.2s ease-out;
   text-decoration: none;
@@ -777,7 +777,7 @@ button:hover, [role="button"]:hover, a:hover {
 .lc-progress-fill {
   height: 100%;
   border-radius: 9999px;
-  background: linear-gradient(90deg, #1A56DB 0%, #7C3AED 100%);
+  background: linear-gradient(90deg, #2563EB 0%, #1D4ED8 100%);
   transition: width 1s ease-out;
 }
 
@@ -801,7 +801,7 @@ button:hover, [role="button"]:hover, a:hover {
   text-align: left;
   transition: color 0.2s;
 }
-.lc-accordion-trigger:hover { color: #1A56DB; }
+.lc-accordion-trigger:hover { color: #2563EB; }
 .lc-accordion-chevron {
   flex-shrink: 0;
   width: 20px;
@@ -832,7 +832,7 @@ button:hover, [role="button"]:hover, a:hover {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1A56DB;
+  color: #2563EB;
 }
 .lc-h2 {
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -853,7 +853,7 @@ button:hover, [role="button"]:hover, a:hover {
 
 /* ── Gradient text ── */
 .lc-gradient-text {
-  background: linear-gradient(135deg, #1A56DB 0%, #7C3AED 100%);
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -916,7 +916,7 @@ button:hover, [role="button"]:hover, a:hover {
   position: absolute;
   inset: -2px;
   border-radius: 18px;
-  background: linear-gradient(135deg, #1A56DB, #7C3AED, #0D9488, #1A56DB);
+  background: linear-gradient(135deg, #2563EB, #7C3AED, #0D9488, #2563EB);
   background-size: 300% 300%;
   animation: lc-gradient-border 4s ease infinite;
   z-index: -1;
@@ -954,7 +954,7 @@ button:hover, [role="button"]:hover, a:hover {
   50% { background-position: 100% 50%; }
 }
 .lc-gradient-text-animated {
-  background: linear-gradient(270deg, #1A56DB, #7C3AED, #0D9488, #1A56DB);
+  background: linear-gradient(270deg, #2563EB, #7C3AED, #0D9488, #2563EB);
   background-size: 400% 400%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -975,7 +975,7 @@ button:hover, [role="button"]:hover, a:hover {
   display: inline-block;
   width: 2px;
   height: 1em;
-  background: #1A56DB;
+  background: #2563EB;
   margin-left: 2px;
   vertical-align: text-bottom;
   animation: lc-blink 1s step-end infinite;
@@ -1311,7 +1311,7 @@ button:hover, [role="button"]:hover, a:hover {
   content: "■";
   display: inline-block;
   margin-right: 8px;
-  color: #1A56DB;
+  color: #2563EB;
   font-size: 0.7em;
   vertical-align: middle;
 }
@@ -1365,7 +1365,7 @@ button:hover, [role="button"]:hover, a:hover {
 }
 
 /* ── Editorial colorways ── */
-.lc-theme-blue { --lc-accent: #1A56DB; --lc-accent-soft: #DBEAFE; --lc-accent-deep: #1E3A8A; }
+.lc-theme-blue { --lc-accent: #2563EB; --lc-accent-soft: #DBEAFE; --lc-accent-deep: #1E3A8A; }
 .lc-theme-violet { --lc-accent: #7C3AED; --lc-accent-soft: #EDE9FE; --lc-accent-deep: #4C1D95; }
 .lc-theme-teal { --lc-accent: #0D9488; --lc-accent-soft: #CCFBF1; --lc-accent-deep: #134E4A; }
 .lc-theme-emerald { --lc-accent: #059669; --lc-accent-soft: #D1FAE5; --lc-accent-deep: #064E3B; }
@@ -1379,7 +1379,7 @@ button:hover, [role="button"]:hover, a:hover {
   justify-content: center;
   gap: 0.5rem;
   border-radius: 999px;
-  background: var(--lc-accent, #1A56DB);
+  background: var(--lc-accent, #2563EB);
   padding: 14px 28px;
   color: #fff;
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
@@ -1391,7 +1391,7 @@ button:hover, [role="button"]:hover, a:hover {
   text-decoration: none;
   white-space: nowrap;
 }
-.lc-btn-accent:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -8px var(--lc-accent, #1A56DB); filter: brightness(1.05); }
+.lc-btn-accent:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -8px var(--lc-accent, #2563EB); filter: brightness(1.05); }
 .lc-btn-accent:active { transform: translateY(0); }
 
 /* ── Outline themed button ── */

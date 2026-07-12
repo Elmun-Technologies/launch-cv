@@ -71,7 +71,7 @@ function VerifyInner() {
 
   return (
     <div className="flex items-center gap-3 text-[14px] text-[#475569]">
-      <Loader2 className="h-4 w-4 animate-spin text-[#1A56DB]" />
+      <Loader2 className="h-4 w-4 animate-spin text-[#2563EB]" />
       Verifying your email…
     </div>
   );

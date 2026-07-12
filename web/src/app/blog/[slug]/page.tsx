@@ -104,9 +104,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     openGraph: {
       type: "article",
       url: absoluteUrl(`/blog/${post.slug}`),
-      title: `${post.seoTitle || post.title} | Launch CV`,
+      title: `${post.seoTitle || post.title} | LaunchCV`,
       description: post.seoDescription || post.description,
-      siteName: "Launch CV",
+      siteName: "LaunchCV",
       locale: "en_US",
       publishedTime: publishedIso,
       modifiedTime: publishedIso,
@@ -206,7 +206,7 @@ export default async function BlogPostPage({
     },
     publisher: {
       "@type": "Organization",
-      name: "Launch CV",
+      name: "LaunchCV",
       url: absoluteUrl("/"),
       logo: { "@type": "ImageObject", url: absoluteUrl("/icon.png") },
     },
@@ -282,9 +282,9 @@ export default async function BlogPostPage({
         {/* Breadcrumb */}
         <div className="border-b border-[#E2E8F0] bg-[#FAFBFC]">
           <div className="mx-auto flex max-w-[800px] items-center gap-2 px-6 py-3 text-[13px] text-[#94A3B8]">
-            <Link href="/" className="transition hover:text-[#1A56DB]">Home</Link>
+            <Link href="/" className="transition hover:text-[#2563EB]">Home</Link>
             <ChevronRight className="h-3.5 w-3.5" />
-            <Link href="/blog" className="transition hover:text-[#1A56DB]">Blog</Link>
+            <Link href="/blog" className="transition hover:text-[#2563EB]">Blog</Link>
             <ChevronRight className="h-3.5 w-3.5" />
             <span className="truncate text-[#334155]">{post.category}</span>
           </div>
@@ -293,14 +293,14 @@ export default async function BlogPostPage({
         <div className="mx-auto max-w-[800px] px-6 py-14">
           <Link
             href="/blog"
-            className="mb-8 inline-flex items-center gap-2 text-[13px] font-semibold text-[#64748B] transition hover:text-[#1A56DB]"
+            className="mb-8 inline-flex items-center gap-2 text-[13px] font-semibold text-[#64748B] transition hover:text-[#2563EB]"
           >
             <ArrowLeft className="h-4 w-4" /> Back to Blog
           </Link>
 
           <header>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-[#EFF6FF] px-3 py-1 text-[12px] font-semibold text-[#1A56DB]">
+              <span className="rounded-full bg-[#EFF6FF] px-3 py-1 text-[12px] font-semibold text-[#2563EB]">
                 {post.category}
               </span>
               <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
@@ -344,7 +344,7 @@ export default async function BlogPostPage({
               />
               <div>
                 <p className="text-[13px] font-semibold text-[#0F172A]">
-                  <Link href="/about" className="transition hover:text-[#1A56DB]" rel="author">
+                  <Link href="/about" className="transition hover:text-[#2563EB]" rel="author">
                     {SITE_AUTHOR.name}
                   </Link>
                 </p>
@@ -353,7 +353,7 @@ export default async function BlogPostPage({
                   {SITE_AUTHOR.bio}{" "}
                   <Link
                     href="/about"
-                    className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+                    className="font-semibold text-[#2563EB] underline-offset-2 hover:underline"
                   >
                     More about the author
                   </Link>
@@ -397,7 +397,7 @@ export default async function BlogPostPage({
                   return (
                     <a
                       href={href}
-                      className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+                      className="font-semibold text-[#2563EB] underline-offset-2 hover:underline"
                       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       {...props}
                     />
@@ -454,7 +454,7 @@ export default async function BlogPostPage({
             </p>
             <CtaLink cta="get_started" location="blog_post"
               href="/register"
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
             >
               Build my resume
               <ArrowRight className="h-4 w-4" />
@@ -473,7 +473,7 @@ export default async function BlogPostPage({
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
                     <ArrowLeft className="h-3 w-3" /> Newer article
                   </span>
-                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#2563EB]">
                     {newerPost.title}
                   </p>
                 </Link>
@@ -488,7 +488,7 @@ export default async function BlogPostPage({
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
                     Older article <ArrowRight className="h-3 w-3" />
                   </span>
-                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#2563EB]">
                     {olderPost.title}
                   </p>
                 </Link>
@@ -508,7 +508,7 @@ export default async function BlogPostPage({
                   href={f.href}
                   className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
                 >
-                  <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">
+                  <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">
                     {f.title}
                   </p>
                   <p className="mt-1 text-[13px] text-[#64748B]">{f.desc}</p>
@@ -531,10 +531,10 @@ export default async function BlogPostPage({
                   >
                     <BlogCover post={rp} size="sm" />
                     <div className="mt-4 px-1 pb-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">
                         {rp.category}
                       </span>
-                      <h3 className="mt-2 text-[15px] font-semibold leading-snug text-[#0F172A] transition-colors group-hover:text-[#1A56DB]">
+                      <h3 className="mt-2 text-[15px] font-semibold leading-snug text-[#0F172A] transition-colors group-hover:text-[#2563EB]">
                         {rp.title}
                       </h3>
                       <p className="mt-1.5 text-[12px] text-[#94A3B8]">{rp.readingTime} min read</p>

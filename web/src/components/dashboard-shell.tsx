@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/site-header";
+import { BrandMark } from "@/components/brand-mark";
 import {
   Home, FileText, Briefcase, Users, Building2, Target,
   Settings, Puzzle, Gift, HelpCircle, Menu, X, Zap, Sparkles,
@@ -137,17 +138,11 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
     <div className="flex h-screen overflow-hidden bg-[#FAFAFA]">
       <aside className="hidden w-[220px] shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
         <div className="flex h-[60px] items-center gap-2.5 border-b border-gray-100 px-5">
-          <svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="dash-logo-grad" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#1A56DB" />
-                <stop offset="1" stopColor="#7C3AED" />
-              </linearGradient>
-            </defs>
-            <rect width="36" height="36" rx="9" fill="url(#dash-logo-grad)" />
-            <text x="10" y="27" fontFamily="system-ui, sans-serif" fontSize="22" fontWeight="800" fill="white" letterSpacing="-1">L</text>
-          </svg>
-          <span className="text-[15px] font-bold tracking-tight text-gray-900">Launch CV</span>
+          <BrandMark size={32} />
+          <span className="text-[15px] font-bold tracking-tight">
+            <span className="text-[#0F172A]">launch</span>
+            <span className="text-[#2563EB]">cv</span>
+          </span>
         </div>
 
         <nav className="flex-1 overflow-y-auto py-5">
@@ -181,8 +176,11 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
             >
               <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
                 <div className="flex items-center gap-2.5">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#7C5CFC] text-[12px] font-bold text-white">L</span>
-                  <span className="text-[15px] font-bold text-gray-900">Launch CV</span>
+                  <BrandMark size={30} />
+                  <span className="text-[15px] font-bold">
+                    <span className="text-[#0F172A]">launch</span>
+                    <span className="text-[#2563EB]">cv</span>
+                  </span>
                 </div>
                 <button type="button" onClick={() => setMobileOpen(false)} className="text-gray-400">
                   <X className="h-5 w-5" />

@@ -136,11 +136,11 @@ export function AdminShell({
                       }`}
                     >
                       {active ? (
-                        <span className="absolute left-0 top-1/2 h-5 w-[2px] -translate-y-1/2 rounded-r-full bg-[#1A56DB]" />
+                        <span className="absolute left-0 top-1/2 h-5 w-[2px] -translate-y-1/2 rounded-r-full bg-[#2563EB]" />
                       ) : null}
                       <item.icon
                         className={`h-4 w-4 shrink-0 ${
-                          active ? "text-[#1A56DB]" : "text-[#94A3B8] group-hover:text-[#475569]"
+                          active ? "text-[#2563EB]" : "text-[#94A3B8] group-hover:text-[#475569]"
                         }`}
                       />
                       <span className="flex-1 truncate">{item.label}</span>
@@ -204,7 +204,7 @@ export function AdminShell({
             {email ? (
               <span className="hidden text-[12px] text-[#64748B] sm:inline">{email}</span>
             ) : null}
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] text-[12px] font-semibold text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[12px] font-semibold text-white">
               {initials}
             </div>
           </div>

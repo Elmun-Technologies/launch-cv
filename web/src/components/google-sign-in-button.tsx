@@ -49,7 +49,7 @@ export function GoogleSignInButton({ next, referralCode, mode = "login" }: Googl
     <Link
       href={href}
       prefetch={false}
-      className="flex w-full items-center justify-center gap-3 rounded-full border border-[#E2E8F0] bg-white py-3 text-[14px] font-semibold text-[#1E293B] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#CBD5E1] hover:bg-[#F8FAFC] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1A56DB]/30"
+      className="flex w-full items-center justify-center gap-3 rounded-full border border-[#E2E8F0] bg-white py-3 text-[14px] font-semibold text-[#1E293B] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#CBD5E1] hover:bg-[#F8FAFC] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/30"
     >
       <GoogleGlyph className="h-[18px] w-[18px]" />
       {label}

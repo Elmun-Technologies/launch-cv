@@ -35,22 +35,22 @@ const planListWithPrices = CHECKOUT_PLAN_ORDER.map(
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Launch CV — AI Resume Builder for 12+ Industries",
-    template: "%s | Launch CV",
+    default: "LaunchCV — AI Resume Builder for 12+ Industries",
+    template: "%s | LaunchCV",
   },
   description: `Build tailored resumes with AI-powered JD alignment, role-fit rubrics, evidence graphs, and interview-ready packets. Paid plans: ${planListWithPrices}.`,
   keywords: ["resume builder", "AI resume", "job application", "JD alignment", "cover letter", "interview prep"],
   openGraph: {
     url: siteUrl,
-    title: "Launch CV — AI Resume Builder",
+    title: "LaunchCV — AI Resume Builder",
     description: "Not just a resume builder — a job-landing system. Tailored for 12+ industries.",
     type: "website",
-    siteName: "Launch CV",
+    siteName: "LaunchCV",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Launch CV — AI Resume Builder",
+    title: "LaunchCV — AI Resume Builder",
     description: "Build winning resumes with AI. JD alignment, role-fit scoring, and more.",
   },
   robots: {
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#1A56DB",
+  themeColor: "#2563EB",
 };
 
 const rootStructuredData = {
@@ -73,7 +73,7 @@ const rootStructuredData = {
   "@graph": [
     {
       "@type": "Organization",
-      name: "Launch CV",
+      name: "LaunchCV",
       url: siteUrl,
       logo: `${siteUrl}/logo.png`,
       sameAs: ["https://twitter.com/launchcv", "https://linkedin.com/company/launchcv"],
@@ -86,10 +86,10 @@ const rootStructuredData = {
     },
     {
       "@type": "WebSite",
-      name: "Launch CV",
+      name: "LaunchCV",
       url: siteUrl,
       description: "Tailored resumes, JD alignment, ATS scoring, cover letters, and interview prep.",
-      publisher: { "@type": "Organization", name: "Launch CV" },
+      publisher: { "@type": "Organization", name: "LaunchCV" },
       potentialAction: {
         "@type": "SearchAction",
         target: { "@type": "EntryPoint", urlTemplate: `${siteUrl}/features?q={search_term_string}` },
@@ -117,7 +117,7 @@ const rootStructuredData = {
     },
     {
       "@type": "SoftwareApplication",
-      name: "Launch CV",
+      name: "LaunchCV",
       url: siteUrl,
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",

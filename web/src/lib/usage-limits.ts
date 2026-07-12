@@ -39,7 +39,7 @@ export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
       kind,
       message: paid
         ? "Monthly AI limit reached for your plan. Resets next month, or upgrade in Subscription."
-        : "Activate a plan to use AI features. Launch CV is paid-only — choose Starter, Professional, Elite, or Lifetime on the Pricing page.",
+        : "Activate a plan to use AI features. LaunchCV is paid-only — choose Starter, Professional, Elite, or Lifetime on the Pricing page.",
     };
   }
   return { ok: true as const, plan, paid, used, max, kind };

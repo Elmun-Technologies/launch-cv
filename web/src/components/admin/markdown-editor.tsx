@@ -179,7 +179,7 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
                   p: (p) => <p className="mt-3" {...p} />,
                   ul: (p) => <ul className="mt-3 list-disc space-y-1.5 pl-6" {...p} />,
                   ol: (p) => <ol className="mt-3 list-decimal space-y-1.5 pl-6" {...p} />,
-                  a: (p) => <a className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline" {...p} />,
+                  a: (p) => <a className="font-semibold text-[#2563EB] underline-offset-2 hover:underline" {...p} />,
                   code: (p) => (
                     <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[13px] text-[#0F172A]" {...p} />
                   ),

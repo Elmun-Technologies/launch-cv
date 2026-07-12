@@ -82,11 +82,11 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
       {/* Header */}
       <div className="mb-5">
         <h1 className="text-[24px] font-semibold leading-[1.15] tracking-tight text-[#0F172A]">
-          Sign in to Launch CV
+          Sign in to LaunchCV
         </h1>
         <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+          <Link href="/register" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
             Create one
           </Link>
         </p>
@@ -124,7 +124,7 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
             </label>
             <Link
               href="/auth/forgot-password"
-              className="text-[12px] font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+              className="text-[12px] font-semibold text-[#2563EB] underline-offset-2 hover:underline"
             >
               Forgot password?
             </Link>

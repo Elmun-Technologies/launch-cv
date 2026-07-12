@@ -26,7 +26,7 @@ export function KeyFacts({
       className={`lc-key-facts rounded-xl border border-[#DBEAFE] bg-[#F5F9FF] p-5 sm:p-6 ${className}`}
       aria-label={title}
     >
-      <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#1A56DB]">
+      <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">
         <Sparkles className="h-3.5 w-3.5" />
         {title}
       </p>
@@ -37,7 +37,7 @@ export function KeyFacts({
         <ul className="mt-3 space-y-1.5">
           {facts.map((f, i) => (
             <li key={i} className="flex gap-2 text-[13.5px] leading-[1.6] text-[#334155]">
-              <span aria-hidden className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#1A56DB]" />
+              <span aria-hidden className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#2563EB]" />
               <span>{f}</span>
             </li>
           ))}

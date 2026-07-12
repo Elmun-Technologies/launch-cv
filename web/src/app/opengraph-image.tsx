@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { OgImage, OG_SIZE, OG_CONTENT_TYPE } from "@/components/og-image";
 
 export const runtime = "edge";
-export const alt = "Launch CV — AI Resume Builder & Job Search Platform";
+export const alt = "LaunchCV — AI Resume Builder & Job Search Platform";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

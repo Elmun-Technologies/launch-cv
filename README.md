@@ -1,4 +1,4 @@
-# Launch CV
+# LaunchCV
 
 AI-powered resume and career toolkit: resume builder, JD alignment, cover letters, interview prep, ATS scoring, and more. Built with **Next.js** (App Router), **Prisma**, and **Tailwind CSS**.
 

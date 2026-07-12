@@ -1,6 +1,6 @@
 # Polar payments (active provider)
 
-Launch CV checks out through [Polar](https://polar.sh) because Stripe / Lemon Squeezy
+LaunchCV checks out through [Polar](https://polar.sh) because Stripe / Lemon Squeezy
 are not available in some regions (e.g. Uzbekistan). Polar is a Merchant of Record:
 it handles checkout, tax, receipts and the customer billing portal.
 

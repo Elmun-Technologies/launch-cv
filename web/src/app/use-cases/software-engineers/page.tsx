@@ -18,7 +18,7 @@ export const metadata = buildMarketingMetadata({
     "The AI resume writer for software engineers: rewrites your bullets to quantify latency, throughput, and scope — the signals recruiters scan. Try it free →",
   pathname: "/use-cases/software-engineers",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["software engineer resume writer", "software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],
+  keywords: ["software engineer resume writer", "software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "LaunchCV"],
 });
 
 const ld = {
@@ -27,7 +27,7 @@ const ld = {
     {
       "@type": "WebPage",
       url: absoluteUrl("/use-cases/software-engineers"),
-      name: "Resume for Software Engineers | Launch CV",
+      name: "Resume for Software Engineers | LaunchCV",
       description:
         "ATS-clean engineering resumes. AI quantifies latency, throughput, scope, and ownership — the signals hiring managers scan for.",
     },
@@ -80,18 +80,18 @@ export default function SoftwareEngineersPage() {
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-                <Code2 className="h-3.5 w-3.5 text-[#1A56DB]" /> For Software Engineers
+                <Code2 className="h-3.5 w-3.5 text-[#2563EB]" /> For Software Engineers
               </span>
               <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
                 A resume that reads like an engineer wrote it
               </h1>
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Most engineering resumes read like a ticket queue. Launch CV rewrites them with the language hiring managers actually scan for — latency, throughput, scope, ownership, baselines — and keeps formatting ATS-clean for Workday, Greenhouse, Lever, and 12 more.
+                Most engineering resumes read like a ticket queue. LaunchCV rewrites them with the language hiring managers actually scan for — latency, throughput, scope, ownership, baselines — and keeps formatting ATS-clean for Workday, Greenhouse, Lever, and 12 more.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="Launch CV builds ATS-clean software engineer resumes that quantify latency, throughput, scope, and ownership — the signals hiring managers scan for. It rewrites ticket-style bullets into measurable impact, draws on a 200+ engineering keyword library, and keeps formatting parseable for Workday, Greenhouse, Lever, and 12 more ATS engines."
+                lead="LaunchCV builds ATS-clean software engineer resumes that quantify latency, throughput, scope, and ownership — the signals hiring managers scan for. It rewrites ticket-style bullets into measurable impact, draws on a 200+ engineering keyword library, and keeps formatting parseable for Workday, Greenhouse, Lever, and 12 more ATS engines."
                 facts={[
                   "Rewrites vague bullets into quantified impact (latency, throughput, scope, MTTR).",
                   "200+ engineering keywords pre-loaded; AI picks the right subset per job.",
@@ -103,7 +103,7 @@ export default function SoftwareEngineersPage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="usecase_swe"
                   href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Build my engineering resume
                   <ArrowRight className="h-4 w-4" />
@@ -140,7 +140,7 @@ export default function SoftwareEngineersPage() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#1A56DB]">Why it matters</p>
+            <p className="lc-overline text-[#2563EB]">Why it matters</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               A great software engineer resume is a parsing problem first
             </h2>
@@ -149,20 +149,20 @@ export default function SoftwareEngineersPage() {
                 Strong engineers lose interviews to formatting, not talent. A clever two-column developer resume can read beautifully to you and arrive as garbled text to an applicant tracking system — so the review never happens.
               </p>
               <p>
-                Launch CV treats the resume as an engineering resume ATS problem: clean structure in, quantified impact out. The tech resume AI keeps three things true at once:
+                LaunchCV treats the resume as an engineering resume ATS problem: clean structure in, quantified impact out. The tech resume AI keeps three things true at once:
               </p>
             </div>
             <ul className="mt-5 space-y-2.5 text-[15px] leading-[1.6] text-[#475569]">
               <li className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                 <span><span className="font-medium text-[#0F172A]">Impact is measurable</span> — latency, throughput, scope, and ownership, not duty lists.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                 <span><span className="font-medium text-[#0F172A]">Formatting is parseable</span> — single-column layouts tested across 15+ ATS platforms.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                 <span><span className="font-medium text-[#0F172A]">Keywords fit the role</span> — each posting matched with JD Alignment before you apply.</span>
               </li>
             </ul>
@@ -175,15 +175,15 @@ export default function SoftwareEngineersPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <p className="lc-overline text-[#2563EB]">Inside the product</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">Matched to the exact engineering role</h2>
             </div>
           </RevealOnView>
           <ProductScreenshot
             className="mt-12"
             src="/images/product/jd-alignment.svg"
-            alt="The Launch CV JD alignment view matching a software engineer resume to a backend job description, showing a 91% match and matched keywords like Kubernetes, GraphQL, and AWS."
-            caption="Paste a backend job description; Launch CV surfaces the exact keywords and gaps to close."
+            alt="The LaunchCV JD alignment view matching a software engineer resume to a backend job description, showing a 91% match and matched keywords like Kubernetes, GraphQL, and AWS."
+            caption="Paste a backend job description; LaunchCV surfaces the exact keywords and gaps to close."
           />
         </div>
       </section>
@@ -193,7 +193,7 @@ export default function SoftwareEngineersPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">The diff · 3 real rewrites</p>
+              <p className="lc-overline text-[#2563EB]">The diff · 3 real rewrites</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 What hiring managers actually want to read
               </h2>
@@ -224,7 +224,7 @@ export default function SoftwareEngineersPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Engineering-specific fixes</p>
+              <p className="lc-overline text-[#2563EB]">Engineering-specific fixes</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Built for the things you actually ship
               </h2>
@@ -235,7 +235,7 @@ export default function SoftwareEngineersPage() {
             {painPoints.map((p) => (
               <RevealOnView key={p.p}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                     <p.i className="h-5 w-5" />
                   </span>
                   <p className="mt-4 text-[11px] font-semibold uppercase tracking-wider text-red-600">Problem</p>
@@ -254,7 +254,7 @@ export default function SoftwareEngineersPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Engineering sections covered</p>
+              <p className="lc-overline text-[#2563EB]">Engineering sections covered</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Not just Experience — all of the above
               </h2>
@@ -272,7 +272,7 @@ export default function SoftwareEngineersPage() {
             ].map((s) => (
               <RevealOnView key={s.h}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#1A56DB]" />
+                  <Check className="h-5 w-5 text-[#2563EB]" />
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{s.h}</h3>
                   <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{s.d}</p>
                 </div>
@@ -287,12 +287,12 @@ export default function SoftwareEngineersPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">How it works</p>
+              <p className="lc-overline text-[#2563EB]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Build a software engineer resume in five steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Launch CV combines an AI resume builder, JD matching, and an ATS check so your developer resume reads like impact, not a ticket queue.
+                LaunchCV combines an AI resume builder, JD matching, and an ATS check so your developer resume reads like impact, not a ticket queue.
               </p>
             </div>
           </RevealOnView>
@@ -307,7 +307,7 @@ export default function SoftwareEngineersPage() {
             ].map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#1A56DB]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
@@ -324,12 +324,12 @@ export default function SoftwareEngineersPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Why engineers use it</p>
+              <p className="lc-overline text-[#2563EB]">Why engineers use it</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 A generic builder vs. an engineering resume ATS engine
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Most builders hand you a pretty template. Launch CV handles the writing, the JD match, and the parsing risk that actually keeps a developer resume out of the pile.
+                Most builders hand you a pretty template. LaunchCV handles the writing, the JD match, and the parsing risk that actually keeps a developer resume out of the pile.
               </p>
             </div>
           </RevealOnView>
@@ -339,7 +339,7 @@ export default function SoftwareEngineersPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What hiring managers scan</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#1A56DB]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#2563EB]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Generic resume builder</th>
                 </tr>
               </thead>
@@ -356,7 +356,7 @@ export default function SoftwareEngineersPage() {
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
                     <td className="py-4 px-4">
                       <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                         <span className="text-[#0F172A]">{r.a}</span>
                       </span>
                     </td>
@@ -373,7 +373,7 @@ export default function SoftwareEngineersPage() {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#1A56DB]">A real use scenario</p>
+            <p className="lc-overline text-[#2563EB]">A real use scenario</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               How Ravi turned ticket-speak into interviews
             </h2>
@@ -404,7 +404,7 @@ export default function SoftwareEngineersPage() {
       <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#1A56DB]">FAQ</p>
+            <p className="lc-overline text-[#2563EB]">FAQ</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
           </RevealOnView>
 
@@ -444,7 +444,7 @@ export default function SoftwareEngineersPage() {
                 href={r.href}
                 className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
               >
-                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">{r.t}</p>
+                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">{r.t}</p>
                 <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
               </Link>
             ))}
@@ -470,7 +470,7 @@ export default function SoftwareEngineersPage() {
                   <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
                   <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:text-[#1A56DB]" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:text-[#2563EB]" />
               </Link>
             ))}
           </div>
@@ -485,7 +485,7 @@ export default function SoftwareEngineersPage() {
           </h2>
           <CtaLink cta="get_started" location="usecase_swe"
             href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
           >
             Build my engineering resume
             <ArrowRight className="h-4 w-4" />

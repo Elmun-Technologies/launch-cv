@@ -10,16 +10,16 @@ import { absoluteUrl } from "@/lib/site";
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Privacy Policy",
   description:
-    "How Launch CV collects, stores, and protects your data. Session cookies, AI processing, export and deletion rights.",
+    "How LaunchCV collects, stores, and protects your data. Session cookies, AI processing, export and deletion rights.",
   pathname: "/legal/privacy",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["Launch CV privacy policy", "GDPR", "CCPA", "data protection"],
+  keywords: ["LaunchCV privacy policy", "GDPR", "CCPA", "data protection"],
 });
 
 const ld = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Privacy Policy | Launch CV",
+  name: "Privacy Policy | LaunchCV",
   url: absoluteUrl("/legal/privacy"),
 };
 
@@ -78,7 +78,7 @@ const sections = [
     h: "Compliance",
     body: (
       <p>
-        Launch CV is built to align with GDPR (EU) and CCPA (California). This page is a plain-language
+        LaunchCV is built to align with GDPR (EU) and CCPA (California). This page is a plain-language
         overview; a full DPA is available on request for paid plans.
       </p>
     ),
@@ -102,17 +102,17 @@ export default function PrivacyPage() {
 
       <section className="bg-[#FAFBFC] pt-[112px]">
         <div className="mx-auto max-w-[860px] px-6 pb-12">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1A56DB] hover:underline">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline">
             <ArrowLeft className="h-3.5 w-3.5" /> Back to home
           </Link>
           <span className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-            <Shield className="h-3.5 w-3.5 text-[#1A56DB]" /> Legal
+            <Shield className="h-3.5 w-3.5 text-[#2563EB]" /> Legal
           </span>
           <h1 className="mt-4 lc-hero-headline text-[#0F172A]">Privacy Policy</h1>
           <p className="mt-4 max-w-[640px] text-[15px] leading-[1.7] text-[#475569]">
-            How Launch CV collects, stores, and protects your data. This is a plain-language summary of our
+            How LaunchCV collects, stores, and protects your data. This is a plain-language summary of our
             practices — for the full Data Processing Addendum, email{" "}
-            <a href="mailto:security@launch-cv.com" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <a href="mailto:security@launch-cv.com" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               security@launch-cv.com
             </a>
             .
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
             <p className="text-[13px] font-semibold uppercase tracking-wider text-[#94A3B8]">Questions?</p>
             <p className="mt-2 text-[15px] text-[#0F172A]">
               Email{" "}
-              <a href="mailto:security@launch-cv.com" className="inline-flex items-center gap-1 font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <a href="mailto:security@launch-cv.com" className="inline-flex items-center gap-1 font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 security@launch-cv.com
                 <Mail className="h-3.5 w-3.5" />
               </a>{" "}

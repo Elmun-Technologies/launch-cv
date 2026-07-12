@@ -105,7 +105,7 @@ function ProfessionalDoc() {
   return (
     <div className="h-full w-full bg-white p-3 text-[7px] text-slate-700">
       <p className="text-[11px] font-bold text-slate-900">Priya Nair</p>
-      <p className="text-[7px] font-medium text-[#1A56DB]">Marketing Manager</p>
+      <p className="text-[7px] font-medium text-[#2563EB]">Marketing Manager</p>
       <p className="text-[6px] text-slate-400">priya@email.com | (555) 012-3456 | Austin, TX</p>
       <div className="mt-2 border-b border-slate-300 pb-[2px]">
         <p className="text-[7px] font-bold uppercase tracking-wide text-slate-800">Professional Experience</p>
@@ -190,7 +190,7 @@ export function ResumeTemplateGallery() {
     <section className="border-t border-[#E2E8F0] bg-white py-20 sm:py-24">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="mx-auto max-w-[680px] text-center">
-          <p className="lc-overline text-[#1A56DB]">Templates</p>
+          <p className="lc-overline text-[#2563EB]">Templates</p>
           <h2 className="mt-3 lc-section-headline text-[#0F172A]">
             Recruiter-approved templates, ready in one click
           </h2>
@@ -209,7 +209,7 @@ export function ResumeTemplateGallery() {
               onClick={() => setActive(c)}
               className={`rounded-full px-4 py-1.5 text-[13px] font-semibold transition ${
                 active === c
-                  ? "bg-[#1A56DB] text-white shadow-sm"
+                  ? "bg-[#2563EB] text-white shadow-sm"
                   : "border border-[#E2E8F0] bg-white text-[#475569] hover:border-[#CBD5E1]"
               }`}
             >
@@ -240,7 +240,7 @@ export function ResumeTemplateGallery() {
                   <div className="pointer-events-none absolute inset-0 flex items-end justify-center bg-gradient-to-t from-[#0F172A]/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <CtaLink cta="get_started" location="template_gallery"
                       href="/register"
-                      className="pointer-events-auto mb-4 inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-[13px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.03]"
+                      className="pointer-events-auto mb-4 inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-[13px] font-bold text-[#2563EB] shadow-lg transition hover:scale-[1.03]"
                     >
                       Use this template <ArrowRight className="h-3.5 w-3.5" />
                     </CtaLink>
@@ -262,7 +262,7 @@ export function ResumeTemplateGallery() {
         <div className="mt-12 text-center">
           <CtaLink cta="get_started" location="template_gallery"
             href="/register"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Browse all 12 templates <ArrowRight className="h-4 w-4" />
           </CtaLink>

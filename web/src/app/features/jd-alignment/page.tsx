@@ -48,11 +48,11 @@ export const metadata = buildMarketingMetadata({
 const faqs: FaqItem[] = [
   {
     q: "How do I match my resume to a job description?",
-    a: "Paste the job description into Launch CV alongside your resume. The AI extracts every hard skill, tool, and seniority signal in the posting, compares it to your resume, and shows a ranked list of the keywords and requirements you are missing — then rewrites your bullets to close the gap without fabricating experience.",
+    a: "Paste the job description into LaunchCV alongside your resume. The AI extracts every hard skill, tool, and seniority signal in the posting, compares it to your resume, and shows a ranked list of the keywords and requirements you are missing — then rewrites your bullets to close the gap without fabricating experience.",
   },
   {
     q: "What is a resume-to-job-description match score?",
-    a: "It is a percentage that estimates how closely your resume matches a specific job posting, based on the skills, keywords, and requirements the role asks for. Launch CV updates the score live as you accept AI rewrites, so you can lift a typical resume from around 40% to 90% or higher before you apply.",
+    a: "It is a percentage that estimates how closely your resume matches a specific job posting, based on the skills, keywords, and requirements the role asks for. LaunchCV updates the score live as you accept AI rewrites, so you can lift a typical resume from around 40% to 90% or higher before you apply.",
   },
   {
     q: "What is keyword gap analysis?",
@@ -64,11 +64,11 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Does it fabricate experience or keyword-stuff my resume?",
-    a: "No. Launch CV weaves missing keywords into your real, existing experience and flags anything it cannot support with your background. It never invents roles, employers, or numbers. Modern ATS software and human reviewers both penalize keyword stuffing, so the goal is an accurate resume that genuinely matches the role.",
+    a: "No. LaunchCV weaves missing keywords into your real, existing experience and flags anything it cannot support with your background. It never invents roles, employers, or numbers. Modern ATS software and human reviewers both penalize keyword stuffing, so the goal is an accurate resume that genuinely matches the role.",
   },
   {
     q: "Can I tailor my resume for multiple jobs at once?",
-    a: "Yes. Launch CV saves a match score per application so you can compare which roles you fit best and reuse a strong base resume across postings, tailoring each one in about a minute instead of rewriting from scratch.",
+    a: "Yes. LaunchCV saves a match score per application so you can compare which roles you fit best and reuse a strong base resume across postings, tailoring each one in about a minute instead of rewriting from scratch.",
   },
 ];
 
@@ -77,7 +77,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "JD Alignment | Launch CV",
+      name: "JD Alignment | LaunchCV",
       url: absoluteUrl("/features/jd-alignment"),
       description:
         "Match your resume to any job description with AI keyword gap analysis and bullet rewrites.",
@@ -157,7 +157,7 @@ const steps = [
 
 const testimonials = [
   {
-    q: "I was applying to the same PM roles for months with no callbacks. Launch CV showed me I was missing fourteen critical keywords. Five interviews in ten days after I fixed it.",
+    q: "I was applying to the same PM roles for months with no callbacks. LaunchCV showed me I was missing fourteen critical keywords. Five interviews in ten days after I fixed it.",
     n: "Rachel M.",
     r: "Product Manager at Linear",
   },
@@ -188,7 +188,7 @@ export default function JDAlignmentPage() {
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-6">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-                <Target className="h-3.5 w-3.5 text-[#1A56DB]" />
+                <Target className="h-3.5 w-3.5 text-[#2563EB]" />
                 JD Alignment
               </span>
 
@@ -197,7 +197,7 @@ export default function JDAlignmentPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Paste a job description. Launch CV scores your fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+.
+                Paste a job description. LaunchCV scores your fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+.
               </p>
 
               <KeyFacts
@@ -209,7 +209,7 @@ export default function JDAlignmentPage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_jd_alignment"
                   href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Run my first alignment
                   <ArrowRight className="h-4 w-4" />
@@ -223,9 +223,9 @@ export default function JDAlignmentPage() {
               </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#64748B]">
-                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#1A56DB]" /> 15 ATS engines</span>
-                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#1A56DB]" /> 12 industries</span>
-                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#1A56DB]" /> Any JD format</span>
+                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> 15 ATS engines</span>
+                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> 12 industries</span>
+                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> Any JD format</span>
               </div>
             </div>
 
@@ -293,7 +293,7 @@ export default function JDAlignmentPage() {
                       { l: "Readability", v: "88" },
                     ].map((m) => (
                       <div key={m.l} className="rounded-lg border border-[#E2E8F0] bg-white p-3 text-center">
-                        <p className="text-[24px] font-bold tracking-tight text-[#1A56DB]">{m.v}%</p>
+                        <p className="text-[24px] font-bold tracking-tight text-[#2563EB]">{m.v}%</p>
                         <p className="mt-0.5 text-[11px] text-[#64748B]">{m.l}</p>
                       </div>
                     ))}
@@ -310,14 +310,14 @@ export default function JDAlignmentPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#1A56DB]">See it in action</p>
+              <p className="lc-overline text-[#2563EB]">See it in action</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">Watch your match score climb</h2>
             </div>
           </RevealOnView>
           <ProductScreenshot
             className="mt-12"
             src="/images/product/jd-alignment.svg"
-            alt="The Launch CV JD alignment view matching a resume to a job description, showing a 91% match score, the matched ATS keywords, and each requirement met."
+            alt="The LaunchCV JD alignment view matching a resume to a job description, showing a 91% match score, the matched ATS keywords, and each requirement met."
             caption="Paste a job description; watch the match score and matched keywords update as you tailor."
           />
         </div>
@@ -345,7 +345,7 @@ export default function JDAlignmentPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">What you get</p>
+              <p className="lc-overline text-[#2563EB]">What you get</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Six AI capabilities behind one button
               </h2>
@@ -356,7 +356,7 @@ export default function JDAlignmentPage() {
             {benefits.map((b) => (
               <RevealOnView key={b.t}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#1A56DB]" />
+                  <Check className="h-5 w-5 text-[#2563EB]" />
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{b.t}</h3>
                   <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{b.d}</p>
                 </div>
@@ -371,7 +371,7 @@ export default function JDAlignmentPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">How it works</p>
+              <p className="lc-overline text-[#2563EB]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 From paste to a 90%+ match in under a minute
               </h2>
@@ -382,7 +382,7 @@ export default function JDAlignmentPage() {
             {steps.map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#1A56DB]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
@@ -398,7 +398,7 @@ export default function JDAlignmentPage() {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[760px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#1A56DB]">The complete guide</p>
+            <p className="lc-overline text-[#2563EB]">The complete guide</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               How to match your resume to a job description
             </h2>
@@ -415,7 +415,7 @@ export default function JDAlignmentPage() {
               tailored one sent to five.
             </p>
             <p>
-              Launch CV automates the tailoring. Paste any job description — from LinkedIn, Indeed,
+              LaunchCV automates the tailoring. Paste any job description — from LinkedIn, Indeed,
               or a careers page — and the AI runs a <strong>keyword gap analysis</strong>: a
               side-by-side map of what your resume already contains versus what the role asks for,
               ranked by impact. It then rewrites your existing bullets to fold in the missing terms
@@ -442,15 +442,15 @@ export default function JDAlignmentPage() {
             <p>
               A high JD match is only half the job — the resume still has to parse cleanly. After you
               align, run it through the{" "}
-              <Link href="/features/ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 ATS score checker to test your resume against 15 ATS engines
               </Link>{" "}
               and catch any formatting issues. For the underlying method, see our guides on{" "}
-              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 checking your ATS score
               </Link>{" "}
               and{" "}
-              <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 choosing the right resume keywords
               </Link>
               .
@@ -464,7 +464,7 @@ export default function JDAlignmentPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Why it beats tailoring by hand</p>
+              <p className="lc-overline text-[#2563EB]">Why it beats tailoring by hand</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Manual editing vs. AI resume tailoring
               </h2>
@@ -479,7 +479,7 @@ export default function JDAlignmentPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#1A56DB]">JD Alignment</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#2563EB]">JD Alignment</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Editing by hand</th>
                 </tr>
               </thead>
@@ -496,7 +496,7 @@ export default function JDAlignmentPage() {
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
                     <td className="py-4 px-4">
                       <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#1A56DB]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                         <span className="text-[#0F172A]">{r.a}</span>
                       </span>
                     </td>
@@ -513,7 +513,7 @@ export default function JDAlignmentPage() {
       <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#1A56DB]">A real use scenario</p>
+            <p className="lc-overline text-[#2563EB]">A real use scenario</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               How Priya turned a 42% match into an interview
             </h2>
@@ -544,7 +544,7 @@ export default function JDAlignmentPage() {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#1A56DB]">FAQ</p>
+            <p className="lc-overline text-[#2563EB]">FAQ</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
           </RevealOnView>
 
@@ -561,9 +561,9 @@ export default function JDAlignmentPage() {
 
           <p className="mt-8 text-[14px] text-[#64748B]">
             Pair it with the{" "}
-            <Link href="/features/resume-builder" className="font-semibold text-[#1A56DB] hover:underline">resume builder</Link> and{" "}
-            <Link href="/features/interview-prep" className="font-semibold text-[#1A56DB] hover:underline">interview prep</Link>, or compare{" "}
-            <Link href="/pricing" className="font-semibold text-[#1A56DB] hover:underline">plans</Link>.
+            <Link href="/features/resume-builder" className="font-semibold text-[#2563EB] hover:underline">resume builder</Link> and{" "}
+            <Link href="/features/interview-prep" className="font-semibold text-[#2563EB] hover:underline">interview prep</Link>, or compare{" "}
+            <Link href="/pricing" className="font-semibold text-[#2563EB] hover:underline">plans</Link>.
           </p>
         </div>
       </section>
@@ -573,7 +573,7 @@ export default function JDAlignmentPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Customer stories</p>
+              <p className="lc-overline text-[#2563EB]">Customer stories</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 People who got the interview back
               </h2>
@@ -615,7 +615,7 @@ export default function JDAlignmentPage() {
                 href={r.href}
                 className="group flex items-start gap-3 rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] hover:shadow-[0_8px_24px_-15px_rgba(15,23,42,0.15)]"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                   <r.icon className="h-4 w-4" />
                 </span>
                 <div>
@@ -639,7 +639,7 @@ export default function JDAlignmentPage() {
           </p>
           <CtaLink cta="get_started" location="feature_jd_alignment"
             href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Run my first alignment
             <ArrowRight className="h-4 w-4" />
@@ -662,7 +662,7 @@ export default function JDAlignmentPage() {
                 href={r.href}
                 className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
               >
-                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#1A56DB]">{r.t}</p>
+                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">{r.t}</p>
                 <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
               </Link>
             ))}

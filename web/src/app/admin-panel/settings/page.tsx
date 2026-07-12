@@ -43,7 +43,7 @@ export default async function AdminSettingsPage() {
           <SectionCard
             title="Environment status"
             description="Configured secrets required for full functionality"
-            action={<Settings className="h-4 w-4 text-[#1A56DB]" />}
+            action={<Settings className="h-4 w-4 text-[#2563EB]" />}
             flush
           >
             <ul className="divide-y divide-[#E2E8F0]">
@@ -75,7 +75,7 @@ export default async function AdminSettingsPage() {
             <SectionCard
               title="DB admin users"
               description="Users with role = &lsquo;admin&rsquo; in the database"
-              action={<Shield className="h-4 w-4 text-[#1A56DB]" />}
+              action={<Shield className="h-4 w-4 text-[#2563EB]" />}
               flush
             >
               {dbAdmins.length === 0 ? (
@@ -84,7 +84,7 @@ export default async function AdminSettingsPage() {
                 <ul className="divide-y divide-[#E2E8F0]">
                   {dbAdmins.map((a) => (
                     <li key={a.id} className="flex items-center gap-3 px-5 py-3">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] text-[11px] font-semibold text-white">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[11px] font-semibold text-white">
                         {(a.name || a.email)[0].toUpperCase()}
                       </div>
                       <div className="min-w-0">
@@ -101,7 +101,7 @@ export default async function AdminSettingsPage() {
               <SectionCard
                 title="Admin emails · env"
                 description="Email allow-list from ADMIN_EMAILS environment variable"
-                action={<Mail className="h-4 w-4 text-[#1A56DB]" />}
+                action={<Mail className="h-4 w-4 text-[#2563EB]" />}
                 flush
               >
                 <ul className="divide-y divide-[#E2E8F0]">

@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { OgImage, OG_SIZE, OG_CONTENT_TYPE } from "@/components/og-image";
 
 export const runtime = "edge";
-export const alt = "Check your ATS score free — no sign-up | Launch CV";
+export const alt = "Check your ATS score free — no sign-up | LaunchCV";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

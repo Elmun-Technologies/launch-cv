@@ -47,7 +47,7 @@ export async function POST(req: Request) {
   const html = `<p>Password reset link (valid for 1 hour):</p><p><a href="${link}">${link}</a></p>`;
   const sent = await sendTransactionalEmail({
     to: user.email,
-    subject: "Launch CV — password reset",
+    subject: "LaunchCV — password reset",
     html,
   });
   await trackEvent("password_reset_requested", { userId: user.id, meta: { sent: sent.ok } });

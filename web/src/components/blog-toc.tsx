@@ -22,7 +22,7 @@ export function BlogToc({ entries }: { entries: TocEntry[] }) {
           <li key={e.id} className={e.depth === 3 ? "pl-4" : ""}>
             <a
               href={`#${e.id}`}
-              className="text-[13px] leading-snug text-[#475569] underline-offset-2 transition hover:text-[#1A56DB] hover:underline"
+              className="text-[13px] leading-snug text-[#475569] underline-offset-2 transition hover:text-[#2563EB] hover:underline"
             >
               {e.text}
             </a>

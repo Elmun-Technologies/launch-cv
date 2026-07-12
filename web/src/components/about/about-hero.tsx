@@ -78,17 +78,17 @@ export function AboutHero() {
               variants={item}
               className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569] shadow-[0_1px_2px_rgba(15,23,42,0.04)]"
             >
-              <Sparkles className="h-3.5 w-3.5 text-[#1A56DB]" />
+              <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" />
               Our story
             </motion.span>
 
             <motion.h1 variants={headline} className="mt-6 lc-hero-headline text-[#0F172A]">
-              We built Launch CV because hiring is broken.
+              We built LaunchCV because hiring is broken.
             </motion.h1>
 
             <motion.p variants={item} className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569] sm:text-[18px]">
               Roughly three in four resumes are rejected by automated software before any human sees them. The reason is
-              rarely talent — it&apos;s formatting, keywords, and time. Launch CV is the tool we wished existed when our
+              rarely talent — it&apos;s formatting, keywords, and time. LaunchCV is the tool we wished existed when our
               friends, our students, and we ourselves were stuck on the wrong side of that filter.
             </motion.p>
 
@@ -96,7 +96,7 @@ export function AboutHero() {
               <motion.div whileHover={reduce ? undefined : { scale: 1.025 }} whileTap={{ scale: 0.98 }}>
                 <CtaLink cta="get_started" location="about_hero"
                   href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Create account
                   <ArrowRight className="h-4 w-4" />
@@ -164,7 +164,7 @@ export function AboutHero() {
                 </div>
               </div>
               <p className="mt-5 text-center text-[13px] leading-[1.6] text-[#475569]">
-                of qualified resumes never reach a human. <span className="font-semibold text-[#1A56DB]">Launch CV flips that.</span>
+                of qualified resumes never reach a human. <span className="font-semibold text-[#2563EB]">LaunchCV flips that.</span>
               </p>
             </motion.div>
             </div>

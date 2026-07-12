@@ -46,7 +46,7 @@ const ld = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "Resume Builder | Launch CV",
+      name: "Resume Builder | LaunchCV",
       url: absoluteUrl("/features/resume-builder"),
       description: "AI-powered resume builder with 12 ATS-tested templates and quantified bullets.",
     },
@@ -129,7 +129,7 @@ export default function ResumeBuilderPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Type your work history in plain language and Launch CV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
+                Type your work history in plain language and LaunchCV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
               </p>
 
               <KeyFacts
@@ -175,7 +175,7 @@ export default function ResumeBuilderPage() {
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">Launch CV editor</span>
+                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">LaunchCV editor</span>
                   <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-semibold text-violet-700 ring-1 ring-violet-200">
                     <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />
                     AI writing
@@ -243,8 +243,8 @@ export default function ResumeBuilderPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/resume-builder.svg"
-            alt="The Launch CV resume builder editor turning rough, plain-language notes into quantified, ATS-ready resume bullet points with a live preview."
-            caption="Type rough notes on the left; Launch CV returns quantified, ATS-ready bullets on the right."
+            alt="The LaunchCV resume builder editor turning rough, plain-language notes into quantified, ATS-ready resume bullet points with a live preview."
+            caption="Type rough notes on the left; LaunchCV returns quantified, ATS-ready bullets on the right."
           />
         </div>
       </section>
@@ -381,7 +381,7 @@ export default function ResumeBuilderPage() {
                 From blank page to ATS-ready resume in five steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                The Launch CV AI resume builder does the heavy lifting: you supply the facts, the AI writes the bullets, and the live preview keeps everything ATS-friendly from the first keystroke.
+                The LaunchCV AI resume builder does the heavy lifting: you supply the facts, the AI writes the bullets, and the live preview keeps everything ATS-friendly from the first keystroke.
               </p>
             </div>
           </RevealOnView>
@@ -413,12 +413,12 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Why Launch CV</p>
+              <p className="lc-overline text-[#7C3AED]">Why LaunchCV</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 An AI resume builder vs. the old way
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                A generic online resume maker hands you a blank template and wishes you luck. Launch CV gives you writing, formatting, and ATS testing in one place.
+                A generic online resume maker hands you a blank template and wishes you luck. LaunchCV gives you writing, formatting, and ATS testing in one place.
               </p>
             </div>
           </RevealOnView>
@@ -428,7 +428,7 @@ export default function ResumeBuilderPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">Launch CV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">DIY or generic maker</th>
                 </tr>
               </thead>

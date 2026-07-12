@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { BrandMark } from "@/components/brand-mark";
 
 export const runtime = "edge";
 export const size = { width: 180, height: 180 };
@@ -12,18 +13,13 @@ export default function AppleIcon() {
           width: 180,
           height: 180,
           borderRadius: 40,
-          background: "linear-gradient(135deg, #1A56DB 0%, #7C3AED 100%)",
+          background: "#2563EB",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontFamily: "sans-serif",
-          fontSize: 96,
-          fontWeight: 800,
-          color: "#fff",
-          letterSpacing: "-4px",
         }}
       >
-        L
+        <BrandMark size={120} stroke="#FFFFFF" bar="#FFFFFF" lines="#BFDBFE" strokeWidth={2.8} />
       </div>
     ),
     { ...size },

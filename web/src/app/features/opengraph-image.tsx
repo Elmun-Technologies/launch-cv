@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { OgImage, OG_SIZE, OG_CONTENT_TYPE } from "@/components/og-image";
 
 export const runtime = "edge";
-export const alt = "Launch CV features — six AI tools for the job search";
+export const alt = "LaunchCV features — six AI tools for the job search";
 export const size = OG_SIZE;
 export const contentType = OG_CONTENT_TYPE;
 

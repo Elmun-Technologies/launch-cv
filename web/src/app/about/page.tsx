@@ -15,20 +15,20 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMarketingMetadata({
-  title: "About — The Story Behind Launch CV",
+  title: "About — The Story Behind LaunchCV",
   description:
-    "Launch CV levels the playing field between job seekers and Applicant Tracking Systems — built by people who watched great candidates lose to format errors.",
+    "LaunchCV levels the playing field between job seekers and Applicant Tracking Systems — built by people who watched great candidates lose to format errors.",
   pathname: "/about",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["Launch CV", "about", "mission", "AI resume builder", "resume platform team"],
+  keywords: ["LaunchCV", "about", "mission", "AI resume builder", "resume platform team"],
 });
 
 const aboutLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
-  name: "About Launch CV",
+  name: "About LaunchCV",
   url: absoluteUrl("/about"),
-  description: "The story behind Launch CV — built to level the playing field between candidates and ATS.",
+  description: "The story behind LaunchCV — built to level the playing field between candidates and ATS.",
 };
 
 const values = [
@@ -102,7 +102,7 @@ export default function AboutPage() {
           <MotionReveal>
             <div className="grid gap-10 lg:grid-cols-12">
               <div className="lg:col-span-4">
-                <p className="lc-overline text-[#1A56DB]">Mission</p>
+                <p className="lc-overline text-[#2563EB]">Mission</p>
                 <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                   Level the field between candidates and machines
                 </h2>
@@ -114,7 +114,7 @@ export default function AboutPage() {
                   keywords, the format, or the time.
                 </p>
                 <p>
-                  Launch CV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover
+                  LaunchCV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover
                   letter generation, and interview prep into one professional platform. We charge for it so we can build
                   something reliable and continuously improved — not a freemium tool that monetizes your data.
                 </p>
@@ -133,7 +133,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">What we stand for</p>
+              <p className="lc-overline text-[#2563EB]">What we stand for</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Four principles, carved into every decision
               </h2>
@@ -161,7 +161,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[860px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Timeline</p>
+              <p className="lc-overline text-[#2563EB]">Timeline</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Built in public, funded by users
               </h2>
@@ -171,19 +171,19 @@ export default function AboutPage() {
           <div className="relative mt-12 pl-8">
             {/* connecting line */}
             <span
-              className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[#1A56DB] via-[#7C3AED] to-[#E2E8F0]"
+              className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[#2563EB] via-[#7C3AED] to-[#E2E8F0]"
               aria-hidden
             />
             <MotionStagger className="space-y-6">
               {milestones.map((m) => (
                 <MotionItem key={m.t}>
                   <div className="relative">
-                    <span className="absolute -left-[29px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] shadow-sm" aria-hidden>
+                    <span className="absolute -left-[29px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#2563EB] to-[#7C3AED] shadow-sm" aria-hidden>
                       <span className="h-1.5 w-1.5 rounded-full bg-white" />
                     </span>
                     <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-20px_rgba(15,23,42,0.18)]">
                       <div className="flex items-center gap-3">
-                        <span className="inline-flex rounded-full bg-[#EFF6FF] px-3 py-1 text-[12px] font-bold text-[#1A56DB]">
+                        <span className="inline-flex rounded-full bg-[#EFF6FF] px-3 py-1 text-[12px] font-bold text-[#2563EB]">
                           {m.y}
                         </span>
                         <h3 className="text-[17px] font-semibold text-[#0F172A]">{m.t}</h3>
@@ -203,7 +203,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Under the hood</p>
+              <p className="lc-overline text-[#2563EB]">Under the hood</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Boring tech, predictable outcomes
               </h2>
@@ -214,7 +214,7 @@ export default function AboutPage() {
             {techStack.map((t) => (
               <MotionItem key={t.name} className="h-full">
                 <div className="h-full rounded-2xl border border-[#E2E8F0] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.15)]">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                     <t.icon className="h-5 w-5" />
                   </span>
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{t.name}</h3>
@@ -231,7 +231,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#1A56DB]">Team</p>
+              <p className="lc-overline text-[#2563EB]">Team</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">Small, fast, hands-on</h2>
             </div>
           </MotionReveal>
@@ -239,13 +239,13 @@ export default function AboutPage() {
           <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-2">
             <MotionItem className="h-full">
               <div className="h-full rounded-2xl border border-[#E2E8F0] bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.15)]">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] text-[20px] font-semibold text-white shadow-sm">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[20px] font-semibold text-white shadow-sm">
                   NE
                 </div>
                 <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">Nazir Elmurodov</h3>
-                <p className="text-[13px] font-medium text-[#1A56DB]">Founder · Building everything</p>
+                <p className="text-[13px] font-medium text-[#2563EB]">Founder · Building everything</p>
                 <p className="mt-3 text-[14px] leading-[1.65] text-[#475569]">
-                  Built Launch CV after watching hundreds of qualified candidates get filtered out by ATS. Obsessed with
+                  Built LaunchCV after watching hundreds of qualified candidates get filtered out by ATS. Obsessed with
                   making hiring fairer through better tools.
                 </p>
               </div>
@@ -260,7 +260,7 @@ export default function AboutPage() {
                 <p className="mt-3 text-[14px] leading-[1.65] text-[#475569]">
                   Building a small, opinionated team. If you&apos;ve felt the friction of a modern job search and want to
                   fix it for the next million people —{" "}
-                  <a href="mailto:hello@launch-cv.com" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                  <a href="mailto:hello@launch-cv.com" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                     hello@launch-cv.com
                   </a>
                   .
@@ -290,7 +290,7 @@ export default function AboutPage() {
                   <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
                   <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#2563EB]" />
               </Link>
             ))}
           </div>
@@ -299,7 +299,7 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="px-6 pb-20 pt-4">
-        <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] px-6 py-16 text-center shadow-[0_30px_60px_-25px_rgba(26,86,219,0.5)]">
+        <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#2563EB] to-[#7C3AED] px-6 py-16 text-center shadow-[0_30px_60px_-25px_rgba(26,86,219,0.5)]">
           <div
             className="pointer-events-none absolute inset-0 opacity-30"
             aria-hidden
@@ -318,7 +318,7 @@ export default function AboutPage() {
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <CtaLink cta="get_started" location="about"
                 href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-[#2563EB] shadow-lg transition hover:scale-[1.02]"
               >
                 Create account
                 <ArrowRight className="h-4 w-4" />

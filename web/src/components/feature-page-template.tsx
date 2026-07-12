@@ -39,9 +39,9 @@ export type FeaturePageProps = {
 
 /* accent → Tailwind class sets */
 const ACCENT: Record<FeatureAccent, { iconBg: string; iconText: string; badge: string; badgeText: string; btnBg: string; btnHover: string; btnShadow: string; gradFrom: string; gradTo: string; stepBg: string; checkText: string }> = {
-  blue: { iconBg: "bg-[#EFF6FF]", iconText: "text-[#1A56DB]", badge: "bg-[#EFF6FF]", badgeText: "text-[#1A56DB]", btnBg: "bg-[#1A56DB]", btnHover: "hover:bg-[#1D4ED8]", btnShadow: "shadow-blue-500/25", gradFrom: "from-[#1A56DB]", gradTo: "to-[#7C3AED]", stepBg: "bg-[#1A56DB]", checkText: "text-[#1A56DB]" },
-  violet: { iconBg: "bg-[#EDE9FE]", iconText: "text-[#6D28D9]", badge: "bg-[#EDE9FE]", badgeText: "text-[#6D28D9]", btnBg: "bg-[#7C3AED]", btnHover: "hover:bg-[#6D28D9]", btnShadow: "shadow-violet-500/25", gradFrom: "from-[#7C3AED]", gradTo: "to-[#1A56DB]", stepBg: "bg-[#7C3AED]", checkText: "text-[#7C3AED]" },
-  teal: { iconBg: "bg-[#F0FDFA]", iconText: "text-[#0D9488]", badge: "bg-[#F0FDFA]", badgeText: "text-[#0D9488]", btnBg: "bg-[#0D9488]", btnHover: "hover:bg-[#0F766E]", btnShadow: "shadow-teal-500/20", gradFrom: "from-[#0D9488]", gradTo: "to-[#1A56DB]", stepBg: "bg-[#0D9488]", checkText: "text-[#0D9488]" },
+  blue: { iconBg: "bg-[#EFF6FF]", iconText: "text-[#2563EB]", badge: "bg-[#EFF6FF]", badgeText: "text-[#2563EB]", btnBg: "bg-[#2563EB]", btnHover: "hover:bg-[#1D4ED8]", btnShadow: "shadow-blue-500/25", gradFrom: "from-[#2563EB]", gradTo: "to-[#1D4ED8]", stepBg: "bg-[#2563EB]", checkText: "text-[#2563EB]" },
+  violet: { iconBg: "bg-[#EDE9FE]", iconText: "text-[#6D28D9]", badge: "bg-[#EDE9FE]", badgeText: "text-[#6D28D9]", btnBg: "bg-[#7C3AED]", btnHover: "hover:bg-[#6D28D9]", btnShadow: "shadow-violet-500/25", gradFrom: "from-[#7C3AED]", gradTo: "to-[#2563EB]", stepBg: "bg-[#7C3AED]", checkText: "text-[#7C3AED]" },
+  teal: { iconBg: "bg-[#F0FDFA]", iconText: "text-[#0D9488]", badge: "bg-[#F0FDFA]", badgeText: "text-[#0D9488]", btnBg: "bg-[#0D9488]", btnHover: "hover:bg-[#0F766E]", btnShadow: "shadow-teal-500/20", gradFrom: "from-[#0D9488]", gradTo: "to-[#2563EB]", stepBg: "bg-[#0D9488]", checkText: "text-[#0D9488]" },
   emerald: { iconBg: "bg-[#DCFCE7]", iconText: "text-[#15803D]", badge: "bg-[#DCFCE7]", badgeText: "text-[#15803D]", btnBg: "bg-[#059669]", btnHover: "hover:bg-[#047857]", btnShadow: "shadow-emerald-500/20", gradFrom: "from-[#059669]", gradTo: "to-[#0D9488]", stepBg: "bg-[#059669]", checkText: "text-[#059669]" },
   orange: { iconBg: "bg-[#FFF7ED]", iconText: "text-[#C2410C]", badge: "bg-[#FFF7ED]", badgeText: "text-[#C2410C]", btnBg: "bg-[#EA580C]", btnHover: "hover:bg-[#C2410C]", btnShadow: "shadow-orange-500/20", gradFrom: "from-[#EA580C]", gradTo: "to-[#D97706]", stepBg: "bg-[#EA580C]", checkText: "text-[#EA580C]" },
   pink: { iconBg: "bg-[#FDF2F8]", iconText: "text-[#9D174D]", badge: "bg-[#FDF2F8]", badgeText: "text-[#9D174D]", btnBg: "bg-[#DB2777]", btnHover: "hover:bg-[#BE185D]", btnShadow: "shadow-pink-500/20", gradFrom: "from-[#DB2777]", gradTo: "to-[#7C3AED]", stepBg: "bg-[#DB2777]", checkText: "text-[#DB2777]" },
@@ -78,7 +78,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
 
   const webPageLd = {
     "@type": "WebPage",
-    name: `${title} | Launch CV`,
+    name: `${title} | LaunchCV`,
     description: description,
     url: absoluteUrl(canonicalPath),
   };
@@ -94,7 +94,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
 
   const howToLd = steps.length > 0 ? {
     "@type": "HowTo",
-    name: `How to use ${title} — Launch CV`,
+    name: `How to use ${title} — LaunchCV`,
     description: description,
     url: absoluteUrl(canonicalPath),
     step: steps.map((s, i) => ({
@@ -281,7 +281,7 @@ export function FeaturePageLayout(props: FeaturePageProps) {
               <Link
                 key={rf.href}
                 href={rf.href}
-                className={`flex items-center gap-1.5 rounded-full border border-[#E2E8F0] px-5 py-2.5 font-body text-[13px] font-semibold text-[#334155] transition hover:border-[#1A56DB] hover:text-[#1A56DB] hover:bg-[#EFF6FF]`}
+                className={`flex items-center gap-1.5 rounded-full border border-[#E2E8F0] px-5 py-2.5 font-body text-[13px] font-semibold text-[#334155] transition hover:border-[#2563EB] hover:text-[#2563EB] hover:bg-[#EFF6FF]`}
               >
                 {rf.title} <ChevronRight className="h-3.5 w-3.5" />
               </Link>

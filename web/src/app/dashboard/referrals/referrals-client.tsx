@@ -124,12 +124,12 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
   const progressPct = Math.min(100, Math.round((progressCurrent / 5) * 100));
 
   const [inviteDescription, setInviteDescription] = useState(
-    `I've been using Launch CV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
+    `I've been using LaunchCV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
   );
 
   useEffect(() => {
     setInviteDescription(
-      `I've been using Launch CV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
+      `I've been using LaunchCV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
     );
   }, [referralLink]);
 
@@ -141,7 +141,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
 
   const steps = [
     { step: 1, icon: Link2, title: "Share your link", desc: "Send your unique referral link to friends" },
-    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "They create a Launch CV account and activate a plan" },
+    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "They create a LaunchCV account and activate a plan" },
     { step: 3, icon: Gift, title: "Earn credits", desc: "Get $9 for every 5 successful referrals" },
   ];
 
@@ -158,7 +158,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
             <Gift className="h-7 w-7 text-[#7C5CFC]" />
           </div>
-          <h2 className="text-[15px] font-bold text-gray-900">Invite Friends to Launch CV</h2>
+          <h2 className="text-[15px] font-bold text-gray-900">Invite Friends to LaunchCV</h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-gray-500">
             Get $9 in credit for every 5 people you refer. Share your unique link below.
           </p>
@@ -267,7 +267,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
             LinkedIn
           </a>
           <a
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out Launch CV – the best tool to manage your job search! ${referralLink}`)}`}
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out LaunchCV – the best tool to manage your job search! ${referralLink}`)}`}
             target="_blank"
             rel="noreferrer"
             className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-5 text-[13px] font-semibold text-gray-700 transition hover:border-[#1DA1F2] hover:bg-sky-50 hover:text-[#1DA1F2]"

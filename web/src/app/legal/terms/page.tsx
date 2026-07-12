@@ -10,16 +10,16 @@ import { absoluteUrl } from "@/lib/site";
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Terms of Service",
   description:
-    "Launch CV terms of service: service availability, AI-content responsibility, account security, prohibited use, and changes to the service.",
+    "LaunchCV terms of service: service availability, AI-content responsibility, account security, prohibited use, and changes to the service.",
   pathname: "/legal/terms",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["Launch CV terms", "terms of service", "user agreement"],
+  keywords: ["LaunchCV terms", "terms of service", "user agreement"],
 });
 
 const ld = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Terms of Service | Launch CV",
+  name: "Terms of Service | LaunchCV",
   url: absoluteUrl("/legal/terms"),
 };
 
@@ -28,7 +28,7 @@ const sections = [
     h: "The service",
     body: (
       <p>
-        Launch CV is provided &ldquo;as is.&rdquo; We make our best effort to keep it available 24/7 but do not
+        LaunchCV is provided &ldquo;as is.&rdquo; We make our best effort to keep it available 24/7 but do not
         guarantee uninterrupted uptime. Scheduled maintenance and incidents are posted in-app when relevant.
       </p>
     ),
@@ -58,7 +58,7 @@ const sections = [
         <li>No spam, harassment, or illegal content.</li>
         <li>No content that violates third-party intellectual property or privacy.</li>
         <li>No automated scraping or attempts to bypass plan limits.</li>
-        <li>No use of Launch CV to misrepresent your identity or credentials.</li>
+        <li>No use of LaunchCV to misrepresent your identity or credentials.</li>
       </ul>
     ),
   },
@@ -78,7 +78,7 @@ const sections = [
       <p>
         We collect technical logs and product analytics (event names, timestamps) to improve the service. No
         personally identifiable data is included in event payloads. See the{" "}
-        <Link href="/legal/privacy" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+        <Link href="/legal/privacy" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
           Privacy Policy
         </Link>{" "}
         for details.
@@ -98,7 +98,7 @@ const sections = [
     h: "Liability",
     body: (
       <p>
-        To the extent permitted by law, Launch CV and Elmun Technologies are not liable for indirect, incidental,
+        To the extent permitted by law, LaunchCV and Elmun Technologies are not liable for indirect, incidental,
         or consequential damages — including missed job opportunities or hiring outcomes.
       </p>
     ),
@@ -113,15 +113,15 @@ export default function TermsPage() {
 
       <section className="bg-[#FAFBFC] pt-[112px]">
         <div className="mx-auto max-w-[860px] px-6 pb-12">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1A56DB] hover:underline">
+          <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline">
             <ArrowLeft className="h-3.5 w-3.5" /> Back to home
           </Link>
           <span className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-            <Scale className="h-3.5 w-3.5 text-[#1A56DB]" /> Legal
+            <Scale className="h-3.5 w-3.5 text-[#2563EB]" /> Legal
           </span>
           <h1 className="mt-4 lc-hero-headline text-[#0F172A]">Terms of Service</h1>
           <p className="mt-4 max-w-[640px] text-[15px] leading-[1.7] text-[#475569]">
-            By using Launch CV you agree to the terms below. Last updated:{" "}
+            By using LaunchCV you agree to the terms below. Last updated:{" "}
             <span className="font-semibold text-[#0F172A]">May 14, 2026</span>.
           </p>
         </div>
@@ -145,7 +145,7 @@ export default function TermsPage() {
             <p className="text-[13px] font-semibold uppercase tracking-wider text-[#94A3B8]">Questions?</p>
             <p className="mt-2 text-[15px] text-[#0F172A]">
               Email{" "}
-              <a href="mailto:hello@launch-cv.com" className="inline-flex items-center gap-1 font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              <a href="mailto:hello@launch-cv.com" className="inline-flex items-center gap-1 font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 hello@launch-cv.com
                 <Mail className="h-3.5 w-3.5" />
               </a>{" "}

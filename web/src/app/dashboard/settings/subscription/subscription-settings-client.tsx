@@ -102,7 +102,7 @@ export function SubscriptionSettingsClient() {
       <div>
         <h1 className="text-[28px] font-bold text-gray-900">Subscription</h1>
         <p className="mt-1 text-[15px] text-gray-500">
-          Launch CV is a paid product — pick a plan that matches your search intensity. Upgrade anytime; Lifetime is a
+          LaunchCV is a paid product — pick a plan that matches your search intensity. Upgrade anytime; Lifetime is a
           one-time purchase.
         </p>
       </div>

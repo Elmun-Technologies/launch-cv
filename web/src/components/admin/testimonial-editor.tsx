@@ -169,7 +169,7 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
                   <label
                     key={p.value}
                     className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-[13px] transition ${
-                      checked ? "border-[#1A56DB] bg-[#EFF6FF] text-[#0F172A]" : "border-[#E2E8F0] bg-white text-[#475569] hover:bg-[#FAFBFC]"
+                      checked ? "border-[#2563EB] bg-[#EFF6FF] text-[#0F172A]" : "border-[#E2E8F0] bg-white text-[#475569] hover:bg-[#FAFBFC]"
                     }`}
                   >
                     <input

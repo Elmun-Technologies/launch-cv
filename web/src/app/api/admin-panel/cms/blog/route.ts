@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       category: String(body.category ?? "Resume Tips").trim(),
       tags: Array.isArray(body.tags) ? (body.tags as unknown[]).filter((t): t is string => typeof t === "string") : [],
       readingTime: Number(body.readingTime ?? 5) || 5,
-      authorName: String(body.authorName ?? "Launch CV Editorial").trim(),
+      authorName: String(body.authorName ?? "LaunchCV Editorial").trim(),
       authorRole: body.authorRole != null ? String(body.authorRole) : null,
       authorBio: body.authorBio != null ? String(body.authorBio) : null,
       bodyMd: String(body.bodyMd ?? ""),

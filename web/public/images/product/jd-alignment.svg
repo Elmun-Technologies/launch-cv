@@ -17,9 +17,9 @@
   <g fill="#64748B" font-size="17">
     <text x="140" y="322">We're hiring an engineer with 5+ years building</text>
     <text x="140" y="350">distributed systems at scale. You'll own</text>
-    <text x="140" y="378">services written in <tspan fill="#1A56DB" font-weight="600">Go</tspan> and <tspan fill="#1A56DB" font-weight="600">TypeScript</tspan>, deployed</text>
-    <text x="140" y="406">on <tspan fill="#1A56DB" font-weight="600">Kubernetes</tspan> across <tspan fill="#1A56DB" font-weight="600">AWS</tspan>. Experience with</text>
-    <text x="140" y="434"><tspan fill="#1A56DB" font-weight="600">GraphQL</tspan>, <tspan fill="#1A56DB" font-weight="600">Postgres</tspan>, and <tspan fill="#1A56DB" font-weight="600">CI/CD</tspan> pipelines is</text>
+    <text x="140" y="378">services written in <tspan fill="#2563EB" font-weight="600">Go</tspan> and <tspan fill="#2563EB" font-weight="600">TypeScript</tspan>, deployed</text>
+    <text x="140" y="406">on <tspan fill="#2563EB" font-weight="600">Kubernetes</tspan> across <tspan fill="#2563EB" font-weight="600">AWS</tspan>. Experience with</text>
+    <text x="140" y="434"><tspan fill="#2563EB" font-weight="600">GraphQL</tspan>, <tspan fill="#2563EB" font-weight="600">Postgres</tspan>, and <tspan fill="#2563EB" font-weight="600">CI/CD</tspan> pipelines is</text>
     <text x="140" y="462">required. Team leadership a strong plus.</text>
   </g>
   <rect x="140" y="500" width="504" height="1" fill="#E2E8F0"/>
@@ -58,6 +58,6 @@
   <text x="752" y="586" fill="#1E3A8A" font-size="18" font-weight="700">AI suggestion · applied</text>
   <text x="752" y="622" fill="#334155" font-size="18">Reworded a bullet to include “gRPC” and “deploy</text>
   <text x="752" y="650" fill="#334155" font-size="18">time cut 40%,” lifting your match from 78% → 91%.</text>
-  <rect x="752" y="672" width="220" height="30" rx="15" fill="#1A56DB"/>
+  <rect x="752" y="672" width="220" height="30" rx="15" fill="#2563EB"/>
   <text x="862" y="693" text-anchor="middle" fill="#FFFFFF" font-size="15" font-weight="600">Before: 78%  →  After: 91%</text>
 </svg>

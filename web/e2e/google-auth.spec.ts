@@ -8,7 +8,7 @@ import { test, expect } from "@playwright/test";
 
 test("Google button is hidden when OAuth isn't configured", async ({ page }) => {
   await page.goto("/login");
-  await expect(page.getByRole("heading", { name: /sign in to launch cv/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /sign in to launchcv/i })).toBeVisible();
   await expect(page.getByRole("link", { name: /continue with google/i })).toHaveCount(0);
 });
 

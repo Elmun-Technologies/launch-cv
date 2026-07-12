@@ -29,7 +29,7 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   {
     title: "JD Alignment Match",
     path: "/features/jd-alignment",
-    summary: "Paste any job description and Launch CV maps every requirement to your resume, fills keyword gaps, and rewrites bullets to raise your match score from ~40% to 90%+ in about 60 seconds.",
+    summary: "Paste any job description and LaunchCV maps every requirement to your resume, fills keyword gaps, and rewrites bullets to raise your match score from ~40% to 90%+ in about 60 seconds.",
   },
   {
     title: "ATS Score Checker",
@@ -57,7 +57,7 @@ const USE_CASE_PAGES: { title: string; path: string; summary: string }[] = [
   {
     title: "Use cases overview",
     path: "/use-cases",
-    summary: "See how Launch CV tailors resumes to specific fields with role-specific AI bullets for software engineers, product managers, and designers.",
+    summary: "See how LaunchCV tailors resumes to specific fields with role-specific AI bullets for software engineers, product managers, and designers.",
   },
   {
     title: "For Software Engineers",
@@ -142,12 +142,12 @@ export async function GET(): Promise<Response> {
         .join("\n")
     : `- Blog index: ${baseUrl}/blog`;
 
-  const body = `# Launch CV — AI Resume Builder & Job Search Copilot
+  const body = `# LaunchCV — AI Resume Builder & Job Search Copilot
 # ${baseUrl}
 
-## What is Launch CV?
+## What is LaunchCV?
 
-Launch CV is a professional AI-powered resume and job search platform for modern job seekers.
+LaunchCV is a professional AI-powered resume and job search platform for modern job seekers.
 It combines six AI tools into one platform: resume building, JD alignment, ATS scoring,
 cover letter generation, interview preparation, and voice input.
 
@@ -168,7 +168,7 @@ cover letter generation, interview preparation, and voice input.
 
 ## Pricing
 
-Launch CV is a paid professional product. There is no free tier for AI features.
+LaunchCV is a paid professional product. There is no free tier for AI features.
 
 ${pricingTable}
 
@@ -194,7 +194,7 @@ ${billingNote}
 
 ## Company
 
-- Product: Launch CV
+- Product: LaunchCV
 - Website: ${baseUrl}
 - Support: support@launch-cv.com
 - Founded: 2025
@@ -218,7 +218,7 @@ ${useCasesBlock}
 
 ## Guides & Blog
 
-Evidence-based career guides written by the Launch CV editorial team. Every published
+Evidence-based career guides written by the LaunchCV editorial team. Every published
 article, with a one-line answer-style summary:
 
 ${blogBlock}

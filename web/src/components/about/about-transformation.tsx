@@ -61,7 +61,7 @@ export function AboutTransformation() {
     <section className="relative overflow-hidden py-20 sm:py-24">
       <div className="mx-auto max-w-[1100px] px-6">
         <div className="mx-auto max-w-[680px] text-center">
-          <p className="lc-overline text-[#1A56DB]">What we actually do</p>
+          <p className="lc-overline text-[#2563EB]">What we actually do</p>
           <h2 className="mt-3 lc-section-headline text-[#0F172A]">
             Same experience. Rewritten to get past the filter.
           </h2>
@@ -104,7 +104,7 @@ export function AboutTransformation() {
 
           {/* arrow */}
           <motion.div
-            className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#1A56DB] to-[#7C3AED] text-white shadow-lg lg:rotate-0"
+            className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-white shadow-lg lg:rotate-0"
             initial={reduce ? false : { opacity: 0, scale: 0.6 }}
             animate={inView ? { opacity: 1, scale: 1 } : undefined}
             transition={{ duration: 0.5, ease: EASE, delay: 0.5 }}
@@ -119,7 +119,7 @@ export function AboutTransformation() {
             animate={inView ? { opacity: 1, x: 0 } : undefined}
             transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
           >
-            <span className="absolute -right-2 -top-2 inline-flex items-center gap-1 rounded-full bg-[#1A56DB] px-2.5 py-1 text-[11px] font-bold text-white shadow-md">
+            <span className="absolute -right-2 -top-2 inline-flex items-center gap-1 rounded-full bg-[#2563EB] px-2.5 py-1 text-[11px] font-bold text-white shadow-md">
               <Sparkles className="h-3 w-3" /> AI rewritten
             </span>
             <div className="flex items-center justify-between">

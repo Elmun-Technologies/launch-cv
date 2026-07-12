@@ -30,7 +30,7 @@ export function AboutTools() {
     <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="max-w-[680px]">
-          <p className="lc-overline text-[#1A56DB]">One product, six tools</p>
+          <p className="lc-overline text-[#2563EB]">One product, six tools</p>
           <h2 className="mt-3 lc-section-headline text-[#0F172A]">
             Everything the job hunt needs — in one place
           </h2>

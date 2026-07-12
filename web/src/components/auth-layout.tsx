@@ -32,12 +32,12 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
           </div>
 
           <div className="flex flex-1 flex-col justify-center">
-            <p className="lc-overline text-[#1A56DB]">{mode === "register" ? "Create your account" : "Sign in"}</p>
+            <p className="lc-overline text-[#2563EB]">{mode === "register" ? "Create your account" : "Sign in"}</p>
 
             <h2 className="mt-3 text-[30px] font-semibold leading-[1.1] tracking-tight text-[#0F172A] xl:text-[36px]">
               {mode === "register"
                 ? "Start the job search that actually works"
-                : "Welcome back to Launch CV"}
+                : "Welcome back to LaunchCV"}
             </h2>
 
             <p className="mt-4 max-w-[440px] text-[14px] leading-[1.6] text-[#475569]">
@@ -51,7 +51,7 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
                 {FEATURES.map((f) => (
                   <li key={f} className="flex items-center gap-2.5 text-[13px] text-[#334155]">
                     <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#EFF6FF]">
-                      <Check className="h-2.5 w-2.5 text-[#1A56DB]" />
+                      <Check className="h-2.5 w-2.5 text-[#2563EB]" />
                     </span>
                     {f}
                   </li>
@@ -98,7 +98,7 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
           </div>
           <p className="mt-4 text-center text-[12px] text-[#94A3B8]">
             Need help?{" "}
-            <a href="mailto:hello@launch-cv.com" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+            <a href="mailto:hello@launch-cv.com" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Email us
             </a>
           </p>

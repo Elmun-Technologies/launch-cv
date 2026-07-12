@@ -48,7 +48,7 @@ export default async function AdminPagesIndex() {
                     className="group flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-[#FAFBFC]"
                   >
                     <div className="flex items-start gap-3">
-                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                         <Layers className="h-4 w-4" />
                       </span>
                       <div>
@@ -65,7 +65,7 @@ export default async function AdminPagesIndex() {
                           Using code defaults
                         </span>
                       )}
-                      <ArrowRight className="h-4 w-4 text-[#CBD5E1] transition group-hover:text-[#1A56DB]" />
+                      <ArrowRight className="h-4 w-4 text-[#CBD5E1] transition group-hover:text-[#2563EB]" />
                     </div>
                   </Link>
                 </li>

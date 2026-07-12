@@ -129,7 +129,7 @@ export function LandingFooter() {
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#E2E8F0] pt-6 sm:flex-row">
           <p className="text-[13px] text-[#94A3B8]">
-            © {new Date().getFullYear()} Launch CV. All rights reserved.
+            © {new Date().getFullYear()} LaunchCV. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             <Link href="/legal/privacy" className="text-[13px] text-[#94A3B8] transition hover:text-[#0F172A]">
