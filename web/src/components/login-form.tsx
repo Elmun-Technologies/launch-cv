@@ -5,7 +5,18 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { AuthLayout } from "@/components/auth-layout";
+import { GoogleSignInButton, AuthDivider } from "@/components/google-sign-in-button";
 import { identifyUser } from "@/lib/analytics-client";
+
+/** Maps `?error=` codes from the Google OAuth callback to friendly copy. */
+const GOOGLE_ERRORS: Record<string, string> = {
+  google_unavailable: "Google sign-in isn't available right now. Use your email and password.",
+  google_denied: "Google sign-in was cancelled.",
+  google_state: "Your Google sign-in session expired. Please try again.",
+  google_profile: "We couldn't read your Google profile. Please try again.",
+  google_unverified_email: "Your Google email isn't verified. Verify it with Google, then retry.",
+  google_server: "Something went wrong finishing Google sign-in. Please try again.",
+};
 
 /** Mirror of middleware's safeNextPath — blocks `//evil.com`, schemes, and
  * other off-site bounces that would let an attacker open-redirect users
@@ -21,13 +32,14 @@ function safeNextPath(value: string | null): string | null {
   return value;
 }
 
-export function LoginForm() {
+export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }) {
   const sp = useSearchParams();
   const explicitNext = safeNextPath(sp.get("next"));
+  const googleError = GOOGLE_ERRORS[sp.get("error") ?? ""] ?? null;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(googleError);
   const [needVerify, setNeedVerify] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -79,6 +91,14 @@ export function LoginForm() {
           </Link>
         </p>
       </div>
+
+      {/* Social sign-in */}
+      {googleEnabled ? (
+        <div className="mb-5 space-y-4">
+          <GoogleSignInButton mode="login" next={explicitNext} />
+          <AuthDivider label="or continue with email" />
+        </div>
+      ) : null}
 
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-4">

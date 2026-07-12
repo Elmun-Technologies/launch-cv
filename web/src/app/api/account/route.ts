@@ -56,6 +56,15 @@ export async function DELETE(req: Request) {
   const user = await prisma.user.findUnique({ where: { id: session.sub } });
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
+  // Accounts created via Google have no password set — they can't confirm
+  // deletion with one. Ask them to set a password first (Account settings).
+  if (!user.passwordHash) {
+    return NextResponse.json(
+      { error: "Set a password before deleting your account.", code: "no_password" },
+      { status: 403 },
+    );
+  }
+
   const ok = await verifyPassword(parsed.data.password, user.passwordHash);
   if (!ok) return NextResponse.json({ error: "Incorrect password" }, { status: 403 });
 
