@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { FeatureRelatedLinks } from "@/components/feature-related-links";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -22,7 +24,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "AI Interview Prep — Practice Real, Role-Specific Questions",
   description:
-    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face — with scored AI feedback and benchmark answers.",
+    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
   pathname: "/features/interview-prep",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -118,13 +120,13 @@ export default function InterviewPrepPage() {
               </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
+                <CtaLink cta="get_started" location="feature_interview_prep"
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#059669] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(5,150,105,0.4)] transition hover:bg-[#047857]"
                 >
                   Drill my first interview
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </CtaLink>
                 <Link
                   href="#categories"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
@@ -312,6 +314,124 @@ export default function InterviewPrepPage() {
         </div>
       </section>
 
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#059669]">How it works</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Five steps from cold to interview-ready
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                AI interview preparation that reads your resume and the job description, then drills the exact job interview questions you are likely to face.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              { n: "01", t: "Add your resume and the JD", d: "AI reads both and builds a question set for the exact role, seniority, and company." },
+              { n: "02", t: "Pick a bank or a full mock", d: "Drill behavioral, technical, or situational questions, or run a screener-to-panel mock interview online." },
+              { n: "03", t: "Answer by voice or text", d: "Respond the way you would in the room — speak your answer or type it." },
+              { n: "04", t: "Get scored feedback", d: "Every answer is rated 1–10 for Clarity, Relevance, Impact, and STAR structure, with the reason why." },
+              { n: "05", t: "Compare and improve", d: "Calibrate against a model answer, then watch your score trend climb across sessions." },
+            ].map((s) => (
+              <RevealOnView key={s.n}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-emerald-50 text-[13px] font-bold text-[#059669]">
+                    {s.n}
+                  </span>
+                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{s.d}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COMPARISON */}
+      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#059669]">Why practice here</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Winging it vs. AI interview coaching
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Reading a list of questions is not practice. Interview practice AI gives you reps, scores, and a coach that never gets tired of your answers.
+              </p>
+            </div>
+          </RevealOnView>
+
+          <div className="mt-10 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
+              <thead>
+                <tr className="border-b border-[#E2E8F0]">
+                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#059669]">Launch CV</th>
+                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Winging it</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { k: "Questions", a: "200+ role-specific, from your resume and JD", b: "Generic lists off the internet" },
+                  { k: "Feedback", a: "Scored 1–10 with the reason why", b: "A friend saying it sounds fine" },
+                  { k: "Structure", a: "STAR-method coaching on every answer", b: "Rambling with no framework" },
+                  { k: "Realism", a: "Recruiter, hiring manager, and panel rounds", b: "One rehearsal in your head" },
+                  { k: "Format", a: "Voice or text, mock interview online", b: "No real practice reps" },
+                  { k: "Progress", a: "A score trend across sessions", b: "No way to measure improvement" },
+                ].map((r) => (
+                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
+                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
+                    <td className="py-4 px-4">
+                      <span className="flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#059669]" />
+                        <span className="text-[#0F172A]">{r.a}</span>
+                      </span>
+                    </td>
+                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* SCENARIO */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#059669]">A real use scenario</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How Leah fixed the answers that kept costing her offers
+            </h2>
+            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
+              <p>
+                Leah kept reaching final rounds and losing them. She knew her work was strong, but her stories wandered and she never quite landed the result. She could not tell what was going wrong.
+              </p>
+              <p>
+                She ran a mock for her target role and answered by voice, exactly as she would in the room. The AI scored her first behavioral answer an <span className="font-medium text-[#0F172A]">8.4 out of 10</span> — strong framing, weak Result — and told her precisely why: she had described the action but never quantified the outcome against a baseline.
+              </p>
+              <p>
+                Over a week of sessions she drilled the banks that worried her, compared each answer to the model response, and watched her STAR scores climb. By her next interview the results came out crisp and numbered. The reps, not luck, were the difference.
+              </p>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/features/jd-alignment" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Match the resume to the role <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+              <Link href="/features/voice-input" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+                Practice answers by voice <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </RevealOnView>
+        </div>
+      </section>
+
       {/* TESTIMONIALS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
@@ -373,15 +493,48 @@ export default function InterviewPrepPage() {
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
             200+ role-specific questions. AI-scored answers. Model responses on tap.
           </p>
-          <Link
+          <CtaLink cta="get_started" location="feature_interview_prep"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#059669] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#047857]"
           >
             Drill my first interview
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </section>
+
+      <FeatureRelatedLinks
+        accent="emerald"
+        useCases={[
+          {
+            href: "/use-cases/software-engineers",
+            title: "Resumes for software engineers",
+            desc: "Drill system-design and behavioral questions pulled from engineering JDs.",
+          },
+          {
+            href: "/use-cases/product-managers",
+            title: "Resumes for product managers",
+            desc: "Practice roadmap, prioritization, and stakeholder questions for PM loops.",
+          },
+        ]}
+        reading={[
+          {
+            href: "/blog/how-to-prepare-for-a-job-interview-with-ai",
+            title: "How to prepare for an interview with AI",
+            desc: "Generate role-specific questions and score your answers before the call.",
+          },
+          {
+            href: "/blog/how-to-tailor-your-resume-for-every-job",
+            title: "How to tailor your resume for every job",
+            desc: "Know the role inside out so interview answers land against the JD.",
+          },
+          {
+            href: "/blog/what-is-an-ats-score",
+            title: "What is an ATS score?",
+            desc: "Get past the resume filter first — then the interview prep pays off.",
+          },
+        ]}
+      />
 
       <LandingFooter />
     </div>

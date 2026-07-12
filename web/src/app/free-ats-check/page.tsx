@@ -2,7 +2,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { FreeAtsClient } from "@/components/free-ats-client";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { buildMarketingMetadata, FREE_ATS_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { BarChart3 } from "lucide-react";
 
@@ -11,6 +11,7 @@ export const metadata = buildMarketingMetadata({
   description:
     "Upload your resume and get a free 0–100 ATS score with a full parser breakdown in seconds. No account required. See exactly why your resume gets filtered.",
   pathname: "/free-ats-check",
+  image: FREE_ATS_OG_IMAGE,
   keywords: [
     "free ATS score checker",
     "ATS resume test free",

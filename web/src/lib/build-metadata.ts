@@ -11,6 +11,7 @@ import { absoluteUrl } from "@/lib/site";
  */
 export const DEFAULT_OG_IMAGE = absoluteUrl("/opengraph-image");
 export const FEATURES_OG_IMAGE = absoluteUrl("/features/opengraph-image");
+export const FREE_ATS_OG_IMAGE = absoluteUrl("/free-ats-check/opengraph-image");
 
 /**
  * Consistent marketing-page metadata: canonical URL, Open Graph, Twitter.

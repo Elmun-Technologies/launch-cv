@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
-import { trackCheckoutStarted, trackFeatureCtaClicked } from "@/lib/analytics-client";
+import { trackCheckoutStarted, trackFeatureCtaClicked, getGaClientId } from "@/lib/analytics-client";
 
 type StatusPayload = {
   pro: boolean;
@@ -83,7 +83,9 @@ export function SubscriptionSettingsClient() {
     const res = await fetch("/api/polar/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
+      // Pass the GA client id so the webhook-driven purchase_completed stitches
+      // back to this browser's GA4 session.
+      body: JSON.stringify({ plan, gaClientId: getGaClientId() }),
     });
     const j = await res.json().catch(() => ({}));
     setLoadingPlan(null);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ArrowRight } from "lucide-react";
 
@@ -238,12 +238,12 @@ export function ResumeTemplateGallery() {
                   </div>
                   {/* hover overlay */}
                   <div className="pointer-events-none absolute inset-0 flex items-end justify-center bg-gradient-to-t from-[#0F172A]/70 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <Link
+                    <CtaLink cta="get_started" location="template_gallery"
                       href="/register"
                       className="pointer-events-auto mb-4 inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-[13px] font-bold text-[#1A56DB] shadow-lg transition hover:scale-[1.03]"
                     >
                       Use this template <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
+                    </CtaLink>
                   </div>
                 </div>
                 <div className="mt-3 flex items-center justify-between px-1">
@@ -260,12 +260,12 @@ export function ResumeTemplateGallery() {
         </motion.div>
 
         <div className="mt-12 text-center">
-          <Link
+          <CtaLink cta="get_started" location="template_gallery"
             href="/register"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
             Browse all 12 templates <ArrowRight className="h-4 w-4" />
-          </Link>
+          </CtaLink>
         </div>
       </div>
     </section>
