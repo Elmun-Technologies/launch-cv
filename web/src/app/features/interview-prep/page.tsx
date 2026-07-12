@@ -3,11 +3,16 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   MessageSquare,
   ArrowRight,
@@ -25,7 +30,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "AI Interview Prep — Practice Real, Role-Specific Questions",
   description:
-    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face — with scored AI feedback and benchmark answers.",
+    "Launch CV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
   pathname: "/features/interview-prep",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -37,7 +42,7 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
-const faqs: FaqEntry[] = [
+const faqs: FaqItem[] = [
   {
     q: "How does Launch CV know which interview questions to ask me?",
     a: "Launch CV reads your resume and the target job description, then generates the exact questions you're likely to face for that role. It pulls behavioral prompts from your experience, technical questions from the JD's required skills, and asks resume-aware follow-ups that dig in like a real interviewer would.",
@@ -81,9 +86,17 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Interview Prep", item: absoluteUrl("/features/interview-prep") },
       ],
     },
-    buildFaqPageLd(faqs),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
+
+const keyFacts = [
+  "Generates role-specific questions from your resume and the exact job description.",
+  "Every answer is scored 1–10 on Clarity, Relevance, Impact, and STAR structure.",
+  "Returns a benchmark model answer beside yours to calibrate against.",
+  "Covers behavioral, technical, company/culture, situational, and curveball rounds.",
+];
 
 const categories = [
   { k: "Behavioral", d: "STAR-method questions generated from your resume experience." },
@@ -147,6 +160,12 @@ export default function InterviewPrepPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 AI reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face. Every answer is scored, every weakness named, every model answer benchmarked.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Interview Prep reads your resume and the target job description, then generates the role-specific questions you're most likely to face. Every answer is scored 1–10 on clarity, relevance, impact, and STAR structure, with a benchmark model answer beside yours across behavioral, technical, company, situational, and curveball rounds."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_interview_prep"
@@ -244,6 +263,24 @@ export default function InterviewPrepPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#059669]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Practice with instant AI feedback</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/interview-prep.svg"
+            alt="The Launch CV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
+            caption="Answer role-specific questions and get scored on clarity, relevance, impact, and STAR structure."
+          />
         </div>
       </section>
 
@@ -566,6 +603,13 @@ export default function InterviewPrepPage() {
       />
 
       <FaqSection items={faqs} accent="#059669" />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#059669] hover:bg-[#047857]"
+        location="feature_interview_prep"
+      />
 
       <LandingFooter />
     </div>

@@ -6,6 +6,8 @@ import { ToastProvider } from "@/components/toast";
 import { AppProviders } from "@/app/providers";
 import { JsonLd } from "@/components/json-ld";
 import { GoogleAnalytics } from "@/components/google-analytics";
+import { aggregateRatingLd, reviewLdList } from "@/lib/geo";
+import { AttributionTracker } from "@/components/attribution-tracker";
 import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
@@ -138,13 +140,8 @@ const rootStructuredData = {
             : {}),
         };
       }),
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: "2400",
-        bestRating: "5",
-        worstRating: "1",
-      },
+      aggregateRating: aggregateRatingLd(),
+      review: reviewLdList(),
       description:
         "AI-powered resume builder with JD alignment, ATS scoring, cover letter generation, interview prep, and voice input. Paid plans for serious job seekers.",
       featureList: [
@@ -168,6 +165,7 @@ export default async function RootLayout({
     <html lang="en" className={`${inter.variable} ${geistMono.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
+        <AttributionTracker />
         <JsonLd data={rootStructuredData} />
         <AppProviders>
           {children}

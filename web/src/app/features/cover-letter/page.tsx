@@ -3,11 +3,16 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { howToLd, speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Mail,
   ArrowRight,
@@ -37,7 +42,7 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
-const faqs: FaqEntry[] = [
+const faqs: FaqItem[] = [
   {
     q: "How does Launch CV personalize my cover letter?",
     a: "Launch CV reads your resume and the job description, then extracts the company mission, tech stack, required skills, and hiring tone and weaves them in naturally. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the letter.",
@@ -81,9 +86,32 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Cover Letter", item: absoluteUrl("/features/cover-letter") },
       ],
     },
-    buildFaqPageLd(faqs),
+    howToLd({
+      name: "How to generate a tailored cover letter",
+      description:
+        "Connect a resume, paste the job description, choose tone and length, and generate an ATS-safe cover letter in under a minute.",
+      totalTime: "PT1M",
+      url: absoluteUrl("/features/cover-letter"),
+      steps: [
+        { name: "Connect a resume", text: "Use a Launch CV resume or paste an existing one — your career history is the foundation." },
+        { name: "Paste the job description", text: "AI auto-extracts the company, role, tech stack, and hiring tone with no manual tagging." },
+        { name: "Add optional personal context", text: "Add the hiring manager's name, a mutual connection, or a why-this-company line and AI weaves it in." },
+        { name: "Pick tone and length", text: "Choose from four tones and three lengths, and preview the voice before generating." },
+        { name: "Generate", text: "AI returns three openings, one full body, and two closings — all editable inline." },
+        { name: "Send", text: "Copy to clipboard, paste into an email, or export a PDF; the plain-text structure works everywhere." },
+      ],
+    }),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
+
+const keyFacts = [
+  "Writes a tailored cover letter from your resume and a job description in about 60 seconds.",
+  "4 tone modes (Professional, Enthusiastic, Concise, Creative) and 14 languages.",
+  "Generates 3 opening hooks and 3 length options (250 / 400 / 600 words).",
+  "ATS-safe plain-text formatting for email body, ATS upload, or PDF.",
+];
 
 const tones = [
   { k: "Professional", d: "Crisp, formal, polished. Best for finance, legal, enterprise." },
@@ -155,6 +183,12 @@ export default function CoverLetterPage() {
                 Stop opening the blank document. Launch CV pulls the company mission, the tech stack, and the hiring manager&apos;s tone — then writes a letter you&apos;d be proud to send.
               </p>
 
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="The Cover Letter Generator writes a tailored, ATS-safe cover letter from your resume and a target job description in under a minute. It extracts the company mission, tech stack, and required skills from the posting, offers four tones and three lengths, and supports 14 languages."
+                facts={keyFacts}
+              />
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_cover_letter"
                   href="/register"
@@ -222,6 +256,24 @@ export default function CoverLetterPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#0D9488]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">A personalized letter in seconds</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/cover-letter.svg"
+            alt="The Launch CV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
+            caption="Pick a tone and language; get a company-specific, ready-to-send letter in under a minute."
+          />
         </div>
       </section>
 
@@ -540,6 +592,13 @@ export default function CoverLetterPage() {
       />
 
       <FaqSection items={faqs} accent="#0D9488" />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#0D9488] hover:bg-[#0F766E]"
+        location="feature_cover_letter"
+      />
 
       <LandingFooter />
     </div>

@@ -28,7 +28,7 @@ import {
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
-  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Land more interviews — plans from ${planPriceLabel("starter")}.`,
+  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Plans from ${planPriceLabel("starter")}.`,
   pathname: "/",
   keywords: [
     "AI resume builder",
@@ -239,6 +239,94 @@ export default async function Home() {
               </MotionItem>
             ))}
           </MotionStagger>
+        </div>
+      </section>
+
+      {/* POPULAR RESOURCES — keyword-rich internal linking hub */}
+      <section className="border-t border-[#E2E8F0] py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <MotionReveal>
+            <div className="max-w-[680px]">
+              <p className="lc-overline text-[#1A56DB]">Most popular</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+                Start with the two tools job seekers use most
+              </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Two free-to-start tools do the heavy lifting: check whether your resume can pass
+                the software, then tailor it to the exact job you want.
+              </p>
+            </div>
+          </MotionReveal>
+
+          <div className="mt-10 grid gap-5 lg:grid-cols-2">
+            <MotionReveal>
+              <Link
+                href="/features/ats-score"
+                className="group flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2)]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
+                  <BarChart3 className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
+                  Free ATS score checker — test your resume on 15 engines
+                </h3>
+                <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
+                  Upload your resume and get a 0–100 ATS score in eight seconds, with a
+                  prioritized list of every formatting and keyword fix. See{" "}
+                  <span className="font-semibold text-[#1A56DB] underline-offset-2 group-hover:underline">
+                    how to check your resume&apos;s ATS score
+                  </span>
+                  .
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                  Check my ATS score
+                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </MotionReveal>
+
+            <MotionReveal>
+              <Link
+                href="/features/jd-alignment"
+                className="group flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2)]"
+              >
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
+                  <Target className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
+                  JD alignment — match your resume to any job description
+                </h3>
+                <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
+                  Paste a job description and AI runs a keyword gap analysis, then rewrites your
+                  bullets to lift your match score from around 40% to 90%+ —{" "}
+                  <span className="font-semibold text-[#1A56DB] underline-offset-2 group-hover:underline">
+                    tailor your resume to the job
+                  </span>{" "}
+                  in under a minute.
+                </p>
+                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#1A56DB]">
+                  Align my resume
+                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                </span>
+              </Link>
+            </MotionReveal>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] text-[#475569]">
+            <span className="font-semibold text-[#94A3B8]">Popular guides:</span>
+            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              What is an ATS score?
+            </Link>
+            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              How to check your ATS score
+            </Link>
+            <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              Resume keywords for software engineers
+            </Link>
+            <Link href="/compare/ats-resume-checkers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+              Best ATS resume checkers
+            </Link>
+          </div>
         </div>
       </section>
 

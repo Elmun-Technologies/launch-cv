@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { trackPurchaseCompleted } from "@/lib/analytics-server";
 import { isOneTimePlan, planIdFromPolarProductId } from "@/lib/polar";
+import { attributionFromRecord } from "@/lib/utm";
 import {
   resolvePolarUserId,
   upsertOrderFromPolar,
@@ -119,6 +120,7 @@ export async function POST(req: Request) {
             gaClientId: gaClientIdOf(metadataOf(data)),
             value: toMajorUnits(sub.amount),
             currency: sub.currency ?? null,
+            attribution: attributionFromRecord(metadataOf(data)),
           });
         }
         break;
@@ -154,6 +156,7 @@ export async function POST(req: Request) {
             gaClientId: gaClientIdOf(metadataOf(data)),
             value: toMajorUnits(order.total_amount ?? order.amount),
             currency: order.currency ?? null,
+            attribution: attributionFromRecord(metadataOf(data)),
           });
         }
         break;

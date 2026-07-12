@@ -4,10 +4,15 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Code2, Terminal, GitBranch, Cpu, Cloud, Check } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Software Engineer Resume Writer: AI, 5-Min Build",
@@ -18,7 +23,7 @@ export const metadata = buildMarketingMetadata({
   keywords: ["software engineer resume writer", "software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "Launch CV"],
 });
 
-const faqs: FaqEntry[] = [
+const faqs: FaqItem[] = [
   {
     q: "How do I write a resume for a software engineer role?",
     a: "Write a software engineer resume with quantified bullets covering latency, throughput, scope, and ownership rather than task lists. Launch CV rewrites vague lines like fixed slow db queries into metric-driven achievements, keeps formatting ATS-clean for Workday, Greenhouse, Lever and more, and picks the right keywords per job description.",
@@ -63,7 +68,8 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Software Engineer Resume", item: absoluteUrl("/use-cases/software-engineers") },
       ],
     },
-    buildFaqPageLd(faqs),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -112,6 +118,18 @@ export default function SoftwareEngineersPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Most engineering resumes read like a ticket queue. Launch CV rewrites them with the language hiring managers actually scan for — latency, throughput, scope, ownership, baselines — and keeps formatting ATS-clean for Workday, Greenhouse, Lever, and 12 more.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV builds ATS-clean software engineer resumes that quantify latency, throughput, scope, and ownership — the signals hiring managers scan for. It rewrites ticket-style bullets into measurable impact, draws on a 200+ engineering keyword library, and keeps formatting parseable for Workday, Greenhouse, Lever, and 12 more ATS engines."
+                facts={[
+                  "Rewrites vague bullets into quantified impact (latency, throughput, scope, MTTR).",
+                  "200+ engineering keywords pre-loaded; AI picks the right subset per job.",
+                  "Engineering-tested templates — no tables, graphics, or sidebars that break ATS.",
+                  "Tested against 15 ATS engines, including Workday, Greenhouse, and Lever.",
+                ]}
+              />
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="usecase_swe"
                   href="/register"
@@ -179,6 +197,24 @@ export default function SoftwareEngineersPage() {
               </li>
             </ul>
           </RevealOnView>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Matched to the exact engineering role</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/jd-alignment.svg"
+            alt="The Launch CV JD alignment view matching a software engineer resume to a backend job description, showing a 91% match and matched keywords like Kubernetes, GraphQL, and AWS."
+            caption="Paste a backend job description; Launch CV surfaces the exact keywords and gaps to close."
+          />
         </div>
       </section>
 
@@ -462,6 +498,12 @@ export default function SoftwareEngineersPage() {
       </section>
 
       <FaqSection items={faqs} accent="#1A56DB" />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="use_case_software_engineers"
+      />
 
       <LandingFooter />
     </div>

@@ -24,3 +24,18 @@ export const PLAN_MONTHLY_LIMITS: Record<
 };
 
 export const NONE_LIMITS = { jd: 0, packet: 0, roleFit: 0 } as const;
+
+/**
+ * List price per plan in USD — the source of truth for the `value` attached to
+ * the GA4 `purchase` event (GA4 monetization reporting needs a numeric value +
+ * currency). Keep aligned with `PUBLIC_PLANS[*].priceDisplay` in
+ * `lib/monetization.ts` and the Polar product amounts.
+ */
+export const PLAN_PRICE_USD: Record<CheckoutPlan, number> = {
+  starter: 9,
+  professional: 29,
+  elite: 49,
+  lifetime: 79,
+};
+
+export const PLAN_CURRENCY = "USD" as const;

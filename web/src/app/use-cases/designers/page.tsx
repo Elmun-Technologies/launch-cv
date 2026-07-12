@@ -4,10 +4,15 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Palette, Layers, Sparkles, Eye, Check } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Designer Resume Builder — Turn Portfolio Into Offers",
@@ -18,7 +23,7 @@ export const metadata = buildMarketingMetadata({
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
 });
 
-const faqs: FaqEntry[] = [
+const faqs: FaqItem[] = [
   {
     q: "How should designers show a portfolio on a resume?",
     a: "Designers should link the portfolio from a dedicated, ATS-parseable Selected Work section that gives each project a live link, short context, and the metric that mattered. Launch CV auto-formats this section so a recruiter can click through, while the resume itself stays clean enough to pass ATS parsing.",
@@ -63,7 +68,8 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Designer Resume", item: absoluteUrl("/use-cases/designers") },
       ],
     },
-    buildFaqPageLd(faqs),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -104,6 +110,18 @@ export default function DesignersPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Most designers under-sell themselves on paper. Launch CV quantifies your hand-off impact, system contributions, research depth, and shipping speed — without making it sound like a banker wrote it.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV writes ATS-clean design resume bullets that quantify impact, design-system contributions, research depth, and shipping speed — so your resume lands the interview your portfolio deserves. It uses design-specific language (not banker-speak) and a design keyword library matched to each job description."
+                facts={[
+                  "Quantifies hand-off impact, design-system work, research depth, and shipping speed.",
+                  "Design keyword library (Figma, design systems, WCAG, IA, prototyping) per job.",
+                  "Writes in design language, not corporate boilerplate.",
+                  "ATS-clean formatting tested against 15 tracking systems.",
+                ]}
+              />
+
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="usecase_designer"
                   href="/register"
@@ -204,6 +222,24 @@ export default function DesignersPage() {
               </RevealOnView>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#E11D48]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Clean, ATS-safe layouts for designers</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-templates.svg"
+            alt="A gallery of ATS-safe, single-column resume templates in Launch CV, giving designers a clean layout that still parses cleanly."
+            caption="Portfolio-worthy without the parser risk — every template is single-column and ATS-tested."
+          />
         </div>
       </section>
 
@@ -461,6 +497,13 @@ export default function DesignersPage() {
       </section>
 
       <FaqSection items={faqs} accent="#DB2777" />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Build my design resume"
+        primaryClassName="bg-[#DB2777] hover:bg-[#BE185D]"
+        location="use_case_designers"
+      />
 
       <LandingFooter />
     </div>

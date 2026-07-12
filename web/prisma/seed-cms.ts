@@ -70,6 +70,8 @@ async function main() {
         authorBio: post.author.bio,
         bodyMd,
         faqs: post.faqs ?? undefined,
+        coverUrl: post.coverImage ?? undefined,
+        coverAlt: post.coverAlt ?? undefined,
         seoTitle: post.seoTitle ?? undefined,
         seoDescription: post.seoDescription ?? undefined,
         status: "published",

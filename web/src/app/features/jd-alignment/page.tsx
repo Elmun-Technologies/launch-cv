@@ -3,11 +3,15 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { howToLd, speakableLd } from "@/lib/geo";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Target,
   ArrowRight,
@@ -37,30 +41,34 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
-const faqs: FaqEntry[] = [
+// Single source of truth for the FAQ: the visible section below and the
+// FAQPage JSON-LD both read from this array, so Google's rich result always
+// matches the on-page text verbatim. Questions map to exact Search Console
+// queries: "match resume to job description", "keyword gap analysis", etc.
+const faqs: FaqItem[] = [
   {
-    q: "How does Launch CV match my resume to a job description?",
-    a: "Launch CV extracts every hard skill, soft skill, tool, and seniority signal from the job description, then compares them against your resume in a ranked gap map. You paste the JD by URL or raw text, review a live match score, and approve AI bullet rewrites that lift your fit one click at a time.",
+    q: "How do I match my resume to a job description?",
+    a: "Paste the job description into Launch CV alongside your resume. The AI extracts every hard skill, tool, and seniority signal in the posting, compares it to your resume, and shows a ranked list of the keywords and requirements you are missing — then rewrites your bullets to close the gap without fabricating experience.",
   },
   {
-    q: "How much can JD alignment raise my resume match score?",
-    a: "JD alignment typically lifts your match score from around 40% to 90% or higher, an average jump of roughly 49 points. The score updates live as you accept each AI rewrite, so you can keep refining until you clear 90% before submitting your application.",
+    q: "What is a resume-to-job-description match score?",
+    a: "It is a percentage that estimates how closely your resume matches a specific job posting, based on the skills, keywords, and requirements the role asks for. Launch CV updates the score live as you accept AI rewrites, so you can lift a typical resume from around 40% to 90% or higher before you apply.",
   },
   {
-    q: "Does JD alignment help me beat ATS keyword filters?",
-    a: "Yes, JD alignment surfaces the exact keywords a role asks for and weaves the missing ones into your experience so applicant tracking systems rank you higher. Every template and rewrite is tested against 15 ATS engines, including Workday, Greenhouse, Lever, iCIMS, and Taleo, across 12 calibrated industries.",
+    q: "What is keyword gap analysis?",
+    a: "Keyword gap analysis is a side-by-side view of what your resume already contains versus what the job description requires, sorted by impact. It shows exactly which terms — like Agile/Scrum, roadmapping, SQL, or OKRs — are missing so you can add the ones you can honestly claim.",
   },
   {
-    q: "Will Launch CV add fake keywords to my resume?",
-    a: "No, Launch CV never fabricates experience or stuffs keywords. It weaves missing terms naturally into the real accomplishments already in your resume, rephrasing bullets so they read honestly while still matching the job description. You approve every suggested rewrite one at a time before it appears on your final document.",
+    q: "Does tailoring my resume to each job actually help?",
+    a: "Yes. Applicant tracking systems rank resumes against the exact job description, so a resume tuned to one posting scores far higher than a generic one. Tailoring the keywords and framing to each role is one of the highest-impact things you can do to get past the ATS filter and reach a recruiter.",
   },
   {
-    q: "How long does a JD alignment scan take?",
-    a: "A JD alignment scan takes about 8 seconds to analyze the posting and produce your gap map. Launch CV parses your uploaded resume in under two seconds, and the full paste-to-match workflow usually finishes in under a minute, including approving rewrites and exporting to PDF or DOCX.",
+    q: "Does it fabricate experience or keyword-stuff my resume?",
+    a: "No. Launch CV weaves missing keywords into your real, existing experience and flags anything it cannot support with your background. It never invents roles, employers, or numbers. Modern ATS software and human reviewers both penalize keyword stuffing, so the goal is an accurate resume that genuinely matches the role.",
   },
   {
-    q: "Can I track match scores across multiple job applications?",
-    a: "Yes, Launch CV saves your match score for every application so you can compare roles side by side and see which ones you fit best. Paste a new job description for each posting, run the alignment, and your tracked scores update, helping you prioritize where to apply first.",
+    q: "Can I tailor my resume for multiple jobs at once?",
+    a: "Yes. Launch CV saves a match score per application so you can compare which roles you fit best and reuse a strong base resume across postings, tailoring each one in about a minute instead of rewriting from scratch.",
   },
 ];
 
@@ -82,9 +90,32 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "JD Alignment", item: absoluteUrl("/features/jd-alignment") },
       ],
     },
-    buildFaqPageLd(faqs),
+    howToLd({
+      name: "How to match your resume to a job description",
+      description:
+        "Paste a job description, review your match score and keyword gaps, approve AI bullet rewrites, and export a tailored resume.",
+      totalTime: "PT1M",
+      url: absoluteUrl("/features/jd-alignment"),
+      steps: [
+        { name: "Add your resume", text: "Upload a PDF or DOCX, or paste plain text. It is parsed in under two seconds." },
+        { name: "Paste the job description", text: "Add the JD from LinkedIn, Indeed, or any careers page — URL or raw text both work." },
+        { name: "Review your match score", text: "AI extracts every requirement and produces your ranked keyword gap map in under ten seconds." },
+        { name: "Approve rewrites", text: "Accept AI suggestions one click at a time; the match score updates as you go." },
+        { name: "Export and apply", text: "Download as PDF or DOCX, or push directly into the cover letter generator." },
+        { name: "Track across roles", text: "Save match scores per application and compare which roles you fit best." },
+      ],
+    }),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
+
+const keyFacts = [
+  "Typical match-score lift: ~40% to 90%+ in about 60 seconds.",
+  "Ranked keyword gap analysis maps every JD requirement to your resume.",
+  "AI rewrites weave keywords into your real experience — no fabrication or stuffing.",
+  "Tested on 15 ATS engines, including Workday, Greenhouse, and Lever.",
+];
 
 const missingKeywords = ["Agile/Scrum", "Roadmapping", "OKRs", "A/B testing", "Cross-functional", "SQL"];
 
@@ -168,6 +199,12 @@ export default function JDAlignmentPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Paste a job description. Launch CV scores your fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="JD Alignment reads any job description, scores your resume's fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+ in about 60 seconds. It weaves keywords into your real experience without fabrication or stuffing, and is tested on 15 ATS engines."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_jd_alignment"
@@ -268,6 +305,24 @@ export default function JDAlignmentPage() {
         </div>
       </section>
 
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Watch your match score climb</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/jd-alignment.svg"
+            alt="The Launch CV JD alignment view matching a resume to a job description, showing a 91% match score, the matched ATS keywords, and each requirement met."
+            caption="Paste a job description; watch the match score and matched keywords update as you tailor."
+          />
+        </div>
+      </section>
+
       {/* STATS */}
       <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-12">
         <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-6 px-6 sm:grid-cols-4">
@@ -335,6 +390,71 @@ export default function JDAlignmentPage() {
                 </div>
               </RevealOnView>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DEEP DIVE — crawlable topical depth */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[760px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#1A56DB]">The complete guide</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How to match your resume to a job description
+            </h2>
+          </RevealOnView>
+
+          <div className="mt-8 space-y-6 text-[16px] leading-[1.8] text-[#334155]">
+            <p>
+              To <strong>match your resume to a job description</strong>, you first have to read
+              the posting the way an applicant tracking system does: as a list of required skills,
+              tools, and seniority signals. A recruiter using Workday or Greenhouse ranks every
+              applicant against that list, so two candidates with identical experience can land on
+              opposite sides of the filter purely based on how closely their resume mirrors the
+              language of the role. That is why a generic resume sent to fifty jobs underperforms a
+              tailored one sent to five.
+            </p>
+            <p>
+              Launch CV automates the tailoring. Paste any job description — from LinkedIn, Indeed,
+              or a careers page — and the AI runs a <strong>keyword gap analysis</strong>: a
+              side-by-side map of what your resume already contains versus what the role asks for,
+              ranked by impact. It then rewrites your existing bullets to fold in the missing terms
+              naturally, so your <strong>match score</strong> climbs from a typical 40% toward 90%
+              or higher. The score updates live as you accept each change, and nothing is fabricated
+              — anything the AI cannot support with your real background is flagged, not invented.
+            </p>
+
+            <h3 className="pt-2 text-[20px] font-semibold tracking-tight text-[#0F172A]">
+              Tailoring vs. keyword stuffing
+            </h3>
+            <p>
+              There is a real difference between <strong>tailoring a resume to a job description</strong>{" "}
+              and keyword stuffing. Stuffing means padding your resume with terms you cannot back up;
+              both modern ATS software and human reviewers penalize it. Tailoring means reframing the
+              genuine work you have already done in the vocabulary the role uses — calling a project
+              &ldquo;cross-functional delivery&rdquo; because it was, or surfacing the SQL you actually
+              wrote. The result is an accurate resume that also happens to rank well.
+            </p>
+
+            <h3 className="pt-2 text-[20px] font-semibold tracking-tight text-[#0F172A]">
+              Confirm the match before you apply
+            </h3>
+            <p>
+              A high JD match is only half the job — the resume still has to parse cleanly. After you
+              align, run it through the{" "}
+              <Link href="/features/ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                ATS score checker to test your resume against 15 ATS engines
+              </Link>{" "}
+              and catch any formatting issues. For the underlying method, see our guides on{" "}
+              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                checking your ATS score
+              </Link>{" "}
+              and{" "}
+              <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                choosing the right resume keywords
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>
@@ -417,6 +537,34 @@ export default function JDAlignmentPage() {
               </Link>
             </div>
           </RevealOnView>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#1A56DB]">FAQ</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
+          </RevealOnView>
+
+          <div className="mt-10 space-y-4">
+            {faqs.map((f) => (
+              <RevealOnView key={f.q}>
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+
+          <p className="mt-8 text-[14px] text-[#64748B]">
+            Pair it with the{" "}
+            <Link href="/features/resume-builder" className="font-semibold text-[#1A56DB] hover:underline">resume builder</Link> and{" "}
+            <Link href="/features/interview-prep" className="font-semibold text-[#1A56DB] hover:underline">interview prep</Link>, or compare{" "}
+            <Link href="/pricing" className="font-semibold text-[#1A56DB] hover:underline">plans</Link>.
+          </p>
         </div>
       </section>
 
@@ -538,7 +686,11 @@ export default function JDAlignmentPage() {
         ]}
       />
 
-      <FaqSection items={faqs} accent="#1A56DB" />
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="feature_jd_alignment"
+      />
 
       <LandingFooter />
     </div>

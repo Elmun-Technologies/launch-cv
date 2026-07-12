@@ -2,22 +2,38 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CtaLink } from "@/components/cta-link";
+import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { BLOG_HOWTO, blogKeyFacts, howToLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
-import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight } from "lucide-react";
+import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight, RefreshCw } from "lucide-react";
 import { BlogFaq } from "@/components/blog-faq";
 import { BlogCover } from "@/components/blog-cover";
+import { BlogToc } from "@/components/blog-toc";
+import { SITE_AUTHOR } from "@/lib/author";
+import { extractToc, createSlugger } from "@/lib/toc";
+import { StickyCta } from "@/components/sticky-cta";
 
 type Params = { slug: string };
 type SearchParams = { preview?: string };
+
+/** Recursively collect the plain text of a hast heading node (for anchor ids). */
+type HastNode = { type?: string; value?: string; children?: HastNode[] };
+function hastText(node: HastNode | undefined): string {
+  if (!node) return "";
+  if (node.type === "text") return node.value ?? "";
+  if (Array.isArray(node.children)) return node.children.map(hastText).join("");
+  return "";
+}
 
 type FeatureLink = { href: string; title: string; desc: string };
 
@@ -75,7 +91,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     article: {
       publishedTime: post.date,
       modifiedTime: post.dateModified,
-      authors: [post.author.name],
+      authors: [SITE_AUTHOR.name],
       section: post.category,
       tags: post.tags,
     },
@@ -154,6 +170,24 @@ export default async function BlogPostPage({
 
   const canonicalUrl = post.canonicalUrl?.trim() || absoluteUrl(`/blog/${post.slug}`);
 
+  // Table of contents (H2/H3). Only shown on longer posts; `slug` mirrors the
+  // slugger used when rendering the Markdown headings so anchors line up.
+  const toc = extractToc(post.bodyMd);
+  const showToc = toc.length >= 3;
+  const headingSlug = createSlugger();
+
+  const publishedLabel = new Date(post.date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const updatedLabel = new Date(post.dateModified).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  const showUpdated = post.dateModified > post.date;
+
   const articleLd = {
     "@type": "Article",
     headline: post.title,
@@ -162,7 +196,14 @@ export default async function BlogPostPage({
     dateModified: post.dateModified,
     url: absoluteUrl(`/blog/${post.slug}`),
     image: post.ogImageUrl || absoluteUrl("/opengraph-image"),
-    author: { "@type": "Organization", name: post.author.name, url: absoluteUrl("/about") },
+    author: {
+      "@type": "Person",
+      name: SITE_AUTHOR.name,
+      url: SITE_AUTHOR.url,
+      image: SITE_AUTHOR.avatar,
+      jobTitle: SITE_AUTHOR.role,
+      description: SITE_AUTHOR.bio,
+    },
     publisher: {
       "@type": "Organization",
       name: "Launch CV",
@@ -198,15 +239,31 @@ export default async function BlogPostPage({
 
   const speakableLd = {
     "@type": "SpeakableSpecification",
-    cssSelector: ["h1", ".speakable-description"],
+    cssSelector: ["h1", ".speakable-description", ".lc-key-facts-lead"],
   };
+
+  // HowTo structured data for step-based guides. Steps mirror the visible
+  // step sections in the post body, so the schema always matches on-page copy.
+  const howtoDef = BLOG_HOWTO[post.slug];
+  const howtoLdNode = howtoDef
+    ? howToLd({ ...howtoDef, url: absoluteUrl(`/blog/${post.slug}`) })
+    : null;
+
+  // Key-facts / TL;DR answer box derived from the post's own description and FAQs.
+  const keyFacts = blogKeyFacts(post);
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@graph": [articleLd, breadcrumbLd, speakableLd, ...(faqLd ? [faqLd] : [])],
+          "@graph": [
+            articleLd,
+            breadcrumbLd,
+            speakableLd,
+            ...(howtoLdNode ? [howtoLdNode] : []),
+            ...(faqLd ? [faqLd] : []),
+          ],
         }}
       />
       <LandingNav />
@@ -248,8 +305,16 @@ export default async function BlogPostPage({
               </span>
               <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
                 <Calendar className="h-3.5 w-3.5" />
-                {new Date(post.date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                Published{" "}
+                <time dateTime={post.date}>{publishedLabel}</time>
               </span>
+              {showUpdated ? (
+                <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Updated{" "}
+                  <time dateTime={post.dateModified}>{updatedLabel}</time>
+                </span>
+              ) : null}
               <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
                 <Clock className="h-3.5 w-3.5" /> {post.readingTime} min read
               </span>
@@ -268,16 +333,39 @@ export default async function BlogPostPage({
               <BlogCover post={post} size="hero" />
             </div>
 
-            <div className="mt-6 flex items-center gap-3 border-t border-[#E2E8F0] pt-5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EFF6FF] text-[15px] font-bold text-[#1A56DB]">
-                L
-              </div>
+            <div className="mt-6 flex items-start gap-4 border-t border-[#E2E8F0] pt-5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={SITE_AUTHOR.avatar}
+                alt={SITE_AUTHOR.name}
+                width={44}
+                height={44}
+                className="h-11 w-11 flex-shrink-0 rounded-full"
+              />
               <div>
-                <p className="text-[13px] font-semibold text-[#0F172A]">{post.author.name}</p>
-                <p className="text-[12px] text-[#94A3B8]">{post.author.role}</p>
+                <p className="text-[13px] font-semibold text-[#0F172A]">
+                  <Link href="/about" className="transition hover:text-[#1A56DB]" rel="author">
+                    {SITE_AUTHOR.name}
+                  </Link>
+                </p>
+                <p className="text-[12px] text-[#94A3B8]">{SITE_AUTHOR.role}</p>
+                <p className="mt-1.5 max-w-[560px] text-[12px] leading-[1.6] text-[#64748B]">
+                  {SITE_AUTHOR.bio}{" "}
+                  <Link
+                    href="/about"
+                    className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+                  >
+                    More about the author
+                  </Link>
+                </p>
               </div>
             </div>
+
+            {showToc ? <BlogToc entries={toc} /> : null}
           </header>
+
+          {/* Key facts / TL;DR — concise, liftable answer box near the top */}
+          <KeyFacts className="mt-10" title="Key facts" lead={keyFacts.lead} facts={keyFacts.facts} />
 
           {/* Article body */}
           <article className="prose-article mt-10 max-w-none text-[16px] leading-[1.85] text-[#334155]">
@@ -285,23 +373,36 @@ export default async function BlogPostPage({
               remarkPlugins={[remarkGfm]}
               components={{
                 h1: ({ ...props }) => (
-                  <h2 className="mt-10 text-[24px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
+                  <h2 className="mt-10 scroll-mt-[96px] text-[24px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
                 ),
-                h2: ({ ...props }) => (
-                  <h2 className="mt-10 text-[22px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
+                h2: ({ node, ...props }) => (
+                  <h2
+                    id={headingSlug(hastText(node as HastNode | undefined))}
+                    className="mt-10 scroll-mt-[96px] text-[22px] font-semibold leading-snug tracking-tight text-[#0F172A]"
+                    {...props}
+                  />
                 ),
-                h3: ({ ...props }) => (
-                  <h3 className="mt-8 text-[18px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
+                h3: ({ node, ...props }) => (
+                  <h3
+                    id={headingSlug(hastText(node as HastNode | undefined))}
+                    className="mt-8 scroll-mt-[96px] text-[18px] font-semibold leading-snug tracking-tight text-[#0F172A]"
+                    {...props}
+                  />
                 ),
                 p: ({ ...props }) => <p className="mt-4" {...props} />,
                 ul: ({ ...props }) => <ul className="mt-4 list-disc space-y-1.5 pl-6" {...props} />,
                 ol: ({ ...props }) => <ol className="mt-4 list-decimal space-y-1.5 pl-6" {...props} />,
-                a: ({ ...props }) => (
-                  <a
-                    className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
-                    {...props}
-                  />
-                ),
+                a: ({ href, ...props }) => {
+                  const external = typeof href === "string" && /^https?:\/\//.test(href);
+                  return (
+                    <a
+                      href={href}
+                      className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline"
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      {...props}
+                    />
+                  );
+                },
                 code: ({ ...props }) => (
                   <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[14px] text-[#0F172A]" {...props} />
                 ),
@@ -311,14 +412,17 @@ export default async function BlogPostPage({
                     {...props}
                   />
                 ),
-                img: ({ ...props }) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    {...props}
-                    alt={props.alt ?? ""}
-                    className="mt-6 rounded-xl border border-[#E2E8F0]"
-                  />
-                ),
+                img: ({ src, alt }) =>
+                  typeof src === "string" && src.length > 0 ? (
+                    <Image
+                      src={src}
+                      alt={alt ?? ""}
+                      width={1600}
+                      height={900}
+                      sizes="(max-width: 800px) 100vw, 800px"
+                      className="mt-6 h-auto w-full rounded-xl border border-[#E2E8F0]"
+                    />
+                  ) : null,
               }}
             >
               {post.bodyMd}
@@ -442,6 +546,13 @@ export default async function BlogPostPage({
           </section>
         ) : null}
       </main>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Build my resume"
+        location="blog_post"
+        revealAfter={900}
+      />
 
       <LandingFooter />
     </div>

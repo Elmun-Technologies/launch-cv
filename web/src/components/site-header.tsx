@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Bell, ChevronDown, Search, LogOut, User, Settings } from "lucide-react";
 import { useState } from "react";
-import { trackFeatureCtaClicked, resetUser } from "@/lib/analytics-client";
+import { trackCtaClick, resetUser } from "@/lib/analytics-client";
 
 export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTitle?: string }) {
   const [showUser, setShowUser] = useState(false);
@@ -71,7 +71,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
         ) : (
           <div className="flex items-center gap-2">
             <Link href="/login" className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-gray-600 transition hover:bg-gray-50">Sign in</Link>
-            <Link href="/register" onClick={() => trackFeatureCtaClicked({ cta: "get_started", location: "site_header" })} className="rounded-lg bg-[#7C5CFC] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Get started</Link>
+            <Link href="/register" onClick={() => trackCtaClick({ cta: "get_started", location: "site_header" })} className="rounded-lg bg-[#7C5CFC] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Get started</Link>
           </div>
         )}
       </div>

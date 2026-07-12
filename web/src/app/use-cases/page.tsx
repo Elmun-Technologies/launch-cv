@@ -3,15 +3,20 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { Code2, Compass, Palette, ArrowRight, Sparkles } from "lucide-react";
+import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
+import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
   title: "Resume Builder by Role — Tailored for Your Job",
   description:
-    "See how Launch CV tailors your resume to your field. Role-specific AI bullets for software engineers, product managers, and designers — ATS-clean, in minutes.",
+    "See how Launch CV tailors your resume to your field. Role-specific AI bullets for engineers, product managers, and designers — ATS-clean, fast.",
   pathname: "/use-cases",
   image: DEFAULT_OG_IMAGE,
   keywords: [
@@ -54,7 +59,7 @@ const roles = [
   },
 ];
 
-const faqs: FaqEntry[] = [
+const faqs: FaqItem[] = [
   {
     q: "Does Launch CV work for my profession?",
     a: "Launch CV works across professions through 12 industry templates that are ATS-tested and quantified out of the box, plus dedicated guides for software engineers, product managers, and designers. Each track tunes the same AI toolkit to the signals recruiters scan for in that specific field.",
@@ -106,7 +111,8 @@ const ld = {
         { "@type": "ListItem", position: 2, name: "Use Cases", item: absoluteUrl("/use-cases") },
       ],
     },
-    buildFaqPageLd(faqs),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -138,6 +144,17 @@ export default function UseCasesPage() {
               Recruiters scan for different signals in every field. Launch CV rewrites your experience into the quantified, ATS-clean language your specific role rewards — pick your track below.
             </p>
 
+            <KeyFacts
+              className="mt-8 max-w-[600px]"
+              lead="Launch CV tailors resumes to how each role gets hired, with role-specific AI bullets for software engineers, product managers, and designers. It rewrites your experience into the quantified, ATS-clean language recruiters in your field scan for, matched to each job description."
+              facts={[
+                "Dedicated tracks for software engineers, product managers, and designers.",
+                "Role-specific keyword libraries matched to each job description.",
+                "Quantified, baselined bullets in the language your field rewards.",
+                "ATS-clean formatting tested against 15 tracking systems.",
+              ]}
+            />
+
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/register"
@@ -154,6 +171,24 @@ export default function UseCasesPage() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#1A56DB]">Inside the product</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Tailored to the role you&apos;re targeting</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/jd-alignment.svg"
+            alt="The Launch CV JD alignment view matching a resume to a specific job description, showing a 91% match score and the role's matched keywords."
+            caption="Launch CV aligns every resume to the exact role — from the match score to the keywords."
+          />
         </div>
       </section>
 
@@ -201,8 +236,34 @@ export default function UseCasesPage() {
         </div>
       </section>
 
+      {/* EXPLORE MORE — keep the visitor moving */}
+      <section className="border-t border-[#E2E8F0] py-16">
+        <div className="mx-auto max-w-[1200px] px-6">
+          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Keep exploring</p>
+          <div className="mt-5 grid gap-4 sm:grid-cols-3">
+            {[
+              { href: "/features", t: "All 6 tools", d: "See the full AI toolkit under one subscription." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
+            ].map((r) => (
+              <Link
+                key={r.href}
+                href={r.href}
+                className="group flex items-start justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white p-6 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+              >
+                <div>
+                  <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
+                  <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#1A56DB]" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="py-20">
+      <section className="border-t border-[#E2E8F0] py-20">
         <div className="mx-auto max-w-[900px] px-6 text-center">
           <h2 className="lc-section-headline text-[#0F172A]">
             Pick your track, land the interview
@@ -226,6 +287,12 @@ export default function UseCasesPage() {
       </section>
 
       <FaqSection items={faqs} accent="#1A56DB" />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="use_cases_index"
+      />
 
       <LandingFooter />
     </div>

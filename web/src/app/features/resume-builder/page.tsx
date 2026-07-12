@@ -3,14 +3,20 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
+import { speakableLd } from "@/lib/geo";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import {
   FileText,
   ArrowRight,
+  Check,
   Star,
   Wand2,
   Layers,
@@ -20,7 +26,6 @@ import {
   Target,
   Mail,
   Mic,
-  Check,
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
@@ -38,7 +43,7 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
-const faqs: FaqEntry[] = [
+const faqs: FaqItem[] = [
   {
     q: "How long does building a resume take with Launch CV?",
     a: "Building a resume with Launch CV takes about five minutes from blank page to finished PDF. You type your work history in plain language, the AI returns quantified bullets, you pick one of 12 templates, and the live preview updates as you go before you export.",
@@ -82,9 +87,17 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "Resume Builder", item: absoluteUrl("/features/resume-builder") },
       ],
     },
-    buildFaqPageLd(faqs),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
+
+const keyFacts = [
+  "12 industry templates, each tested against 15 ATS engines.",
+  "AI writes quantified, action-led bullets from plain-language input.",
+  "Live pixel-accurate preview with PDF, DOCX, and plain-text export.",
+  "Average build time: under 5 minutes.",
+];
 
 const templates = [
   { n: "Atlas", c: "Modern minimal · Tech & SaaS" },
@@ -148,6 +161,12 @@ export default function ResumeBuilderPage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Type your work history in plain language and Launch CV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="The AI Resume Builder turns plain-language work history into quantified, ATS-tuned bullet points. Choose from 12 industry templates, watch a live pixel-accurate preview, and export to PDF or DOCX — most people go from blank page to finished resume in about five minutes."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_resume_builder"
@@ -239,6 +258,24 @@ export default function ResumeBuilderPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#7C3AED]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">A look inside the resume builder</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/resume-builder.svg"
+            alt="The Launch CV resume builder editor turning rough, plain-language notes into quantified, ATS-ready resume bullet points with a live preview."
+            caption="Type rough notes on the left; Launch CV returns quantified, ATS-ready bullets on the right."
+          />
         </div>
       </section>
 
@@ -587,6 +624,13 @@ export default function ResumeBuilderPage() {
       />
 
       <FaqSection items={faqs} accent="#7C3AED" />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#7C3AED] hover:bg-[#6D28D9]"
+        location="feature_resume_builder"
+      />
 
       <LandingFooter />
     </div>

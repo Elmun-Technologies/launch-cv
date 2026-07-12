@@ -3,11 +3,15 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
+import { KeyFacts } from "@/components/key-facts";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { howToLd, speakableLd } from "@/lib/geo";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection, buildFaqPageLd, type FaqEntry } from "@/components/faq-section";
+import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   BarChart3,
   ArrowRight,
@@ -40,30 +44,34 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
-const faqs: FaqEntry[] = [
+// Single source of truth for the FAQ: the visible section below and the
+// FAQPage JSON-LD both read from this array, so Google's rich result always
+// matches the on-page text verbatim. Questions map to exact Search Console
+// queries: "ATS score checker", "check resume ATS score", "resume pass ATS".
+const faqs: FaqItem[] = [
   {
-    q: "Is Launch CV's ATS score checker accurate?",
-    a: "Yes, Launch CV simulates 15 real applicant tracking systems, so your 0 to 100 score reflects how actual parsers read your resume. It tests formatting, keywords, structure, and readability, then names every issue by priority so you fix the exact problems recruiters' software would flag.",
+    q: "What is an ATS score checker?",
+    a: "An ATS score checker is a tool that simulates how applicant tracking systems parse and rank your resume, then returns a 0–100 score. Launch CV tests your resume against 15 real ATS engines — including Workday, Greenhouse, and Lever — and returns a prioritized list of every formatting and keyword fix.",
   },
   {
-    q: "How long does an ATS scan take on Launch CV?",
-    a: "An ATS scan on Launch CV takes about eight seconds. You upload your resume and immediately get a 0 to 100 score, a breakdown across formatting, keywords, structure, and readability, plus a prioritized list of every fix. Most users gain 20 to 40 points on their first pass.",
+    q: "How do I check the ATS score of my resume?",
+    a: "Upload your resume as a PDF, DOCX, or pasted plain text on the free ATS check page. In about eight seconds you get a 0–100 ATS score, a breakdown across formatting, keywords, structure, and readability, and a fix list ranked High, Medium, and Low priority. No account is required to see your score.",
   },
   {
-    q: "Which ATS engines does Launch CV test my resume against?",
-    a: "Launch CV tests your resume against 15 real ATS engines, including Workday, Greenhouse, Lever, iCIMS, Taleo, Bullhorn, BambooHR, JazzHR, SmartRecruiters, Recruitee, Jobvite, and Ashby. Each parser reads formatting differently, so simulating all 15 catches issues one system might miss and shows how your file performs everywhere.",
+    q: "What is a good ATS score for a resume?",
+    a: "Aim for 80 or higher, measured against the specific job description you are applying to. Scores below 65 are at high risk of being filtered out before a recruiter ever sees them. The average Launch CV user gains 43 points on their first pass of fixes.",
   },
   {
-    q: "What file formats can I upload to the ATS checker?",
-    a: "You can upload a PDF, a DOCX file, or pasted plain text to the Launch CV ATS checker. It parses your file in under two seconds, the same way 15 ATS engines would, then validates file type, size, encoding, and font embedding across every parser.",
+    q: "Why is my resume failing ATS?",
+    a: "The most common reasons a resume fails ATS parsing are multi-column layouts, text inside tables or text boxes, header/footer graphics that hide contact info, non-embedded fonts, and inconsistent date formats. The checker names each issue on your resume specifically and tells you exactly how to fix it.",
   },
   {
-    q: "How much can Launch CV improve my ATS score?",
-    a: "The average Launch CV user gains 43 points on their first pass, with most improving 20 to 40 points after applying the recommended fixes. Because the checker names every parsing issue by High, Medium, or Low priority, you know exactly which changes move your score the most.",
+    q: "Which ATS engines does Launch CV test against?",
+    a: "Launch CV simulates parsing across 15 widely used applicant tracking systems, including Workday, Greenhouse, Lever, iCIMS, Taleo, Bullhorn, BambooHR, JazzHR, SmartRecruiters, Recruitee, Jobvite, and Ashby. Each parser reads formatting differently, so testing against all 15 catches issues a single-engine check would miss entirely.",
   },
   {
-    q: "What resume problems does the Launch CV ATS checker catch?",
-    a: "The checker catches 12 categories of parsing failures, including text boxes, multi-column layouts, non-standard fonts, inconsistent date formats, and header graphics that block contact parsing. It audits formatting, keyword density, file compatibility, section structure, date consistency, and contact-info placement, tagging each issue High, Medium, or Low.",
+    q: "Is the ATS resume checker free?",
+    a: "Yes. You can test your resume and see your ATS score and full parser breakdown for free, with no account. The one-click AI fixes and the rest of the toolkit (JD alignment, cover letters, interview prep) are on a paid plan.",
   },
 ];
 
@@ -84,9 +92,29 @@ const ld = {
         { "@type": "ListItem", position: 3, name: "ATS Score", item: absoluteUrl("/features/ats-score") },
       ],
     },
-    buildFaqPageLd(faqs),
+    howToLd({
+      name: "How to check your resume's ATS score",
+      description:
+        "Upload your resume to get a 0–100 ATS score and a prioritized fix list, then apply the fixes and re-score.",
+      totalTime: "PT8S",
+      url: absoluteUrl("/features/ats-score"),
+      steps: [
+        { name: "Upload your file", text: "Upload a PDF, DOCX, or pasted plain text. It is parsed in under two seconds — the same way 15 ATS engines would." },
+        { name: "Get every issue named", text: "12 categories of parsing failures are detected, each tagged High, Medium, or Low priority with a specific fix path." },
+        { name: "Apply the fixes and rescore", text: "Fix inside Launch CV or your own tool, then re-upload to confirm — most users gain 20–40 points on the first round." },
+      ],
+    }),
+    speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
+
+const keyFacts = [
+  "Score range: 0–100 across formatting, keywords, structure, and readability.",
+  "Tested against 15 ATS engines, including Workday, Greenhouse, Lever, and iCIMS.",
+  "Average improvement is +43 points on the first pass, in about 8 seconds.",
+  "Free to check — no account required.",
+];
 
 const issues = [
   { p: "High", t: "Embedded text box in Experience", d: "ATS parsers can&apos;t extract content from text boxes. Convert to plain paragraphs." },
@@ -157,6 +185,12 @@ export default function AtsScorePage() {
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
                 Upload your resume. In eight seconds you get a 0–100 ATS score, a breakdown by parser dimension, and a prioritized list of every fix. The average user gains <span className="font-semibold text-[#0F172A]">43 points</span> on the first pass.
               </p>
+
+              <KeyFacts
+                className="mt-8 max-w-[560px]"
+                lead="Launch CV's ATS Score Checker returns a 0–100 ATS score in about 8 seconds, tested against 15 real ATS engines like Workday, Greenhouse, and Lever. It names every parsing issue by priority, and the average user gains 43 points on the first pass. Checking your score is free and needs no account."
+                facts={keyFacts}
+              />
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="free_ats_check" location="feature_ats_score"
@@ -253,6 +287,24 @@ export default function AtsScorePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* PRODUCT SCREENSHOT */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[1100px] px-6">
+          <RevealOnView>
+            <div className="mx-auto max-w-[680px] text-center">
+              <p className="lc-overline text-[#EA580C]">See it in action</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Your ATS score, itemized</h2>
+            </div>
+          </RevealOnView>
+          <ProductScreenshot
+            className="mt-12"
+            src="/images/product/ats-score.svg"
+            alt="The Launch CV ATS score checker showing a 91 out of 100 ATS score with a formatting, keyword-match, structure, and readability breakdown and the top fix to apply."
+            caption="Every parser-breaking issue named and ranked — the highest-impact fix shown first."
+          />
         </div>
       </section>
 
@@ -359,6 +411,75 @@ export default function AtsScorePage() {
         </div>
       </section>
 
+      {/* DEEP DIVE — crawlable topical depth */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[760px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#EA580C]">The complete guide</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
+              How an ATS score checker actually works
+            </h2>
+          </RevealOnView>
+
+          <div className="mt-8 space-y-6 text-[16px] leading-[1.8] text-[#334155]">
+            <p>
+              An <strong>ATS score checker</strong> reads your resume the same way an
+              applicant tracking system does — as a machine, not a person. Before a recruiter
+              ever opens your application, software from Workday, Greenhouse, Lever, iCIMS, and
+              a dozen others extracts your text, splits it into sections, and matches it against
+              the job description. If the parser stumbles on a two-column layout or a name buried
+              in a header graphic, your experience never registers. Roughly three in four resumes
+              are filtered out at this stage, which is why so many strong candidates get no reply.
+            </p>
+            <p>
+              To <strong>check the ATS score of your resume</strong>, upload a PDF or DOCX and
+              Launch CV runs it through a parser that mirrors those 15 engines. You get a 0–100
+              score in about eight seconds, broken into four dimensions: formatting (can the text
+              be extracted cleanly), keywords (does it contain the terms the role asks for),
+              structure (are Work Experience, Education, Skills, and Contact Info all detected),
+              and readability (is the language clear and quantified). Each dimension is scored
+              independently so you can see exactly where the points are leaking.
+            </p>
+
+            <h3 className="pt-2 text-[20px] font-semibold tracking-tight text-[#0F172A]">
+              What counts as a good ATS score?
+            </h3>
+            <p>
+              A <strong>good ATS score</strong> is 80 or higher against the specific job you are
+              applying to — not a generic template. Anything below 65 is at real risk of being
+              auto-rejected. Because the score is relative to one job description, the same resume
+              can score 92 for one role and 58 for another; that is expected, and it is why
+              tailoring matters. Pair the score with{" "}
+              <Link href="/features/jd-alignment" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                JD alignment to match your resume to the job description
+              </Link>{" "}
+              before you submit.
+            </p>
+
+            <h3 className="pt-2 text-[20px] font-semibold tracking-tight text-[#0F172A]">
+              The formatting mistakes that make a resume fail ATS
+            </h3>
+            <p>
+              Most <strong>ATS parsing failures</strong> come from a short list of formatting
+              choices: multi-column layouts that scramble reading order, tables and text boxes the
+              parser cannot read, contact details trapped in a header or footer, decorative fonts
+              that are not embedded in the file, and mixed date formats. Launch CV flags every one
+              of these on your resume by name, tags it High, Medium, or Low priority, and gives you
+              a plain-English fix — then lets you re-score to confirm the gain. If you want the
+              background first, read{" "}
+              <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                what an ATS score is and how it is calculated
+              </Link>
+              , or the step-by-step{" "}
+              <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#1A56DB] underline-offset-2 hover:underline">
+                guide to checking your resume&apos;s ATS score
+              </Link>
+              .
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* COMPARISON */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
@@ -437,6 +558,33 @@ export default function AtsScorePage() {
               </Link>
             </div>
           </RevealOnView>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 sm:py-24">
+        <div className="mx-auto max-w-[820px] px-6">
+          <RevealOnView>
+            <p className="lc-overline text-[#EA580C]">FAQ</p>
+            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
+          </RevealOnView>
+
+          <div className="mt-10 space-y-4">
+            {faqs.map((f) => (
+              <RevealOnView key={f.q}>
+                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
+                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
+                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
+                </div>
+              </RevealOnView>
+            ))}
+          </div>
+
+          <p className="mt-8 text-[14px] text-[#64748B]">
+            Learn more in{" "}
+            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#EA580C] hover:underline">What is an ATS score?</Link> and{" "}
+            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#EA580C] hover:underline">How to check your ATS score</Link>.
+          </p>
         </div>
       </section>
 
@@ -550,7 +698,12 @@ export default function AtsScorePage() {
         ]}
       />
 
-      <FaqSection items={faqs} accent="#EA580C" />
+      <StickyCta
+        primaryHref="/free-ats-check"
+        primaryLabel="Check my score free"
+        primaryClassName="bg-[#EA580C] hover:bg-[#C2410C]"
+        location="feature_ats_score"
+      />
 
       <LandingFooter />
     </div>

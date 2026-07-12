@@ -6,6 +6,7 @@ import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-tok
 import { allowLoginAttempt } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
 import { isAdminUser } from "@/lib/admin-guard";
+import { INTERNAL_TRAFFIC_KEY } from "@/lib/analytics-enabled";
 
 const schema = z.object({
   email: z
@@ -54,10 +55,21 @@ export async function POST(req: Request) {
   }
   await trackEvent("login_success", { userId: user.id });
   const admin = isAdminUser({ role: user.role, email: user.email });
+  // `userId` (internal id, not PII) lets the client identify() the analytics
+  // session so the conversion funnel connects to server-side events.
   const res = NextResponse.json({ ok: true, isAdmin: admin, userId: user.id });
+  const cookieBase = sessionCookieBase();
   res.cookies.set(COOKIE_NAME, token, {
-    ...sessionCookieBase(),
+    ...cookieBase,
     maxAge: 60 * 60 * 24 * 14,
+  });
+  // Tag staff browsers as internal traffic so GA4 / PostHog can filter them out
+  // of marketing analytics. Non-httpOnly so the client tags can read it; cleared
+  // for non-staff in case the machine was previously used by an admin.
+  res.cookies.set(INTERNAL_TRAFFIC_KEY, admin ? "1" : "", {
+    ...cookieBase,
+    httpOnly: false,
+    maxAge: admin ? 60 * 60 * 24 * 180 : 0,
   });
   return res;
 }
