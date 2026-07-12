@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -533,6 +534,13 @@ export default function VoiceInputPage() {
             desc: "Speak your projects and stack; AI writes quantified, ATS-ready engineering bullets.",
           },
         ]}
+      />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#DB2777] hover:bg-[#BE185D]"
+        location="feature_voice_input"
       />
 
       <LandingFooter />

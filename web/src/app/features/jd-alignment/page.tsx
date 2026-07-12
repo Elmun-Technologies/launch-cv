@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -540,6 +541,12 @@ export default function JDAlignmentPage() {
             desc: "Align roadmap wins, OKRs, and metrics with what the PM role is asking for.",
           },
         ]}
+      />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="feature_jd_alignment"
       />
 
       <LandingFooter />

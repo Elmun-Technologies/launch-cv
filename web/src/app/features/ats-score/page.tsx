@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -551,6 +552,13 @@ export default function AtsScorePage() {
             desc: "Pass ATS parsing while still showcasing portfolio and design-system impact.",
           },
         ]}
+      />
+
+      <StickyCta
+        primaryHref="/free-ats-check"
+        primaryLabel="Check my score free"
+        primaryClassName="bg-[#EA580C] hover:bg-[#C2410C]"
+        location="feature_ats_score"
       />
 
       <LandingFooter />

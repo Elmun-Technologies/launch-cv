@@ -5,6 +5,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
 import { FeatureRelatedLinks } from "@/components/feature-related-links";
+import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import {
@@ -508,6 +509,13 @@ export default function CoverLetterPage() {
             desc: "Turn a strong application into a confident, well-rehearsed interview.",
           },
         ]}
+      />
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#0D9488] hover:bg-[#0F766E]"
+        location="feature_cover_letter"
       />
 
       <LandingFooter />

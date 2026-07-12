@@ -8,6 +8,7 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { BlogCover } from "@/components/blog-cover";
+import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Clock } from "lucide-react";
 
 // CMS-driven via Postgres. ISR keeps the page snappy — published content is
@@ -120,6 +121,22 @@ export default async function BlogPage() {
             <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
               Evidence-based guides on ATS optimization, resume writing, cover letters, interview preparation, and AI-assisted job search — written by the team building Launch CV.
             </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/register"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#1A56DB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+              >
+                Build my resume free
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/free-ats-check"
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
+              >
+                Free ATS score check
+              </Link>
+            </div>
 
             <div className="mt-8 flex flex-wrap gap-2">
               <span className="rounded-full bg-[#0F172A] px-3.5 py-1.5 text-[12px] font-semibold text-white">All posts</span>
@@ -236,6 +253,12 @@ export default async function BlogPage() {
           </CtaLink>
         </div>
       </section>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        location="blog_index"
+      />
 
       <LandingFooter />
     </div>

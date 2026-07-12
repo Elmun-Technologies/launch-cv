@@ -4,6 +4,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
+import { StickyCta } from "@/components/sticky-cta";
 import { ArrowRight, Compass, BarChart3, Users, Target, Sparkles, Check } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
@@ -461,6 +462,13 @@ export default function ProductManagersPage() {
           </CtaLink>
         </div>
       </section>
+
+      <StickyCta
+        primaryHref="/register"
+        primaryLabel="Try free"
+        primaryClassName="bg-[#7C3AED] hover:bg-[#6D28D9]"
+        location="use_case_product_managers"
+      />
 
       <LandingFooter />
     </div>
