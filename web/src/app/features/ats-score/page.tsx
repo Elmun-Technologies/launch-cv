@@ -27,7 +27,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "ATS Score Checker: Free 0–100 Rating in Seconds",
   description:
-    "Check your ATS score with a parser modeled on how ATS platforms like Workday and Greenhouse read resumes. Get a 0–100 rating plus a prioritized fix list in seconds. Try it free →",
+    "Check your ATS score with a parser modeled on how Workday, Greenhouse, and Lever read resumes. Get a 0–100 rating and a prioritized fix list in seconds.",
   pathname: "/features/ats-score",
   image: FEATURES_OG_IMAGE,
   keywords: [

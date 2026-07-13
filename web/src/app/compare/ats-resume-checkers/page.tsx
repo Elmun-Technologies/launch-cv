@@ -22,7 +22,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "Best ATS Resume Checkers in 2026 — How to Choose",
   description:
-    "A buyer's guide to ATS resume checkers: the 6 criteria that separate a real ATS score checker from a keyword counter, and how to pick the right one for your job search.",
+    "A buyer's guide to ATS resume checkers: the 6 criteria that separate a real ATS score checker from a keyword counter, and how to choose the right one.",
   pathname: "/compare/ats-resume-checkers",
   image: DEFAULT_OG_IMAGE,
   keywords: [
