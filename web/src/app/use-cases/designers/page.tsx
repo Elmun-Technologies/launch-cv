@@ -10,6 +10,8 @@ import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
@@ -20,6 +22,33 @@ export const metadata = buildMarketingMetadata({
   image: DEFAULT_OG_IMAGE,
   keywords: ["designer resume", "UX designer resume", "product designer resume ATS", "design portfolio resume"],
 });
+
+const faqs: FaqItem[] = [
+  {
+    q: "How should designers show a portfolio on a resume?",
+    a: "Designers should link the portfolio from a dedicated, ATS-parseable Selected Work section that gives each project a live link, short context, and the metric that mattered. LaunchCV auto-formats this section so a recruiter can click through, while the resume itself stays clean enough to pass ATS parsing.",
+  },
+  {
+    q: "How do I write a resume for a UX or product designer role?",
+    a: "Write a designer resume that quantifies hand-off impact, system contributions, research depth, and shipping speed instead of listing tools. LaunchCV rewrites vague lines like redesigned the dashboard into measured outcomes such as lifting time-on-task 41% and cutting support tickets 28%, keeping the formatting ATS-clean throughout.",
+  },
+  {
+    q: "How do I show design system work on a resume?",
+    a: "Show design system work by quantifying tokens added, components shipped, and adoption across squads rather than saying built design system. LaunchCV formats these contributions automatically, turning that phrase into shipped a v2 token library plus 84 Figma components adopted by 9 product squads, cutting ship time from 18 to 11 days.",
+  },
+  {
+    q: "What keywords should a designer resume include?",
+    a: "A designer resume should include the craft and process terms your target role names, such as design systems, Figma, prototyping, accessibility, user research, and hand-off. LaunchCV pre-loads a design keyword library with over 100 terms across product, brand, motion, and service design, then aligns them to each posting.",
+  },
+  {
+    q: "How do I quantify user research on a designer resume?",
+    a: "Quantify user research by stating tests run, participants, decisions changed, and features killed instead of writing did user testing. LaunchCV formats research depth for you, turning that line into ran 12 weekly moderated cycles that surfaced 14 critical issues before ship, so hiring designers see rigor at a glance.",
+  },
+  {
+    q: "Does a designer really need a resume if I have a portfolio?",
+    a: "Yes, designers still need a resume because it opens the door that the portfolio then walks through. LaunchCV treats the portfolio as the main act and builds an ATS-clean resume with a Selected Work section, so recruiters and their parsers can find you before the visuals ever load.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -40,6 +69,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -399,38 +429,6 @@ export default function DesignersPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[820px] px-6">
-          <RevealOnView>
-            <p className="lc-overline text-[#DB2777]">FAQ</p>
-            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
-          </RevealOnView>
-
-          <div className="mt-10 space-y-4">
-            {[
-              { q: "Why does a designer resume need to be ATS-friendly?", a: "Because the resume is parsed before a human sees it. A UX designer resume with columns, graphics, or embedded links often fails; every template here is single-column and built for how ATS platforms parse resumes." },
-              { q: "Can I still show my portfolio?", a: "Yes. Each resume includes a dedicated, parseable Selected Work section with live links and the metric that mattered — the recruiter clicks, and your portfolio takes over." },
-              { q: "Will the AI quantify design work honestly?", a: "It surfaces the numbers you already have — adoption, time-on-task, tickets, research reach — and never fabricates metrics or projects." },
-              { q: "How fast is it, and does it help?", a: "A first draft takes minutes, and a built-in ATS check shows exactly what to fix before you apply." },
-            ].map((f) => (
-              <RevealOnView key={f.q}>
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-
-          <p className="mt-8 text-[14px] text-[#64748B]">
-            Related reading:{" "}
-            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#DB2777] hover:underline">What is an ATS score?</Link> and{" "}
-            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#DB2777] hover:underline">How to check your ATS score</Link>.
-          </p>
-        </div>
-      </section>
-
       {/* EXPLORE THE TOOLS */}
       <section className="py-16">
         <div className="mx-auto max-w-[1200px] px-6">
@@ -440,7 +438,7 @@ export default function DesignersPage() {
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
               { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
-              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in 60 seconds." },
+              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in about a minute." },
               { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
             ].map((r) => (
@@ -497,6 +495,8 @@ export default function DesignersPage() {
           </CtaLink>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#DB2777" />
 
       <StickyCta
         primaryHref="/register"

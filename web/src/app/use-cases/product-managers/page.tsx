@@ -10,6 +10,8 @@ import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
@@ -20,6 +22,33 @@ export const metadata = buildMarketingMetadata({
   image: DEFAULT_OG_IMAGE,
   keywords: ["product manager resume", "PM resume ATS", "product management resume AI", "LaunchCV"],
 });
+
+const faqs: FaqItem[] = [
+  {
+    q: "How do I write a resume for a product manager role?",
+    a: "Write a product manager resume around outcomes, not feature lists, giving every bullet scope, a metric, a delta, and a baseline. LaunchCV turns your roadmaps, OKRs, and A/B tests into quantified, baselined lines recruiters scan for, then keeps the formatting ATS-clean so screeners actually see your wins.",
+  },
+  {
+    q: "What keywords do product manager resumes need?",
+    a: "Product manager resumes need keywords that match the track you are targeting, such as roadmap, OKRs, A/B testing, activation, retention, GTM, or RICE prioritization. LaunchCV pre-loads a PM keyword library with over 120 terms across B2B, B2C, marketplace, and platform tracks, then aligns them to each job description.",
+  },
+  {
+    q: "How do I quantify product management impact on a resume?",
+    a: "Quantify product management impact by giving each achievement four parts: scope, the metric you moved, the before-to-after delta, and a baseline for comparison. LaunchCV builds every PM bullet with all four, turning worked on pricing into a measured experiment that lifted net-new MRR 38% and conversion 2.4 times.",
+  },
+  {
+    q: "How should a PM resume show A/B tests and experiments?",
+    a: "A PM resume should show experiments in a dedicated section listing each A/B test's scope, lift, and statistical significance, noting failures honestly. LaunchCV formats this for you, turning did user research into 24 generative interviews plus a 9-segment cluster analysis that reframed the ICP and changed the roadmap.",
+  },
+  {
+    q: "Does LaunchCV work for B2B or platform product managers?",
+    a: "Yes, LaunchCV works for B2B, B2C, marketplace, and platform product managers through track-specific keyword libraries totaling over 120 terms. It tailors bullets to the discipline your target role rewards, covering shipped products, experiments, discovery work, and stakeholder management so specialists in any PM track read as credible.",
+  },
+  {
+    q: "How do I put stakeholder management and discovery work on a PM resume?",
+    a: "Put stakeholder management and discovery work in their own sections, quantifying reach and decisions changed rather than listing meetings. LaunchCV formats C-suite reviews, cross-functional partnerships, user interviews, and JTBD studies by their impact, so a line like ran discovery becomes interviews that killed two features and accelerated one.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -40,6 +69,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -398,38 +428,6 @@ export default function ProductManagersPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[820px] px-6">
-          <RevealOnView>
-            <p className="lc-overline text-[#7C3AED]">FAQ</p>
-            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
-          </RevealOnView>
-
-          <div className="mt-10 space-y-4">
-            {[
-              { q: "What does a strong PM resume bullet contain?", a: "Scope, Metric, Delta, and Baseline. The product management resume AI builds all four into every line so senior reviewers see impact, not activity." },
-              { q: "Is the resume ATS-friendly for PM roles?", a: "Yes. Every template is a single-column layout built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes." },
-              { q: "Can I tailor it to each company?", a: "Yes. JD Alignment re-matches your PM resume to each posting and closes the keyword gaps for that role." },
-              { q: "How much does it improve my resume?", a: "A first draft takes minutes, and a built-in ATS check shows exactly what to fix before you apply." },
-            ].map((f) => (
-              <RevealOnView key={f.q}>
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-
-          <p className="mt-8 text-[14px] text-[#64748B]">
-            Related reading:{" "}
-            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#7C3AED] hover:underline">What is an ATS score?</Link> and{" "}
-            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#7C3AED] hover:underline">How to check your ATS score</Link>.
-          </p>
-        </div>
-      </section>
-
       {/* EXPLORE THE TOOLS */}
       <section className="py-16">
         <div className="mx-auto max-w-[1200px] px-6">
@@ -439,7 +437,7 @@ export default function ProductManagersPage() {
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
               { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
-              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in 60 seconds." },
+              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in about a minute." },
               { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
             ].map((r) => (
@@ -496,6 +494,8 @@ export default function ProductManagersPage() {
           </CtaLink>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#7C3AED" />
 
       <StickyCta
         primaryHref="/register"

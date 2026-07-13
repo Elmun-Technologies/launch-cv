@@ -144,10 +144,12 @@ Because the checker scores your resume *against the job description you paste in
       },
     ],
     faqs: [
-      { q: "What does ATS score mean?", a: "It's a 0–100 rating of how well an Applicant Tracking System can read and rank your resume for a given job. A higher score means a better chance of reaching a human recruiter." },
-      { q: "What is the full form of ATS?", a: "ATS stands for Applicant Tracking System — the software employers use to collect, filter, and rank job applications." },
-      { q: "What is a good ATS score for a resume?", a: "Aim for 80 or higher, measured against the specific job description you're applying to. Scores below 65 are at high risk of being filtered out." },
-      { q: "Is a higher ATS score always better?", a: "Up to a point. Focus on an accurate, well-written resume that naturally matches the job. Keyword-stuffing to inflate the number is penalized by both modern ATS software and human reviewers." },
+      { q: "What does ATS score mean?", a: "An ATS score is a rating, usually from 0 to 100, that estimates how well an Applicant Tracking System can read, understand, and rank your resume for a specific job. A higher score means your resume is more likely to be parsed correctly and reach a human recruiter." },
+      { q: "What is the full form of ATS?", a: "ATS stands for Applicant Tracking System, the recruiting software employers use to collect, store, filter, and rank job applications. When you apply online, your resume almost always lands inside an ATS first, so your ATS score reflects how friendly your resume is to that software before a recruiter sees it." },
+      { q: "What is a good ATS score for a resume?", a: "Aim for 80 or higher, measured against the specific job description you're applying to. Scores of 80 to 100 are strong and likely to rank well, 65 to 79 usually need a few keyword or formatting fixes, and anything below 65 is at high risk of being filtered out." },
+      { q: "Is a higher ATS score always better?", a: "Up to a point. Focus on an accurate, well-written resume that naturally matches the job rather than chasing a perfect number. Keyword-stuffing to inflate your score is penalized by both modern ATS software and human reviewers, so a genuine resume at 85 beats a gamed one at 99." },
+      { q: "How can I improve my ATS score?", a: "Switch to a single-column layout, remove tables and graphics, and use standard section headings like Work Experience and Skills. Mirror the exact skills and terms from the job description, export as a text-based PDF, then re-score and iterate until you're comfortably above 80." },
+      { q: "Does an ATS automatically reject my resume?", a: "Usually not. Most Applicant Tracking Systems rank and filter resumes rather than auto-rejecting them, and recruiters set the search terms they use. Your goal is to rank well and be findable, which means clean formatting and strong keyword matching, not defeating an automated gatekeeper." },
     ],
   },
 
@@ -266,10 +268,12 @@ Do this for each role and you stop guessing. Instead of blasting one resume at f
       },
     ],
     faqs: [
-      { q: "How can I check my resume's ATS score for free?", a: "Upload your resume and paste the target job description into a resume ATS score checker such as LaunchCV's ATS Score Checker. It returns a 0–100 score with the specific issues to fix." },
-      { q: "What's a good ATS score to aim for?", a: "Aim for 80 or above, measured against the specific job you're applying to. Below 65 means your resume is at high risk of being filtered out." },
-      { q: "How do I align my resume with a job description?", a: "Pull the required skills and repeated phrases from the posting, match them to your real experience, and use the posting's wording in your summary and top bullets — without stuffing keywords." },
-      { q: "Does the ATS score change for every job?", a: "Yes. Because scoring depends heavily on how well your resume matches the specific job description, the same resume can score differently for different roles. Re-check for each application." },
+      { q: "How can I check my resume's ATS score for free?", a: "Upload your resume and paste the target job description into a resume ATS score checker such as LaunchCV's ATS Score Checker. It parses your resume the way real ATS platforms do and returns a 0 to 100 score with the specific formatting and keyword issues to fix first." },
+      { q: "What's a good ATS score to aim for?", a: "Aim for 80 or above, measured against the specific job you're applying to. A score in the 80 to 100 range is highly likely to be parsed correctly and ranked well, while anything below 65 means your resume is at high risk of being filtered out before a recruiter sees it." },
+      { q: "How do I align my resume with a job description?", a: "Pull the required skills, tools, and repeated phrases from the posting, then match each to your real experience using the posting's own wording. Prioritize your summary and top bullets, since parsers and recruiters weight those most, and keep it honest — don't claim skills you don't have or stuff keywords." },
+      { q: "Does the ATS score change for every job?", a: "Yes. Because scoring depends heavily on how well your resume matches the specific job description, the same resume can score 90 for one role and 60 for another. Re-check your score for each application, especially for roles you really want, so you catch keyword gaps before you apply." },
+      { q: "What does a resume ATS score checker actually look at?", a: "A good checker evaluates four things: parsability (whether tables, columns, or images hide your information), keyword match against the job description, section structure (contact, experience, education, skills), and readability like length, consistent dates, and standard fonts. Look for one that explains why each point was lost." },
+      { q: "How often should I check my resume's ATS score?", a: "Check it every time the target changes, not once and forever. Re-check for each new job posting, after any resume edit, and whenever you switch templates. A realistic cadence during an active search is a quick check per application, plus a full format audit whenever you redesign your resume." },
     ],
   },
 
@@ -397,10 +401,12 @@ You bring the experience; the tools handle the blank page, the formatting, and t
       },
     ],
     faqs: [
-      { q: "What is a voice-to-resume tool?", a: "It's a tool that lets you build your resume by speaking. Voice-to-text transcribes what you say, and AI structures it into professional resume bullet points and sections." },
-      { q: "Is a voice-to-text resume accurate?", a: "Modern speech-to-text is highly accurate, and you always review and edit the draft. It's best for capturing your experience quickly; you polish the wording afterward." },
-      { q: "Will a resume I made by voice still pass ATS?", a: "Yes, as long as you align it to the job description and use a clean, ATS-friendly format. Run the final draft through an ATS score checker before applying." },
-      { q: "Do I have to be a good writer to use voice-to-resume?", a: "No. That's the point — you speak naturally about your work, and the tool handles turning it into polished, professional bullet points." },
+      { q: "What is a voice-to-resume tool?", a: "A voice-to-resume tool lets you build your resume by speaking instead of typing. Voice-to-text transcribes what you say about your roles, projects, and results, and AI then structures that raw speech into professional resume bullet points and standard sections. It solves the hardest part of resume writing: the blank page." },
+      { q: "Is a voice-to-text resume accurate?", a: "Yes. Modern speech-to-text is highly accurate, and you always review and edit the structured draft before using it. Voice input is best for capturing your experience quickly and completely; you then correct any misheard words and polish the wording afterward, so accuracy stays fully in your control." },
+      { q: "Will a resume I made by voice still pass ATS?", a: "Yes, as long as you align it to the job description and use a clean, single-column, ATS-friendly format. Voice input just gets your genuine experience onto the page quickly; you still weave in the posting's keywords and run the final draft through an ATS score checker before applying." },
+      { q: "Do I have to be a good writer to use voice-to-resume?", a: "No. That's the whole point — you speak naturally about your work, the way you would explain it to a friend, and the tool handles turning it into polished, professional bullet points. You bring the experience and specifics; the AI handles the formal wording, structure, and formatting." },
+      { q: "How does voice-to-text resume building work?", a: "It works in three stages. First, speech-to-text captures your words as you talk freely through a role. Second, AI structures that messy transcript into resume sections and quantified bullet points. Third, you review the draft, correct anything misheard, and tighten the wording before exporting your finished resume." },
+      { q: "Who benefits most from a voice-to-resume tool?", a: "Anyone who freezes at the blank page benefits most, along with career changers who struggle to translate past work into new-industry language. Busy professionals can narrate a resume faster than they'd type it, and anyone updating an old resume can quickly speak new accomplishments into an existing draft." },
     ],
   },
 
@@ -543,10 +549,12 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
     ],
     faqs: [
-      { q: "What are the most important resume keywords for software engineers?", a: "The specific technologies you've used that also appear in the job description — languages (e.g., Python, TypeScript), frameworks (e.g., React, Spring), cloud/DevOps (e.g., AWS, Docker, Kubernetes), and databases (e.g., PostgreSQL). Exact matches to the posting matter most." },
-      { q: "How many keywords should a software engineer's resume have?", a: "There's no magic number. Include every relevant term from the job description that reflects your real experience — usually 10–20 technical keywords spread across your skills, summary, and bullets. Don't pad with skills you don't have." },
-      { q: "Should I list programming languages I barely know?", a: "No. Listing skills you can't back up in an interview is risky. Include languages and tools you can speak to confidently, and mirror the ones the posting actually requires." },
-      { q: "Where should keywords go on a software engineer resume?", a: "In a dedicated skills section, your summary, and woven into experience bullets tied to results. Keep everything as plain text in a single-column layout so the ATS can read it." },
+      { q: "What are the most important resume keywords for software engineers?", a: "The specific technologies you've used that also appear in the job description — languages (e.g., Python, TypeScript), frameworks (e.g., React, Spring), cloud and DevOps tools (e.g., AWS, Docker, Kubernetes), and databases (e.g., PostgreSQL). Exact matches to the posting's wording matter most, since recruiters often filter for precise terms." },
+      { q: "How many keywords should a software engineer's resume have?", a: "There's no magic number. Include every relevant term from the job description that reflects your real experience — usually 10 to 20 technical keywords spread across your skills section, summary, and experience bullets. Don't pad with skills you don't have, because unnatural repetition reads as spam to both ATS and recruiters." },
+      { q: "Should I list programming languages I barely know?", a: "No. Listing skills you can't back up in an interview is risky, since a technical screen will quickly expose them. Include only the languages and tools you can speak to confidently, and prioritize mirroring the ones the posting actually requires so your keyword match stays both strong and honest." },
+      { q: "Where should keywords go on a software engineer resume?", a: "Distribute them across a dedicated skills section, your summary's first two lines, experience bullets tied to results, and individual project entries. Keep everything as plain text in a single-column layout, and avoid hiding keywords in images, skill-bar graphics, or sidebars, since the ATS often can't read those." },
+      { q: "How does ATS keyword matching work for tech roles?", a: "An ATS parses your resume into text and compares it against the job description, and recruiters often add exact-match filters like must contain Python or Kubernetes. Writing containerization when the filter looks for Docker can miss you, so use the specific technology names rather than vague umbrella terms." },
+      { q: "How do I choose the right keywords for each software engineering job?", a: "Read each posting and extract every language, framework, tool, and practice it names, then keep only the terms you've genuinely used and drop the rest. Prioritize the required section, and use the exact wording — write TypeScript, not just TS. A JD alignment tool can surface missing keywords for you." },
     ],
   },
 
@@ -588,7 +596,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "How LaunchCV's ATS checker works",
-        body: "LaunchCV's ATS Score Checker simulates how 15+ major applicant tracking systems parse your resume. Upload your PDF or DOCX and receive an instant score from 0–100, broken into four categories: Formatting (detects tables, columns, images), Keywords (measures density vs. industry benchmarks), Structure (checks for expected sections), and Readability (length, date formats, contact info parsing). The average user improves their score by 43 points after addressing the flagged issues. High-priority fixes are shown first, with specific instructions for each problem.\n\n![LaunchCV ATS score checker scoring an uploaded resume and listing the highest-impact formatting and keyword fixes first.](/images/product/ats-score.svg)",
+        body: "LaunchCV's ATS Score Checker simulates how common applicant tracking systems parse your resume. Upload your PDF or DOCX and receive an instant score from 0–100, broken into four categories: Formatting (detects tables, columns, images), Keywords (measures density vs. industry benchmarks), Structure (checks for expected sections), and Readability (length, date formats, contact info parsing). Every flagged issue comes with a specific fix, and high-priority problems are shown first so you know what to change before you apply.\n\n![LaunchCV ATS score checker scoring an uploaded resume and listing the highest-impact formatting and keyword fixes first.](/images/product/ats-score.svg)",
       },
       {
         heading: "Quick checklist before submitting any application",
@@ -596,9 +604,12 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
     ],
     faqs: [
-      { q: "What ATS score should I aim for?", a: "Aim for 80 or above. Resumes scoring 80–100 have the highest likelihood of reaching a human reviewer. Most unoptimized resumes score between 40–65." },
-      { q: "Does every company use ATS?", a: "Most companies with more than 50 employees use some form of ATS. Startups and small businesses may review resumes manually, but ATS-friendly formatting never hurts either way." },
-      { q: "Can I use a designed/visual resume?", a: "Only for roles in creative fields where you email your portfolio directly. For online applications through job boards, always use a clean ATS-compatible format." },
+      { q: "What ATS score should I aim for?", a: "Aim for 80 or above. Resumes scoring 80 to 100 have the highest likelihood of being parsed correctly and reaching a human reviewer, while most unoptimized resumes land between 40 and 65. Measure your score against the specific job description you're targeting, not in a vacuum, for meaningful results." },
+      { q: "Does every company use ATS?", a: "Most companies with more than 50 employees use some form of ATS, and over 98% of Fortune 500 companies rely on one. Startups and small businesses may still review resumes manually, but ATS-friendly formatting never hurts either way, so it's the safest default for every online application you submit." },
+      { q: "Can I use a designed/visual resume?", a: "Only for roles in creative fields where you email your portfolio or resume directly to a person. For online applications submitted through job boards or company careers pages, always use a clean, single-column, ATS-compatible format, because a visually designed resume with columns and graphics can score near zero in the parser." },
+      { q: "What are the most common reasons an ATS rejects a resume?", a: "The top reasons are tables and multi-column layouts the parser can't read, text hidden in headers or footers, the wrong file format, missing keywords from the job description, non-standard section titles, decorative images or icon skill bars, and exotic fonts. Fixing these usually lifts your score substantially." },
+      { q: "How should I structure an ATS-friendly resume?", a: "Use a single-column layout with sections in this order: contact information, a professional summary, work experience in reverse chronological order, education, and a dedicated skills section. Start each bullet with an action verb and include a measurable outcome. Keep it to one or two pages maximum." },
+      { q: "Should I submit my resume as a PDF or Word document?", a: "Submit a text-based PDF unless the job posting specifically asks for a DOCX. A text-based PDF preserves your formatting while remaining fully parseable by modern ATS software. Avoid scanned or image-based PDFs, since the parser can't extract text from an image and will effectively read a blank page." },
     ],
   },
 
@@ -644,9 +655,12 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
     ],
     faqs: [
-      { q: "How long does tailoring take?", a: "With AI assistance, 5–10 minutes per application. Without AI, it typically takes 20–40 minutes to do it properly." },
-      { q: "Should I have different resume versions?", a: "Yes. Maintain a 'master resume' with all your experience, then create tailored versions for each role or job category. Save each version with the company name and date." },
-      { q: "Does tailoring work for career changers?", a: "Especially for career changers. Tailoring helps you emphasize transferable skills and reframe past experience in terms the new industry understands." },
+      { q: "How long does tailoring take?", a: "With AI assistance, about 5 to 10 minutes per application. Without AI, doing it properly typically takes 20 to 40 minutes, since you have to deconstruct the job description, rewrite your summary, and update several bullets by hand. The AI mainly speeds up keyword gap analysis and rewrites." },
+      { q: "Should I have different resume versions?", a: "Yes. Maintain a master resume that holds all your experience, then create tailored versions for each role or job category from it. Save each version with the company name and date so you can track what you sent where. Tailoring the summary and a few bullets per role is usually enough." },
+      { q: "Does tailoring work for career changers?", a: "Yes, especially for career changers. Tailoring helps you emphasize transferable skills and reframe past experience in the language the new industry actually uses. By mirroring the target role's vocabulary and leading with your most relevant achievements, you help both the ATS and the hiring manager see how you fit." },
+      { q: "Why is tailoring my resume to each job worth the effort?", a: "Tailored applications receive roughly three times more interview invitations than generic ones. Hiring managers spend about seven seconds scanning a resume, so if the most relevant experience and keywords aren't immediately visible, they move on. Tailoring puts the right match front and center for both the ATS and the reader." },
+      { q: "Do I need to rewrite my whole resume for each job?", a: "No. Focus on the highest-impact changes: rewrite your professional summary and update two or three bullet points in your most recent roles. Incorporate missing keywords naturally, reframe experience toward the outcomes the role values, and add metrics. The underlying facts stay the same; only the emphasis and wording shift." },
+      { q: "How do I know if my tailored resume matches the job well enough?", a: "Run a JD alignment check: paste the job description and your updated resume, and the tool calculates a match percentage and shows remaining keyword gaps. Aim for roughly 85% or higher, which typically passes most ATS filters and reads as highly relevant to a human reviewer. Close gaps and re-check." },
     ],
   },
 
@@ -657,13 +671,13 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "LaunchCV AI cover letter generator drafting a personalized, professional cover letter with an adjustable tone and language.",
     title: "7 Cover Letter Tips That Actually Get You Interviews in 2025",
     description:
-      "Most cover letters are ignored. Here are 7 evidence-based tips to write cover letters that hiring managers actually read — plus how AI can generate them in 60 seconds.",
+      "Most cover letters are ignored. Here are 7 evidence-based tips to write cover letters that hiring managers actually read — plus how AI can generate them in about a minute.",
     date: "2025-04-05",
     readingTime: 6,
     category: "Cover Letters",
     tags: ["cover letter tips", "cover letter writing", "job application", "AI cover letter", "hiring"],
     seoDescription:
-      "7 evidence-based cover letter tips that get hiring managers to actually read your letter — plus how AI drafts one in 60 seconds.",
+      "7 evidence-based cover letter tips that get hiring managers to actually read your letter — plus how AI drafts one in about a minute.",
     author: {
       name: "Nazir Elmurodov",
       role: "Founder, LaunchCV",
@@ -692,12 +706,16 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "Tips 5–7: Formatting, tone, and AI assistance",
-        body: "Tip 5: Use a professional but human tone. Avoid corporate jargon. Write like you speak in an interview, not like a legal document. Tip 6: End with a specific call to action: 'I would welcome the chance to discuss how my experience with [X] could contribute to [Y goal].' Tip 7: Use AI to generate the first draft. LaunchCV's Cover Letter Generator reads your resume and the job description, personalizes the opening hook, selects tone (professional, enthusiastic, concise, creative), and produces a ready-to-send letter in under 60 seconds. Edit 2–3 sentences to add your own voice and it's ready.",
+        body: "Tip 5: Use a professional but human tone. Avoid corporate jargon. Write like you speak in an interview, not like a legal document. Tip 6: End with a specific call to action: 'I would welcome the chance to discuss how my experience with [X] could contribute to [Y goal].' Tip 7: Use AI to generate the first draft. LaunchCV's Cover Letter Generator reads your resume and the job description, personalizes the opening, picks a Formal or Neutral tone, and produces a ready-to-send letter in about a minute. Edit 2–3 sentences to add your own voice and it's ready.",
       },
     ],
     faqs: [
-      { q: "Should I address the cover letter to a specific person?", a: "Always, if you can find the name. Check LinkedIn for the hiring manager or relevant team lead. 'Dear Sarah Johnson' is more personal than 'Dear Hiring Manager'." },
-      { q: "What if the job posting says 'cover letter optional'?", a: "Submit one anyway. It signals initiative and gives you another opportunity to make your case." },
+      { q: "Should I address the cover letter to a specific person?", a: "Yes, whenever you can find the name. Check LinkedIn or the company site for the hiring manager or relevant team lead, since addressing a real person reads as more personal and prepared than a generic greeting. If you genuinely can't find a name, Dear Hiring Manager is an acceptable fallback." },
+      { q: "What if the job posting says 'cover letter optional'?", a: "Submit one anyway. Marking it optional is often a soft test of initiative, and a specific, well-targeted letter gives you another chance to connect your experience to the company's actual need. Candidates who include a tailored cover letter tend to receive noticeably more interview invitations than those who skip it." },
+      { q: "How long should a cover letter be?", a: "Keep it under 400 words. Hiring managers read hundreds of applications, so anything longer is unlikely to be read fully. A tight structure works best: a hook that says who you are, one specific accomplishment tied to the company's need, why this company specifically, and a closing call to action." },
+      { q: "How do I start a cover letter without sounding generic?", a: "Skip the phrase I am writing to express my interest, which appears in millions of applications. Instead, open with a specific accomplishment or relevant connection that creates immediate curiosity, then link it to the role. A concrete story about real work differentiates you from the very first sentence." },
+      { q: "Do cover letters still matter in 2026?", a: "Yes, but specificity is what makes them work. Candidates who submit cover letters receive interview invitations noticeably more often than those who don't, yet generic letters perform no better than none. A letter that references the company's real product, mission, or news and ties it to your experience stands out." },
+      { q: "Can AI write my cover letter for me?", a: "AI can draft a strong first version in under a minute by reading your resume and the job description, personalizing the opening hook, and setting a tone like professional or enthusiastic. Treat it as a starting point: edit two or three sentences to add your own voice before you send it." },
     ],
   },
 
@@ -743,8 +761,12 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
     ],
     faqs: [
-      { q: "How many questions should I practice before an interview?", a: "Aim for 15–20 questions. Cover at least 3 behavioral questions from your own experience, 5 role-specific technical questions, and 2–3 company/culture questions." },
-      { q: "Is it okay to bring notes to an interview?", a: "Yes — especially for key metrics and examples you want to reference. Brief notes are professional. Reading from a script is not." },
+      { q: "How many questions should I practice before an interview?", a: "Aim for 15 to 20 questions. Cover at least three behavioral questions drawn from your own experience, five role-specific technical questions pulled from the job description, and two or three company and culture questions. Practicing across these categories prepares you for the specific conversation you'll actually have, not just generic prompts." },
+      { q: "Is it okay to bring notes to an interview?", a: "Yes, especially for key metrics and examples you want to reference. Brief, glanceable notes read as professional and prepared, whether the interview is in person or remote. Reading from a full script, however, undermines you — it breaks eye contact and makes your answers sound rehearsed rather than genuine and conversational." },
+      { q: "What is the STAR method for interview answers?", a: "STAR is a framework for answering behavioral questions: Situation sets the context, Task describes your specific responsibility, Action explains what you did and why, and Result quantifies the outcome. Instead of saying we got it done, you walk through the scenario and end with a measurable result. Practice until it's automatic." },
+      { q: "How does AI generate interview questions from my resume?", a: "AI interview prep reads your resume and the target job description, then generates questions across five categories: behavioral, technical or role-specific, company and culture, situational, and curveballs. When you answer, it scores you on clarity, relevance, impact, and STAR structure, and provides a model answer so you can benchmark your response." },
+      { q: "What questions should I ask the interviewer?", a: "Ask questions that signal preparation and can't be answered by ten minutes of research. Strong choices include what success looks like in the first 90 days, the biggest challenges the team is navigating, and what the most successful people in the role have in common. Avoid asking what the company does." },
+      { q: "How many days do I need to prepare for an interview?", a: "Three focused days is usually enough. Spend day one researching the company and noting things you genuinely find interesting, day two practicing 10 to 15 AI-generated questions and improving your STAR answers, and day three running a full mock interview, reviewing feedback, and preparing five thoughtful questions to ask the interviewer." },
     ],
   },
 
@@ -786,9 +808,12 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
     ],
     faqs: [
-      { q: "Do all companies use ATS?", a: "Companies with more than 50 employees almost universally use some form of ATS. Even many smaller companies use basic ATS tools built into job boards like LinkedIn or Indeed." },
-      { q: "Can a great resume still fail ATS?", a: "Yes. A beautifully designed resume with infographics, columns, and custom fonts can score 0 in an ATS even if the content is excellent. Design and ATS compatibility are separate goals." },
-      { q: "Do human recruiters ever override ATS?", a: "Occasionally — usually for highly referred candidates or senior roles. For most job applications, the ATS filter is the first and often most decisive hurdle." },
+      { q: "Do all companies use ATS?", a: "Companies with more than 50 employees almost universally use some form of ATS, and over 98% of Fortune 500 firms rely on one. Even many smaller companies use basic ATS tools built into job boards like LinkedIn or Indeed, so ATS-friendly formatting is worth it for nearly every online application." },
+      { q: "Can a great resume still fail ATS?", a: "Yes. A beautifully designed resume with infographics, columns, and custom fonts can score near zero in an ATS even when the content is excellent, because the parser can't read those elements. Design and ATS compatibility are separate goals, so for online applications, always prioritize a clean, machine-readable, single-column layout." },
+      { q: "Do human recruiters ever override ATS?", a: "Occasionally, usually for highly referred candidates or senior roles where a recruiter searches the pipeline directly. For most standard applications, though, the ATS filter is the first and often most decisive hurdle, so ranking well in the system is what earns you a human review in the first place." },
+      { q: "How does an ATS rank resumes?", a: "Most systems combine keyword matching, which counts how many job-description terms appear in your resume, with contextual parsing that uses NLP to relate words like led and managed. They also rely on section recognition and formatting parsing, so content in tables, columns, or headers can disappear before scoring even happens." },
+      { q: "What are the most common ATS platforms?", a: "The most widely used platforms include Workday, Greenhouse, Lever, iCIMS, and Taleo, along with BambooHR and Jobvite. Workday dominates large enterprises and needs very clean formatting, Greenhouse is popular at tech companies, and Taleo is among the most aggressive about formatting and keyword matching. Each has slightly different parsing quirks." },
+      { q: "How can I tell if my resume will pass ATS before applying?", a: "Use an ATS resume checker before you apply. Upload your resume, paste the job description, and it simulates how the ATS parses your document, returning a 0 to 100 compatibility score with specific issues like missing keywords, formatting problems, and structure gaps. Most unoptimized resumes score 45 to 60." },
     ],
   },
 
@@ -838,9 +863,12 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
     ],
     faqs: [
-      { q: "Can employers tell if I used AI to write my resume?", a: "Not from the content alone. AI-generated text that you've reviewed and personalized reads as professional writing. What matters is that the content accurately represents your experience." },
-      { q: "Is it ethical to use AI for resume writing?", a: "Yes. AI is a writing tool, like a grammar checker or a template. The experience and achievements on your resume must be real — AI helps you express them more effectively." },
-      { q: "How often should I update my resume?", a: "Update it after every significant achievement or role change. A living resume is much easier to maintain than one you haven't touched in 3 years." },
+      { q: "Can employers tell if I used AI to write my resume?", a: "Not from the content alone. AI-generated text that you've reviewed and personalized reads simply as professional writing, much like using a grammar checker or a template. What matters is that the content accurately represents your real experience and that you can speak to every claim in an interview." },
+      { q: "Is it ethical to use AI for resume writing?", a: "Yes. AI is a writing tool, no different in principle from a grammar checker or a resume template. The experience and achievements on your resume must be genuinely real; AI simply helps you express them more clearly, quantify outcomes, and align your wording to each role you apply for." },
+      { q: "How often should I update my resume?", a: "Update it after every significant achievement or role change, not just when you're job hunting. A living resume that you keep current is far easier to maintain than one you haven't touched in three years, and it means you're always ready to tailor a version the moment a good opportunity appears." },
+      { q: "How does an AI resume builder write bullet points?", a: "You describe your work in plain language, like I managed social media for a startup, and the AI adds a strong action verb, layers in specifics from context you provide, quantifies outcomes where data exists, and aligns the language to your target role. The rough input becomes a polished, professional bullet." },
+      { q: "Are AI resume builders better than hiring a professional writer?", a: "For most job seekers, yes. Professional writers charge $200 to $700 and bring human judgment, but AI builders cost far less, produce results in minutes, and can be re-tailored for every application. Human writers still add value for very senior executives and unusual career pivots where personal branding is the main differentiator." },
+      { q: "What should I look for in an AI resume builder?", a: "Prioritize ATS-safe templates with no tables or columns, JD alignment that analyzes keyword gaps against a pasted job description, and a real-time preview of the final PDF. Also look for PDF and DOCX export, industry-specific templates, voice input, and strong privacy so your data isn't used to train models without consent." },
     ],
   },
 ];

@@ -9,6 +9,8 @@ import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
@@ -57,6 +59,33 @@ const roles = [
   },
 ];
 
+const faqs: FaqItem[] = [
+  {
+    q: "Does LaunchCV work for my profession?",
+    a: "LaunchCV works across professions through 12 industry templates that are ATS-tested and quantified out of the box, plus dedicated guides for software engineers, product managers, and designers. Each track tunes the same AI toolkit to the signals recruiters scan for in that specific field.",
+  },
+  {
+    q: "Which LaunchCV resume guide is right for my role?",
+    a: "Choose the software engineer guide for latency, throughput, and stack signals; the product manager guide for roadmaps, OKRs, and A/B tests; or the designer guide for portfolio and system work. Each tailors the same AI toolkit to how your specific role gets hired.",
+  },
+  {
+    q: "Why does a resume need to be tailored to a specific role?",
+    a: "A resume needs role-specific tailoring because recruiters scan for different signals in every field, and generic bullets miss them. LaunchCV rewrites your experience into the quantified, ATS-clean language your particular role rewards, whether that means engineering scope, product metrics, or design impact, so screeners recognize the right proof.",
+  },
+  {
+    q: "What if my job isn't listed in LaunchCV's use cases?",
+    a: "If your job is not listed, LaunchCV still fits because it ships 12 industry templates that are ATS-tested and quantified out of the box. The role guides for engineers, PMs, and designers show the approach, but the same AI toolkit adapts your experience to any field you apply in.",
+  },
+  {
+    q: "How long does it take to build a role-specific resume with LaunchCV?",
+    a: "Building a role-specific resume with LaunchCV takes about five minutes from blank to PDF. You pick your track, and the AI rewrites your experience into quantified, ATS-clean bullets tuned to your field, using templates that are ATS-safe and metrics-first out of the box.",
+  },
+  {
+    q: "Do all LaunchCV roles use the same tool or different ones?",
+    a: "All LaunchCV roles use the same AI toolkit, just tuned to each field's hiring signals. Engineers, product managers, and designers get role-specific bullets and keyword libraries drawn from one product, so switching tracks never means learning a new tool or losing your ATS-clean formatting.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -83,6 +112,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -121,7 +151,7 @@ export default function UseCasesPage() {
                 "Dedicated tracks for software engineers, product managers, and designers.",
                 "Role-specific keyword libraries matched to each job description.",
                 "Quantified, baselined bullets in the language your field rewards.",
-                "ATS-clean formatting tested against 15 tracking systems.",
+                "ATS-clean formatting built for how common ATS platforms parse resumes.",
               ]}
             />
 
@@ -213,7 +243,7 @@ export default function UseCasesPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {[
               { href: "/features", t: "All 6 tools", d: "See the full AI toolkit under one subscription." },
-              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in seconds — no signup." },
               { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
             ].map((r) => (
               <Link
@@ -255,6 +285,8 @@ export default function UseCasesPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <StickyCta
         primaryHref="/register"

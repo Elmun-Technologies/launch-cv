@@ -10,6 +10,8 @@ import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
@@ -48,18 +50,18 @@ const features = [
   {
     icon: Mail,
     title: "Cover Letter Generator",
-    description: "Personalized to the company, the role, and the hiring manager. Multiple tones, under a minute.",
+    description: "Personalized to the role and company, grounded in your resume. Formal or Neutral tone, in about a minute.",
     href: "/features/cover-letter",
     iconBg: "bg-teal-50 text-teal-700",
-    stats: [{ k: "Minutes", v: "Per letter" }, { k: "3", v: "Tones" }],
+    stats: [{ k: "Minutes", v: "Per letter" }, { k: "2", v: "Tones" }],
   },
   {
     icon: MessageSquare,
     title: "Interview Prep",
-    description: "Role-specific questions. AI-scored answers. Model responses on tap. Practice until your worst day still wins.",
+    description: "Role-specific questions, each with a model answer outline to prepare against. Practice until your worst day still wins.",
     href: "/features/interview-prep",
     iconBg: "bg-emerald-50 text-emerald-700",
-    stats: [{ k: "AI-scored", v: "Answers" }, { k: "1–10", v: "Scoring scale" }],
+    stats: [{ k: "Role-specific", v: "Questions" }, { k: "Model", v: "Answer outlines" }],
   },
   {
     icon: Mic,
@@ -68,6 +70,33 @@ const features = [
     href: "/features/voice-input",
     iconBg: "bg-pink-50 text-pink-700",
     stats: [{ k: "Speak", v: "It writes" }, { k: "0", v: "Audio stored" }],
+  },
+];
+
+const faqs: FaqItem[] = [
+  {
+    q: "What AI tools does LaunchCV include?",
+    a: "LaunchCV includes six AI tools under one subscription: JD Alignment, AI Resume Builder, ATS Score Checker, Cover Letter Generator, Interview Prep, and Voice Input. Together they cover every stage of the job hunt — match, write, score, send, practice, and speak — with each tool's output feeding the next.",
+  },
+  {
+    q: "Which LaunchCV feature should I start with?",
+    a: "Start with the AI Resume Builder if you need a resume, since it turns plain English into ATS-tested, quantified bullets in minutes. Its output then feeds the ATS Score Checker and JD Alignment, so beginning there seeds the rest of the workflow automatically.",
+  },
+  {
+    q: "How much can LaunchCV improve my ATS score?",
+    a: "LaunchCV's ATS Score Checker names and ranks every parser-breaking format issue and returns a prioritized fix list, built for how common ATS platforms parse resumes. Separately, JD Alignment scores your job match and rewrites bullets to close the gaps before you apply.",
+  },
+  {
+    q: "Is LaunchCV one subscription or do I pay per tool?",
+    a: "LaunchCV is one subscription that includes all six tools on every plan, so you never pay per tool or copy-paste between tabs. The AI usage ceilings scale with your tier, letting you pick whichever plan matches how hard you are currently applying.",
+  },
+  {
+    q: "Can LaunchCV write a cover letter and prep me for interviews?",
+    a: "Yes, LaunchCV's Cover Letter Generator personalizes letters to the role and company in about a minute, in a Formal or Neutral tone. Interview Prep then generates role-specific questions, each with a model answer outline you can prepare against.",
+  },
+  {
+    q: "Can I build my resume by voice with LaunchCV?",
+    a: "Yes, LaunchCV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished, ATS-ready bullet. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
   },
 ];
 
@@ -90,6 +119,7 @@ const ld = {
       })),
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -257,7 +287,7 @@ export default function FeaturesPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {[
               { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
-              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in seconds — no signup." },
               { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
             ].map((r) => (
               <Link
@@ -299,6 +329,8 @@ export default function FeaturesPage() {
           </div>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <StickyCta
         primaryHref="/register"

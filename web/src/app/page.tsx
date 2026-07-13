@@ -87,7 +87,7 @@ const features = [
   {
     href: "/features/interview-prep",
     title: "Interview Prep",
-    desc: "Role-specific question banks, AI-scored answers, and benchmark responses to calibrate against.",
+    desc: "Role-specific questions, each with a model answer outline to practice against.",
     icon: MessageSquare,
     iconBg: "bg-emerald-50 text-emerald-700",
   },

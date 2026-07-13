@@ -10,6 +10,8 @@ import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Mic,
@@ -40,6 +42,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqItem[] = [
+  {
+    q: "Can I build a resume by voice with LaunchCV?",
+    a: "Yes, you can build a resume entirely by voice with LaunchCV. Click the mic, describe your work the way you would to a friend, and the AI turns your spoken words into quantified, ATS-ready bullets. The mic is available in every section, from Experience to Skills and Projects.",
+  },
+  {
+    q: "What languages does LaunchCV voice input support?",
+    a: "You can speak naturally in your own words and the AI reframes what you say into polished, formal English resume bullets. That's especially helpful for non-native English speakers, who can describe their work in casual phrasing and let the AI handle the professional English framing.",
+  },
+  {
+    q: "Does LaunchCV store my voice recordings?",
+    a: "No, LaunchCV never stores your voice recordings. Audio is streamed to transcription, processed in-memory, and discarded immediately, so no audio file is saved on our servers. Each request is scoped and dropped, with no fine-tuning on your voice. The feature is fully GDPR and CCPA compliant.",
+  },
+  {
+    q: "Do I need to install an app to use voice input?",
+    a: "No, you do not need to install any app or plug-in to use voice input. It runs natively in your browser on Chrome, Edge, and Safari. Just grant mic access and start speaking. Because it works in the browser, you can walk and talk your resume from any phone.",
+  },
+  {
+    q: "Can I fix mistakes in the voice transcription?",
+    a: "Yes, you can fix any mistranscription before transforming it into a bullet. Your words appear on screen in real time as you speak, and you can edit them inline. Once the text looks right, the AI reframes it into a polished, quantified bullet ready for your resume.",
+  },
+  {
+    q: "Is voice input good for non-native English speakers or people with dyslexia?",
+    a: "Yes, voice input is built for non-native English speakers, people with dyslexia, career switchers, and returners. Speak in your strongest language or in casual phrasing, and the AI handles structure, spelling, and formal framing. It turns a spoken story into professional bullets without you ever facing a blank page.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -58,6 +87,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -546,6 +576,8 @@ export default function VoiceInputPage() {
           },
         ]}
       />
+
+      <FaqSection items={faqs} accent="#DB2777" />
 
       <StickyCta
         primaryHref="/register"

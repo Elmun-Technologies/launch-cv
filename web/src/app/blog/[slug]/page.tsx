@@ -49,7 +49,7 @@ const RELATED_FEATURES: Record<string, FeatureLink[]> = {
     { href: "/features/ats-score", title: "ATS Score Checker", desc: "Get a 0–100 ATS score with a prioritized list of formatting fixes." },
   ],
   "Cover Letters": [
-    { href: "/features/cover-letter", title: "AI Cover Letter Generator", desc: "Write a personalized, company-specific cover letter in 60 seconds." },
+    { href: "/features/cover-letter", title: "AI Cover Letter Generator", desc: "Write a personalized, company-specific cover letter in about a minute." },
     { href: "/features/jd-alignment", title: "JD Alignment", desc: "Pull the job description's exact language into your application." },
   ],
   "Interview Prep": [

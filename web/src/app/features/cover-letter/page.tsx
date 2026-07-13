@@ -10,6 +10,8 @@ import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { howToLd, speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   Mail,
@@ -37,6 +39,33 @@ export const metadata = buildMarketingMetadata({
     "cover letter maker",
   ],
 });
+
+const faqs: FaqItem[] = [
+  {
+    q: "How does LaunchCV personalize my cover letter?",
+    a: "LaunchCV reads your resume and the job description together, then grounds the letter in your real experience and the role's stated requirements. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the draft.",
+  },
+  {
+    q: "How long does it take to write a cover letter with LaunchCV?",
+    a: "LaunchCV generates a personalized cover letter in about a minute. You connect a resume, paste the job description, and pick a tone; the AI returns a complete, editable letter body grounded in your real experience, ready to refine before you send.",
+  },
+  {
+    q: "What tones can LaunchCV's cover letter generator write in?",
+    a: "LaunchCV writes in two tones: Formal and Neutral. Formal is a crisp, polished default that suits most roles and industries; Neutral is clear and direct, a good match when the posting itself is casual. Pick either one before generating.",
+  },
+  {
+    q: "Can I edit the cover letter after it's generated?",
+    a: "Yes. LaunchCV returns a complete draft you can edit inline before sending — adjust any sentence, rework the opening, or tighten the close. Because the letter is grounded in your resume, edits are about voice and emphasis, not inventing content.",
+  },
+  {
+    q: "Are LaunchCV cover letters ATS-safe?",
+    a: "Yes, every LaunchCV cover letter uses plain-text, ATS-safe formatting that works in an email body, an ATS upload field, or a PDF attachment. There are no tables, columns, or graphics to break parsing, so your letter stays readable whether a human or software opens it first.",
+  },
+  {
+    q: "Can I control the length of my LaunchCV cover letter?",
+    a: "LaunchCV returns a complete letter body at a natural length for the role. You can trim or expand any part inline before you send — nothing is locked, so you stay in control of the final length.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -70,6 +99,7 @@ const ld = {
       ],
     }),
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -495,7 +525,7 @@ export default function CoverLetterPage() {
             Write a letter you&apos;d actually be proud to send
           </h2>
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Personalized, professional, and ready in 60 seconds. No blank-page anxiety.
+            Personalized, professional, and ready in about a minute. No blank-page anxiety.
           </p>
           <CtaLink cta="get_started" location="feature_cover_letter"
             href="/register"
@@ -539,6 +569,8 @@ export default function CoverLetterPage() {
           },
         ]}
       />
+
+      <FaqSection items={faqs} accent="#0D9488" />
 
       <StickyCta
         primaryHref="/register"

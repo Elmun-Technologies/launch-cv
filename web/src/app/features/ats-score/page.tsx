@@ -50,7 +50,7 @@ export const metadata = buildMarketingMetadata({
 const faqs: FaqItem[] = [
   {
     q: "What is an ATS score checker?",
-    a: "An ATS score checker is a tool that simulates how applicant tracking systems parse and rank your resume, then returns a 0–100 score. LaunchCV tests your resume against 15 real ATS engines — including Workday, Greenhouse, and Lever — and returns a prioritized list of every formatting and keyword fix.",
+    a: "An ATS score checker is a tool that simulates how applicant tracking systems parse and rank your resume, then returns a 0–100 score. LaunchCV checks your resume the way common ATS platforms — like Workday, Greenhouse, and Lever — parse it, and returns a prioritized list of every formatting and keyword fix.",
   },
   {
     q: "How do I check the ATS score of my resume?",

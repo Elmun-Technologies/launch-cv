@@ -10,6 +10,8 @@ import { StickyCta } from "@/components/sticky-cta";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 import {
   MessageSquare,
@@ -36,6 +38,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqItem[] = [
+  {
+    q: "How does LaunchCV know which interview questions to ask me?",
+    a: "LaunchCV reads your resume and the target job description, then generates the exact questions you're likely to face for that role. It pulls behavioral prompts from your experience, technical questions from the JD's required skills, and asks resume-aware follow-ups that dig in like a real interviewer would.",
+  },
+  {
+    q: "What do I get for each interview question?",
+    a: "For each question, LaunchCV gives you a model answer outline — a clear structure you can follow using your own real experience. Rather than a numeric grade, you get a concrete example of what a strong, well-structured answer looks like, so you can prepare with confidence.",
+  },
+  {
+    q: "What types of interview questions can I practice on LaunchCV?",
+    a: "LaunchCV generates the main types you'll actually face: behavioral questions drawn from your resume, technical questions from the job description's required skills, and role- and company-specific questions. The AI picks the right mix for the job automatically.",
+  },
+  {
+    q: "Are the questions specific to my target job?",
+    a: "Yes. Every question is generated from your resume and the specific job description, so you practice what actually matters for that role rather than generic filler. Change the job description and the question set changes with it.",
+  },
+  {
+    q: "Can I focus on the questions that worry me most?",
+    a: "Yes. You can generate a fresh set anytime and concentrate on the areas you find hardest — behavioral storytelling, technical depth, or company-specific questions — practicing the same role until your answers feel sharp.",
+  },
+  {
+    q: "How should I use the model answer outlines?",
+    a: "Treat each outline as a scaffold, not a script. It shows the structure of a strong answer — situation, action, and measurable result — so you can slot in your own real experience and rehearse until it feels natural in your own words.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -54,6 +83,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -486,6 +516,8 @@ export default function InterviewPrepPage() {
           },
         ]}
       />
+
+      <FaqSection items={faqs} accent="#059669" />
 
       <StickyCta
         primaryHref="/register"

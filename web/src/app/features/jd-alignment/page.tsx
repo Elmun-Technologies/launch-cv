@@ -67,7 +67,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Can I tailor my resume for multiple jobs at once?",
-    a: "Yes. LaunchCV saves a match score per application so you can compare which roles you fit best and reuse a strong base resume across postings, tailoring each one in about a minute instead of rewriting from scratch.",
+    a: "Yes. LaunchCV saves a separate match score per application, so you can compare which roles you fit best and reuse a strong base resume across every posting. You tailor each one in about a minute against its job description, instead of rewriting your resume from scratch each time.",
   },
 ];
 
@@ -487,7 +487,7 @@ export default function JDAlignmentPage() {
                   { k: "Keyword gap analysis", a: "Ranked list of exactly what is missing", b: "You miss what you cannot see" },
                   { k: "Bullet rewrites", a: "Reworded to match — no fabrication", b: "Rewritten manually for each role" },
                   { k: "Match score", a: "Live score you can lift up to 95%", b: "No feedback before you submit" },
-                  { k: "ATS optimization", a: "Tuned for 15+ ATS platforms", b: "Formatting risk on every upload" },
+                  { k: "ATS optimization", a: "Tuned for common ATS parsers", b: "Formatting risk on every upload" },
                   { k: "Time per job", a: "Seconds to match and export", b: "30–60 minutes per application" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
@@ -598,7 +598,7 @@ export default function JDAlignmentPage() {
             {[
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "Plain English in, polished bullets out.", icon: FileText },
               { href: "/features/ats-score", t: "ATS Score Checker", d: "Find every parser-breaking format issue.", icon: BarChart3 },
-              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "Same JD, tailored letter in 60 seconds.", icon: Mail },
+              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "Same JD, tailored letter in about a minute.", icon: Mail },
             ].map((r) => (
               <Link
                 key={r.href}

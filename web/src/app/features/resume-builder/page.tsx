@@ -11,6 +11,8 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { ProductScreenshot } from "@/components/product-screenshot";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import {
   FileText,
   ArrowRight,
@@ -40,6 +42,33 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const faqs: FaqItem[] = [
+  {
+    q: "How long does building a resume take with LaunchCV?",
+    a: "Building a resume with LaunchCV takes just a few minutes from blank page to finished PDF. You type your work history in plain language, the AI returns quantified bullets, you pick a template, and the live preview updates as you go before you export.",
+  },
+  {
+    q: "Do I need writing skills to use the LaunchCV resume builder?",
+    a: "No, you do not need any writing skills to use the LaunchCV resume builder. You describe your work in plain, everyday language, and the AI turns your rough notes into quantified, action-led bullets that each close with a measurable outcome. Non-native English speakers can start from casual phrasing too.",
+  },
+  {
+    q: "How many resume templates does LaunchCV offer?",
+    a: "LaunchCV offers a set of ATS-tested templates, including Atlas for tech, Nova for marketing and product, Pulse for design, Vector for engineering, Forge for leadership, and Quill for finance and legal. Every one is built for how common ATS platforms parse resumes.",
+  },
+  {
+    q: "Can I export my LaunchCV resume as PDF or DOCX?",
+    a: "Yes, you can export your LaunchCV resume as both PDF and DOCX with one click. There is also a plain-text view designed for pasting into LinkedIn or an email body. The live preview is pixel-accurate, so what you see is exactly what exports, with no spacing or font surprises.",
+  },
+  {
+    q: "Are LaunchCV resume templates ATS-friendly?",
+    a: "Yes, every LaunchCV template is ATS-friendly and built for how common ATS platforms like Workday, Greenhouse, Lever, and iCIMS parse resumes. There are no hidden tables, bad fonts, or zero-width spaces, so applicant tracking systems read your resume cleanly. Every template uses the same parse-safe structure as the ATS Score Checker.",
+  },
+  {
+    q: "Can I keep different resume versions for different jobs?",
+    a: "Yes, LaunchCV versions every save automatically, so you can roll back any change and keep separate cuts of your resume for different roles. You can also reorder sections by dragging and add Projects, Certifications, Languages, Publications, or Awards, tailoring each version to the job you are targeting.",
+  },
+];
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -58,6 +87,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -389,7 +419,7 @@ export default function ResumeBuilderPage() {
               { n: "01", t: "Pick a template", d: "Choose from 12+ professional resume templates tuned for tech, finance, healthcare, marketing, design, and management." },
               { n: "02", t: "Describe your work", d: "Type or speak plain-language notes. This resume generator AI turns them into quantified, action-led bullets." },
               { n: "03", t: "Watch the live preview", d: "Every edit renders instantly — the WYSIWYG preview is exactly what exports, with no surprise spacing." },
-              { n: "04", t: "Run an ATS check", d: "Score your resume 0–100 against 15+ ATS platforms and fix anything that would break parsing." },
+              { n: "04", t: "Run an ATS check", d: "Score your resume 0–100 for how common ATS platforms parse it, and fix anything that would break parsing." },
               { n: "05", t: "Export and apply", d: "Download as PDF or DOCX in one click, or copy a plain-text version for LinkedIn." },
             ].map((s) => (
               <RevealOnView key={s.n}>
@@ -435,7 +465,7 @@ export default function ResumeBuilderPage() {
                   { k: "Time to first draft", a: "Minutes, with AI-written bullets", b: "Hours staring at a blank page" },
                   { k: "Templates", a: "12+ recruiter-designed, ATS-tested layouts", b: "Clever designs that break parsers" },
                   { k: "Bullet quality", a: "Quantified, outcome-first, tailored", b: "Vague duties copied from the job post" },
-                  { k: "ATS coverage", a: "Tested across 15+ ATS platforms", b: "No visibility into how you parse" },
+                  { k: "ATS coverage", a: "Built for common ATS parsers", b: "No visibility into how you parse" },
                   { k: "Export", a: "PDF and DOCX, plain-text ready", b: "Locked or lossy formats" },
                   { k: "Proof", a: "4 ATS-tested templates, 6 AI tools in one plan", b: "—" },
                 ].map((r) => (
@@ -484,39 +514,6 @@ export default function ResumeBuilderPage() {
               </Link>
             </div>
           </RevealOnView>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[820px] px-6">
-          <RevealOnView>
-            <p className="lc-overline text-[#7C3AED]">FAQ</p>
-            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
-          </RevealOnView>
-
-          <div className="mt-10 space-y-4">
-            {[
-              { q: "Is this an ATS friendly resume builder?", a: "Yes. Every one of the 12+ templates is tested across 15+ ATS platforms including Workday, Greenhouse, Lever, and iCIMS. You can also run a full ATS score check before you apply." },
-              { q: "Do I need writing skills?", a: "No. Describe your work in plain language — or speak it with voice input — and the resume generator AI writes quantified, professional bullets for you." },
-              { q: "What can I export?", a: "PDF and DOCX, plus a plain-text view for LinkedIn or email. Formatting stays identical to the live preview." },
-              { q: "How much does it cost?", a: "Plans start at $9/month, with a $29/month Professional plan and a $79 one-time Lifetime option." },
-            ].map((f) => (
-              <RevealOnView key={f.q}>
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-
-          <p className="mt-8 text-[14px] text-[#64748B]">
-            Explore{" "}
-            <Link href="/features/jd-alignment" className="font-semibold text-[#7C3AED] hover:underline">JD Alignment</Link>,{" "}
-            <Link href="/features/cover-letter" className="font-semibold text-[#7C3AED] hover:underline">Cover Letters</Link>, and{" "}
-            <Link href="/pricing" className="font-semibold text-[#7C3AED] hover:underline">pricing</Link>.
-          </p>
         </div>
       </section>
 
@@ -615,6 +612,8 @@ export default function ResumeBuilderPage() {
           },
         ]}
       />
+
+      <FaqSection items={faqs} accent="#7C3AED" />
 
       <StickyCta
         primaryHref="/register"

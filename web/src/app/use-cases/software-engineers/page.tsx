@@ -10,6 +10,8 @@ import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { speakableLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
+import { FaqSection } from "@/components/faq-section";
+import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
@@ -20,6 +22,33 @@ export const metadata = buildMarketingMetadata({
   image: DEFAULT_OG_IMAGE,
   keywords: ["software engineer resume writer", "software engineer resume", "developer resume", "engineering resume ATS", "tech resume AI", "LaunchCV"],
 });
+
+const faqs: FaqItem[] = [
+  {
+    q: "How do I write a resume for a software engineer role?",
+    a: "Write a software engineer resume with quantified bullets covering latency, throughput, scope, and ownership rather than task lists. LaunchCV rewrites vague lines like fixed slow db queries into metric-driven achievements, keeps formatting ATS-clean for Workday, Greenhouse, Lever and more, and picks the right keywords per job description.",
+  },
+  {
+    q: "What technical keywords should a software engineer resume include?",
+    a: "A software engineer resume should include the specific languages, frameworks, cloud platforms, and datastores the job description names, such as TypeScript, Go, Kubernetes, or PostgreSQL. LaunchCV ships a pre-loaded library of over 200 keywords across cloud, DevOps, security, ML, and mobile, then auto-selects the right subset per role.",
+  },
+  {
+    q: "How can I show open-source contributions on my engineering resume?",
+    a: "Show open-source contributions in a dedicated Projects section listing the repository name, stars, commits, and whether you were maintainer or contributor. LaunchCV auto-detects these details from your linked GitHub account, so recruiters see real proof of your work without you formatting each entry by hand.",
+  },
+  {
+    q: "Will an ATS reject my software engineer resume?",
+    a: "An ATS is most likely to reject engineering resumes that use tables, graphics, or LaTeX-style sidebars that parsers cannot read. LaunchCV uses engineering-tested templates with none of those elements and stays clean for Workday, Greenhouse, Lever, and 12 more systems, so your resume parses correctly every time.",
+  },
+  {
+    q: "How do I show senior or staff engineer impact on a resume?",
+    a: "Show senior engineering impact by surfacing scope signals like team size, system tier, on-call rotation, and RFC ownership instead of routine tasks. LaunchCV highlights these details automatically, turning a line like did on-call work into led a 12-engineer tier-0 rotation that cut MTTR from 41 to 9 minutes.",
+  },
+  {
+    q: "How does LaunchCV tailor my engineering resume to a specific job description?",
+    a: "LaunchCV tailors your engineering resume by reading the pasted job description and selecting the right keywords, frameworks, and platforms from its pre-loaded library for that role. The JD Alignment feature matches your bullets to the posting, so each application emphasizes the latency, scope, and stack signals that specific team is screening for.",
+  },
+];
 
 const ld = {
   "@context": "https://schema.org",
@@ -40,6 +69,7 @@ const ld = {
       ],
     },
     speakableLd(["h1", ".lc-key-facts-lead"]),
+    faqPageLd(faqs),
   ],
 };
 
@@ -400,32 +430,6 @@ export default function SoftwareEngineersPage() {
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[820px] px-6">
-          <RevealOnView>
-            <p className="lc-overline text-[#2563EB]">FAQ</p>
-            <h2 className="mt-3 lc-section-headline text-[#0F172A]">Common questions</h2>
-          </RevealOnView>
-
-          <div className="mt-10 space-y-4">
-            {[
-              { q: "What makes an engineering resume ATS-friendly?", a: "A single-column layout, standard fonts, and no tables or graphics. Every developer resume template here is built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes." },
-              { q: "Will the tech resume AI invent metrics?", a: "No. It quantifies what you actually did — latency, throughput, scope, ownership — from your input. It never fabricates numbers, employers, or roles." },
-              { q: "Can I tailor the resume per company?", a: "Yes. JD Alignment re-matches your engineering resume to each posting and fills the keyword gaps for that exact role." },
-              { q: "How fast is it, and does it help?", a: "A first draft takes minutes, and a built-in ATS check shows exactly what to fix before you apply." },
-            ].map((f) => (
-              <RevealOnView key={f.q}>
-                <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <h3 className="text-[16px] font-semibold text-[#0F172A]">{f.q}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.a}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* EXPLORE THE TOOLS */}
       <section className="py-16">
         <div className="mx-auto max-w-[1200px] px-6">
@@ -435,7 +439,7 @@ export default function SoftwareEngineersPage() {
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
               { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
-              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in 60 seconds." },
+              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in about a minute." },
               { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
             ].map((r) => (
@@ -492,6 +496,8 @@ export default function SoftwareEngineersPage() {
           </CtaLink>
         </div>
       </section>
+
+      <FaqSection items={faqs} accent="#1A56DB" />
 
       <StickyCta
         primaryHref="/register"
