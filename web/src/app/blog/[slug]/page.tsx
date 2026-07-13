@@ -41,7 +41,7 @@ type FeatureLink = { href: string; title: string; desc: string };
 // at least one relevant product feature with descriptive, keyword-rich anchors.
 const RELATED_FEATURES: Record<string, FeatureLink[]> = {
   "Job Search": [
-    { href: "/features/ats-score", title: "ATS Score Checker", desc: "Test your resume against 15 ATS engines and fix what's filtering you out." },
+    { href: "/features/ats-score", title: "ATS Score Checker", desc: "See how your resume reads to ATS software and fix what's filtering you out." },
     { href: "/features/jd-alignment", title: "JD Alignment", desc: "Match your resume to any job description and close every keyword gap." },
   ],
   "Resume Tips": [

@@ -7,10 +7,10 @@ import { ArrowRight } from "lucide-react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-type Category = "All" | "ATS-Friendly" | "Modern" | "Minimalist" | "Creative";
-const CATEGORIES: Category[] = ["All", "ATS-Friendly", "Modern", "Minimalist", "Creative"];
+type Category = "All" | "ATS-Friendly" | "Modern" | "Minimalist";
+const CATEGORIES: Category[] = ["All", "ATS-Friendly", "Modern", "Minimalist"];
 
-/* ── shared tiny building blocks (kept intentionally realistic) ── */
+/* ── shared tiny building block (kept intentionally realistic) ── */
 function Bullet({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex gap-1 leading-[1.35]">
@@ -18,9 +18,6 @@ function Bullet({ children }: { children: React.ReactNode }) {
       <span>{children}</span>
     </li>
   );
-}
-function Chip({ children }: { children: React.ReactNode }) {
-  return <span className="rounded bg-slate-100 px-1.5 py-[1px] text-[6.5px] font-medium text-slate-600">{children}</span>;
 }
 
 /* ── 1. Modern (dark sidebar) ── */
@@ -133,52 +130,13 @@ function ProfessionalDoc() {
   );
 }
 
-/* ── 4. Creative (colored header, two-column) ── */
-function CreativeDoc() {
-  return (
-    <div className="h-full w-full overflow-hidden bg-white text-[7px] text-slate-700">
-      <div className="bg-gradient-to-r from-[#0D9488] to-[#0891B2] p-2.5 text-white">
-        <p className="text-[11px] font-bold leading-tight">Diego Alvarez</p>
-        <p className="text-[6.5px] text-teal-50">Full-Stack Developer · diego@email.com</p>
-      </div>
-      <div className="flex p-2.5">
-        <div className="w-[60%] pr-2">
-          <p className="text-[7px] font-bold uppercase tracking-wide text-[#0D9488]">Experience</p>
-          <div className="mt-1">
-            <p className="text-[7px] font-semibold text-slate-800">Lead Developer</p>
-            <p className="text-[6px] text-slate-400">Vercel · 2021 — Now</p>
-            <ul className="mt-1 space-y-[3px] text-[6.5px] text-slate-600">
-              <Bullet>Built edge runtime used by 500k sites.</Bullet>
-              <Bullet>Reduced cold starts by 60%.</Bullet>
-            </ul>
-          </div>
-          <div className="mt-2">
-            <p className="text-[7px] font-semibold text-slate-800">Developer</p>
-            <p className="text-[6px] text-slate-400">GitLab · 2018 — 2021</p>
-          </div>
-        </div>
-        <div className="w-[40%] border-l border-slate-100 pl-2">
-          <p className="text-[7px] font-bold uppercase tracking-wide text-[#0D9488]">Skills</p>
-          <div className="mt-1 flex flex-wrap gap-1">
-            {["React", "Node", "Rust", "GraphQL", "AWS"].map((s) => (
-              <Chip key={s}>{s}</Chip>
-            ))}
-          </div>
-          <p className="mt-2 text-[7px] font-bold uppercase tracking-wide text-[#0D9488]">Education</p>
-          <p className="mt-1 text-[6.5px] text-slate-700">BS CS · MIT</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
+/* The product ships four resume templates: Classic, Modern, Minimal, Executive.
+ * These previews mirror those styles (the sample content is illustrative). */
 const TEMPLATES: { id: string; name: string; category: Exclude<Category, "All">; ats: boolean; Doc: () => React.ReactElement }[] = [
+  { id: "classic", name: "Classic", category: "ATS-Friendly", ats: true, Doc: ProfessionalDoc },
   { id: "modern", name: "Modern", category: "Modern", ats: true, Doc: ModernDoc },
-  { id: "minimal", name: "Minimalist", category: "Minimalist", ats: true, Doc: MinimalDoc },
-  { id: "professional", name: "Professional", category: "ATS-Friendly", ats: true, Doc: ProfessionalDoc },
-  { id: "creative", name: "Creative", category: "Creative", ats: false, Doc: CreativeDoc },
-  { id: "modern2", name: "Executive", category: "Modern", ats: true, Doc: ProfessionalDoc },
-  { id: "minimal2", name: "Classic", category: "Minimalist", ats: true, Doc: MinimalDoc },
+  { id: "minimal", name: "Minimal", category: "Minimalist", ats: true, Doc: MinimalDoc },
+  { id: "executive", name: "Executive", category: "Modern", ats: true, Doc: ProfessionalDoc },
 ];
 
 export function ResumeTemplateGallery() {
@@ -192,11 +150,11 @@ export function ResumeTemplateGallery() {
         <div className="mx-auto max-w-[680px] text-center">
           <p className="lc-overline text-[#2563EB]">Templates</p>
           <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-            Recruiter-approved templates, ready in one click
+            Clean, ATS-tested templates, ready in one click
           </h2>
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Every template is ATS-tested and fully editable. Pick a style — the AI fills it with your quantified,
-            interview-ready bullet points.
+            Every template is built for ATS parsing and fully editable. Pick a style — the AI fills it with your
+            quantified, interview-ready bullet points.
           </p>
         </div>
 
@@ -264,7 +222,7 @@ export function ResumeTemplateGallery() {
             href="/register"
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
           >
-            Browse all 12 templates <ArrowRight className="h-4 w-4" />
+            Browse all templates <ArrowRight className="h-4 w-4" />
           </CtaLink>
         </div>
       </div>

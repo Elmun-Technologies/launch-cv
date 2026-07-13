@@ -1,20 +1,13 @@
-import { Check, Star } from "lucide-react";
+import { Check } from "lucide-react";
 import { Logo } from "@/components/logo";
 
 const FEATURES = [
   "JD alignment with keyword gap map",
-  "ATS scoring across 15 engines",
-  "Cover letters in 60 seconds",
-  "AI interview drills with feedback",
-  "Voice input in 12 languages",
+  "ATS scoring with a prioritized fix list",
+  "Cover letters in about a minute",
+  "AI interview questions with model answers",
+  "Voice input — speak, AI writes it",
 ];
-
-const TESTIMONIAL = {
-  name: "Marcus T.",
-  role: "Product Manager at Notion",
-  text: "ATS score went from 38 to 93. Three offers in two weeks. The fixes were obvious in hindsight.",
-  rating: 5,
-};
 
 type AuthLayoutProps = {
   children: React.ReactNode;
@@ -59,30 +52,12 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
               </ul>
             )}
 
-            <figure className="mt-7 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-5">
-              <div className="flex gap-0.5">
-                {Array.from({ length: TESTIMONIAL.rating }).map((_, i) => (
-                  <Star key={i} className="h-3.5 w-3.5 fill-[#F59E0B] text-[#F59E0B]" />
-                ))}
-              </div>
-              <blockquote className="mt-2.5 text-[14px] leading-[1.55] text-[#0F172A]">
-                &ldquo;{TESTIMONIAL.text}&rdquo;
-              </blockquote>
-              <figcaption className="mt-3 text-[12px] text-[#64748B]">
-                <span className="font-semibold text-[#0F172A]">{TESTIMONIAL.name}</span> · {TESTIMONIAL.role}
-              </figcaption>
-            </figure>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-[#E2E8F0] pt-4">
-            <p className="text-[10px] font-medium uppercase tracking-wider text-[#94A3B8]">Trusted by people at</p>
-            <div className="flex flex-wrap gap-3">
-              {["Stripe", "Notion", "Linear", "HubSpot"].map((n) => (
-                <span key={n} className="text-[12px] font-semibold text-[#64748B]">
-                  {n}
-                </span>
-              ))}
-            </div>
+            <p className="text-[12px] text-[#64748B]">
+              Free ATS score check, no account needed — every tool included on every paid plan.
+            </p>
           </div>
         </div>
       </div>

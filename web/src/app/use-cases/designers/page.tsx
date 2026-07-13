@@ -88,7 +88,7 @@ export default function DesignersPage() {
                   "Quantifies hand-off impact, design-system work, research depth, and shipping speed.",
                   "Design keyword library (Figma, design systems, WCAG, IA, prototyping) per job.",
                   "Writes in design language, not corporate boilerplate.",
-                  "ATS-clean formatting tested against 15 tracking systems.",
+                  "ATS-clean formatting built for how ATS platforms parse resumes.",
                 ]}
               />
 
@@ -155,7 +155,7 @@ export default function DesignersPage() {
               </li>
               <li className="flex items-start gap-2.5">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#DB2777]" />
-                <span><span className="font-medium text-[#0F172A]">The format parses</span> — single-column layouts tested across 15+ ATS platforms.</span>
+                <span><span className="font-medium text-[#0F172A]">The format parses</span> — single-column layouts built for how major ATS platforms parse.</span>
               </li>
             </ul>
           </RevealOnView>
@@ -301,7 +301,7 @@ export default function DesignersPage() {
               { n: "01", t: "Import or describe your work", d: "Paste an existing resume or describe each project in plain language — voice input works too." },
               { n: "02", t: "Load a target job description", d: "JD Alignment maps the systems, research, and craft signals the role asks for." },
               { n: "03", t: "Let AI quantify the impact", d: "Bullets are rewritten with adoption, time-on-task, ship velocity, and research depth." },
-              { n: "04", t: "Check the ATS score", d: "Score your UX designer resume 0–100 across 15+ ATS platforms; a single-column Selected Work section stays parseable." },
+              { n: "04", t: "Check the ATS score", d: "Score your UX designer resume 0–100 with our ATS check; a single-column Selected Work section stays parseable." },
               { n: "05", t: "Export with portfolio links", d: "Download PDF or DOCX with live, ATS-safe links straight to your best case studies." },
             ].map((s) => (
               <RevealOnView key={s.n}>
@@ -346,10 +346,10 @@ export default function DesignersPage() {
                 {[
                   { k: "Impact metrics", a: "Adoption, time-on-task, and tickets quantified", b: "“Redesigned the dashboard”" },
                   { k: "Systems work", a: "Tokens, components, and squad adoption surfaced", b: "Buried in a paragraph" },
-                  { k: "ATS formatting", a: "Single-column, tested on 15+ platforms", b: "Portfolio layouts that break parsing" },
+                  { k: "ATS formatting", a: "Single-column, built for how ATS parses", b: "Portfolio layouts that break parsing" },
                   { k: "Portfolio links", a: "A parseable Selected Work section", b: "Links trapped inside a graphic" },
                   { k: "Research depth", a: "Tests, participants, and decisions changed", b: "Left off entirely" },
-                  { k: "Proof", a: "+43 average ATS gain · 95% pass rate", b: "No feedback loop" },
+                  { k: "Proof", a: "Free ATS score — no signup", b: "No feedback loop" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
@@ -384,7 +384,7 @@ export default function DesignersPage() {
                 She rebuilt it in LaunchCV. The design portfolio resume kept a clean Selected Work section — live links, one line of context, and the metric that mattered. Her vague &ldquo;redesigned the dashboard&rdquo; became <span className="font-medium text-[#0F172A]">&ldquo;Led a 6-week dashboard rework, lifting daily time-on-task by 41% and cutting support tickets by 28%&rdquo;</span>.
               </p>
               <p>
-                An ATS score check confirmed the new single-column layout parsed cleanly across the major platforms. The portfolio still did the closing; the resume finally opened the door — a first-pass gain in line with the platform&apos;s +43-point average.
+                An ATS score check confirmed the new single-column layout parsed cleanly. The portfolio still did the closing; the resume finally opened the door.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -409,10 +409,10 @@ export default function DesignersPage() {
 
           <div className="mt-10 space-y-4">
             {[
-              { q: "Why does a designer resume need to be ATS-friendly?", a: "Because the resume is parsed before a human sees it. A UX designer resume with columns, graphics, or embedded links often fails; every template here is single-column and tested across 15+ ATS platforms." },
+              { q: "Why does a designer resume need to be ATS-friendly?", a: "Because the resume is parsed before a human sees it. A UX designer resume with columns, graphics, or embedded links often fails; every template here is single-column and built for how ATS platforms parse resumes." },
               { q: "Can I still show my portfolio?", a: "Yes. Each resume includes a dedicated, parseable Selected Work section with live links and the metric that mattered — the recruiter clicks, and your portfolio takes over." },
               { q: "Will the AI quantify design work honestly?", a: "It surfaces the numbers you already have — adoption, time-on-task, tickets, research reach — and never fabricates metrics or projects." },
-              { q: "How fast is it, and does it help?", a: "A first draft takes under 5 minutes, and most people gain +43 ATS points on the first pass toward the 95% pass rate our templates target." },
+              { q: "How fast is it, and does it help?", a: "A first draft takes minutes, and a built-in ATS check shows exactly what to fix before you apply." },
             ].map((f) => (
               <RevealOnView key={f.q}>
                 <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
@@ -437,11 +437,11 @@ export default function DesignersPage() {
           <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Explore the tools</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { href: "/features/resume-builder", t: "AI Resume Builder", d: "12+ ATS-tested templates and quantified bullets." },
+              { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
-              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 score across 15+ ATS platforms." },
+              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
               { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in 60 seconds." },
-              { href: "/features/interview-prep", t: "Interview Prep", d: "200+ role-specific questions, scored." },
+              { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
             ].map((r) => (
               <Link

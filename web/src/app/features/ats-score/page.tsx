@@ -16,7 +16,6 @@ import {
   BarChart3,
   ArrowRight,
   Check,
-  Star,
   AlertTriangle,
   CheckCircle2,
   Upload,
@@ -26,9 +25,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "ATS Score Checker: Free 0–100 Rating in 8s",
+  title: "ATS Score Checker: Free 0–100 Rating in Seconds",
   description:
-    "Check your ATS score against 15 real engines like Workday and Greenhouse. Get a 0–100 rating plus a prioritized fix list in 8 seconds. Try it free →",
+    "Check your ATS score with a parser modeled on how ATS platforms like Workday and Greenhouse read resumes. Get a 0–100 rating plus a prioritized fix list in seconds. Try it free →",
   pathname: "/features/ats-score",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -55,11 +54,11 @@ const faqs: FaqItem[] = [
   },
   {
     q: "How do I check the ATS score of my resume?",
-    a: "Upload your resume as a PDF, DOCX, or pasted plain text on the free ATS check page. In about eight seconds you get a 0–100 ATS score, a breakdown across formatting, keywords, structure, and readability, and a fix list ranked High, Medium, and Low priority. No account is required to see your score.",
+    a: "Upload your resume as a PDF, DOCX, or pasted plain text on the free ATS check page. In seconds you get a 0–100 ATS score, a breakdown across formatting, keywords, structure, and readability, and a fix list ranked High, Medium, and Low priority. No account is required to see your score.",
   },
   {
     q: "What is a good ATS score for a resume?",
-    a: "Aim for 80 or higher, measured against the specific job description you are applying to. Scores below 65 are at high risk of being filtered out before a recruiter ever sees them. The average LaunchCV user gains 43 points on their first pass of fixes.",
+    a: "Aim for 80 or higher, measured against the specific job description you are applying to. Scores below 65 are at high risk of being filtered out before a recruiter ever sees them. Each fix on your prioritized list is designed to move the needle — the score updates live as you apply them.",
   },
   {
     q: "Why is my resume failing ATS?",
@@ -67,7 +66,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Which ATS engines does LaunchCV test against?",
-    a: "LaunchCV simulates parsing across 15 widely used applicant tracking systems, including Workday, Greenhouse, Lever, iCIMS, Taleo, Bullhorn, BambooHR, JazzHR, SmartRecruiters, Recruitee, Jobvite, and Ashby.",
+    a: "LaunchCV's checker is built around the parsing rules common to widely used applicant tracking systems — like Workday, Greenhouse, Lever, and iCIMS — flagging the layout and formatting choices most likely to break in one of them.",
   },
   {
     q: "Is the ATS resume checker free?",
@@ -96,12 +95,12 @@ const ld = {
       name: "How to check your resume's ATS score",
       description:
         "Upload your resume to get a 0–100 ATS score and a prioritized fix list, then apply the fixes and re-score.",
-      totalTime: "PT8S",
+      totalTime: "PT1M",
       url: absoluteUrl("/features/ats-score"),
       steps: [
-        { name: "Upload your file", text: "Upload a PDF, DOCX, or pasted plain text. It is parsed in under two seconds — the same way 15 ATS engines would." },
-        { name: "Get every issue named", text: "12 categories of parsing failures are detected, each tagged High, Medium, or Low priority with a specific fix path." },
-        { name: "Apply the fixes and rescore", text: "Fix inside LaunchCV or your own tool, then re-upload to confirm — most users gain 20–40 points on the first round." },
+        { name: "Upload your file", text: "Upload a PDF, DOCX, or pasted plain text — parsed in seconds, modeled on how common ATS platforms read resumes." },
+        { name: "Get every issue named", text: "Parsing failures across formatting, keywords, structure, and readability are detected and tagged High, Medium, or Low priority with a specific fix path." },
+        { name: "Apply the fixes and rescore", text: "Fix inside LaunchCV or your own tool, then re-upload to confirm your score improved." },
       ],
     }),
     speakableLd(["h1", ".lc-key-facts-lead"]),
@@ -111,8 +110,8 @@ const ld = {
 
 const keyFacts = [
   "Score range: 0–100 across formatting, keywords, structure, and readability.",
-  "Tested against 15 ATS engines, including Workday, Greenhouse, Lever, and iCIMS.",
-  "Average improvement is +43 points on the first pass, in about 8 seconds.",
+  "Built for how ATS platforms like Workday, Greenhouse, Lever, and iCIMS parse resumes.",
+  "A prioritized, plain-English fix list — no guessing what to change first.",
   "Free to check — no account required.",
 ];
 
@@ -121,30 +120,27 @@ const issues = [
   { p: "High", t: "Multi-column layout", d: "Two-column resumes break parsing order. Switch to single-column for ATS rounds." },
   { p: "Medium", t: "Non-standard fonts", d: "Some parsers fall back when fonts aren&apos;t embedded. Use Inter, Source Sans, or Arial." },
   { p: "Medium", t: "Date format inconsistency", d: "You mix &lsquo;Mar 2022&rsquo; and &lsquo;03/22&rsquo;. Standardize on MMM YYYY." },
-  { p: "Low", t: "Header graphic blocks contact parsing", d: "Header art breaks contact-info parsing on iCIMS. Move email and phone to the body." },
+  { p: "Low", t: "Header graphic blocks contact parsing", d: "Header art can hide contact info from ATS parsing. Move email and phone to the body." },
 ];
-
-const atsEngines = ["Workday", "Greenhouse", "Lever", "iCIMS", "Taleo", "Bullhorn", "BambooHR", "JazzHR", "SmartRecruiters", "Recruitee", "Jobvite", "Ashby"];
 
 const benefits = [
   { t: "Formatting parser", d: "Catches tables, text boxes, columns, graphics, and header/footer issues that break ATS." },
   { t: "Keyword density check", d: "Measures keyword richness against industry benchmarks for your target role." },
-  { t: "File compatibility test", d: "Validates file type, size, encoding, and font embedding across 15 parsers." },
+  { t: "File compatibility test", d: "Validates file type, size, encoding, and font embedding for common ATS parsers." },
   { t: "Section structure audit", d: "Confirms Work Experience, Education, Skills, and Contact Info are all parseable." },
   { t: "Date format consistency", d: "ATS systems need uniform date formats. We flag every inconsistency." },
   { t: "Contact info parsing test", d: "Ensures name, email, phone, and LinkedIn land in standard parseable positions." },
 ];
 
-const testimonials = [
+// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
+const whyItWorks = [
   {
-    q: "My ATS score went from 38 to 93. I had no idea how broken my resume was — tables, headers, the wrong fonts. Two weeks later, three offers.",
-    n: "Marcus T.",
-    r: "Product Manager at Notion",
+    t: "See exactly what's broken, not just a number",
+    d: "Every issue is named and ranked — tables, fonts, header graphics, date formats — so you know precisely what to fix first.",
   },
   {
-    q: "I sent 50 applications with zero responses. LaunchCV&apos;s ATS checker showed me my resume was rejected before any human ever saw it. Hired in three weeks.",
-    n: "Chloe W.",
-    r: "Operations Analyst",
+    t: "Free, no account, no waiting",
+    d: "Upload once and get your score with a full parser breakdown. The rest of the toolkit is there when you're ready.",
   },
 ];
 
@@ -183,12 +179,12 @@ export default function AtsScorePage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Upload your resume. In eight seconds you get a 0–100 ATS score, a breakdown by parser dimension, and a prioritized list of every fix. The average user gains <span className="font-semibold text-[#0F172A]">43 points</span> on the first pass.
+                Upload your resume. In seconds you get a 0–100 ATS score, a breakdown by parser dimension, and a <span className="font-semibold text-[#0F172A]">prioritized list of every fix</span>.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="LaunchCV's ATS Score Checker returns a 0–100 ATS score in about 8 seconds, tested against 15 real ATS engines like Workday, Greenhouse, and Lever. It names every parsing issue by priority, and the average user gains 43 points on the first pass. Checking your score is free and needs no account."
+                lead="LaunchCV's ATS Score Checker returns a 0–100 ATS score in seconds, built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes. It names every parsing issue by priority. Checking your score is free and needs no account."
                 facts={keyFacts}
               />
 
@@ -210,9 +206,9 @@ export default function AtsScorePage() {
 
               <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
                 {[
-                  { v: "+43", l: "Average score gain" },
-                  { v: "8 sec", l: "Time to score" },
-                  { v: "15", l: "ATS engines" },
+                  { v: "0–100", l: "ATS score scale" },
+                  { v: "Free", l: "No signup" },
+                  { v: "PDF/DOCX", l: "Files accepted" },
                 ].map((s) => (
                   <div key={s.l}>
                     <p className="text-[24px] font-bold tracking-tight text-[#0F172A]">{s.v}</p>
@@ -308,18 +304,6 @@ export default function AtsScorePage() {
         </div>
       </section>
 
-      {/* ENGINES */}
-      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-10">
-        <p className="text-center text-[12px] font-medium uppercase tracking-wider text-[#94A3B8]">Simulated parsers</p>
-        <div className="mx-auto mt-5 max-w-[1100px] flex flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6">
-          {atsEngines.map((n) => (
-            <span key={n} className="text-[14px] font-semibold tracking-tight text-[#64748B]">
-              {n}
-            </span>
-          ))}
-        </div>
-      </section>
-
       {/* ISSUE LIST */}
       <section id="issues" className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
@@ -390,7 +374,7 @@ export default function AtsScorePage() {
 
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
             {[
-              { i: Upload, t: "Upload your file", d: "PDF, DOCX, or pasted plain text. We parse it in under two seconds — same way 15 ATS engines would." },
+              { i: Upload, t: "Upload your file", d: "PDF, DOCX, or pasted plain text. We parse it in seconds, the same way common ATS platforms would." },
               { i: AlertTriangle, t: "Get every issue named", d: "12 categories of parsing failures detected, each tagged High, Medium, or Low priority with a specific fix path." },
               { i: CheckCircle2, t: "Apply the fixes and rescore", d: "Fix inside LaunchCV or in your own tool. Re-upload to confirm — most users gain 20–40 points on round one." },
             ].map((s, i) => (
@@ -428,14 +412,14 @@ export default function AtsScorePage() {
               ever opens your application, software from Workday, Greenhouse, Lever, iCIMS, and
               a dozen others extracts your text, splits it into sections, and matches it against
               the job description. If the parser stumbles on a two-column layout or a name buried
-              in a header graphic, your experience never registers. Roughly three in four resumes
-              are filtered out at this stage, which is why so many strong candidates get no reply.
+              in a header graphic, your experience never registers — which is why so many strong
+              candidates get no reply.
             </p>
             <p>
               To <strong>check the ATS score of your resume</strong>, upload a PDF or DOCX and
-              LaunchCV runs it through a parser that mirrors those 15 engines. You get a 0–100
-              score in about eight seconds, broken into four dimensions: formatting (can the text
-              be extracted cleanly), keywords (does it contain the terms the role asks for),
+              LaunchCV runs it through a parser built around how common ATS platforms read
+              resumes. You get a 0–100 score in seconds, broken into four dimensions: formatting
+              (can the text be extracted cleanly), keywords (does it contain the terms the role asks for),
               structure (are Work Experience, Education, Skills, and Contact Info all detected),
               and readability (is the language clear and quantified). Each dimension is scored
               independently so you can see exactly where the points are leaking.
@@ -506,11 +490,11 @@ export default function AtsScorePage() {
               </thead>
               <tbody>
                 {[
-                  { k: "Score", a: "A 0–100 ATS score in 8 seconds", b: "No idea why you are filtered" },
-                  { k: "Coverage", a: "15+ ATS platforms simulated", b: "One black-box upload" },
+                  { k: "Score", a: "A 0–100 ATS score in seconds", b: "No idea why you are filtered" },
+                  { k: "Coverage", a: "Built for how common ATS platforms parse", b: "One black-box upload" },
                   { k: "Issue list", a: "Every problem ranked High, Medium, Low", b: "Silent rejection, no reason given" },
                   { k: "Fix path", a: "A specific fix for each flagged issue", b: "Trial and error across dozens of applications" },
-                  { k: "Typical result", a: "+43 points on the first pass", b: "Same resume, same silence" },
+                  { k: "Typical result", a: "A prioritized, plain-English fix list", b: "Same resume, same silence" },
                   { k: "Confidence", a: "Re-upload to confirm you pass ATS", b: "Never know if it worked" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
@@ -543,10 +527,10 @@ export default function AtsScorePage() {
                 Sam had sent 40 applications for operations roles and gotten two rejections and 38 silences. The resume looked great to him — a polished two-column design with a header graphic and a custom font. That was the problem.
               </p>
               <p>
-                He uploaded it to the ATS score checker and got a score of <span className="font-medium text-[#0F172A]">54 out of 100</span> in eight seconds. The report named the culprits: a text box the parser could not read, a multi-column layout that scrambled the reading order, and contact details trapped in the header graphic on iCIMS.
+                He uploaded it to the ATS score checker and got a score of <span className="font-medium text-[#0F172A]">54 out of 100</span> in seconds. The report named the culprits: a text box the parser could not read, a multi-column layout that scrambled the reading order, and contact details trapped in the header graphic.
               </p>
               <p>
-                He switched to a single-column ATS-tested template, moved his email and phone into the body, and standardized his dates. On the re-check his score jumped to 91 — a gain in line with the platform&apos;s +43-point average. The same experience, finally readable, started getting replies.
+                He switched to a single-column ATS-tested template, moved his email and phone into the body, and standardized his dates. On the re-check his score jumped to 91. The same experience, finally readable, started getting replies.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -588,24 +572,16 @@ export default function AtsScorePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-5 lg:grid-cols-2">
-            {testimonials.map((t) => (
-              <RevealOnView key={t.n}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]" dangerouslySetInnerHTML={{ __html: `&ldquo;${t.q}&rdquo;` }} />
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.n}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.r}</p>
-                  </figcaption>
-                </figure>
+            {whyItWorks.map((w) => (
+              <RevealOnView key={w.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>
@@ -619,7 +595,7 @@ export default function AtsScorePage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {[
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match resume to a target role.", icon: Target },
-              { href: "/features/resume-builder", t: "Resume Builder", d: "12 ATS-safe templates.", icon: FileText },
+              { href: "/features/resume-builder", t: "Resume Builder", d: "4 ATS-safe templates.", icon: FileText },
               { href: "/features/cover-letter", t: "Cover Letter", d: "Personalized letter to match.", icon: Mail },
             ].map((r) => (
               <Link

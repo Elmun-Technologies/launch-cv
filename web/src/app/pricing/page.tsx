@@ -4,11 +4,10 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { RevealOnView } from "@/components/reveal-on-view";
-import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown, Star } from "lucide-react";
+import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel, planNameList, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
-import { AGGREGATE_RATING, SITE_REVIEWS, aggregateRatingLd, reviewLdList } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
@@ -95,8 +94,6 @@ const ld = {
         offerCount: planOffers.length,
         offers: planOffers,
       },
-      aggregateRating: aggregateRatingLd(),
-      review: reviewLdList(),
     },
     {
       "@type": "FAQPage",
@@ -148,7 +145,7 @@ const compareGroups = [
     g: "Export & extras",
     rows: [
       { l: "PDF + DOCX export", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "All 12 templates", v: { starter: "Core only", professional: true, elite: true, lifetime: true } },
+      { l: "All 4 templates", v: { starter: "Core only", professional: true, elite: true, lifetime: true } },
       { l: "Job tracker, contacts, companies", v: { starter: true, professional: true, elite: true, lifetime: true } },
       { l: "Email support", v: { starter: "Standard", professional: "Standard", elite: "Priority", lifetime: "Priority" } },
       { l: "Priority feature rollouts", v: { starter: false, professional: false, elite: true, lifetime: true } },
@@ -374,41 +371,27 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* SOCIAL PROOF — visible reviews backing the Product review schema */}
+      {/* WHY IT WORKS */}
       <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="mx-auto max-w-[680px] text-center">
-            <div className="flex items-center justify-center gap-1.5">
-              <div className="flex gap-0.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                ))}
-              </div>
-              <span className="ml-1 text-[15px] font-semibold text-[#0F172A]">
-                {AGGREGATE_RATING.ratingValue}/5
-              </span>
-              <span className="text-[14px] text-[#64748B]">from 2,400+ reviews</span>
-            </div>
-            <h2 className="mt-4 lc-section-headline text-[#0F172A]">Loved by job seekers</h2>
+            <h2 className="lc-section-headline text-[#0F172A]">Every tool, one predictable price</h2>
+            <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+              No upsell modals and no feature paywalled behind a higher tier — every plan gets the full toolkit, with fair-use AI limits that scale with the price.
+            </p>
           </div>
 
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {SITE_REVIEWS.map((r) => (
-              <RevealOnView key={r.author}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: r.rating }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]">
-                    &ldquo;{r.body}&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{r.author}</p>
-                    <p className="text-[13px] text-[#64748B]">{r.role}</p>
-                  </figcaption>
-                </figure>
+            {[
+              { t: "Nothing gated by tier", d: "JD alignment, resume builder, ATS score, cover letters, interview prep, and voice input — included on every paid plan." },
+              { t: "Cancel anytime", d: "Monthly and yearly plans cancel with no penalty. The Lifetime plan is a one-time payment with no renewal." },
+              { t: "Free to start", d: "Check your ATS score with no account, then upgrade only when you want the full toolkit." },
+            ].map((b) => (
+              <RevealOnView key={b.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{b.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{b.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>

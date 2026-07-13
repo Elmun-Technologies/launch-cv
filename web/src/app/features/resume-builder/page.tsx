@@ -15,7 +15,6 @@ import {
   FileText,
   ArrowRight,
   Check,
-  Star,
   Wand2,
   Layers,
   Eye,
@@ -29,7 +28,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "Resume Builder for Software Engineers, Free",
   description:
-    "The AI resume builder software engineers trust: 12 ATS-tested templates, quantified bullets, and PDF/DOCX export in under 5 minutes. Build yours free →",
+    "The AI resume builder software engineers trust: 4 ATS-tested templates, quantified bullets, and PDF/DOCX export in minutes. Build yours free →",
   pathname: "/features/resume-builder",
   keywords: [
     "resume builder software engineer",
@@ -48,7 +47,7 @@ const ld = {
       "@type": "WebPage",
       name: "Resume Builder | LaunchCV",
       url: absoluteUrl("/features/resume-builder"),
-      description: "AI-powered resume builder with 12 ATS-tested templates and quantified bullets.",
+      description: "AI-powered resume builder with 4 ATS-tested templates and quantified bullets.",
     },
     {
       "@type": "BreadcrumbList",
@@ -63,10 +62,10 @@ const ld = {
 };
 
 const keyFacts = [
-  "12 industry templates, each tested against 15 ATS engines.",
+  "Four ATS-tested templates, built for how common ATS software parses resumes.",
   "AI writes quantified, action-led bullets from plain-language input.",
   "Live pixel-accurate preview with PDF, DOCX, and plain-text export.",
-  "Average build time: under 5 minutes.",
+  "Go from blank page to a finished resume in minutes.",
 ];
 
 const templates = [
@@ -81,22 +80,21 @@ const templates = [
 const benefits = [
   { i: Wand2, t: "AI bullet writing", d: "Plain language in. Quantified, action-led bullets out. Each line closes with measurable outcome." },
   { i: Eye, t: "Live preview", d: "WYSIWYG to the pixel. No surprise spacing or font swaps on export." },
-  { i: Layers, t: "Twelve ATS-safe templates", d: "Every template tested against Workday, Greenhouse, Lever, iCIMS, and 11 more parsers." },
+  { i: Layers, t: "Four ATS-safe templates", d: "Every template is built for how common ATS software like Workday, Greenhouse, Lever, and iCIMS parses resumes." },
   { i: FileText, t: "Section flexibility", d: "Drag to reorder. Add Projects, Certifications, Languages, Publications, Awards — or remove what doesn&apos;t apply." },
   { i: Download, t: "PDF & DOCX export", d: "One click, two formats. Plain-text view for LinkedIn paste or email body." },
   { i: Sparkles, t: "Version history", d: "Every save versioned. Roll back any change. Keep different cuts for different roles." },
 ];
 
-const testimonials = [
+// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
+const whyItWorks = [
   {
-    q: "I built my resume in under fifteen minutes and it looked better than anything I&apos;d ever spent hours on. The AI suggestions were dead-on for product management.",
-    n: "Marcus J.",
-    r: "Product Manager at Meta",
+    t: "Plain language in, polished bullets out",
+    d: "Describe what you did in your own words — the AI structures it into quantified, action-led bullets without inventing details.",
   },
   {
-    q: "As a non-native English speaker, writing formal job bullets was hard. The AI took my rough notes and made them professional. Hired in a month.",
-    n: "Yuna K.",
-    r: "UX Designer at Atlassian",
+    t: "Built for non-native and first-time writers",
+    d: "If formal resume language doesn't come naturally, the AI turns rough, honest notes into professional phrasing you can stand behind.",
   },
 ];
 
@@ -129,12 +127,12 @@ export default function ResumeBuilderPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Type your work history in plain language and LaunchCV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Five minutes from blank page to PDF.
+                Type your work history in plain language and LaunchCV returns quantified, ATS-tuned bullets. Pick a template, watch the preview update live, and export. Minutes from blank page to PDF.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="The AI Resume Builder turns plain-language work history into quantified, ATS-tuned bullet points. Choose from 12 industry templates, watch a live pixel-accurate preview, and export to PDF or DOCX — most people go from blank page to finished resume in about five minutes."
+                lead="The AI Resume Builder turns plain-language work history into quantified, ATS-tuned bullet points. Choose from four ATS-tested templates, watch a live pixel-accurate preview, and export to PDF or DOCX — most people go from blank page to finished resume in minutes."
                 facts={keyFacts}
               />
 
@@ -150,15 +148,15 @@ export default function ResumeBuilderPage() {
                   href="#templates"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
                 >
-                  See all 12 templates
+                  See all templates
                 </Link>
               </div>
 
               <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
                 {[
-                  { v: "12", l: "Industry templates" },
-                  { v: "5 min", l: "Average build time" },
-                  { v: "15", l: "ATS engines passed" },
+                  { v: "4", l: "ATS-tested templates" },
+                  { v: "Minutes", l: "To first draft" },
+                  { v: "6", l: "AI tools, one plan" },
                 ].map((s) => (
                   <div key={s.l}>
                     <p className="text-[24px] font-bold tracking-tight text-[#0F172A]">{s.v}</p>
@@ -434,12 +432,12 @@ export default function ResumeBuilderPage() {
               </thead>
               <tbody>
                 {[
-                  { k: "Time to first draft", a: "Under 5 minutes with AI-written bullets", b: "Hours staring at a blank page" },
+                  { k: "Time to first draft", a: "Minutes, with AI-written bullets", b: "Hours staring at a blank page" },
                   { k: "Templates", a: "12+ recruiter-designed, ATS-tested layouts", b: "Clever designs that break parsers" },
                   { k: "Bullet quality", a: "Quantified, outcome-first, tailored", b: "Vague duties copied from the job post" },
                   { k: "ATS coverage", a: "Tested across 15+ ATS platforms", b: "No visibility into how you parse" },
                   { k: "Export", a: "PDF and DOCX, plain-text ready", b: "Locked or lossy formats" },
-                  { k: "Proof", a: "50,000+ resumes · 4.9/5 from 2,400+ reviews", b: "—" },
+                  { k: "Proof", a: "4 ATS-tested templates, 6 AI tools in one plan", b: "—" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
@@ -522,24 +520,16 @@ export default function ResumeBuilderPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-5 lg:grid-cols-2">
-            {testimonials.map((t) => (
-              <RevealOnView key={t.n}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]">&ldquo;{t.q}&rdquo;</blockquote>
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.n}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.r}</p>
-                  </figcaption>
-                </figure>
+            {whyItWorks.map((w) => (
+              <RevealOnView key={w.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>

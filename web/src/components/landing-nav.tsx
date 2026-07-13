@@ -12,7 +12,7 @@ import {
 
 const featureItems = [
   { href: "/features/jd-alignment", icon: Target, label: "JD Alignment", desc: "Match resume to any job description" },
-  { href: "/features/resume-builder", icon: FileText, label: "Resume Builder", desc: "AI-powered with 12+ templates" },
+  { href: "/features/resume-builder", icon: FileText, label: "Resume Builder", desc: "AI-powered, ATS-tested templates" },
   { href: "/features/cover-letter", icon: Mail, label: "Cover Letter", desc: "Personalized letters in 60 seconds" },
   { href: "/features/interview-prep", icon: MessageSquare, label: "Interview Prep", desc: "Role-specific AI practice" },
   { href: "/features/ats-score", icon: BarChart3, label: "ATS Score", desc: "See how ATS reads your resume" },

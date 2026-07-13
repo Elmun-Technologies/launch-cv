@@ -39,7 +39,7 @@ export const metadata = buildMarketingMetadata({
 const faqs: FaqItem[] = [
   {
     q: "What is the best ATS resume checker?",
-    a: "The best ATS resume checker is the one that parses your resume like real applicant tracking systems, scores it against a specific job description rather than a generic template, and returns fixes you can act on — not just a keyword count. LaunchCV tests against 15 ATS engines, scores relative to the job you paste in, and lists every fix by priority.",
+    a: "The best ATS resume checker is the one that parses your resume like real applicant tracking systems, scores it against a specific job description rather than a generic template, and returns fixes you can act on — not just a keyword count. LaunchCV is built for how platforms like Workday, Greenhouse, and Lever parse resumes, scores relative to the job you paste in, and lists every fix by priority.",
   },
   {
     q: "Are free ATS resume checkers accurate?",
@@ -112,7 +112,7 @@ const criteria = [
 
 const rows = [
   { label: "Free ATS score (no account)", launchcv: true, keywordCounter: false, note: "Judge accuracy before you pay" },
-  { label: "Parses against real ATS engines", launchcv: "15 engines", keywordCounter: false, note: "Workday, Greenhouse, Lever, +12" },
+  { label: "Built for real ATS platforms", launchcv: true, keywordCounter: false, note: "Modeled on Workday, Greenhouse, Lever & more" },
   { label: "Scores against the job description", launchcv: true, keywordCounter: "Partial", note: "Relative, per-role scoring" },
   { label: "Prioritized fix list", launchcv: true, keywordCounter: false, note: "High / Medium / Low, specific" },
   { label: "Keyword gap analysis + rewrites", launchcv: true, keywordCounter: "Count only", note: "Adds terms you can support" },
