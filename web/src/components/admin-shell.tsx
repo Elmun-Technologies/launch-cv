@@ -204,7 +204,7 @@ export function AdminShell({
             {email ? (
               <span className="hidden text-[12px] text-[#64748B] sm:inline">{email}</span>
             ) : null}
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[12px] font-semibold text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[12px] font-semibold text-white">
               {initials}
             </div>
           </div>

@@ -84,7 +84,7 @@ export default async function AdminSettingsPage() {
                 <ul className="divide-y divide-[#E2E8F0]">
                   {dbAdmins.map((a) => (
                     <li key={a.id} className="flex items-center gap-3 px-5 py-3">
-                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[11px] font-semibold text-white">
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[11px] font-semibold text-white">
                         {(a.name || a.email)[0].toUpperCase()}
                       </div>
                       <div className="min-w-0">

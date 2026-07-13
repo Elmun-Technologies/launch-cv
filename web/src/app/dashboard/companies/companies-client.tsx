@@ -173,7 +173,7 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
             <button
               type="button"
               onClick={openCreate}
-              className="inline-flex h-10 items-center rounded-lg border border-[#7C5CFC] px-4 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50"
+              className="inline-flex h-10 items-center rounded-lg border border-[#2563EB] px-4 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50"
             >
               <Plus className="mr-1 h-4 w-4" />
               Add a New Job
@@ -228,7 +228,7 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                       <button
                         type="button"
                         onClick={() => openEdit(row)}
-                        className="rounded-lg border border-[#7C5CFC] px-4 py-1.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50"
+                        className="rounded-lg border border-[#2563EB] px-4 py-1.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50"
                       >
                         Edit
                       </button>
@@ -276,7 +276,7 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                   type="button"
                   onClick={() => void refresh({ nextPage: p })}
                   className={`h-8 min-w-8 rounded-md px-2 ${
-                    p === page ? "bg-violet-50 font-semibold text-[#7C5CFC]" : "text-gray-500"
+                    p === page ? "bg-violet-50 font-semibold text-[#2563EB]" : "text-gray-500"
                   }`}
                 >
                   {p}
@@ -317,8 +317,8 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
               </div>
               {err ? <p className="text-sm text-red-600">{err}</p> : null}
               <div className="flex gap-3">
-                <button type="submit" disabled={saving} className="rounded-full bg-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70">{saving ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
-                <button type="button" onClick={() => setShowModal(false)} className="rounded-full border border-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Cancel</button>
+                <button type="submit" disabled={saving} className="rounded-full bg-[#2563EB] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70">{saving ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
+                <button type="button" onClick={() => setShowModal(false)} className="rounded-full border border-[#2563EB] px-6 py-2.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">Cancel</button>
               </div>
             </form>
           </div>

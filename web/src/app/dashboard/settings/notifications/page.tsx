@@ -38,7 +38,7 @@ function Toggle({
       aria-checked={checked}
       onClick={onChange}
       className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full transition-colors ${
-        checked ? "bg-[#7C5CFC]" : "bg-gray-200"
+        checked ? "bg-[#2563EB]" : "bg-gray-200"
       }`}
     >
       <span
@@ -153,7 +153,7 @@ export default function NotificationsPage() {
         <button
           type="button"
           onClick={handleSave}
-          className="rounded-xl bg-[#7C5CFC] px-8 py-3 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+          className="rounded-xl bg-[#2563EB] px-8 py-3 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
         >
           Save Preferences
         </button>

@@ -42,7 +42,7 @@ const TIERS = [
 ] as const;
 
 const TIER_COLORS: Record<string, string> = {
-  faang: "bg-violet-50 text-[#7C5CFC]",
+  faang: "bg-violet-50 text-[#2563EB]",
   tech: "bg-blue-50 text-blue-600",
   finance: "bg-emerald-50 text-emerald-600",
   consulting: "bg-amber-50 text-amber-600",
@@ -221,7 +221,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
           <select
             value={selectedResumeId}
             onChange={(e) => setSelectedResumeId(e.target.value)}
-            className="h-11 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-4 pr-10 text-[13px] font-medium text-gray-900 transition focus:border-[#7C5CFC] focus:outline-none focus:ring-2 focus:ring-violet-100"
+            className="h-11 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-4 pr-10 text-[13px] font-medium text-gray-900 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
           >
             {resumes.length === 0 && <option value="">No resumes available</option>}
             {resumes.map((r) => (
@@ -306,7 +306,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                           className="h-full rounded-full transition-all duration-700 ease-out"
                           style={{
                             width: `${item.score * 10}%`,
-                            background: `linear-gradient(90deg, #7C5CFC ${Math.max(0, 100 - item.score * 12)}%, ${item.score >= 7 ? "#10B981" : item.score >= 5 ? "#F59E0B" : "#EF4444"})`,
+                            background: `linear-gradient(90deg, #2563EB ${Math.max(0, 100 - item.score * 12)}%, ${item.score >= 7 ? "#10B981" : item.score >= 5 ? "#F59E0B" : "#EF4444"})`,
                           }}
                         />
                       </div>
@@ -366,7 +366,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                             className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-semibold transition ${
                               bullet.applied
                                 ? "bg-emerald-50 text-emerald-600"
-                                : "bg-[#7C5CFC] text-white hover:bg-[#6B4CE0]"
+                                : "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
                             }`}
                           >
                             {bullet.applied ? (
@@ -389,7 +389,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   <div className="space-y-3">
                     {result.advice.map((tip, i) => (
                       <div key={i} className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50/50 p-4">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#7C5CFC] text-[12px] font-bold text-white">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-[12px] font-bold text-white">
                           {i + 1}
                         </div>
                         <p className="text-[13px] leading-relaxed text-gray-700">{tip}</p>
@@ -403,7 +403,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               <div className="flex flex-wrap gap-3">
                 <a
                   href={`/resume/${selectedResumeId}/edit`}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)]"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]"
                 >
                   <ExternalLink className="h-4 w-4" /> Open in Editor
                 </a>
@@ -433,7 +433,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search companies, industries, or keywords..."
-                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#7C5CFC] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
                 />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -444,7 +444,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     onClick={() => setActiveTier(tier.key)}
                     className={`rounded-full px-4 py-2 text-[12px] font-semibold transition ${
                       activeTier === tier.key
-                        ? "bg-[#7C5CFC] text-white shadow-sm shadow-violet-500/20"
+                        ? "bg-[#2563EB] text-white shadow-sm shadow-violet-500/20"
                         : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                     }`}
                   >
@@ -460,14 +460,14 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
             {filtered.map((company) => (
               <div
                 key={company.id}
-                className="group rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition hover:border-[#7C5CFC]/30 hover:shadow-lg"
+                className="group rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition hover:border-[#2563EB]/30 hover:shadow-lg"
               >
                 <div className="flex items-start gap-3">
                   <div
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[14px] font-bold text-white"
                     style={{
                       backgroundColor:
-                        company.tier === "faang" ? "#7C5CFC"
+                        company.tier === "faang" ? "#2563EB"
                           : company.tier === "tech" ? "#3B82F6"
                             : company.tier === "finance" ? "#10B981"
                               : company.tier === "consulting" ? "#F59E0B"
@@ -505,7 +505,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   type="button"
                   onClick={() => analyzeCompany(company)}
                   disabled={!selectedResumeId}
-                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)] disabled:opacity-40"
+                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)] disabled:opacity-40"
                 >
                   <Sparkles className="h-3.5 w-3.5" /> Analyze Match
                 </button>
@@ -518,7 +518,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                 <button
                   type="button"
                   onClick={() => setShowCustom(true)}
-                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-gray-400 transition hover:text-[#7C5CFC]"
+                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-gray-400 transition hover:text-[#2563EB]"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-current">
                     <Plus className="h-5 w-5" />
@@ -529,7 +529,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               ) : (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-[#7C5CFC]" />
+                    <Building2 className="h-4 w-4 text-[#2563EB]" />
                     <span className="text-[13px] font-semibold text-gray-900">Custom Company</span>
                   </div>
                   <input
@@ -537,28 +537,28 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     value={customName}
                     onChange={(e) => setCustomName(e.target.value)}
                     placeholder="Company name"
-                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#7C5CFC] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
                   />
                   <input
                     type="text"
                     value={customIndustry}
                     onChange={(e) => setCustomIndustry(e.target.value)}
                     placeholder="Industry"
-                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#7C5CFC] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
                   />
                   <textarea
                     value={customJD}
                     onChange={(e) => setCustomJD(e.target.value)}
                     placeholder="Paste job description here..."
                     rows={4}
-                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#7C5CFC] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
                   />
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={analyzeCustom}
                       disabled={!selectedResumeId || !customName.trim()}
-                      className="flex-1 rounded-xl bg-[#7C5CFC] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-40"
+                      className="flex-1 rounded-xl bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-40"
                     >
                       <span className="inline-flex items-center gap-1.5">
                         <Sparkles className="h-3.5 w-3.5" /> Analyze

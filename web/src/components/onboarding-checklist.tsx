@@ -128,7 +128,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
     <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] text-white shadow-sm shadow-violet-500/20">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white shadow-sm shadow-violet-500/20">
           {allDone ? <Trophy className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
         </div>
         <div className="min-w-0 flex-1">
@@ -180,7 +180,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
         <div className="px-5 pb-1">
           <div className="h-1.5 overflow-hidden rounded-full bg-gray-100">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-[#7C5CFC] to-[#7C3AED] transition-all duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] transition-all duration-700"
               style={{ width: `${progressPct}%` }}
             />
           </div>
@@ -204,9 +204,9 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
                   {/* Status icon */}
                   <div className="mt-0.5 shrink-0">
                     {done ? (
-                      <CheckCircle2 className="h-5 w-5 text-[#7C5CFC]" />
+                      <CheckCircle2 className="h-5 w-5 text-[#2563EB]" />
                     ) : (
-                      <Circle className={`h-5 w-5 ${isActive ? "text-[#7C5CFC]" : "text-gray-300"}`} />
+                      <Circle className={`h-5 w-5 ${isActive ? "text-[#2563EB]" : "text-gray-300"}`} />
                     )}
                   </div>
 
@@ -225,7 +225,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
                         <p className="mt-0.5 text-[12px] leading-relaxed text-gray-500">{step.description}</p>
                         <Link
                           href={step.href}
-                          className="mt-2 inline-flex items-center gap-1 rounded-lg bg-[#7C5CFC] px-3 py-1.5 text-[12px] font-bold text-white transition hover:bg-[#6B4CE0]"
+                          className="mt-2 inline-flex items-center gap-1 rounded-lg bg-[#2563EB] px-3 py-1.5 text-[12px] font-bold text-white transition hover:bg-[#1D4ED8]"
                           onClick={(e) => e.stopPropagation()}
                         >
                           {step.cta} →

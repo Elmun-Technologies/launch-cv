@@ -47,7 +47,7 @@ export function SupportClient() {
       <div className="rounded-2xl border border-gray-100 bg-white px-8 py-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
-            <HelpCircle className="h-7 w-7 text-[#7C5CFC]" />
+            <HelpCircle className="h-7 w-7 text-[#2563EB]" />
           </div>
           <div>
             <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-gray-900">
@@ -67,7 +67,7 @@ export function SupportClient() {
             placeholder="Search for help..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="soha-input h-12 w-full rounded-xl border-gray-200 bg-gray-50 pl-11 pr-4 text-[13px] text-gray-700 placeholder:text-gray-400 focus:border-[#7C5CFC] focus:ring-[#7C5CFC]/20"
+            className="soha-input h-12 w-full rounded-xl border-gray-200 bg-gray-50 pl-11 pr-4 text-[13px] text-gray-700 placeholder:text-gray-400 focus:border-[#2563EB] focus:ring-[#2563EB]/20"
           />
         </div>
       </div>
@@ -76,10 +76,10 @@ export function SupportClient() {
       <div className="grid gap-5 sm:grid-cols-3">
         <a
           href="mailto:support@launch-cv.com"
-          className="group rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition hover:border-[#7C5CFC]/30 hover:shadow-[0_8px_24px_rgba(124,92,252,0.1)]"
+          className="group rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition hover:border-[#2563EB]/30 hover:shadow-[0_8px_24px_rgba(37, 99, 235,0.1)]"
         >
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50 transition group-hover:bg-[#7C5CFC] group-hover:shadow-lg">
-            <Mail className="h-5 w-5 text-[#7C5CFC] transition group-hover:text-white" />
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50 transition group-hover:bg-[#2563EB] group-hover:shadow-lg">
+            <Mail className="h-5 w-5 text-[#2563EB] transition group-hover:text-white" />
           </div>
           <h3 className="mt-4 text-[15px] font-bold text-gray-900">Email Support</h3>
           <p className="mt-1.5 text-[13px] text-gray-500">support@launch-cv.com</p>
@@ -121,10 +121,10 @@ export function SupportClient() {
             <button
               key={article.title}
               type="button"
-              className="flex items-start gap-3 rounded-xl border border-gray-100 p-4 text-left transition hover:border-[#7C5CFC]/20 hover:bg-violet-50/30"
+              className="flex items-start gap-3 rounded-xl border border-gray-100 p-4 text-left transition hover:border-[#2563EB]/20 hover:bg-violet-50/30"
             >
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50">
-                <article.icon className="h-4 w-4 text-[#7C5CFC]" />
+                <article.icon className="h-4 w-4 text-[#2563EB]" />
               </div>
               <div>
                 <p className="text-[13px] font-semibold text-gray-900">{article.title}</p>
@@ -151,12 +151,12 @@ export function SupportClient() {
                   <button
                     type="button"
                     onClick={() => setOpenFaq(isOpen ? null : i)}
-                    className="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-[#7C5CFC]"
+                    className="flex w-full items-center justify-between gap-4 py-4 text-left transition hover:text-[#2563EB]"
                   >
                     <h3 className="text-[13px] font-semibold text-gray-900">{item.q}</h3>
                     <ChevronDown
                       className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200 ${
-                        isOpen ? "rotate-180 text-[#7C5CFC]" : ""
+                        isOpen ? "rotate-180 text-[#2563EB]" : ""
                       }`}
                     />
                   </button>
@@ -186,14 +186,14 @@ export function SupportClient() {
           <div className="mt-5 flex items-center justify-center gap-3">
             <a
               href="mailto:support@launch-cv.com"
-              className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#7C5CFC] px-6 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#2563EB] px-6 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
             >
               <Mail className="h-4 w-4" />
               Email Us
             </a>
             <button
               type="button"
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 text-[13px] font-semibold text-gray-700 transition hover:border-[#7C5CFC] hover:text-[#7C5CFC]"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 text-[13px] font-semibold text-gray-700 transition hover:border-[#2563EB] hover:text-[#2563EB]"
             >
               <MessageCircle className="h-4 w-4" />
               Live Chat

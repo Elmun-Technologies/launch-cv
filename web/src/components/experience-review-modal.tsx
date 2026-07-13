@@ -133,8 +133,8 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
                       onClick={() => setNps(i)}
                       className={`flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-semibold transition ${
                         nps === i
-                          ? "bg-[#7C5CFC] text-white shadow-md shadow-violet-200"
-                          : "border border-gray-200 bg-white text-gray-600 hover:border-[#7C5CFC]/40 hover:bg-violet-50"
+                          ? "bg-[#2563EB] text-white shadow-md shadow-violet-200"
+                          : "border border-gray-200 bg-white text-gray-600 hover:border-[#2563EB]/40 hover:bg-violet-50"
                       }`}
                     >
                       {i}
@@ -153,7 +153,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
                   type="button"
                   disabled={!canNext}
                   onClick={() => setStep((s) => (s + 1) as Step)}
-                  className="rounded-xl bg-[#7C5CFC] px-6 py-2.5 text-[14px] font-semibold text-white transition hover:bg-[#6B4CE0] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-xl bg-[#2563EB] px-6 py-2.5 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Next
                 </button>
@@ -162,7 +162,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
                   type="button"
                   disabled={!canNext || submitting}
                   onClick={() => void submit()}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-6 py-2.5 text-[14px] font-semibold text-white transition hover:bg-[#6B4CE0] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-2.5 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Submit
@@ -180,7 +180,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
             <button
               type="button"
               onClick={() => handleClose(false)}
-              className="mt-8 rounded-xl bg-[#7C5CFC] px-8 py-3 text-[14px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+              className="mt-8 rounded-xl bg-[#2563EB] px-8 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
             >
               Done
             </button>

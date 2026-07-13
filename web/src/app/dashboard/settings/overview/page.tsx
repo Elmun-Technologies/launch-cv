@@ -180,7 +180,7 @@ export default async function OverviewPage() {
               </div>
               <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
                 <div
-                  className="h-full rounded-full bg-[#7C5CFC] transition-all"
+                  className="h-full rounded-full bg-[#2563EB] transition-all"
                   style={{ width: `${storagePercent}%` }}
                 />
               </div>

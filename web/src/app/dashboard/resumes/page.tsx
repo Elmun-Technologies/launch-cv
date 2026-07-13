@@ -47,7 +47,7 @@ export default async function ResumesPage({
               {resumes.length} resume{resumes.length !== 1 ? "s" : ""} {q ? "found" : "created"}
             </p>
           </div>
-          <Link href="/resume/new" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#7C5CFC] px-5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)]">
+          <Link href="/resume/new" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#2563EB] px-5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]">
             <Plus className="h-4 w-4" />New Resume
           </Link>
         </div>
@@ -75,7 +75,7 @@ export default async function ResumesPage({
                       {q ? (
                         <>No resumes match &ldquo;{q}&rdquo;.</>
                       ) : (
-                        <>No resumes yet. <Link href="/resume/new" className="font-medium text-[#7C5CFC] hover:underline">Create one</Link></>
+                        <>No resumes yet. <Link href="/resume/new" className="font-medium text-[#2563EB] hover:underline">Create one</Link></>
                       )}
                     </td>
                   </tr>
@@ -85,7 +85,7 @@ export default async function ResumesPage({
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
                           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50">
-                            <FileText className="h-5 w-5 text-[#7C5CFC]" />
+                            <FileText className="h-5 w-5 text-[#2563EB]" />
                           </div>
                           <div>
                             <span className="font-semibold text-gray-900">{r.title}</span>
@@ -97,7 +97,7 @@ export default async function ResumesPage({
                       <td className="px-4 py-4 text-gray-500">{dateFmt.format(r.createdAt)}</td>
                       <td className="px-4 py-4 text-gray-500">{dateFmt.format(r.updatedAt)}</td>
                       <td className="px-4 py-4 text-right">
-                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#7C5CFC]/20 bg-violet-50 px-4 py-1.5 text-[13px] font-semibold text-[#7C5CFC] transition hover:bg-[#7C5CFC] hover:text-white">Edit</Link>
+                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#2563EB]/20 bg-violet-50 px-4 py-1.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#2563EB] hover:text-white">Edit</Link>
                       </td>
                     </tr>
                   ))

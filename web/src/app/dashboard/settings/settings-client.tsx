@@ -104,7 +104,7 @@ export function SettingsClient({
                 href={item.href}
                 className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] transition-all ${
                   active
-                    ? "bg-[#7C5CFC] font-semibold text-white shadow-[0_2px_8px_rgba(124,92,252,0.25)]"
+                    ? "bg-[#2563EB] font-semibold text-white shadow-[0_2px_8px_rgba(37, 99, 235,0.25)]"
                     : "text-gray-500 hover:bg-violet-50 hover:text-gray-900"
                 }`}
               >
@@ -119,9 +119,9 @@ export function SettingsClient({
       {/* ── Right Content ── */}
       <div className="min-w-0 flex-1">
         {!isPro ? (
-          <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[#7C5CFC]/20 bg-gradient-to-r from-violet-50 to-white p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[#2563EB]/20 bg-gradient-to-r from-violet-50 to-white p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] text-white">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
@@ -134,7 +134,7 @@ export function SettingsClient({
             </div>
             <Link
               href="/dashboard/settings/subscription"
-              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#6B4CE0]"
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#1D4ED8]"
             >
               Upgrade
             </Link>
@@ -145,7 +145,7 @@ export function SettingsClient({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100">
-                <User className="h-4 w-4 text-[#7C5CFC]" />
+                <User className="h-4 w-4 text-[#2563EB]" />
               </div>
               <div>
                 <h2 className="text-[28px] font-bold leading-tight text-gray-900">Profile Information</h2>
@@ -162,7 +162,7 @@ export function SettingsClient({
             <div className="pb-7">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
-                  <User className="h-3.5 w-3.5 text-[#7C5CFC]" />
+                  <User className="h-3.5 w-3.5 text-[#2563EB]" />
                 </div>
                 <h3 className="text-[15px] font-bold text-gray-900">Personal Details</h3>
               </div>
@@ -199,18 +199,18 @@ export function SettingsClient({
                 </div>
 
                 <div className="flex items-center gap-2.5">
-                  <input type="checkbox" checked={wantEmails} onChange={(e) => setWantEmails(e.target.checked)} className="h-4 w-4 rounded border-gray-200 text-[#7C5CFC] accent-[#7C5CFC]" />
+                  <input type="checkbox" checked={wantEmails} onChange={(e) => setWantEmails(e.target.checked)} className="h-4 w-4 rounded border-gray-200 text-[#2563EB] accent-[#2563EB]" />
                   <span className="text-[13px] text-gray-500">Yes, I want to receive emails</span>
                 </div>
 
                 <div>
                   <label className="text-[12px] font-semibold text-gray-700">Photo*</label>
                   <div className="mt-2 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#7C5CFC] to-[#A78BFA] text-sm font-bold text-white shadow-[0_2px_8px_rgba(124,92,252,0.3)]">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#2563EB] to-[#60A5FA] text-sm font-bold text-white shadow-[0_2px_8px_rgba(37, 99, 235,0.3)]">
                       {firstName?.[0]?.toUpperCase() ?? "U"}
                     </div>
-                    <button type="button" className="rounded-xl bg-[#7C5CFC] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)]">Upload</button>
-                    <button type="button" className="rounded-xl border border-[#7C5CFC]/20 px-4 py-2 text-[13px] font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Reset</button>
+                    <button type="button" className="rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]">Upload</button>
+                    <button type="button" className="rounded-xl border border-[#2563EB]/20 px-4 py-2 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50">Reset</button>
                   </div>
                 </div>
 
@@ -231,7 +231,7 @@ export function SettingsClient({
             <div className="border-t border-gray-100 pb-7 pt-7">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
-                  <Link2 className="h-3.5 w-3.5 text-[#7C5CFC]" />
+                  <Link2 className="h-3.5 w-3.5 text-[#2563EB]" />
                 </div>
                 <h3 className="text-[15px] font-bold text-gray-900">Social Links</h3>
               </div>
@@ -249,7 +249,7 @@ export function SettingsClient({
             <div className="border-t border-gray-100 pb-7 pt-7">
               <div className="flex items-center gap-2.5">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
-                  <Lock className="h-3.5 w-3.5 text-[#7C5CFC]" />
+                  <Lock className="h-3.5 w-3.5 text-[#2563EB]" />
                 </div>
                 <div>
                   <h3 className="text-[15px] font-bold text-gray-900">
@@ -303,7 +303,7 @@ export function SettingsClient({
             {/* ── Footer: Terms + Actions ── */}
             <div className="border-t border-gray-100 pt-6">
               <div className="flex items-center gap-2.5">
-                <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} className="h-4 w-4 rounded border-gray-200 text-[#7C5CFC] accent-[#7C5CFC]" />
+                <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} className="h-4 w-4 rounded border-gray-200 text-[#2563EB] accent-[#2563EB]" />
                 <span className="text-[13px] text-gray-500">I agree to the Terms, Privacy and Fees</span>
               </div>
 
@@ -322,12 +322,12 @@ export function SettingsClient({
                   type="button"
                   disabled={saving}
                   onClick={() => void saveProfile()}
-                  className="rounded-xl bg-[#7C5CFC] px-6 py-2.5 text-[13px] font-semibold text-white transition-all hover:bg-[#6B4CE0] hover:shadow-[0_4px_12px_rgba(124,92,252,0.25)] disabled:opacity-60"
+                  className="rounded-xl bg-[#2563EB] px-6 py-2.5 text-[13px] font-semibold text-white transition-all hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)] disabled:opacity-60"
                 >
                   {saving ? <Loader2 className="mr-1.5 inline h-4 w-4 animate-spin" /> : null}
                   Save Changes
                 </button>
-                <button type="button" className="rounded-xl border border-[#7C5CFC]/20 px-6 py-2.5 text-[13px] font-semibold text-[#7C5CFC] transition hover:bg-violet-50">
+                <button type="button" className="rounded-xl border border-[#2563EB]/20 px-6 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50">
                   Cancel
                 </button>
               </div>

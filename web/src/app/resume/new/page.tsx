@@ -226,9 +226,9 @@ export default function NewResumePage() {
         .anim-d4 { animation: fadeInUp 0.5s ease-out 0.32s both; }
         .anim-d5 { animation: fadeInUp 0.5s ease-out 0.40s both; }
         @keyframes pulseViolet {
-          0% { box-shadow: 0 0 0 0 rgba(124,92,252,0.4); }
-          70% { box-shadow: 0 0 0 10px rgba(124,92,252,0); }
-          100% { box-shadow: 0 0 0 0 rgba(124,92,252,0); }
+          0% { box-shadow: 0 0 0 0 rgba(37, 99, 235,0.4); }
+          70% { box-shadow: 0 0 0 10px rgba(37, 99, 235,0); }
+          100% { box-shadow: 0 0 0 0 rgba(37, 99, 235,0); }
         }
         .pulse-violet { animation: pulseViolet 2s ease-out infinite; }
         @keyframes shimmer {
@@ -267,7 +267,7 @@ export default function NewResumePage() {
           {uploadStep === "idle" && (
             <div className="anim-in">
               <div className="text-center">
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#7C5CFC] to-[#9B7DFF]">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF]">
                   <Sparkles className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-[32px] font-extrabold tracking-tight text-gray-900 sm:text-[36px]">
@@ -284,9 +284,9 @@ export default function NewResumePage() {
                   type="button"
                   onClick={() => void handleCreate()}
                   disabled={creating}
-                  className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-[#7C5CFC]/30 hover:shadow-xl hover:shadow-violet-100/50 disabled:opacity-60"
+                  className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-violet-100/50 disabled:opacity-60"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#7C5CFC] to-[#9B7DFF] shadow-lg shadow-violet-200/50">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF] shadow-lg shadow-violet-200/50">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
                   <h2 className="mt-6 text-[20px] font-bold text-gray-900">Start from Scratch</h2>
@@ -302,14 +302,14 @@ export default function NewResumePage() {
                     ].map((b) => (
                       <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-gray-600">
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-50">
-                          <b.icon className="h-3.5 w-3.5 text-[#7C5CFC]" />
+                          <b.icon className="h-3.5 w-3.5 text-[#2563EB]" />
                         </div>
                         {b.text}
                       </div>
                     ))}
                   </div>
 
-                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#7C5CFC] py-3.5 text-[14px] font-semibold text-white transition-colors group-hover:bg-[#6B4CE0]">
+                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#2563EB] py-3.5 text-[14px] font-semibold text-white transition-colors group-hover:bg-[#1D4ED8]">
                     {creating ? <Loader2 className="h-4.5 w-4.5 animate-spin" /> : <Sparkles className="h-4.5 w-4.5" />}
                     {creating ? "Creating…" : "Start Fresh"}
                   </div>
@@ -344,7 +344,7 @@ export default function NewResumePage() {
                     ))}
                   </div>
 
-                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#7C5CFC] py-3.5 text-[14px] font-semibold text-[#7C5CFC] transition-colors group-hover:bg-violet-50">
+                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#2563EB] py-3.5 text-[14px] font-semibold text-[#2563EB] transition-colors group-hover:bg-violet-50">
                     <UploadCloud className="h-4.5 w-4.5" /> Upload File
                   </div>
                   <p className="mt-3 text-center text-[12px] text-gray-400">PDF, DOCX (max 4MB)</p>
@@ -353,7 +353,7 @@ export default function NewResumePage() {
 
               <p className="mt-8 text-center text-[13px] text-gray-400">
                 Not sure?{" "}
-                <button type="button" onClick={() => void handleCreate()} className="font-medium text-[#7C5CFC] underline underline-offset-2 transition hover:text-[#6B4CE0]">
+                <button type="button" onClick={() => void handleCreate()} className="font-medium text-[#2563EB] underline underline-offset-2 transition hover:text-[#1D4ED8]">
                   Start fresh
                 </button>{" "}
                 — you can always import later.
@@ -375,7 +375,7 @@ export default function NewResumePage() {
                       <div key={step.key} className="relative flex flex-1 flex-col items-center">
                         {idx > 0 && (
                           <div className="absolute right-1/2 top-[18px] h-[2px] w-full">
-                            <div className={`h-full w-full rounded-full transition-all duration-700 ${status === "pending" ? "bg-gray-200" : "bg-[#7C5CFC]"}`} />
+                            <div className={`h-full w-full rounded-full transition-all duration-700 ${status === "pending" ? "bg-gray-200" : "bg-[#2563EB]"}`} />
                           </div>
                         )}
                         <div
@@ -383,16 +383,16 @@ export default function NewResumePage() {
                             status === "done"
                               ? "bg-emerald-500 text-white"
                               : status === "active"
-                                ? "pulse-violet bg-[#7C5CFC] text-white"
+                                ? "pulse-violet bg-[#2563EB] text-white"
                                 : "bg-gray-100 text-gray-400"
                           }`}
                         >
                           {status === "done" ? <Check className="h-4 w-4" /> : idx + 1}
                         </div>
-                        <span className={`mt-2.5 text-[12px] font-semibold ${status === "active" ? "text-[#7C5CFC]" : status === "done" ? "text-emerald-600" : "text-gray-400"}`}>
+                        <span className={`mt-2.5 text-[12px] font-semibold ${status === "active" ? "text-[#2563EB]" : status === "done" ? "text-emerald-600" : "text-gray-400"}`}>
                           {step.label}
                         </span>
-                        <span className={`mt-0.5 text-[11px] ${status === "active" ? "text-[#7C5CFC]/70" : "text-gray-300"}`}>
+                        <span className={`mt-0.5 text-[11px] ${status === "active" ? "text-[#2563EB]/70" : "text-gray-300"}`}>
                           {step.desc}
                         </span>
                       </div>
@@ -402,7 +402,7 @@ export default function NewResumePage() {
 
                 <div className="mt-12 text-center">
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
-                    <Loader2 className="h-7 w-7 animate-spin text-[#7C5CFC]" />
+                    <Loader2 className="h-7 w-7 animate-spin text-[#2563EB]" />
                   </div>
                   <h2 className="mt-5 text-[20px] font-bold text-gray-900">
                     {uploadStep === "parsing" ? "Parsing your resume…" : "Running AI diagnostics…"}
@@ -443,7 +443,7 @@ export default function NewResumePage() {
                   <button
                     type="button"
                     onClick={() => { setUploadStep("idle"); setUploadErr(null); }}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
                   >
                     <RefreshCw className="h-4 w-4" /> Try Again
                   </button>
@@ -458,7 +458,7 @@ export default function NewResumePage() {
                 <button
                   type="button"
                   onClick={() => void handleCreate()}
-                  className="mt-4 text-[13px] font-medium text-gray-400 underline underline-offset-2 transition hover:text-[#7C5CFC]"
+                  className="mt-4 text-[13px] font-medium text-gray-400 underline underline-offset-2 transition hover:text-[#2563EB]"
                 >
                   Or start from scratch
                 </button>
@@ -538,7 +538,7 @@ export default function NewResumePage() {
                         </div>
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
                           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50">
-                            <BarChart3 className="h-4.5 w-4.5 text-[#7C5CFC]" />
+                            <BarChart3 className="h-4.5 w-4.5 text-[#2563EB]" />
                           </div>
                           <div>
                             <p className="text-[18px] font-bold text-gray-900">{diagnostic.keywords.length}</p>
@@ -604,7 +604,7 @@ export default function NewResumePage() {
                                               <button
                                                 type="button"
                                                 onClick={() => toggleFix(globalIdx)}
-                                                className="mt-2.5 inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#7C5CFC] transition hover:text-[#6B4CE0]"
+                                                className="mt-2.5 inline-flex items-center gap-1.5 text-[12px] font-semibold text-[#2563EB] transition hover:text-[#1D4ED8]"
                                               >
                                                 <Lightbulb className="h-3.5 w-3.5" />
                                                 {isFixExpanded ? "Hide suggestion" : "How to fix"}
@@ -633,7 +633,7 @@ export default function NewResumePage() {
                     {/* Keywords */}
                     <div className="anim-d3 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
                       <h3 className="flex items-center gap-2 text-[17px] font-bold text-gray-900">
-                        <Shield className="h-5 w-5 text-[#7C5CFC]" />
+                        <Shield className="h-5 w-5 text-[#2563EB]" />
                         Skills we detected
                       </h3>
                       {diagnostic.keywords.length > 0 ? (
@@ -677,9 +677,9 @@ export default function NewResumePage() {
                   {/* ── Right Column ── */}
                   <div className="space-y-6">
                     {/* What to do next */}
-                    <div className="anim-d2 rounded-2xl border-2 border-[#7C5CFC]/20 bg-gradient-to-b from-violet-50/60 to-white p-6 shadow-sm">
+                    <div className="anim-d2 rounded-2xl border-2 border-[#2563EB]/20 bg-gradient-to-b from-violet-50/60 to-white p-6 shadow-sm">
                       <h3 className="flex items-center gap-2 text-[17px] font-bold text-gray-900">
-                        <Target className="h-5 w-5 text-[#7C5CFC]" />
+                        <Target className="h-5 w-5 text-[#2563EB]" />
                         What to do next
                       </h3>
                       <p className="mt-1 text-[13px] text-gray-500">Follow these steps to improve your score</p>
@@ -688,7 +688,7 @@ export default function NewResumePage() {
                         {[
                           { num: "1", text: "Fix critical issues first", href: `/resume/${resumeId}/edit`, icon: AlertCircle, color: "text-red-500" },
                           { num: "2", text: "Add missing keywords", href: `/resume/${resumeId}/edit`, icon: Plus, color: "text-amber-500" },
-                          { num: "3", text: "Tailor to a specific job", href: `/resume/${resumeId}/jd`, icon: Target, color: "text-[#7C5CFC]" },
+                          { num: "3", text: "Tailor to a specific job", href: `/resume/${resumeId}/jd`, icon: Target, color: "text-[#2563EB]" },
                           { num: "4", text: "Match to a target company", href: "/dashboard/company-matcher", icon: Building2, color: "text-emerald-500" },
                         ].map((step) => (
                           <Link
@@ -700,7 +700,7 @@ export default function NewResumePage() {
                               {step.num}
                             </div>
                             <span className="flex-1 text-[13px] font-medium text-gray-700">{step.text}</span>
-                            <ArrowUpRight className="h-4 w-4 text-gray-300 transition group-hover:text-[#7C5CFC]" />
+                            <ArrowUpRight className="h-4 w-4 text-gray-300 transition group-hover:text-[#2563EB]" />
                           </Link>
                         ))}
                       </div>
@@ -712,13 +712,13 @@ export default function NewResumePage() {
                       <div className="mt-4 space-y-2.5">
                         <Link
                           href={`/resume/${resumeId}/edit`}
-                          className="flex items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] py-3 text-[14px] font-semibold text-white transition hover:bg-[#6B4CE0] hover:shadow-md hover:shadow-violet-200/50"
+                          className="flex items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-md hover:shadow-violet-200/50"
                         >
                           <Sparkles className="h-4 w-4" /> Open in Editor
                         </Link>
                         <Link
                           href={`/resume/${resumeId}/jd`}
-                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#7C5CFC] py-3 text-[14px] font-semibold text-[#7C5CFC] transition hover:bg-violet-50"
+                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#2563EB] py-3 text-[14px] font-semibold text-[#2563EB] transition hover:bg-violet-50"
                         >
                           <Target className="h-4 w-4" /> Tailor to Job Description
                         </Link>
@@ -731,7 +731,7 @@ export default function NewResumePage() {
                         <button
                           type="button"
                           onClick={() => { setUploadStep("idle"); setDiagnostic(null); setFileName(""); }}
-                          className="flex w-full items-center justify-center gap-1.5 py-2 text-[13px] font-medium text-gray-400 transition hover:text-[#7C5CFC]"
+                          className="flex w-full items-center justify-center gap-1.5 py-2 text-[13px] font-medium text-gray-400 transition hover:text-[#2563EB]"
                         >
                           <UploadCloud className="h-3.5 w-3.5" /> Upload Different File
                         </button>
@@ -756,7 +756,7 @@ export default function NewResumePage() {
                 </p>
                 <Link
                   href={`/resume/${resumeId}/edit`}
-                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-8 py-3.5 text-[14px] font-bold text-white transition hover:bg-[#6B4CE0]"
+                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-8 py-3.5 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8]"
                 >
                   Open in Editor <ArrowRight className="h-4 w-4" />
                 </Link>

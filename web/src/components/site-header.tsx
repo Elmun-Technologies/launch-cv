@@ -12,7 +12,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
     <header className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 bg-white px-6">
       <div className="flex items-center gap-3">
         {pageTitle ? (
-          <div className="rounded-full bg-[#7C5CFC] px-4 py-1.5 text-[13px] font-semibold text-white">{pageTitle}</div>
+          <div className="rounded-full bg-[#2563EB] px-4 py-1.5 text-[13px] font-semibold text-white">{pageTitle}</div>
         ) : null}
       </div>
 
@@ -22,13 +22,13 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
           <input
             type="text"
             placeholder="Search..."
-            className="h-10 w-60 rounded-xl border border-gray-100 bg-gray-50/50 pl-10 pr-4 text-[13px] text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-[#7C5CFC]/30 focus:bg-white focus:ring-2 focus:ring-[#7C5CFC]/10"
+            className="h-10 w-60 rounded-xl border border-gray-100 bg-gray-50/50 pl-10 pr-4 text-[13px] text-gray-700 outline-none transition placeholder:text-gray-400 focus:border-[#2563EB]/30 focus:bg-white focus:ring-2 focus:ring-[#2563EB]/10"
           />
         </div>
 
         <button type="button" className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-gray-100 text-gray-400 transition hover:bg-gray-50 hover:text-gray-600">
           <Bell className="h-[18px] w-[18px]" />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#7C5CFC]" />
+          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#2563EB]" />
         </button>
 
         <button type="button" className="flex h-10 w-10 items-center justify-center rounded-xl border border-gray-100 text-gray-400 transition hover:bg-gray-50 hover:text-gray-600">
@@ -42,7 +42,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
               onClick={() => setShowUser((s) => !s)}
               className="flex items-center gap-2.5 rounded-xl border border-gray-100 px-3 py-1.5 transition hover:bg-gray-50"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#7C5CFC] to-[#A78BFA] text-[12px] font-bold text-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#60A5FA] text-[12px] font-bold text-white">
                 {email[0]?.toUpperCase() ?? "U"}
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
@@ -71,7 +71,7 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
         ) : (
           <div className="flex items-center gap-2">
             <Link href="/login" className="rounded-lg px-3 py-1.5 text-[13px] font-medium text-gray-600 transition hover:bg-gray-50">Sign in</Link>
-            <Link href="/register" onClick={() => trackCtaClick({ cta: "get_started", location: "site_header" })} className="rounded-lg bg-[#7C5CFC] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Get started</Link>
+            <Link href="/register" onClick={() => trackCtaClick({ cta: "get_started", location: "site_header" })} className="rounded-lg bg-[#2563EB] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">Get started</Link>
           </div>
         )}
       </div>

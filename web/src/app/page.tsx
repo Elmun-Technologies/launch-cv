@@ -197,7 +197,7 @@ export default async function Home() {
                 key={c.label}
                 className="inline-flex items-center gap-2 text-[13px] font-medium text-[#475569] sm:text-[14px]"
               >
-                <c.icon className="h-4 w-4 shrink-0 text-[#1A56DB]" />
+                <c.icon className="h-4 w-4 shrink-0 text-[#2563EB]" />
                 {c.label}
               </span>
             ))}
@@ -407,7 +407,7 @@ export default async function Home() {
             {benefits.map((b) => (
               <MotionItem key={b.title} className="h-full">
                 <div className="flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                     <b.icon className="h-5 w-5" />
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{b.title}</h3>

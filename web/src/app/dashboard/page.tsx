@@ -71,7 +71,7 @@ export default async function HomePage() {
         {plan === "none" ? (
           <div className="flex flex-col gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] text-white">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white">
                 <Sparkles className="h-5 w-5" />
               </div>
               <div>
@@ -86,7 +86,7 @@ export default async function HomePage() {
               cta="choose_plan"
               location="dashboard_no_plan"
               href="/dashboard/settings/subscription"
-              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#6B4CE0]"
+              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#2563EB] px-4 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#1D4ED8]"
             >
               Choose plan
             </CtaLink>
@@ -107,7 +107,7 @@ export default async function HomePage() {
               <option>Last Month</option>
               <option>This Year</option>
             </select>
-            <Link href="/resume/new" className="inline-flex items-center gap-2 rounded-lg bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#6B4CE0]">
+            <Link href="/resume/new" className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white shadow-sm transition hover:bg-[#1D4ED8]">
               <Download className="h-4 w-4" /> New Resume
             </Link>
           </div>
@@ -130,7 +130,7 @@ export default async function HomePage() {
             <div className="flex items-center justify-between border-b border-gray-50 px-5 py-4">
               <h2 className="text-[15px] font-bold text-gray-900">Recent Resumes</h2>
               <div className="flex items-center gap-2">
-                <Link href="/dashboard/resumes" className="text-[13px] font-medium text-[#7C5CFC] transition hover:text-[#6B4CE0]">
+                <Link href="/dashboard/resumes" className="text-[13px] font-medium text-[#2563EB] transition hover:text-[#1D4ED8]">
                   View All
                 </Link>
                 <button type="button" className="text-gray-400 hover:text-gray-600">
@@ -146,7 +146,7 @@ export default async function HomePage() {
                 </div>
                 <p className="mt-4 text-[14px] font-medium text-gray-500">No resumes yet</p>
                 <p className="mt-1 text-[13px] text-gray-400">Create your first resume to get started.</p>
-                <Link href="/resume/new" className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-[#7C5CFC] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">
+                <Link href="/resume/new" className="mt-5 inline-flex items-center gap-1.5 rounded-lg bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">
                   <Plus className="h-3.5 w-3.5" /> Create Resume
                 </Link>
               </div>
@@ -172,7 +172,7 @@ export default async function HomePage() {
           <div className="rounded-2xl border border-gray-100 bg-white">
             <div className="flex items-center justify-between border-b border-gray-50 px-5 py-4">
               <h2 className="text-[15px] font-bold text-gray-900">Recent Applications</h2>
-              <Link href="/dashboard/job-tracker" className="text-[13px] font-medium text-[#7C5CFC] transition hover:text-[#6B4CE0]">
+              <Link href="/dashboard/job-tracker" className="text-[13px] font-medium text-[#2563EB] transition hover:text-[#1D4ED8]">
                 View All
               </Link>
             </div>
