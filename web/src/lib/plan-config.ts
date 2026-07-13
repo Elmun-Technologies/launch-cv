@@ -6,10 +6,11 @@
 export type CheckoutPlan = "starter" | "professional" | "elite" | "lifetime";
 export type PlanId = "none" | CheckoutPlan;
 
+// Elite is intentionally excluded — it is a legacy plan retained only for
+// webhook/plan mapping of existing subscribers, never shown in public UI.
 export const CHECKOUT_PLAN_ORDER: readonly CheckoutPlan[] = [
   "starter",
   "professional",
-  "elite",
   "lifetime",
 ];
 
