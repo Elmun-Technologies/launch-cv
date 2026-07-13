@@ -77,7 +77,7 @@ export default async function HomePage() {
               <div>
                 <p className="text-[14px] font-bold text-gray-900">Activate a plan to unlock AI</p>
                 <p className="mt-0.5 text-[13px] leading-relaxed text-gray-600">
-                  LaunchCV is paid-only for AI features. Choose Starter, Professional, Elite, or Lifetime in subscription
+                  LaunchCV is paid-only for AI features. Choose Starter, Professional, or Lifetime in subscription
                   settings.
                 </p>
               </div>

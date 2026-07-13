@@ -113,12 +113,12 @@ export default function ProductManagersPage() {
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="LaunchCV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean across 15 tracking systems."
+                lead="LaunchCV turns a product manager's roadmaps, OKRs, and A/B tests into the quantified, baselined language recruiters screen for. It surfaces roadmap scope, metric ownership, and cross-functional impact, draws on a PM keyword library, and keeps formatting ATS-clean for how ATS platforms parse resumes."
                 facts={[
                   "Rewrites PM wins into quantified, baselined outcomes (activation, retention, growth).",
                   "Surfaces roadmap scope, metric ownership, and cross-functional impact recruiters scan for.",
                   "PM keyword library (OKRs, RICE, JTBD, PLG, GTM) matched to each job description.",
-                  "ATS-clean formatting tested against 15 tracking systems.",
+                  "ATS-clean formatting built for how ATS platforms parse resumes.",
                 ]}
               />
 
@@ -185,7 +185,7 @@ export default function ProductManagersPage() {
               </li>
               <li className="flex items-start gap-2.5">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
-                <span><span className="font-medium text-[#0F172A]">The format parses</span> — single-column layouts tested across 15+ ATS platforms.</span>
+                <span><span className="font-medium text-[#0F172A]">The format parses</span> — single-column layouts built for how major ATS platforms parse.</span>
               </li>
             </ul>
           </RevealOnView>
@@ -330,7 +330,7 @@ export default function ProductManagersPage() {
               { n: "01", t: "Import or describe your roles", d: "Paste an existing resume or describe each role in plain language — voice input works too." },
               { n: "02", t: "Load a target job description", d: "JD Alignment maps roadmap scope, metric ownership, and stakeholder signals to your experience." },
               { n: "03", t: "Let AI quantify the wins", d: "Every bullet gets Scope, Metric, Delta, and Baseline — the four things senior reviewers scan for first." },
-              { n: "04", t: "Check the ATS score", d: "Score your product management resume 0–100 across 15+ ATS platforms and clear every parsing flag." },
+              { n: "04", t: "Check the ATS score", d: "Score your product management resume 0–100 with our ATS check and clear every parsing flag." },
               { n: "05", t: "Export and drill", d: "Download PDF or DOCX, then rehearse the exact role with interview prep." },
             ].map((s) => (
               <RevealOnView key={s.n}>
@@ -375,10 +375,10 @@ export default function ProductManagersPage() {
                 {[
                   { k: "Metric ownership", a: "Activation, retention, and conversion quantified", b: "“Led product” with no numbers" },
                   { k: "Scope", a: "Team size, segment, and dollar value surfaced", b: "Vague, unmeasured ownership" },
-                  { k: "ATS formatting", a: "Single-column, tested on 15+ platforms", b: "Layouts that break parsing" },
+                  { k: "ATS formatting", a: "Single-column, built for how ATS parses", b: "Layouts that break parsing" },
                   { k: "Keyword match", a: "PM keywords aligned to each JD", b: "One static skills list" },
                   { k: "Experiments", a: "A/B tests with lift and baseline", b: "Left off the page" },
-                  { k: "Proof", a: "+43 average ATS gain · 95% pass rate", b: "No feedback loop" },
+                  { k: "Proof", a: "Free ATS score — no signup", b: "No feedback loop" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
@@ -413,7 +413,7 @@ export default function ProductManagersPage() {
                 She loaded a target job description and let the product management resume AI rewrite each line with Scope, Metric, Delta, and Baseline. &ldquo;Led product team&rdquo; became <span className="font-medium text-[#0F172A]">&ldquo;Owned the PM workstream for 3 squads shipping the activation funnel rebuild — moved D7 activation from 31% to 48%&rdquo;</span>. The keyword gap analysis surfaced the exact terms the JD wanted: roadmap, OKRs, A/B testing.
               </p>
               <p>
-                A quick ATS score check confirmed the single-column layout parsed cleanly, and she exported. Same track record — now readable in the first six seconds a reviewer gives it, with a first-pass gain in line with the platform&apos;s +43-point average.
+                A quick ATS score check confirmed the single-column layout parsed cleanly, and she exported. Same track record — now readable in the first six seconds a reviewer gives it.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -434,11 +434,11 @@ export default function ProductManagersPage() {
           <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Explore the tools</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { href: "/features/resume-builder", t: "AI Resume Builder", d: "12+ ATS-tested templates and quantified bullets." },
+              { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
-              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 score across 15+ ATS platforms." },
-              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in 60 seconds." },
-              { href: "/features/interview-prep", t: "Interview Prep", d: "200+ role-specific questions, scored." },
+              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
+              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in about a minute." },
+              { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
             ].map((r) => (
               <Link

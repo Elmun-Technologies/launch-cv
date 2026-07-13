@@ -17,7 +17,8 @@ import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import {
   ArrowRight,
   Check,
-  Star,
+  Sparkles,
+  Download,
   Target,
   FileText,
   Mail,
@@ -28,7 +29,7 @@ import {
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "AI Resume Builder & Job Search Platform",
-  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep. Rated 4.9/5 by 2,400+ job seekers. Plans from ${planPriceLabel("starter")}.`,
+  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep — all in one plan. Check your resume's ATS score free. Plans from ${planPriceLabel("starter")}.`,
   pathname: "/",
   keywords: [
     "AI resume builder",
@@ -65,60 +66,65 @@ const features = [
   {
     href: "/features/resume-builder",
     title: "AI Resume Builder",
-    desc: "Twelve ATS-tested templates. Plain-English input becomes quantified, professional bullets.",
+    desc: "Four ATS-tested templates. Plain-English input becomes quantified, professional bullets.",
     icon: FileText,
     iconBg: "bg-violet-50 text-violet-700",
   },
   {
     href: "/features/ats-score",
     title: "ATS Score Checker",
-    desc: "Run your resume through 15 ATS engines. Get a 0–100 score and a prioritized fix list.",
+    desc: "Check your resume against the formatting and keyword signals ATS software relies on. Get a 0–100 score and a prioritized fix list.",
     icon: BarChart3,
     iconBg: "bg-orange-50 text-orange-700",
   },
   {
     href: "/features/cover-letter",
     title: "Cover Letter Generator",
-    desc: "Personalized letters in 60 seconds. Four tones. Fourteen languages. ATS-safe formatting.",
+    desc: "Personalized letters in under a minute. Multiple tones and languages. ATS-safe formatting.",
     icon: Mail,
     iconBg: "bg-teal-50 text-teal-700",
   },
   {
     href: "/features/interview-prep",
     title: "Interview Prep",
-    desc: "Role-specific question banks, AI-scored answers, and benchmark responses to calibrate against.",
+    desc: "Role-specific questions, each with a model answer outline to practice against.",
     icon: MessageSquare,
     iconBg: "bg-emerald-50 text-emerald-700",
   },
   {
     href: "/features/voice-input",
     title: "Voice Input",
-    desc: "Speak naturally and LaunchCV turns your words into ATS-ready resume bullets. Twelve languages supported.",
+    desc: "Speak naturally and LaunchCV turns your words into ATS-ready resume bullets — no typing required.",
     icon: Mic,
     iconBg: "bg-pink-50 text-pink-700",
   },
 ];
 
-const trustedBy = ["Stripe", "Notion", "Linear", "HubSpot", "Vercel", "Figma", "Datadog", "Ramp"];
+// Honest capability strip — real product facts, not fabricated logos or metrics.
+const capabilities = [
+  { icon: BarChart3, label: "Free ATS score — no signup" },
+  { icon: FileText, label: "4 ATS-tested templates" },
+  { icon: Sparkles, label: "6 AI tools, one plan" },
+  { icon: Download, label: "PDF & DOCX export" },
+];
 
-const testimonials = [
+// "Why it works" — persuasive, benefit-led copy grounded in what the product
+// actually does. No invented reviews, ratings, or user counts.
+const benefits = [
   {
-    name: "Sarah K.",
-    role: "Software Engineer at Stripe",
-    quote: "Zero callbacks for three months. Four interviews in one week after LaunchCV rewrote my bullets to match the JDs.",
-    rating: 5,
+    icon: Target,
+    title: "Tailored to each job, not generic",
+    desc: "Paste the job description and LaunchCV maps every requirement to your resume, then rewrites bullets to close the gaps — so you apply with a resume built for that role.",
   },
   {
-    name: "Marcus T.",
-    role: "Product Manager at Notion",
-    quote: "My ATS score went from 38 to 93. Three offers in two weeks. The fixes were obvious in hindsight.",
-    rating: 5,
+    icon: BarChart3,
+    title: "See what the software sees",
+    desc: "Get a 0–100 ATS score with a prioritized, plain-English fix list before a recruiter ever opens your file — no guessing why applications stall.",
   },
   {
-    name: "Priya N.",
-    role: "Marketing Lead at HubSpot",
-    quote: "The cover letter generator writes better letters than I do. Saves me two hours per application — easily.",
-    rating: 5,
+    icon: Sparkles,
+    title: "One workspace, every step",
+    desc: "Resume, JD alignment, ATS score, cover letter, and interview prep share the same context, so each tool builds on the last. No copy-pasting between tabs.",
   },
 ];
 
@@ -129,7 +135,7 @@ const faqs = [
   },
   {
     q: "Why does ATS matter?",
-    a: "Applicant Tracking Systems scan and filter resumes before a human reads them. Roughly 75% of resumes are auto-rejected. LaunchCV is tested against the 15 most common ATS platforms.",
+    a: "Most companies run resumes through Applicant Tracking Systems that scan and rank them before a human reads them, so formatting and keywords decide whether you get seen. LaunchCV checks your resume against the signals these systems rely on and shows you exactly what to fix.",
   },
   {
     q: "What file formats can I download?",
@@ -141,7 +147,7 @@ const faqs = [
   },
   {
     q: "Is my data safe and private?",
-    a: "Yes. Data is encrypted in transit and at rest, we are GDPR and CCPA compliant, and we never sell user data. Voice audio is processed in-memory and discarded after transcription.",
+    a: "Yes. Your data is encrypted in transit and at rest, and we never sell it. Voice audio is processed in-memory and discarded after transcription.",
   },
   {
     q: "How long does building a resume take?",
@@ -149,7 +155,7 @@ const faqs = [
   },
   {
     q: "Does it work for all industries?",
-    a: "Yes. Twelve templates across tech, finance, healthcare, marketing, design, operations, and management. The AI is calibrated per vertical.",
+    a: "Yes. The templates work across tech, finance, healthcare, marketing, design, operations, and management, and the AI is calibrated per vertical so the language fits your field.",
   },
   {
     q: "What is the Lifetime plan?",
@@ -182,16 +188,17 @@ export default async function Home() {
       {/* HERO */}
       <LandingHero />
 
-      {/* TRUST BAR */}
-      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-8">
+      {/* CAPABILITY STRIP — honest product facts */}
+      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-6">
         <div className="mx-auto max-w-[1200px] px-6">
-          <p className="text-center text-[12px] font-medium uppercase tracking-wider text-[#94A3B8]">
-            Built with — and used by — people now at
-          </p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-3 opacity-80">
-            {trustedBy.map((n) => (
-              <span key={n} className="text-[16px] font-semibold tracking-tight text-[#64748B]">
-                {n}
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-10">
+            {capabilities.map((c) => (
+              <span
+                key={c.label}
+                className="inline-flex items-center gap-2 text-[13px] font-medium text-[#475569] sm:text-[14px]"
+              >
+                <c.icon className="h-4 w-4 shrink-0 text-[#1A56DB]" />
+                {c.label}
               </span>
             ))}
           </div>
@@ -268,10 +275,10 @@ export default async function Home() {
                   <BarChart3 className="h-5 w-5" />
                 </span>
                 <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
-                  Free ATS score checker — test your resume on 15 engines
+                  Free ATS score checker — see how your resume reads to ATS software
                 </h3>
                 <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
-                  Upload your resume and get a 0–100 ATS score in eight seconds, with a
+                  Upload your resume and get a 0–100 ATS score in seconds, with a
                   prioritized list of every formatting and keyword fix. See{" "}
                   <span className="font-semibold text-[#2563EB] underline-offset-2 group-hover:underline">
                     how to check your resume&apos;s ATS score
@@ -298,7 +305,7 @@ export default async function Home() {
                 </h3>
                 <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
                   Paste a job description and AI runs a keyword gap analysis, then rewrites your
-                  bullets to lift your match score from around 40% to 90%+ —{" "}
+                  bullets to close the gaps and lift your match score —{" "}
                   <span className="font-semibold text-[#2563EB] underline-offset-2 group-hover:underline">
                     tailor your resume to the job
                   </span>{" "}
@@ -340,7 +347,7 @@ export default async function Home() {
                 A complete application in three steps
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Most users finish their first ATS-clean resume and cover letter in under ten minutes.
+                Go from raw experience to an ATS-clean resume and a matching cover letter in one sitting.
               </p>
             </div>
           </MotionReveal>
@@ -355,7 +362,7 @@ export default async function Home() {
               {
                 n: "02",
                 title: "AI writes, scores, and matches",
-                copy: "Quantified bullets. Keywords mapped to the JD. ATS score against 15 engines. All within seconds.",
+                copy: "Quantified bullets. Keywords mapped to the JD. An ATS score with a prioritized fix list. All within seconds.",
               },
               {
                 n: "03",
@@ -380,38 +387,35 @@ export default async function Home() {
       {/* STATS */}
       <HomeClient />
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1200px] px-6">
           <MotionReveal>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Customer stories</p>
+              <p className="lc-overline text-[#2563EB]">Why it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Trusted by people who landed offers
+                Built to get you seen — not just to format a resume
               </h2>
+              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
+                Every tool targets the real reason applications stall: a resume that doesn&apos;t
+                match the job or clear the software screening it first.
+              </p>
             </div>
           </MotionReveal>
 
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {testimonials.map((t) => (
-              <MotionReveal key={t.name}>
-                <figure className="flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: t.rating }).map((_, j) => (
-                      <Star key={j} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 flex-1 text-[15px] leading-[1.7] text-[#0F172A]">
-                    &ldquo;{t.quote}&rdquo;
-                  </blockquote>
-                  <figcaption className="mt-6 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.name}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.role}</p>
-                  </figcaption>
-                </figure>
-              </MotionReveal>
+          <MotionStagger className="mt-12 grid gap-5 lg:grid-cols-3">
+            {benefits.map((b) => (
+              <MotionItem key={b.title} className="h-full">
+                <div className="flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#1A56DB]">
+                    <b.icon className="h-5 w-5" />
+                  </span>
+                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{b.title}</h3>
+                  <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">{b.desc}</p>
+                </div>
+              </MotionItem>
             ))}
-          </div>
+          </MotionStagger>
         </div>
       </section>
 
@@ -423,7 +427,7 @@ export default async function Home() {
               <div className="lg:col-span-7">
                 <p className="lc-overline text-[#2563EB]">Pricing</p>
                 <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                  Pay monthly, yearly, or once
+                  Pay monthly or once
                 </h2>
               </div>
               <p className="text-[16px] leading-[1.65] text-[#475569] lg:col-span-5">
@@ -432,14 +436,13 @@ export default async function Home() {
             </div>
           </MotionReveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
               const tagline: Record<string, string> = {
                 starter: "Try the workflow — monthly, cancel anytime.",
                 professional: "Best balance of limits and price.",
-                elite: "Higher ceilings + priority support, billed yearly.",
                 lifetime: "One payment. Forever access.",
               };
               return (
@@ -568,7 +571,7 @@ export default async function Home() {
             Start your next job search the right way
           </h2>
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Create an account, choose a plan, and paste your first job description. The first interview reply often lands within days.
+            Create an account, choose a plan, and paste your first job description — LaunchCV tailors your resume, scores it against ATS, and drafts the cover letter.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <CtaLink cta="get_started" location="home"

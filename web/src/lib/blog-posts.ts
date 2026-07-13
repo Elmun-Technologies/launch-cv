@@ -596,7 +596,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "How LaunchCV's ATS checker works",
-        body: "LaunchCV's ATS Score Checker simulates how 15+ major applicant tracking systems parse your resume. Upload your PDF or DOCX and receive an instant score from 0–100, broken into four categories: Formatting (detects tables, columns, images), Keywords (measures density vs. industry benchmarks), Structure (checks for expected sections), and Readability (length, date formats, contact info parsing). The average user improves their score by 43 points after addressing the flagged issues. High-priority fixes are shown first, with specific instructions for each problem.\n\n![LaunchCV ATS score checker scoring an uploaded resume and listing the highest-impact formatting and keyword fixes first.](/images/product/ats-score.svg)",
+        body: "LaunchCV's ATS Score Checker simulates how common applicant tracking systems parse your resume. Upload your PDF or DOCX and receive an instant score from 0–100, broken into four categories: Formatting (detects tables, columns, images), Keywords (measures density vs. industry benchmarks), Structure (checks for expected sections), and Readability (length, date formats, contact info parsing). Every flagged issue comes with a specific fix, and high-priority problems are shown first so you know what to change before you apply.\n\n![LaunchCV ATS score checker scoring an uploaded resume and listing the highest-impact formatting and keyword fixes first.](/images/product/ats-score.svg)",
       },
       {
         heading: "Quick checklist before submitting any application",
@@ -671,13 +671,13 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "LaunchCV AI cover letter generator drafting a personalized, professional cover letter with an adjustable tone and language.",
     title: "7 Cover Letter Tips That Actually Get You Interviews in 2025",
     description:
-      "Most cover letters are ignored. Here are 7 evidence-based tips to write cover letters that hiring managers actually read — plus how AI can generate them in 60 seconds.",
+      "Most cover letters are ignored. Here are 7 evidence-based tips to write cover letters that hiring managers actually read — plus how AI can generate them in about a minute.",
     date: "2025-04-05",
     readingTime: 6,
     category: "Cover Letters",
     tags: ["cover letter tips", "cover letter writing", "job application", "AI cover letter", "hiring"],
     seoDescription:
-      "7 evidence-based cover letter tips that get hiring managers to actually read your letter — plus how AI drafts one in 60 seconds.",
+      "7 evidence-based cover letter tips that get hiring managers to actually read your letter — plus how AI drafts one in about a minute.",
     author: {
       name: "Nazir Elmurodov",
       role: "Founder, LaunchCV",
@@ -706,7 +706,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "Tips 5–7: Formatting, tone, and AI assistance",
-        body: "Tip 5: Use a professional but human tone. Avoid corporate jargon. Write like you speak in an interview, not like a legal document. Tip 6: End with a specific call to action: 'I would welcome the chance to discuss how my experience with [X] could contribute to [Y goal].' Tip 7: Use AI to generate the first draft. LaunchCV's Cover Letter Generator reads your resume and the job description, personalizes the opening hook, selects tone (professional, enthusiastic, concise, creative), and produces a ready-to-send letter in under 60 seconds. Edit 2–3 sentences to add your own voice and it's ready.",
+        body: "Tip 5: Use a professional but human tone. Avoid corporate jargon. Write like you speak in an interview, not like a legal document. Tip 6: End with a specific call to action: 'I would welcome the chance to discuss how my experience with [X] could contribute to [Y goal].' Tip 7: Use AI to generate the first draft. LaunchCV's Cover Letter Generator reads your resume and the job description, personalizes the opening, picks a Formal or Neutral tone, and produces a ready-to-send letter in about a minute. Edit 2–3 sentences to add your own voice and it's ready.",
       },
     ],
     faqs: [

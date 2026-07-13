@@ -151,7 +151,7 @@ export default function UseCasesPage() {
                 "Dedicated tracks for software engineers, product managers, and designers.",
                 "Role-specific keyword libraries matched to each job description.",
                 "Quantified, baselined bullets in the language your field rewards.",
-                "ATS-clean formatting tested against 15 tracking systems.",
+                "ATS-clean formatting built for how common ATS platforms parse resumes.",
               ]}
             />
 
@@ -243,7 +243,7 @@ export default function UseCasesPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {[
               { href: "/features", t: "All 6 tools", d: "See the full AI toolkit under one subscription." },
-              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in seconds — no signup." },
               { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
             ].map((r) => (
               <Link

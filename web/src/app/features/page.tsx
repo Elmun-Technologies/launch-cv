@@ -26,50 +26,50 @@ const features = [
   {
     icon: Target,
     title: "JD Alignment",
-    description: "Paste a job description. Watch your match score climb from around 40% to 90%+ in under a minute.",
+    description: "Paste a job description. AI maps every requirement and rewrites your bullets to close the gaps.",
     href: "/features/jd-alignment",
     iconBg: "bg-blue-50 text-blue-700",
-    stats: [{ k: "+49 pts", v: "Avg score jump" }, { k: "8 sec", v: "Time to analyze" }],
+    stats: [{ k: "Ranked", v: "Keyword gaps" }, { k: "Minutes", v: "Per alignment" }],
   },
   {
     icon: FileText,
     title: "AI Resume Builder",
-    description: "Plain English in. ATS-tested, quantified bullets out. 12 industry templates, five minutes from blank to PDF.",
+    description: "Plain English in. ATS-tested, quantified bullets out. 4 templates, minutes from blank to PDF.",
     href: "/features/resume-builder",
     iconBg: "bg-violet-50 text-violet-700",
-    stats: [{ k: "12", v: "Templates" }, { k: "5 min", v: "Avg build" }],
+    stats: [{ k: "4", v: "Templates" }, { k: "Minutes", v: "To first draft" }],
   },
   {
     icon: BarChart3,
     title: "ATS Score Checker",
-    description: "Every parser-breaking format issue, named and ranked. The average user gains 43 points on the first pass.",
+    description: "Every parser-breaking format issue, named and ranked, with a plain-English fix list.",
     href: "/features/ats-score",
     iconBg: "bg-orange-50 text-orange-700",
-    stats: [{ k: "15", v: "ATS engines" }, { k: "+43", v: "Avg gain" }],
+    stats: [{ k: "0–100", v: "ATS score scale" }, { k: "Free", v: "No signup" }],
   },
   {
     icon: Mail,
     title: "Cover Letter Generator",
-    description: "Personalized to the company, the role, and the hiring manager. Four tones, 14 languages, 60 seconds.",
+    description: "Personalized to the role and company, grounded in your resume. Formal or Neutral tone, in about a minute.",
     href: "/features/cover-letter",
     iconBg: "bg-teal-50 text-teal-700",
-    stats: [{ k: "60 sec", v: "Per letter" }, { k: "14", v: "Languages" }],
+    stats: [{ k: "Minutes", v: "Per letter" }, { k: "2", v: "Tones" }],
   },
   {
     icon: MessageSquare,
     title: "Interview Prep",
-    description: "200+ role-specific questions. AI-scored answers. Model responses on tap. Practice until your worst day still wins.",
+    description: "Role-specific questions, each with a model answer outline to prepare against. Practice until your worst day still wins.",
     href: "/features/interview-prep",
     iconBg: "bg-emerald-50 text-emerald-700",
-    stats: [{ k: "200+", v: "Questions" }, { k: "1–10", v: "AI scoring" }],
+    stats: [{ k: "Role-specific", v: "Questions" }, { k: "Model", v: "Answer outlines" }],
   },
   {
     icon: Mic,
     title: "Voice Input",
-    description: "Click the mic, describe your work to a friend, watch it become a polished bullet. 12 languages.",
+    description: "Click the mic, describe your work to a friend, watch it become a polished bullet.",
     href: "/features/voice-input",
     iconBg: "bg-pink-50 text-pink-700",
-    stats: [{ k: "12", v: "Languages" }, { k: "0", v: "Audio stored" }],
+    stats: [{ k: "Speak", v: "It writes" }, { k: "0", v: "Audio stored" }],
   },
 ];
 
@@ -80,11 +80,11 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Which LaunchCV feature should I start with?",
-    a: "Start with the AI Resume Builder if you need a resume, since it turns plain English into ATS-tested, quantified bullets in about five minutes using 12 templates. Its output then feeds the ATS Score Checker and JD Alignment, so beginning there seeds the rest of the workflow automatically.",
+    a: "Start with the AI Resume Builder if you need a resume, since it turns plain English into ATS-tested, quantified bullets in minutes. Its output then feeds the ATS Score Checker and JD Alignment, so beginning there seeds the rest of the workflow automatically.",
   },
   {
     q: "How much can LaunchCV improve my ATS score?",
-    a: "LaunchCV's ATS Score Checker raises the average user's score by 43 points on the first pass, naming and ranking every parser-breaking format issue across 15 ATS engines. Separately, JD Alignment lifts a job-match score from around 40% to over 90% in under a minute.",
+    a: "LaunchCV's ATS Score Checker names and ranks every parser-breaking format issue and returns a prioritized fix list, built for how common ATS platforms parse resumes. Separately, JD Alignment scores your job match and rewrites bullets to close the gaps before you apply.",
   },
   {
     q: "Is LaunchCV one subscription or do I pay per tool?",
@@ -92,11 +92,11 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Can LaunchCV write a cover letter and prep me for interviews?",
-    a: "Yes, LaunchCV's Cover Letter Generator personalizes letters to the company, role, and hiring manager in about 60 seconds with four tones and 14 languages. Interview Prep then serves 200-plus role-specific questions, scores your answers from 1 to 10, and shows model responses on tap.",
+    a: "Yes, LaunchCV's Cover Letter Generator personalizes letters to the role and company in about a minute, in a Formal or Neutral tone. Interview Prep then generates role-specific questions, each with a model answer outline you can prepare against.",
   },
   {
     q: "Can I build my resume by voice with LaunchCV?",
-    a: "Yes, LaunchCV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished bullet in 12 languages. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
+    a: "Yes, LaunchCV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished, ATS-ready bullet. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
   },
 ];
 
@@ -156,9 +156,9 @@ export default function FeaturesPage() {
               lead="LaunchCV combines six AI tools in one subscription: JD alignment, AI resume builder, ATS score checker, cover letter generator, interview prep, and voice input. Each tool's output feeds the next — the resume feeds the ATS scan, the JD match seeds the cover letter — so there's no copy-pasting between tabs."
               facts={[
                 "Six tools, one paid plan — every tool included on every tier.",
-                "JD alignment lifts match scores from ~40% to 90%+ in about a minute.",
-                "ATS checker tests against 15 engines for an average +43-point gain.",
-                "Rated 4.9/5 by 2,400+ job seekers.",
+                "JD alignment maps every requirement and rewrites your bullets to close the gaps.",
+                "ATS checker scores your resume 0–100 with a prioritized fix list.",
+                "Free ATS score check — no account needed to start.",
               ]}
             />
 
@@ -287,7 +287,7 @@ export default function FeaturesPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {[
               { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
-              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in 8 seconds — no signup." },
+              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in seconds — no signup." },
               { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
             ].map((r) => (
               <Link

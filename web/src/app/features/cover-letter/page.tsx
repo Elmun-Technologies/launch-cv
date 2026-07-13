@@ -17,9 +17,7 @@ import {
   Mail,
   ArrowRight,
   Check,
-  Star,
   Building2,
-  User,
   Send,
   Sparkles,
   FileText,
@@ -28,9 +26,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Cover Letter Generator — Personalized Letters in 60 Seconds",
+  title: "AI Cover Letter Generator — Personalized Letters in Minutes",
   description:
-    "Generate a tailored, professional cover letter from your resume and job description in under a minute. Four tones, fourteen languages, ATS-safe formatting.",
+    "Generate a tailored, professional cover letter from your resume and job description in about a minute. Formal or neutral tone, ATS-safe formatting.",
   pathname: "/features/cover-letter",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -45,19 +43,19 @@ export const metadata = buildMarketingMetadata({
 const faqs: FaqItem[] = [
   {
     q: "How does LaunchCV personalize my cover letter?",
-    a: "LaunchCV reads your resume and the job description, then extracts the company mission, tech stack, required skills, and hiring tone and weaves them in naturally. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the letter.",
+    a: "LaunchCV reads your resume and the job description together, then grounds the letter in your real experience and the role's stated requirements. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the draft.",
   },
   {
     q: "How long does it take to write a cover letter with LaunchCV?",
-    a: "LaunchCV generates a personalized cover letter in about 60 seconds. You connect a resume, paste the job description, optionally add personal context, then pick a tone and length. The AI returns three openings, one full body, and two closings, all editable inline before you send.",
+    a: "LaunchCV generates a personalized cover letter in about a minute. You connect a resume, paste the job description, and pick a tone; the AI returns a complete, editable letter body grounded in your real experience, ready to refine before you send.",
   },
   {
     q: "What tones can LaunchCV's cover letter generator write in?",
-    a: "LaunchCV writes in four tones: Professional, Enthusiastic, Concise, and Creative. Professional suits finance and enterprise, Enthusiastic fits startups, Concise keeps engineers to around 200 words, and Creative leads with a distinctive hook for design and marketing roles. You can preview each voice live before generating.",
+    a: "LaunchCV writes in two tones: Formal and Neutral. Formal is a crisp, polished default that suits most roles and industries; Neutral is clear and direct, a good match when the posting itself is casual. Pick either one before generating.",
   },
   {
-    q: "Can LaunchCV write a cover letter in a language other than English?",
-    a: "Yes, LaunchCV writes cover letters in fourteen languages, including English, German, French, Spanish, Portuguese, Dutch, and Italian, plus seven more. Pick your language and the AI still pulls the company mission and job-description details, so the personalization stays intact whichever language you apply in.",
+    q: "Can I edit the cover letter after it's generated?",
+    a: "Yes. LaunchCV returns a complete draft you can edit inline before sending — adjust any sentence, rework the opening, or tighten the close. Because the letter is grounded in your resume, edits are about voice and emphasis, not inventing content.",
   },
   {
     q: "Are LaunchCV cover letters ATS-safe?",
@@ -65,7 +63,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "Can I control the length of my LaunchCV cover letter?",
-    a: "Yes, LaunchCV offers three lengths: Short at around 250 words, Standard at 400, and Detailed at 600. Choose the one that fits the role before generating. The AI also returns three opening hooks, so you can pick the first paragraph that sounds most like you.",
+    a: "LaunchCV returns a complete letter body at a natural length for the role. You can trim or expand any part inline before you send — nothing is locked, so you stay in control of the final length.",
   },
 ];
 
@@ -89,15 +87,14 @@ const ld = {
     howToLd({
       name: "How to generate a tailored cover letter",
       description:
-        "Connect a resume, paste the job description, choose tone and length, and generate an ATS-safe cover letter in under a minute.",
+        "Connect a resume, paste the job description, choose a tone, and generate an ATS-safe cover letter in about a minute.",
       totalTime: "PT1M",
       url: absoluteUrl("/features/cover-letter"),
       steps: [
         { name: "Connect a resume", text: "Use a LaunchCV resume or paste an existing one — your career history is the foundation." },
-        { name: "Paste the job description", text: "AI auto-extracts the company, role, tech stack, and hiring tone with no manual tagging." },
-        { name: "Add optional personal context", text: "Add the hiring manager's name, a mutual connection, or a why-this-company line and AI weaves it in." },
-        { name: "Pick tone and length", text: "Choose from four tones and three lengths, and preview the voice before generating." },
-        { name: "Generate", text: "AI returns three openings, one full body, and two closings — all editable inline." },
+        { name: "Paste the job description", text: "The AI reads the posting alongside your resume — no manual tagging." },
+        { name: "Pick a tone", text: "Choose Formal or Neutral before generating." },
+        { name: "Generate", text: "AI returns a complete, editable cover letter body." },
         { name: "Send", text: "Copy to clipboard, paste into an email, or export a PDF; the plain-text structure works everywhere." },
       ],
     }),
@@ -107,47 +104,41 @@ const ld = {
 };
 
 const keyFacts = [
-  "Writes a tailored cover letter from your resume and a job description in about 60 seconds.",
-  "4 tone modes (Professional, Enthusiastic, Concise, Creative) and 14 languages.",
-  "Generates 3 opening hooks and 3 length options (250 / 400 / 600 words).",
+  "Writes a tailored cover letter from your resume and a job description in about a minute.",
+  "Choose a Formal or Neutral tone before generating.",
+  "Grounded in your real resume — no invented experience.",
   "ATS-safe plain-text formatting for email body, ATS upload, or PDF.",
 ];
 
 const tones = [
-  { k: "Professional", d: "Crisp, formal, polished. Best for finance, legal, enterprise." },
-  { k: "Enthusiastic", d: "Warm, energetic, mission-led. Best for startups and agencies." },
-  { k: "Concise", d: "Two hundred words, every line earning its place. Best for engineers." },
-  { k: "Creative", d: "Hooked opening, distinctive voice. Best for design and marketing." },
+  { k: "Formal", d: "Crisp, polished, professional. A safe default for most roles and industries." },
+  { k: "Neutral", d: "Clear and direct, less stiff than Formal. Good when the posting itself is casual." },
 ];
 
 const benefits = [
-  { t: "Deep personalization", d: "AI extracts the company mission, tech stack, and required skills from the JD — and weaves them in naturally." },
-  { t: "Four tones", d: "Professional, Enthusiastic, Concise, Creative. Preview the change live before generating." },
-  { t: "Three opening hooks", d: "Generates three different first paragraphs. Pick the one that sounds like you." },
+  { t: "Grounded in your resume", d: "The AI writes from your actual experience and the job description — it won't invent achievements you don't have." },
+  { t: "Two tones", d: "Formal or Neutral. Pick the one that matches the role before generating." },
   { t: "ATS-safe formatting", d: "Plain-text structure that works in an email body, ATS upload, or PDF attachment." },
-  { t: "Word-count control", d: "Short (250) · Standard (400) · Detailed (600). You choose the length." },
-  { t: "Fourteen languages", d: "English, German, French, Spanish, Portuguese, Dutch, Italian, and seven more." },
+  { t: "Bundled with interview prep", d: "The same job description also generates interview questions and a short elevator pitch." },
 ];
 
 const steps = [
   { i: FileText, t: "Connect a resume", d: "Use a LaunchCV resume or paste an existing one. Your career history is the foundation." },
-  { i: Building2, t: "Paste the JD", d: "AI auto-extracts the company, role, tech stack, and hiring tone — no manual tagging." },
-  { i: User, t: "Optional personal context", d: "Hiring manager name, mutual connection, why-this-company line. AI weaves it in." },
-  { i: Sparkles, t: "Pick tone + length", d: "Choose from four tones and three lengths. Preview the voice before generating." },
-  { i: Mail, t: "Generate", d: "AI returns three openings, one full body, and two closings — all editable inline." },
+  { i: Building2, t: "Paste the JD", d: "The AI reads the posting alongside your resume — no manual tagging." },
+  { i: Sparkles, t: "Pick a tone", d: "Choose Formal or Neutral before generating." },
+  { i: Mail, t: "Generate", d: "AI returns a complete, editable cover letter body." },
   { i: Send, t: "Send", d: "Copy to clipboard, paste into email, or export PDF. Plain-text compatible everywhere." },
 ];
 
-const testimonials = [
+// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
+const whyItWorks = [
   {
-    q: "The cover letter generator writes better letters than I ever could. It pulled details from the JD I hadn't even noticed. Two-to-three hours saved per application.",
-    n: "Priya N.",
-    r: "Marketing Lead at HubSpot",
+    t: "No more blank-page dread",
+    d: "Connect your resume and a job description, and get a complete first draft to edit — instead of staring at an empty document.",
   },
   {
-    q: "I was embarrassed by my own cover letters. The AI made them sound genuinely enthusiastic and specific. I got a callback from every company I used it on.",
-    n: "Alex T.",
-    r: "Sales Manager",
+    t: "Never invents your experience",
+    d: "The letter is grounded in what's actually in your resume. Nothing fabricated, nothing you can't back up in an interview.",
   },
 ];
 
@@ -176,16 +167,16 @@ export default function CoverLetterPage() {
               </span>
 
               <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-                Personalized cover letters in 60 seconds
+                Personalized cover letters in about a minute
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Stop opening the blank document. LaunchCV pulls the company mission, the tech stack, and the hiring manager&apos;s tone — then writes a letter you&apos;d be proud to send.
+                Stop opening the blank document. LaunchCV reads the job description alongside your resume, then writes a letter grounded in your real experience.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="The Cover Letter Generator writes a tailored, ATS-safe cover letter from your resume and a target job description in under a minute. It extracts the company mission, tech stack, and required skills from the posting, offers four tones and three lengths, and supports 14 languages."
+                lead="The Cover Letter Generator writes a tailored, ATS-safe cover letter from your resume and a target job description in about a minute. It reads the required skills from the posting and offers a Formal or Neutral tone."
                 facts={keyFacts}
               />
 
@@ -207,9 +198,9 @@ export default function CoverLetterPage() {
 
               <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
                 {[
-                  { v: "60 sec", l: "Per letter" },
-                  { v: "14", l: "Languages" },
-                  { v: "3", l: "Opening hooks" },
+                  { v: "~1 min", l: "Per letter" },
+                  { v: "2", l: "Tones" },
+                  { v: "Free", l: "Included on every plan" },
                 ].map((s) => (
                   <div key={s.l}>
                     <p className="text-[24px] font-bold tracking-tight text-[#0F172A]">{s.v}</p>
@@ -228,26 +219,25 @@ export default function CoverLetterPage() {
                     <p className="text-[12px] text-[#94A3B8]">sarah@email.com · NYC</p>
                   </div>
                   <span className="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-teal-700 ring-1 ring-teal-200">
-                    Draft v3
+                    Draft
                   </span>
                 </div>
 
                 <div className="space-y-3 px-6 py-5 text-[14px] leading-[1.75] text-[#0F172A]">
                   <p className="text-[#94A3B8]">March 12, 2026</p>
-                  <p>Dear hiring team at Stripe,</p>
+                  <p>Dear hiring team at Northwind Labs,</p>
                   <p>
-                    I&apos;ve been following Stripe&apos;s expansion into <span className="rounded bg-teal-100 px-1 text-teal-800">embedded finance</span> since the launch of Issuing — and I&apos;d love to bring my six years of payments infrastructure experience to the <span className="rounded bg-teal-100 px-1 text-teal-800">Senior Software Engineer, Money Movement</span> team.
+                    I&apos;ve been following Northwind&apos;s expansion into <span className="rounded bg-teal-100 px-1 text-teal-800">embedded finance</span> since the launch of your Issuing product — and I&apos;d love to bring my six years of payments infrastructure experience to the <span className="rounded bg-teal-100 px-1 text-teal-800">Senior Software Engineer, Money Movement</span> team.
                   </p>
                   <p>
-                    At my current role I led the migration of <span className="rounded bg-teal-100 px-1 text-teal-800">three SaaS systems</span> serving 1,200+ accounts, cutting deploy time by 40% with a TypeScript and Go stack. The challenges Stripe is solving — global rails, sub-100ms settlement — are exactly the problems I want to spend the next chapter of my career on.
+                    At my current role I led the migration of <span className="rounded bg-teal-100 px-1 text-teal-800">three SaaS systems</span> serving 1,200+ accounts, cutting deploy time by 40% with a TypeScript and Go stack. The challenges Northwind is solving — global rails, sub-100ms settlement — are exactly the problems I want to spend the next chapter of my career on.
                   </p>
                   <p className="text-[#94A3B8]">_______________</p>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E2E8F0] px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <span className="rounded-md bg-teal-50 px-2 py-0.5 text-[11px] font-semibold text-teal-700">Tone · Enthusiastic</span>
-                    <span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-medium text-[#475569]">312 words</span>
+                    <span className="rounded-md bg-teal-50 px-2 py-0.5 text-[11px] font-semibold text-teal-700">Tone · Formal</span>
                   </div>
                   <button className="inline-flex items-center gap-1.5 rounded-md bg-[#0D9488] px-3 py-1.5 text-[12px] font-semibold text-white">
                     <Send className="h-3.5 w-3.5" /> Copy &amp; send
@@ -271,8 +261,8 @@ export default function CoverLetterPage() {
           <ProductScreenshot
             className="mt-12"
             src="/images/product/cover-letter.svg"
-            alt="The LaunchCV AI cover letter generator drafting a personalized, professional cover letter with adjustable tone and language controls."
-            caption="Pick a tone and language; get a company-specific, ready-to-send letter in under a minute."
+            alt="The LaunchCV AI cover letter generator drafting a personalized, professional cover letter with an adjustable tone."
+            caption="Pick a tone; get a role-specific, ready-to-send letter in about a minute."
           />
         </div>
       </section>
@@ -284,15 +274,15 @@ export default function CoverLetterPage() {
             <div className="max-w-[680px]">
               <p className="lc-overline text-[#0D9488]">Pick your voice</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Four tones, same job description, very different letters
+                Two tones, same job description, different letters
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Tone is the difference between a recruiter calling you back and skipping to the next CV. Preview each voice before you generate.
+                Tone shapes how the letter reads. Pick the one that matches the role before you generate.
               </p>
             </div>
           </RevealOnView>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-5 sm:grid-cols-2">
             {tones.map((t, i) => (
               <RevealOnView key={t.k}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
@@ -315,7 +305,7 @@ export default function CoverLetterPage() {
             <div className="max-w-[680px]">
               <p className="lc-overline text-[#0D9488]">A real example</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Same JD. Two voices. Pick the one that sounds like you.
+                Same JD. Two tones. Pick the one that fits.
               </h2>
             </div>
           </RevealOnView>
@@ -323,20 +313,18 @@ export default function CoverLetterPage() {
           <div className="mt-12 grid gap-5 lg:grid-cols-2">
             <div className="rounded-xl border border-[#E2E8F0] bg-white p-7">
               <div className="flex items-center gap-2">
-                <span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">Professional</span>
-                <span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-medium text-[#94A3B8]">312 words</span>
+                <span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">Formal</span>
               </div>
               <p className="mt-5 text-[15px] leading-[1.7] text-[#0F172A]">
-                &ldquo;I am writing to express my interest in the Senior Product Manager role at Linear. With seven years of B2B SaaS experience — most recently leading the activation workstream at Datadog — I believe my background in technical product strategy and developer-tools positioning aligns with the responsibilities outlined in your job description.&rdquo;
+                &ldquo;I am writing to express my interest in the Senior Product Manager role at Northwind Labs. With seven years of B2B SaaS experience — most recently leading the activation workstream at my current company — I believe my background in technical product strategy and developer-tools positioning aligns with the responsibilities outlined in your job description.&rdquo;
               </p>
             </div>
             <div className="rounded-xl border border-teal-200 bg-teal-50/50 p-7">
               <div className="flex items-center gap-2">
-                <span className="rounded-md bg-teal-100 px-2 py-0.5 text-[11px] font-semibold text-teal-800">Enthusiastic</span>
-                <span className="rounded-md bg-white px-2 py-0.5 text-[11px] font-medium text-[#475569] ring-1 ring-[#E2E8F0]">298 words</span>
+                <span className="rounded-md bg-teal-100 px-2 py-0.5 text-[11px] font-semibold text-teal-800">Neutral</span>
               </div>
               <p className="mt-5 text-[15px] leading-[1.7] text-[#0F172A]">
-                &ldquo;I&apos;ve been a Linear power user since the very first Cycles ship — and the day I read your Method docs was the day I decided I wanted to build PM tools, not just use them. The Senior PM role you posted is the most specifically me-shaped role I&apos;ve seen in a year, and I want to tell you why.&rdquo;
+                &ldquo;I&apos;m applying for the Senior PM role at Northwind Labs. I&apos;ve spent the last three years leading activation work at a B2B SaaS company, and the problems your job description describes — onboarding, retention, developer-tools positioning — are the ones I want to keep solving.&rdquo;
               </p>
             </div>
           </div>
@@ -426,11 +414,10 @@ export default function CoverLetterPage() {
               </thead>
               <tbody>
                 {[
-                  { k: "Starting point", a: "Pulls company, role, and tone from the JD", b: "An empty document and a deadline" },
-                  { k: "Personalization", a: "Company mission and tech stack woven in", b: "One generic paragraph for every job" },
-                  { k: "Tone", a: "4 tones to match the employer", b: "One stiff, one-size voice" },
-                  { k: "Languages", a: "14 languages", b: "English only" },
-                  { k: "Speed", a: "A finished letter in 60 seconds", b: "An hour of second-guessing" },
+                  { k: "Starting point", a: "Reads the role and required skills from the JD", b: "An empty document and a deadline" },
+                  { k: "Personalization", a: "Grounded in your actual resume, not a generic paragraph", b: "One generic paragraph for every job" },
+                  { k: "Tone", a: "Formal or Neutral to match the employer", b: "One stiff, one-size voice" },
+                  { k: "Speed", a: "A finished letter in about a minute", b: "An hour of second-guessing" },
                   { k: "Formatting", a: "ATS-safe, ready for email or PDF", b: "Formatting that breaks on upload" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
@@ -463,10 +450,10 @@ export default function CoverLetterPage() {
                 Noah wanted to apply to eight companies in a weekend, but every job application cover letter took him the better part of an hour. By Saturday afternoon he had written two and given up.
               </p>
               <p>
-                He connected his resume, pasted the first job description, and let the cover letter maker do the reading. The AI surfaced the company&apos;s mission and the exact stack in the posting, then offered three opening hooks. He picked the one that sounded like him, chose the <span className="font-medium text-[#0F172A]">Enthusiastic</span> tone, and had a tailored draft in under a minute.
+                He connected his resume, pasted the first job description, and let the cover letter generator do the reading. The AI grounded the draft in his real experience and the exact stack in the posting. He picked the <span className="font-medium text-[#0F172A]">Neutral</span> tone and had a tailored first draft in about a minute.
               </p>
               <p>
-                Because each letter starts from the specific role instead of a blank page, the remaining six took a weekend afternoon instead of a week. Every one was a personalized cover letter — same voice, different company — and ready to paste straight into an email or attach as a clean PDF.
+                Because each letter starts from the specific role instead of a blank page, the remaining six took a weekend afternoon instead of a week. Every one was grounded in the same real experience — different company, different framing — and ready to paste straight into an email or attach as a clean PDF.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -481,30 +468,22 @@ export default function CoverLetterPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">Customer stories</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Letters that got replies</h2>
+              <p className="lc-overline text-[#0D9488]">Why it works</p>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Letters grounded in what&apos;s actually true</h2>
             </div>
           </RevealOnView>
           <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            {testimonials.map((t) => (
-              <RevealOnView key={t.n}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]">&ldquo;{t.q}&rdquo;</blockquote>
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.n}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.r}</p>
-                  </figcaption>
-                </figure>
+            {whyItWorks.map((w) => (
+              <RevealOnView key={w.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>
@@ -546,7 +525,7 @@ export default function CoverLetterPage() {
             Write a letter you&apos;d actually be proud to send
           </h2>
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Personalized, professional, and ready in 60 seconds. No blank-page anxiety.
+            Personalized, professional, and ready in about a minute. No blank-page anxiety.
           </p>
           <CtaLink cta="get_started" location="feature_cover_letter"
             href="/register"
@@ -581,7 +560,7 @@ export default function CoverLetterPage() {
           {
             href: "/blog/how-to-tailor-your-resume-for-every-job",
             title: "How to tailor your resume for every job",
-            desc: "Match your application to the job description in under ten minutes.",
+            desc: "Match your application to the job description in minutes.",
           },
           {
             href: "/blog/how-to-prepare-for-a-job-interview-with-ai",

@@ -17,11 +17,7 @@ import {
   MessageSquare,
   ArrowRight,
   Check,
-  Star,
   Mic,
-  Brain,
-  CheckCircle2,
-  TrendingUp,
   Target,
   FileText,
   Mail,
@@ -30,7 +26,7 @@ import {
 export const metadata = buildMarketingMetadata({
   title: "AI Interview Prep — Practice Real, Role-Specific Questions",
   description:
-    "LaunchCV reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face, with scored AI feedback.",
+    "LaunchCV reads your resume and the job description, then generates the questions you&apos;re likely to face — each with a model answer outline to prepare against.",
   pathname: "/features/interview-prep",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -48,24 +44,24 @@ const faqs: FaqItem[] = [
     a: "LaunchCV reads your resume and the target job description, then generates the exact questions you're likely to face for that role. It pulls behavioral prompts from your experience, technical questions from the JD's required skills, and asks resume-aware follow-ups that dig in like a real interviewer would.",
   },
   {
-    q: "How does LaunchCV score my interview answers?",
-    a: "LaunchCV scores every answer from 1 to 10 across four dimensions: Clarity, Relevance, Impact, and STAR structure. You get the breakdown, the reasoning behind each score, and a benchmark model answer beside yours to calibrate against, so you know exactly what to tighten next time.",
+    q: "What do I get for each interview question?",
+    a: "For each question, LaunchCV gives you a model answer outline — a clear structure you can follow using your own real experience. Rather than a numeric grade, you get a concrete example of what a strong, well-structured answer looks like, so you can prepare with confidence.",
   },
   {
     q: "What types of interview questions can I practice on LaunchCV?",
-    a: "LaunchCV offers six question banks: Behavioral, Technical, Company and culture, Situational, Curveball, and Salary and close. The AI picks the right mix automatically, or you can drill the single bank that worries you most. Behavioral uses STAR prompts from your resume; Technical comes from the JD's tools.",
+    a: "LaunchCV generates the main types you'll actually face: behavioral questions drawn from your resume, technical questions from the job description's required skills, and role- and company-specific questions. The AI picks the right mix for the job automatically.",
   },
   {
-    q: "How many practice questions does LaunchCV generate per role?",
-    a: "LaunchCV generates 200+ role-specific questions per role, spread across six banks covering behavioral, technical, company, situational, curveball, and salary topics. Because each set is built from your resume and the job description, you practice the questions that actually matter for that job rather than generic filler.",
+    q: "Are the questions specific to my target job?",
+    a: "Yes. Every question is generated from your resume and the specific job description, so you practice what actually matters for that role rather than generic filler. Change the job description and the question set changes with it.",
   },
   {
-    q: "Can LaunchCV simulate a full multi-round interview?",
-    a: "Yes, LaunchCV runs a multi-round simulation covering the recruiter screen, the hiring manager, and the panel, each with the right tone and question density. You can run a full mock from screener to panel, and a progress dashboard tracks your score trend across every session.",
+    q: "Can I focus on the questions that worry me most?",
+    a: "Yes. You can generate a fresh set anytime and concentrate on the areas you find hardest — behavioral storytelling, technical depth, or company-specific questions — practicing the same role until your answers feel sharp.",
   },
   {
-    q: "Can I answer LaunchCV interview questions out loud?",
-    a: "Yes, LaunchCV includes a voice answer option, so you can speak your responses just like a real interview instead of typing them. Each spoken answer is still scored from 1 to 10 on Clarity, Relevance, Impact, and STAR, with a model answer to compare against.",
+    q: "How should I use the model answer outlines?",
+    a: "Treat each outline as a scaffold, not a script. It shows the structure of a strong answer — situation, action, and measurable result — so you can slot in your own real experience and rehearse until it feels natural in your own words.",
   },
 ];
 
@@ -76,7 +72,7 @@ const ld = {
       "@type": "WebPage",
       name: "Interview Prep | LaunchCV",
       url: absoluteUrl("/features/interview-prep"),
-      description: "Role-specific AI interview practice with scored feedback.",
+      description: "Role-specific AI interview questions with model answer outlines.",
     },
     {
       "@type": "BreadcrumbList",
@@ -92,40 +88,34 @@ const ld = {
 };
 
 const keyFacts = [
-  "Generates role-specific questions from your resume and the exact job description.",
-  "Every answer is scored 1–10 on Clarity, Relevance, Impact, and STAR structure.",
-  "Returns a benchmark model answer beside yours to calibrate against.",
-  "Covers behavioral, technical, company/culture, situational, and curveball rounds.",
+  "Generates interview questions from your resume and the exact job description.",
+  "Each question comes with a model answer outline to prepare against.",
+  "Bundled with a matching cover letter and elevator pitch from the same JD.",
+  "No generic lists — every question is grounded in your actual background.",
 ];
 
 const categories = [
-  { k: "Behavioral", d: "STAR-method questions generated from your resume experience." },
-  { k: "Technical", d: "Pulled from the JD&apos;s required skills and tools, with depth tags." },
-  { k: "Company & culture", d: "Built from public values, mission, and recent press." },
+  { k: "Behavioral", d: "Questions about past experience, grounded in your resume." },
+  { k: "Technical", d: "Pulled from the JD&apos;s required skills and tools." },
   { k: "Situational", d: "What-would-you-do scenarios relevant to the exact role." },
-  { k: "Curveball", d: "The off-script ones recruiters use to test composure." },
-  { k: "Salary & close", d: "Anchoring, negotiation, and post-interview reply scripts." },
 ];
 
 const benefits = [
   { t: "Role-specific questions", d: "Generated from your resume and the JD. No generic &lsquo;tell me your weakness&rsquo;." },
-  { t: "AI scoring 1–10", d: "Every answer rated for Clarity, Relevance, Impact, and STAR structure. With the &lsquo;why&rsquo;." },
-  { t: "Model answer for comparison", d: "AI returns a benchmark answer beside yours — to calibrate against, not to memorize." },
-  { t: "Progress dashboard", d: "Session-by-session score trend. Watch yourself improve across attempts." },
-  { t: "Resume-aware follow-ups", d: "AI digs in like a real interviewer. Mention a project — expect the follow-up question." },
-  { t: "Multi-round simulation", d: "Recruiter screen, hiring manager, panel — each stage with the right tone and density." },
+  { t: "Model answer outlines", d: "Each question comes with a suggested answer outline to prepare against, built from your real background." },
+  { t: "One packet, three outputs", d: "The same job description also produces a tailored cover letter and a short elevator pitch." },
+  { t: "Nothing invented", d: "Answer outlines draw only on experience already in your resume — never fabricated achievements." },
 ];
 
-const testimonials = [
+// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
+const whyItWorks = [
   {
-    q: "Interview prep is underrated. Practicing with AI questions specific to the job made me so much more confident. I knew the answers before they asked.",
-    n: "James O.",
-    r: "Data Analyst at Snowflake",
+    t: "Prepare with your own story, not generic advice",
+    d: "Every question and answer outline is built from your resume and the specific job description — not a stock list off the internet.",
   },
   {
-    q: "I failed four interviews before LaunchCV. The AI feedback showed me I wasn&apos;t using STAR properly. Fixed that — hired on the very next one.",
-    n: "Nina P.",
-    r: "Business Analyst",
+    t: "Walk in with a plan for the hard questions",
+    d: "See likely questions before the interview, with an outline of how to answer using experience you actually have.",
   },
 ];
 
@@ -158,12 +148,12 @@ export default function InterviewPrepPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                AI reads your resume and the job description, then drills you on the exact questions you&apos;re likely to face. Every answer is scored, every weakness named, every model answer benchmarked.
+                AI reads your resume and the job description, then generates the questions you&apos;re likely to face — each with a model answer outline built from your own background.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="Interview Prep reads your resume and the target job description, then generates the role-specific questions you're most likely to face. Every answer is scored 1–10 on clarity, relevance, impact, and STAR structure, with a benchmark model answer beside yours across behavioral, technical, company, situational, and curveball rounds."
+                lead="Interview Prep reads your resume and the target job description, then generates the role-specific questions you're most likely to face, each with a model answer outline to prepare against — covering behavioral, technical, and situational questions."
                 facts={keyFacts}
               />
 
@@ -172,22 +162,22 @@ export default function InterviewPrepPage() {
                   href="/register"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#059669] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(5,150,105,0.4)] transition hover:bg-[#047857]"
                 >
-                  Drill my first interview
+                  Prep my first interview
                   <ArrowRight className="h-4 w-4" />
                 </CtaLink>
                 <Link
                   href="#categories"
                   className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
                 >
-                  Browse question banks
+                  See question types
                 </Link>
               </div>
 
               <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
                 {[
-                  { v: "200+", l: "Questions per role" },
-                  { v: "1–10", l: "AI scoring" },
-                  { v: "6", l: "Question banks" },
+                  { v: "Tailored", l: "To your resume + JD" },
+                  { v: "Outlines", l: "For every question" },
+                  { v: "3", l: "Question types" },
                 ].map((s) => (
                   <div key={s.l}>
                     <p className="text-[24px] font-bold tracking-tight text-[#0F172A]">{s.v}</p>
@@ -197,68 +187,43 @@ export default function InterviewPrepPage() {
               </div>
             </div>
 
-            {/* CHAT MOCKUP */}
+            {/* PREVIEW MOCKUP */}
             <div className="lg:col-span-6">
               <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_30px_60px_-20px_rgba(15,23,42,0.18)]">
                 <div className="flex items-center gap-1.5 border-b border-[#E2E8F0] bg-[#FAFBFC] px-4 py-2.5">
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">Mock · Senior PM @ Linear</span>
-                  <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" /> live
-                  </span>
+                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">Senior PM · question 3 of 10</span>
                 </div>
 
                 <div className="space-y-3 p-6">
                   <div className="flex items-start gap-2.5">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0F172A] text-[10px] font-semibold text-white">AI</span>
-                    <div className="max-w-[80%] rounded-xl rounded-tl-sm bg-[#FAFBFC] px-4 py-3 ring-1 ring-[#E2E8F0]">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Behavioral · Q3</p>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0F172A] text-[10px] font-semibold text-white">Q3</span>
+                    <div className="max-w-[88%] rounded-xl rounded-tl-sm bg-[#FAFBFC] px-4 py-3 ring-1 ring-[#E2E8F0]">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Behavioral</p>
                       <p className="mt-1 text-[13px] leading-[1.55] text-[#0F172A]">
                         Tell me about a cross-functional project that almost shipped late. What did you do?
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start justify-end gap-2.5">
-                    <div className="max-w-[80%] rounded-xl rounded-tr-sm bg-[#059669] px-4 py-3 text-white">
-                      <p className="text-[13px] leading-[1.55]">
-                        Q3 last year, our onboarding rebuild was 2 weeks behind. I split the team into a &lsquo;core path&rsquo; and &lsquo;edge cases&rsquo; track, paused non-critical scope, and we shipped on day-of with 91% activation parity…
-                      </p>
-                    </div>
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#F1F5F9] text-[10px] font-semibold text-[#0F172A]">You</span>
-                  </div>
-
                   <div className="flex items-start gap-2.5">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0F172A] text-[10px] font-semibold text-white">AI</span>
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-semibold text-emerald-700">AI</span>
                     <div className="max-w-[88%] rounded-xl rounded-tl-sm bg-emerald-50 px-4 py-3 ring-1 ring-emerald-200">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700">Feedback · 8.4 / 10</p>
-                      <div className="mt-2 grid grid-cols-4 gap-2 text-[11px]">
-                        {[
-                          { l: "Clarity", v: 9 },
-                          { l: "Relevance", v: 8 },
-                          { l: "Impact", v: 9 },
-                          { l: "STAR", v: 7 },
-                        ].map((m) => (
-                          <div key={m.l} className="text-center">
-                            <p className="text-[18px] font-bold text-[#0F172A]">{m.v}</p>
-                            <p className="text-[#64748B]">{m.l}</p>
-                          </div>
-                        ))}
-                      </div>
-                      <p className="mt-3 text-[12px] leading-[1.55] text-[#0F172A]">
-                        Strong framing. Tighten the <span className="rounded bg-emerald-100 px-1 text-emerald-800">Result</span> — quantify activation parity with a hard baseline, e.g. &ldquo;vs. 87% in the prior quarter&rdquo;.
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700">Model answer outline</p>
+                      <p className="mt-2 text-[12.5px] leading-[1.6] text-[#0F172A]">
+                        Ground it in your onboarding rebuild: name the timeline slip, the call you made to split scope into &lsquo;core path&rsquo; vs. &lsquo;edge cases&rsquo;, and close with the activation-parity number from your resume.
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between border-t border-[#E2E8F0] bg-[#FAFBFC] px-5 py-3">
-                  <button className="inline-flex items-center gap-1.5 rounded-md bg-white px-3 py-1.5 text-[11px] font-semibold text-[#0F172A] ring-1 ring-[#E2E8F0]">
-                    <Mic className="h-3.5 w-3.5 text-[#059669]" /> Voice answer
-                  </button>
-                  <span className="text-[11px] text-[#94A3B8]">Question 3 of 12 · 8.4 avg</span>
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#0F172A]">
+                    <Mic className="h-3.5 w-3.5 text-[#059669]" /> Built from your resume + this JD
+                  </span>
+                  <span className="text-[11px] text-[#94A3B8]">10 questions generated</span>
                 </div>
               </div>
             </div>
@@ -272,14 +237,14 @@ export default function InterviewPrepPage() {
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
               <p className="lc-overline text-[#059669]">See it in action</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Practice with instant AI feedback</h2>
+              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Questions built from your resume and the JD</h2>
             </div>
           </RevealOnView>
           <ProductScreenshot
             className="mt-12"
             src="/images/product/interview-prep.svg"
-            alt="The LaunchCV AI interview prep scoring a STAR-method answer to a behavioral question across clarity, relevance, impact, and structure."
-            caption="Answer role-specific questions and get scored on clarity, relevance, impact, and STAR structure."
+            alt="The LaunchCV AI interview prep generating role-specific questions with model answer outlines from a resume and job description."
+            caption="Role-specific questions, each with a model answer outline to prepare against."
           />
         </div>
       </section>
@@ -289,12 +254,12 @@ export default function InterviewPrepPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#059669]">Question banks</p>
+              <p className="lc-overline text-[#059669]">Question types</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Six banks, every kind of question
+                Every kind of question you&apos;re likely to face
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                AI picks the right mix automatically. Drill the bank that worries you, or run a full mock from screener to panel.
+                AI mixes question types automatically, drawing on your resume and the target job description.
               </p>
             </div>
           </RevealOnView>
@@ -315,45 +280,6 @@ export default function InterviewPrepPage() {
         </div>
       </section>
 
-      {/* SCORING */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#059669]">Inside the score</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Four dimensions, one honest number
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Every answer is graded across the four levers recruiters evaluate. You get the breakdown, the why, and a model answer to calibrate against.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { k: "Clarity", d: "How easily a tired recruiter can follow your story at 4 pm.", i: Brain, v: 9 },
-              { k: "Relevance", d: "How tightly the example maps to the asked question.", i: Target, v: 8 },
-              { k: "Impact", d: "Whether the outcome is quantified, baselined, and yours.", i: TrendingUp, v: 9 },
-              { k: "STAR", d: "Situation, Task, Action, Result — all four explicit.", i: CheckCircle2, v: 7 },
-            ].map((m) => (
-              <RevealOnView key={m.k}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                    <m.i className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{m.k}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{m.d}</p>
-                  <p className="mt-4 text-[28px] font-bold leading-none tracking-tight text-emerald-700">
-                    {m.v}<span className="text-[14px] text-[#94A3B8]">/10</span>
-                  </p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* BENEFITS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1200px] px-6">
@@ -361,7 +287,7 @@ export default function InterviewPrepPage() {
             <div className="max-w-[680px]">
               <p className="lc-overline text-[#059669]">Why it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Built like a coach, drills like a recruiter
+                Grounded in your resume, built for the exact role
               </h2>
             </div>
           </RevealOnView>
@@ -387,21 +313,19 @@ export default function InterviewPrepPage() {
             <div className="max-w-[680px]">
               <p className="lc-overline text-[#059669]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Five steps from cold to interview-ready
+                Three steps from cold to interview-ready
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                AI interview preparation that reads your resume and the job description, then drills the exact job interview questions you are likely to face.
+                AI interview preparation that reads your resume and the job description, then generates the exact job interview questions you are likely to face.
               </p>
             </div>
           </RevealOnView>
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { n: "01", t: "Add your resume and the JD", d: "AI reads both and builds a question set for the exact role, seniority, and company." },
-              { n: "02", t: "Pick a bank or a full mock", d: "Drill behavioral, technical, or situational questions, or run a screener-to-panel mock interview online." },
-              { n: "03", t: "Answer by voice or text", d: "Respond the way you would in the room — speak your answer or type it." },
-              { n: "04", t: "Get scored feedback", d: "Every answer is rated 1–10 for Clarity, Relevance, Impact, and STAR structure, with the reason why." },
-              { n: "05", t: "Compare and improve", d: "Calibrate against a model answer, then watch your score trend climb across sessions." },
+              { n: "01", t: "Add your resume and the JD", d: "AI reads both and builds a question set for the exact role and seniority." },
+              { n: "02", t: "Review your questions", d: "Behavioral, technical, and situational questions, each with a model answer outline." },
+              { n: "03", t: "Prepare your own version", d: "Use the outline as a starting point, then rehearse it in your own words." },
             ].map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
@@ -424,10 +348,10 @@ export default function InterviewPrepPage() {
             <div className="max-w-[680px]">
               <p className="lc-overline text-[#059669]">Why practice here</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Winging it vs. AI interview coaching
+                Winging it vs. preparing with a plan
               </h2>
               <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Reading a list of questions is not practice. Interview practice AI gives you reps, scores, and a coach that never gets tired of your answers.
+                Reading a generic list of questions is not preparation. Interview Prep starts you from questions and answer outlines built for this exact role.
               </p>
             </div>
           </RevealOnView>
@@ -443,12 +367,11 @@ export default function InterviewPrepPage() {
               </thead>
               <tbody>
                 {[
-                  { k: "Questions", a: "200+ role-specific, from your resume and JD", b: "Generic lists off the internet" },
-                  { k: "Feedback", a: "Scored 1–10 with the reason why", b: "A friend saying it sounds fine" },
-                  { k: "Structure", a: "STAR-method coaching on every answer", b: "Rambling with no framework" },
-                  { k: "Realism", a: "Recruiter, hiring manager, and panel rounds", b: "One rehearsal in your head" },
-                  { k: "Format", a: "Voice or text, mock interview online", b: "No real practice reps" },
-                  { k: "Progress", a: "A score trend across sessions", b: "No way to measure improvement" },
+                  { k: "Questions", a: "Role-specific, from your resume and JD", b: "Generic lists off the internet" },
+                  { k: "Answers", a: "A model outline built from your real background", b: "Making it up on the spot" },
+                  { k: "Structure", a: "A clear starting point for every answer", b: "Rambling with no framework" },
+                  { k: "Coverage", a: "Behavioral, technical, and situational questions", b: "Whatever you happen to think of" },
+                  { k: "Bundled output", a: "Cover letter + elevator pitch from the same JD", b: "Starting from scratch each time" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
@@ -473,17 +396,17 @@ export default function InterviewPrepPage() {
           <RevealOnView>
             <p className="lc-overline text-[#059669]">A real use scenario</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-              How Leah fixed the answers that kept costing her offers
+              How Leah walked in with a plan instead of nerves
             </h2>
             <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
               <p>
-                Leah kept reaching final rounds and losing them. She knew her work was strong, but her stories wandered and she never quite landed the result. She could not tell what was going wrong.
+                Leah kept reaching final rounds and losing them. She knew her work was strong, but her stories wandered in the room and she never quite landed the result. She could not tell what was going wrong until she saw herself answer cold.
               </p>
               <p>
-                She ran a mock for her target role and answered by voice, exactly as she would in the room. The AI scored her first behavioral answer an <span className="font-medium text-[#0F172A]">8.4 out of 10</span> — strong framing, weak Result — and told her precisely why: she had described the action but never quantified the outcome against a baseline.
+                She generated questions for her target role from her resume and the job description. The first behavioral question asked about a project that almost shipped late — and the model answer outline pointed straight at her onboarding rebuild, prompting her to lead with the timeline slip and close with the activation-parity number already sitting in her resume.
               </p>
               <p>
-                Over a week of sessions she drilled the banks that worried her, compared each answer to the model response, and watched her STAR scores climb. By her next interview the results came out crisp and numbered. The reps, not luck, were the difference.
+                She rehearsed each outline in her own words before the interview instead of freestyling in the room. By the final round, her stories came out structured and specific — the plan, not luck, made the difference.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -498,24 +421,16 @@ export default function InterviewPrepPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-5 lg:grid-cols-2">
-            {testimonials.map((t) => (
-              <RevealOnView key={t.n}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]" dangerouslySetInnerHTML={{ __html: `&ldquo;${t.q}&rdquo;` }} />
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.n}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.r}</p>
-                  </figcaption>
-                </figure>
+            {whyItWorks.map((w) => (
+              <RevealOnView key={w.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>
@@ -554,16 +469,16 @@ export default function InterviewPrepPage() {
       <section className="py-20">
         <div className="mx-auto max-w-[900px] px-6 text-center">
           <h2 className="lc-section-headline text-[#0F172A]">
-            Practice until your worst day still wins
+            Prepare with a plan, not just nerves
           </h2>
           <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            200+ role-specific questions. AI-scored answers. Model responses on tap.
+            Role-specific questions. Model answer outlines built from your resume.
           </p>
           <CtaLink cta="get_started" location="feature_interview_prep"
             href="/register"
             className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#059669] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#047857]"
           >
-            Drill my first interview
+            Prep my first interview
             <ArrowRight className="h-4 w-4" />
           </CtaLink>
         </div>
@@ -587,7 +502,7 @@ export default function InterviewPrepPage() {
           {
             href: "/blog/how-to-prepare-for-a-job-interview-with-ai",
             title: "How to prepare for an interview with AI",
-            desc: "Generate role-specific questions and score your answers before the call.",
+            desc: "Generate role-specific questions and model answers before the call.",
           },
           {
             href: "/blog/how-to-tailor-your-resume-for-every-job",

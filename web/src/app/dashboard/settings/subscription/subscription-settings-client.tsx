@@ -111,7 +111,7 @@ export function SubscriptionSettingsClient() {
         <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 shadow-sm">
           <p className="text-[14px] font-bold text-amber-950">No active plan</p>
           <p className="mt-1 text-[13px] leading-relaxed text-amber-900/90">
-            AI features stay locked until checkout completes. Choose Starter, Professional, Elite, or Lifetime below.
+            AI features stay locked until checkout completes. Choose Starter, Professional, or Lifetime below.
           </p>
         </div>
       ) : null}

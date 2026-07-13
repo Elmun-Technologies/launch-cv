@@ -42,7 +42,7 @@ const STEPS: Step[] = [
   {
     id: "activate_plan",
     title: "Activate your plan",
-    description: "Choose Starter, Professional, Elite, or Lifetime to unlock AI features.",
+    description: "Choose Starter, Professional, or Lifetime to unlock AI features.",
     cta: "Choose a plan",
     href: "/dashboard/settings/subscription",
     icon: CreditCard,

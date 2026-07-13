@@ -174,7 +174,7 @@ export function ProductShowcase() {
             </span>
             <div>
               <p className="text-[10px] font-medium uppercase tracking-wider text-[#64748B]">Rewritten by AI</p>
-              <p className="text-[12px] font-bold text-white">42 → 91% in 4s</p>
+              <p className="text-[12px] font-bold text-white">Match 42 → 91%</p>
             </div>
           </motion.div>
         </motion.div>

@@ -16,7 +16,6 @@ import {
   Target,
   ArrowRight,
   Check,
-  Star,
   Mail,
   FileText,
   BarChart3,
@@ -25,9 +24,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "JD Alignment: Hit 90%+ Job Match in 60 Seconds",
+  title: "JD Alignment: Match Your Resume to Any Job in Minutes",
   description:
-    "JD alignment scores your resume against any job description, then fills keyword gaps and rewrites bullets to lift match from 40% to 90%+. Start free →",
+    "JD alignment scores your resume against any job description, then fills keyword gaps and rewrites bullets to close the match. Start free →",
   pathname: "/features/jd-alignment",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -52,7 +51,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "What is a resume-to-job-description match score?",
-    a: "It is a percentage that estimates how closely your resume matches a specific job posting, based on the skills, keywords, and requirements the role asks for. LaunchCV updates the score live as you accept AI rewrites, so you can lift a typical resume from around 40% to 90% or higher before you apply.",
+    a: "It is a percentage that estimates how closely your resume matches a specific job posting, based on the skills, keywords, and requirements the role asks for. LaunchCV updates the score live as you accept AI rewrites, so you can watch it climb as you close each gap before you apply.",
   },
   {
     q: "What is keyword gap analysis?",
@@ -111,10 +110,10 @@ const ld = {
 };
 
 const keyFacts = [
-  "Typical match-score lift: ~40% to 90%+ in about 60 seconds.",
+  "Scores your resume's fit against the job description in about a minute.",
   "Ranked keyword gap analysis maps every JD requirement to your resume.",
   "AI rewrites weave keywords into your real experience — no fabrication or stuffing.",
-  "Tested on 15 ATS engines, including Workday, Greenhouse, and Lever.",
+  "Formats for how ATS platforms like Workday, Greenhouse, and Lever parse resumes.",
 ];
 
 const missingKeywords = ["Agile/Scrum", "Roadmapping", "OKRs", "A/B testing", "Cross-functional", "SQL"];
@@ -141,8 +140,8 @@ const benefits = [
     d: "Save scores across applications and compare which roles you fit best.",
   },
   {
-    t: "Tested on 15 ATS engines",
-    d: "Workday, Greenhouse, Lever, iCIMS, Taleo, BambooHR, JazzHR, SmartRecruiters, and more.",
+    t: "Built for real ATS platforms",
+    d: "Formatting is modeled on how systems like Workday, Greenhouse, Lever, and iCIMS actually parse resumes.",
   },
 ];
 
@@ -155,16 +154,15 @@ const steps = [
   { n: "06", t: "Track across roles", d: "Save match scores per application and compare side by side." },
 ];
 
-const testimonials = [
+// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
+const whyItWorks = [
   {
-    q: "I was applying to the same PM roles for months with no callbacks. LaunchCV showed me I was missing fourteen critical keywords. Five interviews in ten days after I fixed it.",
-    n: "Rachel M.",
-    r: "Product Manager at Linear",
+    t: "See the gap, not just the score",
+    d: "A ranked list of exactly which requirements your resume is missing — not just a number, but what to do about it.",
   },
   {
-    q: "The JD alignment alone is worth the subscription. It feels like having a recruiter whisper exactly what to change before you submit.",
-    n: "Tom H.",
-    r: "Software Engineer at Datadog",
+    t: "Rewrites, never invents",
+    d: "AI weaves missing keywords into experience you actually have. It won't fabricate a skill, a tool, or a project you didn't do.",
   },
 ];
 
@@ -197,12 +195,12 @@ export default function JDAlignmentPage() {
               </h1>
 
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Paste a job description. LaunchCV scores your fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+.
+                Paste a job description. LaunchCV scores your fit, flags every missing keyword, and rewrites your bullets to close the gaps.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="JD Alignment reads any job description, scores your resume's fit, flags every missing keyword, and rewrites your bullets to lift the match — typically from around 40% to 90%+ in about 60 seconds. It weaves keywords into your real experience without fabrication or stuffing, and is tested on 15 ATS engines."
+                lead="JD Alignment reads any job description, scores your resume's fit, flags every missing keyword, and rewrites your bullets to close the gaps — in about a minute. It weaves keywords into your real experience without fabrication or stuffing, and formats for how ATS platforms parse resumes."
                 facts={keyFacts}
               />
 
@@ -223,9 +221,9 @@ export default function JDAlignmentPage() {
               </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#64748B]">
-                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> 15 ATS engines</span>
-                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> 12 industries</span>
                 <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> Any JD format</span>
+                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> No fabricated keywords</span>
+                <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-[#2563EB]" /> Free to try</span>
               </div>
             </div>
 
@@ -373,7 +371,7 @@ export default function JDAlignmentPage() {
             <div className="max-w-[680px]">
               <p className="lc-overline text-[#2563EB]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                From paste to a 90%+ match in under a minute
+                From paste to a tailored match in under a minute
               </h2>
             </div>
           </RevealOnView>
@@ -419,8 +417,8 @@ export default function JDAlignmentPage() {
               or a careers page — and the AI runs a <strong>keyword gap analysis</strong>: a
               side-by-side map of what your resume already contains versus what the role asks for,
               ranked by impact. It then rewrites your existing bullets to fold in the missing terms
-              naturally, so your <strong>match score</strong> climbs from a typical 40% toward 90%
-              or higher. The score updates live as you accept each change, and nothing is fabricated
+              naturally, so your <strong>match score</strong> climbs as each gap closes. The score
+              updates live as you accept each change, and nothing is fabricated
               — anything the AI cannot support with your real background is flagged, not invented.
             </p>
 
@@ -443,7 +441,7 @@ export default function JDAlignmentPage() {
               A high JD match is only half the job — the resume still has to parse cleanly. After you
               align, run it through the{" "}
               <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-                ATS score checker to test your resume against 15 ATS engines
+                ATS score checker to see how your resume reads to ATS software
               </Link>{" "}
               and catch any formatting issues. For the underlying method, see our guides on{" "}
               <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
@@ -489,7 +487,7 @@ export default function JDAlignmentPage() {
                   { k: "Keyword gap analysis", a: "Ranked list of exactly what is missing", b: "You miss what you cannot see" },
                   { k: "Bullet rewrites", a: "Reworded to match — no fabrication", b: "Rewritten manually for each role" },
                   { k: "Match score", a: "Live score you can lift up to 95%", b: "No feedback before you submit" },
-                  { k: "ATS optimization", a: "Tuned for 15+ ATS platforms", b: "Formatting risk on every upload" },
+                  { k: "ATS optimization", a: "Tuned for common ATS parsers", b: "Formatting risk on every upload" },
                   { k: "Time per job", a: "Seconds to match and export", b: "30–60 minutes per application" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
@@ -568,32 +566,24 @@ export default function JDAlignmentPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Customer stories</p>
+              <p className="lc-overline text-[#2563EB]">Why it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                People who got the interview back
+                Built to close the gap, not just measure it
               </h2>
             </div>
           </RevealOnView>
           <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            {testimonials.map((t) => (
-              <RevealOnView key={t.n}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]">&ldquo;{t.q}&rdquo;</blockquote>
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.n}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.r}</p>
-                  </figcaption>
-                </figure>
+            {whyItWorks.map((w) => (
+              <RevealOnView key={w.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>
@@ -608,7 +598,7 @@ export default function JDAlignmentPage() {
             {[
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "Plain English in, polished bullets out.", icon: FileText },
               { href: "/features/ats-score", t: "ATS Score Checker", d: "Find every parser-breaking format issue.", icon: BarChart3 },
-              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "Same JD, tailored letter in 60 seconds.", icon: Mail },
+              { href: "/features/cover-letter", t: "Cover Letter Generator", d: "Same JD, tailored letter in about a minute.", icon: Mail },
             ].map((r) => (
               <Link
                 key={r.href}
