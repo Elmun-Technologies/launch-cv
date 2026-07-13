@@ -24,32 +24,32 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   {
     title: "AI Resume Builder",
     path: "/features/resume-builder",
-    summary: "Build an ATS-friendly resume in under five minutes with 12 industry templates, AI-written bullet points, a live preview, and PDF or DOCX export.",
+    summary: "Build an ATS-friendly resume in minutes with 4 templates, AI-written bullet points, a live preview, and PDF or DOCX export.",
   },
   {
     title: "JD Alignment Match",
     path: "/features/jd-alignment",
-    summary: "Paste any job description and LaunchCV maps every requirement to your resume, fills keyword gaps, and rewrites bullets to raise your match score from ~40% to 90%+ in about 60 seconds.",
+    summary: "Paste any job description and LaunchCV maps every requirement to your resume, fills keyword gaps, and rewrites bullets to close the match — in about a minute.",
   },
   {
     title: "ATS Score Checker",
     path: "/features/ats-score",
-    summary: "Upload a resume to get a 0–100 ATS score in about 8 seconds, tested against 15 real ATS engines with a prioritized fix list; the average user gains +43 points.",
+    summary: "Upload a resume to get a 0–100 ATS score in seconds, built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes, with a prioritized fix list.",
   },
   {
     title: "Cover Letter Generator",
     path: "/features/cover-letter",
-    summary: "Generate a tailored, ATS-safe cover letter from your resume and a job description in under a minute, with 4 tone modes and 14 languages.",
+    summary: "Generate a tailored, ATS-safe cover letter from your resume and a job description in about a minute, with a Formal or Neutral tone.",
   },
   {
     title: "Interview Preparation",
     path: "/features/interview-prep",
-    summary: "Generate role-specific practice questions from your resume and target job, then get AI-scored STAR feedback and benchmark answers before the interview.",
+    summary: "Generate role-specific interview questions from your resume and target job, each with a model answer outline built from your real background.",
   },
   {
     title: "Voice Input",
     path: "/features/voice-input",
-    summary: "Speak your experience instead of typing it; the voice-to-text resume builder transcribes your words and turns them into quantified, ATS-ready bullets in 12 languages.",
+    summary: "Speak your experience instead of typing it; the voice-to-text resume builder transcribes your words and turns them into quantified, ATS-ready bullets.",
   },
 ];
 
@@ -153,18 +153,19 @@ cover letter generation, interview preparation, and voice input.
 
 ## Products & Features
 
-- **AI Resume Builder**: Create ATS-optimized resumes from 12+ industry templates in under 5 minutes.
-  AI writes professional bullet points from plain-language input.
+- **AI Resume Builder**: Create ATS-optimized resumes from 4 templates (Classic, Modern, Minimal,
+  Executive) in minutes. AI writes professional bullet points from plain-language input.
 - **JD Alignment Match**: Paste any job description — AI maps every requirement to your resume,
-  highlights gaps, and rewrites bullets to score up to 95% match.
+  highlights gaps, and rewrites bullets to close the match.
 - **ATS Score Checker**: Instant ATS compatibility score (0–100) with detailed formatting,
-  keyword, and structure checks across 15+ major ATS platforms.
-- **Cover Letter Generator**: AI-personalized cover letters in 60 seconds using your resume
-  and the target job description. Supports 4 tone modes and 14 languages.
-- **Interview Preparation**: 200+ role-specific practice questions generated from your resume
-  and job description. AI scores every answer and gives STAR-method feedback.
+  keyword, and structure checks, built for how platforms like Workday, Greenhouse, and Lever
+  parse resumes.
+- **Cover Letter Generator**: AI-personalized cover letters in about a minute using your resume
+  and the target job description. Supports a Formal or Neutral tone.
+- **Interview Preparation**: Role-specific practice questions generated from your resume
+  and job description, each with a model answer outline built from your real background.
 - **Voice Input**: Speak naturally about your work experience. AI transcribes and transforms
-  speech into polished, quantified resume bullet points.
+  speech into polished, quantified resume bullet points. English only.
 
 ## Pricing
 
@@ -177,20 +178,18 @@ ${billingNote}
 
 ## Key Facts for AI Citations
 
-- Average ATS score improvement: +43 points after using the ATS checker
-- Average resume build time: under 5 minutes
-- ATS pass rate: 95% across major platforms
-- 50,000+ resumes created
-- 4.9/5 rating from 2,400+ reviews
-- Supports 12+ industry verticals: tech, finance, healthcare, marketing, design, management
+- Free ATS score check available with no account required
+- 4 resume templates included on paid plans
+- Every AI tool included on every paid plan; only the monthly AI usage ceiling differs
+- Supports multiple industry verticals: tech, finance, healthcare, marketing, design, management
 
 ## Technology
 
 - Built with Next.js 16 (React, TypeScript)
-- AI powered by OpenAI GPT-4 models
-- ATS simulation covers: Workday, Greenhouse, Lever, iCIMS, and 11 others
-- GDPR and CCPA compliant
+- ATS formatting is modeled on how platforms like Workday, Greenhouse, Lever, and iCIMS parse resumes
+- Voice input is English only
 - Voice audio never stored after transcription
+- User data is encrypted in transit and at rest and is never sold
 
 ## Company
 

@@ -24,50 +24,50 @@ const features = [
   {
     icon: Target,
     title: "JD Alignment",
-    description: "Paste a job description. Watch your match score climb from around 40% to 90%+ in under a minute.",
+    description: "Paste a job description. AI maps every requirement and rewrites your bullets to close the gaps.",
     href: "/features/jd-alignment",
     iconBg: "bg-blue-50 text-blue-700",
-    stats: [{ k: "+49 pts", v: "Avg score jump" }, { k: "8 sec", v: "Time to analyze" }],
+    stats: [{ k: "Ranked", v: "Keyword gaps" }, { k: "Minutes", v: "Per alignment" }],
   },
   {
     icon: FileText,
     title: "AI Resume Builder",
-    description: "Plain English in. ATS-tested, quantified bullets out. 12 industry templates, five minutes from blank to PDF.",
+    description: "Plain English in. ATS-tested, quantified bullets out. 4 templates, minutes from blank to PDF.",
     href: "/features/resume-builder",
     iconBg: "bg-violet-50 text-violet-700",
-    stats: [{ k: "12", v: "Templates" }, { k: "5 min", v: "Avg build" }],
+    stats: [{ k: "4", v: "Templates" }, { k: "Minutes", v: "To first draft" }],
   },
   {
     icon: BarChart3,
     title: "ATS Score Checker",
-    description: "Every parser-breaking format issue, named and ranked. The average user gains 43 points on the first pass.",
+    description: "Every parser-breaking format issue, named and ranked, with a plain-English fix list.",
     href: "/features/ats-score",
     iconBg: "bg-orange-50 text-orange-700",
-    stats: [{ k: "15", v: "ATS engines" }, { k: "+43", v: "Avg gain" }],
+    stats: [{ k: "0–100", v: "ATS score scale" }, { k: "Free", v: "No signup" }],
   },
   {
     icon: Mail,
     title: "Cover Letter Generator",
-    description: "Personalized to the company, the role, and the hiring manager. Four tones, 14 languages, 60 seconds.",
+    description: "Personalized to the company, the role, and the hiring manager. Multiple tones, under a minute.",
     href: "/features/cover-letter",
     iconBg: "bg-teal-50 text-teal-700",
-    stats: [{ k: "60 sec", v: "Per letter" }, { k: "14", v: "Languages" }],
+    stats: [{ k: "Minutes", v: "Per letter" }, { k: "3", v: "Tones" }],
   },
   {
     icon: MessageSquare,
     title: "Interview Prep",
-    description: "200+ role-specific questions. AI-scored answers. Model responses on tap. Practice until your worst day still wins.",
+    description: "Role-specific questions. AI-scored answers. Model responses on tap. Practice until your worst day still wins.",
     href: "/features/interview-prep",
     iconBg: "bg-emerald-50 text-emerald-700",
-    stats: [{ k: "200+", v: "Questions" }, { k: "1–10", v: "AI scoring" }],
+    stats: [{ k: "AI-scored", v: "Answers" }, { k: "1–10", v: "Scoring scale" }],
   },
   {
     icon: Mic,
     title: "Voice Input",
-    description: "Click the mic, describe your work to a friend, watch it become a polished bullet. 12 languages.",
+    description: "Click the mic, describe your work to a friend, watch it become a polished bullet.",
     href: "/features/voice-input",
     iconBg: "bg-pink-50 text-pink-700",
-    stats: [{ k: "12", v: "Languages" }, { k: "0", v: "Audio stored" }],
+    stats: [{ k: "Speak", v: "It writes" }, { k: "0", v: "Audio stored" }],
   },
 ];
 
@@ -126,9 +126,9 @@ export default function FeaturesPage() {
               lead="LaunchCV combines six AI tools in one subscription: JD alignment, AI resume builder, ATS score checker, cover letter generator, interview prep, and voice input. Each tool's output feeds the next — the resume feeds the ATS scan, the JD match seeds the cover letter — so there's no copy-pasting between tabs."
               facts={[
                 "Six tools, one paid plan — every tool included on every tier.",
-                "JD alignment lifts match scores from ~40% to 90%+ in about a minute.",
-                "ATS checker tests against 15 engines for an average +43-point gain.",
-                "Rated 4.9/5 by 2,400+ job seekers.",
+                "JD alignment maps every requirement and rewrites your bullets to close the gaps.",
+                "ATS checker scores your resume 0–100 with a prioritized fix list.",
+                "Free ATS score check — no account needed to start.",
               ]}
             />
 

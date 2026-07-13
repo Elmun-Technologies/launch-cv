@@ -13,7 +13,7 @@ import { absoluteUrl } from "@/lib/site";
 import { ProductScreenshot } from "@/components/product-screenshot";
 
 export const metadata = buildMarketingMetadata({
-  title: "Software Engineer Resume Writer: AI, 5-Min Build",
+  title: "Software Engineer Resume Writer: AI, Built in Minutes",
   description:
     "The AI resume writer for software engineers: rewrites your bullets to quantify latency, throughput, and scope — the signals recruiters scan. Try it free →",
   pathname: "/use-cases/software-engineers",
@@ -86,17 +86,17 @@ export default function SoftwareEngineersPage() {
                 A resume that reads like an engineer wrote it
               </h1>
               <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Most engineering resumes read like a ticket queue. LaunchCV rewrites them with the language hiring managers actually scan for — latency, throughput, scope, ownership, baselines — and keeps formatting ATS-clean for Workday, Greenhouse, Lever, and 12 more.
+                Most engineering resumes read like a ticket queue. LaunchCV rewrites them with the language hiring managers actually scan for — latency, throughput, scope, ownership, baselines — and keeps formatting ATS-clean for how platforms like Workday, Greenhouse, and Lever parse resumes.
               </p>
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="LaunchCV builds ATS-clean software engineer resumes that quantify latency, throughput, scope, and ownership — the signals hiring managers scan for. It rewrites ticket-style bullets into measurable impact, draws on a 200+ engineering keyword library, and keeps formatting parseable for Workday, Greenhouse, Lever, and 12 more ATS engines."
+                lead="LaunchCV builds ATS-clean software engineer resumes that quantify latency, throughput, scope, and ownership — the signals hiring managers scan for. It rewrites ticket-style bullets into measurable impact, draws on a 200+ engineering keyword library, and keeps formatting parseable for how ATS platforms like Workday, Greenhouse, and Lever parse resumes."
                 facts={[
                   "Rewrites vague bullets into quantified impact (latency, throughput, scope, MTTR).",
                   "200+ engineering keywords pre-loaded; AI picks the right subset per job.",
                   "Engineering-tested templates — no tables, graphics, or sidebars that break ATS.",
-                  "Tested against 15 ATS engines, including Workday, Greenhouse, and Lever.",
+                  "Built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes.",
                 ]}
               />
 
@@ -159,7 +159,7 @@ export default function SoftwareEngineersPage() {
               </li>
               <li className="flex items-start gap-2.5">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
-                <span><span className="font-medium text-[#0F172A]">Formatting is parseable</span> — single-column layouts tested across 15+ ATS platforms.</span>
+                <span><span className="font-medium text-[#0F172A]">Formatting is parseable</span> — single-column layouts built for how major ATS platforms parse.</span>
               </li>
               <li className="flex items-start gap-2.5">
                 <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
@@ -302,7 +302,7 @@ export default function SoftwareEngineersPage() {
               { n: "01", t: "Import or speak your experience", d: "Paste your existing resume or describe each role in plain language — voice input works too." },
               { n: "02", t: "Load a target job description", d: "JD Alignment maps the required stack and seniority signals to what you already have." },
               { n: "03", t: "Let AI quantify the work", d: "Bullets are rewritten with latency, throughput, scope, and ownership — the signals hiring managers scan for." },
-              { n: "04", t: "Check the ATS score", d: "Score your engineering resume 0–100 across 15+ ATS platforms; templates avoid tables and graphics that break parsing." },
+              { n: "04", t: "Check the ATS score", d: "Score your engineering resume 0–100 with our ATS check; templates avoid tables and graphics that break parsing." },
               { n: "05", t: "Export and drill", d: "Download PDF or DOCX, then run interview prep on the exact same role." },
             ].map((s) => (
               <RevealOnView key={s.n}>
@@ -346,11 +346,11 @@ export default function SoftwareEngineersPage() {
               <tbody>
                 {[
                   { k: "Impact metrics", a: "Latency, throughput, and scope quantified", b: "“Responsible for” duty lines" },
-                  { k: "ATS formatting", a: "Single-column, no tables — tested on 15+ platforms", b: "Sidebars that scramble parsing" },
+                  { k: "ATS formatting", a: "Single-column, no tables — built for how ATS parses", b: "Sidebars that scramble parsing" },
                   { k: "Keyword match", a: "Stack aligned to each posting", b: "One static skills list for every job" },
                   { k: "Projects & OSS", a: "Dedicated, parseable Projects section", b: "Buried or left off entirely" },
                   { k: "Seniority signals", a: "Team size, on-call, and RFC ownership surfaced", b: "A flat list of tasks" },
-                  { k: "Proof", a: "+43 average ATS gain · 95% pass rate", b: "No feedback loop" },
+                  { k: "Proof", a: "Free ATS score — no signup", b: "No feedback loop" },
                 ].map((r) => (
                   <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
@@ -385,7 +385,7 @@ export default function SoftwareEngineersPage() {
                 He pasted a target job description into JD Alignment and let the tech resume AI rewrite. &ldquo;Fixed slow db queries&rdquo; became <span className="font-medium text-[#0F172A]">&ldquo;Cut p95 read latency from 240ms to 48ms on the payments service via index rewrites and connection pooling&rdquo;</span>. His on-call line grew a roster size and an MTTR number. Nothing was invented — the AI just surfaced the scope he had buried.
               </p>
               <p>
-                Then he ran the ATS score checker, swapped his two-column layout for a single-column engineering template, and watched the score clear 90. Same career, finally legible to the parser and the hiring manager — and a first-pass gain in line with the platform&apos;s +43-point average.
+                Then he ran the ATS score checker, swapped his two-column layout for a single-column engineering template, and watched the score clear 90. Same career, finally legible to the parser and the hiring manager.
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -410,10 +410,10 @@ export default function SoftwareEngineersPage() {
 
           <div className="mt-10 space-y-4">
             {[
-              { q: "What makes an engineering resume ATS-friendly?", a: "A single-column layout, standard fonts, and no tables or graphics. Every developer resume template here is tested across 15+ ATS platforms including Workday, Greenhouse, and Lever." },
+              { q: "What makes an engineering resume ATS-friendly?", a: "A single-column layout, standard fonts, and no tables or graphics. Every developer resume template here is built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes." },
               { q: "Will the tech resume AI invent metrics?", a: "No. It quantifies what you actually did — latency, throughput, scope, ownership — from your input. It never fabricates numbers, employers, or roles." },
               { q: "Can I tailor the resume per company?", a: "Yes. JD Alignment re-matches your engineering resume to each posting and fills the keyword gaps for that exact role." },
-              { q: "How fast is it, and does it help?", a: "A first draft takes under 5 minutes, and most people gain +43 ATS points on the first pass — moving toward the 95% pass rate our templates target." },
+              { q: "How fast is it, and does it help?", a: "A first draft takes minutes, and a built-in ATS check shows exactly what to fix before you apply." },
             ].map((f) => (
               <RevealOnView key={f.q}>
                 <div className="rounded-xl border border-[#E2E8F0] bg-white p-6">
@@ -432,11 +432,11 @@ export default function SoftwareEngineersPage() {
           <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Explore the tools</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { href: "/features/resume-builder", t: "AI Resume Builder", d: "12+ ATS-tested templates and quantified bullets." },
+              { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
-              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 score across 15+ ATS platforms." },
+              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
               { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in 60 seconds." },
-              { href: "/features/interview-prep", t: "Interview Prep", d: "200+ role-specific questions, scored." },
+              { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
             ].map((r) => (
               <Link

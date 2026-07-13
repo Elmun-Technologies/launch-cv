@@ -15,7 +15,6 @@ import {
   Mic,
   ArrowRight,
   Check,
-  Star,
   Wand2,
   Shield,
   Globe,
@@ -25,9 +24,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "Voice-to-Text Resume Builder: Speak in 12 Languages",
+  title: "Voice-to-Text Resume Builder: Speak, Don't Type",
   description:
-    "Modern resume builders let you talk, not type. Speak your career and AI turns it into quantified, ATS-ready bullets in 12 languages. Try voice free →",
+    "Modern resume builders let you talk, not type. Speak your career and AI turns it into quantified, ATS-ready bullets. Try voice free →",
   pathname: "/features/voice-input",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -65,31 +64,28 @@ const ld = {
 const keyFacts = [
   "Speak your experience and AI turns it into quantified, ATS-ready bullet points.",
   "Real-time transcription you can edit inline before transforming.",
-  "Works in 12 languages, natively in Chrome, Edge, and Safari — no app to install.",
+  "Runs natively in Chrome, Edge, and Safari — no app to install.",
   "Privacy-first: audio is processed in-memory and discarded after transcription.",
 ];
-
-const langs = ["English", "Español", "Français", "Deutsch", "Português", "Italiano", "Nederlands", "Polski", "日本語", "中文", "한국어", "Türkçe"];
 
 const benefits = [
   { t: "Natural speech to polished bullets", d: "Speak the way you&apos;d describe a job to a friend. AI handles the formal framing." },
   { t: "Real-time transcription", d: "Words appear as you speak. Edit any mistranscription inline before transforming." },
   { t: "Works across every section", d: "Experience, Skills, Projects, Summary, Certifications — mic available everywhere a bullet lives." },
   { t: "No app, no plug-ins", d: "Runs natively in Chrome, Edge, Safari. Permit mic access — nothing to install." },
-  { t: "Privacy-first", d: "Audio is processed in-memory and discarded immediately after transcription. GDPR + CCPA compliant." },
-  { t: "Twelve languages", d: "English, Spanish, French, German, Portuguese, Italian, Polish, Japanese, Mandarin, Korean, and more." },
+  { t: "Privacy-first", d: "Audio is processed in-memory and discarded immediately after transcription. Never sold, never used to train models." },
+  { t: "No typing required", d: "Describe your work out loud and let the AI structure it — no blank page, no formatting to fight." },
 ];
 
-const testimonials = [
+// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
+const whyItWorks = [
   {
-    q: "Voice input is brilliant. I just talked about my job history and it came out polished and professional. I would never have been able to write those bullets myself.",
-    n: "David L.",
-    r: "Operations Manager",
+    t: "Built for the blank-page problem",
+    d: "If starting from nothing is the hard part, talking through your work out loud is often easier than typing it — the AI structures it for you.",
   },
   {
-    q: "I have dyslexia and writing has always been a nightmare. The voice feature changed everything — I just speak and the AI makes it sound great.",
-    n: "Callum R.",
-    r: "Project Manager",
+    t: "Nothing is stored",
+    d: "Audio is transcribed and discarded in-memory — it's never saved as a file or used to train a model.",
   },
 ];
 
@@ -127,7 +123,7 @@ export default function VoiceInputPage() {
 
               <KeyFacts
                 className="mt-8 max-w-[560px]"
-                lead="Voice Input lets you build a resume by speaking. The voice-to-text builder transcribes your words in real time and AI turns them into quantified, ATS-ready bullet points across every resume section. It works in 12 languages with no app to install, and audio is discarded in-memory after transcription."
+                lead="Voice Input lets you build a resume by speaking. The voice-to-text builder transcribes your words in real time and AI turns them into quantified, ATS-ready bullet points across every resume section. No app to install, and audio is discarded in-memory after transcription."
                 facts={keyFacts}
               />
 
@@ -149,8 +145,8 @@ export default function VoiceInputPage() {
 
               <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
                 {[
-                  { v: "12", l: "Languages" },
                   { v: "0", l: "Audio stored" },
+                  { v: "Free", l: "Included on every plan" },
                   { v: "∞", l: "Sections supported" },
                 ].map((s) => (
                   <div key={s.l}>
@@ -238,18 +234,6 @@ export default function VoiceInputPage() {
         </div>
       </section>
 
-      {/* LANGUAGES */}
-      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-10">
-        <p className="text-center text-[12px] font-medium uppercase tracking-wider text-[#94A3B8]">Speak in</p>
-        <div className="mx-auto mt-5 max-w-[1100px] flex flex-wrap items-center justify-center gap-x-8 gap-y-2 px-6">
-          {langs.map((n) => (
-            <span key={n} className="text-[15px] font-medium text-[#64748B]">
-              {n}
-            </span>
-          ))}
-        </div>
-      </section>
-
       {/* WHO IT'S FOR */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[1200px] px-6">
@@ -298,7 +282,7 @@ export default function VoiceInputPage() {
                   {[
                     { i: Shield, t: "Audio is never persisted", d: "Recorded chunks are streamed to transcription, then discarded in-memory. No audio file on our servers." },
                     { i: Shield, t: "Transcription is request-scoped", d: "Each request is processed and dropped. No fine-tuning on your voice, no training corpus contribution." },
-                    { i: Globe, t: "GDPR + CCPA compliant", d: "EU and California residents get full data-export and erasure on demand. DPA is published and signed for every paid plan." },
+                    { i: Globe, t: "Your data, exportable anytime", d: "Export or delete your account data whenever you want. We never sell user data." },
                   ].map((p) => (
                     <li key={p.t} className="flex items-start gap-4">
                       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-pink-50 text-pink-700">
@@ -409,7 +393,7 @@ export default function VoiceInputPage() {
                   { k: "Input", a: "Speak naturally, hands free", b: "Fight a blank page and a blinking cursor" },
                   { k: "Output", a: "Quantified, ATS-ready bullets", b: "Vague duties you rewrite five times" },
                   { k: "Transcription", a: "Real-time and editable inline", b: "None" },
-                  { k: "Languages", a: "Speak in 12 languages", b: "Whatever you can type well" },
+                  { k: "Accessibility", a: "No typing skill or formal phrasing needed", b: "Whatever you can type well" },
                   { k: "Privacy", a: "Audio never stored after transcription", b: "Not applicable" },
                   { k: "Setup", a: "Runs in the browser — no app, no plug-ins", b: "Install something or nothing at all" },
                 ].map((r) => (
@@ -461,24 +445,16 @@ export default function VoiceInputPage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* WHY IT WORKS */}
       <section className="bg-[#FAFBFC] py-20 sm:py-24">
         <div className="mx-auto max-w-[1100px] px-6">
           <div className="grid gap-5 lg:grid-cols-2">
-            {testimonials.map((t) => (
-              <RevealOnView key={t.n}>
-                <figure className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <div className="flex gap-0.5">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-[#F59E0B] text-[#F59E0B]" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-4 text-[15px] leading-[1.7] text-[#0F172A]">&ldquo;{t.q}&rdquo;</blockquote>
-                  <figcaption className="mt-5 border-t border-[#E2E8F0] pt-4">
-                    <p className="text-[14px] font-semibold text-[#0F172A]">{t.n}</p>
-                    <p className="text-[13px] text-[#64748B]">{t.r}</p>
-                  </figcaption>
-                </figure>
+            {whyItWorks.map((w) => (
+              <RevealOnView key={w.t}>
+                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
+                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
+                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
+                </div>
               </RevealOnView>
             ))}
           </div>

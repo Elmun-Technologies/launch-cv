@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion, useInView, animate } from "motion/react";
-import { ArrowRight, Sparkles, Star } from "lucide-react";
+import { ArrowRight, Sparkles, Check } from "lucide-react";
 import { trackCtaClick } from "@/lib/analytics-client";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -119,17 +119,14 @@ export function LandingHero() {
 
             <motion.div
               variants={item}
-              className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[#64748B]"
+              className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-[#64748B]"
             >
-              <div className="inline-flex items-center gap-1.5">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-3.5 w-3.5 fill-[#F59E0B] text-[#F59E0B]" />
-                ))}
-                <span className="ml-1 font-semibold text-[#0F172A]">4.9/5</span>
-                <span>from 2,400+ reviews</span>
-              </div>
-              <span className="hidden h-3 w-px bg-[#E2E8F0] sm:inline-block" />
-              <span>Tested on 15 ATS engines</span>
+              {["Free ATS score — no signup", "PDF & DOCX export", "Cancel anytime"].map((c) => (
+                <span key={c} className="inline-flex items-center gap-1.5">
+                  <Check className="h-3.5 w-3.5 shrink-0 text-[#1A56DB]" />
+                  {c}
+                </span>
+              ))}
             </motion.div>
           </motion.div>
 
@@ -151,7 +148,7 @@ export function LandingHero() {
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">resume_stripe.pdf · ATS-clean</span>
+                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">resume_sample.pdf · ATS-clean</span>
                 </div>
 
                 <div className="p-6">
@@ -167,7 +164,7 @@ export function LandingHero() {
 
                   <div className="mt-5">
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-[#475569]">Experience</p>
-                    <p className="mt-2 text-[13px] font-semibold text-[#0F172A]">Senior Engineer · Stripe</p>
+                    <p className="mt-2 text-[13px] font-semibold text-[#0F172A]">Senior Engineer · Northwind Labs</p>
                     <p className="text-[11px] text-[#94A3B8]">Jun 2022 — Present</p>
                     <ul className="mt-2 space-y-1.5 text-[12px] leading-snug text-[#334155]">
                       {[
