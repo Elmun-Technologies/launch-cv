@@ -84,7 +84,7 @@ export default async function ResumesPage({
                     <tr key={r.id} className="text-[13px] transition hover:bg-[#FAFAFA]">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
                             <FileText className="h-5 w-5 text-[#2563EB]" />
                           </div>
                           <div>
@@ -97,7 +97,7 @@ export default async function ResumesPage({
                       <td className="px-4 py-4 text-gray-500">{dateFmt.format(r.createdAt)}</td>
                       <td className="px-4 py-4 text-gray-500">{dateFmt.format(r.updatedAt)}</td>
                       <td className="px-4 py-4 text-right">
-                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#2563EB]/20 bg-violet-50 px-4 py-1.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#2563EB] hover:text-white">Edit</Link>
+                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#2563EB]/20 bg-blue-50 px-4 py-1.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#2563EB] hover:text-white">Edit</Link>
                       </td>
                     </tr>
                   ))

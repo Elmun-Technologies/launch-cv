@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter } from "next/font/google";
+import { Geist_Mono, Inter, Sora } from "next/font/google";
 import "./globals.css";
 import { CookieBanner } from "@/components/cookie-banner";
 import { ToastProvider } from "@/components/toast";
@@ -21,6 +21,14 @@ const inter = Inter({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+// Sora — geometric display face for the logo wordmark and headings (brand guidelines).
+const sora = Sora({
+  variable: "--font-sora",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  display: "swap",
 });
 
 const siteUrl = getSiteUrl();
@@ -159,7 +167,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistMono.variable} h-full`}>
+    <html lang="en" className={`${inter.variable} ${geistMono.variable} ${sora.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
         <AttributionTracker />

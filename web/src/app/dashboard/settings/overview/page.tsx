@@ -37,14 +37,14 @@ export default async function OverviewPage() {
   ] as const;
 
   const iconColors: Record<string, string> = {
-    violet: "bg-violet-50 text-violet-600",
+    violet: "bg-blue-50 text-blue-600",
     blue: "bg-blue-50 text-blue-600",
     emerald: "bg-emerald-50 text-emerald-600",
     amber: "bg-amber-50 text-amber-600",
   };
 
   const trendColors: Record<string, string> = {
-    violet: "bg-violet-50 text-violet-600",
+    violet: "bg-blue-50 text-blue-600",
     blue: "bg-blue-50 text-blue-600",
     emerald: "bg-emerald-50 text-emerald-600",
     amber: "bg-amber-50 text-amber-600",
@@ -109,7 +109,7 @@ export default async function OverviewPage() {
             <h2 className="text-[15px] font-bold text-gray-900">Account Activity</h2>
             <div className="mt-5 space-y-4">
               <div className="flex items-center gap-4">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <Calendar className="h-5 w-5" />
                 </div>
                 <div>
@@ -146,7 +146,7 @@ export default async function OverviewPage() {
                     <span
                       className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[12px] font-semibold ${
                         planStatus === "Pro"
-                          ? "bg-violet-50 text-violet-600"
+                          ? "bg-blue-50 text-blue-600"
                           : "bg-gray-100 text-gray-600"
                       }`}
                     >
@@ -174,7 +174,7 @@ export default async function OverviewPage() {
                     of {storageTotal} GB used
                   </p>
                 </div>
-                <span className="text-[12px] font-semibold text-violet-600">
+                <span className="text-[12px] font-semibold text-blue-600">
                   {storagePercent}%
                 </span>
               </div>
@@ -199,15 +199,15 @@ export default async function OverviewPage() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="group flex items-center gap-3 rounded-xl border border-gray-100 p-4 transition hover:border-violet-200 hover:bg-violet-50/50"
+                className="group flex items-center gap-3 rounded-xl border border-gray-100 p-4 transition hover:border-blue-200 hover:bg-blue-50/50"
               >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                   <link.icon className="h-5 w-5" />
                 </div>
-                <span className="text-[13px] font-semibold text-gray-700 group-hover:text-violet-600">
+                <span className="text-[13px] font-semibold text-gray-700 group-hover:text-blue-600">
                   {link.label}
                 </span>
-                <ArrowRight className="ml-auto h-4 w-4 text-gray-300 transition group-hover:text-violet-500" />
+                <ArrowRight className="ml-auto h-4 w-4 text-gray-300 transition group-hover:text-blue-500" />
               </Link>
             ))}
           </div>

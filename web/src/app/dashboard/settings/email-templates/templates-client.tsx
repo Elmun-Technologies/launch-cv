@@ -14,7 +14,7 @@ const EMPTY = { name: "", subject: "", body: "", category: "general" };
 function CopyBtn({ text }: { text: string }) {
   const [ok, setOk] = useState(false);
   return (
-    <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium text-gray-500 transition hover:bg-violet-50 hover:text-[#2563EB]" onClick={() => { void navigator.clipboard.writeText(text); setOk(true); setTimeout(() => setOk(false), 1500); }}>
+    <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-medium text-gray-500 transition hover:bg-blue-50 hover:text-[#2563EB]" onClick={() => { void navigator.clipboard.writeText(text); setOk(true); setTimeout(() => setOk(false), 1500); }}>
       {ok ? <Check className="h-3 w-3 text-[#2563EB]" /> : <Copy className="h-3 w-3" />}
       {ok ? "Copied" : "Copy"}
     </button>
@@ -87,7 +87,7 @@ export function TemplatesClient({ initial }: { initial: TemplateRow[] }) {
               <button type="button" disabled={saving} onClick={() => void save()} className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null} Save
               </button>
-              <button type="button" onClick={() => { setShowForm(false); setForm(EMPTY); }} className="rounded-xl border border-[#2563EB]/20 px-4 py-2 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50">Cancel</button>
+              <button type="button" onClick={() => { setShowForm(false); setForm(EMPTY); }} className="rounded-xl border border-[#2563EB]/20 px-4 py-2 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50">Cancel</button>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@ export function TemplatesClient({ initial }: { initial: TemplateRow[] }) {
 
       {rows.length === 0 ? (
         <div className="soha-empty">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
             <Mail className="h-6 w-6 text-[#2563EB]" />
           </div>
           <h3 className="mt-4 text-[13px] font-semibold text-gray-700">No templates yet</h3>

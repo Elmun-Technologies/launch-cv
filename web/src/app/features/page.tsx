@@ -36,7 +36,7 @@ const features = [
     title: "AI Resume Builder",
     description: "Plain English in. ATS-tested, quantified bullets out. 4 templates, minutes from blank to PDF.",
     href: "/features/resume-builder",
-    iconBg: "bg-violet-50 text-violet-700",
+    iconBg: "bg-blue-50 text-blue-700",
     stats: [{ k: "4", v: "Templates" }, { k: "Minutes", v: "To first draft" }],
   },
   {
@@ -257,7 +257,7 @@ export default function FeaturesPage() {
               <div className="flex min-w-[800px] items-center justify-between gap-4">
                 {[
                   { l: "Voice / paste", t: "Raw input", c: "bg-pink-50 text-pink-700" },
-                  { l: "Resume Builder", t: "AI bullets", c: "bg-violet-50 text-violet-700" },
+                  { l: "Resume Builder", t: "AI bullets", c: "bg-blue-50 text-blue-700" },
                   { l: "ATS Scanner", t: "Score + fixes", c: "bg-orange-50 text-orange-700" },
                   { l: "JD Alignment", t: "Keyword match", c: "bg-blue-50 text-blue-700" },
                   { l: "Cover Letter", t: "Personalized letter", c: "bg-teal-50 text-teal-700" },

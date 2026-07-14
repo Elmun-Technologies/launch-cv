@@ -8,7 +8,7 @@ const toneClass: Record<Tone, string> = {
   green: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200",
   amber: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
   red: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
-  violet: "bg-violet-50 text-violet-700 ring-1 ring-inset ring-violet-200",
+  violet: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200",
   slate: "bg-[#0F172A] text-white",
 };
 
@@ -18,7 +18,7 @@ const dotClass: Record<Tone, string> = {
   green: "bg-emerald-500",
   amber: "bg-amber-500",
   red: "bg-red-500",
-  violet: "bg-violet-500",
+  violet: "bg-blue-500",
   slate: "bg-white",
 };
 

@@ -204,8 +204,8 @@ export default function ResumeBuilderPage() {
                   <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
                   <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
                   <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">LaunchCV editor</span>
-                  <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-semibold text-violet-700 ring-1 ring-violet-200">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />
+                  <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700 ring-1 ring-blue-200">
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-500" />
                     AI writing
                   </span>
                 </div>
@@ -224,18 +224,18 @@ export default function ResumeBuilderPage() {
                   </div>
 
                   <div className="p-5">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-violet-700">AI bullets</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-blue-700">AI bullets</p>
                     <ul className="mt-3 space-y-2.5 text-[13px] leading-[1.55] text-[#0F172A]">
                       <li className="flex gap-1.5">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-600" />
-                        <span>Led 8-engineer team to ship Payments API v2, processing <span className="rounded bg-violet-100 px-1 text-violet-800">$12M / month</span> in 6 months post-launch.</span>
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-blue-600" />
+                        <span>Led 8-engineer team to ship Payments API v2, processing <span className="rounded bg-blue-100 px-1 text-blue-800">$12M / month</span> in 6 months post-launch.</span>
                       </li>
                       <li className="flex gap-1.5">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-600" />
-                        <span>Cut churn from <span className="rounded bg-violet-100 px-1 text-violet-800">9.4% → 7.5%</span> via onboarding redesign and SDK error surfacing.</span>
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-blue-600" />
+                        <span>Cut churn from <span className="rounded bg-blue-100 px-1 text-blue-800">9.4% → 7.5%</span> via onboarding redesign and SDK error surfacing.</span>
                       </li>
                       <li className="flex gap-1.5">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-600" />
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-blue-600" />
                         <span>Owned Q3/Q4 roadmap, partnering with Product and DevRel across 3 timezones.</span>
                       </li>
                     </ul>
@@ -248,7 +248,7 @@ export default function ResumeBuilderPage() {
 
                 <div className="flex items-center justify-between border-t border-[#E2E8F0] bg-[#FAFBFC] px-5 py-3">
                   <div className="flex items-center gap-2">
-                    <Eye className="h-3.5 w-3.5 text-violet-700" />
+                    <Eye className="h-3.5 w-3.5 text-blue-700" />
                     <span className="text-[11px] font-semibold text-[#0F172A]">Live preview · synced</span>
                   </div>
                   <span className="text-[11px] text-[#94A3B8]">Template: Atlas · 2 pages</span>
@@ -359,12 +359,12 @@ export default function ResumeBuilderPage() {
                 &ldquo;managed social media, made content, helped grow followers&rdquo;
               </p>
             </div>
-            <div className="rounded-xl border border-violet-200 bg-violet-50/40 p-7">
-              <span className="inline-flex items-center gap-1 rounded-md bg-violet-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-violet-800">
+            <div className="rounded-xl border border-blue-200 bg-blue-50/40 p-7">
+              <span className="inline-flex items-center gap-1 rounded-md bg-blue-100 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-blue-800">
                 AI rewrite
               </span>
               <p className="mt-4 text-[17px] leading-[1.55] text-[#0F172A]">
-                Managed company social presence across 4 channels, lifting <span className="rounded bg-violet-100 px-1 text-violet-800">follower count by 127%</span> and engagement from <span className="rounded bg-violet-100 px-1 text-violet-800">1.8% to 4.6%</span> over six months.
+                Managed company social presence across 4 channels, lifting <span className="rounded bg-blue-100 px-1 text-blue-800">follower count by 127%</span> and engagement from <span className="rounded bg-blue-100 px-1 text-blue-800">1.8% to 4.6%</span> over six months.
               </p>
             </div>
           </div>
@@ -387,7 +387,7 @@ export default function ResumeBuilderPage() {
             {benefits.map((b) => (
               <RevealOnView key={b.t}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                     <b.i className="h-5 w-5" />
                   </span>
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{b.t}</h3>
@@ -424,7 +424,7 @@ export default function ResumeBuilderPage() {
             ].map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#2563EB]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-50 text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
@@ -548,7 +548,7 @@ export default function ResumeBuilderPage() {
                 href={r.href}
                 className="group flex items-start gap-3 rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
               >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                   <r.icon className="h-4 w-4" />
                 </span>
                 <div>

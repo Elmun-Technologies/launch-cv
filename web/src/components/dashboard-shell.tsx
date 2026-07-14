@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/site-header";
-import { BrandMark } from "@/components/brand-mark";
+import { LogoMark } from "@/components/logo";
 import {
   Home, FileText, Briefcase, Users, Building2, Target,
   Settings, Puzzle, Gift, HelpCircle, Menu, X, Zap, Sparkles,
@@ -30,7 +30,7 @@ const othersMenu = [
 
 function UpgradeCard() {
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-violet-50 to-purple-50 px-4 py-5 text-center">
+    <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-50 px-4 py-5 text-center">
       <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#2563EB] text-white shadow-sm">
         <Zap className="h-5 w-5" />
       </div>
@@ -97,7 +97,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition ${
                   active
-                    ? "bg-[#2563EB] text-white shadow-sm shadow-violet-500/20"
+                    ? "bg-[#2563EB] text-white shadow-sm shadow-blue-500/20"
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
@@ -120,7 +120,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
                 onClick={() => setMobileOpen(false)}
                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition ${
                   active
-                    ? "bg-[#2563EB] text-white shadow-sm shadow-violet-500/20"
+                    ? "bg-[#2563EB] text-white shadow-sm shadow-blue-500/20"
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
@@ -138,7 +138,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
     <div className="flex h-screen overflow-hidden bg-[#FAFAFA]">
       <aside className="hidden w-[220px] shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
         <div className="flex h-[60px] items-center gap-2.5 border-b border-gray-100 px-5">
-          <BrandMark size={32} />
+          <LogoMark size={32} />
           <span className="text-[15px] font-bold tracking-tight">
             <span className="text-[#0F172A]">launch</span>
             <span className="text-[#2563EB]">cv</span>
@@ -176,7 +176,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
             >
               <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
                 <div className="flex items-center gap-2.5">
-                  <BrandMark size={30} />
+                  <LogoMark size={30} />
                   <span className="text-[15px] font-bold">
                     <span className="text-[#0F172A]">launch</span>
                     <span className="text-[#2563EB]">cv</span>
@@ -212,7 +212,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
         </div>
 
         {showUpsell && !hideTopBanner ? (
-          <div className="border-b border-violet-100 bg-gradient-to-r from-violet-50 via-white to-violet-50/30 px-4 py-2.5 sm:px-7">
+          <div className="border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-blue-50/30 px-4 py-2.5 sm:px-7">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <p className="flex items-start gap-2 text-[13px] text-gray-700 sm:items-center">
                 <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB] sm:mt-0" />

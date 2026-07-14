@@ -226,7 +226,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     const Icon = icon;
     return (
       <div className="flex flex-col items-center rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 px-6 py-12 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
+        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
           <Icon className="h-7 w-7 text-[#2563EB]" />
         </div>
         <h3 className="mt-4 text-[16px] font-bold text-gray-900">{title}</h3>
@@ -389,19 +389,19 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             const j = await r.json().catch(() => ({}));
             setEnhancing(false);
             if (r.ok && j.result?.rewrites) setEnhanceResult(j.result.rewrites);
-          }} className="inline-flex items-center gap-1.5 rounded-xl border-2 border-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50 disabled:opacity-50">
+          }} className="inline-flex items-center gap-1.5 rounded-xl border-2 border-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50 disabled:opacity-50">
             {enhancing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
             {enhancing ? "Enhancing..." : "Enhance All with AI"}
           </button>
         </div>
 
         {enhanceResult ? (
-          <div className="mt-2 space-y-2.5 rounded-2xl border border-violet-100 bg-violet-50/30 p-5">
+          <div className="mt-2 space-y-2.5 rounded-2xl border border-blue-100 bg-blue-50/30 p-5">
             <h3 className="flex items-center gap-2 text-[14px] font-bold text-[#2563EB]">
               <Sparkles className="h-4 w-4" /> AI-Enhanced Bullets
             </h3>
             {enhanceResult.map((rw) => (
-              <div key={`${rw.experienceId}-${rw.bulletId}`} className="rounded-xl border border-violet-100 bg-white p-4">
+              <div key={`${rw.experienceId}-${rw.bulletId}`} className="rounded-xl border border-blue-100 bg-white p-4">
                 <p className="text-[12px] text-gray-400 line-through">{rw.original}</p>
                 <p className="mt-1.5 text-[13px] font-medium text-gray-900">{rw.improved}</p>
                 <p className="mt-1 text-[12px] text-[#2563EB]">{rw.change_summary}</p>
@@ -428,7 +428,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         {/* ── Section 1: Education / Universities ── */}
         <div>
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-50"><GraduationCap className="h-4 w-4 text-[#2563EB]" /></div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50"><GraduationCap className="h-4 w-4 text-[#2563EB]" /></div>
             <div><h2 className="text-[16px] font-bold text-gray-900">Education</h2><p className="text-[11px] text-gray-400">Degrees, universities, bootcamps</p></div>
           </div>
           {content.education.length === 0 ? (
@@ -594,12 +594,12 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 type="button"
                 onClick={() => setTemplate(t)}
                 className={`cursor-pointer rounded-xl border-2 p-3.5 text-center text-[12px] font-semibold capitalize transition ${
-                  template === t ? "border-[#2563EB] bg-violet-50 text-[#2563EB] shadow-sm shadow-violet-100" : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
+                  template === t ? "border-[#2563EB] bg-blue-50 text-[#2563EB] shadow-sm shadow-blue-100" : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
                 <div className={`mx-auto mb-2.5 h-14 w-11 rounded-lg border-2 ${
-                  t === "classic" ? "border-[#2563EB] bg-violet-50" :
-                  t === "modern" ? "border-purple-400 bg-purple-50" :
+                  t === "classic" ? "border-[#2563EB] bg-blue-50" :
+                  t === "modern" ? "border-blue-400 bg-blue-50" :
                   t === "minimal" ? "border-gray-300 bg-white" :
                   "border-amber-400 bg-amber-50"
                 }`} />
@@ -654,7 +654,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               <div className="h-px flex-1 bg-gray-200" />
             </div>
 
-            <label className="flex min-h-[140px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 text-center transition hover:border-[#2563EB] hover:bg-violet-50/30">
+            <label className="flex min-h-[140px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 text-center transition hover:border-[#2563EB] hover:bg-blue-50/30">
               <input type="file" className="hidden" accept=".doc,.pdf,.docx" onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (!file) return;
@@ -776,7 +776,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
       <div className="flex min-h-0 flex-1">
         {/* ── Sidebar ── */}
         <aside className="hidden w-[64px] shrink-0 flex-col items-center border-r border-gray-100 bg-white py-4 lg:flex">
-          <Link href="/dashboard" className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563EB] text-[12px] font-bold text-white shadow-sm shadow-violet-200">
+          <Link href="/dashboard" className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563EB] text-[12px] font-bold text-white shadow-sm shadow-blue-200">
             L
           </Link>
 
@@ -790,7 +790,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   title={n.label}
                   className={`group relative flex h-10 w-10 items-center justify-center rounded-xl transition ${
                     isActive
-                      ? "bg-violet-50 text-[#2563EB]"
+                      ? "bg-blue-50 text-[#2563EB]"
                       : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                   }`}
                 >
@@ -813,7 +813,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   title={n.label}
                   className={`group relative flex h-10 w-10 items-center justify-center rounded-xl transition ${
                     isActive
-                      ? "bg-violet-50 text-[#2563EB]"
+                      ? "bg-blue-50 text-[#2563EB]"
                       : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                   }`}
                 >
@@ -869,7 +869,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                       onClick={() => setActiveTab(t.key)}
                       className={`group relative flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-[13px] font-semibold transition ${
                         active
-                          ? "bg-[#2563EB] text-white shadow-sm shadow-violet-200"
+                          ? "bg-[#2563EB] text-white shadow-sm shadow-blue-200"
                           : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                       }`}
                     >

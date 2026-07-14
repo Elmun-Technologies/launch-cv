@@ -60,7 +60,7 @@ const categoryClass: Record<string, string> = {
   "Resume Tips": "bg-blue-50 text-blue-700",
   "Cover Letters": "bg-teal-50 text-teal-700",
   "Interview Prep": "bg-emerald-50 text-emerald-700",
-  "Job Search": "bg-violet-50 text-violet-700",
+  "Job Search": "bg-blue-50 text-blue-700",
 };
 
 export default async function BlogPage() {

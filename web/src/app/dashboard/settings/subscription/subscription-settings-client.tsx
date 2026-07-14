@@ -126,7 +126,7 @@ export function SubscriptionSettingsClient() {
         ) : (
           <span
             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold ${
-              paid ? "bg-violet-100 text-[#5B3FD9]" : "bg-gray-100 text-gray-700"
+              paid ? "bg-blue-100 text-[#5B3FD9]" : "bg-gray-100 text-gray-700"
             }`}
           >
             {paid ? <Crown className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
@@ -185,7 +185,7 @@ export function SubscriptionSettingsClient() {
                   Popular
                 </span>
               ) : null}
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                 <Icon className="h-5 w-5" />
               </div>
               <p className="mt-4 text-[15px] font-bold text-gray-900">{cfg.title}</p>

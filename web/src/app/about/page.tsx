@@ -57,8 +57,8 @@ const values = [
     icon: Users,
     title: "Users shape the product",
     d: "We talk to job seekers weekly. Roadmap priorities are decided by the inbox, not the dashboard.",
-    bg: "bg-violet-50",
-    text: "text-violet-600",
+    bg: "bg-blue-50",
+    text: "text-blue-600",
   },
 ];
 

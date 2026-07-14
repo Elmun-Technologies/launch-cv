@@ -46,8 +46,8 @@ const STEPS: Step[] = [
     cta: "Choose a plan",
     href: "/dashboard/settings/subscription",
     icon: CreditCard,
-    accentBg: "bg-violet-50",
-    accentText: "text-violet-600",
+    accentBg: "bg-blue-50",
+    accentText: "text-blue-600",
   },
   {
     id: "create_resume",
@@ -128,7 +128,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
     <div className="rounded-2xl border border-gray-100 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white shadow-sm shadow-violet-500/20">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white shadow-sm shadow-blue-500/20">
           {allDone ? <Trophy className="h-5 w-5" /> : <Sparkles className="h-5 w-5" />}
         </div>
         <div className="min-w-0 flex-1">
@@ -136,7 +136,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
             <p className="text-[15px] font-bold text-gray-900">
               {allDone ? "You're all set! 🎉" : "Get started with LaunchCV"}
             </p>
-            <span className="rounded-full bg-violet-50 px-2.5 py-0.5 text-[12px] font-bold text-violet-700">
+            <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[12px] font-bold text-blue-700">
               {doneCount}/{totalCount}
             </span>
           </div>
@@ -197,7 +197,7 @@ export function OnboardingChecklist({ completedSteps }: OnboardingChecklistProps
                 type="button"
                 onClick={() => !done && setActiveStep(step.id)}
                 className={`w-full rounded-xl px-3 py-3 text-left transition-colors ${
-                  isActive ? "bg-violet-50/60" : "hover:bg-gray-50/70"
+                  isActive ? "bg-blue-50/60" : "hover:bg-gray-50/70"
                 } ${done ? "cursor-default" : "cursor-pointer"}`}
               >
                 <div className="flex items-start gap-3">

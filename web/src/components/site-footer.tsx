@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BrandMark } from "@/components/brand-mark";
+import { LogoMark } from "@/components/logo";
 
 export function SiteFooter() {
   const support = process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "support@launchcv.local";
@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="border-t border-gray-200 bg-white py-8">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 sm:flex-row sm:justify-between">
         <div className="flex items-center gap-2">
-          <BrandMark size={24} />
+          <LogoMark size={24} />
           <span className="text-sm font-semibold">
             <span className="text-[#0F172A]">launch</span>
             <span className="text-[#2563EB]">cv</span>

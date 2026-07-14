@@ -68,7 +68,7 @@ const features = [
     title: "AI Resume Builder",
     desc: "Four ATS-tested templates. Plain-English input becomes quantified, professional bullets.",
     icon: FileText,
-    iconBg: "bg-violet-50 text-violet-700",
+    iconBg: "bg-blue-50 text-blue-700",
   },
   {
     href: "/features/ats-score",
