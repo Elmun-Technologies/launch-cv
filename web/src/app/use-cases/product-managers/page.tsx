@@ -102,7 +102,7 @@ export default function ProductManagersPage() {
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-                <Compass className="h-3.5 w-3.5 text-[#7C3AED]" /> For Product Managers
+                <Compass className="h-3.5 w-3.5 text-[#2563EB]" /> For Product Managers
               </span>
               <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
                 Stop listing features. Start landing interviews.
@@ -125,7 +125,7 @@ export default function ProductManagersPage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="usecase_pm"
                   href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(124,58,237,0.4)] transition hover:bg-[#6D28D9]"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(124,58,237,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Build my PM resume
                   <ArrowRight className="h-4 w-4" />
@@ -162,7 +162,7 @@ export default function ProductManagersPage() {
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#7C3AED]">Why it matters</p>
+            <p className="lc-overline text-[#2563EB]">Why it matters</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               PM hiring rewards evidence, not adjectives
             </h2>
@@ -176,15 +176,15 @@ export default function ProductManagersPage() {
             </div>
             <ul className="mt-5 space-y-2.5 text-[15px] leading-[1.6] text-[#475569]">
               <li className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                 <span><span className="font-medium text-[#0F172A]">The metric is yours</span> — activation, retention, or revenue you actually moved.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                 <span><span className="font-medium text-[#0F172A]">The scope is explicit</span> — team size, segment, and surface area you owned.</span>
               </li>
               <li className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                 <span><span className="font-medium text-[#0F172A]">The format parses</span> — single-column layouts built for how major ATS platforms parse.</span>
               </li>
             </ul>
@@ -197,7 +197,7 @@ export default function ProductManagersPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Four dimensions of PM impact</p>
+              <p className="lc-overline text-[#2563EB]">Four dimensions of PM impact</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Scope, Metric, Delta, Baseline
               </h2>
@@ -233,7 +233,7 @@ export default function ProductManagersPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#7C3AED]">Inside the product</p>
+              <p className="lc-overline text-[#2563EB]">Inside the product</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">Roadmap wins, rewritten for recruiters</h2>
             </div>
           </RevealOnView>
@@ -251,7 +251,7 @@ export default function ProductManagersPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">3 real rewrites</p>
+              <p className="lc-overline text-[#2563EB]">3 real rewrites</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 What hiring committees actually look for
               </h2>
@@ -282,7 +282,7 @@ export default function ProductManagersPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Sections built for PMs</p>
+              <p className="lc-overline text-[#2563EB]">Sections built for PMs</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Not just Experience
               </h2>
@@ -300,7 +300,7 @@ export default function ProductManagersPage() {
             ].map((s) => (
               <RevealOnView key={s.h}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#7C3AED]" />
+                  <Check className="h-5 w-5 text-[#2563EB]" />
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{s.h}</h3>
                   <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: s.d }} />
                 </div>
@@ -315,7 +315,7 @@ export default function ProductManagersPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">How it works</p>
+              <p className="lc-overline text-[#2563EB]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Build a product manager resume in five steps
               </h2>
@@ -335,7 +335,7 @@ export default function ProductManagersPage() {
             ].map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#7C3AED]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
@@ -352,7 +352,7 @@ export default function ProductManagersPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Why PMs use it</p>
+              <p className="lc-overline text-[#2563EB]">Why PMs use it</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 A generic builder vs. a PM resume ATS engine
               </h2>
@@ -367,7 +367,7 @@ export default function ProductManagersPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What committees scan</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">LaunchCV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#2563EB]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Generic resume builder</th>
                 </tr>
               </thead>
@@ -384,7 +384,7 @@ export default function ProductManagersPage() {
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
                     <td className="py-4 px-4">
                       <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                         <span className="text-[#0F172A]">{r.a}</span>
                       </span>
                     </td>
@@ -401,7 +401,7 @@ export default function ProductManagersPage() {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#7C3AED]">A real use scenario</p>
+            <p className="lc-overline text-[#2563EB]">A real use scenario</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               How Elena reframed &ldquo;led product team&rdquo;
             </h2>
@@ -446,7 +446,7 @@ export default function ProductManagersPage() {
                 href={r.href}
                 className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
               >
-                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#7C3AED]">{r.t}</p>
+                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">{r.t}</p>
                 <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
               </Link>
             ))}
@@ -472,7 +472,7 @@ export default function ProductManagersPage() {
                   <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
                   <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:text-[#7C3AED]" />
+                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:text-[#2563EB]" />
               </Link>
             ))}
           </div>
@@ -487,7 +487,7 @@ export default function ProductManagersPage() {
           </h2>
           <CtaLink cta="get_started" location="usecase_pm"
             href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#6D28D9]"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
           >
             Build my PM resume
             <ArrowRight className="h-4 w-4" />
@@ -495,12 +495,12 @@ export default function ProductManagersPage() {
         </div>
       </section>
 
-      <FaqSection items={faqs} accent="#7C3AED" />
+      <FaqSection items={faqs} accent="#2563EB" />
 
       <StickyCta
         primaryHref="/register"
         primaryLabel="Try free"
-        primaryClassName="bg-[#7C3AED] hover:bg-[#6D28D9]"
+        primaryClassName="bg-[#2563EB] hover:bg-[#1D4ED8]"
         location="use_case_product_managers"
       />
 

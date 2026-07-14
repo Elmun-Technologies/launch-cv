@@ -161,9 +161,9 @@ export function VoiceInput({
       <button
         type="button"
         onClick={startRecording}
-        className={`group flex items-center gap-2.5 rounded-xl border border-dashed border-gray-200 px-4 py-3 transition hover:border-[#7C5CFC]/30 hover:bg-violet-50/30 ${className}`}
+        className={`group flex items-center gap-2.5 rounded-xl border border-dashed border-gray-200 px-4 py-3 transition hover:border-[#2563EB]/30 hover:bg-violet-50/30 ${className}`}
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 transition group-hover:bg-[#7C5CFC] group-hover:text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 transition group-hover:bg-[#2563EB] group-hover:text-white">
           <Mic className="h-4 w-4" />
         </div>
         <div className="text-left">
@@ -216,8 +216,8 @@ export function VoiceInput({
 
   if (mode === "enhancing") {
     return (
-      <div className={`rounded-2xl border border-[#7C5CFC]/20 bg-violet-50/30 p-5 text-center ${className}`}>
-        <Loader2 className="mx-auto h-8 w-8 animate-spin text-[#7C5CFC]" />
+      <div className={`rounded-2xl border border-[#2563EB]/20 bg-violet-50/30 p-5 text-center ${className}`}>
+        <Loader2 className="mx-auto h-8 w-8 animate-spin text-[#2563EB]" />
         <p className="mt-3 text-[14px] font-semibold text-gray-900">AI is enhancing your text...</p>
         <p className="mt-1 text-[12px] text-gray-500">Making it impact-driven with quantifiable results</p>
       </div>
@@ -240,8 +240,8 @@ export function VoiceInput({
       </div>
 
       {enhanced ? (
-        <div className="mt-3 rounded-xl border border-[#7C5CFC]/20 bg-violet-50/30 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-[#7C5CFC]">AI-Enhanced version</p>
+        <div className="mt-3 rounded-xl border border-[#2563EB]/20 bg-violet-50/30 p-4">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">AI-Enhanced version</p>
           <p className="mt-2 text-[13px] font-medium leading-relaxed text-gray-900">{enhanced}</p>
         </div>
       ) : null}
@@ -250,7 +250,7 @@ export function VoiceInput({
         <button
           type="button"
           onClick={() => confirmAndAdd(enhanced ?? rawText)}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
         >
           <Check className="h-4 w-4" />
           {enhanced ? "Use Enhanced Version" : "Add to Resume"}
@@ -260,7 +260,7 @@ export function VoiceInput({
           <button
             type="button"
             onClick={() => void enhanceWithAI()}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#7C5CFC]/20 px-4 py-2.5 text-[13px] font-semibold text-[#7C5CFC] transition hover:bg-violet-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#2563EB]/20 px-4 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50"
           >
             <Sparkles className="h-4 w-4" />
             Enhance with AI

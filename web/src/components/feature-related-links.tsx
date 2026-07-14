@@ -10,7 +10,7 @@ export type RelatedLink = { href: string; title: string; desc: string };
 const HOVER: Record<string, string> = {
   blue: "group-hover:text-[#2563EB]",
   orange: "group-hover:text-[#EA580C]",
-  violet: "group-hover:text-[#7C3AED]",
+  violet: "group-hover:text-[#2563EB]",
   teal: "group-hover:text-[#0D9488]",
   emerald: "group-hover:text-[#059669]",
   pink: "group-hover:text-[#DB2777]",

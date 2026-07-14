@@ -71,7 +71,7 @@ export default async function AdminRolesPage() {
               {dbAdmins.map((a) => (
                 <li key={a.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[12px] font-semibold text-white">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[12px] font-semibold text-white">
                       {(a.name || a.email)[0].toUpperCase()}
                     </div>
                     <div className="min-w-0">

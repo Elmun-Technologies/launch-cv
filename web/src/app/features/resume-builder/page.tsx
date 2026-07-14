@@ -148,7 +148,7 @@ export default function ResumeBuilderPage() {
           <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-6">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-                <FileText className="h-3.5 w-3.5 text-[#7C3AED]" />
+                <FileText className="h-3.5 w-3.5 text-[#2563EB]" />
                 AI Resume Builder
               </span>
 
@@ -169,7 +169,7 @@ export default function ResumeBuilderPage() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <CtaLink cta="get_started" location="feature_resume_builder"
                   href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(124,58,237,0.4)] transition hover:bg-[#6D28D9]"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(124,58,237,0.4)] transition hover:bg-[#1D4ED8]"
                 >
                   Build my resume
                   <ArrowRight className="h-4 w-4" />
@@ -240,7 +240,7 @@ export default function ResumeBuilderPage() {
                       </li>
                     </ul>
                     <div className="mt-4 flex gap-2">
-                      <button className="rounded-md bg-[#7C3AED] px-3 py-1.5 text-[11px] font-semibold text-white">Accept all</button>
+                      <button className="rounded-md bg-[#2563EB] px-3 py-1.5 text-[11px] font-semibold text-white">Accept all</button>
                       <button className="rounded-md bg-white px-3 py-1.5 text-[11px] font-semibold text-[#475569] ring-1 ring-[#E2E8F0]">Regenerate</button>
                     </div>
                   </div>
@@ -264,7 +264,7 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#7C3AED]">See it in action</p>
+              <p className="lc-overline text-[#2563EB]">See it in action</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">A look inside the resume builder</h2>
             </div>
           </RevealOnView>
@@ -282,7 +282,7 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Templates · 12 verticals</p>
+              <p className="lc-overline text-[#2563EB]">Templates · 12 verticals</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Designed by recruiters, approved by ATS
               </h2>
@@ -333,7 +333,7 @@ export default function ResumeBuilderPage() {
 
           <p className="mt-10 text-center text-[14px] text-[#64748B]">
             + six more templates inside the app.{" "}
-            <CtaLink cta="get_started" location="feature_resume_builder" href="/register" className="font-semibold text-[#7C3AED] underline-offset-2 hover:underline">
+            <CtaLink cta="get_started" location="feature_resume_builder" href="/register" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               See them all
             </CtaLink>
           </p>
@@ -345,7 +345,7 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">The transform</p>
+              <p className="lc-overline text-[#2563EB]">The transform</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 What you type. What we ship.
               </h2>
@@ -376,7 +376,7 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Capabilities</p>
+              <p className="lc-overline text-[#2563EB]">Capabilities</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 Built like a writer, ships like an engineer
               </h2>
@@ -404,7 +404,7 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1200px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">How it works</p>
+              <p className="lc-overline text-[#2563EB]">How it works</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 From blank page to ATS-ready resume in five steps
               </h2>
@@ -424,7 +424,7 @@ export default function ResumeBuilderPage() {
             ].map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#7C3AED]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
@@ -441,7 +441,7 @@ export default function ResumeBuilderPage() {
         <div className="mx-auto max-w-[1100px] px-6">
           <RevealOnView>
             <div className="max-w-[680px]">
-              <p className="lc-overline text-[#7C3AED]">Why LaunchCV</p>
+              <p className="lc-overline text-[#2563EB]">Why LaunchCV</p>
               <h2 className="mt-3 lc-section-headline text-[#0F172A]">
                 An AI resume builder vs. the old way
               </h2>
@@ -456,7 +456,7 @@ export default function ResumeBuilderPage() {
               <thead>
                 <tr className="border-b border-[#E2E8F0]">
                   <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#7C3AED]">LaunchCV</th>
+                  <th className="py-3 px-4 text-[13px] font-semibold text-[#2563EB]">LaunchCV</th>
                   <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">DIY or generic maker</th>
                 </tr>
               </thead>
@@ -473,7 +473,7 @@ export default function ResumeBuilderPage() {
                     <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
                     <td className="py-4 px-4">
                       <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#7C3AED]" />
+                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
                         <span className="text-[#0F172A]">{r.a}</span>
                       </span>
                     </td>
@@ -490,7 +490,7 @@ export default function ResumeBuilderPage() {
       <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
         <div className="mx-auto max-w-[820px] px-6">
           <RevealOnView>
-            <p className="lc-overline text-[#7C3AED]">A real use scenario</p>
+            <p className="lc-overline text-[#2563EB]">A real use scenario</p>
             <h2 className="mt-3 lc-section-headline text-[#0F172A]">
               How Dana rebuilt a resume in one lunch break
             </h2>
@@ -572,7 +572,7 @@ export default function ResumeBuilderPage() {
           </p>
           <CtaLink cta="get_started" location="feature_resume_builder"
             href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#7C3AED] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#6D28D9]"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
           >
             Build my resume
             <ArrowRight className="h-4 w-4" />
@@ -613,12 +613,12 @@ export default function ResumeBuilderPage() {
         ]}
       />
 
-      <FaqSection items={faqs} accent="#7C3AED" />
+      <FaqSection items={faqs} accent="#2563EB" />
 
       <StickyCta
         primaryHref="/register"
         primaryLabel="Try free"
-        primaryClassName="bg-[#7C3AED] hover:bg-[#6D28D9]"
+        primaryClassName="bg-[#2563EB] hover:bg-[#1D4ED8]"
         location="feature_resume_builder"
       />
 

@@ -134,7 +134,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
   }, [referralLink]);
 
   const stats = [
-    { label: "Total Invited", value: totalReferrals, icon: Users, color: "bg-violet-50 text-[#7C5CFC]" },
+    { label: "Total Invited", value: totalReferrals, icon: Users, color: "bg-violet-50 text-[#2563EB]" },
     { label: "Credited", value: creditedCount, icon: Check, color: "bg-emerald-50 text-emerald-600" },
     { label: "Credits Earned", value: `$${creditsEarned}`, icon: Zap, color: "bg-amber-50 text-amber-600" },
   ];
@@ -156,7 +156,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
       <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <div className="mx-auto max-w-xl text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
-            <Gift className="h-7 w-7 text-[#7C5CFC]" />
+            <Gift className="h-7 w-7 text-[#2563EB]" />
           </div>
           <h2 className="text-[15px] font-bold text-gray-900">Invite Friends to LaunchCV</h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-gray-500">
@@ -176,7 +176,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
               type="button"
               onClick={() => void copyLink()}
               disabled={!referralLink}
-              className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#7C5CFC] px-5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-60"
+              className="inline-flex h-11 items-center gap-2 rounded-xl bg-[#2563EB] px-5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-60"
             >
               {copied ? (
                 <>
@@ -222,9 +222,9 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
           {steps.map((s) => (
             <div
               key={s.step}
-              className="flex items-start gap-3 rounded-xl border border-gray-100 p-4 transition hover:border-[#7C5CFC]/20 hover:bg-violet-50/30"
+              className="flex items-start gap-3 rounded-xl border border-gray-100 p-4 transition hover:border-[#2563EB]/20 hover:bg-violet-50/30"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#7C5CFC] text-[13px] font-bold text-white">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-[13px] font-bold text-white">
                 {s.step}
               </div>
               <div>
@@ -240,11 +240,11 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
       <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <div className="flex items-center justify-between">
           <h2 className="text-[15px] font-bold text-gray-900">Progress to next reward</h2>
-          <span className="text-[13px] font-semibold text-[#7C5CFC]">{progressCurrent}/5 referrals</span>
+          <span className="text-[13px] font-semibold text-[#2563EB]">{progressCurrent}/5 referrals</span>
         </div>
         <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-violet-100">
           <div
-            className="h-full rounded-full bg-[#7C5CFC] transition-all duration-500"
+            className="h-full rounded-full bg-[#2563EB] transition-all duration-500"
             style={{ width: `${progressPct}%` }}
           />
         </div>
@@ -278,7 +278,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
           <button
             type="button"
             onClick={() => setShowEmailInvites(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-5 text-[13px] font-semibold text-gray-700 transition hover:border-[#7C5CFC] hover:bg-violet-50 hover:text-[#7C5CFC]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-5 text-[13px] font-semibold text-gray-700 transition hover:border-[#2563EB] hover:bg-violet-50 hover:text-[#2563EB]"
           >
             <Mail className="h-4 w-4" />
             Email
@@ -286,7 +286,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
           <button
             type="button"
             onClick={() => setShowInviteMsg(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-5 text-[13px] font-semibold text-gray-700 transition hover:border-[#7C5CFC] hover:bg-violet-50 hover:text-[#7C5CFC]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-5 text-[13px] font-semibold text-gray-700 transition hover:border-[#2563EB] hover:bg-violet-50 hover:text-[#2563EB]"
           >
             <Mail className="h-4 w-4" />
             Custom Message
@@ -320,12 +320,12 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
               {[
                 { label: "LinkedIn", icon: Share2, color: "#0A66C2", bg: "bg-blue-50" },
                 { label: "Twitter", icon: MessageSquare, color: "#1DA1F2", bg: "bg-sky-50" },
-                { label: "Email", icon: Mail, color: "#7C5CFC", bg: "bg-violet-50" },
+                { label: "Email", icon: Mail, color: "#2563EB", bg: "bg-violet-50" },
               ].map((s) => (
                 <button
                   key={s.label}
                   type="button"
-                  className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-200 py-3 transition hover:border-[#7C5CFC]/30 hover:bg-violet-50/30"
+                  className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-200 py-3 transition hover:border-[#2563EB]/30 hover:bg-violet-50/30"
                 >
                   <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${s.bg}`}>
                     <s.icon className="h-4 w-4" style={{ color: s.color }} />
@@ -342,7 +342,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
                   void navigator.clipboard.writeText(inviteDescription);
                   setShowInviteMsg(false);
                 }}
-                className="h-10 rounded-xl bg-[#7C5CFC] px-6 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+                className="h-10 rounded-xl bg-[#2563EB] px-6 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
               >
                 Copy Message
               </button>
@@ -388,7 +388,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
               <input
                 type="checkbox"
                 defaultChecked
-                className="h-4 w-4 rounded border-gray-300 text-[#7C5CFC] accent-[#7C5CFC]"
+                className="h-4 w-4 rounded border-gray-300 text-[#2563EB] accent-[#2563EB]"
               />
               Your credentials are encrypted &amp; can be revoked at any time
             </label>
@@ -397,7 +397,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
               <button
                 type="button"
                 onClick={() => setShowEmailInvites(false)}
-                className="h-10 rounded-xl bg-[#7C5CFC] px-6 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+                className="h-10 rounded-xl bg-[#2563EB] px-6 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
               >
                 Send Invites
               </button>

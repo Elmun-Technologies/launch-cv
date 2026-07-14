@@ -123,7 +123,7 @@ export function LandingHero() {
             >
               {["Free ATS score — no signup", "PDF & DOCX export", "Cancel anytime"].map((c) => (
                 <span key={c} className="inline-flex items-center gap-1.5">
-                  <Check className="h-3.5 w-3.5 shrink-0 text-[#1A56DB]" />
+                  <Check className="h-3.5 w-3.5 shrink-0 text-[#2563EB]" />
                   {c}
                 </span>
               ))}

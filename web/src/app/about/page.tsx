@@ -171,14 +171,14 @@ export default function AboutPage() {
           <div className="relative mt-12 pl-8">
             {/* connecting line */}
             <span
-              className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[#2563EB] via-[#7C3AED] to-[#E2E8F0]"
+              className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[#2563EB] via-[#3B82F6] to-[#E2E8F0]"
               aria-hidden
             />
             <MotionStagger className="space-y-6">
               {milestones.map((m) => (
                 <MotionItem key={m.t}>
                   <div className="relative">
-                    <span className="absolute -left-[29px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#2563EB] to-[#7C3AED] shadow-sm" aria-hidden>
+                    <span className="absolute -left-[29px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] shadow-sm" aria-hidden>
                       <span className="h-1.5 w-1.5 rounded-full bg-white" />
                     </span>
                     <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-20px_rgba(15,23,42,0.18)]">
@@ -239,7 +239,7 @@ export default function AboutPage() {
           <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-2">
             <MotionItem className="h-full">
               <div className="h-full rounded-2xl border border-[#E2E8F0] bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.15)]">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[20px] font-semibold text-white shadow-sm">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[20px] font-semibold text-white shadow-sm">
                   NE
                 </div>
                 <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">Nazir Elmurodov</h3>
@@ -299,7 +299,7 @@ export default function AboutPage() {
 
       {/* CTA */}
       <section className="px-6 pb-20 pt-4">
-        <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#2563EB] to-[#7C3AED] px-6 py-16 text-center shadow-[0_30px_60px_-25px_rgba(26,86,219,0.5)]">
+        <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] px-6 py-16 text-center shadow-[0_30px_60px_-25px_rgba(26,86,219,0.5)]">
           <div
             className="pointer-events-none absolute inset-0 opacity-30"
             aria-hidden

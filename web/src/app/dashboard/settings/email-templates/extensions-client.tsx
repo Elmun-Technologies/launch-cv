@@ -30,7 +30,7 @@ function CopyBtn({ text, label = "Copy" }: { text: string; label?: string }) {
   const [ok, setOk] = useState(false);
   return (
     <button type="button" onClick={() => { void navigator.clipboard.writeText(text); setOk(true); setTimeout(() => setOk(false), 1500); }}
-      className="inline-flex items-center gap-1.5 rounded-xl border border-gray-100 px-3 py-1.5 text-[12px] font-medium text-gray-500 transition hover:border-[#7C5CFC]/20 hover:bg-violet-50 hover:text-[#7C5CFC]">
+      className="inline-flex items-center gap-1.5 rounded-xl border border-gray-100 px-3 py-1.5 text-[12px] font-medium text-gray-500 transition hover:border-[#2563EB]/20 hover:bg-violet-50 hover:text-[#2563EB]">
       {ok ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
       {ok ? "Copied" : label}
     </button>
@@ -102,7 +102,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
         {TABS.map((t) => (
           <button key={t.key} type="button" onClick={() => setTab(t.key)}
             className={`flex items-center gap-2 whitespace-nowrap rounded-xl px-4 py-2.5 text-[13px] font-semibold transition ${
-              tab === t.key ? "bg-[#7C5CFC] text-white shadow-sm shadow-violet-500/20" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+              tab === t.key ? "bg-[#2563EB] text-white shadow-sm shadow-violet-500/20" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
             }`}>
             <t.icon className="h-4 w-4" />{t.label}
           </button>
@@ -113,7 +113,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
       {tab === "ai-email" ? (
         <div className="grid gap-5 lg:grid-cols-2">
           <div className="rounded-2xl border border-gray-100 bg-white p-6">
-            <h2 className="flex items-center gap-2 text-[17px] font-bold text-gray-900"><Sparkles className="h-5 w-5 text-[#7C5CFC]" /> AI Email Generator</h2>
+            <h2 className="flex items-center gap-2 text-[17px] font-bold text-gray-900"><Sparkles className="h-5 w-5 text-[#2563EB]" /> AI Email Generator</h2>
             <p className="mt-1 text-[13px] text-gray-500">Generate professional emails powered by AI and your resume data.</p>
             <div className="mt-5 space-y-4">
               <div className="grid gap-3 sm:grid-cols-2">
@@ -132,7 +132,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
               </div>
               <div><label className="text-[12px] font-semibold text-gray-700">Additional Context</label><textarea className="soha-textarea mt-1 min-h-[80px]" value={emailContext} onChange={(e) => setEmailContext(e.target.value)} placeholder="I interviewed last Tuesday and want to follow up..." /></div>
               {emailErr ? <p className="text-[13px] text-red-500">{emailErr}</p> : null}
-              <button type="button" disabled={emailLoading} onClick={() => void generateEmail()} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#7C5CFC] py-3 text-[14px] font-bold text-white transition hover:bg-[#6B4CE0] disabled:opacity-60">
+              <button type="button" disabled={emailLoading} onClick={() => void generateEmail()} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-3 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8] disabled:opacity-60">
                 {emailLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 {emailLoading ? "Generating..." : "Generate Email"}
               </button>
@@ -153,7 +153,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
                 </div>
                 {emailResult.tips.length > 0 ? (
                   <div className="rounded-xl bg-violet-50 p-4">
-                    <p className="text-[12px] font-bold text-[#7C5CFC]">Tips</p>
+                    <p className="text-[12px] font-bold text-[#2563EB]">Tips</p>
                     <ul className="mt-2 space-y-1">{emailResult.tips.map((t, i) => <li key={i} className="text-[12px] text-gray-600">• {t}</li>)}</ul>
                   </div>
                 ) : null}
@@ -161,14 +161,14 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
                   <CopyBtn text={emailResult.subject} label="Copy Subject" />
                   <CopyBtn text={emailResult.body} label="Copy Body" />
                   <CopyBtn text={`Subject: ${emailResult.subject}\n\n${emailResult.body}`} label="Copy All" />
-                  <button type="button" onClick={() => void saveAsTemplate()} className="inline-flex items-center gap-1.5 rounded-xl bg-[#7C5CFC] px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#6B4CE0]">
+                  <button type="button" onClick={() => void saveAsTemplate()} className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8]">
                     <Plus className="h-3 w-3" /> Save as Template
                   </button>
                 </div>
               </div>
             ) : (
               <div className="mt-8 flex flex-col items-center py-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50"><MessageSquare className="h-7 w-7 text-[#7C5CFC]" /></div>
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50"><MessageSquare className="h-7 w-7 text-[#2563EB]" /></div>
                 <p className="mt-4 text-[14px] font-medium text-gray-500">Your generated email will appear here</p>
                 <p className="mt-1 text-[12px] text-gray-400">Fill in the form and click Generate</p>
               </div>
@@ -182,7 +182,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
         <div className="space-y-5">
           <div className="flex items-center justify-between">
             <h2 className="text-[17px] font-bold text-gray-900">Email Templates</h2>
-            <button type="button" onClick={() => setShowTemplateForm((s) => !s)} className="inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">
+            <button type="button" onClick={() => setShowTemplateForm((s) => !s)} className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">
               {showTemplateForm ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
               {showTemplateForm ? "Close" : "New Template"}
             </button>
@@ -197,14 +197,14 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
               </div>
               {tErr ? <p className="mt-2 text-[13px] text-red-500">{tErr}</p> : null}
               <div className="mt-4 flex gap-2">
-                <button type="button" disabled={tSaving} onClick={() => void saveTemplate()} className="rounded-xl bg-[#7C5CFC] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">{tSaving ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
+                <button type="button" disabled={tSaving} onClick={() => void saveTemplate()} className="rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">{tSaving ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
                 <button type="button" onClick={() => setShowTemplateForm(false)} className="rounded-xl border border-gray-100 px-4 py-2 text-[13px] font-medium text-gray-600 hover:bg-gray-50">Cancel</button>
               </div>
             </div>
           ) : null}
           {rows.length === 0 ? (
             <div className="flex flex-col items-center rounded-2xl border border-dashed border-gray-200 py-12 text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50"><Mail className="h-6 w-6 text-[#7C5CFC]" /></div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50"><Mail className="h-6 w-6 text-[#2563EB]" /></div>
               <p className="mt-4 text-[14px] font-medium text-gray-500">No templates yet</p>
               <p className="mt-1 text-[12px] text-gray-400">Create templates or generate them with AI</p>
             </div>
@@ -212,7 +212,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
             <div className="grid gap-4 sm:grid-cols-2">
               {rows.map((t) => (
                 <div key={t.id} className="rounded-2xl border border-gray-100 bg-white p-5 transition hover:shadow-sm">
-                  <div className="flex items-start justify-between"><div><p className="text-[14px] font-semibold text-gray-900">{t.name}</p><span className="mt-1 inline-block rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-semibold text-[#7C5CFC]">{t.category}</span></div>
+                  <div className="flex items-start justify-between"><div><p className="text-[14px] font-semibold text-gray-900">{t.name}</p><span className="mt-1 inline-block rounded-full bg-violet-50 px-2 py-0.5 text-[11px] font-semibold text-[#2563EB]">{t.category}</span></div>
                     <button type="button" onClick={() => void delTemplate(t.id)} className="rounded-xl p-2 text-gray-300 hover:bg-red-50 hover:text-red-500"><Trash2 className="h-4 w-4" /></button></div>
                   <p className="mt-3 text-[12px] text-gray-500">Subject: {t.subject}</p>
                   <p className="mt-1 line-clamp-2 text-[12px] text-gray-400">{t.body}</p>
@@ -231,14 +231,14 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
           <p className="text-[13px] text-gray-500">One-click shortcuts to common tasks across LaunchCV.</p>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { href: "/resume/new", label: "Create New Resume", desc: "Start from scratch or import", icon: Plus, color: "bg-violet-50 text-[#7C5CFC]" },
+              { href: "/resume/new", label: "Create New Resume", desc: "Start from scratch or import", icon: Plus, color: "bg-violet-50 text-[#2563EB]" },
               { href: "/dashboard/resumes", label: "Export PDF", desc: "Download any resume as PDF", icon: Mail, color: "bg-amber-50 text-amber-600" },
               { href: "/dashboard/job-tracker", label: "Track Application", desc: "Add a new job to pipeline", icon: Zap, color: "bg-emerald-50 text-emerald-600" },
               { href: "/dashboard/contacts", label: "Add Contact", desc: "Save a new networking contact", icon: Globe, color: "bg-blue-50 text-blue-600" },
               { href: "/dashboard/companies", label: "Add Company", desc: "Track a target company", icon: Globe, color: "bg-pink-50 text-pink-600" },
               { href: "/dashboard/settings", label: "Account Settings", desc: "Update your profile", icon: Keyboard, color: "bg-gray-50 text-gray-600" },
             ].map((a) => (
-              <a key={a.href} href={a.href} className="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 transition hover:border-[#7C5CFC]/20 hover:shadow-sm">
+              <a key={a.href} href={a.href} className="group flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-5 transition hover:border-[#2563EB]/20 hover:shadow-sm">
                 <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${a.color}`}><a.icon className="h-5 w-5" /></div>
                 <div><p className="text-[14px] font-semibold text-gray-900">{a.label}</p><p className="text-[12px] text-gray-400">{a.desc}</p></div>
               </a>
@@ -308,7 +308,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
         <div className="space-y-5">
           <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-50">
-              <Monitor className="h-8 w-8 text-[#7C5CFC]" />
+              <Monitor className="h-8 w-8 text-[#2563EB]" />
             </div>
             <h2 className="mt-5 text-[20px] font-bold text-gray-900">Chrome Extension</h2>
             <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-gray-500">
@@ -316,13 +316,13 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
               Auto-fill job descriptions from any job board. Coming soon.
             </p>
             <div className="mt-8 flex flex-col items-center gap-3">
-              <button type="button" className="inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-6 py-3 text-[14px] font-bold text-white opacity-60 cursor-not-allowed">
+              <button type="button" className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-[14px] font-bold text-white opacity-60 cursor-not-allowed">
                 <Monitor className="h-5 w-5" /> Install Extension (Coming Soon)
               </button>
               <p className="text-[12px] text-gray-400">Get notified when it launches:</p>
               <div className="flex w-full max-w-sm gap-2">
                 <input className="soha-input flex-1" placeholder="your@email.com" />
-                <button type="button" className="rounded-xl bg-[#7C5CFC] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Notify Me</button>
+                <button type="button" className="rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">Notify Me</button>
               </div>
             </div>
           </div>

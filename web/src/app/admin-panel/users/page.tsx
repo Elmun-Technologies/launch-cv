@@ -58,7 +58,7 @@ export default function AdminUsersPage() {
       header: "User",
       render: (u) => (
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#7C3AED] text-[11px] font-semibold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[11px] font-semibold text-white">
             {(u.name || u.email)[0].toUpperCase()}
           </div>
           <div className="min-w-0">

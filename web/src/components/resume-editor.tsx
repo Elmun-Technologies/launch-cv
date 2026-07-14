@@ -205,14 +205,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {TABS.map((_, i) => (
             <div
               key={i}
-              className={`h-1.5 rounded-full transition-all ${i === activeTabIdx ? "w-6 bg-[#7C5CFC]" : i < activeTabIdx ? "w-1.5 bg-[#7C5CFC]/40" : "w-1.5 bg-gray-200"}`}
+              className={`h-1.5 rounded-full transition-all ${i === activeTabIdx ? "w-6 bg-[#2563EB]" : i < activeTabIdx ? "w-1.5 bg-[#2563EB]/40" : "w-1.5 bg-gray-200"}`}
             />
           ))}
         </div>
         <button
           type="button"
           onClick={() => { void doSave(); nextTab(); }}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+          className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
           {isLast ? "Save & Finish" : "Save & Next"}
@@ -227,14 +227,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     return (
       <div className="flex flex-col items-center rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 px-6 py-12 text-center">
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
-          <Icon className="h-7 w-7 text-[#7C5CFC]" />
+          <Icon className="h-7 w-7 text-[#2563EB]" />
         </div>
         <h3 className="mt-4 text-[16px] font-bold text-gray-900">{title}</h3>
         <p className="mt-1.5 max-w-xs text-[13px] leading-relaxed text-gray-500">{desc}</p>
         <button
           type="button"
           onClick={onAction}
-          className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"
+          className="mt-5 inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
         >
           <Plus className="h-4 w-4" /> {actionLabel}
         </button>
@@ -307,11 +307,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
         <div className="space-y-2.5 border-t border-gray-100 pt-5">
           <label className="inline-flex items-center gap-2.5 text-[13px] text-gray-600">
-            <input type="checkbox" checked={wantsEmails} onChange={(e) => setWantsEmails(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]" />
+            <input type="checkbox" checked={wantsEmails} onChange={(e) => setWantsEmails(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[#2563EB] focus:ring-[#2563EB]" />
             Yes, I want to receive career tips via email
           </label>
           <label className="inline-flex items-center gap-2.5 text-[13px] text-gray-600">
-            <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]" />
+            <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-[#2563EB] focus:ring-[#2563EB]" />
             I agree to the Terms, Privacy and Fees
           </label>
         </div>
@@ -369,7 +369,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             )}
 
             <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-gray-50 pt-3">
-              <button type="button" onClick={() => addBullet(ex.id)} className="inline-flex items-center gap-1 text-[13px] font-medium text-[#7C5CFC] transition hover:text-[#6B4CE0]"><Plus className="h-3.5 w-3.5" />Add achievement</button>
+              <button type="button" onClick={() => addBullet(ex.id)} className="inline-flex items-center gap-1 text-[13px] font-medium text-[#2563EB] transition hover:text-[#1D4ED8]"><Plus className="h-3.5 w-3.5" />Add achievement</button>
               <VoiceInput
                 placeholder="Speak to add bullet"
                 onTranscript={(text) => {
@@ -382,14 +382,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         ))}
 
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={addExp} className="inline-flex items-center gap-1.5 rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]"><Plus className="h-4 w-4" />Add Experience</button>
+          <button type="button" onClick={addExp} className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"><Plus className="h-4 w-4" />Add Experience</button>
           <button type="button" disabled={enhancing || content.experience.length === 0} onClick={async () => {
             setEnhancing(true); setEnhanceResult(null);
             const r = await fetch("/api/ai/impact-rewrite", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) });
             const j = await r.json().catch(() => ({}));
             setEnhancing(false);
             if (r.ok && j.result?.rewrites) setEnhanceResult(j.result.rewrites);
-          }} className="inline-flex items-center gap-1.5 rounded-xl border-2 border-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-[#7C5CFC] transition hover:bg-violet-50 disabled:opacity-50">
+          }} className="inline-flex items-center gap-1.5 rounded-xl border-2 border-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50 disabled:opacity-50">
             {enhancing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
             {enhancing ? "Enhancing..." : "Enhance All with AI"}
           </button>
@@ -397,17 +397,17 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
         {enhanceResult ? (
           <div className="mt-2 space-y-2.5 rounded-2xl border border-violet-100 bg-violet-50/30 p-5">
-            <h3 className="flex items-center gap-2 text-[14px] font-bold text-[#7C5CFC]">
+            <h3 className="flex items-center gap-2 text-[14px] font-bold text-[#2563EB]">
               <Sparkles className="h-4 w-4" /> AI-Enhanced Bullets
             </h3>
             {enhanceResult.map((rw) => (
               <div key={`${rw.experienceId}-${rw.bulletId}`} className="rounded-xl border border-violet-100 bg-white p-4">
                 <p className="text-[12px] text-gray-400 line-through">{rw.original}</p>
                 <p className="mt-1.5 text-[13px] font-medium text-gray-900">{rw.improved}</p>
-                <p className="mt-1 text-[12px] text-[#7C5CFC]">{rw.change_summary}</p>
+                <p className="mt-1 text-[12px] text-[#2563EB]">{rw.change_summary}</p>
                 <button type="button" onClick={() => {
                   setContent((c) => ({ ...c, experience: c.experience.map((ex) => ex.id === rw.experienceId ? { ...ex, bullets: ex.bullets.map((b) => b.id === rw.bulletId ? { ...b, text: rw.improved } : b) } : ex) }));
-                }} className="mt-2.5 rounded-lg bg-[#7C5CFC] px-3.5 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#6B4CE0]">Apply</button>
+                }} className="mt-2.5 rounded-lg bg-[#2563EB] px-3.5 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8]">Apply</button>
               </div>
             ))}
           </div>
@@ -428,13 +428,13 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         {/* ── Section 1: Education / Universities ── */}
         <div>
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-50"><GraduationCap className="h-4 w-4 text-[#7C5CFC]" /></div>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-50"><GraduationCap className="h-4 w-4 text-[#2563EB]" /></div>
             <div><h2 className="text-[16px] font-bold text-gray-900">Education</h2><p className="text-[11px] text-gray-400">Degrees, universities, bootcamps</p></div>
           </div>
           {content.education.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-gray-200 p-6 text-center">
               <p className="text-[13px] text-gray-400">No education added yet</p>
-              <button type="button" onClick={addEdu} className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#7C5CFC] px-4 py-2 text-[12px] font-semibold text-white"><Plus className="h-3.5 w-3.5" />Add Education</button>
+              <button type="button" onClick={addEdu} className="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-4 py-2 text-[12px] font-semibold text-white"><Plus className="h-3.5 w-3.5" />Add Education</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
@@ -453,7 +453,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addEdu} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addEdu} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
             </div>
           )}
         </div>
@@ -467,7 +467,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {certs.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-gray-200 p-5 text-center">
               <p className="text-[13px] text-gray-400">No certifications yet — add AWS, Google, PMP, etc.</p>
-              <button type="button" onClick={addCert} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Certification</button>
+              <button type="button" onClick={addCert} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Certification</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
@@ -485,7 +485,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addCert} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addCert} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
             </div>
           )}
         </div>
@@ -499,7 +499,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {achievements.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-gray-200 p-5 text-center">
               <p className="text-[13px] text-gray-400">Stand out — add awards, scholarships, or notable achievements</p>
-              <button type="button" onClick={addAchievement} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Achievement</button>
+              <button type="button" onClick={addAchievement} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Achievement</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
@@ -516,7 +516,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addAchievement} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addAchievement} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
             </div>
           )}
         </div>
@@ -530,7 +530,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {recs.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-gray-200 p-5 text-center">
               <p className="text-[13px] text-gray-400">Add references — recruiters value peer endorsements</p>
-              <button type="button" onClick={addRec} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Recommendation</button>
+              <button type="button" onClick={addRec} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Recommendation</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
@@ -549,7 +549,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addRec} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addRec} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
             </div>
           )}
         </div>
@@ -594,11 +594,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 type="button"
                 onClick={() => setTemplate(t)}
                 className={`cursor-pointer rounded-xl border-2 p-3.5 text-center text-[12px] font-semibold capitalize transition ${
-                  template === t ? "border-[#7C5CFC] bg-violet-50 text-[#7C5CFC] shadow-sm shadow-violet-100" : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
+                  template === t ? "border-[#2563EB] bg-violet-50 text-[#2563EB] shadow-sm shadow-violet-100" : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
                 <div className={`mx-auto mb-2.5 h-14 w-11 rounded-lg border-2 ${
-                  t === "classic" ? "border-[#7C5CFC] bg-violet-50" :
+                  t === "classic" ? "border-[#2563EB] bg-violet-50" :
                   t === "modern" ? "border-purple-400 bg-purple-50" :
                   t === "minimal" ? "border-gray-300 bg-white" :
                   "border-amber-400 bg-amber-50"
@@ -642,7 +642,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 setLinkedinImporting(false);
                 if (!r.ok) { setImportErr(j.error ?? "Import failed"); return; }
                 if (j.content) { setContent(j.content as ResumeContent); setShowOverwrite(false); setLinkedinText(""); }
-              }} className="mt-2.5 inline-flex items-center gap-2 rounded-xl bg-[#7C5CFC] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-50">
+              }} className="mt-2.5 inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-50">
                 {linkedinImporting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 {linkedinImporting ? "Parsing with AI..." : "Import from LinkedIn"}
               </button>
@@ -654,7 +654,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               <div className="h-px flex-1 bg-gray-200" />
             </div>
 
-            <label className="flex min-h-[140px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 text-center transition hover:border-[#7C5CFC] hover:bg-violet-50/30">
+            <label className="flex min-h-[140px] cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 text-center transition hover:border-[#2563EB] hover:bg-violet-50/30">
               <input type="file" className="hidden" accept=".doc,.pdf,.docx" onChange={async (e) => {
                 const file = e.target.files?.[0];
                 if (!file) return;
@@ -670,7 +670,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   setShowOverwrite(false);
                 }
               }} />
-              {importing ? <Loader2 className="h-8 w-8 animate-spin text-[#7C5CFC]" /> : <UploadCloud className="h-8 w-8 text-[#7C5CFC]" />}
+              {importing ? <Loader2 className="h-8 w-8 animate-spin text-[#2563EB]" /> : <UploadCloud className="h-8 w-8 text-[#2563EB]" />}
               <p className="mt-2.5 text-[13px] font-medium text-gray-600">{importing ? "Parsing with AI..." : "Drag & drop or click to select a file"}</p>
               <p className="mt-1 text-[12px] text-gray-400">PDF, DOC, DOCX (max 4MB)</p>
             </label>
@@ -701,11 +701,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             <input className="soha-input mt-1.5" placeholder="name@email.com" value={deleteEmail} onChange={(e) => setDeleteEmail(e.target.value)} />
           </div>
           <label className="mt-3 inline-flex items-center gap-2 text-[13px] text-gray-600">
-            <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-gray-300 text-[#7C5CFC] focus:ring-[#7C5CFC]" />
+            <input type="checkbox" defaultChecked className="h-4 w-4 rounded border-gray-300 text-[#2563EB] focus:ring-[#2563EB]" />
             Your credentials are encrypted &amp; can be revoked at any time
           </label>
           <div className="mt-5 flex gap-3">
-            <button type="button" onClick={() => setShowDeleteConfirm(false)} className="flex-1 rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">No, Keep</button>
+            <button type="button" onClick={() => setShowDeleteConfirm(false)} className="flex-1 rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">No, Keep</button>
             <button type="button" onClick={() => setShowDeleteConfirm(false)} className="flex-1 rounded-xl border-2 border-red-200 px-5 py-2.5 text-[13px] font-semibold text-red-600 transition hover:bg-red-50">Yes, Delete</button>
           </div>
         </div>
@@ -743,7 +743,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           )}
           <div className="flex gap-2">
             <input className="soha-input flex-1" value={newSkill} onChange={(e) => setNewSkill(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") addSkillToList(); }} placeholder="Type a skill and press Enter" />
-            <button type="button" onClick={addSkillToList} className="rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Add</button>
+            <button type="button" onClick={addSkillToList} className="rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">Add</button>
           </div>
           {renderNavFooter()}
         </div>
@@ -763,7 +763,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           <label className="text-[13px] font-semibold text-gray-700">Add a new skill</label>
           <div className="mt-1.5 flex gap-2">
             <input className="soha-input flex-1" value={newSkill} onChange={(e) => setNewSkill(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") addSkillToList(); }} placeholder="Type a skill and press Enter" />
-            <button type="button" onClick={addSkillToList} className="rounded-xl bg-[#7C5CFC] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">Add</button>
+            <button type="button" onClick={addSkillToList} className="rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">Add</button>
           </div>
         </div>
         {renderNavFooter()}
@@ -776,7 +776,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
       <div className="flex min-h-0 flex-1">
         {/* ── Sidebar ── */}
         <aside className="hidden w-[64px] shrink-0 flex-col items-center border-r border-gray-100 bg-white py-4 lg:flex">
-          <Link href="/dashboard" className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7C5CFC] text-[12px] font-bold text-white shadow-sm shadow-violet-200">
+          <Link href="/dashboard" className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#2563EB] text-[12px] font-bold text-white shadow-sm shadow-violet-200">
             L
           </Link>
 
@@ -790,7 +790,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   title={n.label}
                   className={`group relative flex h-10 w-10 items-center justify-center rounded-xl transition ${
                     isActive
-                      ? "bg-violet-50 text-[#7C5CFC]"
+                      ? "bg-violet-50 text-[#2563EB]"
                       : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                   }`}
                 >
@@ -813,7 +813,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   title={n.label}
                   className={`group relative flex h-10 w-10 items-center justify-center rounded-xl transition ${
                     isActive
-                      ? "bg-violet-50 text-[#7C5CFC]"
+                      ? "bg-violet-50 text-[#2563EB]"
                       : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                   }`}
                 >
@@ -846,7 +846,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               >
                 <Download className="h-4 w-4" /> PDF
               </button>
-              <button type="button" onClick={() => void doSave()} className="inline-flex items-center gap-1.5 rounded-xl bg-[#7C5CFC] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#6B4CE0]">
+              <button type="button" onClick={() => void doSave()} className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : justSaved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
                 {saving ? "Saving..." : justSaved ? "Saved" : "Save"}
               </button>
@@ -869,7 +869,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                       onClick={() => setActiveTab(t.key)}
                       className={`group relative flex flex-1 items-center justify-center gap-2 rounded-xl py-2.5 text-[13px] font-semibold transition ${
                         active
-                          ? "bg-[#7C5CFC] text-white shadow-sm shadow-violet-200"
+                          ? "bg-[#2563EB] text-white shadow-sm shadow-violet-200"
                           : "text-gray-400 hover:bg-gray-50 hover:text-gray-600"
                       }`}
                     >
@@ -890,7 +890,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 {TABS.map((_, i) => (
                   <div
                     key={i}
-                    className={`h-1 rounded-full transition-all ${i === activeTabIdx ? "w-5 bg-[#7C5CFC]" : i < activeTabIdx ? "w-1.5 bg-[#7C5CFC]/40" : "w-1.5 bg-gray-200"}`}
+                    className={`h-1 rounded-full transition-all ${i === activeTabIdx ? "w-5 bg-[#2563EB]" : i < activeTabIdx ? "w-1.5 bg-[#2563EB]/40" : "w-1.5 bg-gray-200"}`}
                   />
                 ))}
               </div>
@@ -940,7 +940,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                     <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-black/0 transition-all duration-300 group-hover:bg-black/40">
                       <div className="flex flex-col items-center opacity-0 transition-all duration-300 group-hover:opacity-100">
                         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl">
-                          <Sparkles className="h-6 w-6 text-[#7C5CFC]" />
+                          <Sparkles className="h-6 w-6 text-[#2563EB]" />
                         </div>
                         <p className="mt-3 rounded-full bg-white/90 px-4 py-1.5 text-[13px] font-bold text-gray-900 shadow-lg backdrop-blur">View Score</p>
                       </div>
@@ -1058,7 +1058,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                       </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center py-16 text-center">
-                        <Loader2 className="h-8 w-8 animate-spin text-[#7C5CFC]" />
+                        <Loader2 className="h-8 w-8 animate-spin text-[#2563EB]" />
                         <p className="mt-4 text-[14px] font-semibold text-gray-900">Analyzing your resume...</p>
                         <p className="mt-1 text-[12px] text-gray-400">AI is scoring your content</p>
                       </div>

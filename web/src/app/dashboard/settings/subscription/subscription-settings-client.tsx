@@ -150,7 +150,7 @@ export function SubscriptionSettingsClient() {
             href={PORTAL_URL}
             target="_blank"
             rel="noreferrer"
-            className="font-semibold text-[#7C5CFC] underline-offset-2 hover:underline"
+            className="font-semibold text-[#2563EB] underline-offset-2 hover:underline"
           >
             Polar customer portal
             <ExternalLink className="mb-0.5 ml-0.5 inline h-3 w-3" />
@@ -177,11 +177,11 @@ export function SubscriptionSettingsClient() {
             <div
               key={key}
               className={`relative flex flex-col rounded-2xl border-2 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${
-                isPopular ? "border-[#7C5CFC] shadow-[0_4px_24px_rgba(124,92,252,0.12)]" : "border-gray-100"
+                isPopular ? "border-[#2563EB] shadow-[0_4px_24px_rgba(37, 99, 235,0.12)]" : "border-gray-100"
               }`}
             >
               {isPopular ? (
-                <span className="absolute -top-3 left-4 inline-flex rounded-full bg-[#7C5CFC] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
+                <span className="absolute -top-3 left-4 inline-flex rounded-full bg-[#2563EB] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
                   Popular
                 </span>
               ) : null}
@@ -199,7 +199,7 @@ export function SubscriptionSettingsClient() {
                 <ul className="space-y-2.5">
                   {bullets.map((t) => (
                     <li key={t} className="flex items-start gap-2 text-[12px] text-gray-600">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#7C5CFC]" />
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2563EB]" />
                       {t}
                     </li>
                   ))}
@@ -211,7 +211,7 @@ export function SubscriptionSettingsClient() {
                 disabled={!!loadingPlan || statusLoading || isCurrent}
                 className={`mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[13px] font-semibold transition ${
                   isPopular
-                    ? "bg-[#7C5CFC] text-white hover:bg-[#6B4CE0] disabled:opacity-50"
+                    ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8] disabled:opacity-50"
                     : "border border-gray-200 text-gray-800 hover:border-gray-300 hover:bg-gray-50 disabled:opacity-50"
                 }`}
               >
@@ -241,7 +241,7 @@ export function SubscriptionSettingsClient() {
             href={PORTAL_URL}
             target="_blank"
             rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#7C5CFC] hover:underline"
+            className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline"
           >
             Open customer portal <ExternalLink className="h-3.5 w-3.5" />
           </a>
@@ -252,7 +252,7 @@ export function SubscriptionSettingsClient() {
         <HelpCircle className="h-4 w-4 text-gray-400" />
         <span className="text-[13px] text-gray-500">
           Need help?{" "}
-          <Link href="/dashboard/support" className="font-semibold text-[#7C5CFC] transition hover:text-[#6B4CE0]">
+          <Link href="/dashboard/support" className="font-semibold text-[#2563EB] transition hover:text-[#1D4ED8]">
             Contact support
           </Link>
         </span>

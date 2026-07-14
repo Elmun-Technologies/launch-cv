@@ -310,7 +310,7 @@ export function JobTrackerProClient({
                 type="button"
                 onClick={() => void addContact()}
                 disabled={addingContact}
-                className="w-full rounded-full bg-[#7C5CFC] py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70"
+                className="w-full rounded-full bg-[#2563EB] py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70"
               >
                 {addingContact ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : <Plus className="mr-1 inline h-4 w-4" />}
                 Add a Contact
@@ -384,7 +384,7 @@ export function JobTrackerProClient({
                   type="button"
                   onClick={() => void sendNote()}
                   disabled={sendingNote || !noteText.trim()}
-                  className="rounded-full bg-[#7C5CFC] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70"
+                  className="rounded-full bg-[#2563EB] px-5 py-2 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70"
                 >
                   {sendingNote ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}
                   Send
@@ -450,8 +450,8 @@ export function JobTrackerProClient({
           </div>
         </div>
         <div className="mt-4 flex gap-2">
-          <button type="button" onClick={() => void navigator.clipboard.writeText("Introduction — Acme Design Studio")} className="rounded-full bg-[#7C5CFC] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#6B4CE0]">Copy Subject</button>
-          <button type="button" className="rounded-full border border-[#7C5CFC] px-4 py-2 text-xs font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Copy Message</button>
+          <button type="button" onClick={() => void navigator.clipboard.writeText("Introduction — Acme Design Studio")} className="rounded-full bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#1D4ED8]">Copy Subject</button>
+          <button type="button" className="rounded-full border border-[#2563EB] px-4 py-2 text-xs font-semibold text-[#2563EB] transition hover:bg-violet-50">Copy Message</button>
         </div>
       </div>
     );
@@ -517,13 +517,13 @@ export function JobTrackerProClient({
                 <span className="text-[13px] text-[#ACB5C2]">{s.value}%</span>
               </div>
               <div className="relative mt-2 h-1.5 w-full rounded-full bg-[#E9F4FF]">
-                <div className="h-full rounded-full bg-[#7C5CFC]" style={{ width: `${s.value}%` }} />
-                <div className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white bg-[#7C5CFC] shadow" style={{ left: `calc(${s.value}% - 8px)` }} />
+                <div className="h-full rounded-full bg-[#2563EB]" style={{ width: `${s.value}%` }} />
+                <div className="absolute top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-white bg-[#2563EB] shadow" style={{ left: `calc(${s.value}% - 8px)` }} />
               </div>
             </div>
           ))}
         </div>
-        <button type="button" className="mt-3 text-sm font-medium text-[#7C5CFC] hover:underline">Show all 11</button>
+        <button type="button" className="mt-3 text-sm font-medium text-[#2563EB] hover:underline">Show all 11</button>
       </div>
     );
   }
@@ -602,8 +602,8 @@ export function JobTrackerProClient({
         <div className="flex items-center justify-between">
           <h4 className={isCard ? "text-[22px] font-bold text-gray-900" : "text-[32px] font-semibold tracking-[-0.02em] text-gray-900"}>Experience</h4>
           <div className="flex items-center gap-2 text-gray-500">
-            <button type="button" onClick={openAddExp} className="transition hover:text-[#7C5CFC]"><Plus className="h-5 w-5" /></button>
-            {isCard && experiences[0] ? <button type="button" onClick={() => openEditExp(experiences[0])} className="transition hover:text-[#7C5CFC]"><Edit3 className="h-4 w-4" /></button> : null}
+            <button type="button" onClick={openAddExp} className="transition hover:text-[#2563EB]"><Plus className="h-5 w-5" /></button>
+            {isCard && experiences[0] ? <button type="button" onClick={() => openEditExp(experiences[0])} className="transition hover:text-[#2563EB]"><Edit3 className="h-4 w-4" /></button> : null}
           </div>
         </div>
         {showExpForm ? (
@@ -615,7 +615,7 @@ export function JobTrackerProClient({
             </div>
             <textarea className="soha-textarea min-h-[60px]" placeholder="Bullet points (one per line)" value={expForm.bullets} onChange={(e) => setExpForm((p) => ({ ...p, bullets: e.target.value }))} />
             <div className="flex gap-2">
-              <button type="button" onClick={saveExp} className="rounded-full bg-[#7C5CFC] px-4 py-1.5 text-xs font-semibold text-white">{editingExp ? "Update" : "Add"}</button>
+              <button type="button" onClick={saveExp} className="rounded-full bg-[#2563EB] px-4 py-1.5 text-xs font-semibold text-white">{editingExp ? "Update" : "Add"}</button>
               <button type="button" onClick={() => setShowExpForm(false)} className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600">Cancel</button>
             </div>
           </div>
@@ -634,7 +634,7 @@ export function JobTrackerProClient({
           ))}
         </div>
         {!isCard ? (
-          <button type="button" onClick={openAddExp} className="mt-4 rounded-full bg-[#7C5CFC] px-5 py-2.5 text-[16px] font-semibold text-white">
+          <button type="button" onClick={openAddExp} className="mt-4 rounded-full bg-[#2563EB] px-5 py-2.5 text-[16px] font-semibold text-white">
             <Plus className="mr-1 inline h-5 w-5" />
             Add Experience
           </button>
@@ -650,8 +650,8 @@ export function JobTrackerProClient({
         <div className="flex items-center justify-between">
           <h4 className={isCard ? "text-[22px] font-bold text-gray-900" : "text-[32px] font-semibold tracking-[-0.02em] text-gray-900"}>Education</h4>
           <div className="flex items-center gap-2 text-gray-500">
-            <button type="button" onClick={openAddEdu} className="transition hover:text-[#7C5CFC]"><Plus className="h-5 w-5" /></button>
-            {isCard && education[0] ? <button type="button" onClick={() => openEditEdu(education[0])} className="transition hover:text-[#7C5CFC]"><Edit3 className="h-4 w-4" /></button> : null}
+            <button type="button" onClick={openAddEdu} className="transition hover:text-[#2563EB]"><Plus className="h-5 w-5" /></button>
+            {isCard && education[0] ? <button type="button" onClick={() => openEditEdu(education[0])} className="transition hover:text-[#2563EB]"><Edit3 className="h-4 w-4" /></button> : null}
           </div>
         </div>
         {showEduForm ? (
@@ -662,7 +662,7 @@ export function JobTrackerProClient({
               <input className="soha-input" placeholder="Year" value={eduForm.year} onChange={(e) => setEduForm((p) => ({ ...p, year: e.target.value }))} />
             </div>
             <div className="flex gap-2">
-              <button type="button" onClick={saveEdu} className="rounded-full bg-[#7C5CFC] px-4 py-1.5 text-xs font-semibold text-white">{editingEdu ? "Update" : "Add"}</button>
+              <button type="button" onClick={saveEdu} className="rounded-full bg-[#2563EB] px-4 py-1.5 text-xs font-semibold text-white">{editingEdu ? "Update" : "Add"}</button>
               <button type="button" onClick={() => setShowEduForm(false)} className="rounded-full border border-gray-200 px-4 py-1.5 text-xs font-semibold text-gray-600">Cancel</button>
             </div>
           </div>
@@ -676,7 +676,7 @@ export function JobTrackerProClient({
           ))}
         </div>
         {!isCard ? (
-          <button type="button" onClick={openAddEdu} className="mt-4 rounded-full bg-[#7C5CFC] px-5 py-2.5 text-[16px] font-semibold text-white">
+          <button type="button" onClick={openAddEdu} className="mt-4 rounded-full bg-[#2563EB] px-5 py-2.5 text-[16px] font-semibold text-white">
             <Plus className="mr-1 inline h-5 w-5" />
             Add Education
           </button>
@@ -691,12 +691,12 @@ export function JobTrackerProClient({
       <div className={isCard ? "rounded-xl border border-gray-100 border-l-[3px] border-l-[#4CB1FF] p-3" : ""}>
         <div className="flex items-center justify-between">
           <h4 className={isCard ? "text-[22px] font-bold text-gray-900" : "text-[32px] font-semibold tracking-[-0.02em] text-gray-900"}>Skills</h4>
-          <button type="button" onClick={() => setShowSkillInput(true)} className="text-gray-500 transition hover:text-[#7C5CFC]"><Plus className="h-5 w-5" /></button>
+          <button type="button" onClick={() => setShowSkillInput(true)} className="text-gray-500 transition hover:text-[#2563EB]"><Plus className="h-5 w-5" /></button>
         </div>
         {showSkillInput ? (
           <div className="mt-2 flex gap-2">
             <input className="soha-input flex-1" placeholder="New skill" value={newSkill} onChange={(e) => setNewSkill(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") addSkill(); }} autoFocus />
-            <button type="button" onClick={addSkill} className="rounded-full bg-[#7C5CFC] px-3 py-1.5 text-xs font-semibold text-white">Add</button>
+            <button type="button" onClick={addSkill} className="rounded-full bg-[#2563EB] px-3 py-1.5 text-xs font-semibold text-white">Add</button>
             <button type="button" onClick={() => { setShowSkillInput(false); setNewSkill(""); }} className="rounded-full border border-gray-200 px-3 py-1.5 text-xs text-gray-600">Cancel</button>
           </div>
         ) : null}
@@ -820,7 +820,7 @@ export function JobTrackerProClient({
               <Menu className="h-4 w-4" />
               Menu
             </button>
-            <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center rounded-lg border border-[#7C5CFC] px-4 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">
+            <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center rounded-lg border border-[#2563EB] px-4 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">
               <Plus className="mr-1 h-4 w-4" />
               Add a New Job
             </button>
@@ -875,7 +875,7 @@ export function JobTrackerProClient({
                     <td className="px-4 py-4 text-gray-500">09/09/2023</td>
                     <td className="px-4 py-4 text-gray-500">{new Date(row.createdAt).toLocaleDateString("en-GB")}</td>
                     <td className="px-4 py-4 text-right">
-                      <button type="button" onClick={() => setSelected(row)} className="rounded-lg border border-[#7C5CFC] px-4 py-1.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">
+                      <button type="button" onClick={() => setSelected(row)} className="rounded-lg border border-[#2563EB] px-4 py-1.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">
                         Edit
                       </button>
                     </td>
@@ -911,7 +911,7 @@ export function JobTrackerProClient({
               const p = idx + Math.max(1, Math.min(page - 2, totalPages - 4));
               if (p > totalPages) return null;
               return (
-                <button key={p} type="button" onClick={() => void loadRows({ nextPage: p })} className={`h-8 min-w-8 rounded-md px-2 ${p === page ? "bg-violet-50 font-semibold text-[#7C5CFC]" : "text-gray-500"}`}>
+                <button key={p} type="button" onClick={() => void loadRows({ nextPage: p })} className={`h-8 min-w-8 rounded-md px-2 ${p === page ? "bg-violet-50 font-semibold text-[#2563EB]" : "text-gray-500"}`}>
                   {p}
                 </button>
               );
@@ -931,7 +931,7 @@ export function JobTrackerProClient({
               <h3 className="text-[20px] font-bold text-gray-900">Add a New Job Post</h3>
               <button type="button" onClick={() => setShowCreate(false)} className="text-gray-400 hover:text-gray-600"><X className="h-5 w-5" /></button>
             </div>
-            <p className="mb-5 text-sm text-[#7C5CFC]">Add jobs in one click with the LaunchCV Extension</p>
+            <p className="mb-5 text-sm text-[#2563EB]">Add jobs in one click with the LaunchCV Extension</p>
             {resumes.length === 0 ? (
               <p className="text-sm text-gray-500">First, <Link href="/resume/new" className="text-blue-500 underline">create a resume</Link>.</p>
             ) : (
@@ -952,8 +952,8 @@ export function JobTrackerProClient({
                 </div>
                 {createErr ? <p className="text-sm text-red-600">{createErr}</p> : null}
                 <div className="flex gap-3">
-                  <button type="button" onClick={() => void createJob()} disabled={savingCreate} className="rounded-full bg-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70">{savingCreate ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save Job</button>
-                  <button type="button" onClick={() => setShowCreate(false)} className="rounded-full border border-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Cancel</button>
+                  <button type="button" onClick={() => void createJob()} disabled={savingCreate} className="rounded-full bg-[#2563EB] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70">{savingCreate ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save Job</button>
+                  <button type="button" onClick={() => setShowCreate(false)} className="rounded-full border border-[#2563EB] px-6 py-2.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">Cancel</button>
                 </div>
               </div>
             )}

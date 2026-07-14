@@ -12,7 +12,7 @@ const DEMO_SKILLS = [
 ];
 
 const TEMPLATE_COLORS: Record<TemplateStyle, { accent: string; sidebarBg: string; nameFg: string }> = {
-  classic: { accent: "#7C5CFC", sidebarBg: "#f9fafb", nameFg: "#7C5CFC" },
+  classic: { accent: "#2563EB", sidebarBg: "#f9fafb", nameFg: "#2563EB" },
   modern: { accent: "#7C3AED", sidebarBg: "#F5F3FF", nameFg: "#7C3AED" },
   minimal: { accent: "#111827", sidebarBg: "#ffffff", nameFg: "#111827" },
   executive: { accent: "#B45309", sidebarBg: "#FFFBEB", nameFg: "#92400E" },

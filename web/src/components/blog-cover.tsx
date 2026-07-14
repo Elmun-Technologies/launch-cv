@@ -34,9 +34,9 @@ const coverByCategory: Record<string, CoverConfig> = {
     iconColor: "text-[#059669]",
   },
   "Job Search": {
-    gradient: "from-[#FAF5FF] via-[#EDE9FE] to-[#DDD6FE]",
+    gradient: "from-[#FAF5FF] via-[#DBEAFE] to-[#BFDBFE]",
     icon: Search,
-    iconColor: "text-[#7C3AED]",
+    iconColor: "text-[#2563EB]",
   },
 };
 

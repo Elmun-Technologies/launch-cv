@@ -278,10 +278,10 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
                 </div>
               </div>
               <div className="flex gap-3 pt-1">
-                <button type="button" disabled={saving} onClick={() => void saveContact()} className="rounded-full bg-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0]">
+                <button type="button" disabled={saving} onClick={() => void saveContact()} className="rounded-full bg-[#2563EB] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8]">
                   {saving ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save
                 </button>
-                <button type="button" onClick={() => { setSelected(null); setForm(EMPTY); }} className="rounded-full border border-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Cancel</button>
+                <button type="button" onClick={() => { setSelected(null); setForm(EMPTY); }} className="rounded-full border border-[#2563EB] px-6 py-2.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">Cancel</button>
               </div>
             </div>
             <div className="space-y-4">
@@ -318,23 +318,23 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
           <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_1.2fr]">
             <label className="flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-gray-200 bg-white text-center transition hover:border-[#80C7FF]">
               <input type="file" multiple className="hidden" onChange={onPickFiles} />
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-violet-50 text-[#7C5CFC]"><UploadCloud className="h-7 w-7" /></div>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-violet-50 text-[#2563EB]"><UploadCloud className="h-7 w-7" /></div>
               <p className="mt-3 text-lg font-semibold text-gray-900">Drag & Drop file here</p>
               <p className="mt-1 text-sm text-gray-400">or click to browse (4mb max)</p>
             </label>
             <div className="space-y-3">
               {(uploads.length ? uploads : [{ id: "p1", name: "Prototype screenshot05.mp4", progress: 0 }, { id: "p2", name: "Prototype screenshot05.mp4", progress: 0 }, { id: "p3", name: "Prototype screenshot05.mp4", progress: 0 }]).map((u) => (
                 <div key={u.id} className="flex items-center gap-3 rounded-lg border border-gray-100 p-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-50 text-[#7C5CFC]"><FilePlus2 className="h-4 w-4" /></div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-50 text-[#2563EB]"><FilePlus2 className="h-4 w-4" /></div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-gray-700">{u.name}</p>
-                    <div className="mt-1 h-2 w-full rounded-full bg-[#E7F3FF]"><div className="h-full rounded-full bg-[#7C5CFC]" style={{ width: `${u.progress}%` }} /></div>
+                    <div className="mt-1 h-2 w-full rounded-full bg-[#E7F3FF]"><div className="h-full rounded-full bg-[#2563EB]" style={{ width: `${u.progress}%` }} /></div>
                   </div>
                   <span className="text-sm text-gray-400">{String(u.progress).padStart(2, "0")}%</span>
                   <button type="button" onClick={() => setUploads((p) => p.filter((x) => x.id !== u.id))} className="text-gray-400 hover:text-gray-600"><X className="h-4 w-4" /></button>
                 </div>
               ))}
-              <button type="button" onClick={() => void createRelatedJob()} disabled={creatingJob} className="mt-1 w-full rounded-full bg-[#7C5CFC] py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70">
+              <button type="button" onClick={() => void createRelatedJob()} disabled={creatingJob} className="mt-1 w-full rounded-full bg-[#2563EB] py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70">
                 {creatingJob ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : <Plus className="mr-1 inline h-4 w-4" />}
                 Create a New Job
               </button>
@@ -364,7 +364,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
               <option value="status">Group by : Status</option>
             </select>
             <button type="button" className="inline-flex h-10 items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-medium text-gray-500"><Menu className="h-4 w-4" />Menu</button>
-            <button type="button" onClick={openCreate} className="inline-flex h-10 items-center rounded-lg border border-[#7C5CFC] px-4 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">
+            <button type="button" onClick={openCreate} className="inline-flex h-10 items-center rounded-lg border border-[#2563EB] px-4 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">
               <Plus className="mr-1 h-4 w-4" />Add a New Job
             </button>
           </div>
@@ -409,7 +409,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
                     <td className="px-4 py-4 text-gray-500">{row.goal ?? "Add Goal"}</td>
                     <td className="px-4 py-4 text-gray-500">{row.followUpAt ? new Date(row.followUpAt).toLocaleDateString() : "Add Date"}</td>
                     <td className="px-4 py-4 text-right">
-                      <button type="button" onClick={() => openEdit(row)} className="rounded-lg border border-[#7C5CFC] px-4 py-1.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Edit</button>
+                      <button type="button" onClick={() => openEdit(row)} className="rounded-lg border border-[#2563EB] px-4 py-1.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">Edit</button>
                     </td>
                   </tr>
                 ))
@@ -433,7 +433,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
               const p = idx + Math.max(1, Math.min(page - 2, totalPages - 4));
               if (p > totalPages) return null;
               return (
-                <button key={p} type="button" onClick={() => setPage(p)} className={`h-8 min-w-8 rounded-md px-2 ${p === page ? "bg-violet-50 font-semibold text-[#7C5CFC]" : "text-gray-500"}`}>{p}</button>
+                <button key={p} type="button" onClick={() => setPage(p)} className={`h-8 min-w-8 rounded-md px-2 ${p === page ? "bg-violet-50 font-semibold text-[#2563EB]" : "text-gray-500"}`}>{p}</button>
               );
             })}
             <button type="button" onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages} className="rounded-md border border-gray-200 px-2 py-1 text-gray-500 disabled:opacity-50"><ChevronRight className="h-4 w-4" /></button>
@@ -464,8 +464,8 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
               <label className="inline-flex items-center gap-2 text-sm text-gray-600"><input type="checkbox" checked={createF.wantsEmails} onChange={(e) => setCreateF((p) => ({ ...p, wantsEmails: e.target.checked }))} className="h-4 w-4 rounded border-gray-300 text-blue-500" />Yes, I want to receive emails</label>
               {err ? <p className="text-sm text-red-600">{err}</p> : null}
               <div className="flex gap-3">
-                <button type="button" onClick={() => void submitCreate()} disabled={createBusy} className="rounded-full bg-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#6B4CE0] disabled:opacity-70">{createBusy ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
-                <button type="button" onClick={() => setShowCreateModal(false)} className="rounded-full border border-[#7C5CFC] px-6 py-2.5 text-sm font-semibold text-[#7C5CFC] transition hover:bg-violet-50">Cancel</button>
+                <button type="button" onClick={() => void submitCreate()} disabled={createBusy} className="rounded-full bg-[#2563EB] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70">{createBusy ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save</button>
+                <button type="button" onClick={() => setShowCreateModal(false)} className="rounded-full border border-[#2563EB] px-6 py-2.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">Cancel</button>
               </div>
             </div>
           </div>

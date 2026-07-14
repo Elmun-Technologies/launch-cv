@@ -330,7 +330,7 @@ export default function FeaturesPage() {
         </div>
       </section>
 
-      <FaqSection items={faqs} accent="#1A56DB" />
+      <FaqSection items={faqs} accent="#2563EB" />
 
       <StickyCta
         primaryHref="/register"
