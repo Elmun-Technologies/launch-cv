@@ -55,7 +55,9 @@ export function LandingNav() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setMobileOpen(false); setMegaOpen(false); }, [pathname]);
 
-  const isDark = !scrolled && !mobileOpen && (pathname === "/" || pathname === "");
+  // Transparent header only controls the background over the (light) hero.
+  // The hero is light, so logo + nav text stay dark everywhere for contrast.
+  const overHero = !scrolled && !mobileOpen && (pathname === "/" || pathname === "");
 
   return (
     <>
@@ -63,14 +65,14 @@ export function LandingNav() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled || mobileOpen
             ? "bg-white/95 backdrop-blur-[12px] border-b border-[#E2E8F0] shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
-            : isDark
+            : overHero
             ? "bg-transparent"
             : "bg-white/95 backdrop-blur-[12px] border-b border-[#E2E8F0]"
         }`}
       >
         <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6">
           {/* Logo */}
-          <Logo variant={isDark ? "dark" : "light"} size="md" />
+          <Logo variant="light" size="md" />
 
           {/* Desktop center nav */}
           <nav className="hidden items-center gap-1 lg:flex">
@@ -80,11 +82,7 @@ export function LandingNav() {
                 type="button"
                 onClick={() => setMegaOpen((v) => !v)}
                 aria-expanded={megaOpen}
-                className={`flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
-                  isDark
-                    ? "text-white/80 hover:text-white hover:bg-white/10"
-                    : "text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
-                }`}
+                className="flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
               >
                 Features
                 <ChevronDown
@@ -143,8 +141,6 @@ export function LandingNav() {
                 className={`rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
                   pathname === l.href
                     ? "text-[#2563EB]"
-                    : isDark
-                    ? "text-white/80 hover:text-white hover:bg-white/10"
                     : "text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
                 }`}
               >
@@ -157,9 +153,7 @@ export function LandingNav() {
           <div className="hidden items-center gap-2 lg:flex">
             <Link
               href="/login"
-              className={`rounded-lg px-4 py-2 text-[14px] font-semibold transition-colors font-body ${
-                isDark ? "text-white/80 hover:text-white hover:bg-white/10" : "text-[#334155] hover:text-[#2563EB] hover:bg-[#F8FAFC]"
-              }`}
+              className="rounded-lg px-4 py-2 text-[14px] font-semibold transition-colors font-body text-[#334155] hover:text-[#2563EB] hover:bg-[#F8FAFC]"
             >
               Sign in
             </Link>
@@ -177,9 +171,7 @@ export function LandingNav() {
             type="button"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             onClick={() => setMobileOpen((v) => !v)}
-            className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors lg:hidden ${
-              isDark ? "text-white hover:bg-white/10" : "text-[#334155] hover:bg-[#F8FAFC]"
-            }`}
+            className="flex h-10 w-10 items-center justify-center rounded-lg transition-colors lg:hidden text-[#334155] hover:bg-[#F8FAFC]"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>

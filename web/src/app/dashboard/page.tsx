@@ -69,7 +69,7 @@ export default async function HomePage() {
         )}
 
         {plan === "none" ? (
-          <div className="flex flex-col gap-3 rounded-2xl border border-violet-200 bg-gradient-to-r from-violet-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50 to-white p-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white">
                 <Sparkles className="h-5 w-5" />
@@ -116,7 +116,7 @@ export default async function HomePage() {
         {/* ── Stat Cards ── */}
         <DashboardStatCards
           stats={[
-            { label: "Total Resumes", value: resumeCount, icon: FileText, color: "bg-violet-50 text-violet-600", trend: "+12%" },
+            { label: "Total Resumes", value: resumeCount, icon: FileText, color: "bg-blue-50 text-blue-600", trend: "+12%" },
             { label: "Applications", value: appCount, icon: Briefcase, color: "bg-amber-50 text-amber-600", trend: "+8%" },
             { label: "Contacts", value: contactCount, icon: Users, color: "bg-emerald-50 text-emerald-600", trend: "+5%" },
             { label: "Companies", value: companyCount, icon: Building2, color: "bg-blue-50 text-blue-600", trend: "+3%" },
@@ -154,8 +154,8 @@ export default async function HomePage() {
               <div className="divide-y divide-gray-50">
                 {recentResumes.map((r) => (
                   <Link key={r.id} href={`/resume/${r.id}/edit`} className="flex items-center gap-4 px-5 py-3.5 transition hover:bg-gray-50/50">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-50">
-                      <FileText className="h-[18px] w-[18px] text-violet-600" />
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50">
+                      <FileText className="h-[18px] w-[18px] text-blue-600" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[14px] font-semibold text-gray-900">{r.title}</p>
@@ -214,7 +214,7 @@ export default async function HomePage() {
         {/* ── Quick Actions ── */}
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { href: "/resume/new", icon: Plus, label: "Create New Resume", desc: "Start from scratch or import", color: "bg-violet-50 text-violet-600" },
+            { href: "/resume/new", icon: Plus, label: "Create New Resume", desc: "Start from scratch or import", color: "bg-blue-50 text-blue-600" },
             { href: "/dashboard/job-tracker", icon: Briefcase, label: "Track Applications", desc: "Manage your job pipeline", color: "bg-amber-50 text-amber-600" },
             { href: "/dashboard/contacts", icon: Users, label: "Manage Contacts", desc: "Build your network", color: "bg-emerald-50 text-emerald-600" },
           ].map((a) => (

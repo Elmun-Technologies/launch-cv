@@ -91,7 +91,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm">
       <div
-        className="relative w-full max-w-[440px] rounded-2xl border border-gray-100 bg-white shadow-2xl shadow-violet-200/30"
+        className="relative w-full max-w-[440px] rounded-2xl border border-gray-100 bg-white shadow-2xl shadow-blue-200/30"
         role="dialog"
         aria-modal="true"
         aria-labelledby="exp-review-title"
@@ -133,8 +133,8 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
                       onClick={() => setNps(i)}
                       className={`flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-semibold transition ${
                         nps === i
-                          ? "bg-[#2563EB] text-white shadow-md shadow-violet-200"
-                          : "border border-gray-200 bg-white text-gray-600 hover:border-[#2563EB]/40 hover:bg-violet-50"
+                          ? "bg-[#2563EB] text-white shadow-md shadow-blue-200"
+                          : "border border-gray-200 bg-white text-gray-600 hover:border-[#2563EB]/40 hover:bg-blue-50"
                       }`}
                     >
                       {i}

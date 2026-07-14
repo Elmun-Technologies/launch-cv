@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
-import { BrandMark } from "@/components/brand-mark";
+import { LogoMark } from "@/components/logo";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
   FileText, Loader2, UploadCloud, CheckCircle, AlertTriangle,
@@ -245,7 +245,7 @@ export default function NewResumePage() {
       {/* Header */}
       <header className="flex items-center justify-between border-b border-gray-100 bg-white px-6 py-3.5">
         <Link href="/dashboard" className="flex items-center gap-2.5">
-          <BrandMark size={30} />
+          <LogoMark size={30} />
           <span className="text-[15px] font-bold">
             <span className="text-[#0F172A]">launch</span>
             <span className="text-[#2563EB]">cv</span>
@@ -284,9 +284,9 @@ export default function NewResumePage() {
                   type="button"
                   onClick={() => void handleCreate()}
                   disabled={creating}
-                  className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-violet-100/50 disabled:opacity-60"
+                  className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-blue-100/50 disabled:opacity-60"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF] shadow-lg shadow-violet-200/50">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF] shadow-lg shadow-blue-200/50">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
                   <h2 className="mt-6 text-[20px] font-bold text-gray-900">Start from Scratch</h2>
@@ -301,7 +301,7 @@ export default function NewResumePage() {
                       { icon: Mic, text: "Voice input supported" },
                     ].map((b) => (
                       <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-gray-600">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-violet-50">
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50">
                           <b.icon className="h-3.5 w-3.5 text-[#2563EB]" />
                         </div>
                         {b.text}
@@ -344,7 +344,7 @@ export default function NewResumePage() {
                     ))}
                   </div>
 
-                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#2563EB] py-3.5 text-[14px] font-semibold text-[#2563EB] transition-colors group-hover:bg-violet-50">
+                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#2563EB] py-3.5 text-[14px] font-semibold text-[#2563EB] transition-colors group-hover:bg-blue-50">
                     <UploadCloud className="h-4.5 w-4.5" /> Upload File
                   </div>
                   <p className="mt-3 text-center text-[12px] text-gray-400">PDF, DOCX (max 4MB)</p>
@@ -401,7 +401,7 @@ export default function NewResumePage() {
                 </div>
 
                 <div className="mt-12 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
                     <Loader2 className="h-7 w-7 animate-spin text-[#2563EB]" />
                   </div>
                   <h2 className="mt-5 text-[20px] font-bold text-gray-900">
@@ -537,7 +537,7 @@ export default function NewResumePage() {
                           </div>
                         </div>
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50">
                             <BarChart3 className="h-4.5 w-4.5 text-[#2563EB]" />
                           </div>
                           <div>
@@ -612,7 +612,7 @@ export default function NewResumePage() {
                                             </div>
                                           </div>
                                           {isFixExpanded && (
-                                            <div className="border-t border-gray-100 bg-violet-50/50 px-4 py-3">
+                                            <div className="border-t border-gray-100 bg-blue-50/50 px-4 py-3">
                                               <p className="text-[12px] leading-relaxed text-gray-600">
                                                 {fixSuggestions[issue.type] ?? "Open the editor to address this issue with AI-powered guidance."}
                                               </p>
@@ -677,7 +677,7 @@ export default function NewResumePage() {
                   {/* ── Right Column ── */}
                   <div className="space-y-6">
                     {/* What to do next */}
-                    <div className="anim-d2 rounded-2xl border-2 border-[#2563EB]/20 bg-gradient-to-b from-violet-50/60 to-white p-6 shadow-sm">
+                    <div className="anim-d2 rounded-2xl border-2 border-[#2563EB]/20 bg-gradient-to-b from-blue-50/60 to-white p-6 shadow-sm">
                       <h3 className="flex items-center gap-2 text-[17px] font-bold text-gray-900">
                         <Target className="h-5 w-5 text-[#2563EB]" />
                         What to do next
@@ -712,13 +712,13 @@ export default function NewResumePage() {
                       <div className="mt-4 space-y-2.5">
                         <Link
                           href={`/resume/${resumeId}/edit`}
-                          className="flex items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-md hover:shadow-violet-200/50"
+                          className="flex items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-md hover:shadow-blue-200/50"
                         >
                           <Sparkles className="h-4 w-4" /> Open in Editor
                         </Link>
                         <Link
                           href={`/resume/${resumeId}/jd`}
-                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#2563EB] py-3 text-[14px] font-semibold text-[#2563EB] transition hover:bg-violet-50"
+                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#2563EB] py-3 text-[14px] font-semibold text-[#2563EB] transition hover:bg-blue-50"
                         >
                           <Target className="h-4 w-4" /> Tailor to Job Description
                         </Link>

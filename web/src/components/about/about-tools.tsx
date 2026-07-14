@@ -10,7 +10,7 @@ type Tool = { icon: LucideIcon; title: string; desc: string; bg: string; text: s
 
 const TOOLS: Tool[] = [
   { icon: Target, title: "JD Alignment", desc: "Maps every requirement to your resume and lifts your match score.", bg: "bg-blue-50", text: "text-blue-600", span: true },
-  { icon: FileText, title: "Resume Builder", desc: "4 ATS-tested templates. Plain input becomes quantified bullets.", bg: "bg-violet-50", text: "text-violet-600" },
+  { icon: FileText, title: "Resume Builder", desc: "4 ATS-tested templates. Plain input becomes quantified bullets.", bg: "bg-blue-50", text: "text-blue-600" },
   { icon: BarChart3, title: "ATS Score", desc: "Scored on the signals ATS software relies on, with a prioritized fix list.", bg: "bg-orange-50", text: "text-orange-600" },
   { icon: Mail, title: "Cover Letters", desc: "Personalized in about a minute. Formal or Neutral tone.", bg: "bg-teal-50", text: "text-teal-600" },
   { icon: MessageSquare, title: "Interview Prep", desc: "Role-specific questions with model answer outlines.", bg: "bg-emerald-50", text: "text-emerald-600", span: true },

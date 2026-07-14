@@ -90,9 +90,9 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
           </Link>
         </p>
         {referralCode ? (
-          <div className="mt-4 flex items-center gap-2 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2">
-            <Gift className="h-3.5 w-3.5 shrink-0 text-violet-600" />
-            <p className="text-[12px] font-semibold text-violet-700">
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2">
+            <Gift className="h-3.5 w-3.5 shrink-0 text-blue-600" />
+            <p className="text-[12px] font-semibold text-blue-700">
               Referral applied: <span className="font-bold">{referralCode}</span>
             </p>
           </div>

@@ -451,7 +451,7 @@ export function JobTrackerProClient({
         </div>
         <div className="mt-4 flex gap-2">
           <button type="button" onClick={() => void navigator.clipboard.writeText("Introduction — Acme Design Studio")} className="rounded-full bg-[#2563EB] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[#1D4ED8]">Copy Subject</button>
-          <button type="button" className="rounded-full border border-[#2563EB] px-4 py-2 text-xs font-semibold text-[#2563EB] transition hover:bg-violet-50">Copy Message</button>
+          <button type="button" className="rounded-full border border-[#2563EB] px-4 py-2 text-xs font-semibold text-[#2563EB] transition hover:bg-blue-50">Copy Message</button>
         </div>
       </div>
     );
@@ -820,7 +820,7 @@ export function JobTrackerProClient({
               <Menu className="h-4 w-4" />
               Menu
             </button>
-            <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center rounded-lg border border-[#2563EB] px-4 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">
+            <button type="button" onClick={() => setShowCreate(true)} className="inline-flex h-10 items-center rounded-lg border border-[#2563EB] px-4 text-sm font-semibold text-[#2563EB] transition hover:bg-blue-50">
               <Plus className="mr-1 h-4 w-4" />
               Add a New Job
             </button>
@@ -875,7 +875,7 @@ export function JobTrackerProClient({
                     <td className="px-4 py-4 text-gray-500">09/09/2023</td>
                     <td className="px-4 py-4 text-gray-500">{new Date(row.createdAt).toLocaleDateString("en-GB")}</td>
                     <td className="px-4 py-4 text-right">
-                      <button type="button" onClick={() => setSelected(row)} className="rounded-lg border border-[#2563EB] px-4 py-1.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">
+                      <button type="button" onClick={() => setSelected(row)} className="rounded-lg border border-[#2563EB] px-4 py-1.5 text-sm font-semibold text-[#2563EB] transition hover:bg-blue-50">
                         Edit
                       </button>
                     </td>
@@ -911,7 +911,7 @@ export function JobTrackerProClient({
               const p = idx + Math.max(1, Math.min(page - 2, totalPages - 4));
               if (p > totalPages) return null;
               return (
-                <button key={p} type="button" onClick={() => void loadRows({ nextPage: p })} className={`h-8 min-w-8 rounded-md px-2 ${p === page ? "bg-violet-50 font-semibold text-[#2563EB]" : "text-gray-500"}`}>
+                <button key={p} type="button" onClick={() => void loadRows({ nextPage: p })} className={`h-8 min-w-8 rounded-md px-2 ${p === page ? "bg-blue-50 font-semibold text-[#2563EB]" : "text-gray-500"}`}>
                   {p}
                 </button>
               );
@@ -953,7 +953,7 @@ export function JobTrackerProClient({
                 {createErr ? <p className="text-sm text-red-600">{createErr}</p> : null}
                 <div className="flex gap-3">
                   <button type="button" onClick={() => void createJob()} disabled={savingCreate} className="rounded-full bg-[#2563EB] px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-70">{savingCreate ? <Loader2 className="mr-1 inline h-4 w-4 animate-spin" /> : null}Save Job</button>
-                  <button type="button" onClick={() => setShowCreate(false)} className="rounded-full border border-[#2563EB] px-6 py-2.5 text-sm font-semibold text-[#2563EB] transition hover:bg-violet-50">Cancel</button>
+                  <button type="button" onClick={() => setShowCreate(false)} className="rounded-full border border-[#2563EB] px-6 py-2.5 text-sm font-semibold text-[#2563EB] transition hover:bg-blue-50">Cancel</button>
                 </div>
               </div>
             )}

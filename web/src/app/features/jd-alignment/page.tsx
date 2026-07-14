@@ -263,7 +263,7 @@ export default function JDAlignmentPage() {
                         <Plus className="h-3.5 w-3.5 text-emerald-700" />
                         <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-700">After · 91% match</p>
                       </div>
-                      <span className="rounded-full bg-violet-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-violet-700">AI</span>
+                      <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-blue-700">AI</span>
                     </div>
                     <p className="mt-2 text-[13px] leading-snug text-[#0F172A]">
                       Led cross-functional delivery of 3 enterprise SaaS migrations, cutting time-to-deploy by 40% with Agile/Scrum.

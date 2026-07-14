@@ -105,7 +105,7 @@ export function SettingsClient({
                 className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] transition-all ${
                   active
                     ? "bg-[#2563EB] font-semibold text-white shadow-[0_2px_8px_rgba(37, 99, 235,0.25)]"
-                    : "text-gray-500 hover:bg-violet-50 hover:text-gray-900"
+                    : "text-gray-500 hover:bg-blue-50 hover:text-gray-900"
                 }`}
               >
                 <span>{item.label}</span>
@@ -119,7 +119,7 @@ export function SettingsClient({
       {/* ── Right Content ── */}
       <div className="min-w-0 flex-1">
         {!isPro ? (
-          <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[#2563EB]/20 bg-gradient-to-r from-violet-50 to-white p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[#2563EB]/20 bg-gradient-to-r from-blue-50 to-white p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white">
                 <Sparkles className="h-5 w-5" />
@@ -144,7 +144,7 @@ export function SettingsClient({
           {/* Header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-100">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100">
                 <User className="h-4 w-4 text-[#2563EB]" />
               </div>
               <div>
@@ -161,7 +161,7 @@ export function SettingsClient({
             {/* ── Section: Personal Details ── */}
             <div className="pb-7">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
                   <User className="h-3.5 w-3.5 text-[#2563EB]" />
                 </div>
                 <h3 className="text-[15px] font-bold text-gray-900">Personal Details</h3>
@@ -210,7 +210,7 @@ export function SettingsClient({
                       {firstName?.[0]?.toUpperCase() ?? "U"}
                     </div>
                     <button type="button" className="rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]">Upload</button>
-                    <button type="button" className="rounded-xl border border-[#2563EB]/20 px-4 py-2 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50">Reset</button>
+                    <button type="button" className="rounded-xl border border-[#2563EB]/20 px-4 py-2 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50">Reset</button>
                   </div>
                 </div>
 
@@ -230,7 +230,7 @@ export function SettingsClient({
             {/* ── Section: Social Links ── */}
             <div className="border-t border-gray-100 pb-7 pt-7">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
                   <Link2 className="h-3.5 w-3.5 text-[#2563EB]" />
                 </div>
                 <h3 className="text-[15px] font-bold text-gray-900">Social Links</h3>
@@ -248,7 +248,7 @@ export function SettingsClient({
             {/* ── Section: Security ── */}
             <div className="border-t border-gray-100 pb-7 pt-7">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-violet-50">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
                   <Lock className="h-3.5 w-3.5 text-[#2563EB]" />
                 </div>
                 <div>
@@ -327,7 +327,7 @@ export function SettingsClient({
                   {saving ? <Loader2 className="mr-1.5 inline h-4 w-4 animate-spin" /> : null}
                   Save Changes
                 </button>
-                <button type="button" className="rounded-xl border border-[#2563EB]/20 px-6 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-violet-50">
+                <button type="button" className="rounded-xl border border-[#2563EB]/20 px-6 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50">
                   Cancel
                 </button>
               </div>

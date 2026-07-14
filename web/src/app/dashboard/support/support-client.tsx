@@ -46,7 +46,7 @@ export function SupportClient() {
       {/* Header */}
       <div className="rounded-2xl border border-gray-100 bg-white px-8 py-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-50">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
             <HelpCircle className="h-7 w-7 text-[#2563EB]" />
           </div>
           <div>
@@ -78,7 +78,7 @@ export function SupportClient() {
           href="mailto:support@launch-cv.com"
           className="group rounded-2xl border border-gray-100 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition hover:border-[#2563EB]/30 hover:shadow-[0_8px_24px_rgba(37, 99, 235,0.1)]"
         >
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-violet-50 transition group-hover:bg-[#2563EB] group-hover:shadow-lg">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 transition group-hover:bg-[#2563EB] group-hover:shadow-lg">
             <Mail className="h-5 w-5 text-[#2563EB] transition group-hover:text-white" />
           </div>
           <h3 className="mt-4 text-[15px] font-bold text-gray-900">Email Support</h3>
@@ -121,9 +121,9 @@ export function SupportClient() {
             <button
               key={article.title}
               type="button"
-              className="flex items-start gap-3 rounded-xl border border-gray-100 p-4 text-left transition hover:border-[#2563EB]/20 hover:bg-violet-50/30"
+              className="flex items-start gap-3 rounded-xl border border-gray-100 p-4 text-left transition hover:border-[#2563EB]/20 hover:bg-blue-50/30"
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50">
                 <article.icon className="h-4 w-4 text-[#2563EB]" />
               </div>
               <div>
@@ -177,7 +177,7 @@ export function SupportClient() {
       </div>
 
       {/* Still Need Help */}
-      <div className="rounded-2xl border border-gray-100 bg-gradient-to-br from-violet-50/60 to-white p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+      <div className="rounded-2xl border border-gray-100 bg-gradient-to-br from-blue-50/60 to-white p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <div className="text-center">
           <h2 className="text-[15px] font-bold text-gray-900">Still need help?</h2>
           <p className="mt-1.5 text-[13px] text-gray-500">

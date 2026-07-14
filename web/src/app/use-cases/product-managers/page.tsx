@@ -144,7 +144,7 @@ export default function ProductManagersPage() {
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">PM keyword library — pre-loaded</p>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {pmKeywords.map((s) => (
-                    <span key={s} className="rounded-md bg-violet-50 px-2 py-0.5 text-[11px] font-medium text-violet-800 ring-1 ring-violet-200">
+                    <span key={s} className="rounded-md bg-blue-50 px-2 py-0.5 text-[11px] font-medium text-blue-800 ring-1 ring-blue-200">
                       {s}
                     </span>
                   ))}
@@ -216,7 +216,7 @@ export default function ProductManagersPage() {
             ].map((m) => (
               <RevealOnView key={m.k}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
                     <m.i className="h-5 w-5" />
                   </span>
                   <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{m.k}</h3>
@@ -266,8 +266,8 @@ export default function ProductManagersPage() {
                     <p className="text-[11px] font-semibold uppercase tracking-wider text-red-600">Before</p>
                     <p className="mt-2 text-[14px] text-[#475569]">&ldquo;{e.before}&rdquo;</p>
                   </div>
-                  <div className="rounded-lg border border-violet-100 bg-violet-50/30 p-5">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-violet-700">After · AI rewrite</p>
+                  <div className="rounded-lg border border-blue-100 bg-blue-50/30 p-5">
+                    <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-700">After · AI rewrite</p>
                     <p className="mt-2 text-[14px] leading-[1.6] text-[#0F172A]">{e.after}</p>
                   </div>
                 </div>
@@ -335,7 +335,7 @@ export default function ProductManagersPage() {
             ].map((s) => (
               <RevealOnView key={s.n}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-violet-50 text-[13px] font-bold text-[#2563EB]">
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-blue-50 text-[13px] font-bold text-[#2563EB]">
                     {s.n}
                   </span>
                   <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>

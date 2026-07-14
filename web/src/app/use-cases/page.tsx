@@ -45,7 +45,7 @@ const roles = [
     description:
       "Turn roadmaps, OKRs, and A/B tests into the quantified, recruiter-ready language that PM hiring actually rewards.",
     href: "/use-cases/product-managers",
-    iconBg: "bg-violet-50 text-violet-700",
+    iconBg: "bg-blue-50 text-blue-700",
     stats: [{ k: "Metrics-first", v: "Every bullet" }, { k: "12", v: "Templates" }],
   },
   {

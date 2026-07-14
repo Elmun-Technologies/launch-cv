@@ -42,7 +42,7 @@ const TIERS = [
 ] as const;
 
 const TIER_COLORS: Record<string, string> = {
-  faang: "bg-violet-50 text-[#2563EB]",
+  faang: "bg-blue-50 text-[#2563EB]",
   tech: "bg-blue-50 text-blue-600",
   finance: "bg-emerald-50 text-emerald-600",
   consulting: "bg-amber-50 text-amber-600",
@@ -221,7 +221,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
           <select
             value={selectedResumeId}
             onChange={(e) => setSelectedResumeId(e.target.value)}
-            className="h-11 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-4 pr-10 text-[13px] font-medium text-gray-900 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
+            className="h-11 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-4 pr-10 text-[13px] font-medium text-gray-900 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
           >
             {resumes.length === 0 && <option value="">No resumes available</option>}
             {resumes.map((r) => (
@@ -433,7 +433,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search companies, industries, or keywords..."
-                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
                 />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -444,7 +444,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     onClick={() => setActiveTier(tier.key)}
                     className={`rounded-full px-4 py-2 text-[12px] font-semibold transition ${
                       activeTier === tier.key
-                        ? "bg-[#2563EB] text-white shadow-sm shadow-violet-500/20"
+                        ? "bg-[#2563EB] text-white shadow-sm shadow-blue-500/20"
                         : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                     }`}
                   >
@@ -537,21 +537,21 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     value={customName}
                     onChange={(e) => setCustomName(e.target.value)}
                     placeholder="Company name"
-                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
                   />
                   <input
                     type="text"
                     value={customIndustry}
                     onChange={(e) => setCustomIndustry(e.target.value)}
                     placeholder="Industry"
-                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
                   />
                   <textarea
                     value={customJD}
                     onChange={(e) => setCustomJD(e.target.value)}
                     placeholder="Paste job description here..."
                     rows={4}
-                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-violet-100"
+                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
                   />
                   <div className="flex gap-2">
                     <button
