@@ -1,11 +1,11 @@
-# 10.2 Analytics — GA4 + PostHog + ichki DB
+# 10.2 Analytics — GA4 + PostHog + Mixpanel + ichki DB
 
 ## Konversiya funneli (asosiy hodisalar)
 
 Butun funnel bitta joyda belgilangan: **`src/lib/analytics-events.ts`**.
-Har bir hodisa GA4 **va** PostHog ikkalasiga ham yuboriladi. Nomlar GA4 tavsiya
-etilgan event nomlariga moslangan (`purchase`, `sign_up_*`), shunda GA4 ning
-tayyor monetization/konversiya hisobotlari ishlaydi.
+Har bir hodisa GA4, PostHog **va** Mixpanel — uchalasiga ham yuboriladi. Nomlar GA4
+tavsiya etilgan event nomlariga moslangan (`purchase`, `sign_up_*`), shunda GA4
+ning tayyor monetization/konversiya hisobotlari ishlaydi.
 
 | Event | Qachon | Qayerda (kod) | Yo‘nalish |
 |-------|--------|---------------|-----------|
@@ -32,15 +32,19 @@ tayyor monetization/konversiya hisobotlari ishlaydi.
 - **`lib/analytics-events.ts`** — event nomlari, `KEY_EVENT_NAMES` va tiplar
   (yagona manba, izomorf).
 - **`lib/analytics-client.ts`** — brauzerda `track()` → `gtag()` +
-  `window.posthog.capture()`. Har bir hodisaga birinchi-teginish (first-touch)
-  UTM atributlari avtomatik qo‘shiladi. `identifyUser(userId)` — register/login’dan
-  keyin funnel’ni bitta odam bo‘yicha (server `purchase` bilan) bog‘laydi.
-  `posthog-js` static import qilinmaydi (bundle o‘smasligi uchun); `window.posthog`
-  `app/providers.tsx` da init’dan keyin ochib qo‘yiladi.
+  `window.posthog.capture()` + `window.mixpanel.track()`. Har bir hodisaga
+  birinchi-teginish (first-touch) UTM atributlari avtomatik qo‘shiladi.
+  `identifyUser(userId)` — register/login’dan keyin funnel’ni bitta odam
+  bo‘yicha (server `purchase` bilan) bog‘laydi (PostHog `identify()` +
+  Mixpanel `identify()`/`people.set()` + GA4 `user_id`). `posthog-js` va
+  `mixpanel-browser` static import qilinmaydi (bundle o‘smasligi uchun);
+  `window.posthog` / `window.mixpanel` `app/providers.tsx` da init’dan keyin
+  ochib qo‘yiladi.
 - **`lib/analytics-server.ts`** — server dispatch: GA4 **Measurement Protocol** +
-  PostHog `/capture/` endpoint. `purchase` (webhook) uchun. `value` berilmasa
-  reja narxidan (`PLAN_PRICE_USD`) olinadi; UTM atributlari GA4 traffic-source
-  (`source`/`medium`/`campaign`) va PostHog xususiyatlariga o‘tkaziladi.
+  PostHog `/capture/` endpoint + Mixpanel `/track` endpoint. `purchase`
+  (webhook) uchun. `value` berilmasa reja narxidan (`PLAN_PRICE_USD`) olinadi;
+  UTM atributlari GA4 traffic-source (`source`/`medium`/`campaign`) va
+  PostHog/Mixpanel xususiyatlariga o‘tkaziladi.
 - **`lib/utm.ts`** — kampaniya atributsiyasi (UTM + `gclid`/`fbclid`/`msclkid`).
   Birinchi-teginish `lc_attribution` cookie’siga yoziladi (90 kun).
 - **`components/attribution-tracker.tsx`** — `<AttributionTracker>` (layout’da) —
@@ -72,12 +76,18 @@ GA_API_SECRET=""                   # FAQAT server (purchase) uchun — Measureme
 # PostHog
 NEXT_PUBLIC_POSTHOG_KEY=""
 NEXT_PUBLIC_POSTHOG_HOST="https://us.i.posthog.com"
+
+# Mixpanel
+NEXT_PUBLIC_MIXPANEL_TOKEN=""
+# NEXT_PUBLIC_MIXPANEL_HOST="https://api-eu.mixpanel.com"   # ixtiyoriy, EU-residency loyihalar uchun
 ```
 
 `GA_API_SECRET` bo‘sh bo‘lsa server-side GA4 yuborish jim o‘tkazib yuboriladi
-(client hodisalar baribir ishlaydi). PostHog server capture uchun alohida secret
-kerak emas — `NEXT_PUBLIC_POSTHOG_KEY` yetarli. UTM uchun qo‘shimcha env kerak
-emas (cookie asosida ishlaydi).
+(client hodisalar baribir ishlaydi). PostHog va Mixpanel server capture uchun
+alohida secret kerak emas — mos public token/key (`NEXT_PUBLIC_POSTHOG_KEY` /
+`NEXT_PUBLIC_MIXPANEL_TOKEN`) yetarli, chunki ularning `/capture/` va `/track`
+ingestion endpointlari public token bilan ishlaydi. UTM uchun qo‘shimcha env
+kerak emas (cookie asosida ishlaydi).
 
 ---
 
@@ -191,6 +201,42 @@ Hodisalar to‘g‘ri kelayotganini avval **Activity → Explore events** da tek
 > Brauzerda register/login’dan keyin `identifyUser(userId)` chaqirilgani uchun
 > funnel bitta odam bo‘yicha to‘liq bog‘lanadi (client qadamlar → server `purchase`).
 
+---
+
+## Mixpanel’da funnel qurish
+
+Hodisalar to‘g‘ri kelayotganini avval **Events** ko‘rinishida tekshiring
+(yuqoridagi 6 event nomi bo‘yicha filtr; real-vaqtda ko‘rish uchun **Events →
+Live View**).
+
+### 1) Signup funnel
+
+1. Mixpanel → **Reports → Funnels → Create new funnel**.
+2. Qadamlar:
+   1. `sign_up_start`
+   2. `sign_up_complete`
+3. (ixtiyoriy) 0-qadam sifatida `cta_click` qo‘yib, marketing CTA → ro‘yxatdan
+   o‘tish oqimini o‘lchang.
+4. Conversion window: 1 kun. **Breakdown**: `utm_source` yoki `utm_campaign`.
+5. Saqlang: **“Signup funnel”**.
+
+### 2) Purchase funnel
+
+1. **Funnels → Create new funnel**.
+2. Qadamlar:
+   1. `sign_up_complete`
+   2. `plan_selected`
+   3. `checkout_start`
+   4. `purchase`
+3. Conversion window: 7 kun (yoki biznesga mos). **Breakdown**: `plan` — qaysi
+   reja ko‘proq konversiya beradi; yoki `utm_campaign` — qaysi kampaniya to‘laydi.
+4. Saqlang: **“Purchase funnel”**.
+
+> Muhim: `purchase` Mixpanel’ga serverdan `distinct_id = userId` bilan keladi
+> (`$insert_id` bilan — Polar webhook qayta yetkazsa ham ikki marta sanalmaydi).
+> Brauzerda register/login’dan keyin `identifyUser(userId)` chaqirilgani uchun
+> funnel bitta odam bo‘yicha to‘liq bog‘lanadi (client qadamlar → server `purchase`).
+
 ## User identity (o‘rnatilgan)
 
 Funnel qadamlari bitta foydalanuvchi bo‘yicha bog‘lanishi uchun `identifyUser()`
@@ -198,10 +244,12 @@ Funnel qadamlari bitta foydalanuvchi bo‘yicha bog‘lanishi uchun `identifyUse
 
 - **register muvaffaqiyatli** — `app/register/page.tsx` (`identifyUser(userId)`)
 - **login muvaffaqiyatli** — `components/login-form.tsx` (login route endi `userId` qaytaradi)
-- **logout** — `components/site-header.tsx` → `resetUser()` (PostHog `reset()` + GA4 `user_id=null`)
+- **logout** — `components/site-header.tsx` → `resetUser()` (PostHog `reset()` +
+  Mixpanel `reset()` + GA4 `user_id=null`)
 
-Bu `posthog.identify(userId)` + GA4 `gtag('set', { user_id })` ni bajaradi, shunda
-signup’gacha bo‘lgan anonim hodisalar identifikatsiyalangan foydalanuvchiga ulanadi.
+Bu `posthog.identify(userId)` + `mixpanel.identify(userId)`/`people.set(traits)` +
+GA4 `gtag('set', { user_id })` ni bajaradi, shunda signup’gacha bo‘lgan anonim
+hodisalar identifikatsiyalangan foydalanuvchiga ulanadi.
 
 ## GA4 session stitching (purchase, o‘rnatilgan)
 
@@ -233,24 +281,24 @@ faqat pre-purchase sessiyaga ulanmaydi).
 ## E2E test
 
 `e2e/analytics.spec.ts` — `sign_up_start` va `cta_click` (reja bilan)
-event’lari GA4 (`dataLayer`) va PostHog’ga yetishini tekshiradi. Ishga tushirish:
-`npm run test:e2e` (production `next start`ga qarshi ishlaydi).
+event’lari GA4 (`dataLayer`), PostHog va Mixpanel’ga yetishini tekshiradi. Ishga
+tushirish: `npm run test:e2e` (production `next start`ga qarshi ishlaydi).
 
 ## Ichki hodisalar (`AnalyticsEvent`)
 
 Serverda `trackEvent()` (`lib/analytics.ts`) — Postgres/Prisma’ga yozadi: `signup`,
-`checkout_started`, `pay_success` va h.k. Bu GA4/PostHog’dan mustaqil, BI/Metabase
-uchun. Yangi konversiya funneli ustidan qo‘shimcha; uni almashtirmaydi.
+`checkout_started`, `pay_success` va h.k. Bu GA4/PostHog/Mixpanel’dan mustaqil,
+BI/Metabase uchun. Yangi konversiya funneli ustidan qo‘shimcha; uni almashtirmaydi.
 
 ## Ichki / jamoa trafigini tozalash (internal traffic)
 
 Analytics’ni jamoa va preview trafigidan toza ushlab turish uchun ikki qatlam bor:
-**(1) kodda yuklanishni cheklash** va **(2) GA4/PostHog UI’da filtr**.
+**(1) kodda yuklanishni cheklash** va **(2) GA4/PostHog/Mixpanel UI’da filtr**.
 
 ### 1-qatlam — kod (avtomatik, allaqachon o‘rnatilgan)
 
-`src/lib/analytics-enabled.ts` yagona qaror manbai. GA4 (`components/google-analytics.tsx`)
-va PostHog (`app/providers.tsx`) faqat quyidagi hollarda yuklanadi:
+`src/lib/analytics-enabled.ts` yagona qaror manbai. GA4 (`components/google-analytics.tsx`),
+PostHog va Mixpanel (ikkalasi ham `app/providers.tsx`) faqat quyidagi hollarda yuklanadi:
 
 - **Faqat production marketing sayti.** `NEXT_PUBLIC_VERCEL_ENV === "production"`
   bo‘lganda (Vercel avtomatik beradi). Preview deploy (`preview`), local dev, va
@@ -258,7 +306,8 @@ va PostHog (`app/providers.tsx`) faqat quyidagi hollarda yuklanadi:
   ildizidan kesadi.
 - **App sahifalarida emas.** `/admin-panel` va `/dashboard` (va ular ostidagi hamma
   narsa) — hech qachon yuklanmaydi. SPA navigatsiyada ham: bu sahifalarga o‘tilganda
-  GA `ga-disable-<ID>` bilan, PostHog `opt_out_capturing()` bilan to‘xtaydi.
+  GA `ga-disable-<ID>` bilan, PostHog `opt_out_capturing()` bilan, Mixpanel
+  `opt_out_tracking()` bilan to‘xtaydi.
 
 ### Internal flag (jamoa a’zolari)
 
@@ -272,6 +321,8 @@ Jamoa a’zosi **production marketing saytini** ko‘rsa ham, uni `internal` deb
 Flag borligida:
 - GA4 → har bir hit `traffic_type: 'internal'` bilan ketadi.
 - PostHog → har bir eventda `is_internal: true` super-property bo‘ladi.
+- Mixpanel → har bir eventda `is_internal: true` super-property bo‘ladi (PostHog
+  bilan bir xil konventsiya).
 
 ### 2-qatlam — GA4 UI (bir marta sozlanadi)
 
@@ -299,6 +350,18 @@ Flag borligida:
      (`posthog.identify` email bilan chaqirilganda ishlaydi).
 3. Insight/Dashboard/Funnel’larda **“Filter out internal and test users”** ni yoqing
    (odatda default yoqilgan bo‘ladi). Shundan so‘ng jamoa trafigi hisob-kitobdan chiqadi.
+
+### 2-qatlam — Mixpanel UI (bir marta sozlanadi)
+
+1. Mixpanel → **Data Management → Filter and Blocking Rules** (yoki loyihaga qarab
+   **Settings → Data Governance**).
+2. **Property filter** qo‘shing: `is_internal` **= `true`** — yuqoridagi super-property
+   (login qilgan staff + `?lcv_internal=1` bilan belgilangan brauzerlar). Filter’ni
+   yangi hodisalarni **drop** qilishga emas, balki reportlarda **filter/exclude**
+   qilishga sozlang — kelajakda internal trafikni alohida ko‘rish kerak bo‘lsa,
+   xom ma’lumot saqlanib qoladi.
+3. Alohida **Cohort** yarating (`is_internal = true`) va uni Insights/Funnels’da
+   “Exclude” sifatida qo‘llang.
 
 > Eslatma: kod qatlami preview va app trafigini butunlay **yubormaydi**, UI filtri esa
 > production marketing saytida yurgan jamoa a’zolarini hisobdan **chiqaradi**. Ikkalasi

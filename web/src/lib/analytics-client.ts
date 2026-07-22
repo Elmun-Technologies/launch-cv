@@ -1,13 +1,15 @@
 /**
  * Browser-side analytics dispatch.
  *
- * A single `track()` fans every event out to BOTH destinations:
+ * A single `track()` fans every event out to ALL THREE destinations:
  *   - Google Analytics 4 via the global `gtag()` (see `components/google-analytics.tsx`)
  *   - PostHog via `window.posthog` (exposed in `app/providers.tsx` after init)
+ *   - Mixpanel via `window.mixpanel` (exposed in `app/providers.tsx` after init)
  *
  * We intentionally reach for the globals rather than statically importing
- * `posthog-js` — a static import would pull the (large) library into the
- * initial JS bundle and defeat the dynamic-import loading in `providers.tsx`.
+ * `posthog-js` / `mixpanel-browser` — a static import would pull the (large)
+ * libraries into the initial JS bundle and defeat the dynamic-import loading
+ * in `providers.tsx`.
  *
  * Every dispatched event is decorated with first-touch campaign attribution
  * (UTM + click ids) from the `lc_attribution` cookie, so GA4 and PostHog both
@@ -32,6 +34,12 @@ type GtagWindow = Window & {
     identify?: (distinctId: string, properties?: EventParams) => void;
     reset?: () => void;
   };
+  mixpanel?: {
+    track?: (event: string, properties?: EventParams) => void;
+    identify?: (distinctId: string) => void;
+    people?: { set?: (properties: EventParams) => void };
+    reset?: () => void;
+  };
 };
 
 function toGtag(event: AnalyticsEventName, params: EventParams) {
@@ -51,10 +59,16 @@ function toPosthog(event: AnalyticsEventName, params: EventParams) {
   (window as GtagWindow).posthog?.capture?.(event, params);
 }
 
+function toMixpanel(event: AnalyticsEventName, params: EventParams) {
+  if (typeof window === "undefined") return;
+  (window as GtagWindow).mixpanel?.track?.(event, params);
+}
+
 /**
- * Send a conversion / funnel event to GA4 and PostHog. Never throws — analytics
- * must not break the UI. Undefined params are dropped so GA4 doesn't record them.
- * First-touch campaign attribution is merged in automatically (explicit params win).
+ * Send a conversion / funnel event to GA4, PostHog and Mixpanel. Never throws —
+ * analytics must not break the UI. Undefined params are dropped so GA4 doesn't
+ * record them. First-touch campaign attribution is merged in automatically
+ * (explicit params win).
  */
 export function track(event: AnalyticsEventName, params?: EventParams) {
   const clean: EventParams = { ...getAttribution() };
@@ -70,6 +84,11 @@ export function track(event: AnalyticsEventName, params?: EventParams) {
   }
   try {
     toPosthog(event, clean);
+  } catch {
+    // ignore
+  }
+  try {
+    toMixpanel(event, clean);
   } catch {
     // ignore
   }
@@ -118,6 +137,12 @@ export function identifyUser(userId: string, traits?: EventParams) {
   } catch {
     // ignore
   }
+  try {
+    w.mixpanel?.identify?.(userId);
+    if (traits) w.mixpanel?.people?.set?.(traits);
+  } catch {
+    // ignore
+  }
 }
 
 /** Clear the identified user on logout so the next visitor starts anonymous. */
@@ -131,6 +156,11 @@ export function resetUser() {
   }
   try {
     w.posthog?.reset?.();
+  } catch {
+    // ignore
+  }
+  try {
+    w.mixpanel?.reset?.();
   } catch {
     // ignore
   }

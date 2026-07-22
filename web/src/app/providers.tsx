@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import { usePathname } from "next/navigation";
 import type { PostHog } from "posthog-js";
+import type { Mixpanel } from "mixpanel-browser";
 import {
   analyticsAllowed,
   currentEnvName,
@@ -22,12 +23,18 @@ type PostHogProviderComp = ComponentType<{ client: PostHog; children: React.Reac
  * or `/dashboard`, and never on preview / local builds — so team and preview
  * traffic don't pollute product analytics. Internal/team browsers are tagged with
  * `is_internal: true` so PostHog's "Filter test accounts" rule can exclude them.
+ *
+ * Mixpanel (`mixpanel-browser`) is initialised the same way, right alongside
+ * PostHog, gated by the same `analyticsAllowed` check.
  */
 export function AppProviders({ children }: { children: React.ReactNode }) {
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const host = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
+  const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
+  const mixpanelHost = process.env.NEXT_PUBLIC_MIXPANEL_HOST;
   const pathname = usePathname();
   const inited = useRef(false);
+  const mixpanelInited = useRef(false);
   const [provider, setProvider] = useState<{ Provider: PostHogProviderComp; client: PostHog } | null>(null);
 
   // Persist the internal/team flag from a `?lcv_internal=1` query param, on any page.
@@ -80,6 +87,49 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
       cancelled = true;
     };
   }, [key, host, pathname]);
+
+  useEffect(() => {
+    if (!mixpanelToken) return;
+    // Allowed only on the production marketing site, and never a preview host.
+    const allowed = analyticsAllowed(pathname) && !isPreviewHost();
+
+    if (!allowed) {
+      // Stop capturing if we're already running but wandered onto an app surface.
+      const mp = (window as unknown as { mixpanel?: Mixpanel }).mixpanel;
+      mp?.opt_out_tracking?.();
+      return;
+    }
+
+    if (mixpanelInited.current) {
+      // Returning to a tracked page after having opted out on an excluded path.
+      (window as unknown as { mixpanel?: Mixpanel }).mixpanel?.opt_in_tracking?.();
+      return;
+    }
+
+    mixpanelInited.current = true;
+    let cancelled = false;
+    import("mixpanel-browser").then(({ default: mixpanel }) => {
+      if (cancelled) return;
+      mixpanel.init(mixpanelToken, {
+        ...(mixpanelHost ? { api_host: mixpanelHost } : {}),
+        track_pageview: true,
+        persistence: "localStorage",
+      });
+      // Same "is_internal" convention as PostHog's super property, so team
+      // traffic can be filtered out of Mixpanel reports too.
+      if (readInternalFlag()) {
+        mixpanel.register({ is_internal: true });
+      }
+      mixpanel.register({ environment: currentEnvName() });
+      // Expose the initialized client so `lib/analytics-client.ts` can dispatch
+      // events without a static `mixpanel-browser` import (which would bloat the
+      // initial bundle this dynamic import is here to avoid).
+      (window as unknown as { mixpanel?: Mixpanel }).mixpanel = mixpanel;
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [mixpanelToken, mixpanelHost, pathname]);
 
   if (!provider) return <>{children}</>;
 
