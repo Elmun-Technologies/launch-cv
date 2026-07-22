@@ -1,11 +1,12 @@
 /**
  * Server-side analytics dispatch.
  *
- * Used where there is no browser to run gtag/posthog — currently the Polar
- * webhook, which is the source of truth for the `purchase` event. Fans the
- * event out to BOTH destinations:
+ * Used where there is no browser to run gtag/posthog/mixpanel — currently the
+ * Polar webhook, which is the source of truth for the `purchase` event. Fans
+ * the event out to ALL THREE destinations:
  *   - GA4 via the Measurement Protocol (needs a Measurement ID + an API secret)
  *   - PostHog via the /capture/ HTTP endpoint (uses the public project key)
+ *   - Mixpanel via the /track HTTP endpoint (uses the public project token)
  *
  * Everything here is best-effort: a missing env var or a network hiccup must
  * never fail the webhook (Polar would just retry the delivery).
@@ -100,13 +101,39 @@ async function sendToPosthog(event: AnalyticsEventName, distinctId: string, prop
   }).catch(() => undefined);
 }
 
+/** Mixpanel /track ingestion endpoint. Silently skips when the project token is unset. */
+async function sendToMixpanel(event: AnalyticsEventName, distinctId: string, properties: Record<string, unknown>) {
+  const token = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN?.trim();
+  if (!token) return;
+  const host = (process.env.NEXT_PUBLIC_MIXPANEL_HOST || "https://api.mixpanel.com").replace(/\/$/, "");
+
+  await fetch(`${host}/track`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "text/plain" },
+    body: JSON.stringify([
+      {
+        event,
+        properties: {
+          ...properties,
+          token,
+          distinct_id: distinctId,
+          time: Date.now(),
+          // Dedupes retried webhook deliveries the same way Mixpanel's own SDKs do.
+          $insert_id: crypto.randomUUID(),
+        },
+      },
+    ]),
+  }).catch(() => undefined);
+}
+
 /**
- * Emit a server-side event to GA4 + PostHog.
+ * Emit a server-side event to GA4 + PostHog + Mixpanel.
  *
  * GA4's Measurement Protocol requires a `client_id`. There is no browser cookie
  * on a webhook, so we synthesize a stable id from the user id — the purchase
  * still lands as a proper GA4 conversion, just not stitched to the pre-purchase
- * web session. PostHog is keyed by the same user id, matching browser identify().
+ * web session. PostHog and Mixpanel are keyed by the same user id, matching
+ * browser identify().
  */
 export async function trackServerEvent(
   event: AnalyticsEventName,
@@ -120,6 +147,7 @@ export async function trackServerEvent(
   await Promise.all([
     sendToGa4(event, params, clientId, userId),
     sendToPosthog(event, distinctId, params),
+    sendToMixpanel(event, distinctId, params),
   ]);
 }
 
