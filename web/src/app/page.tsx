@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
@@ -73,10 +74,10 @@ const filterFacts = [
 ];
 
 const fields = [
-  { href: "/use-cases/software-engineers", label: "Software engineers" },
-  { href: "/use-cases/product-managers", label: "Product managers" },
-  { href: "/use-cases/designers", label: "Designers" },
-  { href: "/features/ats-score", label: "Career changers" },
+  { href: "/use-cases/software-engineers", label: "Software engineers", sub: "Backend, frontend, full-stack", img: "/images/photos/role-software-engineer.webp", alt: "Software engineer coding on a laptop" },
+  { href: "/use-cases/product-managers", label: "Product managers", sub: "Associate to director", img: "/images/photos/role-product-manager.webp", alt: "Product manager smiling in an office" },
+  { href: "/use-cases/designers", label: "Designers", sub: "UX, product and visual", img: "/images/photos/role-designer.webp", alt: "Designer at her desk" },
+  { href: "/use-cases", label: "Every other role", sub: "Analysts, marketers, support and more", img: "/images/photos/role-data-analyst.webp", alt: "Analyst on a video call" },
 ];
 
 const templates = [
@@ -331,15 +332,22 @@ export default async function Home() {
             All use cases →
           </Link>
         </div>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
           {fields.map((f) => (
-            <Link
-              key={f.label}
-              href={f.href}
-              className="flex items-center justify-between rounded-xl border border-[#E5E5E2] px-5 py-4 text-[15px] font-medium transition hover:border-[#111111]"
-            >
-              {f.label}
-              <ArrowRight className="h-4 w-4 text-[#8A8A86]" aria-hidden="true" />
+            <Link key={f.label} href={f.href} className="group block">
+              <Image
+                src={f.img}
+                alt={f.alt}
+                width={640}
+                height={480}
+                sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                className="aspect-[4/3] w-full rounded-[14px] object-cover"
+              />
+              <span className="mt-3 flex items-center justify-between text-[16px] font-medium">
+                {f.label}
+                <ArrowRight className="h-4 w-4 text-[#8A8A86] transition group-hover:translate-x-0.5" aria-hidden="true" />
+              </span>
+              <span className="mt-0.5 block text-[14px] text-[#6B6B6B]">{f.sub}</span>
             </Link>
           ))}
         </div>
@@ -417,9 +425,13 @@ export default async function Home() {
       ) : null}
 
       {/* FINAL CTA */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pb-24 pt-24 text-center sm:pt-28">
-        <h2 className="text-[34px] font-semibold tracking-[-0.03em] sm:text-[52px]">See your score in about 10 seconds.</h2>
-        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+      <section className="mx-auto w-full max-w-[1200px] px-6 pb-24 pt-24 sm:pt-28">
+        <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] lg:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-6 p-8 sm:p-14">
+        <h2 className="text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[48px]">
+          See your score in about 10 seconds. <span className={grey}>Then go get the interview.</span>
+        </h2>
+        <div className="flex flex-wrap gap-2.5">
           <CtaLink
             cta="check_resume"
             location="home_footer"
@@ -436,6 +448,16 @@ export default async function Home() {
           >
             Build a new resume
           </CtaLink>
+        </div>
+        </div>
+        <Image
+          src="/images/photos/colleagues-celebrate.webp"
+          alt="Two colleagues celebrating at a desk"
+          width={1400}
+          height={900}
+          sizes="(min-width: 1024px) 560px, 100vw"
+          className="h-[260px] w-full object-cover lg:h-auto lg:w-[48%]"
+        />
         </div>
       </section>
 

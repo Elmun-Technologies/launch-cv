@@ -21,7 +21,7 @@ const featureItems = [
 
 const navLinks = [
   { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export function LandingNav() {
@@ -64,27 +64,41 @@ export function LandingNav() {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled || mobileOpen
-            ? "bg-white/95 backdrop-blur-[12px] border-b border-[#E2E8F0] shadow-[0_1px_8px_rgba(0,0,0,0.04)]"
+            ? "bg-white/95 backdrop-blur-[12px] border-b border-[#EEEEEB]"
             : overHero
             ? "bg-transparent"
-            : "bg-white/95 backdrop-blur-[12px] border-b border-[#E2E8F0]"
+            : "bg-white/95 backdrop-blur-[12px] border-b border-[#EEEEEB]"
         }`}
       >
-        <div className="mx-auto flex h-[72px] max-w-[1280px] items-center justify-between px-6">
+        <div className="mx-auto flex h-[72px] max-w-[1200px] items-center justify-between px-6">
           {/* Logo */}
           <Logo variant="light" size="md" />
 
           {/* Desktop center nav */}
           <nav className="hidden items-center gap-1 lg:flex">
+            <Link
+              href="/free-ats-check"
+              className={`rounded-lg px-3 py-2 text-[15px] font-medium transition-colors ${
+                pathname === "/free-ats-check" ? "text-[#111111]" : "text-[#3F3F3F] hover:text-[#111111]"
+              }`}
+            >
+              ATS Checker
+            </Link>
+            <Link
+              href="/features/resume-builder"
+              className="rounded-lg px-3 py-2 text-[15px] font-medium text-[#3F3F3F] transition-colors hover:text-[#111111]"
+            >
+              Resume Builder
+            </Link>
             {/* Features mega-menu trigger */}
             <div ref={megaRef} className="relative">
               <button
                 type="button"
                 onClick={() => setMegaOpen((v) => !v)}
                 aria-expanded={megaOpen}
-                className="flex items-center gap-1 rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
+                className="flex items-center gap-1 rounded-lg px-3 py-2 text-[15px] font-medium text-[#3F3F3F] transition-colors hover:text-[#111111]"
               >
-                Features
+                All tools
                 <ChevronDown
                   className={`h-4 w-4 transition-transform duration-200 ${megaOpen ? "rotate-180" : ""}`}
                 />
@@ -100,7 +114,7 @@ export function LandingNav() {
                         href={item.href}
                         className="group flex items-start gap-3 rounded-xl p-3 transition-colors hover:bg-[#F8FAFC]"
                       >
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F5F5F3] text-[#111111]">
                           <item.icon className="h-4 w-4" />
                         </div>
                         <div>
@@ -138,10 +152,8 @@ export function LandingNav() {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`rounded-lg px-3 py-2 text-[14px] font-semibold transition-colors font-body ${
-                  pathname === l.href
-                    ? "text-[#2563EB]"
-                    : "text-[#334155] hover:text-[#2563EB] hover:bg-[#EFF6FF]"
+                className={`rounded-lg px-3 py-2 text-[15px] font-medium transition-colors ${
+                  pathname === l.href ? "text-[#111111]" : "text-[#3F3F3F] hover:text-[#111111]"
                 }`}
               >
                 {l.label}
@@ -153,16 +165,16 @@ export function LandingNav() {
           <div className="hidden items-center gap-2 lg:flex">
             <Link
               href="/login"
-              className="rounded-lg px-4 py-2 text-[14px] font-semibold transition-colors font-body text-[#334155] hover:text-[#2563EB] hover:bg-[#F8FAFC]"
+              className="rounded-lg px-4 py-2 text-[15px] font-medium text-[#3F3F3F] transition-colors hover:text-[#111111]"
             >
-              Sign in
+              Log in
             </Link>
             <Link
-              href="/register"
-              onClick={() => trackCtaClick({ cta: "get_started", location: "landing_nav" })}
-              className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#2563EB] px-4 py-2 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8] hover:shadow-lg hover:shadow-blue-500/20 font-body"
+              href="/free-ats-check"
+              onClick={() => trackCtaClick({ cta: "try_free", location: "landing_nav" })}
+              className="inline-flex h-11 items-center rounded-full bg-[#2563EB] px-5 text-[15px] font-medium text-white transition hover:bg-[#1D4ED8]"
             >
-              Get started
+              Try it free
             </Link>
           </div>
 
