@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
 import { emptyResumeContent } from "@/types/resume";
 import { trackEvent } from "@/lib/analytics";
+import { SIGNUP_FLAG_COOKIE } from "@/lib/analytics-enabled";
 import { isAdminUser } from "@/lib/admin-guard";
 import { INTERNAL_TRAFFIC_KEY } from "@/lib/analytics-enabled";
 import {
@@ -186,6 +187,9 @@ export async function GET(req: Request) {
     httpOnly: false,
     maxAge: admin ? 60 * 60 * 24 * 180 : 0,
   });
+  // Google sign-up finishes server-side, so the browser never sees a form
+  // submit; this short-lived flag lets the client fire sign_up_complete.
+  if (isNewUser) res.cookies.set(SIGNUP_FLAG_COOKIE, "google", { ...cookieBase, httpOnly: false, maxAge: 600 });
   // Consume the one-time state cookie.
   res.cookies.set(GOOGLE_STATE_COOKIE, "", { ...cookieBase, maxAge: 0 });
   return res;

@@ -4,7 +4,9 @@
  *
  * The goal is to keep our GA4 / PostHog data clean of internal noise:
  *   - Analytics only load on the PRODUCTION marketing site.
- *   - They never load on the app surfaces (`/admin-panel`, `/dashboard`).
+ *   - They never load on the admin panel. The signed-in app (`/dashboard`,
+ *     `/resume`) is tracked — that is where checkout starts — but clicks there
+ *     are not autocaptured, so resume text never leaves the page.
  *   - They never load on Vercel *preview* deployments (or local dev), which is
  *     the source of the "vercel.com preview" referral pollution.
  *   - Team members can be tagged as `internal` so GA4's internal-traffic filter
@@ -18,11 +20,22 @@
 /** localStorage key + cookie name + query param used to flag internal traffic. */
 export const INTERNAL_TRAFFIC_KEY = "lcv_internal";
 
+/** Set by the Google OAuth callback for new accounts; read once by the client. */
+export const SIGNUP_FLAG_COOKIE = "lcv_signup";
+
 /**
- * App surfaces that must never load marketing analytics. A path is excluded if
- * it equals one of these prefixes or is nested under it (`/dashboard/resumes`).
+ * Surfaces that must never load analytics. A path is excluded if it equals one
+ * of these prefixes or is nested under it.
  */
-export const EXCLUDED_PATH_PREFIXES = ["/admin-panel", "/dashboard"] as const;
+export const EXCLUDED_PATH_PREFIXES = ["/admin-panel"] as const;
+
+/** Signed-in app surfaces: explicit events only, no click autocapture. */
+export const APP_PATH_PREFIXES = ["/dashboard", "/resume"] as const;
+
+export function isAppPath(pathname: string | null | undefined): boolean {
+  if (!pathname) return false;
+  return APP_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
+}
 
 export type EnvName = "production" | "preview" | "development";
 
@@ -47,7 +60,7 @@ export function isProductionSite(): boolean {
   return currentEnvName() === "production";
 }
 
-/** Does `pathname` point at an internal app surface (admin panel / dashboard)? */
+/** Does `pathname` point at a surface that never loads analytics (admin panel)? */
 export function isExcludedPath(pathname: string | null | undefined): boolean {
   if (!pathname) return false;
   return EXCLUDED_PATH_PREFIXES.some((p) => pathname === p || pathname.startsWith(`${p}/`));
