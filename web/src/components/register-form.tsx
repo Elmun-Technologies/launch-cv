@@ -32,6 +32,7 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
   const sp = useSearchParams();
   const referralCode = sp.get("ref")?.trim() || "";
   const next = safeNextPath(sp.get("next")) || "/dashboard";
+  const fromReport = next.startsWith("/dashboard/ats-report/");
   const atsRaw = Number(sp.get("ats"));
   const atsScore = Number.isFinite(atsRaw) && atsRaw > 0 && atsRaw <= 100 ? Math.round(atsRaw) : null;
   const googleError = GOOGLE_ERRORS[sp.get("error") ?? ""] ?? null;
@@ -80,12 +81,23 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
     <AuthLayout mode="register">
       {/* Header */}
       <div className="mb-5">
-        <h1 className="text-[24px] font-semibold leading-[1.15] tracking-tight text-[#0F172A]">
-          Create your LaunchCV account
+        <h1 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111]">
+          {fromReport ? (
+            <>
+              Save your report. <span className="text-[#8A8A86]">It&apos;s free.</span>
+            </>
+          ) : (
+            <>
+              Create your account. <span className="text-[#8A8A86]">It&apos;s free.</span>
+            </>
+          )}
         </h1>
-        <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
-          Pick a plan after sign-up.{" "}
-          <Link href="/login" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
+        <p className="mt-2.5 text-[15px] leading-[1.6] text-[#3F3F3F]">
+          {fromReport
+            ? "See every issue we found and keep it with your resume. No credit card."
+            : "Check and fix your resume, then pick a plan when you need the AI tools."}{" "}
+          Already have an account?{" "}
+          <Link href="/login" className="font-semibold text-[#1D4ED8] hover:underline">
             Sign in
           </Link>
         </p>
@@ -98,11 +110,11 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
           </div>
         ) : null}
         {atsScore !== null ? (
-          <div className="mt-4 flex items-center gap-2.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2.5">
-            <BarChart3 className="h-4 w-4 shrink-0 text-[#EA580C]" />
-            <p className="text-[12px] font-semibold leading-snug text-[#9A3412]">
+          <div className="mt-4 flex items-center gap-2.5 rounded-[12px] bg-[#F5F5F3] px-3.5 py-3">
+            <BarChart3 className="h-4 w-4 shrink-0 text-[#111111]" />
+            <p className="text-[13px] leading-snug text-[#3F3F3F]">
               Your ATS score: <span className="font-bold">{atsScore}/100</span>. Create your
-              account to unlock every prioritized fix and lift it.
+              account to see every fix.
             </p>
           </div>
         ) : null}
@@ -119,11 +131,11 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-3.5">
         <div>
-          <label className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
-            Full name <span className="font-normal normal-case tracking-normal text-[#94A3B8]">(optional)</span>
+          <label className="mb-1.5 block text-[13px] font-medium text-[#111111]">
+            Full name <span className="font-normal text-[#6B6B6B]">(optional)</span>
           </label>
           <input
-            className="soha-input"
+            className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Alex Johnson"
@@ -132,11 +144,11 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         </div>
 
         <div>
-          <label className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">Email</label>
+          <label className="mb-1.5 block text-[13px] font-medium text-[#111111]">Email</label>
           <input
             type="email"
             required
-            className="soha-input"
+            className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
@@ -145,15 +157,15 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         </div>
 
         <div>
-          <label className="mb-1 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
-            Password <span className="font-normal normal-case tracking-normal text-[#94A3B8]">(min 8)</span>
+          <label className="mb-1.5 block text-[13px] font-medium text-[#111111]">
+            Password <span className="font-normal text-[#6B6B6B]">(min 8)</span>
           </label>
           <div className="relative">
             <input
               type={showPw ? "text" : "password"}
               required
               minLength={8}
-              className="soha-input pr-10"
+              className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5 pr-10"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
@@ -178,7 +190,7 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#0F172A] py-3 text-[14px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-60"
+          className="mt-2 flex w-full items-center justify-center gap-2 h-[50px] rounded-full bg-[#2563EB] text-[15px] font-medium text-white transition hover:bg-[#1D4ED8] disabled:opacity-60"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
           {loading ? "Creating account…" : "Create my account"}
