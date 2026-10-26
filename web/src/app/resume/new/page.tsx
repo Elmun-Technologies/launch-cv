@@ -7,7 +7,7 @@ import { LogoMark } from "@/components/logo";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
   FileText, Loader2, UploadCloud, CheckCircle, AlertTriangle,
-  ArrowRight, BarChart3, Target, Sparkles, X, ArrowLeft,
+  ArrowRight, BarChart3, Target, Sparkles, ArrowLeft,
   ChevronDown, Check, AlertCircle, Info, Building2, Plus,
   Lightbulb, Zap, Mic, Search, MessageSquare, FileUp,
   ArrowUpRight, RefreshCw, Shield,
@@ -38,7 +38,7 @@ function getScoreInfo(score: number) {
 export default function NewResumePage() {
   const [creating, setCreating] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  const [, setUploading] = useState(false);
   const [uploadStep, setUploadStep] = useState<"idle" | "parsing" | "scoring" | "done" | "error">("idle");
   const [uploadErr, setUploadErr] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");

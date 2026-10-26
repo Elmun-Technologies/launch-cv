@@ -220,10 +220,10 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                         <span className="font-semibold text-gray-800">{row.name}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-4 font-medium text-gray-700">{row.industry ?? "Design"}</td>
+                    <td className="px-4 py-4 font-medium text-gray-700">{row.industry || "—"}</td>
                     <td className="px-4 py-4 font-semibold text-[#2F7D67]">{row.location ?? "—"}</td>
                     <td className="px-4 py-4 text-gray-500">{row.size ?? "11-50 Employees"}</td>
-                    <td className="px-4 py-4 text-gray-500">{row.type ?? "Public Company"}</td>
+                    <td className="px-4 py-4 text-gray-500">{row.type || "—"}</td>
                     <td className="px-4 py-4 text-right">
                       <button
                         type="button"

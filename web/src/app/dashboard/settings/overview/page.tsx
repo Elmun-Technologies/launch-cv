@@ -5,7 +5,7 @@ import { getSession } from "@/lib/session";
 import { subscriptionRowGrantsPro } from "@/lib/entitlements";
 import { DashboardShell } from "@/components/dashboard-shell";
 import {
-  FileText, Briefcase, Users, Building2, TrendingUp,
+  FileText, Briefcase, Users, Building2,
   Calendar, Clock, CreditCard, HardDrive, ArrowRight,
   UserCircle, Gift,
 } from "lucide-react";
@@ -30,10 +30,10 @@ export default async function OverviewPage() {
     ]);
 
   const stats = [
-    { label: "Resumes", value: resumeCount, icon: FileText, color: "violet", trend: "+2 this week" },
-    { label: "Applications", value: appCount, icon: Briefcase, color: "blue", trend: "+5 this week" },
-    { label: "Contacts", value: contactCount, icon: Users, color: "emerald", trend: "+3 this month" },
-    { label: "Companies", value: companyCount, icon: Building2, color: "amber", trend: "+1 this month" },
+    { label: "Resumes", value: resumeCount, icon: FileText, color: "violet" },
+    { label: "Applications", value: appCount, icon: Briefcase, color: "blue" },
+    { label: "Contacts", value: contactCount, icon: Users, color: "emerald" },
+    { label: "Companies", value: companyCount, icon: Building2, color: "amber" },
   ] as const;
 
   const iconColors: Record<string, string> = {
@@ -43,12 +43,6 @@ export default async function OverviewPage() {
     amber: "bg-amber-50 text-amber-600",
   };
 
-  const trendColors: Record<string, string> = {
-    violet: "bg-blue-50 text-blue-600",
-    blue: "bg-blue-50 text-blue-600",
-    emerald: "bg-emerald-50 text-emerald-600",
-    amber: "bg-amber-50 text-amber-600",
-  };
 
   const planStatus = subscriptionRowGrantsPro(
     user?.subscription
@@ -90,10 +84,6 @@ export default async function OverviewPage() {
                 <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${iconColors[s.color]}`}>
                   <s.icon className="h-5 w-5" />
                 </div>
-                <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[12px] font-semibold ${trendColors[s.color]}`}>
-                  <TrendingUp className="h-3 w-3" />
-                  {s.trend}
-                </span>
               </div>
               <p className="mt-4 text-[32px] font-bold leading-none text-gray-900">
                 {s.value}

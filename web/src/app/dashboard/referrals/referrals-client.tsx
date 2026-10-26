@@ -6,7 +6,6 @@ import {
   Copy,
   Gift,
   Link2,
-  Loader2,
   Mail,
   MessageSquare,
   Send,

@@ -210,7 +210,7 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
       body: JSON.stringify({
         resumeId: resumes[0].id,
         title: form.description.trim() || "Networking Follow-up",
-        company: selected?.company ?? "Target Company",
+        company: selected?.company ?? undefined,
         jdText: "This job opportunity is tracked from networking outreach. Responsibilities include communication with hiring teams, sending follow-up updates, and maintaining a professional relationship pipeline with clear outcomes.",
       }),
     });
@@ -399,14 +399,14 @@ export function ContactsClient({ initial, resumes }: { initial: ContactRow[]; re
                         <span className="font-semibold text-gray-800">{row.name} *</span>
                       </div>
                     </td>
-                    <td className="px-4 py-4 text-gray-700">{row.company ?? "Acme Corp"}</td>
+                    <td className="px-4 py-4 text-gray-700">{row.company || "—"}</td>
                     <td className="px-4 py-4 text-gray-500">—</td>
                     <td className="px-4 py-4">
                       <span className="rounded-full bg-[#EAF8E8] px-3 py-1 text-xs font-semibold text-[#73B76A]">
                         {row.status === "active" ? "Add Status" : row.status}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-gray-500">{row.goal ?? "Add Goal"}</td>
+                    <td className="px-4 py-4 text-gray-500">{row.goal || "—"}</td>
                     <td className="px-4 py-4 text-gray-500">{row.followUpAt ? new Date(row.followUpAt).toLocaleDateString() : "Add Date"}</td>
                     <td className="px-4 py-4 text-right">
                       <button type="button" onClick={() => openEdit(row)} className="rounded-lg border border-[#2563EB] px-4 py-1.5 text-sm font-semibold text-[#2563EB] transition hover:bg-blue-50">Edit</button>

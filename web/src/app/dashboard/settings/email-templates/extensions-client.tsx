@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import {
-  Check, Copy, ExternalLink, Globe, Keyboard,
-  Loader2, Mail, MessageSquare, Mic, Monitor, Plus, Send, Sparkles, Trash2, X, Zap,
+  Check, Copy, Globe, Keyboard,
+  Loader2, Mail, MessageSquare, Monitor, Plus, Send, Sparkles, Trash2, X, Zap,
 } from "lucide-react";
 
 export type TemplateRow = {

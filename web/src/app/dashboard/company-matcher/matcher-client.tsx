@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import {
   Search, ChevronDown, Sparkles, ExternalLink, RotateCcw,
-  Check, X, AlertTriangle, Plus, Building2, Loader2,
+  Check, X, AlertTriangle, Plus, Building2,
 } from "lucide-react";
 import { COMPANIES, searchCompanies, type CompanyRequirement } from "@/lib/company-requirements";
 
