@@ -203,6 +203,7 @@ ${billingNote}
 - Home: ${baseUrl}/
 - Pricing: ${baseUrl}/pricing
 - Free ATS Check (no account): ${baseUrl}/free-ats-check
+- Resume examples by job, with keywords and bullet examples: ${baseUrl}/resume-examples
 - Blog: ${baseUrl}/blog
 - About: ${baseUrl}/about
 - Contact: ${baseUrl}/contact

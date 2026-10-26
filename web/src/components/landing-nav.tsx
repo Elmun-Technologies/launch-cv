@@ -20,6 +20,7 @@ const featureItems = [
 ];
 
 const navLinks = [
+  { label: "Examples", href: "/resume-examples" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
 ];
