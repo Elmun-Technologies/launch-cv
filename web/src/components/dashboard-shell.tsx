@@ -156,9 +156,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
     <div className="flex h-screen overflow-hidden bg-[#FAFAF9] text-[#111111]">
       <aside className="hidden w-[240px] shrink-0 flex-col border-r border-[#EEEEEB] bg-white lg:flex">
         <div className="flex h-[60px] shrink-0 items-center px-5">
-          <Link href="/dashboard" aria-label="LaunchCV dashboard">
-            <Logo variant="light" size="md" />
-          </Link>
+          <Logo variant="light" size="md" href="/dashboard" />
         </div>
         {sidebar}
       </aside>
@@ -182,7 +180,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
               transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="flex h-[60px] shrink-0 items-center justify-between px-5">
-                <Logo variant="light" size="md" />
+                <Logo variant="light" size="md" href="/dashboard" />
                 <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close menu" className="text-[#6B6B6B]">
                   <X className="h-5 w-5" />
                 </button>
