@@ -32,7 +32,8 @@ export async function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     url.search = "";
-    const next = safeNextPath(pathname);
+    // Keep the query (e.g. ?plan=) so the user lands exactly where they were headed.
+    const next = safeNextPath(pathname + req.nextUrl.search);
     if (next) url.searchParams.set("next", next);
     return NextResponse.redirect(url);
   }

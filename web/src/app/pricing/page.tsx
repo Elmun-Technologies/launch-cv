@@ -12,6 +12,8 @@ import { absoluteUrl } from "@/lib/site";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
 const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
+/** Carries the chosen plan through sign-up so checkout opens right after. */
+const planHref = (plan: string) => `/register?next=${encodeURIComponent(`${SUB_NEXT}?plan=${plan}`)}`;
 
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Pay Monthly or Once",
@@ -244,7 +246,7 @@ export default function PricingPage() {
                       plan={key}
                       location="pricing_card"
                       selectsPlan
-                      href={registerHref}
+                      href={planHref(key)}
                       className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
                         popular
                           ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"

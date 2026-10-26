@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import {
   Loader2,
@@ -43,26 +43,49 @@ function planLabel(p: string | null | undefined): string {
   return p;
 }
 
+async function fetchStatus(): Promise<StatusPayload | null> {
+  const r = await fetch("/api/subscription/status", { cache: "no-store" });
+  const j = (await r.json().catch(() => ({}))) as Partial<StatusPayload>;
+  if (!r.ok) return null;
+  return {
+    pro: !!j.pro,
+    paid: j.paid ?? j.pro,
+    plan: j.plan ?? null,
+    status: j.status ?? null,
+    currentPeriodEnd: j.currentPeriodEnd ?? null,
+    cancelAtPeriodEnd: !!j.cancelAtPeriodEnd,
+  };
+}
+
+const isPaid = (s: StatusPayload | null) => s?.paid === true || s?.pro === true;
+
 export function SubscriptionSettingsClient() {
   const [loadingPlan, setLoadingPlan] = useState<CheckoutPlan | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
   const [status, setStatus] = useState<StatusPayload | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  /** "waiting" while the payment webhook catches up after a successful checkout. */
+  const [returned, setReturned] = useState<"waiting" | "confirmed" | "slow" | null>(null);
+  const autoStarted = useRef(false);
 
   useEffect(() => {
     let c = true;
+    const qs = new URLSearchParams(window.location.search);
+    const fromCheckout = qs.get("checkout") === "success";
     (async () => {
       try {
-        const r = await fetch("/api/subscription/status");
-        const j = (await r.json().catch(() => ({}))) as Partial<StatusPayload>;
-        if (c && r.ok) {
-          setStatus({
-            pro: !!j.pro,
-            paid: j.paid ?? j.pro,
-            plan: j.plan ?? null,
-            status: j.status ?? null,
-            currentPeriodEnd: j.currentPeriodEnd ?? null,
-            cancelAtPeriodEnd: !!j.cancelAtPeriodEnd,
-          });
+        let s = await fetchStatus();
+        if (c) setStatus(s);
+        if (fromCheckout) {
+          if (c) setReturned(isPaid(s) ? "confirmed" : "waiting");
+          // The webhook usually lands within a few seconds; poll briefly so the
+          // buyer doesn't see "No active plan" right after paying.
+          for (let i = 0; i < 10 && c && !isPaid(s); i++) {
+            await new Promise((res) => setTimeout(res, 3000));
+            s = await fetchStatus();
+            if (c) setStatus(s);
+          }
+          if (c) setReturned(isPaid(s) ? "confirmed" : "slow");
         }
       } finally {
         if (c) setStatusLoading(false);
@@ -73,28 +96,45 @@ export function SubscriptionSettingsClient() {
     };
   }, []);
 
-  const paid = status?.paid === true || status?.pro === true;
+  const paid = isPaid(status);
   const currentPlan = (status?.plan as CheckoutPlan | "none" | undefined) ?? "none";
+
+  // Pricing and paywall CTAs link here with ?plan=<plan>: open that checkout
+  // straight away instead of making the visitor pick the plan a second time.
+  useEffect(() => {
+    if (statusLoading || paid || autoStarted.current) return;
+    const plan = new URLSearchParams(window.location.search).get("plan") as CheckoutPlan | null;
+    if (plan && CHECKOUT_PLAN_ORDER.includes(plan)) {
+      autoStarted.current = true;
+      void startCheckout(plan);
+    }
+  }, [statusLoading, paid]);
 
   async function startCheckout(plan: CheckoutPlan) {
     // CTA click on a "Choose <plan>" button, and the funnel's plan-selection step.
     trackCtaClick({ cta: "choose_plan", plan, location: "subscription_settings" });
     trackPlanSelected(plan, { location: "subscription_settings" });
     setLoadingPlan(plan);
+    setCheckoutError(null);
     const res = await fetch("/api/polar/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       // Pass the GA client id so the webhook-driven purchase event stitches
       // back to this browser's GA4 session.
       body: JSON.stringify({ plan, gaClientId: getGaClientId() }),
-    });
-    const j = await res.json().catch(() => ({}));
+    }).catch(() => null);
+    const j = res ? await res.json().catch(() => ({})) : {};
     setLoadingPlan(null);
-    if (res.ok && j.url) {
+    if (res?.ok && j.url) {
       // Polar checkout is opening — fire before the redirect leaves the page.
       trackCheckoutStart(plan);
       window.location.href = j.url as string;
+      return;
     }
+    if (res?.status === 409 && typeof j.error === "string") setCheckoutError(j.error);
+    else if (res && res.status >= 500)
+      setCheckoutError("Checkout isn't available right now. Please try again in a few minutes or contact support.");
+    else setCheckoutError(typeof j.error === "string" ? j.error : "Couldn't open checkout. Please try again.");
   }
 
   return (
@@ -107,7 +147,53 @@ export function SubscriptionSettingsClient() {
         </p>
       </div>
 
-      {!statusLoading && !paid ? (
+      {returned ? (
+        <div
+          role="status"
+          className={`rounded-2xl border p-5 ${
+            returned === "slow" ? "border-amber-200 bg-amber-50" : "border-emerald-200 bg-emerald-50"
+          }`}
+        >
+          <p className="text-[14px] font-bold text-gray-900">
+            {returned === "confirmed"
+              ? "Payment received — you're all set."
+              : returned === "waiting"
+                ? "Payment received. Activating your plan…"
+                : "Payment received. Your plan is still activating."}
+          </p>
+          <p className="mt-1 text-[13px] text-gray-700">
+            {returned === "confirmed" ? (
+              <>
+                Every AI tool is unlocked.{" "}
+                <Link href="/dashboard/resumes" className="font-semibold text-[#2563EB] hover:underline">
+                  Go to my resumes
+                </Link>
+              </>
+            ) : returned === "waiting" ? (
+              "This usually takes a few seconds."
+            ) : (
+              "Refresh this page in a minute. If it still shows no plan, contact support and we'll sort it out."
+            )}
+          </p>
+        </div>
+      ) : null}
+
+      {checkoutError ? (
+        <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-5">
+          <p className="text-[14px] font-bold text-red-900">{checkoutError}</p>
+          <p className="mt-1 text-[13px] text-red-800">
+            <a href={PORTAL_URL} target="_blank" rel="noreferrer" className="font-semibold underline">
+              Open billing portal
+            </a>{" "}
+            ·{" "}
+            <Link href="/dashboard/support" className="font-semibold underline">
+              Contact support
+            </Link>
+          </p>
+        </div>
+      ) : null}
+
+      {!statusLoading && !paid && !returned ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 shadow-sm">
           <p className="text-[14px] font-bold text-amber-950">No active plan</p>
           <p className="mt-1 text-[13px] leading-relaxed text-amber-900/90">
