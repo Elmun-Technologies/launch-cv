@@ -100,12 +100,12 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
   ];
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
-      <div className="flex items-center justify-between gap-2 border-b border-[#E2E8F0] bg-[#FAFBFC] px-3 py-2">
+    <div className="overflow-hidden rounded-xl border border-[#E5E5E2] bg-white">
+      <div className="flex items-center justify-between gap-2 border-b border-[#E5E5E2] bg-[#FAFAF9] px-3 py-2">
         <div className="flex items-center gap-1">
           {toolbarButtons.map((b, idx) => {
             if (b.kind === "spacer") {
-              return <span key={`s-${idx}`} className="mx-1 h-5 w-px bg-[#E2E8F0]" />;
+              return <span key={`s-${idx}`} className="mx-1 h-5 w-px bg-[#E5E5E2]" />;
             }
             const Icon = b.icon;
             return (
@@ -114,30 +114,30 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
                 type="button"
                 title={b.title}
                 onClick={() => apply(b.action)}
-                className="flex h-7 w-7 items-center justify-center rounded-md text-[#475569] transition hover:bg-white hover:text-[#0F172A]"
+                className="flex h-7 w-7 items-center justify-center rounded-md text-[#3F3F3F] transition hover:bg-white hover:text-[#111111]"
               >
                 <Icon className="h-3.5 w-3.5" />
               </button>
             );
           })}
-          <span className="mx-1 h-5 w-px bg-[#E2E8F0]" />
+          <span className="mx-1 h-5 w-px bg-[#E5E5E2]" />
           <button
             type="button"
             title="Insert image"
             onClick={handleImageUpload}
             disabled={uploading}
-            className="flex h-7 items-center gap-1 rounded-md px-2 text-[12px] font-semibold text-[#475569] transition hover:bg-white hover:text-[#0F172A] disabled:opacity-50"
+            className="flex h-7 items-center gap-1 rounded-md px-2 text-[12px] font-semibold text-[#3F3F3F] transition hover:bg-white hover:text-[#111111] disabled:opacity-50"
           >
             {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ImageIcon className="h-3.5 w-3.5" />}
             {uploading ? "Uploading…" : "Image"}
           </button>
         </div>
-        <div className="flex rounded-md bg-[#F1F5F9] p-0.5 text-[11px] font-semibold">
+        <div className="flex rounded-md bg-[#F5F5F3] p-0.5 text-[11px] font-semibold">
           <button
             type="button"
             onClick={() => setActiveTab("write")}
             className={`rounded px-2 py-0.5 transition ${
-              activeTab === "write" ? "bg-white text-[#0F172A] shadow-sm" : "text-[#64748B]"
+              activeTab === "write" ? "bg-white text-[#111111] shadow-sm" : "text-[#6B6B6B]"
             }`}
           >
             Write
@@ -146,7 +146,7 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
             type="button"
             onClick={() => setActiveTab("preview")}
             className={`rounded px-2 py-0.5 transition ${
-              activeTab === "preview" ? "bg-white text-[#0F172A] shadow-sm" : "text-[#64748B]"
+              activeTab === "preview" ? "bg-white text-[#111111] shadow-sm" : "text-[#6B6B6B]"
             }`}
           >
             Preview
@@ -162,33 +162,33 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
           placeholder={placeholder ?? "Write your post in Markdown…"}
           spellCheck
           style={{ minHeight }}
-          className="block w-full resize-y bg-white p-5 font-mono text-[13px] leading-[1.7] text-[#0F172A] outline-none placeholder:text-[#94A3B8]"
+          className="block w-full resize-y bg-white p-5 font-mono text-[13px] leading-[1.7] text-[#111111] outline-none placeholder:text-[#8A8A86]"
         />
       ) : (
         <div style={{ minHeight }} className="overflow-auto bg-white p-6">
           {value.trim().length === 0 ? (
-            <p className="text-[13px] text-[#94A3B8]">Nothing to preview yet.</p>
+            <p className="text-[13px] text-[#8A8A86]">Nothing to preview yet.</p>
           ) : (
-            <article className="max-w-none text-[15px] leading-[1.75] text-[#334155]">
+            <article className="max-w-none text-[15px] leading-[1.75] text-[#3F3F3F]">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  h1: (p) => <h2 className="mt-8 text-[22px] font-semibold tracking-tight text-[#0F172A]" {...p} />,
-                  h2: (p) => <h2 className="mt-8 text-[22px] font-semibold tracking-tight text-[#0F172A]" {...p} />,
-                  h3: (p) => <h3 className="mt-6 text-[18px] font-semibold tracking-tight text-[#0F172A]" {...p} />,
+                  h1: (p) => <h2 className="mt-8 text-[22px] font-semibold tracking-tight text-[#111111]" {...p} />,
+                  h2: (p) => <h2 className="mt-8 text-[22px] font-semibold tracking-tight text-[#111111]" {...p} />,
+                  h3: (p) => <h3 className="mt-6 text-[18px] font-semibold tracking-tight text-[#111111]" {...p} />,
                   p: (p) => <p className="mt-3" {...p} />,
                   ul: (p) => <ul className="mt-3 list-disc space-y-1.5 pl-6" {...p} />,
                   ol: (p) => <ol className="mt-3 list-decimal space-y-1.5 pl-6" {...p} />,
                   a: (p) => <a className="font-semibold text-[#2563EB] underline-offset-2 hover:underline" {...p} />,
                   code: (p) => (
-                    <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[13px] text-[#0F172A]" {...p} />
+                    <code className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[13px] text-[#111111]" {...p} />
                   ),
                   blockquote: (p) => (
-                    <blockquote className="mt-4 border-l-4 border-[#E2E8F0] pl-4 italic text-[#475569]" {...p} />
+                    <blockquote className="mt-4 border-l-4 border-[#E5E5E2] pl-4 italic text-[#3F3F3F]" {...p} />
                   ),
                   img: (p) => (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img {...p} alt={p.alt ?? ""} className="mt-4 rounded-xl border border-[#E2E8F0]" />
+                    <img {...p} alt={p.alt ?? ""} className="mt-4 rounded-xl border border-[#E5E5E2]" />
                   ),
                 }}
               >

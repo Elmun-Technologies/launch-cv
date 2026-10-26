@@ -3,7 +3,7 @@ import { getUserPlanId, limitsForPlan, type PlanId } from "@/lib/plans";
 
 export type UsageKind = "jd" | "packet" | "role_fit";
 
-function monthKey(d = new Date()) {
+export function monthKey(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 

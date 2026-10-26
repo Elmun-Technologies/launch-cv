@@ -57,7 +57,7 @@ export function UserDetailActions({
             type="button"
             onClick={handleSaveRole}
             disabled={saving || role === currentRole}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#0F172A] py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B] disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#111111] py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {saving ? "Saving…" : "Save role"}

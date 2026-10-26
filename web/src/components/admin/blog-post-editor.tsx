@@ -176,16 +176,16 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
         <div className="flex items-start gap-3">
           <Link
             href="/admin-panel/cms/blog"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#475569] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E5E5E2] bg-white text-[#3F3F3F] transition hover:bg-[#FAFAF9] hover:text-[#111111]"
             aria-label="Back to blog list"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
-            <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">
+            <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">
               {isNew ? "New blog post" : data.title || "Untitled"}
             </h1>
-            <div className="mt-1 flex items-center gap-2 text-[12px] text-[#64748B]">
+            <div className="mt-1 flex items-center gap-2 text-[12px] text-[#6B6B6B]">
               <StatusBadge tone={data.status === "published" ? "green" : data.status === "scheduled" ? "blue" : data.status === "archived" ? "default" : "amber"} dot>
                 {data.status}
               </StatusBadge>
@@ -204,7 +204,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
               type="button"
               onClick={openPreview}
               disabled={previewLoading}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E5E2] bg-white px-3 py-2 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
             >
               {previewLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Eye className="h-3.5 w-3.5" />}
               Preview
@@ -214,7 +214,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
             type="button"
             onClick={save}
             disabled={saving}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F172A] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#111111] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
           >
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
             {isNew ? "Create" : "Save"}
@@ -258,7 +258,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
           <SectionCard title="Publishing">
             <div className="space-y-3">
               {isNew ? (
-                <p className="rounded-md bg-[#FAFBFC] px-3 py-2 text-[12px] text-[#64748B]">
+                <p className="rounded-md bg-[#FAFAF9] px-3 py-2 text-[12px] text-[#6B6B6B]">
                   Save to create the post as a draft. You can then publish or schedule it.
                 </p>
               ) : (
@@ -268,7 +268,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
                       type="button"
                       onClick={() => changeStatus("draft")}
                       disabled={saving || data.status === "draft"}
-                      className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:opacity-50"
+                      className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
                     >
                       Draft
                     </button>
@@ -281,7 +281,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
                       Publish
                     </button>
                   </div>
-                  <div className="border-t border-[#E2E8F0] pt-3">
+                  <div className="border-t border-[#E5E5E2] pt-3">
                     <FormField label="Schedule for" hint="Auto-publishes when the time passes">
                       <AdminInput
                         type="datetime-local"
@@ -293,17 +293,17 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
                       type="button"
                       onClick={() => changeStatus("scheduled")}
                       disabled={saving || !data.scheduledFor || data.status === "scheduled"}
-                      className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:opacity-50"
+                      className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
                     >
                       Schedule
                     </button>
                   </div>
-                  <div className="border-t border-[#E2E8F0] pt-3">
+                  <div className="border-t border-[#E5E5E2] pt-3">
                     <button
                       type="button"
                       onClick={() => changeStatus("archived")}
                       disabled={saving || data.status === "archived"}
-                      className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#64748B] transition hover:bg-[#FAFBFC] disabled:opacity-50"
+                      className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9] disabled:opacity-50"
                     >
                       Archive
                     </button>
@@ -387,7 +387,7 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
                 />
               </FormField>
 
-              <div className="rounded-lg border border-[#E2E8F0] bg-[#FAFBFC] p-3">
+              <div className="rounded-lg border border-[#E5E5E2] bg-[#FAFAF9] p-3">
                 <SeoChecklist
                   focusKeyword={data.focusKeyword}
                   title={data.seoTitle || data.title}

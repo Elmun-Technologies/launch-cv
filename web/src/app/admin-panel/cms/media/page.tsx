@@ -37,8 +37,8 @@ export default async function AdminMediaPage() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {assets.map((a) => (
-              <div key={a.id} className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
-                <div className="relative aspect-[4/3] bg-[#F1F5F9]">
+              <div key={a.id} className="overflow-hidden rounded-xl border border-[#E5E5E2] bg-white">
+                <div className="relative aspect-[4/3] bg-[#F5F5F3]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={a.url}
@@ -48,12 +48,12 @@ export default async function AdminMediaPage() {
                   />
                 </div>
                 <div className="px-4 py-3">
-                  <p className="truncate font-mono text-[11px] text-[#0F172A]">{a.url}</p>
-                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-[#94A3B8]">
+                  <p className="truncate font-mono text-[11px] text-[#111111]">{a.url}</p>
+                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-[#8A8A86]">
                     <span>{a.mimeType.split("/")[1]?.toUpperCase() ?? a.mimeType}</span>
                     <span>{formatBytes(a.sizeBytes)}</span>
                   </div>
-                  <p className="mt-1 truncate text-[11px] text-[#64748B]">
+                  <p className="mt-1 truncate text-[11px] text-[#6B6B6B]">
                     {a.uploadedBy?.email ?? "—"} · {a.createdAt.toLocaleDateString()}
                   </p>
                 </div>

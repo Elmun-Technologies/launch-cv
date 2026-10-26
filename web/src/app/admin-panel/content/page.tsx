@@ -114,8 +114,8 @@ export default async function AdminContentPage() {
     <AdminShell email={admin.email} pageTitle="User CRM">
       <div className="space-y-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">User CRM</h1>
-          <p className="mt-1 text-[13px] text-[#64748B]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">User CRM</h1>
+          <p className="mt-1 text-[13px] text-[#6B6B6B]">
             Contacts, companies, and referrals collected inside user dashboards. Read-only snapshot.
           </p>
         </div>
@@ -134,18 +134,18 @@ export default async function AdminContentPage() {
             flush
           >
             {section.rows.length === 0 ? (
-              <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">
+              <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">
                 No {section.title.toLowerCase()} yet.
               </p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-[12px]">
                   <thead>
-                    <tr className="border-b border-[#E2E8F0] bg-[#FAFBFC]">
+                    <tr className="border-b border-[#E5E5E2] bg-[#FAFAF9]">
                       {section.headers.map((h) => (
                         <th
                           key={h}
-                          className="px-5 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[#475569]"
+                          className="px-5 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[#3F3F3F]"
                         >
                           {h}
                         </th>
@@ -154,7 +154,7 @@ export default async function AdminContentPage() {
                   </thead>
                   <tbody>
                     {section.rows.map((row, i) => (
-                      <tr key={i} className="border-b border-[#E2E8F0] last:border-b-0 hover:bg-[#FAFBFC]">
+                      <tr key={i} className="border-b border-[#E5E5E2] last:border-b-0 hover:bg-[#FAFAF9]">
                         {row.map((cell, j) => {
                           if (typeof cell === "object" && cell !== null && "kind" in cell) {
                             return (
@@ -164,7 +164,7 @@ export default async function AdminContentPage() {
                             );
                           }
                           return (
-                            <td key={j} className="px-5 py-3 text-[#475569]">
+                            <td key={j} className="px-5 py-3 text-[#3F3F3F]">
                               {cell}
                             </td>
                           );

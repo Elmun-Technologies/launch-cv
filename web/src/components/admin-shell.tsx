@@ -100,17 +100,17 @@ export function AdminShell({
   const initials = (email ?? "Admin").slice(0, 1).toUpperCase();
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#FAFBFC] text-[#0F172A]">
+    <div className="flex h-screen overflow-hidden bg-[#FAFAF9] text-[#111111]">
       {/* Sidebar */}
       <aside
-        className={`absolute z-30 flex h-full w-[240px] shrink-0 flex-col border-r border-[#E2E8F0] bg-white transition-transform lg:relative lg:translate-x-0 ${
+        className={`absolute z-30 flex h-full w-[240px] shrink-0 flex-col border-r border-[#E5E5E2] bg-white transition-transform lg:relative lg:translate-x-0 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Brand */}
-        <div className="flex h-[56px] shrink-0 items-center gap-2 border-b border-[#E2E8F0] px-5">
+        <div className="flex h-[56px] shrink-0 items-center gap-2 border-b border-[#E5E5E2] px-5">
           <Logo variant="light" size="sm" />
-          <span className="ml-1 rounded-md bg-[#0F172A] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
+          <span className="ml-1 rounded-md bg-[#111111] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white">
             Admin
           </span>
         </div>
@@ -119,7 +119,7 @@ export function AdminShell({
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           {groups.map((group) => (
             <div key={group.label} className="mb-5 last:mb-0">
-              <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+              <p className="px-2 pb-2 text-[10px] font-semibold uppercase tracking-wider text-[#8A8A86]">
                 {group.label}
               </p>
               <div className="space-y-0.5">
@@ -131,8 +131,8 @@ export function AdminShell({
                       href={item.href}
                       className={`group relative flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] font-medium transition ${
                         active
-                          ? "bg-[#F1F5F9] text-[#0F172A]"
-                          : "text-[#475569] hover:bg-[#FAFBFC] hover:text-[#0F172A]"
+                          ? "bg-[#F5F5F3] text-[#111111]"
+                          : "text-[#3F3F3F] hover:bg-[#FAFAF9] hover:text-[#111111]"
                       }`}
                     >
                       {active ? (
@@ -140,7 +140,7 @@ export function AdminShell({
                       ) : null}
                       <item.icon
                         className={`h-4 w-4 shrink-0 ${
-                          active ? "text-[#2563EB]" : "text-[#94A3B8] group-hover:text-[#475569]"
+                          active ? "text-[#2563EB]" : "text-[#8A8A86] group-hover:text-[#3F3F3F]"
                         }`}
                       />
                       <span className="flex-1 truncate">{item.label}</span>
@@ -150,7 +150,7 @@ export function AdminShell({
                         </span>
                       ) : null}
                       {item.badge === "soon" ? (
-                        <span className="rounded bg-[#F1F5F9] px-1.5 text-[10px] font-medium text-[#94A3B8]">
+                        <span className="rounded bg-[#F5F5F3] px-1.5 text-[10px] font-medium text-[#8A8A86]">
                           Soon
                         </span>
                       ) : null}
@@ -163,10 +163,10 @@ export function AdminShell({
         </nav>
 
         {/* Back to app */}
-        <div className="shrink-0 border-t border-[#E2E8F0] p-3">
+        <div className="shrink-0 border-t border-[#E5E5E2] p-3">
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 rounded-md px-2.5 py-2 text-[13px] font-medium text-[#64748B] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
+            className="flex items-center gap-2 rounded-md px-2.5 py-2 text-[13px] font-medium text-[#6B6B6B] transition hover:bg-[#FAFAF9] hover:text-[#111111]"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to dashboard
@@ -177,7 +177,7 @@ export function AdminShell({
       {/* Backdrop for mobile sidebar */}
       {mobileOpen ? (
         <div
-          className="absolute inset-0 z-20 bg-[#0F172A]/30 backdrop-blur-[2px] lg:hidden"
+          className="absolute inset-0 z-20 bg-[#111111]/30 backdrop-blur-[2px] lg:hidden"
           onClick={() => setMobileOpen(false)}
           aria-hidden
         />
@@ -186,25 +186,25 @@ export function AdminShell({
       {/* Main column */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-[56px] shrink-0 items-center justify-between gap-3 border-b border-[#E2E8F0] bg-white px-5">
+        <header className="flex h-[56px] shrink-0 items-center justify-between gap-3 border-b border-[#E5E5E2] bg-white px-5">
           <div className="flex items-center gap-3">
             <button
               type="button"
               aria-label="Toggle navigation"
               onClick={() => setMobileOpen((v) => !v)}
-              className="flex h-8 w-8 items-center justify-center rounded-md text-[#475569] transition hover:bg-[#F1F5F9] lg:hidden"
+              className="flex h-8 w-8 items-center justify-center rounded-md text-[#3F3F3F] transition hover:bg-[#F5F5F3] lg:hidden"
             >
               <ChevronRight className={`h-4 w-4 transition-transform ${mobileOpen ? "rotate-180" : ""}`} />
             </button>
             {pageTitle ? (
-              <h1 className="text-[14px] font-semibold tracking-tight text-[#0F172A]">{pageTitle}</h1>
+              <h1 className="text-[14px] font-semibold tracking-tight text-[#111111]">{pageTitle}</h1>
             ) : null}
           </div>
           <div className="flex items-center gap-3">
             {email ? (
-              <span className="hidden text-[12px] text-[#64748B] sm:inline">{email}</span>
+              <span className="hidden text-[12px] text-[#6B6B6B] sm:inline">{email}</span>
             ) : null}
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[12px] font-semibold text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#111111] text-[12px] font-semibold text-white">
               {initials}
             </div>
           </div>

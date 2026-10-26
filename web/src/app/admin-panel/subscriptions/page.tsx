@@ -39,8 +39,8 @@ export default async function AdminSubscriptionsPage() {
       header: "User",
       render: (s) => (
         <div className="min-w-0">
-          <p className="truncate text-[13px] font-medium text-[#0F172A]">{s.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#94A3B8]">{s.user.email}</p>
+          <p className="truncate text-[13px] font-medium text-[#111111]">{s.user.name || "—"}</p>
+          <p className="truncate text-[11px] text-[#8A8A86]">{s.user.email}</p>
         </div>
       ),
     },
@@ -62,14 +62,14 @@ export default async function AdminSubscriptionsPage() {
       key: "plan",
       header: "Plan / variant",
       render: (s) => (
-        <span className="font-mono text-[12px] text-[#475569]">{s.stripePriceId}</span>
+        <span className="font-mono text-[12px] text-[#3F3F3F]">{s.stripePriceId}</span>
       ),
     },
     {
       key: "period_end",
       header: "Period end",
       render: (s) => (
-        <span className="text-[12px] text-[#64748B]">
+        <span className="text-[12px] text-[#6B6B6B]">
           {s.currentPeriodEnd ? s.currentPeriodEnd.toLocaleDateString() : "—"}
         </span>
       ),
@@ -79,7 +79,7 @@ export default async function AdminSubscriptionsPage() {
       header: "Subscription ID",
       truncate: "max-w-[180px]",
       render: (s) => (
-        <span className="font-mono text-[11px] text-[#94A3B8]">{s.stripeSubscriptionId}</span>
+        <span className="font-mono text-[11px] text-[#8A8A86]">{s.stripeSubscriptionId}</span>
       ),
     },
   ];
@@ -88,8 +88,8 @@ export default async function AdminSubscriptionsPage() {
     <AdminShell email={admin.email} pageTitle="Subscriptions">
       <div className="space-y-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Subscriptions</h1>
-          <p className="mt-1 text-[13px] text-[#64748B]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Subscriptions</h1>
+          <p className="mt-1 text-[13px] text-[#6B6B6B]">
             Polar subscription records, including pending cancellations.
           </p>
         </div>

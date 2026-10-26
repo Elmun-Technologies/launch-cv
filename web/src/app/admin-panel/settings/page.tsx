@@ -33,8 +33,8 @@ export default async function AdminSettingsPage() {
     <AdminShell email={admin.email} pageTitle="Settings">
       <div className="space-y-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Settings</h1>
-          <p className="mt-1 text-[13px] text-[#64748B]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Settings</h1>
+          <p className="mt-1 text-[13px] text-[#6B6B6B]">
             Environment configuration and admin user management.
           </p>
         </div>
@@ -46,12 +46,12 @@ export default async function AdminSettingsPage() {
             action={<Settings className="h-4 w-4 text-[#2563EB]" />}
             flush
           >
-            <ul className="divide-y divide-[#E2E8F0]">
+            <ul className="divide-y divide-[#E5E5E2]">
               {envChecks.map((e) => (
                 <li key={e.key} className="flex items-center justify-between gap-4 px-5 py-3">
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium text-[#0F172A]">{e.name}</p>
-                    <p className="truncate font-mono text-[11px] text-[#94A3B8]">{e.key}</p>
+                    <p className="truncate text-[13px] font-medium text-[#111111]">{e.name}</p>
+                    <p className="truncate font-mono text-[11px] text-[#8A8A86]">{e.key}</p>
                   </div>
                   {e.configured ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
@@ -79,17 +79,17 @@ export default async function AdminSettingsPage() {
               flush
             >
               {dbAdmins.length === 0 ? (
-                <p className="px-5 py-6 text-center text-[13px] text-[#94A3B8]">No admin users in DB.</p>
+                <p className="px-5 py-6 text-center text-[13px] text-[#8A8A86]">No admin users in DB.</p>
               ) : (
-                <ul className="divide-y divide-[#E2E8F0]">
+                <ul className="divide-y divide-[#E5E5E2]">
                   {dbAdmins.map((a) => (
                     <li key={a.id} className="flex items-center gap-3 px-5 py-3">
                       <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[11px] font-semibold text-white">
                         {(a.name || a.email)[0].toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <p className="truncate text-[13px] font-medium text-[#0F172A]">{a.name || "—"}</p>
-                        <p className="truncate text-[11px] text-[#64748B]">{a.email}</p>
+                        <p className="truncate text-[13px] font-medium text-[#111111]">{a.name || "—"}</p>
+                        <p className="truncate text-[11px] text-[#6B6B6B]">{a.email}</p>
                       </div>
                     </li>
                   ))}
@@ -104,9 +104,9 @@ export default async function AdminSettingsPage() {
                 action={<Mail className="h-4 w-4 text-[#2563EB]" />}
                 flush
               >
-                <ul className="divide-y divide-[#E2E8F0]">
+                <ul className="divide-y divide-[#E5E5E2]">
                   {adminEmails.map((email) => (
-                    <li key={email} className="px-5 py-3 font-mono text-[12px] text-[#475569]">
+                    <li key={email} className="px-5 py-3 font-mono text-[12px] text-[#3F3F3F]">
                       {email}
                     </li>
                   ))}

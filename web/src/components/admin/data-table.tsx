@@ -37,15 +37,15 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E2E8F0] bg-white">
+    <div className="overflow-hidden rounded-xl border border-[#E5E5E2] bg-white">
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-[13px]">
-          <thead className="bg-[#FAFBFC]">
+          <thead className="bg-[#FAFAF9]">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className={`whitespace-nowrap border-b border-[#E2E8F0] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#475569] ${
+                  className={`whitespace-nowrap border-b border-[#E5E5E2] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#3F3F3F] ${
                     col.align === "right" ? "text-right" : "text-left"
                   }`}
                 >
@@ -60,8 +60,8 @@ export function DataTable<T>({
               return (
                 <tr
                   key={rowKey(row)}
-                  className={`border-b border-[#E2E8F0] last:border-b-0 ${
-                    href ? "cursor-pointer hover:bg-[#FAFBFC]" : ""
+                  className={`border-b border-[#E5E5E2] last:border-b-0 ${
+                    href ? "cursor-pointer hover:bg-[#FAFAF9]" : ""
                   }`}
                   onClick={
                     href
@@ -74,7 +74,7 @@ export function DataTable<T>({
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      className={`px-4 py-3 text-[#0F172A] ${col.align === "right" ? "text-right" : ""} ${
+                      className={`px-4 py-3 text-[#111111] ${col.align === "right" ? "text-right" : ""} ${
                         col.truncate ? `${col.truncate} truncate` : ""
                       }`}
                     >
@@ -112,19 +112,19 @@ export function Pagination({
   const end = Math.min(page * pageSize, total);
 
   return (
-    <div className="mt-4 flex items-center justify-between text-[12px] text-[#64748B]">
+    <div className="mt-4 flex items-center justify-between text-[12px] text-[#6B6B6B]">
       <p>
-        Showing <span className="font-semibold text-[#0F172A]">{start}–{end}</span> of{" "}
-        <span className="font-semibold text-[#0F172A]">{total.toLocaleString()}</span>
+        Showing <span className="font-semibold text-[#111111]">{start}–{end}</span> of{" "}
+        <span className="font-semibold text-[#111111]">{total.toLocaleString()}</span>
       </p>
       <div className="flex items-center gap-1">
         <a
           href={prevHref ?? undefined}
           aria-disabled={!prevHref}
-          className={`rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold transition ${
+          className={`rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold transition ${
             prevHref
-              ? "text-[#0F172A] hover:bg-[#FAFBFC]"
-              : "pointer-events-none text-[#CBD5E1]"
+              ? "text-[#111111] hover:bg-[#FAFAF9]"
+              : "pointer-events-none text-[#D9D9D5]"
           }`}
         >
           Previous
@@ -132,10 +132,10 @@ export function Pagination({
         <a
           href={nextHref ?? undefined}
           aria-disabled={!nextHref}
-          className={`rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold transition ${
+          className={`rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold transition ${
             nextHref
-              ? "text-[#0F172A] hover:bg-[#FAFBFC]"
-              : "pointer-events-none text-[#CBD5E1]"
+              ? "text-[#111111] hover:bg-[#FAFAF9]"
+              : "pointer-events-none text-[#D9D9D5]"
           }`}
         >
           Next

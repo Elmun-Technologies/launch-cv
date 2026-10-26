@@ -82,15 +82,15 @@ export default async function AdminBlogListPage({
       truncate: "max-w-[320px]",
       render: (p) => (
         <div className="min-w-0">
-          <p className="truncate font-medium text-[#0F172A]">{p.title}</p>
-          <p className="truncate font-mono text-[11px] text-[#94A3B8]">/{p.slug}</p>
+          <p className="truncate font-medium text-[#111111]">{p.title}</p>
+          <p className="truncate font-mono text-[11px] text-[#8A8A86]">/{p.slug}</p>
         </div>
       ),
     },
     {
       key: "category",
       header: "Category",
-      render: (p) => <span className="text-[12px] text-[#475569]">{p.category}</span>,
+      render: (p) => <span className="text-[12px] text-[#3F3F3F]">{p.category}</span>,
     },
     {
       key: "status",
@@ -101,7 +101,7 @@ export default async function AdminBlogListPage({
             {p.status}
           </StatusBadge>
           {p.status === "scheduled" && p.scheduledFor ? (
-            <span className="text-[10px] text-[#94A3B8]">{dateFmt.format(p.scheduledFor)}</span>
+            <span className="text-[10px] text-[#8A8A86]">{dateFmt.format(p.scheduledFor)}</span>
           ) : null}
         </div>
       ),
@@ -110,7 +110,7 @@ export default async function AdminBlogListPage({
       key: "published",
       header: "Published",
       render: (p) => (
-        <span className="text-[12px] text-[#64748B]">
+        <span className="text-[12px] text-[#6B6B6B]">
           {p.publishedAt ? dateFmt.format(p.publishedAt) : "—"}
         </span>
       ),
@@ -118,7 +118,7 @@ export default async function AdminBlogListPage({
     {
       key: "updated",
       header: "Updated",
-      render: (p) => <span className="text-[12px] text-[#64748B]">{dateFmt.format(p.updatedAt)}</span>,
+      render: (p) => <span className="text-[12px] text-[#6B6B6B]">{dateFmt.format(p.updatedAt)}</span>,
     },
     {
       key: "actions",
@@ -127,7 +127,7 @@ export default async function AdminBlogListPage({
       render: (p) => (
         <Link
           href={`/admin-panel/cms/blog/${p.id}`}
-          className="inline-flex items-center gap-1 rounded-md border border-[#E2E8F0] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC]"
+          className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
         >
           <Pencil className="h-3 w-3" />
           Edit
@@ -157,7 +157,7 @@ export default async function AdminBlogListPage({
                   key={s}
                   href={href}
                   className={`rounded-full px-3 py-1 text-[12px] font-semibold capitalize transition ${
-                    isActive ? "bg-[#0F172A] text-white" : "bg-[#F1F5F9] text-[#475569] hover:bg-[#E2E8F0]"
+                    isActive ? "bg-[#111111] text-white" : "bg-[#F5F5F3] text-[#3F3F3F] hover:bg-[#E5E5E2]"
                   }`}
                 >
                   {s}

@@ -56,18 +56,18 @@ export default async function AdminUserDetailPage({
         <div className="flex items-start gap-3">
           <Link
             href="/admin-panel/users"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#475569] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E5E5E2] bg-white text-[#3F3F3F] transition hover:bg-[#FAFAF9] hover:text-[#111111]"
             aria-label="Back to users"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
-            <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">
+            <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">
               {user.name || user.email}
             </h1>
-            <p className="mt-1 text-[13px] text-[#64748B]">
+            <p className="mt-1 text-[13px] text-[#6B6B6B]">
               <StatusBadge tone={statusToTone(user.role)}>{user.role}</StatusBadge>
-              <span className="ml-2 font-mono text-[11px] text-[#94A3B8]">{user.id}</span>
+              <span className="ml-2 font-mono text-[11px] text-[#8A8A86]">{user.id}</span>
             </p>
           </div>
         </div>
@@ -75,14 +75,14 @@ export default async function AdminUserDetailPage({
         <div className="grid gap-5 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <SectionCard title="User information" flush>
-              <dl className="divide-y divide-[#E2E8F0]">
+              <dl className="divide-y divide-[#E5E5E2]">
                 {fields.map((f) => (
                   <div key={f.label} className="flex items-start justify-between gap-4 px-5 py-3">
-                    <dt className="text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
+                    <dt className="text-[12px] font-semibold uppercase tracking-wider text-[#3F3F3F]">
                       {f.label}
                     </dt>
                     <dd
-                      className={`max-w-[60%] truncate text-right text-[13px] text-[#0F172A] ${
+                      className={`max-w-[60%] truncate text-right text-[13px] text-[#111111] ${
                         f.mono ? "font-mono text-[12px]" : ""
                       }`}
                     >
@@ -92,7 +92,7 @@ export default async function AdminUserDetailPage({
                 ))}
                 {user.subscription ? (
                   <div className="flex items-start justify-between gap-4 px-5 py-3">
-                    <dt className="text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
+                    <dt className="text-[12px] font-semibold uppercase tracking-wider text-[#3F3F3F]">
                       <CreditCard className="mr-1 inline h-3 w-3 align-text-bottom" />
                       Subscription
                     </dt>
@@ -100,7 +100,7 @@ export default async function AdminUserDetailPage({
                       <StatusBadge tone={statusToTone(user.subscription.status)} dot>
                         {user.subscription.status}
                       </StatusBadge>
-                      <span className="ml-2 text-[12px] text-[#94A3B8]">
+                      <span className="ml-2 text-[12px] text-[#8A8A86]">
                         until {user.subscription.currentPeriodEnd?.toLocaleDateString() ?? "—"}
                       </span>
                     </dd>
@@ -120,16 +120,16 @@ export default async function AdminUserDetailPage({
           flush
         >
           {user.resumes.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">No resumes.</p>
+            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">No resumes.</p>
           ) : (
-            <ul className="divide-y divide-[#E2E8F0]">
+            <ul className="divide-y divide-[#E5E5E2]">
               {user.resumes.map((r) => (
-                <li key={r.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
+                <li key={r.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFAF9]">
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium text-[#0F172A]">{r.title}</p>
-                    <p className="truncate text-[12px] text-[#64748B]">{r.vertical}</p>
+                    <p className="truncate text-[13px] font-medium text-[#111111]">{r.title}</p>
+                    <p className="truncate text-[12px] text-[#6B6B6B]">{r.vertical}</p>
                   </div>
-                  <p className="shrink-0 text-[12px] text-[#94A3B8]">{r.updatedAt.toLocaleDateString()}</p>
+                  <p className="shrink-0 text-[12px] text-[#8A8A86]">{r.updatedAt.toLocaleDateString()}</p>
                 </li>
               ))}
             </ul>
@@ -143,18 +143,18 @@ export default async function AdminUserDetailPage({
           flush
         >
           {user.jobApplications.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">No applications.</p>
+            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">No applications.</p>
           ) : (
-            <ul className="divide-y divide-[#E2E8F0]">
+            <ul className="divide-y divide-[#E5E5E2]">
               {user.jobApplications.map((a) => (
-                <li key={a.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
+                <li key={a.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFAF9]">
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-medium text-[#0F172A]">{a.title || "Untitled"}</p>
-                    <p className="truncate text-[12px] text-[#64748B]">{a.company || "—"}</p>
+                    <p className="truncate text-[13px] font-medium text-[#111111]">{a.title || "Untitled"}</p>
+                    <p className="truncate text-[12px] text-[#6B6B6B]">{a.company || "—"}</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
                     <StatusBadge tone={statusToTone(a.status)}>{a.status}</StatusBadge>
-                    <p className="text-[12px] text-[#94A3B8]">{a.createdAt.toLocaleDateString()}</p>
+                    <p className="text-[12px] text-[#8A8A86]">{a.createdAt.toLocaleDateString()}</p>
                   </div>
                 </li>
               ))}

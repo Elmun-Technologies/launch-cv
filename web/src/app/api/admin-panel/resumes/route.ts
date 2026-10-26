@@ -48,6 +48,7 @@ export async function GET(req: Request) {
         id: true,
         title: true,
         vertical: true,
+        regionMode: true,
         createdAt: true,
         updatedAt: true,
         user: { select: { id: true, email: true, name: true } },

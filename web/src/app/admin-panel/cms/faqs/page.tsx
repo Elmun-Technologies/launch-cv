@@ -29,18 +29,18 @@ export default async function AdminFaqsPage() {
       key: "question",
       header: "Question",
       truncate: "max-w-[420px]",
-      render: (r) => <span className="font-medium text-[#0F172A]">{r.question}</span>,
+      render: (r) => <span className="font-medium text-[#111111]">{r.question}</span>,
     },
     {
       key: "placement",
       header: "Placement",
-      render: (r) => <span className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[11px] text-[#475569]">{r.placement}</span>,
+      render: (r) => <span className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[11px] text-[#3F3F3F]">{r.placement}</span>,
     },
     {
       key: "order",
       header: "Order",
       align: "right",
-      render: (r) => <span className="font-mono text-[12px] text-[#475569]">{r.order}</span>,
+      render: (r) => <span className="font-mono text-[12px] text-[#3F3F3F]">{r.order}</span>,
     },
     {
       key: "status",
@@ -55,7 +55,7 @@ export default async function AdminFaqsPage() {
       render: (r) => (
         <Link
           href={`/admin-panel/cms/faqs/${r.id}`}
-          className="inline-flex items-center gap-1 rounded-md border border-[#E2E8F0] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC]"
+          className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
         >
           <Pencil className="h-3 w-3" />
           Edit

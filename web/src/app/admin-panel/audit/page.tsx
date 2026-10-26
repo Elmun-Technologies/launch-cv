@@ -66,13 +66,13 @@ export default async function AdminAuditPage({
     {
       key: "when",
       header: "When",
-      render: (r) => <span className="text-[12px] text-[#64748B]">{dateFmt.format(r.createdAt)}</span>,
+      render: (r) => <span className="text-[12px] text-[#6B6B6B]">{dateFmt.format(r.createdAt)}</span>,
     },
     {
       key: "actor",
       header: "Actor",
       render: (r) => (
-        <span className="text-[12px] text-[#0F172A]">{r.actor?.email ?? "—"}</span>
+        <span className="text-[12px] text-[#111111]">{r.actor?.email ?? "—"}</span>
       ),
     },
     {
@@ -83,20 +83,20 @@ export default async function AdminAuditPage({
     {
       key: "entity",
       header: "Entity",
-      render: (r) => <span className="font-mono text-[11px] text-[#475569]">{r.entity}</span>,
+      render: (r) => <span className="font-mono text-[11px] text-[#3F3F3F]">{r.entity}</span>,
     },
     {
       key: "entityId",
       header: "Target",
       truncate: "max-w-[160px]",
       render: (r) => (
-        <span className="font-mono text-[11px] text-[#94A3B8]">{r.entityId ?? "—"}</span>
+        <span className="font-mono text-[11px] text-[#8A8A86]">{r.entityId ?? "—"}</span>
       ),
     },
     {
       key: "ip",
       header: "IP",
-      render: (r) => <span className="font-mono text-[11px] text-[#94A3B8]">{r.ip ?? "—"}</span>,
+      render: (r) => <span className="font-mono text-[11px] text-[#8A8A86]">{r.ip ?? "—"}</span>,
     },
   ];
 
@@ -109,9 +109,9 @@ export default async function AdminAuditPage({
           entityCounts.length > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[#2563EB]" />
-              <span className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">By entity</span>
+              <span className="text-[12px] font-semibold uppercase tracking-wider text-[#8A8A86]">By entity</span>
               {entityCounts.map((e) => (
-                <span key={e.entity} className="rounded-full bg-[#F1F5F9] px-2.5 py-0.5 text-[12px] font-medium text-[#475569]">
+                <span key={e.entity} className="rounded-full bg-[#F5F5F3] px-2.5 py-0.5 text-[12px] font-medium text-[#3F3F3F]">
                   {e.entity} · {e._count.entity}
                 </span>
               ))}
