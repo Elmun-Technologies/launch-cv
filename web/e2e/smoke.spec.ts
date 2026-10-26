@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("home page renders", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /the ai job search platform/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /find out why your resume/i })).toBeVisible();
 });
 
 test("login page renders", async ({ page }) => {
@@ -23,6 +23,6 @@ test("free ATS check page renders without an account", async ({ page }) => {
 
 test("home hero CTA points to the free ATS check", async ({ page }) => {
   await page.goto("/");
-  const cta = page.getByRole("link", { name: /check your ats score free/i }).first();
+  const cta = page.getByRole("link", { name: /check my resume — free/i }).first();
   await expect(cta).toHaveAttribute("href", "/free-ats-check");
 });
