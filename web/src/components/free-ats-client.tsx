@@ -2,29 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import {
-  Upload,
-  Loader2,
-  Lock,
-  ArrowRight,
-  AlertTriangle,
-  FileText,
-  ClipboardPaste,
-} from "lucide-react";
+import { Loader2, Lock, ArrowRight, AlertTriangle, FileText } from "lucide-react";
+import { track } from "@/lib/analytics-client";
+import { ANALYTICS_EVENTS } from "@/lib/analytics-events";
+import { GoogleSignInButton } from "@/components/google-sign-in-button";
+import { DimensionBars, FixItem, scoreVerdict } from "@/components/ats-report-parts";
 import type { FreeAtsResult } from "@/types/ai-results";
 
 type Mode = "upload" | "paste";
 type Status = "idle" | "loading" | "done" | "error";
-
-/** Fire-and-forget funnel event to GA4 (gtag) if analytics is loaded. */
-function fireEvent(name: string, params?: Record<string, unknown>): void {
-  try {
-    const w = window as unknown as { gtag?: (...args: unknown[]) => void };
-    w.gtag?.("event", name, params ?? {});
-  } catch {
-    /* analytics must never break the flow */
-  }
-}
 
 /** Lightweight, non-invasive client signal — a secondary abuse hint only. */
 function clientFingerprint(): string {
@@ -42,25 +28,13 @@ function clientFingerprint(): string {
   }
 }
 
-function band(score: number): { label: string; className: string } {
-  if (score >= 85) return { label: "Strong — minor fixes", className: "text-emerald-700" };
-  if (score >= 70) return { label: "Good — fixes recommended", className: "text-[#C2410C]" };
-  if (score >= 50) return { label: "At risk — needs work", className: "text-amber-700" };
-  return { label: "High risk — likely filtered", className: "text-red-700" };
-}
-
-function barColor(v: number): string {
-  if (v >= 85) return "bg-emerald-500";
-  if (v >= 70) return "bg-amber-500";
-  return "bg-red-500";
-}
-
 export function FreeAtsClient() {
   const [mode, setMode] = useState<Mode>("upload");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [alreadyUsed, setAlreadyUsed] = useState(false);
   const [result, setResult] = useState<FreeAtsResult | null>(null);
+  const [claimToken, setClaimToken] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [pasted, setPasted] = useState("");
   const [displayScore, setDisplayScore] = useState(0);
@@ -70,7 +44,7 @@ export function FreeAtsClient() {
   useEffect(() => {
     if (status !== "done" || !result) return;
     const target = result.overall;
-    fireEvent("free_ats_result", { score: target, fixes: result.totalFixes });
+    track(ANALYTICS_EVENTS.atsCheckCompleted, { score: target, fixes: result.totalFixes });
     const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     if (reduce) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -102,18 +76,16 @@ export function FreeAtsClient() {
       const json = await res.json().catch(() => ({}));
       if (!res.ok || !json.result) {
         setStatus("error");
-        const used = Boolean(json.alreadyUsed);
-        setAlreadyUsed(used);
+        setAlreadyUsed(Boolean(json.alreadyUsed));
         setError(json.error ?? "Something went wrong. Please try again.");
-        fireEvent(used ? "free_ats_quota_hit" : "free_ats_error");
         return;
       }
       setResult(json.result as FreeAtsResult);
+      setClaimToken(typeof json.claimToken === "string" ? json.claimToken : null);
       setStatus("done");
     } catch {
       setStatus("error");
       setError("Network error. Please try again.");
-      fireEvent("free_ats_error");
     }
   }
 
@@ -142,6 +114,7 @@ export function FreeAtsClient() {
   function reset() {
     setStatus("idle");
     setResult(null);
+    setClaimToken(null);
     setError(null);
     setAlreadyUsed(false);
     setFileName(null);
@@ -149,174 +122,127 @@ export function FreeAtsClient() {
 
   // ---- Result view ----
   if (status === "done" && result) {
-    const b = band(result.overall);
-    const dash = 283;
-    const offset = dash - (dash * displayScore) / 100;
+    const next = claimToken ? `/dashboard/ats-report/${claimToken}` : "/dashboard";
+    const hidden = Math.max(0, result.totalFixes - result.preview.length);
+    const onGate = () => track(ANALYTICS_EVENTS.atsGateClick, { score: result.overall, hidden });
     return (
-      <div className="mx-auto max-w-[720px]" role="status" aria-live="polite">
-        <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_30px_60px_-20px_rgba(15,23,42,0.18)]">
-          <div className="grid sm:grid-cols-5">
-            <div className="flex flex-col items-center justify-center border-b border-[#E2E8F0] bg-[#FFF7ED] p-6 sm:col-span-2 sm:border-b-0 sm:border-r">
-              <div className="relative h-[150px] w-[150px]">
-                <svg viewBox="0 0 120 120" className="h-full w-full -rotate-90">
-                  <circle cx="60" cy="60" r="45" fill="none" stroke="#FED7AA" strokeWidth="12" />
-                  <circle
-                    cx="60"
-                    cy="60"
-                    r="45"
-                    fill="none"
-                    stroke="#EA580C"
-                    strokeWidth="12"
-                    strokeLinecap="round"
-                    strokeDasharray={dash}
-                    strokeDashoffset={offset}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <p className="text-[40px] font-bold leading-none tracking-tight text-[#0F172A]">
-                    {displayScore}
-                  </p>
-                  <p className="text-[10px] uppercase tracking-wider text-[#94A3B8]">of 100</p>
-                </div>
-              </div>
-              <p className={`mt-4 text-center text-[11px] font-semibold uppercase tracking-wider ${b.className}`}>
-                {b.label}
-              </p>
-            </div>
-
-            <div className="p-6 sm:col-span-3">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-                Breakdown
-              </p>
-              <div className="mt-3 space-y-3">
-                {result.dimensions.map((d) => (
-                  <div key={d.name}>
-                    <div className="mb-1 flex items-center justify-between text-[12px]">
-                      <span className="text-[#475569]">{d.name}</span>
-                      <span className="font-semibold text-[#0F172A]">{d.score}</span>
-                    </div>
-                    <div className="h-1.5 overflow-hidden rounded-full bg-[#FFF7ED]">
-                      <div
-                        className={`h-full rounded-full ${barColor(d.score)}`}
-                        style={{ width: `${d.score}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+      <div className="mx-auto w-full max-w-[1000px] text-left" role="status" aria-live="polite">
+        <div className="flex flex-col gap-8 border-b border-[#EEEEEB] pb-10 lg:flex-row lg:items-end lg:gap-16">
+          <div className="flex-1">
+            <p className="text-[14px] text-[#6B6B6B]">Your ATS score{fileName ? ` · ${fileName}` : ""}</p>
+            <p className="mt-1.5 flex items-baseline gap-3">
+              <span className="text-[88px] font-semibold leading-[0.9] tracking-[-0.05em] text-[#111111]">{displayScore}</span>
+              <span className="text-[22px] text-[#8A8A86]">/ 100</span>
+            </p>
+            <h2 className="mt-5 max-w-[560px] text-[30px] font-semibold leading-[1.15] tracking-[-0.03em] text-[#111111]">
+              {scoreVerdict(result.overall)}{" "}
+              {result.totalFixes > 0 ? (
+                <span className="text-[#8A8A86]">
+                  {result.totalFixes} fixable {result.totalFixes === 1 ? "issue" : "issues"}.
+                </span>
+              ) : null}
+            </h2>
           </div>
-
-          <div className="grid grid-cols-3 gap-px border-t border-[#E2E8F0] bg-[#E2E8F0]">
-            {[
-              { l: "High issues", v: result.issueCounts.high, c: "text-red-600" },
-              { l: "Medium", v: result.issueCounts.medium, c: "text-amber-600" },
-              { l: "Low", v: result.issueCounts.low, c: "text-yellow-600" },
-            ].map((s) => (
-              <div key={s.l} className="bg-white p-4 text-center">
-                <p className={`text-[22px] font-bold ${s.c}`}>{s.v}</p>
-                <p className="text-[11px] uppercase tracking-wider text-[#94A3B8]">{s.l}</p>
-              </div>
-            ))}
+          <div className="w-full lg:max-w-[380px]">
+            <DimensionBars dimensions={result.dimensions} />
           </div>
         </div>
 
-        {/* Locked fix list — the upsell */}
-        <div className="relative mt-5 overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white">
-          <div className="p-6" aria-hidden>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-              Your prioritized fix list ({result.totalFixes})
-            </p>
-            <div className="mt-3 space-y-3 blur-[6px] select-none">
-              {Array.from({ length: Math.max(3, Math.min(result.totalFixes, 5)) }).map((_, i) => (
-                <div key={i} className="flex items-start gap-3 rounded-xl border border-[#E2E8F0] bg-white p-4">
-                  <span className="inline-flex shrink-0 items-center rounded-md bg-red-50 px-2 py-0.5 text-[11px] font-semibold uppercase text-red-700">
-                    High
-                  </span>
+        <div className="mt-8 flex items-baseline justify-between gap-4">
+          <h3 className="text-[22px] font-semibold tracking-[-0.02em] text-[#111111]">Fix these first</h3>
+          <span className="text-[14px] text-[#6B6B6B]">
+            {result.issueCounts.high} high · {result.issueCounts.medium} medium · {result.issueCounts.low} low
+          </span>
+        </div>
+        <ol className="mt-3">
+          {result.preview.map((f, i) => (
+            <FixItem key={f.title} fix={f} n={i + 1} />
+          ))}
+        </ol>
+
+        {hidden > 0 ? (
+          <div className="relative mt-1 min-h-[400px] overflow-hidden rounded-[20px] border border-[#E5E5E2]">
+            <div className="space-y-4 p-6 blur-[5px] select-none" aria-hidden>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="flex gap-4">
+                  <span className="h-[26px] w-[26px] shrink-0 rounded-full bg-[#E8890C]" />
                   <div className="flex-1">
-                    <div className="h-3 w-2/3 rounded bg-[#E2E8F0]" />
-                    <div className="mt-2 h-2 w-full rounded bg-[#EEF2F6]" />
+                    <div className="h-3.5 w-2/3 rounded bg-[#D9D9D5]" />
+                    <div className="mt-2.5 h-2.5 w-full rounded bg-[#EEEEEB]" />
                   </div>
                 </div>
               ))}
             </div>
+            <div className="absolute inset-0 flex items-center justify-center bg-white/60 p-4">
+              <div className="w-full max-w-[420px] rounded-[20px] border border-[#E5E5E2] bg-white p-6 text-center shadow-[0_30px_60px_-24px_rgba(0,0,0,0.3)]">
+                <Lock className="mx-auto h-5 w-5 text-[#111111]" aria-hidden />
+                <p className="mt-3 text-[20px] font-semibold tracking-[-0.02em] text-[#111111]">
+                  See all {result.totalFixes} issues — free
+                </p>
+                <p className="mt-1.5 text-[15px] leading-[1.55] text-[#3F3F3F]">
+                  Save your report to unlock the other {hidden} and keep it with your resume.
+                </p>
+                <div className="mt-4 flex flex-col gap-2.5" onClick={onGate}>
+                  <GoogleSignInButton mode="register" next={next} />
+                  <Link
+                    href={`/register?next=${encodeURIComponent(next)}`}
+                    className="flex h-12 items-center justify-center rounded-full bg-[#111111] text-[15px] font-medium text-white transition hover:bg-[#2B2B2B]"
+                  >
+                    Continue with email
+                  </Link>
+                </div>
+                <p className="mt-3 text-[13px] text-[#6B6B6B]">No credit card needed</p>
+              </div>
+            </div>
           </div>
+        ) : null}
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-white/40 to-white p-6 text-center">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-orange-50 text-[#EA580C]">
-              <Lock className="h-5 w-5" />
-            </span>
-            <h3 className="mt-4 text-[18px] font-bold text-[#0F172A]">
-              Unlock every fix — and lift your score
-            </h3>
-            <p className="mx-auto mt-2 max-w-[420px] text-[14px] leading-[1.6] text-[#475569]">
-              Create a free account to see all {result.totalFixes} prioritized fixes, apply them
-              one-by-one, and rescore. Most users gain 20–40 points on the first pass.
-            </p>
-            <Link
-              href={`/register?next=/resume/new&ats=${result.overall}`}
-              onClick={() => fireEvent("free_ats_gate_cta_click", { score: result.overall })}
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_8px_24px_-12px_rgba(234,88,12,0.5)] transition hover:bg-[#C2410C]"
-            >
-              Unlock my fix list
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <button
-              onClick={reset}
-              className="mt-3 text-[13px] font-medium text-[#64748B] hover:text-[#0F172A]"
-            >
-              Check another resume
-            </button>
-          </div>
-        </div>
+        <button onClick={reset} className="mt-6 text-[14px] font-medium text-[#1D4ED8] hover:underline">
+          Check another resume
+        </button>
       </div>
     );
   }
 
   // ---- Input view ----
   return (
-    <div className="mx-auto max-w-[640px]">
-      <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-[0_20px_50px_-24px_rgba(15,23,42,0.18)] sm:p-8">
-        <div className="flex gap-2 rounded-lg bg-[#F1F5F9] p-1">
-          <button
-            onClick={() => setMode("upload")}
-            className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-[13px] font-semibold transition ${
-              mode === "upload" ? "bg-white text-[#0F172A] shadow-sm" : "text-[#64748B]"
-            }`}
-          >
-            <FileText className="h-4 w-4" /> Upload file
-          </button>
-          <button
-            onClick={() => setMode("paste")}
-            className={`flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-2 text-[13px] font-semibold transition ${
-              mode === "paste" ? "bg-white text-[#0F172A] shadow-sm" : "text-[#64748B]"
-            }`}
-          >
-            <ClipboardPaste className="h-4 w-4" /> Paste text
-          </button>
+    <div className="mx-auto w-full max-w-[720px]">
+      <div className="rounded-[20px] border border-[#E5E5E2] bg-white p-2.5 shadow-[0_30px_60px_-40px_rgba(0,0,0,0.3)]">
+        <div className="mx-auto mt-1.5 flex w-max gap-1 rounded-full bg-[#F5F5F3] p-1" role="tablist">
+          {(["upload", "paste"] as const).map((m) => (
+            <button
+              key={m}
+              role="tab"
+              aria-selected={mode === m}
+              onClick={() => setMode(m)}
+              className={`h-9 rounded-full px-4 text-[14px] font-medium transition ${
+                mode === m ? "bg-white text-[#111111] shadow-[0_1px_2px_rgba(0,0,0,0.08)]" : "text-[#6B6B6B]"
+              }`}
+            >
+              {m === "upload" ? "Upload file" : "Paste text"}
+            </button>
+          ))}
         </div>
 
         {status === "loading" ? (
           <div
             role="status"
             aria-live="polite"
-            className="mt-6 flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-[#E2E8F0] py-14"
+            className="mt-3 flex flex-col items-center justify-center gap-3 rounded-[14px] border-[1.5px] border-dashed border-[#C9C9C4] bg-[#FAFAF9] py-14"
           >
-            <Loader2 className="h-7 w-7 animate-spin text-[#EA580C]" />
-            <p className="text-[14px] font-medium text-[#475569]">Scoring your resume…</p>
-            <p className="text-[12px] text-[#94A3B8]">Usually under 10 seconds</p>
+            <Loader2 className="h-7 w-7 animate-spin text-[#111111]" />
+            <p className="text-[15px] font-medium text-[#111111]">Reading your resume the way an ATS does…</p>
+            <p className="text-[13px] text-[#6B6B6B]">Usually about 10 seconds</p>
           </div>
         ) : mode === "upload" ? (
-          <div className="mt-6">
+          <div className="mt-3">
             <button
               onClick={() => fileRef.current?.click()}
-              className="flex w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-[#E2E8F0] bg-[#FAFBFC] py-12 transition hover:border-[#EA580C] hover:bg-[#FFF7ED]"
+              className="flex w-full flex-col items-center justify-center gap-2.5 rounded-[14px] border-[1.5px] border-dashed border-[#C9C9C4] bg-[#FAFAF9] px-6 py-12 transition hover:border-[#111111]"
             >
-              <Upload className="h-7 w-7 text-[#EA580C]" />
-              <span className="text-[14px] font-semibold text-[#0F172A]">
-                {fileName ?? "Upload your resume"}
-              </span>
-              <span className="text-[12px] text-[#94A3B8]">PDF or DOCX · max 4MB</span>
+              <FileText className="h-8 w-8 text-[#111111]" aria-hidden />
+              <span className="text-[17px] font-medium text-[#111111]">{fileName ?? "Upload your resume"}</span>
+              <span className="text-[14px] text-[#6B6B6B]">PDF or DOCX · up to 4 MB</span>
             </button>
             <input
               ref={fileRef}
@@ -328,57 +254,42 @@ export function FreeAtsClient() {
             />
           </div>
         ) : (
-          <div className="mt-6">
+          <div className="mt-3 px-1.5 pb-1.5">
             <textarea
               value={pasted}
               onChange={(e) => setPasted(e.target.value)}
               aria-label="Paste your resume text"
               placeholder="Paste your resume text here…"
-              className="h-52 w-full resize-none rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-4 text-[14px] leading-[1.6] text-[#0F172A] outline-none transition focus:border-[#EA580C] focus:bg-white"
+              className="h-52 w-full resize-none rounded-[14px] border border-[#D9D9D5] bg-[#FAFAF9] p-4 text-[15px] leading-[1.6] text-[#111111] outline-none transition focus:border-[#111111] focus:bg-white"
             />
             <button
               onClick={onPasteSubmit}
-              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#EA580C] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#C2410C]"
+              className="mt-2.5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#111111] text-[15px] font-medium text-white transition hover:bg-[#2B2B2B]"
             >
-              Check my ATS score
-              <ArrowRight className="h-4 w-4" />
+              Check my resume <ArrowRight className="h-4 w-4" />
             </button>
           </div>
         )}
 
-        {status === "error" && error && (
+        {status === "error" && error ? (
           <div
             role="alert"
-            className={`mt-4 flex items-start gap-2 rounded-lg border p-3 text-[13px] ${
-              alreadyUsed
-                ? "border-orange-200 bg-orange-50 text-[#9A3412]"
-                : "border-red-200 bg-red-50 text-red-700"
-            }`}
+            className="mx-1.5 mb-1.5 mt-3 flex items-start gap-2 rounded-[12px] border border-[#F6D3CD] bg-[#FDF2F0] p-3 text-[14px] text-[#8F2A18]"
           >
-            {alreadyUsed ? (
-              <Lock className="mt-0.5 h-4 w-4 shrink-0" />
-            ) : (
-              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-            )}
+            {alreadyUsed ? <Lock className="mt-0.5 h-4 w-4 shrink-0" /> : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />}
             <div>
               <p>{error}</p>
-              {alreadyUsed && (
-                <Link
-                  href="/register?next=/resume/new"
-                  onClick={() => fireEvent("free_ats_gate_cta_click", { source: "quota" })}
-                  className="mt-1 inline-flex items-center gap-1 font-semibold underline underline-offset-2"
-                >
-                  Create a free account <ArrowRight className="h-3.5 w-3.5" />
+              {alreadyUsed ? (
+                <Link href="/pricing" className="mt-1 inline-flex items-center gap-1 font-medium underline underline-offset-2">
+                  See plans to keep checking <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
-              )}
+              ) : null}
             </div>
           </div>
-        )}
+        ) : null}
       </div>
 
-      <p className="mt-4 text-center text-[12px] text-[#94A3B8]">
-        No account needed · one free scan · your file is never stored
-      </p>
+      <p className="mt-4 text-center text-[13px] text-[#6B6B6B]">No account needed · your file is read once and not stored</p>
     </div>
   );
 }

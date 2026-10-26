@@ -33,6 +33,10 @@ export const ANALYTICS_EVENTS = {
   purchase: "purchase",
   /** A key CTA ("Get started" / "Choose plan" / …) was clicked. */
   ctaClick: "cta_click",
+  /** The free ATS check returned a score. */
+  atsCheckCompleted: "ats_check_completed",
+  /** The visitor clicked "save report" on the free ATS result. */
+  atsGateClick: "ats_gate_click",
 } as const;
 
 export type AnalyticsEventName = (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS];

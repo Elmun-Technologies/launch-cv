@@ -12,12 +12,12 @@ test("login page renders", async ({ page }) => {
 
 test("free ATS check page renders without an account", async ({ page }) => {
   await page.goto("/free-ats-check");
-  await expect(page.getByRole("heading", { name: /check your ats score free/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /free ats resume checker/i })).toBeVisible();
   // Upload affordance is the default input mode. Target the dropzone button
   // specifically — the hero copy also contains "Upload your resume…".
   await expect(page.getByRole("button", { name: /upload your resume/i })).toBeVisible();
   // Switching to the paste tab reveals the textarea.
-  await page.getByRole("button", { name: /paste text/i }).click();
+  await page.getByRole("tab", { name: /paste text/i }).click();
   await expect(page.getByPlaceholder(/paste your resume text/i)).toBeVisible();
 });
 
