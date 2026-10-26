@@ -33,7 +33,7 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   },
   {
     title: "ATS Score Checker",
-    path: "/features/ats-score",
+    path: "/free-ats-check",
     summary: "Upload a resume to get a 0–100 ATS score in seconds, built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes, with a prioritized fix list.",
   },
   {

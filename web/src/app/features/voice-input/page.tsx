@@ -467,7 +467,7 @@ export default function VoiceInputPage() {
               <Link href="/features/resume-builder" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
                 Build the full resume <ArrowRight className="h-3.5 w-3.5" />
               </Link>
-              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+              <Link href="/free-ats-check" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
                 Check the ATS score <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>

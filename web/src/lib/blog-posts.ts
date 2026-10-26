@@ -136,7 +136,7 @@ Understanding what the score really represents — parsability plus relevance �
       },
       {
         heading: "How LaunchCV calculates your ATS score",
-        body: `LaunchCV's [ATS Score Checker](/features/ats-score) simulates how major applicant tracking systems parse a resume and returns a 0–100 score broken into the four categories above: formatting, keywords, structure, and readability. Upload a PDF or DOCX and you get an instant, itemized report that lists the highest-impact fixes first — each with a specific, plain-English instruction rather than a vague warning.
+        body: `LaunchCV's [ATS Score Checker](/free-ats-check) simulates how major applicant tracking systems parse a resume and returns a 0–100 score broken into the four categories above: formatting, keywords, structure, and readability. Upload a PDF or DOCX and you get an instant, itemized report that lists the highest-impact fixes first — each with a specific, plain-English instruction rather than a vague warning.
 
 Because the checker scores your resume *against the job description you paste in*, the feedback reflects the role you actually want, not a generic template. From there you can jump straight into the [resume builder](/features/resume-builder) to apply the fixes and re-score in the same place. The goal isn't to trick the software — it's to make sure a resume you're proud of actually reaches the human on the other side.
 
@@ -190,7 +190,7 @@ ATS scoring is only meaningful against a specific role. Pick the exact job posti
 
 ### Step 2: Upload both to an ATS checker
 
-Paste the job description and upload your resume into a tool like the [LaunchCV ATS Score Checker](/features/ats-score). It parses your resume the way real ATS platforms do.
+Paste the job description and upload your resume into a tool like the [LaunchCV ATS Score Checker](/free-ats-check). It parses your resume the way real ATS platforms do.
 
 ### Step 3: Read your score and the breakdown
 
@@ -262,7 +262,7 @@ A realistic cadence for an active job search is a quick check per application fo
       },
       {
         heading: "Turn your score into interviews",
-        body: `Checking your ATS score is step one; acting on it is what lands interviews. The fastest workflow is to keep everything in one place: paste the job description, check your score with the [ATS Score Checker](/features/ats-score), align keywords with [JD alignment](/features/jd-alignment), and apply the fixes in the [resume builder](/features/resume-builder) — then re-score before you hit apply.
+        body: `Checking your ATS score is step one; acting on it is what lands interviews. The fastest workflow is to keep everything in one place: paste the job description, check your score with the [ATS Score Checker](/free-ats-check), align keywords with [JD alignment](/features/jd-alignment), and apply the fixes in the [resume builder](/features/resume-builder) — then re-score before you hit apply.
 
 Do this for each role and you stop guessing. Instead of blasting one resume at fifty jobs, you send a tailored, ATS-ready resume that actually reaches a human — and your response rate follows.`,
       },
@@ -357,7 +357,7 @@ Fix any transcription errors, and make sure the wording matches the jobs you're 
         body: `Getting the words out is half the job; the other half is making sure the finished resume passes the software filter. After your voice draft is structured:
 
 - **Align it to the job description.** Weave in the skills and terms from the posting so your keyword match is strong. Our [JD alignment tool](/features/jd-alignment) shows you which ones are missing.
-- **Check the ATS score.** Run the draft through the [ATS Score Checker](/features/ats-score) to catch formatting or keyword issues before you apply.
+- **Check the ATS score.** Run the draft through the [ATS Score Checker](/free-ats-check) to catch formatting or keyword issues before you apply.
 - **Mind role-specific keywords.** If you're a software engineer, make sure the real technologies you named out loud — the languages, frameworks, and tools — actually made it onto the page, since those are the exact terms recruiters search for.
 
 Speaking gets your genuine experience onto the page fast; aligning and scoring makes sure it reaches a human.`,
@@ -526,7 +526,7 @@ Pair a technical keyword with a measurable result: “Optimized PostgreSQL queri
 
 Doing this manually for every role is tedious. Our [JD alignment tool](/features/jd-alignment) reads the posting, compares it to your resume, and shows exactly which technical keywords you're missing — so you tailor in minutes.
 
-![LaunchCV JD alignment matching a software engineer resume to a backend job description and surfacing missing technical keywords such as Kubernetes and gRPC.](/images/product/jd-alignment.svg) Then confirm your match with the [ATS Score Checker](/features/ats-score) before applying; see our guide on [how to check your resume's ATS score](/blog/how-to-check-ats-score-of-resume).
+![LaunchCV JD alignment matching a software engineer resume to a backend job description and surfacing missing technical keywords such as Kubernetes and gRPC.](/images/product/jd-alignment.svg) Then confirm your match with the [ATS Score Checker](/free-ats-check) before applying; see our guide on [how to check your resume's ATS score](/blog/how-to-check-ats-score-of-resume).
 
 ![LaunchCV ATS score checker confirming a strong keyword match for a software engineer resume before applying.](/images/product/ats-score.svg)`,
       },
@@ -543,7 +543,7 @@ Avoid hiding keywords in images, skill-bar graphics, or a two-column sidebar —
       },
       {
         heading: "Turn your keyword list into an interview",
-        body: `The fastest path from keyword list to interview is to build with the right terms baked in from the start. Draft your resume in the [resume builder](/features/resume-builder), align it to each posting with [JD alignment](/features/jd-alignment), and verify your keyword match with the [ATS Score Checker](/features/ats-score) before you apply.
+        body: `The fastest path from keyword list to interview is to build with the right terms baked in from the start. Draft your resume in the [resume builder](/features/resume-builder), align it to each posting with [JD alignment](/features/jd-alignment), and verify your keyword match with the [ATS Score Checker](/free-ats-check) before you apply.
 
 Keywords aren't about gaming the system — they're about making sure a recruiter searching for exactly your skills can actually find you. Use the real technologies you know, mirror each posting's vocabulary, and prove impact with numbers. That combination is what turns a software engineer's resume from filtered-out to shortlisted.`,
       },

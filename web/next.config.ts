@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
       { source: "/year", destination: "/pricing", statusCode: 301 },
       { source: "/yearly", destination: "/pricing", statusCode: 301 },
       { source: "/annual", destination: "/pricing", statusCode: 301 },
+      // The feature page and the free tool targeted the same queries; one page ranks better than two.
+      { source: "/features/ats-score", destination: "/free-ats-check", statusCode: 301 },
     ];
   },
 };

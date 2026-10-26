@@ -43,7 +43,7 @@ const features = [
     icon: BarChart3,
     title: "ATS Score Checker",
     description: "Every parser-breaking format issue, named and ranked, with a plain-English fix list.",
-    href: "/features/ats-score",
+    href: "/free-ats-check",
     iconBg: "bg-orange-50 text-orange-700",
     stats: [{ k: "0–100", v: "ATS score scale" }, { k: "Free", v: "No signup" }],
   },

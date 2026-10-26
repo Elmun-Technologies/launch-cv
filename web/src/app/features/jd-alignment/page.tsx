@@ -440,7 +440,7 @@ export default function JDAlignmentPage() {
             <p>
               A high JD match is only half the job — the resume still has to parse cleanly. After you
               align, run it through the{" "}
-              <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
+              <Link href="/free-ats-check" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 ATS score checker to see how your resume reads to ATS software
               </Link>{" "}
               and catch any formatting issues. For the underlying method, see our guides on{" "}
@@ -527,7 +527,7 @@ export default function JDAlignmentPage() {
               </p>
             </div>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
+              <Link href="/free-ats-check" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
                 Check your ATS score <ArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link href="/features/cover-letter" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-white">
@@ -597,7 +597,7 @@ export default function JDAlignmentPage() {
           <div className="mt-5 grid gap-4 sm:grid-cols-3">
             {[
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "Plain English in, polished bullets out.", icon: FileText },
-              { href: "/features/ats-score", t: "ATS Score Checker", d: "Find every parser-breaking format issue.", icon: BarChart3 },
+              { href: "/free-ats-check", t: "ATS Score Checker", d: "Find every parser-breaking format issue.", icon: BarChart3 },
               { href: "/features/cover-letter", t: "Cover Letter Generator", d: "Same JD, tailored letter in about a minute.", icon: Mail },
             ].map((r) => (
               <Link

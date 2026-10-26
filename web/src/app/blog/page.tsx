@@ -8,8 +8,6 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { BlogCover } from "@/components/blog-cover";
-import { StickyCta } from "@/components/sticky-cta";
-import { ArrowRight, Clock } from "lucide-react";
 
 // CMS-driven via Postgres. ISR keeps the page snappy — published content is
 // served from cache for up to 5 minutes; the admin API calls revalidatePath()
@@ -19,7 +17,7 @@ export const revalidate = 300;
 const baseMetadata: Metadata = buildMarketingMetadata({
   title: "Resume & Career Blog — ATS Tips, Templates & Guides",
   description:
-    "Evidence-based guides on resume writing, ATS optimization, cover letters, and interview prep — actionable tactics to help you land the job faster.",
+    "Practical guides on ATS resumes, keywords, tailoring your resume to each job, cover letters and interview prep — with examples you can copy.",
   pathname: "/blog",
   image: DEFAULT_OG_IMAGE,
   keywords: [
@@ -56,12 +54,8 @@ const blogLd = {
   },
 };
 
-const categoryClass: Record<string, string> = {
-  "Resume Tips": "bg-blue-50 text-blue-700",
-  "Cover Letters": "bg-teal-50 text-teal-700",
-  "Interview Prep": "bg-emerald-50 text-emerald-700",
-  "Job Search": "bg-blue-50 text-blue-700",
-};
+const fmtDate = (d: string) =>
+  new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
 export default async function BlogPage() {
   const posts = await getPublishedPosts();
@@ -86,12 +80,12 @@ export default async function BlogPage() {
 
   if (!featured) {
     return (
-      <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+      <div className="flex min-h-screen flex-col bg-white text-[#111111]">
         <JsonLd data={blogLd} />
         <LandingNav />
-        <main className="mx-auto max-w-[1100px] flex-1 px-6 py-32 text-center">
-          <h1 className="lc-hero-headline text-[#0F172A]">Career blog</h1>
-          <p className="mt-6 text-[16px] text-[#475569]">New articles coming soon. Check back shortly.</p>
+        <main className="mx-auto max-w-[1200px] flex-1 px-5 py-32 sm:px-8">
+          <h1 className="text-[44px] font-semibold tracking-[-0.04em]">Resume guides</h1>
+          <p className="mt-4 text-[17px] text-[#3F3F3F]">New guides are on the way.</p>
         </main>
         <LandingFooter />
       </div>
@@ -99,166 +93,86 @@ export default async function BlogPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={blogLdWithPosts} />
       <LandingNav />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[96px]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            backgroundImage: "radial-gradient(circle at 12% 0%, rgba(26,86,219,0.06), transparent 50%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-12 pt-12">
-          <div className="max-w-[760px]">
-            <p className="lc-overline text-[#2563EB]">Career blog</p>
-            <h1 className="mt-3 lc-hero-headline text-[#0F172A]">
-              Resume tips and career advice for modern job seekers
-            </h1>
-            <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
-              Evidence-based guides on ATS optimization, resume writing, cover letters, interview preparation, and AI-assisted job search — written by the team building LaunchCV.
-            </p>
+      <main className="flex-1">
+        <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
+          <h1 className="max-w-[820px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
+            Resume guides. <span className="text-[#8A8A86]">Practical, specific, no fluff.</span>
+          </h1>
+          <p className="mt-5 max-w-[600px] text-[17px] leading-[1.6] text-[#3F3F3F]">
+            How applicant tracking systems read resumes, how to tailor yours to each job, and how to prepare for the
+            interview that follows.
+          </p>
+          <p className="mt-6 flex flex-wrap gap-x-2 gap-y-2 text-[14px]">
+            {categories.map((cat) => (
+              <span key={cat} className="rounded-full border border-[#E5E5E2] px-3.5 py-1.5 text-[#3F3F3F]">
+                {cat} · {posts.filter((p) => p.category === cat).length}
+              </span>
+            ))}
+          </p>
+        </section>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
-              >
-                Build my resume free
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/free-ats-check"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
-              >
-                Free ATS score check
-              </Link>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-2">
-              <span className="rounded-full bg-[#0F172A] px-3.5 py-1.5 text-[12px] font-semibold text-white">All posts</span>
-              {categories.map((cat) => (
-                <span
-                  key={cat}
-                  className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold ${categoryClass[cat] ?? "bg-[#F1F5F9] text-[#475569]"}`}
-                >
-                  {cat}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FEATURED + GRID */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-16 sm:py-20">
-        <div className="mx-auto max-w-[1200px] px-6">
-          {/* Featured */}
-          <Link
-            href={`/blog/${featured.slug}`}
-            className="group grid gap-8 rounded-2xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)] lg:grid-cols-2 lg:items-center lg:gap-10 lg:p-6"
-          >
-            <BlogCover post={featured} size="lg" />
-            <div className="px-2 lg:px-4">
-              <div className="flex items-center gap-3">
-                <span className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#2563EB]">
-                  Featured
-                </span>
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
-                    categoryClass[featured.category] ?? "bg-[#F1F5F9] text-[#475569]"
-                  }`}
-                >
-                  {featured.category}
-                </span>
-                <span className="inline-flex items-center gap-1 text-[12px] text-[#94A3B8]">
-                  <Clock className="h-3 w-3" /> {featured.readingTime} min read
-                </span>
-              </div>
-              <h2 className="mt-4 text-[24px] font-semibold leading-tight tracking-tight text-[#0F172A] transition group-hover:text-[#2563EB] sm:text-[28px]">
+        {/* FEATURED */}
+        <section className="mx-auto max-w-[1200px] px-5 pt-12 sm:px-8">
+          <Link href={`/blog/${featured.slug}`} className="group grid gap-6 lg:grid-cols-[1.25fr_1fr] lg:items-center lg:gap-12">
+            <BlogCover post={featured} size="lg" priority />
+            <div>
+              <p className="text-[14px] text-[#6B6B6B]">
+                {featured.category} · {featured.readingTime} min read
+              </p>
+              <h2 className="mt-3 text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] group-hover:text-[#1D4ED8] sm:text-[34px]">
                 {featured.title}
               </h2>
-              <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{featured.description}</p>
-              <span className="mt-5 inline-flex items-center gap-1 text-[14px] font-semibold text-[#2563EB]">
-                Read article
-                <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
-              </span>
+              <p className="mt-3 text-[16px] leading-[1.6] text-[#3F3F3F]">{featured.description}</p>
+              <p className="mt-4 text-[14px] text-[#6B6B6B]">
+                {featured.author.name} · {fmtDate(featured.dateModified || featured.date)}
+              </p>
             </div>
           </Link>
+        </section>
 
-          {/* Grid */}
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* ALL POSTS */}
+        <section className="mx-auto max-w-[1200px] px-5 pt-20 sm:px-8">
+          <h2 className="text-[24px] font-semibold tracking-[-0.02em]">All guides</h2>
+          <div className="mt-6 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {rest.map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-4 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
-              >
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="group flex flex-col">
                 <BlogCover post={post} size="md" />
-                <div className="flex flex-1 flex-col px-2 pb-2 pt-5">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`rounded-md px-2 py-0.5 text-[10px] font-semibold ${
-                        categoryClass[post.category] ?? "bg-[#F1F5F9] text-[#475569]"
-                      }`}
-                    >
-                      {post.category}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] text-[#94A3B8]">
-                      <Clock className="h-3 w-3" /> {post.readingTime} min
-                    </span>
-                  </div>
-                  <h2 className="mt-3 text-[16px] font-semibold leading-snug tracking-tight text-[#0F172A] transition group-hover:text-[#2563EB]">
-                    {post.title}
-                  </h2>
-                  <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-[1.65] text-[#475569]">
-                    {post.description}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between border-t border-[#E2E8F0] pt-3">
-                    <span className="text-[11px] text-[#94A3B8]">
-                      {new Date(post.date).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563EB]">
-                      Read
-                      <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
-                    </span>
-                  </div>
-                </div>
+                <p className="mt-4 text-[13px] text-[#6B6B6B]">
+                  {post.category} · {post.readingTime} min read
+                </p>
+                <h3 className="mt-1.5 text-[18px] font-semibold leading-snug tracking-[-0.01em] group-hover:text-[#1D4ED8]">
+                  {post.title}
+                </h3>
+                <p className="mt-2 line-clamp-2 text-[15px] leading-[1.55] text-[#3F3F3F]">{post.description}</p>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-[900px] px-6 text-center">
-          <h2 className="lc-section-headline text-[#0F172A]">Put these tips to work</h2>
-          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Build your ATS-optimized resume with AI. Choose a plan and get started.
-          </p>
-          <CtaLink cta="get_started" location="blog_index"
-            href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
-          >
-            Get started
-            <ArrowRight className="h-4 w-4" />
-          </CtaLink>
-        </div>
-      </section>
-
-      <StickyCta
-        primaryHref="/register"
-        primaryLabel="Try free"
-        location="blog_index"
-      />
+        {/* CTA */}
+        <section className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 sm:py-[104px]">
+          <div className="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:p-12">
+            <div>
+              <h2 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
+                Put it to the test. <span className="text-[#8A8A86]">Check your resume for free.</span>
+              </h2>
+              <p className="mt-2 text-[16px] text-[#3F3F3F]">No sign-up, about 10 seconds.</p>
+            </div>
+            <CtaLink
+              cta="free_ats_check"
+              location="blog_index"
+              href="/free-ats-check"
+              className="inline-flex h-12 shrink-0 items-center rounded-full bg-[#2563EB] px-6 text-[15px] font-medium text-white hover:bg-[#1D4ED8]"
+            >
+              Check my resume — free
+            </CtaLink>
+          </div>
+        </section>
+      </main>
 
       <LandingFooter />
     </div>

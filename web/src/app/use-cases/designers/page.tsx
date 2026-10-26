@@ -421,7 +421,7 @@ export default function DesignersPage() {
               <Link href="/features/resume-builder" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
                 Build the resume <ArrowRight className="h-3.5 w-3.5" />
               </Link>
-              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
+              <Link href="/free-ats-check" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
                 Check the ATS score <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
@@ -437,7 +437,7 @@ export default function DesignersPage() {
             {[
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
-              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
+              { href: "/free-ats-check", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
               { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in about a minute." },
               { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },

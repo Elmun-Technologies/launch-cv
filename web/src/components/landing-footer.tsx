@@ -7,7 +7,6 @@ const productLinks = [
   { label: "Resume Builder", href: "/features/resume-builder" },
   { label: "Cover Letter", href: "/features/cover-letter" },
   { label: "Interview Prep", href: "/features/interview-prep" },
-  { label: "ATS Score", href: "/features/ats-score" },
   { label: "Voice Input", href: "/features/voice-input" },
   { label: "Pricing", href: "/pricing" },
 ];

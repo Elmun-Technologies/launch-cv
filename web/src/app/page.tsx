@@ -43,7 +43,7 @@ const homeLd = {
 };
 
 const tools = [
-  { href: "/features/ats-score", label: "ATS check" },
+  { href: "/free-ats-check", label: "ATS check" },
   { href: "/features/resume-builder", label: "Resume builder" },
   { href: "/features/jd-alignment", label: "Job tailoring" },
   { href: "/features/cover-letter", label: "Cover letters" },

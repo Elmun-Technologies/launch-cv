@@ -149,7 +149,7 @@ export default function AtsResumeCheckersComparePage() {
           <p className="mx-auto mt-6 max-w-[620px] text-[17px] leading-[1.7] text-[#475569]">
             Every resume tool claims to &ldquo;beat the ATS.&rdquo; Most just count keywords. This
             guide covers the six criteria that separate a real{" "}
-            <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
+            <Link href="/free-ats-check" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               ATS score checker
             </Link>{" "}
             from a glorified word counter — and how LaunchCV measures up.
@@ -271,7 +271,7 @@ export default function AtsResumeCheckersComparePage() {
             </p>
             <p>
               That is why LaunchCV pairs a free{" "}
-              <Link href="/features/ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
+              <Link href="/free-ats-check" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 ATS score checker
               </Link>{" "}
               with{" "}

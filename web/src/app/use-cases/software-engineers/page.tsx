@@ -438,7 +438,7 @@ export default function SoftwareEngineersPage() {
             {[
               { href: "/features/resume-builder", t: "AI Resume Builder", d: "4 ATS-ready templates and quantified bullets." },
               { href: "/features/jd-alignment", t: "JD Alignment", d: "Match your resume to any job description." },
-              { href: "/features/ats-score", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
+              { href: "/free-ats-check", t: "ATS Score Checker", d: "A 0–100 ATS readiness score." },
               { href: "/features/cover-letter", t: "Cover Letter Generator", d: "A tailored letter in about a minute." },
               { href: "/features/interview-prep", t: "Interview Prep", d: "Role-specific questions with model answer outlines." },
               { href: "/features/voice-input", t: "Voice Input", d: "Speak your experience, AI writes it." },
