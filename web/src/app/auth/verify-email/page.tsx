@@ -25,7 +25,7 @@ function VerifyInner() {
       });
       const j = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setErr(j.error ?? "Couldn&apos;t verify the email. The link may be expired.");
+        setErr(j.error ?? "Couldn't verify the email. The link may be expired.");
         return;
       }
       setMsg("Your email is verified.");

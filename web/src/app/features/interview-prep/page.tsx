@@ -96,12 +96,12 @@ const keyFacts = [
 
 const categories = [
   { k: "Behavioral", d: "Questions about past experience, grounded in your resume." },
-  { k: "Technical", d: "Pulled from the JD&apos;s required skills and tools." },
+  { k: "Technical", d: "Pulled from the JD's required skills and tools." },
   { k: "Situational", d: "What-would-you-do scenarios relevant to the exact role." },
 ];
 
 const benefits = [
-  { t: "Role-specific questions", d: "Generated from your resume and the JD. No generic &lsquo;tell me your weakness&rsquo;." },
+  { t: "Role-specific questions", d: "Generated from your resume and the JD. No generic ‘tell me your weakness’." },
   { t: "Model answer outlines", d: "Each question comes with a suggested answer outline to prepare against, built from your real background." },
   { t: "One packet, three outputs", d: "The same job description also produces a tailored cover letter and a short elevator pitch." },
   { t: "Nothing invented", d: "Answer outlines draw only on experience already in your resume — never fabricated achievements." },

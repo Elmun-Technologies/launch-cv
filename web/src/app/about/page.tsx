@@ -70,7 +70,7 @@ const techStack = [
 
 const milestones = [
   { y: "2024", t: "Founded", d: "Started after watching one too many qualified friends lose interviews to ATS filtering." },
-  { y: "2025", t: "Public launch", d: "First 1,000 paying users in 90 days. Featured in Product Hunt’s resume category." },
+  { y: "2025", t: "Public launch", d: "Opened LaunchCV to everyone with the free ATS check and the first AI tools." },
   { y: "2026", t: "Six tools, one product", d: "Voice input, JD alignment, ATS scanner, cover letter, interview prep — under one subscription." },
   { y: "Next", t: "Human review add-on", d: "Optional 1:1 reviews with vetted recruiters, layered onto the AI workflow." },
 ];

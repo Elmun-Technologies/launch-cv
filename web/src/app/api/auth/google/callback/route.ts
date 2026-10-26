@@ -173,7 +173,8 @@ export async function GET(req: Request) {
 
   await trackEvent(isNewUser ? "google_signup_success" : "login_success", { userId });
 
-  const admin = isAdminUser({ role: userRole, email: userEmail });
+  // Google only lets us this far for verified addresses (checked above).
+  const admin = isAdminUser({ role: userRole, email: userEmail, emailVerifiedAt: new Date() });
   const next = safeNextPath(stateCookie.next);
   const destination = next || (admin ? "/admin-panel" : "/dashboard");
 

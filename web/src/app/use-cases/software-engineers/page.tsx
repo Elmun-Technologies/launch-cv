@@ -34,7 +34,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "How can I show open-source contributions on my engineering resume?",
-    a: "Show open-source contributions in a dedicated Projects section listing the repository name, stars, commits, and whether you were maintainer or contributor. LaunchCV auto-detects these details from your linked GitHub account, so recruiters see real proof of your work without you formatting each entry by hand.",
+    a: "Show open-source contributions in a dedicated Projects section listing the repository name, stars, commits, and whether you were maintainer or contributor. Add them once and LaunchCV formats them consistently, so recruiters see real proof of your work without you formatting each entry by hand.",
   },
   {
     q: "Will an ATS reject my software engineer resume?",
@@ -79,10 +79,10 @@ const stack = [
 ];
 
 const painPoints = [
-  { i: Terminal, p: "Bullets sound like JIRA tickets", s: "AI rewrites &lsquo;fixed bug in payments&rsquo; as &lsquo;reduced p99 checkout latency by 38% across 3 regions&rsquo;." },
-  { i: GitBranch, p: "Open-source isn&apos;t on the resume", s: "Dedicated Projects section with stars, commits, and contribution role auto-detected from GitHub." },
+  { i: Terminal, p: "Bullets sound like JIRA tickets", s: "AI rewrites ‘fixed bug in payments’ as ‘reduced p99 checkout latency by 38% across 3 regions’." },
+  { i: GitBranch, p: "Open-source isn't on the resume", s: "Dedicated Projects section for repo, stars, commits and your contribution role." },
   { i: Cpu, p: "ATS rejects clever layouts", s: "Engineering-tested templates: no tables, no graphics, no LaTeX-looking sidebars." },
-  { i: Cloud, p: "Senior signals don&apos;t pop", s: "AI surfaces scope: team size, system tier, on-call rotation, RFC ownership." },
+  { i: Cloud, p: "Senior signals don't pop", s: "AI surfaces scope: team size, system tier, on-call rotation, RFC ownership." },
 ];
 
 const examples = [
@@ -294,7 +294,7 @@ export default function SoftwareEngineersPage() {
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { h: "Tech stack", d: "Cloud, languages, frameworks, datastores — grouped, deduped, ATS-parseable." },
-              { h: "Open-source projects", d: "Repo name, stars, commits, role. Maintainer or contributor — auto-detected from GitHub if linked." },
+              { h: "Open-source projects", d: "Repo name, stars, commits, role. Maintainer or contributor." },
               { h: "System design", d: "RFCs, architecture migrations, scale milestones (10× users, 100× requests, $X cost saved)." },
               { h: "On-call and SRE", d: "Rotation size, MTTR, incident leadership, postmortem ownership." },
               { h: "Certifications", d: "AWS, GCP, K8s, security — with issue date and credential ID." },

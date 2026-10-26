@@ -116,10 +116,10 @@ const keyFacts = [
 ];
 
 const issues = [
-  { p: "High", t: "Embedded text box in Experience", d: "ATS parsers can&apos;t extract content from text boxes. Convert to plain paragraphs." },
+  { p: "High", t: "Embedded text box in Experience", d: "ATS parsers can't extract content from text boxes. Convert to plain paragraphs." },
   { p: "High", t: "Multi-column layout", d: "Two-column resumes break parsing order. Switch to single-column for ATS rounds." },
-  { p: "Medium", t: "Non-standard fonts", d: "Some parsers fall back when fonts aren&apos;t embedded. Use Inter, Source Sans, or Arial." },
-  { p: "Medium", t: "Date format inconsistency", d: "You mix &lsquo;Mar 2022&rsquo; and &lsquo;03/22&rsquo;. Standardize on MMM YYYY." },
+  { p: "Medium", t: "Non-standard fonts", d: "Some parsers fall back when fonts aren't embedded. Use Inter, Source Sans, or Arial." },
+  { p: "Medium", t: "Date format inconsistency", d: "You mix ‘Mar 2022’ and ‘03/22’. Standardize on MMM YYYY." },
   { p: "Low", t: "Header graphic blocks contact parsing", d: "Header art can hide contact info from ATS parsing. Move email and phone to the body." },
 ];
 
@@ -376,7 +376,7 @@ export default function AtsScorePage() {
             {[
               { i: Upload, t: "Upload your file", d: "PDF, DOCX, or pasted plain text. We parse it in seconds, the same way common ATS platforms would." },
               { i: AlertTriangle, t: "Get every issue named", d: "12 categories of parsing failures detected, each tagged High, Medium, or Low priority with a specific fix path." },
-              { i: CheckCircle2, t: "Apply the fixes and rescore", d: "Fix inside LaunchCV or in your own tool. Re-upload to confirm — most users gain 20–40 points on round one." },
+              { i: CheckCircle2, t: "Apply the fixes and rescore", d: "Fix inside LaunchCV or in your own tool. Re-upload to confirm your new score." },
             ].map((s, i) => (
               <RevealOnView key={s.t}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">

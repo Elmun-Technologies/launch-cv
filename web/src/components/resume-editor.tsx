@@ -100,6 +100,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [liveScore, setLiveScore] = useState<{ score: number; fixes: string[] } | null>(null);
   const [scoringBusy, setScoringBusy] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
+  const [enhanceError, setEnhanceError] = useState<{ message: string; upgrade: boolean } | null>(null);
   const [enhanceResult, setEnhanceResult] = useState<Array<{ experienceId: string; bulletId: string; original: string; improved: string; change_summary: string }> | null>(null);
   const [showOverwrite, setShowOverwrite] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -384,16 +385,26 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         <div className="flex flex-wrap gap-3">
           <button type="button" onClick={addExp} className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"><Plus className="h-4 w-4" />Add Experience</button>
           <button type="button" disabled={enhancing || content.experience.length === 0} onClick={async () => {
-            setEnhancing(true); setEnhanceResult(null);
-            const r = await fetch("/api/ai/impact-rewrite", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) });
-            const j = await r.json().catch(() => ({}));
+            setEnhancing(true); setEnhanceResult(null); setEnhanceError(null);
+            const r = await fetch("/api/ai/impact-rewrite", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) }).catch(() => null);
+            const j = r ? await r.json().catch(() => ({})) : {};
             setEnhancing(false);
-            if (r.ok && j.result?.rewrites) setEnhanceResult(j.result.rewrites);
+            if (r?.ok && j.result?.rewrites) setEnhanceResult(j.result.rewrites);
+            else setEnhanceError({ message: j.error ?? "Couldn't enhance your bullets. Please try again.", upgrade: Boolean(j.upgrade) });
           }} className="inline-flex items-center gap-1.5 rounded-xl border-2 border-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50 disabled:opacity-50">
             {enhancing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
             {enhancing ? "Enhancing..." : "Enhance All with AI"}
           </button>
         </div>
+
+        {enhanceError ? (
+          <div className="mt-2 rounded-2xl border border-red-200 bg-red-50 p-4">
+            <p className="text-[13px] text-red-700">{enhanceError.message}</p>
+            {enhanceError.upgrade ? (
+              <Link href="/dashboard/settings/subscription" className="mt-2.5 inline-flex rounded-lg bg-[#2563EB] px-3.5 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8]">See plans</Link>
+            ) : null}
+          </div>
+        ) : null}
 
         {enhanceResult ? (
           <div className="mt-2 space-y-2.5 rounded-2xl border border-blue-100 bg-blue-50/30 p-5">

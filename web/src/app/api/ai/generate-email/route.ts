@@ -5,6 +5,8 @@ import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
 import { chatJson } from "@/lib/openai-client";
 import { allowAiJd } from "@/lib/rate-limit-presets";
+import { assertAiUsageAllowed, incrementAiUsage } from "@/lib/usage-limits";
+import { jsonUsageBlocked } from "@/lib/usage-response";
 
 const schema = z.object({
   type: z.enum(["thank-you", "follow-up", "networking", "introduction", "custom"]),
@@ -28,6 +30,8 @@ export async function POST(req: Request) {
   if (!allowAiJd(session.sub)) {
     return NextResponse.json({ error: "Rate limit exceeded. Try again shortly." }, { status: 429 });
   }
+  const usage = await assertAiUsageAllowed(session.sub, "packet");
+  if (!usage.ok) return jsonUsageBlocked(usage);
 
   let rawBody: unknown;
   try { rawBody = await req.json(); } catch { return NextResponse.json({ error: "JSON expected" }, { status: 400 }); }
@@ -69,6 +73,7 @@ Generate a professional ${type} email.`;
     if (!result || typeof result.subject !== "string") {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
     }
+    await incrementAiUsage(session.sub, "packet");
     return NextResponse.json({ result });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Error" }, { status: 502 });

@@ -28,9 +28,9 @@ import {
 } from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "Resume Builder for Software Engineers, Free",
+  title: "AI Resume Builder: ATS-Friendly Resumes in Minutes",
   description:
-    "The AI resume builder software engineers trust: 4 ATS-tested templates, quantified bullets, and PDF/DOCX export in minutes. Build yours free →",
+    "The AI resume builder software engineers trust: 4 ATS-tested templates, quantified bullets, and PDF/DOCX export in minutes. Check your ATS score free →",
   pathname: "/features/resume-builder",
   keywords: [
     "resume builder software engineer",
@@ -111,7 +111,7 @@ const benefits = [
   { i: Wand2, t: "AI bullet writing", d: "Plain language in. Quantified, action-led bullets out. Each line closes with measurable outcome." },
   { i: Eye, t: "Live preview", d: "WYSIWYG to the pixel. No surprise spacing or font swaps on export." },
   { i: Layers, t: "Four ATS-safe templates", d: "Every template is built for how common ATS software like Workday, Greenhouse, Lever, and iCIMS parses resumes." },
-  { i: FileText, t: "Section flexibility", d: "Drag to reorder. Add Projects, Certifications, Languages, Publications, Awards — or remove what doesn&apos;t apply." },
+  { i: FileText, t: "Section flexibility", d: "Drag to reorder. Add Projects, Certifications, Languages, Publications, Awards — or remove what doesn't apply." },
   { i: Download, t: "PDF & DOCX export", d: "One click, two formats. Plain-text view for LinkedIn paste or email body." },
   { i: Sparkles, t: "Version history", d: "Every save versioned. Roll back any change. Keep different cuts for different roles." },
 ];

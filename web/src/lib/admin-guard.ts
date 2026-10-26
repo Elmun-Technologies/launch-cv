@@ -12,22 +12,25 @@ export async function requireAdmin(): Promise<{ sub: string; email: string } | n
 
   const user = await prisma.user.findUnique({
     where: { id: session.sub },
-    select: { role: true, email: true },
+    select: { role: true, email: true, emailVerifiedAt: true },
   });
   if (!user) return null;
 
-  if (user.role === "admin" || ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-    return session;
-  }
-
-  return null;
+  return isAdminUser(user) ? session : null;
 }
 
 /**
  * Returns true if a freshly-loaded user row qualifies for admin access.
- * Used by the login endpoint to decide where to redirect right after sign-in.
+ * The ADMIN_EMAILS allow-list only applies once the address is verified —
+ * otherwise anyone could register an allow-listed email that has no account
+ * yet and get admin access, since registration signs the user in immediately.
  */
-export function isAdminUser(user: { role: string; email: string }): boolean {
-  return user.role === "admin" || ADMIN_EMAILS.includes(user.email.toLowerCase());
+export function isAdminUser(user: {
+  role: string;
+  email: string;
+  emailVerifiedAt: Date | null;
+}): boolean {
+  if (user.role === "admin") return true;
+  return user.emailVerifiedAt !== null && ADMIN_EMAILS.includes(user.email.toLowerCase());
 }
 

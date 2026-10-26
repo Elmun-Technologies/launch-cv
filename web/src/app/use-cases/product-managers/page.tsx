@@ -296,7 +296,7 @@ export default function ProductManagersPage() {
               { h: "Discovery work", d: "User interviews, surveys, JTBD studies — quantified by reach and decisions changed." },
               { h: "Stakeholder mgmt", d: "C-suite reviews owned, cross-functional partnerships, board updates if applicable." },
               { h: "Talks and writing", d: "Public-speaking, blog posts, podcast appearances, internal RFCs cited externally." },
-              { h: "Education and certs", d: "MBA, Reforge, Lenny&apos;s, PMC — issued and verified-link-included where possible." },
+              { h: "Education and certs", d: "MBA, Reforge, Lenny's, PMC — issued and verified-link-included where possible." },
             ].map((s) => (
               <RevealOnView key={s.h}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">

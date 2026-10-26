@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
+import { allowImport } from "@/lib/rate-limit-presets";
 import { chatJson } from "@/lib/openai-client";
 import { extractResumeText } from "@/lib/resume-parse";
 import type { ResumeContent } from "@/types/resume";
@@ -7,6 +8,9 @@ import type { ResumeContent } from "@/types/resume";
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!allowImport(session.sub)) {
+    return NextResponse.json({ error: "Too many imports. Try again in an hour." }, { status: 429 });
+  }
 
   const formData = await req.formData().catch(() => null);
   if (!formData) return NextResponse.json({ error: "Form data expected" }, { status: 400 });

@@ -5,6 +5,8 @@ import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
 import { chatJson } from "@/lib/openai-client";
 import { allowAiEvidence } from "@/lib/rate-limit-presets";
+import { assertAiUsageAllowed } from "@/lib/usage-limits";
+import { jsonUsageBlocked } from "@/lib/usage-response";
 import { trackEvent } from "@/lib/analytics";
 
 const schema = z.object({
@@ -32,6 +34,8 @@ export async function POST(req: Request) {
   if (!allowAiEvidence(session.sub)) {
     return NextResponse.json({ error: "AI limit: exceeded hourly allowance." }, { status: 429 });
   }
+  const usage = await assertAiUsageAllowed(session.sub, "jd");
+  if (!usage.ok) return jsonUsageBlocked(usage);
   let body: unknown;
   try {
     body = await req.json();

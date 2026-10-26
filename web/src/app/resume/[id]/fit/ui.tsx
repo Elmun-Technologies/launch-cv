@@ -99,7 +99,7 @@ export function FitClient({ resumeId }: { resumeId: string }) {
             <p className="text-sm text-red-600">{error}</p>
             {upgrade ? (
               <Link
-                href="/dashboard/settings"
+                href="/dashboard/settings/subscription"
                 onClick={() => trackCtaClick({ cta: "upgrade", location: "role_fit_paywall" })}
                 className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
               >

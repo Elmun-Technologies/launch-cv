@@ -14,7 +14,7 @@ const SUB_NEXT = "/dashboard/settings/subscription";
 const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
 
 export const metadata = buildMarketingMetadata({
-  title: "Pricing — Monthly, Yearly, or Pay Once",
+  title: "Pricing — Pay Monthly or Once",
   description: `LaunchCV pricing: ${CHECKOUT_PLAN_ORDER.map(
     (key) => `${PUBLIC_PLANS[key].title} ${planPriceLabel(key)}`,
   ).join(", ")}. Every AI tool included on every plan. No freemium games.`,
@@ -29,7 +29,7 @@ const faqs = [
   },
   {
     q: "How does billing work?",
-    a: "Starter is billed monthly and Professional is billed yearly — both renew automatically through Polar until you cancel. Lifetime is a one-time purchase. Receipts and renewals live in your Polar customer portal.",
+    a: "Starter and Professional are billed monthly — both renew automatically through Polar until you cancel. Lifetime is a one-time purchase. Receipts and renewals live in your Polar customer portal.",
   },
   {
     q: "Can I change plans later?",
@@ -37,7 +37,7 @@ const faqs = [
   },
   {
     q: "Do you offer refunds?",
-    a: "Yes — a 7-day money-back guarantee on subscription plans, where Polar policy allows. Email support and we&apos;ll coordinate with our payment provider.",
+    a: "Yes — a 7-day money-back guarantee on subscription plans, where Polar policy allows. Email support and we'll coordinate with our payment provider.",
   },
   {
     q: "What's the fair-use cap on Lifetime?",
@@ -181,10 +181,10 @@ export default function PricingPage() {
               <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" /> Pricing
             </span>
             <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-              Pay monthly, yearly, or once — for life
+              Pay monthly, or once — for life
             </h1>
             <p className="mt-6 max-w-[640px] text-[17px] leading-[1.65] text-[#475569]">
-              Three subscription tiers plus a Lifetime option for people who&apos;d rather not think about renewals. No freemium games. No data harvesting. No surprise upgrades.
+              Two monthly plans plus a Lifetime option for people who&apos;d rather not think about renewals. No freemium games. No data harvesting. No surprise upgrades.
             </p>
           </div>
         </div>
@@ -353,10 +353,10 @@ export default function PricingPage() {
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { k: "No data sold", d: "Your resume, applications, and interview practice — never shared, never sold, never used for ads." },
-              { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No &lsquo;Made with LaunchCV&rsquo; baked in." },
+              { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No ‘Made with LaunchCV’ baked in." },
               { k: "Predictable limits", d: "Every plan publishes its monthly AI ceiling. No mystery throttling, no surprise paywalls." },
               { k: "Real human support", d: "Reply in under a business day. Same email queue the founder reads." },
-              { k: "Cancel without drama", d: "One click in the Polar portal. No retention pop-ups, no &lsquo;are you sure&rsquo; flows." },
+              { k: "Cancel without drama", d: "One click in the Polar portal. No retention pop-ups, no ‘are you sure’ flows." },
               { k: "Lifetime really is lifetime", d: "One payment. Updates included. Active while the product exists." },
             ].map((p) => (
               <RevealOnView key={p.k}>
@@ -384,8 +384,8 @@ export default function PricingPage() {
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
             {[
               { t: "Nothing gated by tier", d: "JD alignment, resume builder, ATS score, cover letters, interview prep, and voice input — included on every paid plan." },
-              { t: "Cancel anytime", d: "Monthly and yearly plans cancel with no penalty. The Lifetime plan is a one-time payment with no renewal." },
-              { t: "Free to start", d: "Check your ATS score with no account, then upgrade only when you want the full toolkit." },
+              { t: "Cancel anytime", d: "Monthly plans cancel with no penalty. The Lifetime plan is a one-time payment with no renewal." },
+              { t: "Free ATS check", d: "Check your ATS score with no account. AI tools unlock when you choose a plan." },
             ].map((b) => (
               <RevealOnView key={b.t}>
                 <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">

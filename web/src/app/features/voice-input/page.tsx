@@ -99,7 +99,7 @@ const keyFacts = [
 ];
 
 const benefits = [
-  { t: "Natural speech to polished bullets", d: "Speak the way you&apos;d describe a job to a friend. AI handles the formal framing." },
+  { t: "Natural speech to polished bullets", d: "Speak the way you'd describe a job to a friend. AI handles the formal framing." },
   { t: "Real-time transcription", d: "Words appear as you speak. Edit any mistranscription inline before transforming." },
   { t: "Works across every section", d: "Experience, Skills, Projects, Summary, Certifications — mic available everywhere a bullet lives." },
   { t: "No app, no plug-ins", d: "Runs natively in Chrome, Edge, Safari. Permit mic access — nothing to install." },
@@ -281,7 +281,7 @@ export default function VoiceInputPage() {
               { t: "Non-native English speakers", d: "Speak in your strongest tongue. AI translates and reframes into formal English bullets." },
               { t: "Career switchers", d: "New to the vocabulary? Talk about what you did — we find the industry phrasing." },
               { t: "People with dyslexia", d: "Writing is hard. Speaking your career story is natural. AI handles structure and spelling." },
-              { t: "Trade and service workers", d: "When the job is hands-on, the resume can be hands-free. Tell it, don&apos;t type it." },
+              { t: "Trade and service workers", d: "When the job is hands-on, the resume can be hands-free. Tell it, don't type it." },
               { t: "Returners after a break", d: "Caregivers, military, recovery. Speak the story without staring at a blank page." },
               { t: "Anyone with a phone", d: "Voice input runs in the browser. No app, no install. Walk-and-talk your resume." },
             ].map((p) => (
