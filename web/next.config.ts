@@ -3,6 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactCompiler: true,
   serverExternalPackages: ["@react-pdf/renderer"],
+  // Fonts read from disk by the PDF renderer (see src/lib/pdf/resume-pdf.tsx).
+  outputFileTracingIncludes: {
+    "/api/resumes/*/pdf": ["./src/lib/pdf/fonts/**"],
+  },
   async redirects() {
     // Billing-period tokens (e.g. "$9/month") that crawlers occasionally
     // mis-extract as relative URLs should land on the pricing page, not a 404.

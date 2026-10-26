@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ResumeContent } from "@/types/resume";
 import { ResumePreview, type TemplateStyle } from "@/components/resume-preview";
+import { TEMPLATE_SPECS, TEMPLATE_STYLES, parseTemplate } from "@/lib/resume-templates";
 import { VoiceInput } from "@/components/voice-input";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
@@ -95,7 +96,25 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [websiteVal, setWebsiteVal] = useState("");
   const [newSkill, setNewSkill] = useState("");
   const [, setShowSkillInput] = useState(false);
-  const [template, setTemplate] = useState<TemplateStyle>("classic");
+  // Remembered per resume in this browser; sent with every PDF export.
+  const [template, setTemplateState] = useState<TemplateStyle>("classic");
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = window.localStorage.getItem(`lcv_tpl_${resumeId}`);
+    } catch {
+      // storage unavailable
+    }
+    if (saved) setTemplateState(parseTemplate(saved));
+  }, [resumeId]);
+  function setTemplate(t: TemplateStyle) {
+    setTemplateState(t);
+    try {
+      window.localStorage.setItem(`lcv_tpl_${resumeId}`, t);
+    } catch {
+      // storage unavailable — the choice still applies for this session
+    }
+  }
   const [previewFlipped, setPreviewFlipped] = useState(false);
   const [liveScore, setLiveScore] = useState<{ score: number; fixes: string[] } | null>(null);
   const [scoringBusy, setScoringBusy] = useState(false);
@@ -141,7 +160,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   }, []);
 
   function onPdfExportClick() {
-    window.open(`/api/resumes/${resumeId}/pdf`, "_blank", "noopener,noreferrer");
+    window.open(`/api/resumes/${resumeId}/pdf?template=${template}`, "_blank", "noopener,noreferrer");
     if (!shouldOfferSatisfactionSurvey()) return;
     if (surveyDelayRef.current != null) return;
     setSurveyContext("pdf_export");
@@ -599,7 +618,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           <h3 className="text-[16px] font-bold text-gray-900">Choose Template</h3>
           <p className="mt-1 text-[12px] text-gray-400">This affects how your resume looks when exported</p>
           <div className="mt-4 grid grid-cols-4 gap-3">
-            {(["classic", "modern", "minimal", "executive"] as TemplateStyle[]).map((t) => (
+            {TEMPLATE_STYLES.map((t) => (
               <button
                 key={t}
                 type="button"
@@ -608,13 +627,18 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   template === t ? "border-[#2563EB] bg-blue-50 text-[#2563EB] shadow-sm shadow-blue-100" : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <div className={`mx-auto mb-2.5 h-14 w-11 rounded-lg border-2 ${
-                  t === "classic" ? "border-[#2563EB] bg-blue-50" :
-                  t === "modern" ? "border-blue-400 bg-blue-50" :
-                  t === "minimal" ? "border-gray-300 bg-white" :
-                  "border-amber-400 bg-amber-50"
-                }`} />
-                {t}
+                <div
+                  className={`mx-auto mb-2.5 flex h-14 w-11 flex-col gap-[3px] rounded-[4px] border border-[#E5E5E2] bg-white p-1.5 ${TEMPLATE_SPECS[t].centered ? "items-center" : ""}`}
+                  aria-hidden
+                >
+                  <span className="h-[3px] w-6 rounded-full" style={{ background: TEMPLATE_SPECS[t].accent }} />
+                  <span className="h-px w-full" style={{ background: TEMPLATE_SPECS[t].rule ?? "transparent" }} />
+                  <span className="h-[2px] w-full rounded-full bg-[#D9D9D5]" />
+                  <span className="h-[2px] w-4/5 rounded-full bg-[#D9D9D5]" />
+                  <span className="h-px w-full" style={{ background: TEMPLATE_SPECS[t].rule ?? "transparent" }} />
+                  <span className="h-[2px] w-full rounded-full bg-[#D9D9D5]" />
+                </div>
+                {TEMPLATE_SPECS[t].label}
               </button>
             ))}
           </div>

@@ -5,12 +5,13 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
 import { ResumePdfDocument } from "@/lib/pdf/resume-pdf";
+import { parseTemplate } from "@/lib/resume-templates";
 import { allowPdfUser } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-export async function GET(_req: Request, ctx: Ctx) {
+export async function GET(req: Request, ctx: Ctx) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!allowPdfUser(session.sub)) {
@@ -26,6 +27,7 @@ export async function GET(_req: Request, ctx: Ctx) {
     content,
     title: resume.title,
     regionMode: resume.regionMode,
+    template: parseTemplate(new URL(req.url).searchParams.get("template")),
   });
   const buffer = await renderToBuffer(doc);
   await trackEvent("pdf_export", { userId: session.sub, meta: { resumeId: id } });
