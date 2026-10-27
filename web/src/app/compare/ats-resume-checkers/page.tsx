@@ -117,7 +117,7 @@ export default function CompareAtsCheckersPage() {
         <section className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 pt-[120px] sm:px-8 lg:flex-row lg:items-center lg:gap-14">
           <div className="flex-1">
             <h1 className="text-[38px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[54px]">
-              How to choose an ATS resume checker. <span className="text-[#6E6E6A]">Six things that matter.</span>
+              How to choose an ATS resume checker. <span className="text-[#8A8A86]">Six things that matter.</span>
             </h1>
             <p className="mt-5 max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">
               Every resume tool says it beats the ATS. Many only count keywords. Here&apos;s what separates a useful
@@ -151,7 +151,7 @@ export default function CompareAtsCheckersPage() {
 
         <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
           <h2 className={h2}>
-            A full check vs. <span className="text-[#6E6E6A]">a keyword counter.</span>
+            A full check vs. <span className="text-[#8A8A86]">a keyword counter.</span>
           </h2>
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[560px] border-collapse text-[15px]">
@@ -204,7 +204,7 @@ export default function CompareAtsCheckersPage() {
           <div className="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:p-12">
             <div>
               <h2 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
-                Judge it yourself. <span className="text-[#6E6E6A]">The check is free.</span>
+                Judge it yourself. <span className="text-[#8A8A86]">The check is free.</span>
               </h2>
               <p className="mt-2 text-[16px] text-[#3F3F3F]">
                 No account. Score and fixes in about 10 seconds.{" "}

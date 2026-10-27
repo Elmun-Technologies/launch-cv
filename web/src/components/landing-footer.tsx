@@ -17,6 +17,7 @@ const companyLinks = [
 ];
 
 const resourceLinks = [
+  { label: "Resume Templates", href: "/resume-templates" },
   { label: "Resume Examples", href: "/resume-examples" },
   { label: "Software engineer resume", href: "/resume-examples/software-engineer" },
   { label: "Product manager resume", href: "/resume-examples/product-manager" },

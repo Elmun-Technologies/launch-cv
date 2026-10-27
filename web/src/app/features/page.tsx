@@ -73,7 +73,7 @@ export default function FeaturesPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
           <h1 className="max-w-[820px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
-            Everything between your resume <span className="text-[#6E6E6A]">and the interview.</span>
+            Everything between your resume <span className="text-[#8A8A86]">and the interview.</span>
           </h1>
           <p className="mt-5 max-w-[600px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             Start with the free ATS check. Every other tool is included in each plan, from{" "}
@@ -110,7 +110,7 @@ export default function FeaturesPage() {
           <div className="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:p-12">
             <div>
               <h2 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
-                Not sure where to start? <span className="text-[#6E6E6A]">Check your resume.</span>
+                Not sure where to start? <span className="text-[#8A8A86]">Check your resume.</span>
               </h2>
               <p className="mt-2 text-[16px] text-[#3F3F3F]">Free, no sign-up, about 10 seconds.</p>
             </div>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { LogoMark } from "@/components/logo";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
+import { TEMPLATE_STYLES, type TemplateStyle } from "@/lib/resume-templates";
 import {
   FileText, Loader2, UploadCloud, CheckCircle, AlertTriangle,
   ArrowRight, BarChart3, Target, Sparkles, ArrowLeft,
@@ -65,6 +66,17 @@ export default function NewResumePage() {
     };
   }, [uploadStep, resumeId]);
 
+  /** Templates page links here with ?template=<style>; remember it for the editor. */
+  function rememberTemplate(id: string) {
+    const t = new URLSearchParams(window.location.search).get("template");
+    if (!t || !TEMPLATE_STYLES.includes(t as TemplateStyle)) return;
+    try {
+      window.localStorage.setItem(`lcv_tpl_${id}`, t);
+    } catch {
+      // storage unavailable: the editor falls back to Classic
+    }
+  }
+
   async function handleCreate() {
     setCreating(true);
     const r = await fetch("/api/resumes", {
@@ -74,6 +86,7 @@ export default function NewResumePage() {
     });
     const j = await r.json().catch(() => ({}));
     if (r.ok && j.id) {
+      rememberTemplate(j.id);
       window.location.href = `/resume/${j.id}/edit`;
     } else {
       setCreating(false);
@@ -124,6 +137,7 @@ export default function NewResumePage() {
     });
 
     setResumeId(createJ.id);
+    rememberTemplate(createJ.id);
 
     try {
       const fitRes = await fetch("/api/ai/role-fit", {

@@ -11,7 +11,7 @@ import { RESUME_EXAMPLES, type ResumeExample } from "@/lib/resume-examples";
 export const metadata = buildMarketingMetadata({
   title: "Resume Examples by Job — With Keywords & Bullet Points",
   description:
-    "Resume examples for software engineers, product managers, analysts, marketers, designers and more — each with summary and bullet examples, keywords and ATS tips.",
+    "Resume examples for 16 jobs — engineers, nurses, teachers, accountants and more — each with summary and bullet examples, keywords and ATS tips.",
   pathname: "/resume-examples",
   image: DEFAULT_OG_IMAGE,
   keywords: ["resume examples", "resume samples", "resume examples by job", "ATS resume examples"],
@@ -40,7 +40,7 @@ export default function ResumeExamplesPage() {
       <main className="flex-1">
         <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
           <h1 className="max-w-[820px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
-            Resume examples. <span className="text-[#6E6E6A]">Written for the job, readable by the software.</span>
+            Resume examples. <span className="text-[#8A8A86]">Written for the job, readable by the software.</span>
           </h1>
           <p className="mt-5 max-w-[600px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             Each example comes with summary lines and bullet points you can adapt, the keywords recruiters search for
@@ -75,7 +75,7 @@ export default function ResumeExamplesPage() {
           <div className="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:p-12">
             <div>
               <h2 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
-                Already have a resume? <span className="text-[#6E6E6A]">See how it scores.</span>
+                Already have a resume? <span className="text-[#8A8A86]">See how it scores.</span>
               </h2>
               <p className="mt-2 text-[16px] text-[#3F3F3F]">Free ATS check, no sign-up, about 10 seconds.</p>
             </div>

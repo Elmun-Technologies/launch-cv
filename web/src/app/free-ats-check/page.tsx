@@ -111,7 +111,7 @@ export default function FreeAtsCheckPage() {
       <main className="flex-1">
         <section className="mx-auto w-full max-w-[1200px] px-5 pt-[112px] text-center sm:px-8 sm:pt-[136px]">
           <h1 className="mx-auto max-w-[820px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
-            Free ATS resume checker. <span className="text-[#6E6E6A]">Your score in about 10 seconds.</span>
+            Free ATS resume checker. <span className="text-[#8A8A86]">Your score in about 10 seconds.</span>
           </h1>
           <p className="mx-auto mt-5 max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             See how applicant tracking software reads your resume — what it can&apos;t parse, which keywords are
@@ -131,7 +131,7 @@ export default function FreeAtsCheckPage() {
         {/* WHAT THE SOFTWARE SEES */}
         <section className="mx-auto w-full max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
           <h2 className={`${h2} max-w-[760px]`}>
-            What you see vs. <span className="text-[#6E6E6A]">what the software sees.</span>
+            What you see vs. <span className="text-[#8A8A86]">what the software sees.</span>
           </h2>
           <p className="mt-3.5 max-w-[640px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             A two-column template looks tidy to you. Many parsers read it line by line, left to right — and mix your
@@ -205,7 +205,7 @@ export default function FreeAtsCheckPage() {
             <div className="flex flex-col gap-3.5 p-8 lg:p-12">
               <h2 className="text-[28px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[36px]">
                 A recruiter will spend seconds on your resume.{" "}
-                <span className="text-[#6E6E6A]">If the software lets it through.</span>
+                <span className="text-[#8A8A86]">If the software lets it through.</span>
               </h2>
               <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
                 Most applications are parsed and ranked before a person opens them. This check shows you what that

@@ -152,7 +152,7 @@ export function JobTrackerClient({
                 <section key={st.key} aria-label={st.label} className="flex flex-col rounded-[14px] bg-[#F5F5F3] p-2.5">
                   <h2 className="flex items-center justify-between px-1.5 pb-2.5 pt-1 text-[13px] font-medium text-[#3F3F3F]">
                     {st.label}
-                    <span className="text-[#6E6E6A]">{items.length}</span>
+                    <span className="text-[#8A8A86]">{items.length}</span>
                   </h2>
                   <div className="flex flex-col gap-2">
                     {items.map((r) => (

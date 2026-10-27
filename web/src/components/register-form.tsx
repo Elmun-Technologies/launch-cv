@@ -84,11 +84,11 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         <h1 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111]">
           {fromReport ? (
             <>
-              Save your report. <span className="text-[#6E6E6A]">It&apos;s free.</span>
+              Save your report. <span className="text-[#8A8A86]">It&apos;s free.</span>
             </>
           ) : (
             <>
-              Create your account. <span className="text-[#6E6E6A]">It&apos;s free.</span>
+              Create your account. <span className="text-[#8A8A86]">It&apos;s free.</span>
             </>
           )}
         </h1>

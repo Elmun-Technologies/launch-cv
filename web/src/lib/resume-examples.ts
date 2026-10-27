@@ -183,7 +183,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
       { q: "Should I include a portfolio?", a: "A short link to case studies helps, but the resume itself should already show the problem, what you shipped and the result." },
       { q: "How do I move into product from another role?", a: "Lead with work that looks like product work — customer research, prioritization, launches you drove — and quantify it the same way a PM would." },
     ],
-    related: ["software-engineer", "data-analyst", "marketing-manager"],
+    related: ["software-engineer", "project-manager", "data-analyst"],
   },
   {
     slug: "data-analyst",
@@ -251,7 +251,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
       { q: "Should I include personal projects?", a: "Yes if you have under two years of experience. Describe the question, the data and the result in one or two bullets." },
       { q: "Do certifications help?", a: "Tool certifications like Tableau or Google Data Analytics can help at entry level. Experience with results matters more after that." },
     ],
-    related: ["software-engineer", "financial-analyst", "product-manager"],
+    related: ["data-scientist", "financial-analyst", "product-manager"],
   },
   {
     slug: "marketing-manager",
@@ -387,7 +387,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
       { q: "Should I include my GPA?", a: "Include it in your first two years after graduating if it's 3.5 or higher, or if the employer asks for it." },
       { q: "How do I show impact in a support role?", a: "Describe the decisions your analysis informed and any time saved, accuracy gained or costs found." },
     ],
-    related: ["data-analyst", "hr-generalist", "marketing-manager"],
+    related: ["accountant", "data-analyst", "marketing-manager"],
   },
   {
     slug: "ux-designer",
@@ -592,6 +592,550 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
       { q: "How do I keep employee relations work confidential?", a: "Describe the type and volume of cases and the outcome in general terms — never names or identifying details." },
     ],
     related: ["customer-service-representative", "financial-analyst", "marketing-manager"],
+  },
+  {
+    slug: "registered-nurse",
+    role: "Registered Nurse",
+    group: "People & service",
+    photo: photo("role-nurse", "Nurse in scrubs with a stethoscope"),
+    level: "Experienced · 6 years",
+    intro: "A registered nurse resume that shows safe, high-quality patient care — with the licensure, certification and clinical keywords hospital recruiters screen for.",
+    resume: {
+      name: "Megan Foster",
+      headline: "Registered Nurse, Medical-Surgical",
+      contact: "Columbus, OH · megan.foster@email.com · (614) 555-0142",
+      summary:
+        "Registered nurse with 6 years in medical-surgical and telemetry units. I give safe, organized care on busy shifts and help newer nurses find their feet.",
+      jobs: [
+        {
+          title: "Registered Nurse, Medical-Surgical",
+          company: "Northwind Health Medical Center",
+          dates: "May 2021 – Present",
+          bullets: [
+            "Care for 5–6 adult patients per shift on a 32-bed medical-surgical unit",
+            "Led an hourly rounding project that cut patient falls on the unit by 35% in 12 months",
+            "Serve as relief charge nurse 2 shifts a week, managing assignments and bed flow for 8 nurses",
+            "Precepted 9 new graduate nurses; all completed orientation on schedule",
+          ],
+        },
+        {
+          title: "Registered Nurse, Telemetry",
+          company: "Cedar Grove Hospital",
+          dates: "Jun 2019 – Apr 2021",
+          bullets: [
+            "Monitored cardiac rhythms for 4 telemetry patients per shift and escalated changes through rapid response",
+            "Helped keep the unit's CAUTI rate at zero for 9 straight months with daily catheter-necessity checks",
+          ],
+        },
+      ],
+      education: "B.S. Nursing (BSN), The Ohio State University, 2019 · RN license, Ohio · BLS, ACLS",
+      skills: ["Patient assessment", "Medication administration", "Care planning", "Telemetry monitoring", "IV therapy", "Wound care", "Patient education", "Epic", "Fall prevention", "Charge nurse"],
+    },
+    whyItWorks:
+      "It puts licensure and certifications where recruiters check first, names the unit, patient load and specialty in plain words, and shows quality results — falls, infections, orientation — instead of a list of duties.",
+    summaries: [
+      { level: "New graduate", text: "New graduate RN with a BSN and a 200-hour capstone on a medical-surgical unit. Licensed in Ohio and BLS certified, with clinical rotations in ICU, pediatrics and behavioral health." },
+      { level: "Experienced", text: "Registered nurse with 6 years in med-surg and telemetry. I care for 5–6 patients a shift and led a rounding project that cut unit falls by 35%." },
+      { level: "Charge nurse", text: "Charge nurse with 10 years in acute care who leads shifts of 10 nurses, manages patient flow for a 36-bed unit and works closely with physicians, case management and rapid response teams." },
+    ],
+    bullets: [
+      { skill: "Safety", weak: "Helped prevent falls", strong: "Led an hourly rounding project that cut unit patient falls by 35% in 12 months" },
+      { skill: "Infection control", weak: "Followed infection control policies", strong: "Helped keep the unit's CAUTI rate at zero for 9 months with daily catheter-necessity checks" },
+      { skill: "Precepting", weak: "Trained new nurses", strong: "Precepted 9 new graduate nurses through a 12-week orientation; all finished on schedule" },
+      { skill: "Patient education", weak: "Educated patients before discharge", strong: "Introduced teach-back discharge teaching that cut follow-up calls about medications by 30%" },
+    ],
+    keywords: [
+      "Registered Nurse (RN)", "BSN", "RN license", "BLS", "ACLS", "Patient assessment", "Medication administration", "Care planning",
+      "Patient education", "Telemetry", "IV therapy", "Wound care", "Infection control", "Epic", "Cerner", "Charge nurse", "Med-surg",
+    ],
+    tips: [
+      { t: "Lead with license and certifications", d: "Put your RN license type and state, plus BLS, ACLS or PALS, near the top in plain text — recruiters often check these first." },
+      { t: "Name the unit and patient load", d: "\"Med-surg, 32 beds, 5–6 patients\" tells a nurse manager your setting and pace in one line." },
+      { t: "Use quality measures", d: "Falls, pressure injuries, infections, readmissions and patient satisfaction show the results of your care." },
+      { t: "List the EHR", d: "Epic, Cerner (Oracle Health) and Meditech are common screening terms — name the ones you've charted in." },
+    ],
+    faqs: [
+      { q: "Should I put my RN license number on my resume?", a: "Usually not. List the license type and state; employers verify the number during hiring. Include it only if the posting asks for it." },
+      { q: "What should a new grad nurse resume include?", a: "Your BSN or ADN, license status, clinical rotations — unit, hours and skills practiced — and any healthcare jobs such as CNA or patient care tech roles." },
+      { q: "Which certifications should I list?", a: "The ones that matter for the role — BLS and ACLS for most acute care, PALS for pediatrics, and specialty certifications like CCRN or CMSRN where they apply." },
+    ],
+    related: ["teacher", "customer-service-representative", "hr-generalist"],
+  },
+  {
+    slug: "teacher",
+    role: "Teacher",
+    group: "People & service",
+    photo: photo("role-teacher", "Teacher at the board with students raising their hands"),
+    level: "Experienced · 7 years",
+    intro: "A teacher resume that shows student growth and classroom impact — with the certification, curriculum and instruction keywords school districts search for.",
+    resume: {
+      name: "Hannah Mitchell",
+      headline: "Middle School Math Teacher",
+      contact: "Raleigh, NC · hannah.mitchell@email.com · (919) 555-0163",
+      summary:
+        "Licensed math teacher with 7 years in grades 6–8. I plan data-driven lessons and build classrooms where students who struggle with math start to catch up.",
+      jobs: [
+        {
+          title: "7th Grade Math Teacher",
+          company: "Willow Creek Middle School",
+          dates: "Aug 2021 – Present",
+          bullets: [
+            "Teach 5 sections of 7th grade math, about 130 students a year, including inclusion and advanced classes",
+            "Raised the share of students meeting grade-level benchmarks from 58% to 71% in two years",
+            "Use weekly exit tickets and small-group reteaching to close gaps before unit tests",
+            "Lead the 4-teacher math team, building shared unit plans aligned to state standards",
+          ],
+        },
+        {
+          title: "6th Grade Math and Science Teacher",
+          company: "Lakeside Charter Academy",
+          dates: "Aug 2018 – Jun 2021",
+          bullets: [
+            "Co-taught inclusion classes with special education staff, implementing IEP accommodations for 20+ students",
+            "Started an after-school STEM club that grew from 8 to 35 regular members",
+          ],
+        },
+      ],
+      education: "B.A. Mathematics Education, North Carolina State University, 2018 · North Carolina teaching license, Mathematics 6–9",
+      skills: ["Lesson planning", "Differentiated instruction", "Classroom management", "Formative assessment", "Data-driven instruction", "IEP implementation", "Google Classroom", "Canvas", "Parent communication", "Standards-aligned curriculum"],
+    },
+    whyItWorks:
+      "It leads with license and grade level, measures teaching in student growth rather than duties, and uses the instruction and assessment terms districts write into their job posts.",
+    summaries: [
+      { level: "New teacher", text: "Newly licensed elementary teacher with a semester of student teaching in a 2nd grade class of 24. Planned and taught a full literacy unit and used reading assessments to group students." },
+      { level: "Experienced", text: "Licensed math teacher with 7 years in grades 6–8. The share of my students meeting benchmarks rose from 58% to 71% in two years." },
+      { level: "Teacher leader", text: "Instructional lead with 12 years in secondary education who has coached 10 teachers, led a department curriculum adoption and mentored new teachers through licensure." },
+    ],
+    bullets: [
+      { skill: "Student growth", weak: "Helped students improve their scores", strong: "Raised the share of students meeting grade-level benchmarks from 58% to 71% in two years" },
+      { skill: "Differentiation", weak: "Differentiated instruction", strong: "Ran weekly small-group reteaching from exit-ticket data, cutting unit test failures by a third" },
+      { skill: "Inclusion", weak: "Worked with special education students", strong: "Co-taught inclusion classes and implemented IEP accommodations for 20+ students" },
+      { skill: "Engagement", weak: "Ran an after-school club", strong: "Started an after-school STEM club that grew from 8 to 35 regular members" },
+    ],
+    keywords: [
+      "Lesson planning", "Curriculum development", "Differentiated instruction", "Classroom management", "Formative assessment", "Data-driven instruction",
+      "Standards-aligned instruction", "IEP", "504 plans", "English language learners (ELL)", "Google Classroom", "Canvas", "Parent communication", "PLC", "Teaching license",
+    ],
+    tips: [
+      { t: "Put your license at the top", d: "State, license type and subject or grade bands should be easy to find — many districts screen on them first." },
+      { t: "Measure learning, not tasks", d: "Benchmark results, reading levels, pass rates or attendance gains show what changed for your students." },
+      { t: "Match the district's language", d: "If the post mentions PLCs, MTSS or a specific curriculum, use those exact terms where they're true for you." },
+      { t: "Keep student details private", d: "Describe classes by grade, size and needs — never names or anything that could identify a student." },
+    ],
+    faqs: [
+      { q: "How long should a teacher resume be?", a: "One page for most teachers. Two pages is fine for experienced teachers with coaching, curriculum or leadership work." },
+      { q: "What should a first-year teacher include?", a: "Your license or expected license date, your student teaching placement — grade, subject and class size — and any tutoring, coaching or camp work with young people." },
+      { q: "Should I include test scores?", a: "Yes if you can explain them, such as benchmark or end-of-year results for your classes. Use class-level percentages or growth, never individual student data." },
+    ],
+    related: ["registered-nurse", "hr-generalist", "administrative-assistant"],
+  },
+  {
+    slug: "sales-representative",
+    role: "Sales Representative",
+    group: "Business",
+    photo: photo("handshake-desk", "Sales representative shaking hands with a client"),
+    level: "Mid-level · 5 years experience",
+    intro: "A sales representative resume that leads with quota attainment and revenue — with the CRM, prospecting and pipeline keywords sales recruiters filter on.",
+    resume: {
+      name: "Marcus Allen",
+      headline: "Sales Representative",
+      contact: "Atlanta, GA · marcus.allen@email.com · linkedin.com/in/marcusallen",
+      summary:
+        "B2B sales representative with 5 years selling software and business services to small and mid-sized companies. I build my own pipeline, follow up with discipline and close above quota.",
+      jobs: [
+        {
+          title: "Sales Representative",
+          company: "Fabrikam Software",
+          dates: "Feb 2022 – Present",
+          bullets: [
+            "Closed $1.4M in new annual contract value in 2024, 118% of quota",
+            "Ranked in the top 3 of 14 reps for four straight quarters",
+            "Sourced 40% of my own pipeline through outbound calls, email and LinkedIn prospecting",
+            "Shortened the average sales cycle from 62 to 45 days with a structured discovery and demo process",
+          ],
+        },
+        {
+          title: "Sales Development Representative",
+          company: "Contoso Office Solutions",
+          dates: "Jun 2019 – Jan 2022",
+          bullets: [
+            "Booked 25+ qualified meetings a month for 4 account executives",
+            "Generated $900K in sourced pipeline in 2021 from cold outreach",
+          ],
+        },
+      ],
+      education: "B.B.A. Marketing, Georgia State University, 2019",
+      skills: ["B2B sales", "Prospecting", "Cold calling", "Discovery calls", "Product demos", "Negotiation", "Pipeline management", "Salesforce", "HubSpot", "Sales forecasting"],
+    },
+    whyItWorks:
+      "It opens with quota attainment and dollar figures, shows how pipeline was built and not just closed, and names the CRM and sales methods recruiters search for.",
+    summaries: [
+      { level: "Entry level", text: "Competitive retail sales associate moving into B2B sales. Beat monthly sales targets 10 months out of 12 and regularly led the store in add-on sales." },
+      { level: "Mid level", text: "B2B sales representative with 5 years in software sales. I closed $1.4M in new business last year at 118% of quota." },
+      { level: "Senior", text: "Enterprise account executive with 10 years closing six-figure deals, averaging 110%+ of quota and running territory plans for a $6M book of business." },
+    ],
+    bullets: [
+      { skill: "Quota", weak: "Met sales goals", strong: "Closed $1.4M in new annual contract value, 118% of quota" },
+      { skill: "Prospecting", weak: "Made cold calls", strong: "Sourced 40% of my own pipeline through outbound calls, email and LinkedIn" },
+      { skill: "Sales process", weak: "Improved the sales process", strong: "Cut the average sales cycle from 62 to 45 days with structured discovery and tailored demos" },
+      { skill: "Consistency", weak: "Top performer on the team", strong: "Ranked top 3 of 14 reps for four straight quarters" },
+    ],
+    keywords: [
+      "B2B sales", "Quota attainment", "Prospecting", "Lead generation", "Cold calling", "Pipeline management", "Account management", "Negotiation",
+      "Closing", "Salesforce", "HubSpot", "CRM", "Sales forecasting", "Consultative selling", "MEDDIC", "SPIN Selling",
+    ],
+    tips: [
+      { t: "Lead with quota attainment", d: "Percent of quota, revenue closed and rank on the team are the first numbers sales managers look for." },
+      { t: "Give your numbers context", d: "Say the deal size, sales cycle and who you sold to — $1M in small-business deals and $1M in enterprise deals are very different jobs." },
+      { t: "Name the CRM and methods", d: "Salesforce, HubSpot and methods like MEDDIC or SPIN Selling are common search terms." },
+      { t: "Show how you build pipeline", d: "Hiring managers want to know you can find your own deals, not only close inbound leads." },
+    ],
+    faqs: [
+      { q: "What if I missed quota some years?", a: "Show the strongest measurable results you have — rank on the team, year-over-year growth or specific wins — and be ready to explain the context in the interview." },
+      { q: "Should I list sales awards?", a: "Yes, if they show consistent performance — President's Club or top-rep rankings — with the year and the size of the team." },
+      { q: "How do I move into sales from another job?", a: "Lead with anything that involved targets, persuasion or customers — retail sales, fundraising, upsells in customer service — and quantify it." },
+    ],
+    related: ["marketing-manager", "customer-service-representative", "project-manager"],
+  },
+  {
+    slug: "project-manager",
+    role: "Project Manager",
+    group: "Business",
+    photo: photo("interview-panel", "Team meeting around a conference table"),
+    level: "Mid-level · 8 years experience",
+    intro: "A project manager resume that shows projects delivered on time and on budget — with the PMP, methodology and tool keywords recruiters search for.",
+    resume: {
+      name: "Kevin O'Brien",
+      headline: "Project Manager, PMP",
+      contact: "Minneapolis, MN · kevin.obrien@email.com · linkedin.com/in/kevinobrien",
+      summary:
+        "Project manager with 8 years delivering IT and operations projects in logistics and healthcare. I keep scope, budget and stakeholders aligned so projects land on time.",
+      jobs: [
+        {
+          title: "Senior Project Manager",
+          company: "Tailspin Logistics",
+          dates: "Mar 2021 – Present",
+          bullets: [
+            "Manage a portfolio of 6 projects worth $4.8M; 5 delivered on or ahead of schedule",
+            "Led a warehouse management system rollout across 9 sites, finishing 3 weeks early and 4% under budget",
+            "Introduced a weekly RAID log and status report that cut late escalations by half",
+            "Coordinate 30+ stakeholders across IT, operations, finance and two vendors",
+          ],
+        },
+        {
+          title: "Project Coordinator",
+          company: "Lakeshore Health Partners",
+          dates: "Aug 2017 – Feb 2021",
+          bullets: [
+            "Supported an EHR upgrade for 14 clinics, tracking 400+ tasks in Smartsheet",
+            "Ran sprint ceremonies for a 7-person Agile team after earning the CSM certification",
+          ],
+        },
+      ],
+      education: "B.S. Business Administration, University of Minnesota, 2016 · PMP · Certified ScrumMaster (CSM)",
+      skills: ["Project planning", "Scope management", "Budget management", "Risk management", "Stakeholder communication", "Agile / Scrum", "Waterfall", "MS Project", "Jira", "Smartsheet"],
+    },
+    whyItWorks:
+      "It states the size of each project in money, sites or people, reports delivery against schedule and budget, and puts the PMP and methodologies in plain text where a parser can find them.",
+    summaries: [
+      { level: "Entry level", text: "Project coordinator with 2 years supporting IT projects. Tracked schedules and budgets for 5 concurrent projects and earned the CAPM certification." },
+      { level: "Mid level", text: "PMP-certified project manager with 8 years in IT and operations. I led a 9-site system rollout that finished 3 weeks early and under budget." },
+      { level: "Senior", text: "Program manager who has led $20M+ portfolios and a team of 5 project managers, setting PMO standards for planning, reporting and risk." },
+    ],
+    bullets: [
+      { skill: "Delivery", weak: "Managed projects", strong: "Delivered a 9-site warehouse system rollout 3 weeks early and 4% under budget" },
+      { skill: "Scale", weak: "Handled multiple projects", strong: "Managed 6 concurrent projects worth $4.8M; 5 delivered on or ahead of schedule" },
+      { skill: "Risk", weak: "Tracked risks", strong: "Introduced a weekly RAID log that cut late escalations by half" },
+      { skill: "Stakeholders", weak: "Worked with stakeholders", strong: "Aligned 30+ stakeholders across IT, operations, finance and 2 vendors on one plan" },
+    ],
+    keywords: [
+      "Project management", "PMP", "Project planning", "Scope management", "Budget management", "Risk management", "Stakeholder management", "Agile",
+      "Scrum", "Waterfall", "Change management", "Resource planning", "MS Project", "Jira", "Smartsheet", "Asana",
+    ],
+    tips: [
+      { t: "Size every project", d: "Budget, team size, sites or users tell a recruiter the scale you can handle." },
+      { t: "Report against the plan", d: "On time, early, under budget or recovered from a slip — show how delivery compared to the baseline." },
+      { t: "Write certifications in full once", d: "Put \"Project Management Professional (PMP)\" once so both the acronym and the full name are matched." },
+      { t: "Match the methodology", d: "If the post asks for Agile, Waterfall or hybrid, describe your work in that language where it's true." },
+    ],
+    faqs: [
+      { q: "Do I need a PMP to get a project manager job?", a: "Not always, but many postings list it as preferred. CAPM or Scrum certifications can help earlier in your career." },
+      { q: "How do I show project management experience without the title?", a: "Describe projects you led in any role — scope, team, timeline and result — using project terms like schedule, budget and risk." },
+      { q: "Should I list every project?", a: "No. Pick 3–4 per role that show the biggest scope or the results closest to the job you want." },
+    ],
+    related: ["product-manager", "business-analyst", "administrative-assistant"],
+  },
+  {
+    slug: "accountant",
+    role: "Accountant",
+    group: "Business",
+    photo: photo("role-accountant", "Tax forms, receipts and a calculator on a desk"),
+    level: "Mid-level · 5 years experience",
+    intro: "An accountant resume that shows accurate, on-time closes and clean audits — with the CPA, GAAP and ERP keywords finance recruiters look for.",
+    resume: {
+      name: "Grace Sullivan",
+      headline: "Senior Accountant, CPA",
+      contact: "Dallas, TX · grace.sullivan@email.com · linkedin.com/in/gracesullivan",
+      summary:
+        "CPA with 5 years in corporate accounting for manufacturing and distribution companies. I run a fast, accurate month-end close and keep the books audit-ready.",
+      jobs: [
+        {
+          title: "Senior Accountant",
+          company: "Wingtip Manufacturing",
+          dates: "Jan 2022 – Present",
+          bullets: [
+            "Lead month-end close for 3 entities with $180M in combined annual revenue",
+            "Cut the close from 9 business days to 5 by standardizing reconciliations and journal entry templates",
+            "Prepared schedules for the annual external audit, which closed with no material adjustments",
+            "Reconcile 40+ balance sheet accounts monthly; traced and resolved a $250K intercompany variance",
+          ],
+        },
+        {
+          title: "Staff Accountant",
+          company: "Bluebonnet Distribution",
+          dates: "Aug 2019 – Dec 2021",
+          bullets: [
+            "Managed accounts payable for 600+ vendors and about $3M in monthly payments",
+            "Prepared sales tax filings in 12 states with zero penalties",
+          ],
+        },
+      ],
+      education: "B.B.A. Accounting, University of Texas at Dallas, 2019 · Certified Public Accountant (CPA), Texas",
+      skills: ["General ledger", "Month-end close", "Account reconciliation", "Journal entries", "GAAP", "Financial statements", "Audit preparation", "NetSuite", "Excel (pivot tables, XLOOKUP)", "Accounts payable"],
+    },
+    whyItWorks:
+      "It shows the scale of the books you keep, measures the close in days, points to clean audit results and spells out the CPA, GAAP and ERP terms screening tools look for.",
+    summaries: [
+      { level: "Entry level", text: "Accounting graduate with a tax-season internship and the credit hours for CPA eligibility. Prepared 60+ individual returns and reconciled client accounts in QuickBooks." },
+      { level: "Mid level", text: "CPA with 5 years in corporate accounting. I lead the close for 3 entities and cut it from 9 business days to 5." },
+      { level: "Senior", text: "Accounting manager who has led a team of 6, owned consolidated reporting for a $500M company and managed external audits and an ERP migration." },
+    ],
+    bullets: [
+      { skill: "Close", weak: "Did month-end close", strong: "Cut month-end close from 9 business days to 5 by standardizing reconciliations" },
+      { skill: "Audit", weak: "Helped with audits", strong: "Prepared schedules for an external audit that closed with no material adjustments" },
+      { skill: "Reconciliation", weak: "Reconciled accounts", strong: "Reconciled 40+ balance sheet accounts monthly and resolved a $250K intercompany variance" },
+      { skill: "Compliance", weak: "Handled sales tax", strong: "Prepared sales tax filings in 12 states with zero penalties" },
+    ],
+    keywords: [
+      "CPA", "GAAP", "General ledger", "Month-end close", "Account reconciliation", "Journal entries", "Financial statements", "Accounts payable",
+      "Accounts receivable", "Audit", "Accruals", "Sales tax", "NetSuite", "QuickBooks", "SAP", "Excel",
+    ],
+    tips: [
+      { t: "Put your CPA status up front", d: "Add \"CPA\" to your headline, or write \"CPA candidate — 2 of 4 exams passed\" if you're on the way." },
+      { t: "Measure the close", d: "Days to close, entities covered and accounts reconciled show your speed and scope." },
+      { t: "List the ERP and software", d: "NetSuite, SAP, Oracle, QuickBooks and Excel skills like pivot tables are common screening terms." },
+      { t: "Describe audit results carefully", d: "\"No material adjustments\" or \"no findings\" is strong — but only if it's accurate and not confidential." },
+    ],
+    faqs: [
+      { q: "Should I list CPA exam progress?", a: "Yes. Show which sections you've passed and when you expect to finish — many employers hire candidates partway through." },
+      { q: "How is an accountant resume different from a financial analyst resume?", a: "Accountant resumes focus on accuracy, the close, reconciliations and compliance. Financial analyst resumes focus on forecasting, modeling and planning." },
+      { q: "Do I need public accounting experience?", a: "Not for most corporate roles. Show the size and complexity of the books you've handled and the systems you've used." },
+    ],
+    related: ["financial-analyst", "business-analyst", "administrative-assistant"],
+  },
+  {
+    slug: "data-scientist",
+    role: "Data Scientist",
+    group: "Tech & product",
+    photo: photo("role-data-scientist", "Two data scientists reviewing code on a monitor"),
+    level: "Mid-level · 5 years experience",
+    intro: "A data scientist resume that ties models to business results — with the machine learning, statistics and tooling keywords hiring teams filter on.",
+    resume: {
+      name: "Arjun Mehta",
+      headline: "Data Scientist",
+      contact: "San Francisco, CA · arjun.mehta@email.com · github.com/amehta",
+      summary:
+        "Data scientist with 5 years in e-commerce and fintech. I build and ship models for ranking, fraud and forecasting — and measure whether they move the business.",
+      jobs: [
+        {
+          title: "Data Scientist",
+          company: "Litware Marketplace",
+          dates: "Mar 2022 – Present",
+          bullets: [
+            "Built a gradient-boosted ranking model for recommendations that lifted click-through by 8% in an A/B test",
+            "Design and analyze 20+ experiments a year using a shared Python framework for power analysis",
+            "Deployed batch and real-time models with MLflow and Docker, with automated drift monitoring",
+            "Cut weekly model retraining from 6 hours to 40 minutes by moving feature pipelines to Spark",
+          ],
+        },
+        {
+          title: "Junior Data Scientist",
+          company: "Pennant Pay",
+          dates: "Jul 2020 – Feb 2022",
+          bullets: [
+            "Built a fraud model that caught 23% more fraudulent transactions at the same false-positive rate",
+            "Wrote SQL and Python pipelines feeding 15 production dashboards",
+          ],
+        },
+      ],
+      education: "M.S. Statistics, University of California, Berkeley, 2020",
+      skills: ["Python", "SQL", "scikit-learn", "XGBoost", "PyTorch", "Spark", "A/B testing", "Causal inference", "MLflow", "AWS SageMaker"],
+    },
+    whyItWorks:
+      "Each bullet names the model or method and the business metric it moved, experiments are described with real rigor, and the tools appear exactly as data science job posts write them.",
+    summaries: [
+      { level: "Entry level", text: "Statistics graduate with an M.S. and a capstone forecasting hospital admissions. Skilled in Python, SQL and scikit-learn, with two end-to-end modeling projects on GitHub." },
+      { level: "Mid level", text: "Data scientist with 5 years in e-commerce and fintech. My ranking and fraud models lifted click-through by 8% and caught 23% more fraud." },
+      { level: "Senior", text: "Senior data scientist who has led a team of 4 and set modeling and experimentation standards for a marketplace with millions of monthly users." },
+    ],
+    bullets: [
+      { skill: "Modeling", weak: "Built machine learning models", strong: "Built a ranking model that lifted recommendation click-through by 8% in an A/B test" },
+      { skill: "Experiments", weak: "Ran A/B tests", strong: "Designed and analyzed 20+ experiments a year with a shared power-analysis framework" },
+      { skill: "Production", weak: "Deployed models", strong: "Deployed batch and real-time models with MLflow and Docker, with automated drift alerts" },
+      { skill: "Efficiency", weak: "Improved data pipelines", strong: "Cut model retraining from 6 hours to 40 minutes by moving feature pipelines to Spark" },
+    ],
+    keywords: [
+      "Python", "R", "SQL", "Machine learning", "Statistics", "scikit-learn", "TensorFlow", "PyTorch", "XGBoost", "A/B testing",
+      "Causal inference", "Feature engineering", "Deep learning", "NLP", "Spark", "MLflow", "AWS",
+    ],
+    tips: [
+      { t: "Lead with impact, then method", d: "\"Lifted click-through by 8% with a ranking model\" reads better than a list of algorithms." },
+      { t: "Show models in production", d: "Deployment, monitoring and retraining set you apart from purely exploratory work." },
+      { t: "Match the flavor of the role", d: "Some posts are analytics-heavy, others are closer to ML engineering — mirror the mix of statistics, SQL and engineering they ask for." },
+      { t: "Write links as text", d: "GitHub, Kaggle or a blog belong in the contact line as plain URLs, with the results described on the resume itself." },
+    ],
+    faqs: [
+      { q: "How is a data scientist resume different from a data analyst resume?", a: "Data analyst resumes center on SQL, BI and reporting. Data scientist resumes add modeling, experimentation and getting models into production." },
+      { q: "Do I need a master's or PhD?", a: "Many roles prefer one, but strong results with models in production can matter as much. Put education first only if it's your strongest point." },
+      { q: "Should I list every library I've used?", a: "No. List the ones you'd be comfortable discussing in depth, led by those in the job post." },
+    ],
+    related: ["data-analyst", "software-engineer", "business-analyst"],
+  },
+  {
+    slug: "business-analyst",
+    role: "Business Analyst",
+    group: "Business",
+    photo: photo("role-business-analyst", "Laptop showing an analytics dashboard"),
+    level: "Mid-level · 6 years experience",
+    intro: "A business analyst resume that shows the processes you improved and the requirements you delivered — with the analysis, modeling and tool keywords recruiters search for.",
+    resume: {
+      name: "Natalie Ward",
+      headline: "Senior Business Analyst",
+      contact: "Boston, MA · natalie.ward@email.com · linkedin.com/in/natalieward",
+      summary:
+        "Business analyst with 6 years in insurance and financial services. I turn messy business problems into clear requirements and processes that teams can build and run.",
+      jobs: [
+        {
+          title: "Senior Business Analyst",
+          company: "Woodgrove Insurance",
+          dates: "Apr 2022 – Present",
+          bullets: [
+            "Gathered and documented requirements for a claims system replacement used by 350 adjusters",
+            "Mapped claims intake and removed 4 manual hand-offs, cutting average intake time from 3 days to 1",
+            "Wrote 180+ user stories with acceptance criteria and ran UAT with 25 business testers",
+            "Built a Power BI claims backlog dashboard that leadership reviews every week",
+          ],
+        },
+        {
+          title: "Business Analyst",
+          company: "Harborline Credit Union",
+          dates: "Jun 2019 – Mar 2022",
+          bullets: [
+            "Documented current- and future-state loan origination processes across 12 branches",
+            "Analyzed member complaint data in SQL, leading to a policy fix that cut complaints by 18%",
+          ],
+        },
+      ],
+      education: "B.S. Information Systems, Boston University, 2019 · CBAP",
+      skills: ["Requirements gathering", "Process mapping", "User stories", "UAT", "Stakeholder interviews", "Gap analysis", "SQL", "Power BI", "Visio", "Jira"],
+    },
+    whyItWorks:
+      "It shows what each analysis changed — time saved, complaints cut, systems delivered — and uses the requirements, process and testing terms that business analyst job posts list.",
+    summaries: [
+      { level: "Entry level", text: "Information systems graduate with a business analysis internship. Documented 15 processes for an operations team and wrote the requirements for a new intake form." },
+      { level: "Mid level", text: "Business analyst with 6 years in insurance and financial services. My process redesign cut claims intake time from 3 days to 1." },
+      { level: "Senior", text: "Lead business analyst who has guided requirements for $10M+ system programs, coached 4 analysts and set BA standards for a 200-person IT department." },
+    ],
+    bullets: [
+      { skill: "Process", weak: "Improved processes", strong: "Removed 4 manual hand-offs from claims intake, cutting average intake time from 3 days to 1" },
+      { skill: "Requirements", weak: "Wrote requirements", strong: "Wrote 180+ user stories with acceptance criteria for a system used by 350 adjusters" },
+      { skill: "Testing", weak: "Helped with testing", strong: "Planned and ran UAT with 25 business testers, closing 96% of defects before launch" },
+      { skill: "Analysis", weak: "Analyzed data", strong: "Analyzed complaint data in SQL, leading to a policy fix that cut complaints by 18%" },
+    ],
+    keywords: [
+      "Business analysis", "Requirements gathering", "Business requirements document (BRD)", "User stories", "Acceptance criteria", "Process mapping",
+      "BPMN", "Gap analysis", "UAT", "Stakeholder management", "SQL", "Power BI", "Tableau", "Visio", "Jira", "Agile", "CBAP",
+    ],
+    tips: [
+      { t: "Show what changed", d: "Time saved, errors reduced or systems delivered show that your analysis led somewhere." },
+      { t: "Name your deliverables", d: "BRDs, user stories, process maps and use cases tell a hiring manager how you work." },
+      { t: "Match the type of BA role", d: "IT business analyst posts stress requirements and UAT; data-focused posts stress SQL and dashboards — lead with what they ask for." },
+      { t: "Put your industry in the summary", d: "Domain knowledge like insurance, banking or healthcare is a strong filter for BA roles." },
+    ],
+    faqs: [
+      { q: "How is a business analyst resume different from a data analyst resume?", a: "A business analyst resume centers on requirements, processes and stakeholders. A data analyst resume centers on queries, dashboards and statistics. Many roles mix both." },
+      { q: "Is CBAP worth listing?", a: "Yes, if you have it. ECBA or CCBA help earlier in your career, and Agile or product certifications can also be relevant." },
+      { q: "How do I move into business analysis?", a: "Highlight times you documented a process, gathered needs from users or helped test a new system — in any role." },
+    ],
+    related: ["data-analyst", "project-manager", "product-manager"],
+  },
+  {
+    slug: "administrative-assistant",
+    role: "Administrative Assistant",
+    group: "People & service",
+    photo: photo("role-admin-assistant", "Two colleagues meeting at a desk with a laptop"),
+    level: "Experienced · 6 years",
+    intro: "An administrative assistant resume that proves you keep offices and executives running smoothly — with the software and organization keywords employers screen for.",
+    resume: {
+      name: "Jasmine Ortiz",
+      headline: "Executive Administrative Assistant",
+      contact: "San Diego, CA · jasmine.ortiz@email.com · (619) 555-0129",
+      summary:
+        "Administrative assistant with 6 years supporting executives and busy office teams. I manage calendars, travel and records so leaders can focus on their work.",
+      jobs: [
+        {
+          title: "Executive Administrative Assistant",
+          company: "Adventure Works Engineering",
+          dates: "Feb 2021 – Present",
+          bullets: [
+            "Support the COO and 2 vice presidents, managing calendars with 40+ meetings a week",
+            "Coordinate domestic and international travel for 15 staff, keeping every trip within policy",
+            "Organized a quarterly leadership offsite for 60 people, delivered 8% under budget",
+            "Moved paper filing to SharePoint, cutting the time the team spent finding documents by about half",
+          ],
+        },
+        {
+          title: "Office Assistant",
+          company: "Coastal Smiles Dental Group",
+          dates: "Jun 2018 – Jan 2021",
+          bullets: [
+            "Greeted 50+ patients a day, scheduled appointments and answered a multi-line phone system",
+            "Consolidated office supply orders and cut monthly supply spend by 12%",
+          ],
+        },
+      ],
+      education: "Associate of Arts, Business Administration, San Diego City College, 2018 · Microsoft Office Specialist (Excel)",
+      skills: ["Calendar management", "Travel coordination", "Microsoft 365", "Outlook", "Excel", "SharePoint", "Event planning", "Meeting minutes", "Expense reports", "Typing 75 WPM"],
+    },
+    whyItWorks:
+      "It shows who and how many people you support, measures organization in time and money saved, and names the office software employers ask about.",
+    summaries: [
+      { level: "Entry level", text: "Organized, detail-focused receptionist moving into an administrative role. Managed a front desk with 50+ visitors a day and kept appointment calendars for 6 providers accurate." },
+      { level: "Experienced", text: "Administrative assistant with 6 years supporting executives. I manage calendars with 40+ meetings a week and coordinate travel for a team of 15." },
+      { level: "Executive assistant", text: "Executive assistant with 10 years supporting C-suite leaders, managing board meeting logistics, confidential communications and a team of 3 administrative staff." },
+    ],
+    bullets: [
+      { skill: "Scheduling", weak: "Managed calendars", strong: "Managed calendars for the COO and 2 VPs, coordinating 40+ meetings a week across time zones" },
+      { skill: "Events", weak: "Planned events", strong: "Organized a 60-person leadership offsite, delivered 8% under budget" },
+      { skill: "Organization", weak: "Organized files", strong: "Moved paper filing to SharePoint, cutting the time the team spent finding documents by about half" },
+      { skill: "Cost", weak: "Ordered supplies", strong: "Consolidated office supply orders and cut monthly supply spend by 12%" },
+    ],
+    keywords: [
+      "Administrative support", "Calendar management", "Scheduling", "Travel arrangements", "Microsoft Office", "Microsoft 365", "Outlook", "Excel", "Word",
+      "PowerPoint", "Google Workspace", "Data entry", "Expense reports", "Meeting minutes", "Office management", "Event planning", "Confidentiality",
+    ],
+    tips: [
+      { t: "Say who you support", d: "\"COO and 2 VPs\" or \"a 25-person sales team\" tells employers your level right away." },
+      { t: "Name the software", d: "Microsoft 365, Google Workspace, SharePoint, Concur and Zoom are common screening terms." },
+      { t: "Turn tasks into results", d: "Time saved, budgets met and errors avoided show how well you run things, not just what you did." },
+      { t: "Show discretion", d: "Mention confidential work in general terms — board materials, HR files — without sharing any details." },
+    ],
+    faqs: [
+      { q: "What skills should an administrative assistant list?", a: "Calendar and travel management, office software, communication and organization, plus any specialty like bookkeeping, HR support or a second language." },
+      { q: "Should I include typing speed?", a: "Yes if it's strong — around 60 WPM or higher — especially for roles with heavy data entry or transcription." },
+      { q: "How do I move up to an executive assistant role?", a: "Show the seniority of the people you support, the confidential work you handle and the projects you run on their behalf." },
+    ],
+    related: ["customer-service-representative", "hr-generalist", "project-manager"],
   },
 ];
 

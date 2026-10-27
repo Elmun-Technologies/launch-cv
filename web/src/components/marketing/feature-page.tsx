@@ -91,7 +91,7 @@ export function FeaturePage({ f }: { f: FeaturePageData }) {
               <span className="text-[#111111]">{f.name}</span>
             </nav>
             <h1 className="text-[38px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[54px]">
-              {f.h1} <span className="text-[#6E6E6A]">{f.h1Tail}</span>
+              {f.h1} <span className="text-[#8A8A86]">{f.h1Tail}</span>
             </h1>
             <p className="max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">{f.lead}</p>
             <div className="flex flex-wrap gap-2.5">

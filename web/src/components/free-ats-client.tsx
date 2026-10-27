@@ -137,7 +137,7 @@ export function FreeAtsClient() {
             <h2 className="mt-5 max-w-[560px] text-[30px] font-semibold leading-[1.15] tracking-[-0.03em] text-[#111111]">
               {scoreVerdict(result.overall)}{" "}
               {result.totalFixes > 0 ? (
-                <span className="text-[#6E6E6A]">
+                <span className="text-[#8A8A86]">
                   {result.totalFixes} fixable {result.totalFixes === 1 ? "issue" : "issues"}.
                 </span>
               ) : null}

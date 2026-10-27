@@ -147,7 +147,7 @@ export default function PricingPage() {
         {/* HERO */}
         <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
           <h1 className="max-w-[760px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
-            Pay monthly or once. <span className="text-[#6E6E6A]">Checking your resume is always free.</span>
+            Pay monthly or once. <span className="text-[#8A8A86]">Checking your resume is always free.</span>
           </h1>
           <p className="mt-5 max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             Every AI tool is on every plan. Plans only differ in how much you can use them each month.
@@ -300,7 +300,7 @@ export default function PricingPage() {
           <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] md:flex-row">
             <div className="flex flex-1 flex-col justify-center gap-4 p-8 sm:p-14">
               <h2 className="text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[40px]">
-                If it doesn&apos;t help, <span className="text-[#6E6E6A]">you get your money back.</span>
+                If it doesn&apos;t help, <span className="text-[#8A8A86]">you get your money back.</span>
               </h2>
               <p className="max-w-[440px] text-[16px] leading-[1.6] text-[#3F3F3F]">
                 Email us within 7 days of paying for a monthly plan and we&apos;ll refund you in full. Lifetime can be

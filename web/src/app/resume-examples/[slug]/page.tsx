@@ -112,7 +112,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
           <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-16">
             <div className="flex-1">
               <h1 className="text-[36px] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[52px]">
-                {e.role} resume example. <span className="text-[#6E6E6A]">Plus the keywords recruiters search for.</span>
+                {e.role} resume example. <span className="text-[#8A8A86]">Plus the keywords recruiters search for.</span>
               </h1>
               <p className="mt-4 max-w-[640px] text-[17px] leading-[1.6] text-[#3F3F3F]">{e.intro}</p>
             </div>
