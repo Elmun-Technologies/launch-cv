@@ -23,7 +23,12 @@ const items = GROUPS.flatMap((g) => RESUME_EXAMPLES.filter((e) => e.group === g)
   .map((e) => ({ e, c: getCoverLetterExample(e.slug) }))
   .filter((x): x is { e: ResumeExample; c: NonNullable<typeof x.c> } => !!x.c);
 
-const firstSentence = (p: string) => (p.match(/^.*?[.!?](\s|$)/)?.[0] ?? p).trim();
+/** The opening line always names the role; the sentence after it is the hook worth previewing. */
+const hook = (p: string) => {
+  // Split only where a sentence ends and the next begins, so "99.99%" and "£3.4M" stay whole.
+  const sentences = p.split(/(?<=[.!?])\s+(?=[A-Z])/);
+  return (sentences[1] ?? sentences[0]).trim();
+};
 
 const ld = {
   "@context": "https://schema.org",
@@ -68,7 +73,7 @@ export default function CoverLetterExamplesPage() {
                     For {c.target.title} at {c.target.company}
                   </span>
                   <span className="mt-3 line-clamp-3 text-[15px] leading-[1.55] text-[#3F3F3F]">
-                    &ldquo;{firstSentence(c.paragraphs[0] ?? "")}&rdquo;
+                    &ldquo;{hook(c.paragraphs[0] ?? "")}&rdquo;
                   </span>
                 </Link>
               </li>

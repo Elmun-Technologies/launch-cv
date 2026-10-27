@@ -107,7 +107,7 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
                 {e.role} cover letter example. <span className="text-[#8A8A86]">Annotated, paragraph by paragraph.</span>
               </h1>
               <p className="mt-4 max-w-[640px] text-[17px] leading-[1.6] text-[#3F3F3F]">
-                {r.name} is applying for a {roleLower(c.target.title)} role at {c.target.company}. The letter goes with
+                {r.name} is applying for the {c.target.title} role at {c.target.company}. The letter goes with
                 their{" "}
                 <Link href={`/resume-examples/${slug}`} className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                   {roleLower(e.role)} resume example
