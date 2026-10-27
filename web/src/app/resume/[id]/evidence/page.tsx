@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ResumeToolLayout } from "@/components/resume-tool-layout";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -18,21 +18,17 @@ export default async function EvidencePage({ params }: Props) {
   if (!resume) notFound();
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-zinc-400">
-        <Link href={`/resume/${id}/edit`} className="hover:text-white">
-          ← Edit
-        </Link>
-        <Link href="/dashboard" className="hover:text-white">
-          Dashboard
-        </Link>
-      </div>
-      <h1 className="mt-6 text-2xl font-semibold text-white">Evidence / consistency check</h1>
-      <p className="mt-2 text-sm text-zinc-400">Quick report on metrics and evidence linkage.</p>
-      <div className="mt-6 max-w-2xl">
+    <ResumeToolLayout
+      resumeId={id}
+      resumeTitle={resume.title}
+      active="evidence"
+      title="Consistency check"
+      lead="Find mismatched dates, formats and claims across your resume, and the metrics it already contains."
+    >
+      <div className="max-w-2xl">
         <AiDisclaimer />
       </div>
       <EvidenceClient resumeId={id} />
-    </main>
+    </ResumeToolLayout>
   );
 }

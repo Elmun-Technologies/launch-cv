@@ -143,13 +143,13 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
           {/* Cover letter */}
           <section className="soha-card">
             <div className="flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#111111]">
                 <MessageSquare className="h-4 w-4 text-blue-500" /> Cover
                 letter
               </h2>
               <CopyButton text={result.cover_letter} />
             </div>
-            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700">
+            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4 text-sm leading-relaxed text-[#3F3F3F]">
               {result.cover_letter}
             </pre>
           </section>
@@ -157,36 +157,36 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
           {/* Elevator pitch */}
           <section className="soha-card">
             <div className="flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#111111]">
                 <Mic className="h-4 w-4 text-blue-500" /> Elevator pitch
               </h2>
               <CopyButton text={result.elevator_pitch} />
             </div>
-            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700">
+            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4 text-sm leading-relaxed text-[#3F3F3F]">
               {result.elevator_pitch}
             </pre>
           </section>
 
           {/* Questions */}
           <section className="soha-card">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900">
+            <h2 className="mb-4 text-sm font-semibold text-[#111111]">
               Interview questions
             </h2>
             <div className="space-y-3">
               {result.interview_questions.map((q, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+                  className="rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4"
                 >
                   <div className="flex items-start gap-2.5">
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[10px] font-bold text-blue-600">
                       {i + 1}
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-gray-800">
+                      <p className="text-sm font-medium text-[#1c1c1c]">
                         {q.question}
                       </p>
-                      <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                      <p className="mt-2 text-xs leading-relaxed text-[#6B6B6B]">
                         {q.answer_outline}
                       </p>
                     </div>

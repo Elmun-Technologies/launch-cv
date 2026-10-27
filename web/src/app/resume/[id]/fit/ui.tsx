@@ -13,13 +13,13 @@ function ScoreBar({ score, max }: { score: number; max: number }) {
   const pct = max > 0 ? (score / max) * 100 : 0;
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-200">
+      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#EEEEEB]">
         <div
           className="h-full rounded-full bg-blue-500 transition-all duration-500"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="w-10 text-right text-xs tabular-nums text-gray-500">
+      <span className="w-10 text-right text-xs tabular-nums text-[#6B6B6B]">
         {score}/{max}
       </span>
     </div>
@@ -122,10 +122,10 @@ export function FitClient({ resumeId }: { resumeId: string }) {
               </span>
             </div>
             <div>
-              <div className="text-sm font-semibold text-gray-900">
+              <div className="text-sm font-semibold text-[#111111]">
                 Overall score
               </div>
-              <div className="mt-1 text-xs text-gray-500">
+              <div className="mt-1 text-xs text-[#6B6B6B]">
                 On a 100-point scale. 70+ is a good result.
               </div>
             </div>
@@ -133,19 +133,19 @@ export function FitClient({ resumeId }: { resumeId: string }) {
 
           {/* Scores */}
           <section className="soha-card">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900">
+            <h2 className="mb-4 text-sm font-semibold text-[#111111]">
               Criteria
             </h2>
             <div className="space-y-3">
               {result.scores.map((s, i) => (
                 <div key={i}>
                   <div className="mb-1 flex items-center justify-between">
-                    <span className="text-xs font-medium text-gray-700">
+                    <span className="text-xs font-medium text-[#3F3F3F]">
                       {s.name}
                     </span>
                   </div>
                   <ScoreBar score={s.score} max={s.max} />
-                  <p className="mt-1 text-[11px] text-gray-500">
+                  <p className="mt-1 text-[11px] text-[#6B6B6B]">
                     {s.comment}
                   </p>
                 </div>
@@ -156,14 +156,14 @@ export function FitClient({ resumeId }: { resumeId: string }) {
           {/* Fixes */}
           {result.prioritized_fixes.length > 0 ? (
             <section className="soha-card">
-              <h2 className="mb-3 text-sm font-semibold text-gray-900">
+              <h2 className="mb-3 text-sm font-semibold text-[#111111]">
                 Prioritized fixes
               </h2>
               <ol className="space-y-2">
                 {result.prioritized_fixes.map((f, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-2.5 text-sm text-gray-600"
+                    className="flex items-start gap-2.5 text-sm text-[#3F3F3F]"
                   >
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[10px] font-bold text-blue-600">
                       {i + 1}

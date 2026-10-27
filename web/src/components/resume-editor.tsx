@@ -866,22 +866,35 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         <div className="flex flex-1 flex-col overflow-hidden">
           {/* Header */}
           <header className="flex items-center justify-between border-b border-gray-100 bg-white px-6 py-3">
-            <div className="min-w-0">
-              <h1 className="text-[16px] font-bold text-gray-900">Resume Editor</h1>
-              <p className="truncate text-[12px] text-gray-400">{content.contact.fullName || content.headline || title}</p>
+            <div className="flex min-w-0 items-center gap-5">
+              <div className="min-w-0">
+                <h1 className="truncate text-[15px] font-semibold text-[#111111]">{title}</h1>
+                <p className="truncate text-[12px] text-[#8A8A86]">{content.contact.fullName || content.headline || "Resume"}</p>
+              </div>
+              <nav aria-label="Resume tools" className="hidden items-center gap-1 lg:flex">
+                {[
+                  { href: `/resume/${resumeId}/jd`, label: "Match to a job" },
+                  { href: `/resume/${resumeId}/packet`, label: "Cover letter & interview" },
+                  { href: `/resume/${resumeId}/snapshots`, label: "Versions" },
+                ].map((l) => (
+                  <Link key={l.href} href={l.href} className="rounded-full px-3 py-1.5 text-[13px] text-[#3F3F3F] hover:bg-[#F5F5F3] hover:text-[#111111]">
+                    {l.label}
+                  </Link>
+                ))}
+              </nav>
             </div>
-            <div className="flex items-center gap-2.5">
+            <div className="flex shrink-0 items-center gap-2.5">
               <span className="hidden text-[12px] text-gray-400 sm:block">
                 {justSaved ? "All changes saved" : saving ? "Saving..." : "Auto-save on"}
               </span>
               <button
                 type="button"
                 onClick={onPdfExportClick}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 px-4 py-2 text-[13px] font-semibold text-gray-700 transition hover:bg-gray-50"
+                className="inline-flex h-9 items-center gap-1.5 rounded-full border border-[#D9D9D5] px-4 text-[13px] font-medium text-[#111111] transition hover:border-[#111111]"
               >
                 <Download className="h-4 w-4" /> PDF
               </button>
-              <button type="button" onClick={() => void doSave()} className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]">
+              <button type="button" onClick={() => void doSave()} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#111111] px-4 text-[13px] font-medium text-white transition hover:bg-black">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : justSaved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
                 {saving ? "Saving..." : justSaved ? "Saved" : "Save"}
               </button>

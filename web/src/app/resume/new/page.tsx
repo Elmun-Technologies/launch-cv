@@ -267,14 +267,14 @@ export default function NewResumePage() {
           {uploadStep === "idle" && (
             <div className="anim-in">
               <div className="text-center">
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF]">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#111111]">
                   <Sparkles className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-[32px] font-extrabold tracking-tight text-gray-900 sm:text-[36px]">
                   Let&apos;s build your resume
                 </h1>
                 <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-gray-500">
-                  Choose how you&apos;d like to get started. Either way, our AI will guide you every step.
+                  Start from a blank page or import the resume you already have. You can switch later.
                 </p>
               </div>
 
@@ -286,19 +286,19 @@ export default function NewResumePage() {
                   disabled={creating}
                   className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-blue-100/50 disabled:opacity-60"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF] shadow-lg shadow-blue-200/50">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F3] text-[#111111] [&_svg]:!text-[#111111]">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
                   <h2 className="mt-6 text-[20px] font-bold text-gray-900">Start from Scratch</h2>
                   <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
-                    Perfect if you want full control. Our AI will guide you step by step.
+                    Fill in each section with a live preview that matches the PDF you download.
                   </p>
 
                   <div className="mt-5 space-y-2.5">
                     {[
-                      { icon: Zap, text: "AI-powered suggestions" },
-                      { icon: FileText, text: "12+ industry templates" },
-                      { icon: Mic, text: "Voice input supported" },
+                      { icon: Zap, text: "AI rewrites for weak bullets" },
+                      { icon: FileText, text: "4 ATS-friendly templates" },
+                      { icon: Mic, text: "Dictate bullets by voice" },
                     ].map((b) => (
                       <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-gray-600">
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50">
@@ -321,19 +321,19 @@ export default function NewResumePage() {
                   onClick={() => fileRef.current?.click()}
                   className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-amber-200 hover:shadow-xl hover:shadow-amber-100/40"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg shadow-amber-200/50">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F3] text-[#111111] [&_svg]:!text-[#111111]">
                     <UploadCloud className="h-8 w-8 text-white" />
                   </div>
                   <h2 className="mt-6 text-[20px] font-bold text-gray-900">Upload &amp; Improve</h2>
                   <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
-                    Already have a resume? Upload it and we&apos;ll score it, find issues, and help you fix them.
+                    Upload a PDF or DOCX and every section is filled in for you to review and edit.
                   </p>
 
                   <div className="mt-5 space-y-2.5">
                     {[
-                      { icon: BarChart3, text: "Instant AI scoring" },
-                      { icon: Search, text: "Find missing keywords" },
-                      { icon: MessageSquare, text: "Get improvement suggestions" },
+                      { icon: BarChart3, text: "Role-fit score on any plan" },
+                      { icon: Search, text: "Checks for missing sections" },
+                      { icon: MessageSquare, text: "Keep editing in the builder" },
                     ].map((b) => (
                       <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-gray-600">
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-50">

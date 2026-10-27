@@ -42,71 +42,73 @@ body {
 ::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(156, 163, 175, 0.4); }
 ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.6); }
 
+/* Component classes live in a layer so Tailwind utilities (pl-9, h-10, …)
+   on the same element still win. */
+@layer components {
 /* ── Inputs ── */
 .soha-input {
   display: block;
   width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #D9D9D5;
   background: #fff;
-  padding: 0.625rem 0.875rem;
-  font-size: 0.8125rem;
+  padding: 0.6875rem 0.875rem;
+  font-size: 0.875rem;
   line-height: 1.25rem;
-  color: #1a1a2e;
+  color: #111111;
   outline: none;
-  transition: all 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
-.soha-input::placeholder { color: #b0b0b0; }
-.soha-input:hover { border-color: #e0e0e0; }
-.soha-input:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08); }
+.soha-input::placeholder { color: #8A8A86; }
+.soha-input:hover { border-color: #B5B5B0; }
+.soha-input:focus { border-color: #111111; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05); }
 .soha-input:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .soha-select {
   display: block;
   width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #D9D9D5;
   background: #fff;
-  padding: 0.625rem 2rem 0.625rem 0.875rem;
-  font-size: 0.8125rem;
+  padding: 0.6875rem 2rem 0.6875rem 0.875rem;
+  font-size: 0.875rem;
   line-height: 1.25rem;
-  color: #1a1a2e;
+  color: #111111;
   outline: none;
-  transition: all 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   appearance: none;
   background-image: url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%239ca3af%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22m4.427%206.427%203.396%203.396a.25.25%200%200%200%20.354%200l3.396-3.396A.25.25%200%200%200%2011.396%206H4.604a.25.25%200%200%200-.177.427Z%22%2F%3E%3C%2Fsvg%3E');
   background-size: 16px;
   background-position: right 8px center;
   background-repeat: no-repeat;
 }
-.soha-select:hover { border-color: #e0e0e0; }
-.soha-select:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08); }
+.soha-select:hover { border-color: #B5B5B0; }
+.soha-select:focus { border-color: #111111; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05); }
 
 .soha-textarea {
   display: block;
   width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  border: 1px solid #D9D9D5;
   background: #fff;
-  padding: 0.625rem 0.875rem;
-  font-size: 0.8125rem;
+  padding: 0.6875rem 0.875rem;
+  font-size: 0.875rem;
   line-height: 1.6;
-  color: #1a1a2e;
+  color: #111111;
   outline: none;
-  transition: all 0.2s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   min-height: 80px;
   resize: vertical;
 }
-.soha-textarea::placeholder { color: #b0b0b0; }
-.soha-textarea:hover { border-color: #e0e0e0; }
-.soha-textarea:focus { border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08); }
+.soha-textarea::placeholder { color: #8A8A86; }
+.soha-textarea:hover { border-color: #B5B5B0; }
+.soha-textarea:focus { border-color: #111111; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05); }
 
 .soha-label {
   display: block;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #374151;
-  letter-spacing: 0.01em;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #111111;
 }
 
 /* ── Buttons ── */
@@ -115,39 +117,41 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 0.75rem;
-  background: #2563EB;
-  padding: 0.5rem 1.125rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #fff;
+  min-height: 2.75rem;
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
   outline: none;
-  transition: all 0.2s;
-  border: none;
+  transition: background-color 0.15s, border-color 0.15s;
   cursor: pointer;
+  background: #2563EB;
+  color: #fff;
+  border: none;
 }
-.soha-btn-primary:hover { background: #1D4ED8; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2); }
+.soha-btn-primary:hover { background: #1D4ED8; }
 .soha-btn-primary:focus-visible { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
 .soha-btn-primary:active { transform: scale(0.98); }
-.soha-btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+.soha-btn-primary:disabled { opacity: 0.45; pointer-events: none; }
 
 .soha-btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid #f0f0f0;
-  background: #fff;
-  padding: 0.5rem 1.125rem;
-  font-size: 0.8125rem;
+  min-height: 2.75rem;
+  border-radius: 9999px;
+  padding: 0.5rem 1.25rem;
+  font-size: 0.875rem;
   font-weight: 500;
-  color: #1a1a2e;
   outline: none;
-  transition: all 0.2s;
+  transition: background-color 0.15s, border-color 0.15s;
   cursor: pointer;
+  border: 1px solid #D9D9D5;
+  background: #fff;
+  color: #111111;
 }
-.soha-btn-secondary:hover { background: #fafafa; border-color: #e0e0e0; }
+.soha-btn-secondary:hover { border-color: #111111; }
 .soha-btn-secondary:focus-visible { box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
 
 .soha-btn-ghost {
@@ -159,14 +163,14 @@ body {
   padding: 0.375rem 0.625rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: #6b7280;
+  color: #6B6B6B;
   outline: none;
   transition: all 0.15s;
   background: transparent;
   border: none;
   cursor: pointer;
 }
-.soha-btn-ghost:hover { background: #f3f4f6; color: #111827; }
+.soha-btn-ghost:hover { background: #F5F5F3; color: #111111; }
 
 .soha-btn-danger {
   display: inline-flex;
@@ -188,19 +192,18 @@ body {
 
 /* ── Cards & Surfaces ── */
 .soha-card {
-  border-radius: 1rem;
-  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  border: 1px solid #E5E5E2;
   background: #fff;
   padding: 1.25rem;
-  transition: all 0.2s;
+  transition: border-color 0.15s;
 }
 .soha-card:hover {
-  border-color: #e0e0e0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border-color: #D9D9D5;
 }
 .soha-section {
-  border-radius: 0.75rem;
-  border: 1px solid #f3f4f6;
+  border-radius: 14px;
+  border: 1px solid #E5E5E2;
   background: #fff;
   padding: 1.25rem;
 }
@@ -425,11 +428,6 @@ body {
 .soha-toast-error { background: #dc2626; }
 .soha-toast-info { background: #2563eb; }
 
-/* ── Micro-interactions ── */
-.soha-btn-primary:hover { background: #1D4ED8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
-.soha-btn-primary:active { transform: translateY(0) scale(0.98); box-shadow: none; }
-.soha-btn-secondary:hover { background: #f9fafb; border-color: #d1d5db; transform: translateY(-1px); }
-.soha-btn-secondary:active { transform: translateY(0); }
 
 /* ── Sidebar tooltip ── */
 .soha-sidebar-item { position: relative; }
@@ -477,6 +475,8 @@ body {
 .soha-sidebar-item-active:hover::after {
   opacity: 1;
   transform: translateY(-50%) scale(1);
+}
+
 }
 
 /* ── Mobile responsive ── */
