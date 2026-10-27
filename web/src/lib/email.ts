@@ -4,6 +4,7 @@ export async function sendTransactionalEmail(args: {
   to: string;
   subject: string;
   html: string;
+  text?: string;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM_EMAIL;
@@ -21,6 +22,7 @@ export async function sendTransactionalEmail(args: {
       to: [args.to],
       subject: args.subject,
       html: args.html,
+      ...(args.text ? { text: args.text } : {}),
     }),
   });
   if (!res.ok) {
