@@ -50,7 +50,7 @@ const blogLd = {
     "@type": "Organization",
     name: "LaunchCV",
     url: absoluteUrl("/"),
-    logo: { "@type": "ImageObject", url: absoluteUrl("/icon.png") },
+    logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png") },
   },
 };
 

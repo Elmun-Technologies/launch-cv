@@ -83,7 +83,6 @@ const rootStructuredData = {
       name: "LaunchCV",
       url: siteUrl,
       logo: `${siteUrl}/logo.png`,
-      sameAs: ["https://twitter.com/launchcv", "https://linkedin.com/company/launchcv"],
       description: "AI-powered resume and job search platform for modern job seekers.",
       contactPoint: {
         "@type": "ContactPoint",
@@ -97,11 +96,6 @@ const rootStructuredData = {
       url: siteUrl,
       description: "Tailored resumes, JD alignment, ATS scoring, cover letters, and interview prep.",
       publisher: { "@type": "Organization", name: "LaunchCV" },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: { "@type": "EntryPoint", urlTemplate: `${siteUrl}/features?q={search_term_string}` },
-        "query-input": "required name=search_term_string",
-      },
     },
     {
       "@type": "SiteNavigationElement",

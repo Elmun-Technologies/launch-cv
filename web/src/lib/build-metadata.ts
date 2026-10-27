@@ -91,7 +91,8 @@ export function buildMarketingMetadata(input: {
       card: "summary_large_image",
       title: ogTitle,
       description: input.description,
-      site: "@launchcv",
+      // Only claim an X/Twitter account that exists: set NEXT_PUBLIC_TWITTER_HANDLE (e.g. "@launchcv").
+      ...(process.env.NEXT_PUBLIC_TWITTER_HANDLE ? { site: process.env.NEXT_PUBLIC_TWITTER_HANDLE } : {}),
       ...imageProp,
     },
     robots: input.robots ?? { index: true, follow: true },

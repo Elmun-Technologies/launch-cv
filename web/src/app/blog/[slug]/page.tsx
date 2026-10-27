@@ -9,7 +9,7 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { KeyFacts } from "@/components/key-facts";
-import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { BLOG_HOWTO, blogKeyFacts, howToLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
@@ -86,7 +86,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     pathname: `/blog/${post.slug}`,
     keywords: post.tags,
     canonicalUrl: post.canonicalUrl || undefined,
-    image: post.ogImageUrl || post.coverUrl || DEFAULT_OG_IMAGE,
+    // Social cards can't use SVG; fall back to this post's generated card.
+    image: [post.ogImageUrl, post.coverUrl].find((u) => u && !/\.svg(\?|$)/i.test(u)) || absoluteUrl(`/blog/${post.slug}/opengraph-image`),
     type: "article",
     article: {
       publishedTime: post.date,
@@ -195,7 +196,7 @@ export default async function BlogPostPage({
     datePublished: post.date,
     dateModified: post.dateModified,
     url: absoluteUrl(`/blog/${post.slug}`),
-    image: post.ogImageUrl || absoluteUrl("/opengraph-image"),
+    image: post.ogImageUrl && !/\.svg(\?|$)/i.test(post.ogImageUrl) ? post.ogImageUrl : absoluteUrl(`/blog/${post.slug}/opengraph-image`),
     author: {
       "@type": "Person",
       name: SITE_AUTHOR.name,
@@ -208,7 +209,7 @@ export default async function BlogPostPage({
       "@type": "Organization",
       name: "LaunchCV",
       url: absoluteUrl("/"),
-      logo: { "@type": "ImageObject", url: absoluteUrl("/icon.png") },
+      logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png") },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
     keywords: post.tags.join(", "),

@@ -47,11 +47,42 @@ function isFaqArray(v: unknown): v is Array<{ q: string; a: string }> {
   );
 }
 
+/** Retired URLs that still appear in stored post bodies, mapped to where they now 301. */
+const LEGACY_LINKS: [RegExp, string][] = [
+  [/\(\/features\/ats-score\/?\)/g, "(/free-ats-check)"],
+  [/\(\/use-cases\/designers\/?\)/g, "(/resume-examples/ux-designer)"],
+  [/\(\/use-cases\/[a-z-]*\/?\)/g, "(/resume-examples)"],
+];
+
+/**
+ * Older posts embed illustrated "screenshots" of a product UI that no longer exists
+ * (template names, a two-column layout, test claims). Drop them, and point links at
+ * live URLs instead of redirects.
+ */
+export function cleanLegacyMarkdown(md: string): string {
+  let out = md.replace(/^[ \t]*!\[[^\]]*\]\(\/images\/product\/[^)]+\)[ \t]*$/gm, "");
+  out = out.replace(/!\[[^\]]*\]\(\/images\/product\/[^)]+\)/g, "");
+  for (const [re, to] of LEGACY_LINKS) out = out.replace(re, to);
+  return out.replace(/\n{3,}/g, "\n\n");
+}
+
+/** Drop a year from a title once it's in the past ("… in 2025", "(2025 Method)"), rather than leave it looking stale. */
+export function stripStaleYear(title: string): string;
+export function stripStaleYear(title: string | null): string | null;
+export function stripStaleYear(title: string | null): string | null {
+  if (!title) return title;
+  const now = new Date().getUTCFullYear();
+  return title
+    .replace(/\s*\((20\d\d)(?:\s[^)]*)?\)/g, (m, y) => (Number(y) < now ? "" : m))
+    .replace(/\s+in\s+(20\d\d)\b/g, (m, y) => (Number(y) < now ? "" : m))
+    .trim();
+}
+
 export function rowToBlogPost(row: DbBlogPost): BlogPost {
   const dateSource = row.publishedAt ?? row.createdAt;
   return {
     slug: row.slug,
-    title: row.title,
+    title: stripStaleYear(row.title),
     description: row.description,
     date: dateSource.toISOString().slice(0, 10),
     dateModified: row.updatedAt.toISOString().slice(0, 10),
@@ -63,11 +94,11 @@ export function rowToBlogPost(row: DbBlogPost): BlogPost {
       role: row.authorRole ?? "",
       bio: row.authorBio ?? "",
     },
-    bodyMd: row.bodyMd,
+    bodyMd: cleanLegacyMarkdown(row.bodyMd),
     faqs: isFaqArray(row.faqs) ? row.faqs : undefined,
     coverUrl: row.coverUrl,
     coverAlt: row.coverAlt,
-    seoTitle: row.seoTitle,
+    seoTitle: stripStaleYear(row.seoTitle),
     seoDescription: row.seoDescription,
     ogImageUrl: row.ogImageUrl,
     canonicalUrl: row.canonicalUrl,
