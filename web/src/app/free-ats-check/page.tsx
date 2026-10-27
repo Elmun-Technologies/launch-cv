@@ -111,7 +111,7 @@ export default function FreeAtsCheckPage() {
       <main className="flex-1">
         <section className="mx-auto w-full max-w-[1200px] px-5 pt-[112px] text-center sm:px-8 sm:pt-[136px]">
           <h1 className="mx-auto max-w-[820px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
-            Free ATS resume checker. <span className="text-[#8A8A86]">Your score in about 10 seconds.</span>
+            Free ATS resume checker. <span className="text-[#6E6E6A]">Your score in about 10 seconds.</span>
           </h1>
           <p className="mx-auto mt-5 max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             See how applicant tracking software reads your resume — what it can&apos;t parse, which keywords are
@@ -131,7 +131,7 @@ export default function FreeAtsCheckPage() {
         {/* WHAT THE SOFTWARE SEES */}
         <section className="mx-auto w-full max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
           <h2 className={`${h2} max-w-[760px]`}>
-            What you see vs. <span className="text-[#8A8A86]">what the software sees.</span>
+            What you see vs. <span className="text-[#6E6E6A]">what the software sees.</span>
           </h2>
           <p className="mt-3.5 max-w-[640px] text-[17px] leading-[1.6] text-[#3F3F3F]">
             A two-column template looks tidy to you. Many parsers read it line by line, left to right — and mix your
@@ -172,7 +172,7 @@ export default function FreeAtsCheckPage() {
               </div>
             </figure>
             <figure className="rounded-2xl bg-[#111111] p-6 text-[#E5E5E2] sm:p-7">
-              <figcaption className="mb-3.5 text-[14px] text-[#8A8A86]">What a parser can extract</figcaption>
+              <figcaption className="mb-3.5 text-[14px] text-[#A3A3A0]">What a parser can extract</figcaption>
               <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-[13px] leading-[1.75]">
                 {"name:       Maria Lopez Product Manager EXPERIENCE\ntitle:      "}
                 <span className="text-[#FF8A73]">— not found —</span>
@@ -205,7 +205,7 @@ export default function FreeAtsCheckPage() {
             <div className="flex flex-col gap-3.5 p-8 lg:p-12">
               <h2 className="text-[28px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[36px]">
                 A recruiter will spend seconds on your resume.{" "}
-                <span className="text-[#8A8A86]">If the software lets it through.</span>
+                <span className="text-[#6E6E6A]">If the software lets it through.</span>
               </h2>
               <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
                 Most applications are parsed and ranked before a person opens them. This check shows you what that
@@ -260,7 +260,7 @@ export default function FreeAtsCheckPage() {
         <section className="mx-auto w-full max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
             <h2 className={`${h2} lg:w-[40%]`}>How to check your resume&apos;s ATS score</h2>
-            <ol className="flex flex-1 list-decimal flex-col gap-4 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#8A8A86]">
+            <ol className="flex flex-1 list-decimal flex-col gap-4 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#6E6E6A]">
               {steps.map((s) => (
                 <li key={s.t}>
                   <strong className="font-semibold text-[#111111]">{s.t}</strong> {s.d}
@@ -279,7 +279,7 @@ export default function FreeAtsCheckPage() {
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                   {f.q}
                   <ChevronDown
-                    className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180"
+                    className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180"
                     aria-hidden
                   />
                 </summary>

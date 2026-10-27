@@ -50,7 +50,7 @@ export default async function AdminTestimonialsPage() {
       render: (r) => (
         <div className="flex flex-wrap gap-1">
           {r.placement.length === 0 ? (
-            <span className="text-[12px] text-[#8A8A86]">None</span>
+            <span className="text-[12px] text-[#6E6E6A]">None</span>
           ) : (
             r.placement.map((p) => (
               <span key={p} className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[11px] text-[#3F3F3F]">

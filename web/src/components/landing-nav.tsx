@@ -210,7 +210,7 @@ export function LandingNav() {
             </Link>
 
             {/* Features group */}
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#94A3B8] font-body">Features</p>
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#6E6E6A] font-body">Features</p>
             <div className="space-y-1">
               {featureItems.map((item) => (
                 <Link

@@ -84,11 +84,11 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         <h1 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111]">
           {fromReport ? (
             <>
-              Save your report. <span className="text-[#8A8A86]">It&apos;s free.</span>
+              Save your report. <span className="text-[#6E6E6A]">It&apos;s free.</span>
             </>
           ) : (
             <>
-              Create your account. <span className="text-[#8A8A86]">It&apos;s free.</span>
+              Create your account. <span className="text-[#6E6E6A]">It&apos;s free.</span>
             </>
           )}
         </h1>
@@ -97,7 +97,7 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
             ? "See every issue we found and keep it with your resume. No credit card."
             : "Check and fix your resume, then pick a plan when you need the AI tools."}{" "}
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-[#1D4ED8] hover:underline">
+          <Link href="/login" className="font-semibold text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
             Sign in
           </Link>
         </p>
@@ -131,10 +131,11 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-3.5">
         <div>
-          <label className="mb-1.5 block text-[13px] font-medium text-[#111111]">
+          <label htmlFor="reg-name" className="mb-1.5 block text-[13px] font-medium text-[#111111]">
             Full name <span className="font-normal text-[#6B6B6B]">(optional)</span>
           </label>
           <input
+              id="reg-name"
             className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -144,8 +145,9 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         </div>
 
         <div>
-          <label className="mb-1.5 block text-[13px] font-medium text-[#111111]">Email</label>
+          <label htmlFor="reg-email" className="mb-1.5 block text-[13px] font-medium text-[#111111]">Email</label>
           <input
+              id="reg-email"
             type="email"
             required
             className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
@@ -157,11 +159,12 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         </div>
 
         <div>
-          <label className="mb-1.5 block text-[13px] font-medium text-[#111111]">
+          <label htmlFor="reg-password" className="mb-1.5 block text-[13px] font-medium text-[#111111]">
             Password <span className="font-normal text-[#6B6B6B]">(min 8)</span>
           </label>
           <div className="relative">
             <input
+              id="reg-password"
               type={showPw ? "text" : "password"}
               required
               minLength={8}
@@ -173,7 +176,8 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
             <button
               type="button"
               tabIndex={-1}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#475569]"
+              aria-label={showPw ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] transition hover:text-[#475569]"
               onClick={() => setShowPw((s) => !s)}
             >
               {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -197,7 +201,7 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
         </button>
       </form>
 
-      <p className="mt-5 text-[11px] leading-[1.55] text-[#94A3B8]">
+      <p className="mt-5 text-[11px] leading-[1.55] text-[#6E6E6A]">
         By creating an account you agree to our{" "}
         <Link href="/legal/terms" className="font-semibold text-[#475569] underline underline-offset-2 hover:text-[#0F172A]">Terms</Link>{" "}
         and{" "}

@@ -88,7 +88,7 @@ export default function VerifyEmailPage() {
           One-time check — usually finishes in a second or two.
         </p>
       </div>
-      <Suspense fallback={<p className="text-[13px] text-[#94A3B8]">Loading…</p>}>
+      <Suspense fallback={<p className="text-[13px] text-[#6E6E6A]">Loading…</p>}>
         <VerifyInner />
       </Suspense>
     </AuthLayout>

@@ -117,7 +117,7 @@ export default function CompareAtsCheckersPage() {
         <section className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 pt-[120px] sm:px-8 lg:flex-row lg:items-center lg:gap-14">
           <div className="flex-1">
             <h1 className="text-[38px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[54px]">
-              How to choose an ATS resume checker. <span className="text-[#8A8A86]">Six things that matter.</span>
+              How to choose an ATS resume checker. <span className="text-[#6E6E6A]">Six things that matter.</span>
             </h1>
             <p className="mt-5 max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">
               Every resume tool says it beats the ATS. Many only count keywords. Here&apos;s what separates a useful
@@ -141,7 +141,7 @@ export default function CompareAtsCheckersPage() {
           <ol className="mt-7 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
             {criteria.map((c, i) => (
               <li key={c.t} className="border-t border-[#EEEEEB] py-5">
-                <p className="text-[14px] text-[#8A8A86] [font-feature-settings:'tnum']">{i + 1}</p>
+                <p className="text-[14px] text-[#6E6E6A] [font-feature-settings:'tnum']">{i + 1}</p>
                 <p className="mt-1 text-[17px] font-semibold">{c.t}</p>
                 <p className="mt-1 text-[15px] leading-[1.55] text-[#3F3F3F]">{c.d}</p>
               </li>
@@ -151,7 +151,7 @@ export default function CompareAtsCheckersPage() {
 
         <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
           <h2 className={h2}>
-            A full check vs. <span className="text-[#8A8A86]">a keyword counter.</span>
+            A full check vs. <span className="text-[#6E6E6A]">a keyword counter.</span>
           </h2>
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[560px] border-collapse text-[15px]">
@@ -192,7 +192,7 @@ export default function CompareAtsCheckersPage() {
               <details key={x.q} open={i === 0} className="group border-t border-[#E5E5E2] py-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                   {x.q}
-                  <ChevronDown className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180" aria-hidden />
+                  <ChevronDown className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180" aria-hidden />
                 </summary>
                 <p className="mt-2.5 text-[16px] leading-[1.65] text-[#3F3F3F]">{x.a}</p>
               </details>
@@ -204,11 +204,11 @@ export default function CompareAtsCheckersPage() {
           <div className="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:p-12">
             <div>
               <h2 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
-                Judge it yourself. <span className="text-[#8A8A86]">The check is free.</span>
+                Judge it yourself. <span className="text-[#6E6E6A]">The check is free.</span>
               </h2>
               <p className="mt-2 text-[16px] text-[#3F3F3F]">
                 No account. Score and fixes in about 10 seconds.{" "}
-                <Link href="/blog/what-is-an-ats-score" className="text-[#1D4ED8] hover:underline">
+                <Link href="/blog/what-is-an-ats-score" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                   What the score means
                 </Link>
               </p>

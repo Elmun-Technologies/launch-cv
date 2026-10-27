@@ -47,11 +47,11 @@ export default function ContactPage() {
         <section className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 pt-[120px] sm:px-8 lg:flex-row lg:items-center lg:gap-14">
           <div className="flex-1">
             <h1 className="text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
-              Get in touch. <span className="text-[#8A8A86]">A person reads every email.</span>
+              Get in touch. <span className="text-[#6E6E6A]">A person reads every email.</span>
             </h1>
             <p className="mt-5 max-w-[520px] text-[17px] leading-[1.6] text-[#3F3F3F]">
               Write to{" "}
-              <a href={`mailto:${EMAIL}`} className="text-[#1D4ED8] hover:underline">
+              <a href={`mailto:${EMAIL}`} className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 {EMAIL}
               </a>{" "}
               and put the topic in the subject so it reaches the right person.
@@ -99,11 +99,11 @@ export default function ContactPage() {
             </div>
             <p className="text-[15px] text-[#3F3F3F]">
               Billing questions? See{" "}
-              <Link href="/pricing" className="text-[#1D4ED8] hover:underline">
+              <Link href="/pricing" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 plans and refunds
               </Link>{" "}
               or the{" "}
-              <Link href="/legal/terms" className="text-[#1D4ED8] hover:underline">
+              <Link href="/legal/terms" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 terms
               </Link>
               .

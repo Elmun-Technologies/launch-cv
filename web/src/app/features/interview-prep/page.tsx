@@ -45,7 +45,7 @@ const f: FeaturePageData = {
               {i + 1}. {x.q}
             </p>
             <p className="mt-1.5 text-[15px] leading-[1.6] text-[#3F3F3F]">
-              <span className="text-[#8A8A86]">Answer outline — </span>
+              <span className="text-[#6E6E6A]">Answer outline — </span>
               {x.a}
             </p>
           </div>

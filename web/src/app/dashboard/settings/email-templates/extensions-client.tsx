@@ -145,11 +145,11 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
             {emailResult ? (
               <div className="mt-4 space-y-4 animate-fadeIn">
                 <div className="rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">Subject</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Subject</p>
                   <p className="mt-1 text-[14px] font-semibold text-[#111111]">{emailResult.subject}</p>
                 </div>
                 <div className="rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">Body</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Body</p>
                   <p className="mt-2 whitespace-pre-wrap text-[13px] leading-relaxed text-[#3F3F3F]">{emailResult.body}</p>
                 </div>
                 {emailResult.tips.length > 0 ? (
@@ -171,7 +171,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
               <div className="mt-8 flex flex-col items-center py-8 text-center">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF3FF]"><MessageSquare className="h-7 w-7 text-[#2563EB]" /></div>
                 <p className="mt-4 text-[14px] font-medium text-[#6B6B6B]">Your generated email will appear here</p>
-                <p className="mt-1 text-[12px] text-[#8A8A86]">Fill in the form and click Generate</p>
+                <p className="mt-1 text-[12px] text-[#6E6E6A]">Fill in the form and click Generate</p>
               </div>
             )}
           </div>
@@ -207,16 +207,16 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
             <div className="flex flex-col items-center rounded-2xl border border-dashed border-[#E5E5E2] py-12 text-center">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#EEF3FF]"><Mail className="h-6 w-6 text-[#2563EB]" /></div>
               <p className="mt-4 text-[14px] font-medium text-[#6B6B6B]">No templates yet</p>
-              <p className="mt-1 text-[12px] text-[#8A8A86]">Create templates or generate them with AI</p>
+              <p className="mt-1 text-[12px] text-[#6E6E6A]">Create templates or generate them with AI</p>
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2">
               {rows.map((t) => (
                 <div key={t.id} className="rounded-2xl border border-[#EEEEEB] bg-white p-5 transition hover:shadow-sm">
                   <div className="flex items-start justify-between"><div><p className="text-[14px] font-semibold text-[#111111]">{t.name}</p><span className="mt-1 inline-block rounded-full bg-[#EEF3FF] px-2 py-0.5 text-[11px] font-semibold text-[#2563EB]">{t.category}</span></div>
-                    <button type="button" onClick={() => void delTemplate(t.id)} className="rounded-xl p-2 text-[#A3A3A0] hover:bg-red-50 hover:text-red-500"><Trash2 className="h-4 w-4" /></button></div>
+                    <button type="button" onClick={() => void delTemplate(t.id)} className="rounded-xl p-2 text-[#8A8A86] hover:bg-red-50 hover:text-red-500"><Trash2 className="h-4 w-4" /></button></div>
                   <p className="mt-3 text-[12px] text-[#6B6B6B]">Subject: {t.subject}</p>
-                  <p className="mt-1 line-clamp-2 text-[12px] text-[#8A8A86]">{t.body}</p>
+                  <p className="mt-1 line-clamp-2 text-[12px] text-[#6E6E6A]">{t.body}</p>
                   <div className="mt-3 flex gap-1.5 border-t border-[#EEEEEB] pt-3"><CopyBtn text={t.subject} label="Subject" /><CopyBtn text={t.body} label="Body" /></div>
                 </div>
               ))}

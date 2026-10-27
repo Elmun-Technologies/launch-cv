@@ -53,11 +53,11 @@ export default async function AdminPagesIndex() {
                       </span>
                       <div>
                         <p className="text-[14px] font-semibold text-[#111111]">{p.label}</p>
-                        <p className="font-mono text-[11px] text-[#8A8A86]">{p.key}</p>
+                        <p className="font-mono text-[11px] text-[#6E6E6A]">{p.key}</p>
                         <p className="mt-1 text-[12px] text-[#6B6B6B]">{p.description}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 text-[12px] text-[#8A8A86]">
+                    <div className="flex items-center gap-3 text-[12px] text-[#6E6E6A]">
                       {row ? (
                         <span>Updated {dateFmt.format(row.updatedAt)}</span>
                       ) : (

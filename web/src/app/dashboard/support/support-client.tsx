@@ -61,7 +61,7 @@ export function SupportClient() {
 
         {/* Search Bar */}
         <div className="relative mt-6">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" />
           <input
             type="text"
             placeholder="Search for help..."
@@ -140,7 +140,7 @@ export function SupportClient() {
         <h2 className="text-[15px] font-semibold text-[#111111]">Frequently Asked Questions</h2>
         <div className="mt-4 divide-y divide-[#EEEEEB]">
           {filteredFaq.length === 0 ? (
-            <p className="py-6 text-center text-[13px] text-[#8A8A86]">
+            <p className="py-6 text-center text-[13px] text-[#6E6E6A]">
               No matching questions found. Try a different search term.
             </p>
           ) : (
@@ -155,7 +155,7 @@ export function SupportClient() {
                   >
                     <h3 className="text-[13px] font-semibold text-[#111111]">{item.q}</h3>
                     <ChevronDown
-                      className={`h-4 w-4 shrink-0 text-[#8A8A86] transition-transform duration-200 ${
+                      className={`h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform duration-200 ${
                         isOpen ? "rotate-180 text-[#2563EB]" : ""
                       }`}
                     />

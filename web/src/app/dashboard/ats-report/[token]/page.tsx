@@ -48,11 +48,11 @@ export default async function AtsReportPage({ params }: { params: Promise<{ toke
               <span className="text-[80px] font-semibold leading-[0.9] tracking-[-0.05em] text-[#111111]">
                 {report.overall}
               </span>
-              <span className="text-[22px] text-[#8A8A86]">/ 100</span>
+              <span className="text-[22px] text-[#6E6E6A]">/ 100</span>
             </p>
             <h1 className="mt-5 max-w-[560px] text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-[#111111]">
               {scoreVerdict(report.overall)}{" "}
-              <span className="text-[#8A8A86]">Here is every issue we found.</span>
+              <span className="text-[#6E6E6A]">Here is every issue we found.</span>
             </h1>
           </div>
           <div className="w-full lg:max-w-[380px]">

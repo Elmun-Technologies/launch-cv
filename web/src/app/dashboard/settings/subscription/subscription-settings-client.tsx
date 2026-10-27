@@ -151,7 +151,7 @@ export function SubscriptionSettingsClient() {
             {returned === "confirmed" ? (
               <>
                 Every AI tool is unlocked.{" "}
-                <Link href="/dashboard/resumes" className="font-medium text-[#1D4ED8] hover:underline">
+                <Link href="/dashboard/resumes" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                   Go to my resumes
                 </Link>
               </>
@@ -241,7 +241,7 @@ export function SubscriptionSettingsClient() {
                 <span className="text-[32px] font-semibold tracking-[-0.02em] text-[#111111]">{cfg.priceDisplay}</span>
                 <span className="text-[14px] text-[#6B6B6B]">{cfg.periodLabel}</span>
               </p>
-              <p className="mt-1 text-[12px] leading-snug text-[#8A8A86]">{cfg.billingExplainer}</p>
+              <p className="mt-1 text-[12px] leading-snug text-[#6E6E6A]">{cfg.billingExplainer}</p>
               <ul className="mt-5 flex-1 space-y-2.5 border-t border-[#EEEEEB] pt-5">
                 {bullets.map((t) => (
                   <li key={t} className="flex items-start gap-2 text-[13px] text-[#3F3F3F]">
@@ -277,7 +277,7 @@ export function SubscriptionSettingsClient() {
         </p>
         <p>
           Questions about billing?{" "}
-          <Link href="/dashboard/support" className="font-medium text-[#1D4ED8] hover:underline">
+          <Link href="/dashboard/support" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
             Contact support
           </Link>
         </p>

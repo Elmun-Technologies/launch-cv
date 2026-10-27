@@ -19,7 +19,7 @@ export function BlogFaq({ items }: { items: FaqItem[] }) {
           >
             <span className="text-[17px] font-medium text-[#111111]">{item.q}</span>
             <ChevronDown
-              className={`h-4 w-4 shrink-0 text-[#8A8A86] transition-transform duration-200 ${open === i ? "rotate-180" : ""}`}
+              className={`h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform duration-200 ${open === i ? "rotate-180" : ""}`}
             />
           </button>
           {open === i && (

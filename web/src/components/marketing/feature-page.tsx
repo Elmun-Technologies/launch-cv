@@ -91,7 +91,7 @@ export function FeaturePage({ f }: { f: FeaturePageData }) {
               <span className="text-[#111111]">{f.name}</span>
             </nav>
             <h1 className="text-[38px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[54px]">
-              {f.h1} <span className="text-[#8A8A86]">{f.h1Tail}</span>
+              {f.h1} <span className="text-[#6E6E6A]">{f.h1Tail}</span>
             </h1>
             <p className="max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">{f.lead}</p>
             <div className="flex flex-wrap gap-2.5">
@@ -139,7 +139,7 @@ export function FeaturePage({ f }: { f: FeaturePageData }) {
             <ol className="flex flex-1 flex-col">
               {f.steps.map((s, i) => (
                 <li key={s.t} className="flex gap-5 border-t border-[#EEEEEB] py-5 last:border-b">
-                  <span className="w-6 shrink-0 text-[15px] text-[#8A8A86] [font-feature-settings:'tnum']">{i + 1}</span>
+                  <span className="w-6 shrink-0 text-[15px] text-[#6E6E6A] [font-feature-settings:'tnum']">{i + 1}</span>
                   <div>
                     <p className="text-[17px] font-semibold">{s.t}</p>
                     <p className="mt-1 text-[16px] leading-[1.6] text-[#3F3F3F]">{s.d}</p>
@@ -196,7 +196,7 @@ export function FeaturePage({ f }: { f: FeaturePageData }) {
               <details key={x.q} open={i === 0} className="group border-t border-[#E5E5E2] py-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                   {x.q}
-                  <ChevronDown className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180" aria-hidden />
+                  <ChevronDown className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180" aria-hidden />
                 </summary>
                 <p className="mt-2.5 text-[16px] leading-[1.65] text-[#3F3F3F]">{x.a}</p>
               </details>
@@ -238,7 +238,7 @@ export function BeforeAfter({ before, after }: { before: string; after: string }
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       <div className="rounded-xl border border-[#EEEEEB] p-4">
-        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[#8A8A86]">Before</p>
+        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[#6E6E6A]">Before</p>
         <p className="mt-2 text-[15px] leading-[1.55] text-[#6B6B6B]">{before}</p>
       </div>
       <div className="rounded-xl border border-[#111111] p-4">

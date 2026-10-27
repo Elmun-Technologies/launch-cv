@@ -109,7 +109,7 @@ export function JobTrackerClient({
           {rows.length > 0 ? (
             <label className="relative flex-1 sm:w-[260px] sm:flex-none">
               <span className="sr-only">Search applications</span>
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" aria-hidden />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" aria-hidden />
               <input
                 type="search"
                 value={query}
@@ -152,7 +152,7 @@ export function JobTrackerClient({
                 <section key={st.key} aria-label={st.label} className="flex flex-col rounded-[14px] bg-[#F5F5F3] p-2.5">
                   <h2 className="flex items-center justify-between px-1.5 pb-2.5 pt-1 text-[13px] font-medium text-[#3F3F3F]">
                     {st.label}
-                    <span className="text-[#8A8A86]">{items.length}</span>
+                    <span className="text-[#6E6E6A]">{items.length}</span>
                   </h2>
                   <div className="flex flex-col gap-2">
                     {items.map((r) => (
@@ -164,7 +164,7 @@ export function JobTrackerClient({
                       >
                         <p className="truncate text-[14px] font-medium">{r.company || "Company not set"}</p>
                         <p className="mt-0.5 truncate text-[13px] text-[#3F3F3F]">{r.title || "Role not set"}</p>
-                        <p className="mt-2 truncate text-[12px] text-[#8A8A86]">
+                        <p className="mt-2 truncate text-[12px] text-[#6E6E6A]">
                           {fmtDate(r.updatedAt)} · {r.resume.title}
                         </p>
                       </button>
@@ -288,7 +288,7 @@ function ApplicationDrawer({
 
           <div>
             <p className={labelCls}>Resume sent</p>
-            <Link href={`/resume/${app.resumeId}/edit`} className="text-[14px] text-[#1D4ED8] hover:underline">
+            <Link href={`/resume/${app.resumeId}/edit`} className="text-[14px] text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
               {app.resume.title}
             </Link>
           </div>
@@ -344,12 +344,12 @@ function ApplicationDrawer({
             </button>
             <ul className="mt-3">
               {notes === null ? (
-                <li className="text-[13px] text-[#8A8A86]">Loading notes…</li>
+                <li className="text-[13px] text-[#6E6E6A]">Loading notes…</li>
               ) : (
                 notes.map((n) => (
                   <li key={n.id} className="border-t border-[#EEEEEB] py-2.5 text-[14px]">
                     <p className="whitespace-pre-line">{n.content}</p>
-                    <p className="mt-1 text-[12px] text-[#8A8A86]">{fmtDate(n.createdAt)}</p>
+                    <p className="mt-1 text-[12px] text-[#6E6E6A]">{fmtDate(n.createdAt)}</p>
                   </li>
                 ))
               )}

@@ -354,8 +354,8 @@ export default async function BlogPostPage({
                     />
                   ),
                   p: ({ ...props }) => <p className="mt-5" {...props} />,
-                  ul: ({ ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6 marker:text-[#8A8A86]" {...props} />,
-                  ol: ({ ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6 marker:text-[#8A8A86]" {...props} />,
+                  ul: ({ ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6 marker:text-[#6E6E6A]" {...props} />,
+                  ol: ({ ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6 marker:text-[#6E6E6A]" {...props} />,
                   strong: ({ ...props }) => <strong className="font-semibold text-[#111111]" {...props} />,
                   a: ({ href, ...props }) => {
                     const external = typeof href === "string" && /^https?:\/\//.test(href);

@@ -75,7 +75,7 @@ export default async function AdminAnalyticsPage() {
                   <span className="text-[16px] font-semibold leading-none tracking-tight text-[#111111]">
                     {d.count}
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-[#8A8A86]">
+                  <span className="text-[10px] uppercase tracking-wider text-[#6E6E6A]">
                     {d.label.split(",")[0]}
                   </span>
                 </div>
@@ -91,7 +91,7 @@ export default async function AdminAnalyticsPage() {
             action={<BarChart3 className="h-4 w-4 text-[#2563EB]" />}
           >
             {allEvents.length === 0 ? (
-              <p className="py-8 text-center text-[13px] text-[#8A8A86]">No events recorded.</p>
+              <p className="py-8 text-center text-[13px] text-[#6E6E6A]">No events recorded.</p>
             ) : (
               <ul className="space-y-3">
                 {allEvents.map((e) => {
@@ -122,7 +122,7 @@ export default async function AdminAnalyticsPage() {
             flush
           >
             {recentEvents.length === 0 ? (
-              <p className="py-8 text-center text-[13px] text-[#8A8A86]">No events yet.</p>
+              <p className="py-8 text-center text-[13px] text-[#6E6E6A]">No events yet.</p>
             ) : (
               <ul className="max-h-[420px] divide-y divide-[#E5E5E2] overflow-y-auto">
                 {recentEvents.map((e) => (
@@ -133,7 +133,7 @@ export default async function AdminAnalyticsPage() {
                         {e.userId ? `user ${e.userId.slice(0, 8)}…` : "anonymous"}
                       </p>
                     </div>
-                    <p className="shrink-0 text-[11px] text-[#8A8A86]">{dateTimeFmt.format(e.createdAt)}</p>
+                    <p className="shrink-0 text-[11px] text-[#6E6E6A]">{dateTimeFmt.format(e.createdAt)}</p>
                   </li>
                 ))}
               </ul>

@@ -54,7 +54,7 @@ export function ResumePreview({
         }}
       >
         {empty ? (
-          <div className="flex h-full items-center justify-center text-center text-[1.3em] text-[#8A8A86]">
+          <div className="flex h-full items-center justify-center text-center text-[1.3em] text-[#6E6E6A]">
             Your resume appears here as you fill it in.
           </div>
         ) : (

@@ -35,7 +35,7 @@ export function LegalPage({
               {sections.map((s, i) => (
                 <li key={s.h}>
                   <a href={`#${id(s.h)}`} className="text-[#6B6B6B] hover:text-[#111111]">
-                    <span className="mr-2 tabular-nums text-[#8A8A86]">{i + 1}.</span>
+                    <span className="mr-2 tabular-nums text-[#6E6E6A]">{i + 1}.</span>
                     {s.h}
                   </a>
                 </li>
@@ -46,7 +46,7 @@ export function LegalPage({
             {sections.map((s, i) => (
               <section key={s.h} id={id(s.h)} className="scroll-mt-[96px]">
                 <h2 className="text-[20px] font-semibold tracking-[-0.01em]">
-                  <span className="mr-2 tabular-nums text-[#8A8A86]">{i + 1}.</span>
+                  <span className="mr-2 tabular-nums text-[#6E6E6A]">{i + 1}.</span>
                   {s.h}
                 </h2>
                 <div className="mt-3 text-[16px] leading-[1.7] text-[#3F3F3F]">{s.body}</div>
@@ -54,7 +54,7 @@ export function LegalPage({
             ))}
             <p className="rounded-[14px] border border-[#E5E5E2] bg-[#FAFAF9] p-5 text-[15px] text-[#3F3F3F]">
               Questions about this page? Email{" "}
-              <a href="mailto:support@launch-cv.com" className="font-medium text-[#1D4ED8] hover:underline">
+              <a href="mailto:support@launch-cv.com" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 support@launch-cv.com
               </a>
               .

@@ -99,7 +99,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
         <button
           type="button"
           onClick={() => handleClose(true)}
-          className="absolute right-3 top-3 rounded-lg p-2 text-[#8A8A86] transition hover:bg-[#FAFAF9] hover:text-[#6B6B6B]"
+          className="absolute right-3 top-3 rounded-lg p-2 text-[#6E6E6A] transition hover:bg-[#FAFAF9] hover:text-[#6B6B6B]"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
@@ -114,7 +114,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
               {q.title}
             </h2>
             {q.subtitle ? (
-              <p className="mt-2 text-center text-[12px] text-[#8A8A86]">{q.subtitle}</p>
+              <p className="mt-2 text-center text-[12px] text-[#6E6E6A]">{q.subtitle}</p>
             ) : null}
 
             <div className="mt-8 flex min-h-[52px] flex-col items-center justify-center gap-3">
@@ -147,7 +147,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
             {error ? <p className="mt-4 text-center text-[13px] font-medium text-red-600">{error}</p> : null}
 
             <div className="mt-10 flex items-center justify-between border-t border-[#EEEEEB] pt-5">
-              <span className="text-[11px] text-[#8A8A86]">Your feedback stays private</span>
+              <span className="text-[11px] text-[#6E6E6A]">Your feedback stays private</span>
               {step < 2 ? (
                 <button
                   type="button"

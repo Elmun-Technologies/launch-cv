@@ -33,7 +33,7 @@ const aboutLd = {
 };
 
 const principles = [
-  { t: "Your data stays yours", d: "We never sell or share resumes. You can delete your account and everything in it." },
+  { t: "Your data stays yours", d: "We never sell your resumes or use them to advertise. You can download or delete everything in your account." },
   { t: "No made-up experience", d: "Rewrites only use facts from your resume, and you approve every change." },
   { t: "Plain prices", d: "A free ATS check, two monthly plans and Lifetime. 7-day refund on monthly plans." },
 ];
@@ -60,7 +60,7 @@ export default function AboutPage() {
         <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
           <h1 className="max-w-[900px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[60px]">
             We build tools for the part of job hunting nobody sees.{" "}
-            <span className="text-[#8A8A86]">The software.</span>
+            <span className="text-[#6E6E6A]">The software.</span>
           </h1>
         </section>
 
@@ -99,7 +99,7 @@ export default function AboutPage() {
 
         <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-[104px]">
           <h2 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[36px]">
-            Who we build for. <span className="text-[#8A8A86]">Anyone applying through a form.</span>
+            Who we build for. <span className="text-[#6E6E6A]">Anyone applying through a form.</span>
           </h2>
           <div className="mt-7 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
             {roles.map((r) => (
@@ -122,7 +122,7 @@ export default function AboutPage() {
           <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] md:flex-row">
             <div className="flex flex-1 flex-col justify-center gap-4 p-8 sm:p-12">
               <h2 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[36px]">
-                Get in touch. <span className="text-[#8A8A86]">A person reads every email.</span>
+                Get in touch. <span className="text-[#6E6E6A]">A person reads every email.</span>
               </h2>
               <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
                 Questions about billing, your account or the product — write to us and we&apos;ll get back to you.

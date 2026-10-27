@@ -134,7 +134,7 @@ export default async function AdminContentPage() {
             flush
           >
             {section.rows.length === 0 ? (
-              <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">
+              <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">
                 No {section.title.toLowerCase()} yet.
               </p>
             ) : (

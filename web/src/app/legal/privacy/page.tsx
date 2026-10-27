@@ -84,7 +84,7 @@ const sections: LegalSection[] = [
         </li>
         <li>
           Ask us to correct, export or erase your data by emailing{" "}
-          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline-offset-2 hover:underline">
+          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline-offset-2 underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
             support@launch-cv.com
           </a>
           .

@@ -49,7 +49,7 @@ export default async function AdminMediaPage() {
                 </div>
                 <div className="px-4 py-3">
                   <p className="truncate font-mono text-[11px] text-[#111111]">{a.url}</p>
-                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-[#8A8A86]">
+                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-[#6E6E6A]">
                     <span>{a.mimeType.split("/")[1]?.toUpperCase() ?? a.mimeType}</span>
                     <span>{formatBytes(a.sizeBytes)}</span>
                   </div>

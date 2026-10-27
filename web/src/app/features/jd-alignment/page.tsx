@@ -32,7 +32,7 @@ const f: FeaturePageData = {
     body: (
       <div className="flex flex-col gap-6">
         <div className="flex items-baseline gap-3">
-          <span className="text-[44px] font-semibold leading-none tracking-[-0.04em] text-[#E8890C]">64</span>
+          <span className="text-[44px] font-semibold leading-none tracking-[-0.04em] text-[#C2700A]">64</span>
           <span className="text-[15px] text-[#6B6B6B]">match score · 6 of 11 key skills covered</span>
         </div>
         <div>

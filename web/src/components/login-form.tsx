@@ -86,7 +86,7 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
         </h1>
         <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-[#1D4ED8] hover:underline">
+          <Link href="/register" className="font-semibold text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
             Create one
           </Link>
         </p>
@@ -103,10 +103,11 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
       {/* Form */}
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
-          <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
+          <label htmlFor="login-email" className="mb-1.5 block text-[13px] font-medium text-[#111111]">
             Email
           </label>
           <input
+              id="login-email"
             type="email"
             required
             className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
@@ -119,18 +120,19 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
 
         <div>
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
+            <label htmlFor="login-password" className="text-[13px] font-medium text-[#111111]">
               Password
             </label>
             <Link
               href="/auth/forgot-password"
-              className="text-[12px] font-semibold text-[#1D4ED8] hover:underline"
+              className="text-[12px] font-semibold text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
             >
               Forgot password?
             </Link>
           </div>
           <div className="relative">
             <input
+              id="login-password"
               type={showPw ? "text" : "password"}
               required
               minLength={8}
@@ -142,7 +144,8 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
             <button
               type="button"
               tabIndex={-1}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#475569]"
+              aria-label={showPw ? "Hide password" : "Show password"}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] transition hover:text-[#475569]"
               onClick={() => setShowPw((s) => !s)}
             >
               {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -167,15 +170,15 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
         <button
           type="submit"
           disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#0F172A] py-3 text-[15px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-60"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] py-3 text-[15px] font-semibold text-white transition hover:bg-black disabled:opacity-60"
         >
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
           {loading ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
-      <p className="mt-6 text-[12px] text-[#94A3B8]">
-        Secure sign-in. Your data is encrypted and never shared.
+      <p className="mt-6 text-[12px] text-[#6E6E6A]">
+        Sign-in is protected over HTTPS. We never sell your data.
       </p>
     </AuthLayout>
   );

@@ -193,13 +193,13 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
             title="Recent sign-ups"
             flush
             action={
-              <Link href="/admin-panel/users" className="inline-flex items-center gap-1 text-[13px] text-[#1D4ED8] hover:underline">
+              <Link href="/admin-panel/users" className="inline-flex items-center gap-1 text-[13px] text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 All users <ArrowRight className="h-3 w-3" />
               </Link>
             }
           >
             {recentUsers.length === 0 ? (
-              <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">No users yet.</p>
+              <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">No users yet.</p>
             ) : (
               <table className="w-full text-[14px]">
                 <thead>
@@ -222,7 +222,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
                           <Link href={`/admin-panel/users/${u.id}`} className="block truncate hover:text-[#1D4ED8]">
                             {u.email}
                           </Link>
-                          <span className="text-[12px] text-[#8A8A86]">{dateFmt.format(u.createdAt)}</span>
+                          <span className="text-[12px] text-[#6E6E6A]">{dateFmt.format(u.createdAt)}</span>
                         </td>
                         <td className="py-2.5 text-[#3F3F3F]">{u.googleId ? "Google" : "Email"}</td>
                         <td className={`py-2.5 pr-5 ${plan === "none" ? "text-[#6B6B6B]" : ""}`}>

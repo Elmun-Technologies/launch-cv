@@ -132,12 +132,12 @@ export function FreeAtsClient() {
             <p className="text-[14px] text-[#6B6B6B]">Your ATS score{fileName ? ` · ${fileName}` : ""}</p>
             <p className="mt-1.5 flex items-baseline gap-3">
               <span className="text-[88px] font-semibold leading-[0.9] tracking-[-0.05em] text-[#111111]">{displayScore}</span>
-              <span className="text-[22px] text-[#8A8A86]">/ 100</span>
+              <span className="text-[22px] text-[#6E6E6A]">/ 100</span>
             </p>
             <h2 className="mt-5 max-w-[560px] text-[30px] font-semibold leading-[1.15] tracking-[-0.03em] text-[#111111]">
               {scoreVerdict(result.overall)}{" "}
               {result.totalFixes > 0 ? (
-                <span className="text-[#8A8A86]">
+                <span className="text-[#6E6E6A]">
                   {result.totalFixes} fixable {result.totalFixes === 1 ? "issue" : "issues"}.
                 </span>
               ) : null}
@@ -165,7 +165,7 @@ export function FreeAtsClient() {
             <div className="space-y-4 p-6 blur-[5px] select-none" aria-hidden>
               {Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="flex gap-4">
-                  <span className="h-[26px] w-[26px] shrink-0 rounded-full bg-[#E8890C]" />
+                  <span className="h-[26px] w-[26px] shrink-0 rounded-full bg-[#C2700A]" />
                   <div className="flex-1">
                     <div className="h-3.5 w-2/3 rounded bg-[#D9D9D5]" />
                     <div className="mt-2.5 h-2.5 w-full rounded bg-[#EEEEEB]" />
@@ -197,7 +197,7 @@ export function FreeAtsClient() {
           </div>
         ) : null}
 
-        <button onClick={reset} className="mt-6 text-[14px] font-medium text-[#1D4ED8] hover:underline">
+        <button onClick={reset} className="mt-6 text-[14px] font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
           Check another resume
         </button>
       </div>

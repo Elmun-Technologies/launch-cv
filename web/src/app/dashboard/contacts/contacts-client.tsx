@@ -314,7 +314,7 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
         <>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="relative sm:w-[320px]">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" aria-hidden />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" aria-hidden />
               <input
                 className="soha-input pl-9"
                 placeholder="Search name, company or email"
@@ -357,7 +357,7 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
                       <span className="min-w-0">
                         <span className="flex items-center gap-1.5 truncate text-[15px] font-medium text-[#111111]">
                           {c.name}
-                          {c.linkedinUrl ? <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[#8A8A86]" aria-label="Has LinkedIn" /> : null}
+                          {c.linkedinUrl ? <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[#6E6E6A]" aria-label="Has LinkedIn" /> : null}
                         </span>
                         <span className="block truncate text-[13px] text-[#6B6B6B]">
                           {[c.role, c.company].filter(Boolean).join(" · ") || c.email || "—"}

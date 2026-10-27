@@ -42,7 +42,7 @@ export function LandingFooter() {
 
           {/* Product */}
           <div>
-            <h3 className="text-[14px] font-semibold text-[#111111]">Product</h3>
+            <h2 className="text-[14px] font-semibold text-[#111111]">Product</h2>
             <ul className="mt-4 space-y-2.5">
               {productLinks.map((l) => (
                 <li key={l.href}>
@@ -56,7 +56,7 @@ export function LandingFooter() {
 
           {/* Company */}
           <div>
-            <h3 className="text-[14px] font-semibold text-[#111111]">Company</h3>
+            <h2 className="text-[14px] font-semibold text-[#111111]">Company</h2>
             <ul className="mt-4 space-y-2.5">
               {companyLinks.map((l) => (
                 <li key={l.href}>
@@ -70,7 +70,7 @@ export function LandingFooter() {
 
           {/* Resources */}
           <div>
-            <h3 className="text-[14px] font-semibold text-[#111111]">Resources</h3>
+            <h2 className="text-[14px] font-semibold text-[#111111]">Resources</h2>
             <ul className="mt-4 space-y-2.5">
               {resourceLinks.map((l) => (
                 <li key={l.href}>

@@ -112,7 +112,7 @@ function ScoreGauge({ score }: { score: number }) {
         <span className="text-[32px] font-semibold tracking-tight" style={{ color }}>
           {score}
         </span>
-        <span className="text-[11px] font-medium text-[#8A8A86]">/ 100</span>
+        <span className="text-[11px] font-medium text-[#6E6E6A]">/ 100</span>
       </div>
     </div>
   );
@@ -231,7 +231,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
       {/* Resume Selector */}
       <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
-        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8A8A86]">
+        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#6E6E6A]">
           Select Resume
         </label>
         <div className="relative w-full max-w-sm">
@@ -245,7 +245,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               <option key={r.id} value={r.id}>{r.title}</option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" />
         </div>
       </div>
 
@@ -300,7 +300,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
                     <thead>
-                      <tr className="border-b border-[#EEEEEB] text-[11px] uppercase tracking-wider text-[#8A8A86]">
+                      <tr className="border-b border-[#EEEEEB] text-[11px] uppercase tracking-wider text-[#6E6E6A]">
                         <th className="pb-3 pr-4 font-semibold">Keyword</th>
                         <th className="pb-3 pr-4 font-semibold">Status</th>
                         <th className="pb-3 font-semibold">Suggestion</th>
@@ -356,7 +356,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                           : "border-[#EEEEEB] bg-[#FAFAF9]/50"
                       }`}
                     >
-                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${rec.done ? "bg-emerald-500 text-white" : "bg-[#EEEEEB] text-[#8A8A86]"}`}>
+                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${rec.done ? "bg-emerald-500 text-white" : "bg-[#EEEEEB] text-[#6E6E6A]"}`}>
                         {rec.done ? <Check className="h-3.5 w-3.5" /> : <span className="text-[10px] font-semibold">{i + 1}</span>}
                       </div>
                       <span className={rec.done ? "text-emerald-700" : "text-[#3F3F3F]"}>{rec.label}</span>
@@ -374,8 +374,8 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                       <div key={i} className="rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
                         <div className="grid gap-4 sm:grid-cols-2">
                           <div>
-                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">Original</span>
-                            <p className="text-[13px] leading-relaxed text-[#8A8A86] line-through decoration-red-300">
+                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Original</span>
+                            <p className="text-[13px] leading-relaxed text-[#6E6E6A] line-through decoration-red-300">
                               {bullet.original}
                             </p>
                           </div>
@@ -440,7 +440,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
           <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="relative w-full max-w-sm">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -485,7 +485,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     <h3 className="truncate text-[14px] font-semibold text-[#111111]">
                       {company.name}
                     </h3>
-                    <p className="text-[12px] text-[#8A8A86]">{company.industry}</p>
+                    <p className="text-[12px] text-[#6E6E6A]">{company.industry}</p>
                   </div>
                   <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase ${TIER_COLORS[company.tier]}`}>
                     {company.tier}
@@ -501,7 +501,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     </span>
                   ))}
                   {company.keywords.length > 4 && (
-                    <span className="rounded-md bg-[#FAFAF9] px-2 py-0.5 text-[11px] font-medium text-[#8A8A86]">
+                    <span className="rounded-md bg-[#FAFAF9] px-2 py-0.5 text-[11px] font-medium text-[#6E6E6A]">
                       +{company.keywords.length - 4}
                     </span>
                   )}
@@ -523,7 +523,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                 <button
                   type="button"
                   onClick={() => setShowCustom(true)}
-                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-[#8A8A86] transition hover:text-[#2563EB]"
+                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-[#6E6E6A] transition hover:text-[#2563EB]"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-current">
                     <Plus className="h-5 w-5" />
@@ -584,9 +584,9 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
           {filtered.length === 0 && (
             <div className="rounded-2xl border border-[#EEEEEB] bg-white py-16 text-center">
-              <Search className="mx-auto h-8 w-8 text-[#A3A3A0]" />
+              <Search className="mx-auto h-8 w-8 text-[#8A8A86]" />
               <p className="mt-3 text-[14px] font-medium text-[#6B6B6B]">No companies found</p>
-              <p className="mt-1 text-[13px] text-[#8A8A86]">Try adjusting your search or filters</p>
+              <p className="mt-1 text-[13px] text-[#6E6E6A]">Try adjusting your search or filters</p>
             </div>
           )}
         </>

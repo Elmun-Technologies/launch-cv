@@ -90,13 +90,13 @@ export default async function AdminAuditPage({
       header: "Target",
       truncate: "max-w-[160px]",
       render: (r) => (
-        <span className="font-mono text-[11px] text-[#8A8A86]">{r.entityId ?? "—"}</span>
+        <span className="font-mono text-[11px] text-[#6E6E6A]">{r.entityId ?? "—"}</span>
       ),
     },
     {
       key: "ip",
       header: "IP",
-      render: (r) => <span className="font-mono text-[11px] text-[#8A8A86]">{r.ip ?? "—"}</span>,
+      render: (r) => <span className="font-mono text-[11px] text-[#6E6E6A]">{r.ip ?? "—"}</span>,
     },
   ];
 
@@ -109,7 +109,7 @@ export default async function AdminAuditPage({
           entityCounts.length > 0 ? (
             <div className="flex flex-wrap items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-[#2563EB]" />
-              <span className="text-[12px] font-semibold uppercase tracking-wider text-[#8A8A86]">By entity</span>
+              <span className="text-[12px] font-semibold uppercase tracking-wider text-[#6E6E6A]">By entity</span>
               {entityCounts.map((e) => (
                 <span key={e.entity} className="rounded-full bg-[#F5F5F3] px-2.5 py-0.5 text-[12px] font-medium text-[#3F3F3F]">
                   {e.entity} · {e._count.entity}

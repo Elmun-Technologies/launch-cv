@@ -277,7 +277,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
               <button
                 type="button"
                 onClick={() => setShowInviteMsg(false)}
-                className="rounded-lg p-1 text-[#8A8A86] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"
+                className="rounded-lg p-1 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -341,7 +341,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
               <button
                 type="button"
                 onClick={() => setShowEmailInvites(false)}
-                className="rounded-lg p-1 text-[#8A8A86] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"
+                className="rounded-lg p-1 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"
               >
                 <X className="h-5 w-5" />
               </button>

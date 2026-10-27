@@ -65,7 +65,7 @@ function Form() {
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">
-          New password <span className="font-normal normal-case tracking-normal text-[#94A3B8]">(min 8 chars)</span>
+          New password <span className="font-normal normal-case tracking-normal text-[#6E6E6A]">(min 8 chars)</span>
         </label>
         <div className="relative">
           <input
@@ -80,7 +80,7 @@ function Form() {
           <button
             type="button"
             tabIndex={-1}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] transition hover:text-[#475569]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] transition hover:text-[#475569]"
             onClick={() => setShowPw((s) => !s)}
           >
             {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -120,7 +120,7 @@ export default function ResetPasswordPage() {
           Choose a strong password — eight characters minimum.
         </p>
       </div>
-      <Suspense fallback={<p className="text-[13px] text-[#94A3B8]">Loading…</p>}>
+      <Suspense fallback={<p className="text-[13px] text-[#6E6E6A]">Loading…</p>}>
         <Form />
       </Suspense>
     </AuthLayout>

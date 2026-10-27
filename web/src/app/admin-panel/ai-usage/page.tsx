@@ -36,7 +36,7 @@ export default async function AdminAiUsagePage() {
       render: (u) => (
         <div className="min-w-0">
           <p className="truncate text-[13px] font-medium text-[#111111]">{u.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#8A8A86]">{u.user.email}</p>
+          <p className="truncate text-[11px] text-[#6E6E6A]">{u.user.email}</p>
         </div>
       ),
     },

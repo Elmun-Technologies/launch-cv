@@ -51,7 +51,7 @@ export default async function AdminSettingsPage() {
                 <li key={e.key} className="flex items-center justify-between gap-4 px-5 py-3">
                   <div className="min-w-0">
                     <p className="truncate text-[13px] font-medium text-[#111111]">{e.name}</p>
-                    <p className="truncate font-mono text-[11px] text-[#8A8A86]">{e.key}</p>
+                    <p className="truncate font-mono text-[11px] text-[#6E6E6A]">{e.key}</p>
                   </div>
                   {e.configured ? (
                     <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
@@ -79,7 +79,7 @@ export default async function AdminSettingsPage() {
               flush
             >
               {dbAdmins.length === 0 ? (
-                <p className="px-5 py-6 text-center text-[13px] text-[#8A8A86]">No admin users in DB.</p>
+                <p className="px-5 py-6 text-center text-[13px] text-[#6E6E6A]">No admin users in DB.</p>
               ) : (
                 <ul className="divide-y divide-[#E5E5E2]">
                   {dbAdmins.map((a) => (

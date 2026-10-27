@@ -112,7 +112,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
           <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-16">
             <div className="flex-1">
               <h1 className="text-[36px] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[52px]">
-                {e.role} resume example. <span className="text-[#8A8A86]">Plus the keywords recruiters search for.</span>
+                {e.role} resume example. <span className="text-[#6E6E6A]">Plus the keywords recruiters search for.</span>
               </h1>
               <p className="mt-4 max-w-[640px] text-[17px] leading-[1.6] text-[#3F3F3F]">{e.intro}</p>
             </div>
@@ -310,7 +310,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             {/* TIPS */}
             <section id="tips" className="flex scroll-mt-[96px] flex-col gap-3.5">
               <h2 className={h2}>ATS tips for {roleLower(e.role)}s</h2>
-              <ol className="flex list-decimal flex-col gap-3 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#8A8A86]">
+              <ol className="flex list-decimal flex-col gap-3 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#6E6E6A]">
                 {e.tips.map((t) => (
                   <li key={t.t}>
                     <strong className="font-semibold text-[#111111]">{t.t}.</strong> {t.d}
@@ -328,7 +328,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                       {f.q}
                       <ChevronDown
-                        className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180"
+                        className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180"
                         aria-hidden
                       />
                     </summary>
@@ -350,7 +350,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
                       className="flex items-center justify-between rounded-xl border border-[#E5E5E2] px-4 py-4 text-[15px] hover:border-[#111111]"
                     >
                       {x.role}
-                      <ChevronRight className="h-4 w-4 text-[#8A8A86]" aria-hidden />
+                      <ChevronRight className="h-4 w-4 text-[#6E6E6A]" aria-hidden />
                     </Link>
                   ))}
                 </div>

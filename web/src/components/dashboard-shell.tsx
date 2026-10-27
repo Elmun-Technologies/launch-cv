@@ -128,7 +128,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
                 active ? "bg-[#F5F5F3] font-medium text-[#111111]" : "text-[#3F3F3F] hover:bg-[#FAFAF9] hover:text-[#111111]"
               }`}
             >
-              <item.icon className={`h-4 w-4 ${active ? "text-[#111111]" : "text-[#8A8A86]"}`} aria-hidden />
+              <item.icon className={`h-4 w-4 ${active ? "text-[#111111]" : "text-[#6E6E6A]"}`} aria-hidden />
               {item.label}
             </Link>
           );
@@ -207,7 +207,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
         </div>
 
         {usage && !usage.paid && !hideTopBanner ? (
-          <div className="flex items-center justify-between gap-3 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px]">
+          <div role="region" aria-label="Plan" className="flex items-center justify-between gap-3 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px]">
             <p className="min-w-0 text-[#111111]">
               <span className="sm:hidden">AI tools from {PUBLIC_PLANS.starter.priceDisplay}/mo</span>
               <span className="hidden sm:inline">
