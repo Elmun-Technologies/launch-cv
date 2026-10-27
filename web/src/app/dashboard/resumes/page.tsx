@@ -42,8 +42,8 @@ export default async function ResumesPage({
       <div className="space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-gray-900">My Resumes</h1>
-            <p className="mt-1 text-[13px] text-gray-500">
+            <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">My Resumes</h1>
+            <p className="mt-1 text-[13px] text-[#6B6B6B]">
               {resumes.length} resume{resumes.length !== 1 ? "s" : ""} {q ? "found" : "created"}
             </p>
           </div>
@@ -52,14 +52,14 @@ export default async function ResumesPage({
           </Link>
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+        <div className="rounded-2xl border border-[#EEEEEB] bg-white p-4">
           <ResumesToolbar q={q} sort={sort} />
         </div>
 
-        <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+        <div className="overflow-hidden rounded-2xl border border-[#EEEEEB] bg-white">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-left">
-              <thead className="border-b border-gray-100 bg-[#FAFAFA] text-[11px] uppercase tracking-wider text-gray-400">
+              <thead className="border-b border-[#EEEEEB] bg-[#FAFAFA] text-[11px] uppercase tracking-wider text-[#8A8A86]">
                 <tr>
                   <th className="px-5 py-3.5 font-semibold">Resume</th>
                   <th className="px-4 py-3.5 font-semibold">Region</th>
@@ -68,10 +68,10 @@ export default async function ResumesPage({
                   <th className="px-4 py-3.5" />
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100 bg-white">
+              <tbody className="divide-y divide-[#EEEEEB] bg-white">
                 {resumes.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-5 py-12 text-center text-[13px] text-gray-500">
+                    <td colSpan={5} className="px-5 py-12 text-center text-[13px] text-[#6B6B6B]">
                       {q ? (
                         <>No resumes match &ldquo;{q}&rdquo;.</>
                       ) : (
@@ -84,20 +84,20 @@ export default async function ResumesPage({
                     <tr key={r.id} className="text-[13px] transition hover:bg-[#FAFAFA]">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF3FF]">
                             <FileText className="h-5 w-5 text-[#2563EB]" />
                           </div>
                           <div>
-                            <span className="font-semibold text-gray-900">{r.title}</span>
-                            {r.vertical ? <p className="mt-0.5 text-[11px] text-gray-400">{r.vertical}</p> : null}
+                            <span className="font-semibold text-[#111111]">{r.title}</span>
+                            {r.vertical ? <p className="mt-0.5 text-[11px] text-[#8A8A86]">{r.vertical}</p> : null}
                           </div>
                         </div>
                       </td>
-                      <td className="px-4 py-4 text-gray-500">{r.regionMode.toUpperCase()}</td>
-                      <td className="px-4 py-4 text-gray-500">{dateFmt.format(r.createdAt)}</td>
-                      <td className="px-4 py-4 text-gray-500">{dateFmt.format(r.updatedAt)}</td>
+                      <td className="px-4 py-4 text-[#6B6B6B]">{r.regionMode.toUpperCase()}</td>
+                      <td className="px-4 py-4 text-[#6B6B6B]">{dateFmt.format(r.createdAt)}</td>
+                      <td className="px-4 py-4 text-[#6B6B6B]">{dateFmt.format(r.updatedAt)}</td>
                       <td className="px-4 py-4 text-right">
-                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#2563EB]/20 bg-blue-50 px-4 py-1.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#2563EB] hover:text-white">Edit</Link>
+                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#2563EB]/20 bg-[#EEF3FF] px-4 py-1.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#2563EB] hover:text-white">Edit</Link>
                       </td>
                     </tr>
                   ))

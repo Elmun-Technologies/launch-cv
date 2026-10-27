@@ -91,7 +91,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm">
       <div
-        className="relative w-full max-w-[440px] rounded-2xl border border-gray-100 bg-white shadow-2xl shadow-blue-200/30"
+        className="relative w-full max-w-[440px] rounded-2xl border border-[#EEEEEB] bg-white shadow-2xl shadow-blue-200/30"
         role="dialog"
         aria-modal="true"
         aria-labelledby="exp-review-title"
@@ -99,7 +99,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
         <button
           type="button"
           onClick={() => handleClose(true)}
-          className="absolute right-3 top-3 rounded-lg p-2 text-gray-400 transition hover:bg-gray-50 hover:text-gray-600"
+          className="absolute right-3 top-3 rounded-lg p-2 text-[#8A8A86] transition hover:bg-[#FAFAF9] hover:text-[#6B6B6B]"
           aria-label="Close"
         >
           <X className="h-5 w-5" />
@@ -107,14 +107,14 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
 
         {step < 3 ? (
           <div className="p-8 pt-10">
-            <p className="text-center text-[13px] leading-relaxed text-gray-500">
+            <p className="text-center text-[13px] leading-relaxed text-[#6B6B6B]">
               We&apos;re glad you&apos;re using LaunchCV. Please take a moment to help us improve.
             </p>
-            <h2 id="exp-review-title" className="mt-5 text-center text-[17px] font-bold text-gray-900">
+            <h2 id="exp-review-title" className="mt-5 text-center text-[17px] font-semibold text-[#111111]">
               {q.title}
             </h2>
             {q.subtitle ? (
-              <p className="mt-2 text-center text-[12px] text-gray-400">{q.subtitle}</p>
+              <p className="mt-2 text-center text-[12px] text-[#8A8A86]">{q.subtitle}</p>
             ) : null}
 
             <div className="mt-8 flex min-h-[52px] flex-col items-center justify-center gap-3">
@@ -134,7 +134,7 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
                       className={`flex h-10 w-10 items-center justify-center rounded-full text-[13px] font-semibold transition ${
                         nps === i
                           ? "bg-[#2563EB] text-white shadow-md shadow-blue-200"
-                          : "border border-gray-200 bg-white text-gray-600 hover:border-[#2563EB]/40 hover:bg-blue-50"
+                          : "border border-[#E5E5E2] bg-white text-[#6B6B6B] hover:border-[#2563EB]/40 hover:bg-[#EEF3FF]"
                       }`}
                     >
                       {i}
@@ -146,8 +146,8 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
 
             {error ? <p className="mt-4 text-center text-[13px] font-medium text-red-600">{error}</p> : null}
 
-            <div className="mt-10 flex items-center justify-between border-t border-gray-100 pt-5">
-              <span className="text-[11px] text-gray-400">Your feedback stays private</span>
+            <div className="mt-10 flex items-center justify-between border-t border-[#EEEEEB] pt-5">
+              <span className="text-[11px] text-[#8A8A86]">Your feedback stays private</span>
               {step < 2 ? (
                 <button
                   type="button"
@@ -175,8 +175,8 @@ export function ExperienceReviewModal({ open, onClose, context = "general" }: Pr
             <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-50">
               <Star className="h-7 w-7 fill-emerald-500 text-emerald-500" />
             </div>
-            <h2 className="mt-5 text-[18px] font-bold text-gray-900">Thank you!</h2>
-            <p className="mt-2 text-[14px] text-gray-500">Your ratings help us build a better product.</p>
+            <h2 className="mt-5 text-[18px] font-semibold text-[#111111]">Thank you!</h2>
+            <p className="mt-2 text-[14px] text-[#6B6B6B]">Your ratings help us build a better product.</p>
             <button
               type="button"
               onClick={() => handleClose(false)}
@@ -203,7 +203,7 @@ function StarRow({ value, onChange }: { value: number; onChange: (n: number) => 
           aria-label={`${n} stars`}
         >
           <Star
-            className={`h-10 w-10 ${n <= value ? "fill-amber-400 text-amber-400" : "fill-gray-100 text-gray-200"}`}
+            className={`h-10 w-10 ${n <= value ? "fill-amber-400 text-amber-400" : "fill-gray-100 text-[#D9D9D5]"}`}
           />
         </button>
       ))}

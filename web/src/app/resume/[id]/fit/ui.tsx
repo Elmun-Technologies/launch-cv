@@ -101,7 +101,7 @@ export function FitClient({ resumeId }: { resumeId: string }) {
               <Link
                 href="/dashboard/settings/subscription"
                 onClick={() => trackCtaClick({ cta: "upgrade", location: "role_fit_paywall" })}
-                className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                className="mt-1 inline-flex items-center gap-1 text-xs text-[#2563EB] hover:underline"
               >
                 <CreditCard className="h-3 w-3" /> Upgrade to Pro
               </Link>
@@ -116,8 +116,8 @@ export function FitClient({ resumeId }: { resumeId: string }) {
         <div className="animate-fadeIn space-y-6">
           {/* Overall */}
           <div className="soha-card flex items-center gap-6">
-            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-blue-50 ring-1 ring-blue-200">
-              <span className="text-2xl font-bold text-blue-600">
+            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[#EEF3FF] ring-1 ring-[#DCE6FF]">
+              <span className="text-2xl font-semibold text-[#2563EB]">
                 {Math.round(result.overall)}
               </span>
             </div>
@@ -165,7 +165,7 @@ export function FitClient({ resumeId }: { resumeId: string }) {
                     key={i}
                     className="flex items-start gap-2.5 text-sm text-[#3F3F3F]"
                   >
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[10px] font-bold text-blue-600">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#EEF3FF] text-[10px] font-semibold text-[#2563EB]">
                       {i + 1}
                     </span>
                     {f}

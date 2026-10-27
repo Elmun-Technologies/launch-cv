@@ -19,7 +19,7 @@ export default async function ExtensionsPage() {
   }));
 
   return (
-    <DashboardShell pageTitle="Extensions" email={session.email}>
+    <DashboardShell pageTitle="Email templates" email={session.email}>
       <ExtensionsClient initial={initial} resumes={resumes} />
     </DashboardShell>
   );

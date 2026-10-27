@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useMemo, useCallback } from "react";
 import {
   Search, ChevronDown, Sparkles, ExternalLink, RotateCcw,
   Check, X, AlertTriangle, Plus, Building2,
 } from "lucide-react";
+import { CopyButton } from "@/components/copy-button";
 import { COMPANIES, searchCompanies, type CompanyRequirement } from "@/lib/company-requirements";
 
 type Resume = { id: string; title: string; updatedAt: string };
@@ -20,7 +22,6 @@ type CultureFit = { aspect: string; score: number };
 type BulletRewrite = {
   original: string;
   improved: string;
-  applied?: boolean;
 };
 
 type MatchResult = {
@@ -32,6 +33,41 @@ type MatchResult = {
   advice: string[];
 };
 
+type ApiResult = {
+  matchScore?: number;
+  keywordGaps?: KeywordGap[];
+  cultureFit?: CultureFit[];
+  formatRecommendations?: string[];
+  bulletRewrites?: { original: string; improved: string }[];
+  overallAdvice?: string[];
+};
+
+/** The API returns `{ result }` in its own shape; map it onto what this view renders. */
+function toMatchResult(r: ApiResult): MatchResult {
+  return {
+    score: Math.max(0, Math.min(100, Math.round(r.matchScore ?? 0))),
+    keywordGaps: r.keywordGaps ?? [],
+    cultureFit: r.cultureFit ?? [],
+    formatRecommendations: (r.formatRecommendations ?? []).map((label) => ({ label, done: false })),
+    bulletRewrites: (r.bulletRewrites ?? []).map((b) => ({ original: b.original, improved: b.improved })),
+    advice: r.overallAdvice ?? [],
+  };
+}
+
+async function requestMatch(body: unknown): Promise<{ data: MatchResult } | { error: string; upgrade: boolean }> {
+  const res = await fetch("/api/ai/company-match", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  }).catch(() => null);
+  const j = res ? await res.json().catch(() => ({})) : {};
+  if (res?.ok && j.result) return { data: toMatchResult(j.result as ApiResult) };
+  return {
+    error: typeof j.error === "string" ? j.error : "Couldn't run the analysis. Please try again.",
+    upgrade: res?.status === 402 || res?.status === 403,
+  };
+}
+
 const TIERS = [
   { key: "all", label: "All" },
   { key: "faang", label: "FAANG+" },
@@ -42,11 +78,11 @@ const TIERS = [
 ] as const;
 
 const TIER_COLORS: Record<string, string> = {
-  faang: "bg-blue-50 text-[#2563EB]",
-  tech: "bg-blue-50 text-blue-600",
-  finance: "bg-emerald-50 text-emerald-600",
-  consulting: "bg-amber-50 text-amber-600",
-  startup: "bg-rose-50 text-rose-600",
+  faang: "bg-[#F5F5F3] text-[#3F3F3F]",
+  tech: "bg-[#F5F5F3] text-[#3F3F3F]",
+  finance: "bg-[#F5F5F3] text-[#3F3F3F]",
+  consulting: "bg-[#F5F5F3] text-[#3F3F3F]",
+  startup: "bg-[#F5F5F3] text-[#3F3F3F]",
 };
 
 function ScoreGauge({ score }: { score: number }) {
@@ -73,10 +109,10 @@ function ScoreGauge({ score }: { score: number }) {
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-[32px] font-bold tracking-tight" style={{ color }}>
+        <span className="text-[32px] font-semibold tracking-tight" style={{ color }}>
           {score}
         </span>
-        <span className="text-[11px] font-medium text-gray-400">/ 100</span>
+        <span className="text-[11px] font-medium text-[#8A8A86]">/ 100</span>
       </div>
     </div>
   );
@@ -102,18 +138,18 @@ function StatusBadge({ status }: { status: "found" | "missing" | "partial" }) {
 
 function SkeletonBlock() {
   return (
-    <div className="animate-pulse space-y-6 rounded-2xl border border-gray-100 bg-white p-6">
+    <div className="animate-pulse space-y-6 rounded-2xl border border-[#EEEEEB] bg-white p-6">
       <div className="flex items-center gap-6">
-        <div className="h-36 w-36 rounded-full bg-gray-100" />
+        <div className="h-36 w-36 rounded-full bg-[#F5F5F3]" />
         <div className="flex-1 space-y-3">
-          <div className="h-5 w-48 rounded bg-gray-100" />
-          <div className="h-4 w-72 rounded bg-gray-100" />
-          <div className="h-4 w-56 rounded bg-gray-100" />
+          <div className="h-5 w-48 rounded bg-[#F5F5F3]" />
+          <div className="h-4 w-72 rounded bg-[#F5F5F3]" />
+          <div className="h-4 w-56 rounded bg-[#F5F5F3]" />
         </div>
       </div>
       <div className="space-y-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-10 rounded-xl bg-gray-50" />
+          <div key={i} className="h-10 rounded-xl bg-[#FAFAF9]" />
         ))}
       </div>
     </div>
@@ -132,6 +168,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
   const [customIndustry, setCustomIndustry] = useState("");
   const [customJD, setCustomJD] = useState("");
   const [bulletRewrites, setBulletRewrites] = useState<BulletRewrite[]>([]);
+  const [error, setError] = useState<{ error: string; upgrade: boolean } | null>(null);
 
   const filtered = useMemo(() => {
     let list: CompanyRequirement[] = COMPANIES;
@@ -145,22 +182,14 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
       if (!selectedResumeId) return;
       setSelectedCompany(company);
       setResult(null);
+      setError(null);
       setLoading(true);
-      try {
-        const res = await fetch("/api/ai/company-match", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ resumeId: selectedResumeId, companyId: company.id }),
-        });
-        if (!res.ok) throw new Error("Analysis failed");
-        const data: MatchResult = await res.json();
-        setResult(data);
-        setBulletRewrites(data.bulletRewrites);
-      } catch {
-        setResult(null);
-      } finally {
-        setLoading(false);
-      }
+      const out = await requestMatch({ resumeId: selectedResumeId, companyId: company.id });
+      setLoading(false);
+      if ("data" in out) {
+        setResult(out.data);
+        setBulletRewrites(out.data.bulletRewrites);
+      } else setError(out);
     },
     [selectedResumeId],
   );
@@ -169,31 +198,19 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
     if (!selectedResumeId || !customName.trim()) return;
     setSelectedCompany({ id: "custom", name: customName, logo: customName[0]?.toUpperCase() ?? "?", industry: customIndustry, tier: "startup", keywords: [], culture: [], formatTips: [], mustHave: [], avoid: [], exampleBullet: "" });
     setResult(null);
+    setError(null);
     setLoading(true);
-    try {
-      const res = await fetch("/api/ai/company-match", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ resumeId: selectedResumeId, customCompany: { name: customName, industry: customIndustry, jobDescription: customJD } }),
-      });
-      if (!res.ok) throw new Error("Analysis failed");
-      const data: MatchResult = await res.json();
-      setResult(data);
-      setBulletRewrites(data.bulletRewrites);
-    } catch {
-      setResult(null);
-    } finally {
-      setLoading(false);
-    }
+    const out = await requestMatch({ resumeId: selectedResumeId, customCompany: { name: customName, industry: customIndustry, jobDescription: customJD } });
+    setLoading(false);
+    if ("data" in out) {
+      setResult(out.data);
+      setBulletRewrites(out.data.bulletRewrites);
+    } else setError(out);
   }, [selectedResumeId, customName, customIndustry, customJD]);
 
-  const handleApplyRewrite = (idx: number) => {
-    setBulletRewrites((prev) =>
-      prev.map((b, i) => (i === idx ? { ...b, applied: true } : b)),
-    );
-  };
 
   const resetAnalysis = () => {
+    setError(null);
     setSelectedCompany(null);
     setResult(null);
     setLoading(false);
@@ -204,33 +221,44 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-gray-900">
-          Company Matcher
+        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+          Company matcher <span className="text-[#8A8A86]">— tailor your resume to one employer.</span>
         </h1>
-        <p className="mt-1 text-[13px] text-gray-500">
-          Analyze how well your resume matches specific company requirements
+        <p className="mt-1 text-[15px] text-[#6B6B6B]">
+          Pick a company to see which keywords and values your resume already covers, and what to add.
         </p>
       </div>
 
       {/* Resume Selector */}
-      <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-        <label className="mb-2 block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-400">
+      <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
+        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8A8A86]">
           Select Resume
         </label>
         <div className="relative w-full max-w-sm">
           <select
             value={selectedResumeId}
             onChange={(e) => setSelectedResumeId(e.target.value)}
-            className="h-11 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-4 pr-10 text-[13px] font-medium text-gray-900 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
+            className="h-11 w-full appearance-none rounded-xl border border-[#E5E5E2] bg-white pl-4 pr-10 text-[13px] font-medium text-[#111111] transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
           >
             {resumes.length === 0 && <option value="">No resumes available</option>}
             {resumes.map((r) => (
               <option key={r.id} value={r.id}>{r.title}</option>
             ))}
           </select>
-          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
         </div>
       </div>
+
+      {error ? (
+        <p role="alert" className="rounded-xl border border-[#F6D3CD] bg-[#FDF2F0] px-4 py-3 text-[14px] text-[#B42318]">
+          {error.error}{" "}
+          {error.upgrade ? (
+            <Link href="/dashboard/settings/subscription" className="font-medium underline">
+              See plans
+            </Link>
+          ) : null}
+        </p>
+      ) : null}
 
       {/* Analysis Results Panel */}
       {(loading || result) && selectedCompany && (
@@ -240,14 +268,14 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
           ) : result ? (
             <>
               {/* Match Score */}
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
                 <div className="flex flex-col items-center gap-6 sm:flex-row">
                   <ScoreGauge score={result.score} />
                   <div className="flex-1">
-                    <h2 className="text-[20px] font-semibold text-gray-900">
+                    <h2 className="text-[20px] font-semibold text-[#111111]">
                       {selectedCompany.name} Match
                     </h2>
-                    <p className="mt-1 text-[13px] text-gray-500">
+                    <p className="mt-1 text-[13px] text-[#6B6B6B]">
                       {result.score >= 80
                         ? "Excellent match! Your resume aligns strongly with this company."
                         : result.score >= 60
@@ -258,7 +286,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                       <span className={`rounded-full px-3 py-1 text-[11px] font-semibold ${TIER_COLORS[selectedCompany.tier]}`}>
                         {selectedCompany.tier.toUpperCase()}
                       </span>
-                      <span className="rounded-full bg-gray-50 px-3 py-1 text-[11px] font-semibold text-gray-500">
+                      <span className="rounded-full bg-[#FAFAF9] px-3 py-1 text-[11px] font-semibold text-[#6B6B6B]">
                         {selectedCompany.industry}
                       </span>
                     </div>
@@ -267,23 +295,23 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               </div>
 
               {/* Keyword Gaps */}
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                <h3 className="mb-4 text-[15px] font-semibold text-gray-900">Keyword Analysis</h3>
+              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
+                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Keyword Analysis</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
                     <thead>
-                      <tr className="border-b border-gray-100 text-[11px] uppercase tracking-wider text-gray-400">
+                      <tr className="border-b border-[#EEEEEB] text-[11px] uppercase tracking-wider text-[#8A8A86]">
                         <th className="pb-3 pr-4 font-semibold">Keyword</th>
                         <th className="pb-3 pr-4 font-semibold">Status</th>
                         <th className="pb-3 font-semibold">Suggestion</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-50">
+                    <tbody className="divide-y divide-[#EEEEEB]">
                       {result.keywordGaps.map((gap, i) => (
                         <tr key={i} className="text-[13px]">
-                          <td className="py-3 pr-4 font-medium text-gray-900">{gap.keyword}</td>
+                          <td className="py-3 pr-4 font-medium text-[#111111]">{gap.keyword}</td>
                           <td className="py-3 pr-4"><StatusBadge status={gap.status} /></td>
-                          <td className="py-3 text-gray-500">{gap.suggestion}</td>
+                          <td className="py-3 text-[#6B6B6B]">{gap.suggestion}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -292,16 +320,16 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               </div>
 
               {/* Culture Fit */}
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                <h3 className="mb-4 text-[15px] font-semibold text-gray-900">Culture Fit</h3>
+              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
+                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Culture Fit</h3>
                 <div className="space-y-4">
                   {result.cultureFit.map((item, i) => (
                     <div key={i}>
                       <div className="mb-1.5 flex items-center justify-between text-[13px]">
-                        <span className="font-medium text-gray-700">{item.aspect}</span>
-                        <span className="font-semibold text-gray-900">{item.score}/10</span>
+                        <span className="font-medium text-[#3F3F3F]">{item.aspect}</span>
+                        <span className="font-semibold text-[#111111]">{item.score}/10</span>
                       </div>
-                      <div className="h-2.5 overflow-hidden rounded-full bg-gray-100">
+                      <div className="h-2.5 overflow-hidden rounded-full bg-[#F5F5F3]">
                         <div
                           className="h-full rounded-full transition-all duration-700 ease-out"
                           style={{
@@ -316,8 +344,8 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               </div>
 
               {/* Format Recommendations */}
-              <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                <h3 className="mb-4 text-[15px] font-semibold text-gray-900">Format Recommendations</h3>
+              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
+                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Format Recommendations</h3>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {result.formatRecommendations.map((rec, i) => (
                     <div
@@ -325,13 +353,13 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                       className={`flex items-center gap-3 rounded-xl border p-4 text-[13px] ${
                         rec.done
                           ? "border-emerald-100 bg-emerald-50/50"
-                          : "border-gray-100 bg-gray-50/50"
+                          : "border-[#EEEEEB] bg-[#FAFAF9]/50"
                       }`}
                     >
-                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${rec.done ? "bg-emerald-500 text-white" : "bg-gray-200 text-gray-400"}`}>
-                        {rec.done ? <Check className="h-3.5 w-3.5" /> : <span className="text-[10px] font-bold">{i + 1}</span>}
+                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${rec.done ? "bg-emerald-500 text-white" : "bg-[#EEEEEB] text-[#8A8A86]"}`}>
+                        {rec.done ? <Check className="h-3.5 w-3.5" /> : <span className="text-[10px] font-semibold">{i + 1}</span>}
                       </div>
-                      <span className={rec.done ? "text-emerald-700" : "text-gray-700"}>{rec.label}</span>
+                      <span className={rec.done ? "text-emerald-700" : "text-[#3F3F3F]"}>{rec.label}</span>
                     </div>
                   ))}
                 </div>
@@ -339,42 +367,27 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
               {/* Bullet Rewrites */}
               {bulletRewrites.length > 0 && (
-                <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                  <h3 className="mb-4 text-[15px] font-semibold text-gray-900">Bullet Rewrites</h3>
+                <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
+                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Bullet Rewrites</h3>
                   <div className="space-y-4">
                     {bulletRewrites.map((bullet, i) => (
-                      <div key={i} className="rounded-xl border border-gray-100 bg-gray-50/50 p-4">
+                      <div key={i} className="rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
                         <div className="grid gap-4 sm:grid-cols-2">
                           <div>
-                            <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-gray-400">Original</span>
-                            <p className="text-[13px] leading-relaxed text-gray-400 line-through decoration-red-300">
+                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">Original</span>
+                            <p className="text-[13px] leading-relaxed text-[#8A8A86] line-through decoration-red-300">
                               {bullet.original}
                             </p>
                           </div>
                           <div>
-                            <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-wider text-emerald-500">Improved</span>
-                            <p className="text-[13px] font-medium leading-relaxed text-gray-900">
+                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-emerald-500">Improved</span>
+                            <p className="text-[13px] font-medium leading-relaxed text-[#111111]">
                               {bullet.improved}
                             </p>
                           </div>
                         </div>
                         <div className="mt-3 flex justify-end">
-                          <button
-                            type="button"
-                            onClick={() => handleApplyRewrite(i)}
-                            disabled={bullet.applied}
-                            className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-semibold transition ${
-                              bullet.applied
-                                ? "bg-emerald-50 text-emerald-600"
-                                : "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
-                            }`}
-                          >
-                            {bullet.applied ? (
-                              <><Check className="h-3.5 w-3.5" /> Applied</>
-                            ) : (
-                              <><Sparkles className="h-3.5 w-3.5" /> Apply</>
-                            )}
-                          </button>
+<CopyButton text={bullet.improved} label="Copy rewrite" />
                         </div>
                       </div>
                     ))}
@@ -384,15 +397,15 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
               {/* Overall Advice */}
               {result.advice.length > 0 && (
-                <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                  <h3 className="mb-4 text-[15px] font-semibold text-gray-900">Overall Advice</h3>
+                <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
+                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Overall Advice</h3>
                   <div className="space-y-3">
                     {result.advice.map((tip, i) => (
-                      <div key={i} className="flex gap-3 rounded-xl border border-gray-100 bg-gray-50/50 p-4">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#2563EB] text-[12px] font-bold text-white">
+                      <div key={i} className="flex gap-3 rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
+                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-[12px] font-semibold text-white">
                           {i + 1}
                         </div>
-                        <p className="text-[13px] leading-relaxed text-gray-700">{tip}</p>
+                        <p className="text-[13px] leading-relaxed text-[#3F3F3F]">{tip}</p>
                       </div>
                     ))}
                   </div>
@@ -403,14 +416,14 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               <div className="flex flex-wrap gap-3">
                 <a
                   href={`/resume/${selectedResumeId}/edit`}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
                 >
                   <ExternalLink className="h-4 w-4" /> Open in Editor
                 </a>
                 <button
                   type="button"
                   onClick={resetAnalysis}
-                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 text-[13px] font-semibold text-gray-700 transition hover:border-gray-300 hover:bg-gray-50"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E2] bg-white px-6 py-3 text-[13px] font-semibold text-[#3F3F3F] transition hover:border-[#D9D9D5] hover:bg-[#FAFAF9]"
                 >
                   <RotateCcw className="h-4 w-4" /> Try Another Company
                 </button>
@@ -424,16 +437,16 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
       {!selectedCompany && (
         <>
           {/* Search + Filters */}
-          <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="relative w-full max-w-sm">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search companies, industries, or keywords..."
-                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
+                  className="h-11 w-full rounded-xl border border-[#E5E5E2] bg-white pl-10 pr-4 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
                 />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -444,8 +457,8 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     onClick={() => setActiveTier(tier.key)}
                     className={`rounded-full px-4 py-2 text-[12px] font-semibold transition ${
                       activeTier === tier.key
-                        ? "bg-[#2563EB] text-white shadow-sm shadow-blue-500/20"
-                        : "bg-gray-50 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                        ? "bg-[#111111] text-white"
+                        : "bg-[#FAFAF9] text-[#6B6B6B] hover:bg-[#F5F5F3] hover:text-[#3F3F3F]"
                     }`}
                   >
                     {tier.label}
@@ -460,29 +473,21 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
             {filtered.map((company) => (
               <div
                 key={company.id}
-                className="group rounded-2xl border border-gray-100 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition hover:border-[#2563EB]/30 hover:shadow-lg"
+                className="group rounded-2xl border border-[#EEEEEB] bg-white p-5 transition hover:border-[#D9D9D5]"
               >
                 <div className="flex items-start gap-3">
                   <div
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-[14px] font-bold text-white"
-                    style={{
-                      backgroundColor:
-                        company.tier === "faang" ? "#2563EB"
-                          : company.tier === "tech" ? "#3B82F6"
-                            : company.tier === "finance" ? "#10B981"
-                              : company.tier === "consulting" ? "#F59E0B"
-                                : "#F43F5E",
-                    }}
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F5F5F3] text-[14px] font-semibold text-[#111111]"
                   >
                     {company.logo}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-[14px] font-semibold text-gray-900">
+                    <h3 className="truncate text-[14px] font-semibold text-[#111111]">
                       {company.name}
                     </h3>
-                    <p className="text-[12px] text-gray-400">{company.industry}</p>
+                    <p className="text-[12px] text-[#8A8A86]">{company.industry}</p>
                   </div>
-                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase ${TIER_COLORS[company.tier]}`}>
+                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase ${TIER_COLORS[company.tier]}`}>
                     {company.tier}
                   </span>
                 </div>
@@ -490,13 +495,13 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   {company.keywords.slice(0, 4).map((kw) => (
                     <span
                       key={kw}
-                      className="rounded-md bg-gray-50 px-2 py-0.5 text-[11px] font-medium text-gray-500"
+                      className="rounded-md bg-[#FAFAF9] px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B]"
                     >
                       {kw}
                     </span>
                   ))}
                   {company.keywords.length > 4 && (
-                    <span className="rounded-md bg-gray-50 px-2 py-0.5 text-[11px] font-medium text-gray-400">
+                    <span className="rounded-md bg-[#FAFAF9] px-2 py-0.5 text-[11px] font-medium text-[#8A8A86]">
                       +{company.keywords.length - 4}
                     </span>
                   )}
@@ -505,7 +510,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   type="button"
                   onClick={() => analyzeCompany(company)}
                   disabled={!selectedResumeId}
-                  className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)] disabled:opacity-40"
+                  className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full border border-[#D9D9D5] text-[13px] font-medium text-[#111111] transition hover:border-[#111111] disabled:opacity-40"
                 >
                   <Sparkles className="h-3.5 w-3.5" /> Analyze Match
                 </button>
@@ -513,12 +518,12 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
             ))}
 
             {/* Custom Company Card */}
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+            <div className="rounded-2xl border border-dashed border-[#E5E5E2] bg-white p-5">
               {!showCustom ? (
                 <button
                   type="button"
                   onClick={() => setShowCustom(true)}
-                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-gray-400 transition hover:text-[#2563EB]"
+                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-[#8A8A86] transition hover:text-[#2563EB]"
                 >
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-current">
                     <Plus className="h-5 w-5" />
@@ -530,35 +535,35 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-[#2563EB]" />
-                    <span className="text-[13px] font-semibold text-gray-900">Custom Company</span>
+                    <span className="text-[13px] font-semibold text-[#111111]">Custom Company</span>
                   </div>
                   <input
                     type="text"
                     value={customName}
                     onChange={(e) => setCustomName(e.target.value)}
                     placeholder="Company name"
-                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
+                    className="h-10 w-full rounded-xl border border-[#E5E5E2] bg-white px-3 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
                   />
                   <input
                     type="text"
                     value={customIndustry}
                     onChange={(e) => setCustomIndustry(e.target.value)}
                     placeholder="Industry"
-                    className="h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
+                    className="h-10 w-full rounded-xl border border-[#E5E5E2] bg-white px-3 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
                   />
                   <textarea
                     value={customJD}
                     onChange={(e) => setCustomJD(e.target.value)}
                     placeholder="Paste job description here..."
                     rows={4}
-                    className="w-full resize-none rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-[13px] text-gray-900 placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-blue-100"
+                    className="w-full resize-none rounded-xl border border-[#E5E5E2] bg-white px-3 py-2.5 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
                   />
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={analyzeCustom}
                       disabled={!selectedResumeId || !customName.trim()}
-                      className="flex-1 rounded-xl bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-40"
+                      className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-40"
                     >
                       <span className="inline-flex items-center gap-1.5">
                         <Sparkles className="h-3.5 w-3.5" /> Analyze
@@ -567,7 +572,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     <button
                       type="button"
                       onClick={() => { setShowCustom(false); setCustomName(""); setCustomIndustry(""); setCustomJD(""); }}
-                      className="rounded-xl border border-gray-200 px-4 py-2.5 text-[12px] font-semibold text-gray-500 transition hover:bg-gray-50"
+                      className="rounded-xl border border-[#E5E5E2] px-4 py-2.5 text-[12px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
                     >
                       Cancel
                     </button>
@@ -578,10 +583,10 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
           </div>
 
           {filtered.length === 0 && (
-            <div className="rounded-2xl border border-gray-100 bg-white py-16 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-              <Search className="mx-auto h-8 w-8 text-gray-300" />
-              <p className="mt-3 text-[14px] font-medium text-gray-500">No companies found</p>
-              <p className="mt-1 text-[13px] text-gray-400">Try adjusting your search or filters</p>
+            <div className="rounded-2xl border border-[#EEEEEB] bg-white py-16 text-center">
+              <Search className="mx-auto h-8 w-8 text-[#A3A3A0]" />
+              <p className="mt-3 text-[14px] font-medium text-[#6B6B6B]">No companies found</p>
+              <p className="mt-1 text-[13px] text-[#8A8A86]">Try adjusting your search or filters</p>
             </div>
           )}
         </>

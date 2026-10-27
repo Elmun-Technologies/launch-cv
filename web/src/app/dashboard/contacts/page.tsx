@@ -8,17 +8,10 @@ export default async function ContactsPage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
-  const [rows, resumes] = await Promise.all([
-    prisma.contact.findMany({
-      where: { userId: session.sub },
-      orderBy: { updatedAt: "desc" },
-    }),
-    prisma.resume.findMany({
-      where: { userId: session.sub },
-      orderBy: { updatedAt: "desc" },
-      select: { id: true, title: true },
-    }),
-  ]);
+  const rows = await prisma.contact.findMany({
+    where: { userId: session.sub },
+    orderBy: { updatedAt: "desc" },
+  });
 
   const initial: ContactRow[] = rows.map((c) => ({
     id: c.id, name: c.name, email: c.email, phone: c.phone, company: c.company,
@@ -30,7 +23,7 @@ export default async function ContactsPage() {
 
   return (
     <DashboardShell pageTitle="Contacts" email={session.email}>
-      <ContactsClient initial={initial} resumes={resumes} />
+      <ContactsClient initial={initial} />
     </DashboardShell>
   );
 }

@@ -1,11 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { isAppPath } from "@/lib/analytics-enabled";
 
 const KEY = "launchcv_cookie_ack";
 
 export function CookieBanner() {
   const [show, setShow] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     try {
@@ -15,7 +18,8 @@ export function CookieBanner() {
     }
   }, []);
 
-  if (!show) return null;
+  // Signed-in app screens are reached through the marketing site or login, where the notice already showed.
+  if (!show || isAppPath(pathname)) return null;
 
   return (
     <div

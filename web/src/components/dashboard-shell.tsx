@@ -25,7 +25,7 @@ const mainMenu: NavItem[] = [
 
 const othersMenu: NavItem[] = [
   { href: "/dashboard/settings", label: "Settings", icon: Settings, exclude: "/dashboard/settings/email-templates" },
-  { href: "/dashboard/settings/email-templates", label: "Templates", icon: Puzzle },
+  { href: "/dashboard/settings/email-templates", label: "Email templates", icon: Puzzle },
   { href: "/dashboard/referrals", label: "Referrals", icon: Gift },
   { href: "/dashboard/support", label: "Help", icon: HelpCircle },
 ];

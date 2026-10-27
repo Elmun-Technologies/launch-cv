@@ -32,7 +32,7 @@ function CopyButton({ text }: { text: string }) {
       className="soha-btn-ghost !px-2 !py-1 text-xs"
     >
       {copied ? (
-        <Check className="h-3 w-3 text-blue-500" />
+        <Check className="h-3 w-3 text-[#2563EB]" />
       ) : (
         <Copy className="h-3 w-3" />
       )}
@@ -127,7 +127,7 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
               <Link
                 href="/dashboard/settings/subscription"
                 onClick={() => trackCtaClick({ cta: "upgrade", location: "packet_paywall" })}
-                className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
+                className="mt-1 inline-flex items-center gap-1 text-xs text-[#2563EB] hover:underline"
               >
                 <CreditCard className="h-3 w-3" /> Upgrade to Pro
               </Link>
@@ -144,7 +144,7 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
           <section className="soha-card">
             <div className="flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-[#111111]">
-                <MessageSquare className="h-4 w-4 text-blue-500" /> Cover
+                <MessageSquare className="h-4 w-4 text-[#2563EB]" /> Cover
                 letter
               </h2>
               <CopyButton text={result.cover_letter} />
@@ -158,7 +158,7 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
           <section className="soha-card">
             <div className="flex items-center justify-between">
               <h2 className="flex items-center gap-2 text-sm font-semibold text-[#111111]">
-                <Mic className="h-4 w-4 text-blue-500" /> Elevator pitch
+                <Mic className="h-4 w-4 text-[#2563EB]" /> Elevator pitch
               </h2>
               <CopyButton text={result.elevator_pitch} />
             </div>
@@ -179,7 +179,7 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
                   className="rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4"
                 >
                   <div className="flex items-start gap-2.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[10px] font-bold text-blue-600">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#EEF3FF] text-[10px] font-semibold text-[#2563EB]">
                       {i + 1}
                     </span>
                     <div>

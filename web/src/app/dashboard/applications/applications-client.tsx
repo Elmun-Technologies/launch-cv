@@ -75,16 +75,16 @@ export function ApplicationsClient({ initial, resumes }: { initial: ApplicationR
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Applications</h1>
-          <p className="mt-1 text-sm text-gray-500">Job postings, checklist, and resume history.</p>
+          <h1 className="text-xl font-semibold text-[#111111]">Applications</h1>
+          <p className="mt-1 text-sm text-[#6B6B6B]">Job postings, checklist, and resume history.</p>
         </div>
         <button type="button" onClick={() => setShowForm((s) => !s)} className="soha-btn-primary text-sm"><Plus className="h-4 w-4" /> New application</button>
       </div>
 
       {showForm ? (
         <div className="animate-fadeIn soha-card space-y-4">
-          <h2 className="text-sm font-semibold text-gray-900">New application</h2>
-          {resumes.length === 0 ? <p className="text-sm text-gray-500">Create a resume first.</p> : (
+          <h2 className="text-sm font-semibold text-[#111111]">New application</h2>
+          {resumes.length === 0 ? <p className="text-sm text-[#6B6B6B]">Create a resume first.</p> : (
             <>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div><label className="soha-label">Resume</label><select className="soha-select mt-1.5" value={resumeId} onChange={(e) => setResumeId(e.target.value)}>{resumeOptions.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select></div>
@@ -102,7 +102,7 @@ export function ApplicationsClient({ initial, resumes }: { initial: ApplicationR
       ) : null}
 
       {apps.length === 0 ? (
-        <div className="soha-empty"><FolderOpen className="h-12 w-12 text-gray-300" /><h3 className="mt-4 text-sm font-semibold text-gray-700">No applications yet</h3><p className="mt-1 text-sm text-gray-500">Add an application from JD analysis or using the button above.</p></div>
+        <div className="soha-empty"><FolderOpen className="h-12 w-12 text-[#A3A3A0]" /><h3 className="mt-4 text-sm font-semibold text-[#3F3F3F]">No applications yet</h3><p className="mt-1 text-sm text-[#6B6B6B]">Add an application from JD analysis or using the button above.</p></div>
       ) : (
         <div className="space-y-3">
           {apps.map((app) => {
@@ -113,10 +113,10 @@ export function ApplicationsClient({ initial, resumes }: { initial: ApplicationR
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-semibold text-gray-900">{app.title || "No title specified"}</h3>
-                      {app.company ? <span className="text-sm text-gray-500">· {app.company}</span> : null}
+                      <h3 className="text-sm font-semibold text-[#111111]">{app.title || "No title specified"}</h3>
+                      {app.company ? <span className="text-sm text-[#6B6B6B]">· {app.company}</span> : null}
                     </div>
-                    <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-gray-500">
+                    <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-[#6B6B6B]">
                       <span className={STATUS_STYLES[app.status] ?? "soha-badge"}>{app.status}</span>
                       <span>{app.resume.title}</span>
                       <span>· {new Date(app.createdAt).toLocaleDateString()}</span>
@@ -127,16 +127,16 @@ export function ApplicationsClient({ initial, resumes }: { initial: ApplicationR
                     {app.jdRunId ? <Link href={`/resume/${app.resume.id}/jd`} className="soha-btn-ghost text-xs"><Target className="h-3 w-3" /> JD</Link> : null}
                   </div>
                 </div>
-                <div className="mt-3 border-t border-gray-100 pt-3">
+                <div className="mt-3 border-t border-[#EEEEEB] pt-3">
                   <div className="mb-2 flex items-center justify-between text-xs">
-                    <span className="flex items-center gap-1.5 font-medium text-gray-600"><CheckSquare className="h-3 w-3" /> Checklist</span>
-                    <span className="text-gray-400">{done}/{list.length}</span>
+                    <span className="flex items-center gap-1.5 font-medium text-[#6B6B6B]"><CheckSquare className="h-3 w-3" /> Checklist</span>
+                    <span className="text-[#8A8A86]">{done}/{list.length}</span>
                   </div>
                   <div className="space-y-1">
                     {list.map((item) => (
-                      <label key={item.id} className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition hover:bg-gray-50">
-                        <input type="checkbox" checked={item.done} onChange={() => void toggleChecklist(app, item.id)} className="h-3.5 w-3.5 rounded border-gray-300 text-blue-500 focus:ring-blue-200" />
-                        <span className={item.done ? "text-gray-400 line-through" : "text-gray-700"}>{item.label}</span>
+                      <label key={item.id} className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition hover:bg-[#FAFAF9]">
+                        <input type="checkbox" checked={item.done} onChange={() => void toggleChecklist(app, item.id)} className="h-3.5 w-3.5 rounded border-[#D9D9D5] text-[#2563EB] focus:ring-[#DCE6FF]" />
+                        <span className={item.done ? "text-[#8A8A86] line-through" : "text-[#3F3F3F]"}>{item.label}</span>
                       </label>
                     ))}
                   </div>
