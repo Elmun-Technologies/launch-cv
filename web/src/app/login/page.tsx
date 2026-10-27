@@ -1,3 +1,6 @@
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/session";
+import { safeNextPath } from "@/lib/safe-next";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LoginForm } from "@/components/login-form";
@@ -9,7 +12,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: true },
 };
 
-export default function LoginPage() {
+/** Signed-in visitors (e.g. from a "Use this template" link) go straight on to where they were headed. */
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+  const session = await getSession();
+  if (session) redirect(safeNextPath((await searchParams).next) ?? "/dashboard");
   const googleEnabled = isGoogleOAuthConfigured();
   return (
     <Suspense

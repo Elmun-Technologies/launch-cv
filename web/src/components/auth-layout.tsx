@@ -11,18 +11,18 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
     <div className="flex min-h-screen bg-white">
       {/* FORM */}
       <div className="flex flex-1 flex-col px-5 py-8 sm:px-12 lg:px-16">
-        <div className="shrink-0">
+        <header className="shrink-0">
           <Logo variant="light" size="md" />
-        </div>
-        <div className="mx-auto flex w-full max-w-[400px] flex-1 flex-col justify-center py-10">
+        </header>
+        <main className="mx-auto flex w-full max-w-[400px] flex-1 flex-col justify-center py-10">
           {children}
           <p className="mt-8 text-center text-[13px] text-[#6B6B6B]">
             Need help?{" "}
-            <a href="mailto:support@launch-cv.com" className="font-medium text-[#1D4ED8] hover:underline">
+            <a href="mailto:support@launch-cv.com" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
               Email us
             </a>
           </p>
-        </div>
+        </main>
       </div>
 
       {/* PHOTO */}
@@ -40,10 +40,8 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
           {mode === "register" ? (
             <>
               <div className="shrink-0 whitespace-nowrap">
-                <p className="text-[13px] text-[#6B6B6B]">Free ATS check</p>
-                <p className="text-[24px] font-semibold tracking-[-0.02em] text-[#111111]">
-                  54 <span className="text-[#8A8A86]">→</span> 89
-                </p>
+                <p className="text-[13px] text-[#6B6B6B]">Free to start</p>
+                <p className="text-[24px] font-semibold tracking-[-0.02em] text-[#111111]">ATS check</p>
               </div>
               <div className="h-12 w-px shrink-0 bg-[#EEEEEB]" />
               <p className="text-[14px] leading-[1.5] text-[#3F3F3F]">

@@ -242,7 +242,7 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
       ) : (
         <>
           <div className="relative sm:w-[320px]">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" aria-hidden />
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" aria-hidden />
             <input
               className="soha-input pl-9"
               placeholder="Search name, industry or location"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { LogoMark } from "@/components/logo";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
+import { TEMPLATE_STYLES, type TemplateStyle } from "@/lib/resume-templates";
 import {
   FileText, Loader2, UploadCloud, CheckCircle, AlertTriangle,
   ArrowRight, BarChart3, Target, Sparkles, ArrowLeft,
@@ -47,6 +48,15 @@ export default function NewResumePage() {
   const [collapsedSeverity, setCollapsedSeverity] = useState<Record<string, boolean>>({});
   const [expandedFix, setExpandedFix] = useState<Record<number, boolean>>({});
   const [surveyOpen, setSurveyOpen] = useState(false);
+  /** Set when arriving from a resume example page (?example=<slug>). */
+  const [exampleSlug, setExampleSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("example");
+    if (slug && /^[a-z0-9-]{2,80}$/.test(slug)) queueMicrotask(() => setExampleSlug(slug));
+  }, []);
+
+  const exampleRole = exampleSlug ? exampleSlug.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()) : "";
   const surveyDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -65,15 +75,27 @@ export default function NewResumePage() {
     };
   }, [uploadStep, resumeId]);
 
-  async function handleCreate() {
+  /** Templates page links here with ?template=<style>; remember it for the editor. */
+  function rememberTemplate(id: string) {
+    const t = new URLSearchParams(window.location.search).get("template");
+    if (!t || !TEMPLATE_STYLES.includes(t as TemplateStyle)) return;
+    try {
+      window.localStorage.setItem(`lcv_tpl_${id}`, t);
+    } catch {
+      // storage unavailable: the editor falls back to Classic
+    }
+  }
+
+  async function handleCreate(example?: string) {
     setCreating(true);
     const r = await fetch("/api/resumes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "New Resume", vertical: "software", regionMode: "us" }),
+      body: JSON.stringify({ title: "New Resume", vertical: "software", regionMode: "us", ...(example ? { example } : {}) }),
     });
     const j = await r.json().catch(() => ({}));
     if (r.ok && j.id) {
+      rememberTemplate(j.id);
       window.location.href = `/resume/${j.id}/edit`;
     } else {
       setCreating(false);
@@ -124,6 +146,7 @@ export default function NewResumePage() {
     });
 
     setResumeId(createJ.id);
+    rememberTemplate(createJ.id);
 
     try {
       const fitRes = await fetch("/api/ai/role-fit", {
@@ -266,6 +289,26 @@ export default function NewResumePage() {
           {/* ── IDLE: Guided Onboarding ── */}
           {uploadStep === "idle" && (
             <div className="anim-in">
+              {exampleSlug ? (
+                <div className="mb-10 flex flex-col gap-4 rounded-2xl border border-[#DCE6FF] bg-[#EEF3FF] p-6 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-[17px] font-semibold text-[#111111]">Start from the {exampleRole} example</p>
+                    <p className="mt-1 max-w-[520px] text-[14px] leading-relaxed text-[#3F3F3F]">
+                      We&apos;ll copy its summary, experience and skills into a new resume with your name and email.
+                      Replace the sample details with your own before you send it.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => void handleCreate(exampleSlug)}
+                    disabled={creating}
+                    className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#2563EB] px-5 text-[14px] font-medium text-white hover:bg-[#1D4ED8] disabled:opacity-60"
+                  >
+                    {creating ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                    Use this example
+                  </button>
+                </div>
+              ) : null}
               <div className="text-center">
                 <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#111111]">
                   <Sparkles className="h-7 w-7 text-white" />
@@ -347,11 +390,11 @@ export default function NewResumePage() {
                   <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#2563EB] py-3.5 text-[14px] font-semibold text-[#2563EB] transition-colors group-hover:bg-[#EEF3FF]">
                     <UploadCloud className="h-4.5 w-4.5" /> Upload File
                   </div>
-                  <p className="mt-3 text-center text-[12px] text-[#8A8A86]">PDF, DOCX (max 4MB)</p>
+                  <p className="mt-3 text-center text-[12px] text-[#6E6E6A]">PDF, DOCX (max 4MB)</p>
                 </button>
               </div>
 
-              <p className="mt-8 text-center text-[13px] text-[#8A8A86]">
+              <p className="mt-8 text-center text-[13px] text-[#6E6E6A]">
                 Not sure?{" "}
                 <button type="button" onClick={() => void handleCreate()} className="font-medium text-[#2563EB] underline underline-offset-2 transition hover:text-[#1D4ED8]">
                   Start fresh
@@ -384,15 +427,15 @@ export default function NewResumePage() {
                               ? "bg-emerald-500 text-white"
                               : status === "active"
                                 ? "pulse-violet bg-[#2563EB] text-white"
-                                : "bg-[#F5F5F3] text-[#8A8A86]"
+                                : "bg-[#F5F5F3] text-[#6E6E6A]"
                           }`}
                         >
                           {status === "done" ? <Check className="h-4 w-4" /> : idx + 1}
                         </div>
-                        <span className={`mt-2.5 text-[12px] font-semibold ${status === "active" ? "text-[#2563EB]" : status === "done" ? "text-emerald-600" : "text-[#8A8A86]"}`}>
+                        <span className={`mt-2.5 text-[12px] font-semibold ${status === "active" ? "text-[#2563EB]" : status === "done" ? "text-emerald-600" : "text-[#6E6E6A]"}`}>
                           {step.label}
                         </span>
-                        <span className={`mt-0.5 text-[11px] ${status === "active" ? "text-[#2563EB]/70" : "text-[#A3A3A0]"}`}>
+                        <span className={`mt-0.5 text-[11px] ${status === "active" ? "text-[#2563EB]/70" : "text-[#8A8A86]"}`}>
                           {step.desc}
                         </span>
                       </div>
@@ -415,11 +458,11 @@ export default function NewResumePage() {
                 </div>
 
                 <div className="mx-auto mt-8 flex max-w-sm items-center gap-3 rounded-xl bg-[#FAFAF9] px-4 py-3">
-                  <FileUp className="h-4 w-4 shrink-0 text-[#8A8A86]" />
+                  <FileUp className="h-4 w-4 shrink-0 text-[#6E6E6A]" />
                   <p className="truncate text-[13px] font-medium text-[#6B6B6B]">{fileName}</p>
                 </div>
 
-                <p className="mt-4 text-center text-[12px] text-[#8A8A86]">This usually takes 15–30 seconds</p>
+                <p className="mt-4 text-center text-[12px] text-[#6E6E6A]">This usually takes 15–30 seconds</p>
               </div>
             </div>
           )}
@@ -458,7 +501,7 @@ export default function NewResumePage() {
                 <button
                   type="button"
                   onClick={() => void handleCreate()}
-                  className="mt-4 text-[13px] font-medium text-[#8A8A86] underline underline-offset-2 transition hover:text-[#2563EB]"
+                  className="mt-4 text-[13px] font-medium text-[#6E6E6A] underline underline-offset-2 transition hover:text-[#2563EB]"
                 >
                   Or start from scratch
                 </button>
@@ -524,7 +567,7 @@ export default function NewResumePage() {
                           </div>
                           <div>
                             <p className="text-[18px] font-semibold text-[#111111]">{highCount}</p>
-                            <p className="text-[12px] text-[#8A8A86]">Critical</p>
+                            <p className="text-[12px] text-[#6E6E6A]">Critical</p>
                           </div>
                         </div>
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
@@ -533,7 +576,7 @@ export default function NewResumePage() {
                           </div>
                           <div>
                             <p className="text-[18px] font-semibold text-[#111111]">{medCount}</p>
-                            <p className="text-[12px] text-[#8A8A86]">Medium</p>
+                            <p className="text-[12px] text-[#6E6E6A]">Medium</p>
                           </div>
                         </div>
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
@@ -542,7 +585,7 @@ export default function NewResumePage() {
                           </div>
                           <div>
                             <p className="text-[18px] font-semibold text-[#111111]">{diagnostic.keywords.length}</p>
-                            <p className="text-[12px] text-[#8A8A86]">Keywords</p>
+                            <p className="text-[12px] text-[#6E6E6A]">Keywords</p>
                           </div>
                         </div>
                       </div>
@@ -573,7 +616,7 @@ export default function NewResumePage() {
                                   className="flex w-full items-center gap-2.5"
                                 >
                                   <ChevronDown
-                                    className={`h-4 w-4 text-[#8A8A86] transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`}
+                                    className={`h-4 w-4 text-[#6E6E6A] transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`}
                                   />
                                   <span className={`text-[14px] font-semibold ${cfg.text}`}>{cfg.label}</span>
                                   <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${cfg.badge}`}>
@@ -598,7 +641,7 @@ export default function NewResumePage() {
                                                 <span className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${cfg.badge}`}>
                                                   {issue.type}
                                                 </span>
-                                                <span className="ml-auto text-[11px] font-medium text-[#A3A3A0]">#{i + 1}</span>
+                                                <span className="ml-auto text-[11px] font-medium text-[#8A8A86]">#{i + 1}</span>
                                               </div>
                                               <p className="mt-1.5 text-[13px] leading-relaxed text-[#3F3F3F]">{issue.message}</p>
                                               <button
@@ -650,14 +693,14 @@ export default function NewResumePage() {
                         </div>
                       ) : (
                         <div className="mt-4 rounded-xl bg-[#FAFAF9] px-4 py-6 text-center">
-                          <Search className="mx-auto h-6 w-6 text-[#A3A3A0]" />
+                          <Search className="mx-auto h-6 w-6 text-[#8A8A86]" />
                           <p className="mt-2 text-[13px] text-[#6B6B6B]">No skills detected — add them in the editor</p>
                         </div>
                       )}
 
                       {diagnostic.suggestions.length > 0 && (
                         <div className="mt-5">
-                          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#8A8A86]">Consider Adding</p>
+                          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Consider Adding</p>
                           <div className="mt-2.5 flex flex-wrap gap-2">
                             {diagnostic.suggestions.map((s, i) => (
                               <span
@@ -700,7 +743,7 @@ export default function NewResumePage() {
                               {step.num}
                             </div>
                             <span className="flex-1 text-[13px] font-medium text-[#3F3F3F]">{step.text}</span>
-                            <ArrowUpRight className="h-4 w-4 text-[#A3A3A0] transition group-hover:text-[#2563EB]" />
+                            <ArrowUpRight className="h-4 w-4 text-[#8A8A86] transition group-hover:text-[#2563EB]" />
                           </Link>
                         ))}
                       </div>
@@ -731,7 +774,7 @@ export default function NewResumePage() {
                         <button
                           type="button"
                           onClick={() => { setUploadStep("idle"); setDiagnostic(null); setFileName(""); }}
-                          className="flex w-full items-center justify-center gap-1.5 py-2 text-[13px] font-medium text-[#8A8A86] transition hover:text-[#2563EB]"
+                          className="flex w-full items-center justify-center gap-1.5 py-2 text-[13px] font-medium text-[#6E6E6A] transition hover:text-[#2563EB]"
                         >
                           <UploadCloud className="h-3.5 w-3.5" /> Upload Different File
                         </button>

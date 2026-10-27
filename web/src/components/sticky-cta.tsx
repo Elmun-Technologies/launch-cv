@@ -108,7 +108,7 @@ export function StickyCta({
           type="button"
           onClick={() => setDismissed(true)}
           aria-label="Dismiss"
-          className="shrink-0 rounded-lg p-1.5 text-[#94A3B8] transition hover:bg-[#F1F5F9] hover:text-[#475569]"
+          className="shrink-0 rounded-lg p-1.5 text-[#6E6E6A] transition hover:bg-[#F1F5F9] hover:text-[#475569]"
         >
           <X className="h-4 w-4" />
         </button>

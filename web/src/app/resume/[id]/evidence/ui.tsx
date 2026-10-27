@@ -9,7 +9,7 @@ type Result = { issues: Issue[]; metrics_found: { text: string; bulletId?: strin
 
 const SEVERITY: Record<Issue["severity"], { label: string; cls: string }> = {
   high: { label: "High", cls: "text-[#C2341B]" },
-  med: { label: "Medium", cls: "text-[#B2610A]" },
+  med: { label: "Medium", cls: "text-[#9C5200]" },
   low: { label: "Low", cls: "text-[#6B6B6B]" },
 };
 

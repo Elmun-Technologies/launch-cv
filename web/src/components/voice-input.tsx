@@ -168,7 +168,7 @@ export function VoiceInput({
         </div>
         <div className="text-left">
           <p className="text-[13px] font-medium text-[#3F3F3F]">{placeholder}</p>
-          <p className="text-[11px] text-[#8A8A86]">Click to start — speak freely, confirm when done</p>
+          <p className="text-[11px] text-[#6E6E6A]">Click to start — speak freely, confirm when done</p>
         </div>
       </button>
     );
@@ -199,15 +199,15 @@ export function VoiceInput({
 
         {(rawText || interim) ? (
           <div className="mt-4 rounded-xl bg-white p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">Live transcript</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Live transcript</p>
             <p className="mt-2 text-[13px] leading-relaxed text-[#3F3F3F]">
               {rawText}
-              {interim ? <span className="text-[#8A8A86] italic"> {interim}</span> : null}
+              {interim ? <span className="text-[#6E6E6A] italic"> {interim}</span> : null}
             </p>
           </div>
         ) : (
           <div className="mt-4 rounded-xl bg-white/50 p-4 text-center">
-            <p className="text-[13px] text-[#8A8A86]">Start speaking... your words will appear here</p>
+            <p className="text-[13px] text-[#6E6E6A]">Start speaking... your words will appear here</p>
           </div>
         )}
       </div>
@@ -229,13 +229,13 @@ export function VoiceInput({
     <div className={`rounded-2xl border border-[#E5E5E2] bg-white p-5 ${className}`}>
       <div className="flex items-center justify-between">
         <p className="text-[14px] font-semibold text-[#111111]">Review your input</p>
-        <button type="button" onClick={reset} className="text-[12px] font-medium text-[#8A8A86] transition hover:text-[#6B6B6B]">
+        <button type="button" onClick={reset} className="text-[12px] font-medium text-[#6E6E6A] transition hover:text-[#6B6B6B]">
           <RotateCcw className="mr-1 inline h-3 w-3" />Start over
         </button>
       </div>
 
       <div className="mt-4 rounded-xl bg-[#FAFAF9] p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">What you said</p>
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">What you said</p>
         <p className="mt-2 text-[13px] leading-relaxed text-[#3F3F3F]">{rawText}</p>
       </div>
 
@@ -287,7 +287,7 @@ export function VoiceInput({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center gap-1.5 px-3 py-2.5 text-[13px] text-[#8A8A86] transition hover:text-[#6B6B6B]"
+          className="inline-flex items-center gap-1.5 px-3 py-2.5 text-[13px] text-[#6E6E6A] transition hover:text-[#6B6B6B]"
         >
           <X className="h-3.5 w-3.5" />
           Cancel

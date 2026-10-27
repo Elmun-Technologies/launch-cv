@@ -105,7 +105,7 @@ export default function AdminUsersPage() {
         <div className="flex items-center justify-end gap-1">
           <Link
             href={`/admin-panel/users/${u.id}`}
-            className="rounded-md p-1.5 text-[#8A8A86] transition hover:bg-[#F5F5F3] hover:text-[#2563EB]"
+            className="rounded-md p-1.5 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#2563EB]"
             aria-label="Edit user"
           >
             <Pencil className="h-4 w-4" />
@@ -113,7 +113,7 @@ export default function AdminUsersPage() {
           <button
             type="button"
             onClick={() => handleDelete(u.id)}
-            className="rounded-md p-1.5 text-[#8A8A86] transition hover:bg-red-50 hover:text-red-600"
+            className="rounded-md p-1.5 text-[#6E6E6A] transition hover:bg-red-50 hover:text-red-600"
             aria-label="Delete user"
           >
             <Trash2 className="h-4 w-4" />
@@ -144,7 +144,7 @@ export default function AdminUsersPage() {
         </div>
 
         {loading ? (
-          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#8A8A86]">
+          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#6E6E6A]">
             Loading…
           </div>
         ) : (

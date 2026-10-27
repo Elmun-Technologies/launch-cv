@@ -172,7 +172,7 @@ export default function FreeAtsCheckPage() {
               </div>
             </figure>
             <figure className="rounded-2xl bg-[#111111] p-6 text-[#E5E5E2] sm:p-7">
-              <figcaption className="mb-3.5 text-[14px] text-[#8A8A86]">What a parser can extract</figcaption>
+              <figcaption className="mb-3.5 text-[14px] text-[#A3A3A0]">What a parser can extract</figcaption>
               <pre className="overflow-x-auto whitespace-pre-wrap font-mono text-[13px] leading-[1.75]">
                 {"name:       Maria Lopez Product Manager EXPERIENCE\ntitle:      "}
                 <span className="text-[#FF8A73]">— not found —</span>
@@ -260,7 +260,7 @@ export default function FreeAtsCheckPage() {
         <section className="mx-auto w-full max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
           <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
             <h2 className={`${h2} lg:w-[40%]`}>How to check your resume&apos;s ATS score</h2>
-            <ol className="flex flex-1 list-decimal flex-col gap-4 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#8A8A86]">
+            <ol className="flex flex-1 list-decimal flex-col gap-4 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#6E6E6A]">
               {steps.map((s) => (
                 <li key={s.t}>
                   <strong className="font-semibold text-[#111111]">{s.t}</strong> {s.d}
@@ -279,7 +279,7 @@ export default function FreeAtsCheckPage() {
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                   {f.q}
                   <ChevronDown
-                    className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180"
+                    className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180"
                     aria-hidden
                   />
                 </summary>

@@ -220,7 +220,7 @@ export default function PricingPage() {
             <span aria-hidden className="hidden sm:inline">·</span>
             <span>
               Already have an account?{" "}
-              <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="text-[#1D4ED8] hover:underline">
+              <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 Sign in
               </Link>
             </span>
@@ -262,7 +262,7 @@ export default function PricingPage() {
                 {limitRows.map((r) => (
                   <tr key={r.k} className="border-b border-[#EEEEEB]">
                     <td className="py-4">{r.l} / month</td>
-                    <td className="py-4 text-center text-[#8A8A86]">—</td>
+                    <td className="py-4 text-center text-[#6E6E6A]">—</td>
                     {CHECKOUT_PLAN_ORDER.map((key) => (
                       <td key={key} className="py-4 text-center">
                         {PLAN_MONTHLY_LIMITS[key][r.k].toLocaleString("en-US")}
@@ -273,7 +273,7 @@ export default function PricingPage() {
                 {toolRows.map((l) => (
                   <tr key={l} className="border-b border-[#EEEEEB]">
                     <td className="py-4">{l}</td>
-                    <td className="py-4 text-center text-[#8A8A86]">—</td>
+                    <td className="py-4 text-center text-[#6E6E6A]">—</td>
                     {CHECKOUT_PLAN_ORDER.map((key) => (
                       <td key={key} className="py-4 text-center">
                         <Check className="mx-auto h-4 w-4" aria-label="Included" />
@@ -283,7 +283,7 @@ export default function PricingPage() {
                 ))}
                 <tr>
                   <td className="py-4">Billing</td>
-                  <td className="py-4 text-center text-[#8A8A86]">—</td>
+                  <td className="py-4 text-center text-[#6E6E6A]">—</td>
                   {CHECKOUT_PLAN_ORDER.map((key) => (
                     <td key={key} className="py-4 text-center">
                       {key === "lifetime" ? "One-time" : "Monthly"}
@@ -306,7 +306,7 @@ export default function PricingPage() {
                 Email us within 7 days of paying for a monthly plan and we&apos;ll refund you in full. Lifetime can be
                 refunded within 14 days.
               </p>
-              <Link href="/legal/terms" className="text-[15px] text-[#1D4ED8] hover:underline">
+              <Link href="/legal/terms" className="text-[15px] text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 Read the refund terms
               </Link>
             </div>
@@ -333,7 +333,7 @@ export default function PricingPage() {
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                   {f.q}
                   <ChevronDown
-                    className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180"
+                    className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180"
                     aria-hidden
                   />
                 </summary>
@@ -343,7 +343,7 @@ export default function PricingPage() {
           </div>
           <p className="mt-8 text-center text-[15px] text-[#6B6B6B]">
             Something else?{" "}
-            <Link href="/contact" className="text-[#1D4ED8] hover:underline">
+            <Link href="/contact" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
               Email support
             </Link>
           </p>

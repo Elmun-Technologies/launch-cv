@@ -48,6 +48,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
   if (!e) notFound();
 
   const r = e.resume;
+  const startHref = `/register?next=${encodeURIComponent(`/resume/new?example=${e.slug}`)}`;
   const url = absoluteUrl(`/resume-examples/${e.slug}`);
   const related = e.related.map(getResumeExample).filter((x) => !!x);
   const toc = [
@@ -122,12 +123,12 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
               </p>
               <div className="flex flex-wrap gap-2">
                 <CtaLink
-                  cta="build_resume"
+                  cta="use_example"
                   location="resume_example"
-                  href="/register"
+                  href={startHref}
                   className="inline-flex h-12 items-center rounded-full bg-[#2563EB] px-5 text-[15px] font-medium text-white hover:bg-[#1D4ED8]"
                 >
-                  Build my resume
+                  Start from this example
                 </CtaLink>
                 <CtaLink
                   cta="free_ats_check"
@@ -180,7 +181,17 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             <section id="example" className="flex scroll-mt-[96px] flex-col gap-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className={h2}>{e.role} resume example</h2>
-                <CopyButton text={exampleResumeText(e)} label="Copy text" />
+                <div className="flex gap-2">
+                  <CopyButton text={exampleResumeText(e)} label="Copy text" />
+                  <CtaLink
+                    cta="use_example"
+                    location="resume_example_sample"
+                    href={startHref}
+                    className="inline-flex h-9 shrink-0 items-center rounded-full bg-[#111111] px-4 text-[13px] font-medium text-white hover:bg-black"
+                  >
+                    Edit this resume
+                  </CtaLink>
+                </div>
               </div>
               <div className="rounded-2xl bg-[#F5F5F3] p-3 sm:p-9">
                 <div className="mx-auto max-w-[680px] rounded bg-white px-6 py-8 text-[13.5px] leading-[1.55] text-[#1c1c1c] shadow-[0_16px_40px_-20px_rgba(0,0,0,0.3)] sm:px-12 sm:py-11">
@@ -310,7 +321,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             {/* TIPS */}
             <section id="tips" className="flex scroll-mt-[96px] flex-col gap-3.5">
               <h2 className={h2}>ATS tips for {roleLower(e.role)}s</h2>
-              <ol className="flex list-decimal flex-col gap-3 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#8A8A86]">
+              <ol className="flex list-decimal flex-col gap-3 pl-6 text-[17px] leading-[1.65] text-[#3F3F3F] marker:text-[#6E6E6A]">
                 {e.tips.map((t) => (
                   <li key={t.t}>
                     <strong className="font-semibold text-[#111111]">{t.t}.</strong> {t.d}
@@ -328,7 +339,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                       {f.q}
                       <ChevronDown
-                        className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180"
+                        className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180"
                         aria-hidden
                       />
                     </summary>
@@ -350,7 +361,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
                       className="flex items-center justify-between rounded-xl border border-[#E5E5E2] px-4 py-4 text-[15px] hover:border-[#111111]"
                     >
                       {x.role}
-                      <ChevronRight className="h-4 w-4 text-[#8A8A86]" aria-hidden />
+                      <ChevronRight className="h-4 w-4 text-[#6E6E6A]" aria-hidden />
                     </Link>
                   ))}
                 </div>

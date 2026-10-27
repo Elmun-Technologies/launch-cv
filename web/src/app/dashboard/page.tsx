@@ -115,7 +115,7 @@ export default async function DashboardHomePage() {
             <div className="flex items-baseline justify-between">
               <h2 className="text-[17px] font-semibold">Your resumes</h2>
               {resumeCount > 0 ? (
-                <Link href="/dashboard/resumes" className="text-[14px] text-[#1D4ED8] hover:underline">
+                <Link href="/dashboard/resumes" className="text-[14px] text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                   See all {resumeCount}
                 </Link>
               ) : null}
@@ -149,7 +149,7 @@ export default async function DashboardHomePage() {
             <div className="rounded-[14px] border border-[#E5E5E2] bg-white p-5">
               <div className="flex items-baseline justify-between">
                 <h2 className="text-[17px] font-semibold">Applications</h2>
-                <Link href="/dashboard/job-tracker" className="text-[14px] text-[#1D4ED8] hover:underline">
+                <Link href="/dashboard/job-tracker" className="text-[14px] text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                   Tracker
                 </Link>
               </div>

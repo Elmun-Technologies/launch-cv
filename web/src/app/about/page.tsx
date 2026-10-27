@@ -33,7 +33,7 @@ const aboutLd = {
 };
 
 const principles = [
-  { t: "Your data stays yours", d: "We never sell or share resumes. You can delete your account and everything in it." },
+  { t: "Your data stays yours", d: "We never sell your resumes or use them to advertise. You can download or delete everything in your account." },
   { t: "No made-up experience", d: "Rewrites only use facts from your resume, and you approve every change." },
   { t: "Plain prices", d: "A free ATS check, two monthly plans and Lifetime. 7-day refund on monthly plans." },
 ];

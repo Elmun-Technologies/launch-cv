@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { allowForgotPasswordIp } from "@/lib/rate-limit-presets";
 import { appBaseUrl, sendTransactionalEmail } from "@/lib/email";
+import { transactionalEmail } from "@/lib/email-layout";
 import { generateRawToken, hashToken } from "@/lib/token-crypto";
 import { trackEvent } from "@/lib/analytics";
 
@@ -44,11 +45,18 @@ export async function POST(req: Request) {
   });
 
   const link = `${appBaseUrl()}/auth/reset-password?token=${encodeURIComponent(raw)}`;
-  const html = `<p>Password reset link (valid for 1 hour):</p><p><a href="${link}">${link}</a></p>`;
+  const { html, text } = transactionalEmail({
+    preheader: "Choose a new password for your LaunchCV account.",
+    heading: "Reset your password",
+    paragraphs: ["Someone asked to reset the password for this LaunchCV account. If it was you, choose a new one below."],
+    cta: { label: "Choose a new password", url: link },
+    footnote: "This link works for 1 hour and can be used once. If you didn't ask for this, ignore this email — your password stays the same.",
+  });
   const sent = await sendTransactionalEmail({
     to: user.email,
-    subject: "LaunchCV — password reset",
+    subject: "Reset your LaunchCV password",
     html,
+    text,
   });
   await trackEvent("password_reset_requested", { userId: user.id, meta: { sent: sent.ok } });
 

@@ -51,7 +51,7 @@ function PasswordInput({
       <button
         type="button"
         aria-label={show ? "Hide password" : "Show password"}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A8A86] hover:text-[#111111]"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] hover:text-[#111111]"
         onClick={() => setShow((s) => !s)}
       >
         {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -159,12 +159,12 @@ export function SettingsClient({
                   <Check className="h-3.5 w-3.5" aria-hidden /> Verified
                 </span>
               ) : (
-                <span className="shrink-0 text-[13px] text-[#B2610A]">Not verified</span>
+                <span className="shrink-0 text-[13px] text-[#9C5200]">Not verified</span>
               )}
             </div>
-            <p className="mt-1.5 text-[13px] text-[#8A8A86]">
+            <p className="mt-1.5 text-[13px] text-[#6E6E6A]">
               To change your email, write to{" "}
-              <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] hover:underline">
+              <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 support@launch-cv.com
               </a>
               .

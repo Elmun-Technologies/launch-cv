@@ -136,7 +136,7 @@ const faqLd = {
 export const revalidate = 300;
 
 const h2 = "text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111] sm:text-[40px]";
-const grey = "text-[#8A8A86]";
+const grey = "text-[#6E6E6A]";
 
 export default async function Home() {
   const latestPosts = (await getPublishedPosts()).slice(0, 3);
@@ -146,6 +146,7 @@ export default async function Home() {
       <JsonLd data={homeLd} />
       <JsonLd data={faqLd} />
       <LandingNav />
+      <main>
 
       {/* HERO */}
       <section className="mx-auto w-full max-w-[1200px] px-6 pt-[112px] sm:pt-[136px]">
@@ -207,7 +208,7 @@ export default async function Home() {
               </span>
               <span>
                 <span className="block font-semibold">ATS score</span>
-                <span className="block text-[12px] text-[#6B6B6B]">up from 54</span>
+                <span className="block text-[12px] text-[#6B6B6B]">Ready to apply</span>
               </span>
             </div>
           </div>
@@ -245,7 +246,7 @@ export default async function Home() {
             <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
               A score out of 100, the issues behind it ranked by impact, and a clear fix for each one.
             </p>
-            <Link href="/free-ats-check" className="inline-flex items-center gap-1 font-medium text-[#1D4ED8] hover:underline">
+            <Link href="/free-ats-check" className="inline-flex items-center gap-1 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
               Check my resume <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
@@ -253,7 +254,7 @@ export default async function Home() {
             <div className="flex shrink-0 flex-col items-center gap-2 sm:w-[180px]">
               <svg width="150" height="150" viewBox="0 0 120 120" role="img" aria-label="Example ATS score: 54 out of 100">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#F0F0EE" strokeWidth="10" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#E8890C" strokeWidth="10" strokeLinecap="round" strokeDasharray="170 314" transform="rotate(-90 60 60)" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#C2700A" strokeWidth="10" strokeLinecap="round" strokeDasharray="170 314" transform="rotate(-90 60 60)" />
                 <text x="60" y="68" textAnchor="middle" fontSize="30" fontWeight="600" fill="#111111">54</text>
               </svg>
               <p className="font-semibold">Needs work</p>
@@ -311,7 +312,7 @@ export default async function Home() {
           <ol className="flex flex-1 flex-col gap-6">
             {filterFacts.map((f, i) => (
               <li key={f.t} className="flex gap-5">
-                <span className="pt-0.5 text-[14px] text-[#8A8A86]">0{i + 1}</span>
+                <span className="pt-0.5 text-[14px] text-[#A3A3A0]">0{i + 1}</span>
                 <span>
                   <span className="block text-[17px] font-semibold">{f.t}</span>
                   <span className="mt-1 block text-[15px] leading-[1.6] text-[#B5B5B0]">{f.d}</span>
@@ -328,7 +329,7 @@ export default async function Home() {
           <h2 className={h2}>
             Built for your field. <span className={grey}>Not a generic template.</span>
           </h2>
-          <Link href="/resume-examples" className="font-medium text-[#1D4ED8] hover:underline">
+          <Link href="/resume-examples" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
             All use cases →
           </Link>
         </div>
@@ -345,7 +346,7 @@ export default async function Home() {
               />
               <span className="mt-3 flex items-center justify-between text-[16px] font-medium">
                 {f.label}
-                <ArrowRight className="h-4 w-4 text-[#8A8A86] transition group-hover:translate-x-0.5" aria-hidden="true" />
+                <ArrowRight className="h-4 w-4 text-[#6E6E6A] transition group-hover:translate-x-0.5" aria-hidden="true" />
               </span>
               <span className="mt-0.5 block text-[14px] text-[#6B6B6B]">{f.sub}</span>
             </Link>
@@ -404,7 +405,7 @@ export default async function Home() {
             <h2 className={h2}>
               Resume guides. <span className={grey}>Written for job seekers.</span>
             </h2>
-            <Link href="/blog" className="hidden shrink-0 font-medium text-[#1D4ED8] hover:underline sm:inline">
+            <Link href="/blog" className="hidden shrink-0 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8] sm:inline">
               All articles →
             </Link>
           </div>
@@ -461,6 +462,7 @@ export default async function Home() {
         </div>
       </section>
 
+      </main>
       <LandingFooter />
     </div>
   );

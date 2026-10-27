@@ -63,7 +63,7 @@ const sections: LegalSection[] = [
         <p className="mt-3">
           Monthly plans come with a 7-day money-back guarantee, and Lifetime can be refunded within 14 days of purchase.
           Email{" "}
-          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] hover:underline">
+          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
             support@launch-cv.com
           </a>{" "}
           from your account email to request one.
@@ -85,7 +85,7 @@ const sections: LegalSection[] = [
     body: (
       <p>
         How we handle your data, including analytics and the providers we use, is described in the{" "}
-        <Link href="/legal/privacy" className="text-[#1D4ED8] hover:underline">
+        <Link href="/legal/privacy" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
           Privacy Policy
         </Link>
         .

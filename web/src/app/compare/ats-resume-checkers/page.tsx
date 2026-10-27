@@ -141,7 +141,7 @@ export default function CompareAtsCheckersPage() {
           <ol className="mt-7 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
             {criteria.map((c, i) => (
               <li key={c.t} className="border-t border-[#EEEEEB] py-5">
-                <p className="text-[14px] text-[#8A8A86] [font-feature-settings:'tnum']">{i + 1}</p>
+                <p className="text-[14px] text-[#6E6E6A] [font-feature-settings:'tnum']">{i + 1}</p>
                 <p className="mt-1 text-[17px] font-semibold">{c.t}</p>
                 <p className="mt-1 text-[15px] leading-[1.55] text-[#3F3F3F]">{c.d}</p>
               </li>
@@ -192,7 +192,7 @@ export default function CompareAtsCheckersPage() {
               <details key={x.q} open={i === 0} className="group border-t border-[#E5E5E2] py-5">
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
                   {x.q}
-                  <ChevronDown className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180" aria-hidden />
+                  <ChevronDown className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180" aria-hidden />
                 </summary>
                 <p className="mt-2.5 text-[16px] leading-[1.65] text-[#3F3F3F]">{x.a}</p>
               </details>
@@ -208,7 +208,7 @@ export default function CompareAtsCheckersPage() {
               </h2>
               <p className="mt-2 text-[16px] text-[#3F3F3F]">
                 No account. Score and fixes in about 10 seconds.{" "}
-                <Link href="/blog/what-is-an-ats-score" className="text-[#1D4ED8] hover:underline">
+                <Link href="/blog/what-is-an-ats-score" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                   What the score means
                 </Link>
               </p>

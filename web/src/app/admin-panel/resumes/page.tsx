@@ -63,7 +63,7 @@ export default function AdminResumesPage() {
       render: (r) => (
         <div className="min-w-0">
           <p className="truncate text-[12px] text-[#111111]">{r.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#8A8A86]">{r.user.email}</p>
+          <p className="truncate text-[11px] text-[#6E6E6A]">{r.user.email}</p>
         </div>
       ),
     },
@@ -82,7 +82,7 @@ export default function AdminResumesPage() {
         <button
           type="button"
           onClick={() => handleDelete(r.id)}
-          className="rounded-md p-1.5 text-[#8A8A86] transition hover:bg-red-50 hover:text-red-600"
+          className="rounded-md p-1.5 text-[#6E6E6A] transition hover:bg-red-50 hover:text-red-600"
           aria-label="Delete resume"
         >
           <Trash2 className="h-4 w-4" />
@@ -113,7 +113,7 @@ export default function AdminResumesPage() {
         </div>
 
         {loading ? (
-          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#8A8A86]">
+          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#6E6E6A]">
             Loading…
           </div>
         ) : (

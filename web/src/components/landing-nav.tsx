@@ -12,7 +12,7 @@ import {
 
 const featureItems = [
   { href: "/features/jd-alignment", icon: Target, label: "JD Alignment", desc: "Match resume to any job description" },
-  { href: "/features/resume-builder", icon: FileText, label: "Resume Builder", desc: "AI-powered, ATS-tested templates" },
+  { href: "/features/resume-builder", icon: FileText, label: "Resume Builder", desc: "Four ATS-friendly templates, live preview" },
   { href: "/features/cover-letter", icon: Mail, label: "Cover Letter", desc: "Personalized letters in about a minute" },
   { href: "/features/interview-prep", icon: MessageSquare, label: "Interview Prep", desc: "Role-specific AI practice" },
   { href: "/free-ats-check", icon: BarChart3, label: "ATS Score", desc: "See how ATS reads your resume" },
@@ -20,6 +20,7 @@ const featureItems = [
 ];
 
 const navLinks = [
+  { label: "Templates", href: "/resume-templates" },
   { label: "Examples", href: "/resume-examples" },
   { label: "Pricing", href: "/pricing" },
   { label: "Blog", href: "/blog" },
@@ -210,7 +211,7 @@ export function LandingNav() {
             </Link>
 
             {/* Features group */}
-            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#94A3B8] font-body">Features</p>
+            <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.08em] text-[#6E6E6A] font-body">Features</p>
             <div className="space-y-1">
               {featureItems.map((item) => (
                 <Link

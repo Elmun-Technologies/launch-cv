@@ -51,7 +51,7 @@ export default function ContactPage() {
             </h1>
             <p className="mt-5 max-w-[520px] text-[17px] leading-[1.6] text-[#3F3F3F]">
               Write to{" "}
-              <a href={`mailto:${EMAIL}`} className="text-[#1D4ED8] hover:underline">
+              <a href={`mailto:${EMAIL}`} className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 {EMAIL}
               </a>{" "}
               and put the topic in the subject so it reaches the right person.
@@ -99,11 +99,11 @@ export default function ContactPage() {
             </div>
             <p className="text-[15px] text-[#3F3F3F]">
               Billing questions? See{" "}
-              <Link href="/pricing" className="text-[#1D4ED8] hover:underline">
+              <Link href="/pricing" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 plans and refunds
               </Link>{" "}
               or the{" "}
-              <Link href="/legal/terms" className="text-[#1D4ED8] hover:underline">
+              <Link href="/legal/terms" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
                 terms
               </Link>
               .

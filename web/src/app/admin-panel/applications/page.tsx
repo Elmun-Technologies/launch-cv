@@ -65,7 +65,7 @@ export default function AdminApplicationsPage() {
       render: (a) => (
         <div className="min-w-0">
           <p className="truncate text-[12px] text-[#111111]">{a.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#8A8A86]">{a.user.email}</p>
+          <p className="truncate text-[11px] text-[#6E6E6A]">{a.user.email}</p>
         </div>
       ),
     },
@@ -113,7 +113,7 @@ export default function AdminApplicationsPage() {
         }
       >
         {loading ? (
-          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#8A8A86]">
+          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#6E6E6A]">
             Loading…
           </div>
         ) : (

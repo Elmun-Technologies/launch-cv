@@ -67,7 +67,7 @@ export default async function AdminUserDetailPage({
             </h1>
             <p className="mt-1 text-[13px] text-[#6B6B6B]">
               <StatusBadge tone={statusToTone(user.role)}>{user.role}</StatusBadge>
-              <span className="ml-2 font-mono text-[11px] text-[#8A8A86]">{user.id}</span>
+              <span className="ml-2 font-mono text-[11px] text-[#6E6E6A]">{user.id}</span>
             </p>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default async function AdminUserDetailPage({
                       <StatusBadge tone={statusToTone(user.subscription.status)} dot>
                         {user.subscription.status}
                       </StatusBadge>
-                      <span className="ml-2 text-[12px] text-[#8A8A86]">
+                      <span className="ml-2 text-[12px] text-[#6E6E6A]">
                         until {user.subscription.currentPeriodEnd?.toLocaleDateString() ?? "—"}
                       </span>
                     </dd>
@@ -120,7 +120,7 @@ export default async function AdminUserDetailPage({
           flush
         >
           {user.resumes.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">No resumes.</p>
+            <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">No resumes.</p>
           ) : (
             <ul className="divide-y divide-[#E5E5E2]">
               {user.resumes.map((r) => (
@@ -129,7 +129,7 @@ export default async function AdminUserDetailPage({
                     <p className="truncate text-[13px] font-medium text-[#111111]">{r.title}</p>
                     <p className="truncate text-[12px] text-[#6B6B6B]">{r.vertical}</p>
                   </div>
-                  <p className="shrink-0 text-[12px] text-[#8A8A86]">{r.updatedAt.toLocaleDateString()}</p>
+                  <p className="shrink-0 text-[12px] text-[#6E6E6A]">{r.updatedAt.toLocaleDateString()}</p>
                 </li>
               ))}
             </ul>
@@ -143,7 +143,7 @@ export default async function AdminUserDetailPage({
           flush
         >
           {user.jobApplications.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">No applications.</p>
+            <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">No applications.</p>
           ) : (
             <ul className="divide-y divide-[#E5E5E2]">
               {user.jobApplications.map((a) => (
@@ -154,7 +154,7 @@ export default async function AdminUserDetailPage({
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
                     <StatusBadge tone={statusToTone(a.status)}>{a.status}</StatusBadge>
-                    <p className="text-[12px] text-[#8A8A86]">{a.createdAt.toLocaleDateString()}</p>
+                    <p className="text-[12px] text-[#6E6E6A]">{a.createdAt.toLocaleDateString()}</p>
                   </div>
                 </li>
               ))}

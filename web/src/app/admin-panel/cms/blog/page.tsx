@@ -83,7 +83,7 @@ export default async function AdminBlogListPage({
       render: (p) => (
         <div className="min-w-0">
           <p className="truncate font-medium text-[#111111]">{p.title}</p>
-          <p className="truncate font-mono text-[11px] text-[#8A8A86]">/{p.slug}</p>
+          <p className="truncate font-mono text-[11px] text-[#6E6E6A]">/{p.slug}</p>
         </div>
       ),
     },
@@ -101,7 +101,7 @@ export default async function AdminBlogListPage({
             {p.status}
           </StatusBadge>
           {p.status === "scheduled" && p.scheduledFor ? (
-            <span className="text-[10px] text-[#8A8A86]">{dateFmt.format(p.scheduledFor)}</span>
+            <span className="text-[10px] text-[#6E6E6A]">{dateFmt.format(p.scheduledFor)}</span>
           ) : null}
         </div>
       ),

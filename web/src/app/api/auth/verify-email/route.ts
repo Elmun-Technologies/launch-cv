@@ -16,11 +16,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "JSON" }, { status: 400 });
   }
   const parsed = schema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Token is missing" }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: "This link is incomplete or invalid. Request a new one." }, { status: 400 });
 
   const row = await verifyAuthToken(parsed.data.token, "email_verify");
   if (!row) {
-    return NextResponse.json({ error: "Link is invalid or expired" }, { status: 400 });
+    return NextResponse.json({ error: "This link has expired or was already used. Request a new one." }, { status: 400 });
   }
 
   await prisma.$transaction([

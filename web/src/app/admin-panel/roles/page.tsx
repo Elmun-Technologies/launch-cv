@@ -59,7 +59,7 @@ export default async function AdminRolesPage() {
           flush
         >
           {dbAdmins.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">
+            <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">
               No DB admins yet. Promote via{" "}
               <a href="/admin-panel/settings" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 Settings
@@ -79,7 +79,7 @@ export default async function AdminRolesPage() {
                       <p className="truncate text-[11px] text-[#6B6B6B]">{a.email}</p>
                     </div>
                   </div>
-                  <span className="text-[11px] text-[#8A8A86]">
+                  <span className="text-[11px] text-[#6E6E6A]">
                     since {a.createdAt.toLocaleDateString()}
                   </span>
                 </li>
@@ -95,7 +95,7 @@ export default async function AdminRolesPage() {
           flush
         >
           {envEmails.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">
+            <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">
               ADMIN_EMAILS is empty. Set it in Vercel → Settings → Environment Variables.
             </p>
           ) : (

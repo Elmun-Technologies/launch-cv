@@ -10,13 +10,13 @@ export function scoreVerdict(score: number): string {
 
 export function scoreColor(v: number): string {
   if (v >= 80) return "#12A15E";
-  if (v >= 60) return "#E8890C";
+  if (v >= 60) return "#C2700A";
   return "#C2341B";
 }
 
 const PRIORITY_COLOR: Record<FreeAtsFix["priority"], string> = {
   High: "#C2341B",
-  Medium: "#E8890C",
+  Medium: "#C2700A",
   Low: "#8A8A86",
 };
 

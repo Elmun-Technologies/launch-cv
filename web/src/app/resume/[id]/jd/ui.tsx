@@ -286,7 +286,7 @@ export function JdClient({ resumeId }: { resumeId: string }) {
                   >
                     <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-400" />
                     <span>
-                      <code className="text-xs text-[#8A8A86]">
+                      <code className="text-xs text-[#6E6E6A]">
                         {r.bulletId}
                       </code>{" "}
                       — {r.reason}

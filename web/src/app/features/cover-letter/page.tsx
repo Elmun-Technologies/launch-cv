@@ -36,7 +36,7 @@ const f: FeaturePageData = {
           that move retention. At Brightpath Health I ran more than 30 customer interviews that shaped our 2024 roadmap,
           and led the self-scheduling launch that cut no-shows by 23% across 41 clinics.
         </p>
-        <p className="mt-3 text-[#8A8A86]">…</p>
+        <p className="mt-3 text-[#6E6E6A]">…</p>
       </div>
     ),
   },

@@ -6,7 +6,7 @@ export function MiniPage({ content }: { content: ResumeContent }) {
   const name = c.contact.fullName || "Your name";
   if (!c.contact.fullName && !c.summary && c.experience.length === 0) {
     return (
-      <div className="flex h-[208px] w-[86%] max-w-[228px] items-center justify-center bg-white text-[12px] text-[#8A8A86] shadow-[0_6px_16px_-8px_rgba(0,0,0,0.25)]">
+      <div className="flex h-[208px] w-[86%] max-w-[228px] items-center justify-center bg-white text-[12px] text-[#6E6E6A] shadow-[0_6px_16px_-8px_rgba(0,0,0,0.25)]">
         Empty draft
       </div>
     );

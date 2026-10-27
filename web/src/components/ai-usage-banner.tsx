@@ -38,7 +38,7 @@ export function AiUsageBanner({ usage, kind }: { usage: AiUsagePayload | null; k
       <span className="font-medium">
         {used} of {max.toLocaleString("en-US")} used this month.
       </span>{" "}
-      <Link href="/dashboard/settings/subscription" className="text-[#1D4ED8] hover:underline">
+      <Link href="/dashboard/settings/subscription" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
         Higher limits
       </Link>
     </div>

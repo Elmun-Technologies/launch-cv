@@ -62,7 +62,7 @@ export function AuthDivider({ label = "or" }: { label?: string }) {
   return (
     <div className="flex items-center gap-3" role="separator" aria-label={label}>
       <span className="h-px flex-1 bg-[#E2E8F0]" />
-      <span className="text-[11px] font-medium uppercase tracking-wider text-[#94A3B8]">{label}</span>
+      <span className="text-[11px] font-medium uppercase tracking-wider text-[#6E6E6A]">{label}</span>
       <span className="h-px flex-1 bg-[#E2E8F0]" />
     </div>
   );

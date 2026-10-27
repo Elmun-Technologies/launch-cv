@@ -55,6 +55,11 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
 
 const USE_CASE_PAGES: { title: string; path: string; summary: string }[] = [
   {
+    title: "Resume templates",
+    path: "/resume-templates",
+    summary: "Four ATS-friendly resume templates (Classic, Modern, Minimal, Executive): single column, standard headings, real text, PDF export.",
+  },
+  {
     title: "Resume examples",
     path: "/resume-examples",
     summary: "Resume examples by job, each with summary and bullet examples, role keywords, ATS tips and an FAQ.",

@@ -102,7 +102,7 @@ export function ApplicationsClient({ initial, resumes }: { initial: ApplicationR
       ) : null}
 
       {apps.length === 0 ? (
-        <div className="soha-empty"><FolderOpen className="h-12 w-12 text-[#A3A3A0]" /><h3 className="mt-4 text-sm font-semibold text-[#3F3F3F]">No applications yet</h3><p className="mt-1 text-sm text-[#6B6B6B]">Add an application from JD analysis or using the button above.</p></div>
+        <div className="soha-empty"><FolderOpen className="h-12 w-12 text-[#8A8A86]" /><h3 className="mt-4 text-sm font-semibold text-[#3F3F3F]">No applications yet</h3><p className="mt-1 text-sm text-[#6B6B6B]">Add an application from JD analysis or using the button above.</p></div>
       ) : (
         <div className="space-y-3">
           {apps.map((app) => {
@@ -130,13 +130,13 @@ export function ApplicationsClient({ initial, resumes }: { initial: ApplicationR
                 <div className="mt-3 border-t border-[#EEEEEB] pt-3">
                   <div className="mb-2 flex items-center justify-between text-xs">
                     <span className="flex items-center gap-1.5 font-medium text-[#6B6B6B]"><CheckSquare className="h-3 w-3" /> Checklist</span>
-                    <span className="text-[#8A8A86]">{done}/{list.length}</span>
+                    <span className="text-[#6E6E6A]">{done}/{list.length}</span>
                   </div>
                   <div className="space-y-1">
                     {list.map((item) => (
                       <label key={item.id} className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-1.5 text-sm transition hover:bg-[#FAFAF9]">
                         <input type="checkbox" checked={item.done} onChange={() => void toggleChecklist(app, item.id)} className="h-3.5 w-3.5 rounded border-[#D9D9D5] text-[#2563EB] focus:ring-[#DCE6FF]" />
-                        <span className={item.done ? "text-[#8A8A86] line-through" : "text-[#3F3F3F]"}>{item.label}</span>
+                        <span className={item.done ? "text-[#6E6E6A] line-through" : "text-[#3F3F3F]"}>{item.label}</span>
                       </label>
                     ))}
                   </div>
