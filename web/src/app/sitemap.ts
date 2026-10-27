@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { RESUME_EXAMPLES } from "@/lib/resume-examples";
+import { COVER_LETTER_EXAMPLES } from "@/lib/cover-letter-examples";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://launch-cv.com";
@@ -26,6 +27,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    })),
+    { url: `${baseUrl}/cover-letter-examples`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
+    ...COVER_LETTER_EXAMPLES.map((c) => ({
+      url: `${baseUrl}/cover-letter-examples/${c.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
     // login/register are utility pages (noindex) — intentionally kept out of the sitemap.
     { url: `${baseUrl}/legal/privacy`, lastModified: new Date(), changeFrequency: "yearly", priority: 0.3 },

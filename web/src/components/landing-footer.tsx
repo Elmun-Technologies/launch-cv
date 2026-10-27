@@ -19,6 +19,7 @@ const companyLinks = [
 const resourceLinks = [
   { label: "Resume Templates", href: "/resume-templates" },
   { label: "Resume Examples", href: "/resume-examples" },
+  { label: "Cover Letter Examples", href: "/cover-letter-examples" },
   { label: "Software engineer resume", href: "/resume-examples/software-engineer" },
   { label: "Product manager resume", href: "/resume-examples/product-manager" },
   { label: "UX designer resume", href: "/resume-examples/ux-designer" },

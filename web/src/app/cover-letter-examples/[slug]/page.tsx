@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 const UPDATED = "2026-10-27";
 const h2 = "text-[26px] font-semibold leading-[1.15] tracking-[-0.025em] sm:text-[30px]";
 
-export function letterText(c: CoverLetterExample, name: string): string {
+function letterText(c: CoverLetterExample, name: string): string {
   return [`Dear ${c.target.hiringManager},`, "", ...c.paragraphs.flatMap((p) => [p, ""]), "Sincerely,", name].join("\n");
 }
 
