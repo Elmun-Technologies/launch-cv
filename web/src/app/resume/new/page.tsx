@@ -48,6 +48,15 @@ export default function NewResumePage() {
   const [collapsedSeverity, setCollapsedSeverity] = useState<Record<string, boolean>>({});
   const [expandedFix, setExpandedFix] = useState<Record<number, boolean>>({});
   const [surveyOpen, setSurveyOpen] = useState(false);
+  /** Set when arriving from a resume example page (?example=<slug>). */
+  const [exampleSlug, setExampleSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("example");
+    if (slug && /^[a-z0-9-]{2,80}$/.test(slug)) queueMicrotask(() => setExampleSlug(slug));
+  }, []);
+
+  const exampleRole = exampleSlug ? exampleSlug.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()) : "";
   const surveyDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -77,12 +86,12 @@ export default function NewResumePage() {
     }
   }
 
-  async function handleCreate() {
+  async function handleCreate(example?: string) {
     setCreating(true);
     const r = await fetch("/api/resumes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "New Resume", vertical: "software", regionMode: "us" }),
+      body: JSON.stringify({ title: "New Resume", vertical: "software", regionMode: "us", ...(example ? { example } : {}) }),
     });
     const j = await r.json().catch(() => ({}));
     if (r.ok && j.id) {
@@ -280,6 +289,26 @@ export default function NewResumePage() {
           {/* ── IDLE: Guided Onboarding ── */}
           {uploadStep === "idle" && (
             <div className="anim-in">
+              {exampleSlug ? (
+                <div className="mb-10 flex flex-col gap-4 rounded-2xl border border-[#DCE6FF] bg-[#EEF3FF] p-6 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-[17px] font-semibold text-[#111111]">Start from the {exampleRole} example</p>
+                    <p className="mt-1 max-w-[520px] text-[14px] leading-relaxed text-[#3F3F3F]">
+                      We&apos;ll copy its summary, experience and skills into a new resume with your name and email.
+                      Replace the sample details with your own before you send it.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => void handleCreate(exampleSlug)}
+                    disabled={creating}
+                    className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-[#2563EB] px-5 text-[14px] font-medium text-white hover:bg-[#1D4ED8] disabled:opacity-60"
+                  >
+                    {creating ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                    Use this example
+                  </button>
+                </div>
+              ) : null}
               <div className="text-center">
                 <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#111111]">
                   <Sparkles className="h-7 w-7 text-white" />

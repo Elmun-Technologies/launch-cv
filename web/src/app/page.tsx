@@ -208,7 +208,7 @@ export default async function Home() {
               </span>
               <span>
                 <span className="block font-semibold">ATS score</span>
-                <span className="block text-[12px] text-[#6B6B6B]">up from 54</span>
+                <span className="block text-[12px] text-[#6B6B6B]">Ready to apply</span>
               </span>
             </div>
           </div>

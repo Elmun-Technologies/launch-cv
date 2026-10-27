@@ -40,10 +40,8 @@ export function AuthLayout({ children, mode }: AuthLayoutProps) {
           {mode === "register" ? (
             <>
               <div className="shrink-0 whitespace-nowrap">
-                <p className="text-[13px] text-[#6B6B6B]">Free ATS check</p>
-                <p className="text-[24px] font-semibold tracking-[-0.02em] text-[#111111]">
-                  54 <span className="text-[#6E6E6A]">→</span> 89
-                </p>
+                <p className="text-[13px] text-[#6B6B6B]">Free to start</p>
+                <p className="text-[24px] font-semibold tracking-[-0.02em] text-[#111111]">ATS check</p>
               </div>
               <div className="h-12 w-px shrink-0 bg-[#EEEEEB]" />
               <p className="text-[14px] leading-[1.5] text-[#3F3F3F]">

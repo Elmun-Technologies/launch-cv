@@ -6,7 +6,8 @@ import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
-import { getResumeExample, type ResumeExample } from "@/lib/resume-examples";
+import { getResumeExample } from "@/lib/resume-examples";
+import { exampleToContent } from "@/lib/example-to-content";
 import { TEMPLATE_SPECS, TEMPLATE_STYLES, type TemplateStyle } from "@/lib/resume-templates";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 import type { ResumeContent } from "@/types/resume";
@@ -70,32 +71,6 @@ const faqs = [
   },
 ];
 
-/** Turns a written example into editor content so the preview shows exactly what the PDF would. */
-function toContent(e: ResumeExample): ResumeContent {
-  const r = e.resume;
-  const [location, email, ...links] = r.contact.split(" · ");
-  const year = (s: string) => s.trim();
-  return {
-    contact: { fullName: r.name, email: email ?? "", location, links },
-    headline: r.headline,
-    summary: r.summary,
-    experience: r.jobs.map((j, i) => {
-      const [start, end] = j.dates.split("–");
-      return {
-        id: `x${i}`,
-        company: j.company,
-        role: j.title,
-        start: year(start ?? ""),
-        end: year(end ?? ""),
-        bullets: j.bullets.map((b, k) => ({ id: `x${i}b${k}`, text: b, evidenceIds: [] })),
-      };
-    }),
-    education: [{ id: "ed", school: r.education.split(" · ")[0] ?? r.education, degree: r.education.split(" · ").slice(1).join(" · "), start: "", end: "" }],
-    skills: r.skills,
-    evidence: [],
-  };
-}
-
 /** A fuller page than the example alone, so each template shows how it handles every section. */
 function withExtras(c: ResumeContent): ResumeContent {
   return {
@@ -121,7 +96,7 @@ function withExtras(c: ResumeContent): ResumeContent {
 }
 
 const sample = getResumeExample("product-manager");
-const content = sample ? withExtras(toContent(sample)) : null;
+const content = sample ? withExtras(exampleToContent(sample)) : null;
 
 const startHref = (t: TemplateStyle) => `/register?next=${encodeURIComponent(`/resume/new?template=${t}`)}`;
 
