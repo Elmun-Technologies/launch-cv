@@ -12,7 +12,7 @@ import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
   Award, Loader2, Check, MessageSquare, Plus, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download, Save,
   Home, FileText, Briefcase, Users, Building2, HelpCircle, Settings, Puzzle, Gift,
-  User, GraduationCap, AlignLeft, Wrench, ChevronRight, ChevronLeft,
+  User, GraduationCap, AlignLeft, Wrench, ChevronRight, ChevronLeft, ArrowLeft,
 } from "lucide-react";
 
 function uid() { return crypto.randomUUID(); }
@@ -823,8 +823,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         {/* ── Main Area ── */}
         <div className="flex flex-1 flex-col overflow-hidden">
           {/* Header */}
-          <header className="flex items-center justify-between border-b border-[#EEEEEB] bg-white px-6 py-3">
-            <div className="flex min-w-0 items-center gap-5">
+          <header className="flex items-center justify-between gap-3 border-b border-[#EEEEEB] bg-white px-4 py-3 sm:px-6">
+            <div className="flex min-w-0 items-center gap-3 lg:gap-5">
+              <Link href="/dashboard/resumes" aria-label="Back to resumes" className="-ml-2 rounded-full p-2 text-[#3F3F3F] hover:bg-[#F5F5F3] lg:hidden">
+                <ArrowLeft className="h-5 w-5" />
+              </Link>
               <div className="min-w-0">
                 <h1 className="truncate text-[15px] font-semibold text-[#111111]">{title}</h1>
                 <p className="truncate text-[12px] text-[#8A8A86]">{content.contact.fullName || content.headline || "Resume"}</p>
@@ -860,6 +863,19 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           </header>
 
           {error ? <div className="bg-red-50 px-6 py-2 text-[13px] font-medium text-red-600">{error}</div> : null}
+
+          <nav aria-label="Resume tools" className="flex gap-1 overflow-x-auto border-b border-[#EEEEEB] bg-white px-4 py-2 lg:hidden">
+            {[
+              { href: "#resume-preview", label: "Preview" },
+              { href: `/resume/${resumeId}/jd`, label: "Match to a job" },
+              { href: `/resume/${resumeId}/packet`, label: "Cover letter" },
+              { href: `/resume/${resumeId}/snapshots`, label: "Versions" },
+            ].map((l) => (
+              <a key={l.href} href={l.href} className="shrink-0 rounded-full border border-[#E5E5E2] px-3 py-1.5 text-[13px] text-[#3F3F3F]">
+                {l.label}
+              </a>
+            ))}
+          </nav>
 
           <div className="flex-1 overflow-y-auto p-5">
             {/* Tab Navigation */}
@@ -911,7 +927,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 {activeTab === "shortbio" ? renderShortBioTab() : null}
                 {activeTab === "skills" ? renderSkillsTab() : null}
               </div>
-              <div className="rounded-2xl border border-[#EEEEEB] bg-white shadow-sm" style={{ perspective: "1200px" }}>
+              <div id="resume-preview" className="scroll-mt-4 rounded-2xl border border-[#EEEEEB] bg-white shadow-sm" style={{ perspective: "1200px" }}>
                 <div
                   className="relative transition-transform duration-600"
                   style={{ transformStyle: "preserve-3d", transform: previewFlipped ? "rotateY(180deg)" : "rotateY(0)" }}

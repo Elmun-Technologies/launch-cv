@@ -207,9 +207,12 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
         </div>
 
         {usage && !usage.paid && !hideTopBanner ? (
-          <div className="flex flex-col gap-2 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2.5 text-[14px] sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <p className="text-[#111111]">
-              AI tools unlock on a plan — from {PUBLIC_PLANS.starter.priceDisplay}/month or {PUBLIC_PLANS.lifetime.priceDisplay} once.
+          <div className="flex items-center justify-between gap-3 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px]">
+            <p className="min-w-0 text-[#111111]">
+              <span className="sm:hidden">AI tools from {PUBLIC_PLANS.starter.priceDisplay}/mo</span>
+              <span className="hidden sm:inline">
+                AI tools unlock on a plan — from {PUBLIC_PLANS.starter.priceDisplay}/month or {PUBLIC_PLANS.lifetime.priceDisplay} once.
+              </span>
             </p>
             <Link
               href="/dashboard/settings/subscription"

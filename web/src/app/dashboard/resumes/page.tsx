@@ -4,7 +4,9 @@ import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { FileText, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import { MiniPage } from "@/components/resume-mini-page";
+import { parseResumeContent } from "@/lib/resume-json";
 import { ResumesToolbar } from "./resumes-toolbar";
 
 type SortKey = "newest" | "oldest" | "az";
@@ -15,7 +17,7 @@ const ORDER_BY: Record<SortKey, Prisma.ResumeOrderByWithRelationInput> = {
   az: { title: "asc" },
 };
 
-const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+const dateFmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
 
 export default async function ResumesPage({
   searchParams,
@@ -38,74 +40,59 @@ export default async function ResumesPage({
   });
 
   return (
-    <DashboardShell email={session.email} pageTitle="Resume Builder">
-      <div className="space-y-5">
-        <div className="flex flex-wrap items-center justify-between gap-4">
+    <DashboardShell email={session.email} pageTitle="Resumes">
+      <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">My Resumes</h1>
-            <p className="mt-1 text-[13px] text-[#6B6B6B]">
-              {resumes.length} resume{resumes.length !== 1 ? "s" : ""} {q ? "found" : "created"}
+            <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+              Resumes <span className="text-[#8A8A86]">— one per kind of role you apply for.</span>
+            </h1>
+            <p className="mt-1 text-[15px] text-[#6B6B6B]">
+              {resumes.length} resume{resumes.length !== 1 ? "s" : ""}
+              {q ? <> matching &ldquo;{q}&rdquo;</> : null}
             </p>
           </div>
-          <Link href="/resume/new" className="inline-flex h-10 items-center gap-2 rounded-xl bg-[#2563EB] px-5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]">
-            <Plus className="h-4 w-4" />New Resume
+          <Link href="/resume/new" className="soha-btn-primary inline-flex shrink-0 items-center gap-1.5">
+            <Plus className="h-4 w-4" aria-hidden /> New resume
           </Link>
         </div>
 
-        <div className="rounded-2xl border border-[#EEEEEB] bg-white p-4">
-          <ResumesToolbar q={q} sort={sort} />
-        </div>
+        <ResumesToolbar q={q} sort={sort} />
 
-        <div className="overflow-hidden rounded-2xl border border-[#EEEEEB] bg-white">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] text-left">
-              <thead className="border-b border-[#EEEEEB] bg-[#FAFAFA] text-[11px] uppercase tracking-wider text-[#8A8A86]">
-                <tr>
-                  <th className="px-5 py-3.5 font-semibold">Resume</th>
-                  <th className="px-4 py-3.5 font-semibold">Region</th>
-                  <th className="px-4 py-3.5 font-semibold">Created</th>
-                  <th className="px-4 py-3.5 font-semibold">Updated</th>
-                  <th className="px-4 py-3.5" />
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#EEEEEB] bg-white">
-                {resumes.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-5 py-12 text-center text-[13px] text-[#6B6B6B]">
-                      {q ? (
-                        <>No resumes match &ldquo;{q}&rdquo;.</>
-                      ) : (
-                        <>No resumes yet. <Link href="/resume/new" className="font-medium text-[#2563EB] hover:underline">Create one</Link></>
-                      )}
-                    </td>
-                  </tr>
-                ) : (
-                  resumes.map((r) => (
-                    <tr key={r.id} className="text-[13px] transition hover:bg-[#FAFAFA]">
-                      <td className="px-5 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF3FF]">
-                            <FileText className="h-5 w-5 text-[#2563EB]" />
-                          </div>
-                          <div>
-                            <span className="font-semibold text-[#111111]">{r.title}</span>
-                            {r.vertical ? <p className="mt-0.5 text-[11px] text-[#8A8A86]">{r.vertical}</p> : null}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-4 text-[#6B6B6B]">{r.regionMode.toUpperCase()}</td>
-                      <td className="px-4 py-4 text-[#6B6B6B]">{dateFmt.format(r.createdAt)}</td>
-                      <td className="px-4 py-4 text-[#6B6B6B]">{dateFmt.format(r.updatedAt)}</td>
-                      <td className="px-4 py-4 text-right">
-                        <Link href={`/resume/${r.id}/edit`} className="rounded-xl border border-[#2563EB]/20 bg-[#EEF3FF] px-4 py-1.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#2563EB] hover:text-white">Edit</Link>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+        {resumes.length === 0 ? (
+          <div className="rounded-[14px] border border-dashed border-[#D9D9D5] bg-white px-6 py-14 text-center">
+            {q ? (
+              <p className="text-[15px] text-[#6B6B6B]">No resumes match &ldquo;{q}&rdquo;.</p>
+            ) : (
+              <>
+                <p className="text-[17px] font-semibold">No resumes yet</p>
+                <p className="mx-auto mt-1 max-w-[420px] text-[14px] text-[#6B6B6B]">
+                  Start from a blank page, or import the resume you already have and improve it.
+                </p>
+                <Link href="/resume/new" className="soha-btn-secondary mt-5 inline-flex">
+                  Create your first resume
+                </Link>
+              </>
+            )}
           </div>
-        </div>
+        ) : (
+          <ul className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            {resumes.map((r) => (
+              <li key={r.id}>
+                <Link
+                  href={`/resume/${r.id}/edit`}
+                  className="block rounded-[14px] border border-[#E5E5E2] bg-white p-3 hover:border-[#111111]"
+                >
+                  <div className="flex h-[180px] justify-center overflow-hidden rounded-lg bg-[#F5F5F3] pt-3 sm:h-[220px]">
+                    <MiniPage content={parseResumeContent(r.content)} />
+                  </div>
+                  <p className="mt-3 truncate text-[15px] font-medium text-[#111111]">{r.title}</p>
+                  <p className="text-[13px] text-[#6B6B6B]">Edited {dateFmt.format(r.updatedAt)}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </DashboardShell>
   );
