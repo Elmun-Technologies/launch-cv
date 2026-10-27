@@ -1,585 +1,93 @@
-import Link from "next/link";
-import { CtaLink } from "@/components/cta-link";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
-import { JsonLd } from "@/components/json-ld";
-import { KeyFacts } from "@/components/key-facts";
-import { RevealOnView } from "@/components/reveal-on-view";
-import { FeatureRelatedLinks } from "@/components/feature-related-links";
-import { StickyCta } from "@/components/sticky-cta";
+import { FeaturePage, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
-import { howToLd, speakableLd } from "@/lib/geo";
-import { absoluteUrl } from "@/lib/site";
-import { FaqSection } from "@/components/faq-section";
-import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
-import { ProductScreenshot } from "@/components/product-screenshot";
-import {
-  Mail,
-  ArrowRight,
-  Check,
-  Building2,
-  Send,
-  Sparkles,
-  FileText,
-  MessageSquare,
-  Target,
-} from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Cover Letter Generator — Personalized Letters in Minutes",
+  title: "AI Cover Letter Generator — From Your Resume and the Job Post",
   description:
-    "Generate a tailored, professional cover letter from your resume and job description in about a minute. Formal or neutral tone, ATS-safe formatting.",
+    "Generate a cover letter written from your resume and the job description, in a formal or neutral tone. No invented experience. Edit and copy in one click.",
   pathname: "/features/cover-letter",
   image: FEATURES_OG_IMAGE,
   keywords: [
     "AI cover letter generator",
+    "cover letter from resume",
+    "cover letter for job description",
     "cover letter writer",
     "personalized cover letter",
-    "job application cover letter",
-    "cover letter maker",
   ],
 });
 
-const faqs: FaqItem[] = [
-  {
-    q: "How does LaunchCV personalize my cover letter?",
-    a: "LaunchCV reads your resume and the job description together, then grounds the letter in your real experience and the role's stated requirements. You can also add the hiring manager's name, a mutual connection, or a why-this-company line, and the AI works them into the draft.",
+const f: FeaturePageData = {
+  path: "/features/cover-letter",
+  name: "Cover Letter",
+  h1: "A cover letter for this job,",
+  h1Tail: "written from what you've actually done.",
+  lead:
+    "Pick a resume, paste the job description and choose a formal or neutral tone. You get a letter that connects your real experience to what the posting asks for — plus an elevator pitch and likely interview questions in the same packet.",
+  facts: ["Formal or neutral tone", "Uses only your resume", "Copy in one click"],
+  photo: { src: "/images/photos/handshake-desk.webp", alt: "Two people shaking hands across a desk" },
+  example: {
+    title: "What you get back",
+    caption: "Example opening for a product manager role. Your letter is written from your resume and the posting you paste.",
+    body: (
+      <div className="max-w-[680px] text-[15px] leading-[1.7] text-[#3F3F3F]">
+        <p>Dear Hiring Team,</p>
+        <p className="mt-3">
+          Your Senior Product Manager posting asks for someone who can turn customer research into shipped features
+          that move retention. At Brightpath Health I ran more than 30 customer interviews that shaped our 2024 roadmap,
+          and led the self-scheduling launch that cut no-shows by 23% across 41 clinics.
+        </p>
+        <p className="mt-3 text-[#8A8A86]">…</p>
+      </div>
+    ),
   },
-  {
-    q: "How long does it take to write a cover letter with LaunchCV?",
-    a: "LaunchCV generates a personalized cover letter in about a minute. You connect a resume, paste the job description, and pick a tone; the AI returns a complete, editable letter body grounded in your real experience, ready to refine before you send.",
+  steps: [
+    { t: "Choose a resume", d: "Use the version you're sending for this job." },
+    { t: "Paste the job description", d: "The letter references what this posting asks for, not a generic template." },
+    { t: "Pick a tone", d: "Formal for traditional employers, neutral for most others." },
+    { t: "Edit and copy", d: "Adjust anything you want, then copy the letter into the application." },
+  ],
+  gets: [
+    { t: "Tailored cover letter", d: "Connects your experience to the posting's requirements." },
+    { t: "Elevator pitch", d: "A 25–40 second answer to “tell me about yourself” for this role." },
+    { t: "10 likely interview questions", d: "Each with an answer outline drawn from your resume." },
+    { t: "No invented claims", d: "The model is told not to add experience or metrics you don't have." },
+    { t: "Two tones", d: "Formal or neutral, depending on the company." },
+    { t: "One-click copy", d: "Paste straight into an application form or email." },
+  ],
+  banner: {
+    photo: { src: "/images/photos/colleagues-celebrate.webp", alt: "Colleagues celebrating good news at work" },
+    title: "Spend your time on the interview, not the letter.",
+    text: "Generate a first draft in about a minute, then make it yours.",
   },
-  {
-    q: "What tones can LaunchCV's cover letter generator write in?",
-    a: "LaunchCV writes in two tones: Formal and Neutral. Formal is a crisp, polished default that suits most roles and industries; Neutral is clear and direct, a good match when the posting itself is casual. Pick either one before generating.",
-  },
-  {
-    q: "Can I edit the cover letter after it's generated?",
-    a: "Yes. LaunchCV returns a complete draft you can edit inline before sending — adjust any sentence, rework the opening, or tighten the close. Because the letter is grounded in your resume, edits are about voice and emphasis, not inventing content.",
-  },
-  {
-    q: "Are LaunchCV cover letters ATS-safe?",
-    a: "Yes, every LaunchCV cover letter uses plain-text, ATS-safe formatting that works in an email body, an ATS upload field, or a PDF attachment. There are no tables, columns, or graphics to break parsing, so your letter stays readable whether a human or software opens it first.",
-  },
-  {
-    q: "Can I control the length of my LaunchCV cover letter?",
-    a: "LaunchCV returns a complete letter body at a natural length for the role. You can trim or expand any part inline before you send — nothing is locked, so you stay in control of the final length.",
-  },
-];
-
-const ld = {
-  "@context": "https://schema.org",
-  "@graph": [
+  faqs: [
     {
-      "@type": "WebPage",
-      name: "Cover Letter Generator | LaunchCV",
-      url: absoluteUrl("/features/cover-letter"),
-      description: "AI cover letters personalized to the company, role, and hiring manager.",
+      q: "How does the cover letter generator work?",
+      a: "It reads the resume you choose and the job description you paste, then writes a letter that links your real experience to the posting's requirements, in the tone you pick.",
     },
     {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-        { "@type": "ListItem", position: 2, name: "Features", item: absoluteUrl("/features") },
-        { "@type": "ListItem", position: 3, name: "Cover Letter", item: absoluteUrl("/features/cover-letter") },
-      ],
+      q: "Will it invent achievements?",
+      a: "No. It's instructed not to add work experience or metrics that aren't in your resume. Read the draft before sending and adjust anything that doesn't sound like you.",
     },
-    howToLd({
-      name: "How to generate a tailored cover letter",
-      description:
-        "Connect a resume, paste the job description, choose a tone, and generate an ATS-safe cover letter in about a minute.",
-      totalTime: "PT1M",
-      url: absoluteUrl("/features/cover-letter"),
-      steps: [
-        { name: "Connect a resume", text: "Use a LaunchCV resume or paste an existing one — your career history is the foundation." },
-        { name: "Paste the job description", text: "The AI reads the posting alongside your resume — no manual tagging." },
-        { name: "Pick a tone", text: "Choose Formal or Neutral before generating." },
-        { name: "Generate", text: "AI returns a complete, editable cover letter body." },
-        { name: "Send", text: "Copy to clipboard, paste into an email, or export a PDF; the plain-text structure works everywhere." },
-      ],
-    }),
-    speakableLd(["h1", ".lc-key-facts-lead"]),
-    faqPageLd(faqs),
+    {
+      q: "Can I choose the tone?",
+      a: "Yes — formal or neutral.",
+    },
+    {
+      q: "What else is in the packet?",
+      a: "An elevator pitch and ten likely interview questions with answer outlines, all based on the same resume and job description.",
+    },
+    {
+      q: "Is it included in my plan?",
+      a: "Yes. Every paid plan includes application packets; plans differ in how many you can generate per month.",
+    },
+  ],
+  related: [
+    { kind: "Tool", label: "Interview prep for this job", href: "/features/interview-prep" },
+    { kind: "Guide", label: "Cover letter tips that actually work", href: "/blog/cover-letter-tips-that-actually-work" },
+    { kind: "Tool", label: "Match your resume to a job", href: "/features/jd-alignment" },
   ],
 };
 
-const keyFacts = [
-  "Writes a tailored cover letter from your resume and a job description in about a minute.",
-  "Choose a Formal or Neutral tone before generating.",
-  "Grounded in your real resume — no invented experience.",
-  "ATS-safe plain-text formatting for email body, ATS upload, or PDF.",
-];
-
-const tones = [
-  { k: "Formal", d: "Crisp, polished, professional. A safe default for most roles and industries." },
-  { k: "Neutral", d: "Clear and direct, less stiff than Formal. Good when the posting itself is casual." },
-];
-
-const benefits = [
-  { t: "Grounded in your resume", d: "The AI writes from your actual experience and the job description — it won't invent achievements you don't have." },
-  { t: "Two tones", d: "Formal or Neutral. Pick the one that matches the role before generating." },
-  { t: "ATS-safe formatting", d: "Plain-text structure that works in an email body, ATS upload, or PDF attachment." },
-  { t: "Bundled with interview prep", d: "The same job description also generates interview questions and a short elevator pitch." },
-];
-
-const steps = [
-  { i: FileText, t: "Connect a resume", d: "Use a LaunchCV resume or paste an existing one. Your career history is the foundation." },
-  { i: Building2, t: "Paste the JD", d: "The AI reads the posting alongside your resume — no manual tagging." },
-  { i: Sparkles, t: "Pick a tone", d: "Choose Formal or Neutral before generating." },
-  { i: Mail, t: "Generate", d: "AI returns a complete, editable cover letter body." },
-  { i: Send, t: "Send", d: "Copy to clipboard, paste into email, or export PDF. Plain-text compatible everywhere." },
-];
-
-// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
-const whyItWorks = [
-  {
-    t: "No more blank-page dread",
-    d: "Connect your resume and a job description, and get a complete first draft to edit — instead of staring at an empty document.",
-  },
-  {
-    t: "Never invents your experience",
-    d: "The letter is grounded in what's actually in your resume. Nothing fabricated, nothing you can't back up in an interview.",
-  },
-];
-
 export default function CoverLetterPage() {
-  return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
-      <JsonLd data={ld} />
-      <LandingNav />
-
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[96px]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 12% 0%, rgba(13,148,136,0.07), transparent 50%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-12 lg:pb-24">
-          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-6">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-                <Mail className="h-3.5 w-3.5 text-[#0D9488]" />
-                Cover Letter Generator
-              </span>
-
-              <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-                Personalized cover letters in about a minute
-              </h1>
-
-              <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                Stop opening the blank document. LaunchCV reads the job description alongside your resume, then writes a letter grounded in your real experience.
-              </p>
-
-              <KeyFacts
-                className="mt-8 max-w-[560px]"
-                lead="The Cover Letter Generator writes a tailored, ATS-safe cover letter from your resume and a target job description in about a minute. It reads the required skills from the posting and offers a Formal or Neutral tone."
-                facts={keyFacts}
-              />
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <CtaLink cta="get_started" location="feature_cover_letter"
-                  href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0D9488] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(13,148,136,0.4)] transition hover:bg-[#0F766E]"
-                >
-                  Write my first letter
-                  <ArrowRight className="h-4 w-4" />
-                </CtaLink>
-                <Link
-                  href="#preview"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
-                >
-                  See an example
-                </Link>
-              </div>
-
-              <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
-                {[
-                  { v: "~1 min", l: "Per letter" },
-                  { v: "2", l: "Tones" },
-                  { v: "Free", l: "Included on every plan" },
-                ].map((s) => (
-                  <div key={s.l}>
-                    <p className="text-[24px] font-bold tracking-tight text-[#0F172A]">{s.v}</p>
-                    <p className="mt-1 text-[12px] uppercase tracking-wider text-[#94A3B8]">{s.l}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* LETTER MOCKUP */}
-            <div className="lg:col-span-6">
-              <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_30px_60px_-20px_rgba(15,23,42,0.18)]">
-                <div className="flex items-center justify-between border-b border-[#E2E8F0] px-6 pt-6 pb-4">
-                  <div>
-                    <p className="text-[16px] font-semibold text-[#0F172A]">Sarah Khan</p>
-                    <p className="text-[12px] text-[#94A3B8]">sarah@email.com · NYC</p>
-                  </div>
-                  <span className="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-teal-700 ring-1 ring-teal-200">
-                    Draft
-                  </span>
-                </div>
-
-                <div className="space-y-3 px-6 py-5 text-[14px] leading-[1.75] text-[#0F172A]">
-                  <p className="text-[#94A3B8]">March 12, 2026</p>
-                  <p>Dear hiring team at Northwind Labs,</p>
-                  <p>
-                    I&apos;ve been following Northwind&apos;s expansion into <span className="rounded bg-teal-100 px-1 text-teal-800">embedded finance</span> since the launch of your Issuing product — and I&apos;d love to bring my six years of payments infrastructure experience to the <span className="rounded bg-teal-100 px-1 text-teal-800">Senior Software Engineer, Money Movement</span> team.
-                  </p>
-                  <p>
-                    At my current role I led the migration of <span className="rounded bg-teal-100 px-1 text-teal-800">three SaaS systems</span> serving 1,200+ accounts, cutting deploy time by 40% with a TypeScript and Go stack. The challenges Northwind is solving — global rails, sub-100ms settlement — are exactly the problems I want to spend the next chapter of my career on.
-                  </p>
-                  <p className="text-[#94A3B8]">_______________</p>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#E2E8F0] px-6 py-4">
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-md bg-teal-50 px-2 py-0.5 text-[11px] font-semibold text-teal-700">Tone · Formal</span>
-                  </div>
-                  <button className="inline-flex items-center gap-1.5 rounded-md bg-[#0D9488] px-3 py-1.5 text-[12px] font-semibold text-white">
-                    <Send className="h-3.5 w-3.5" /> Copy &amp; send
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PRODUCT SCREENSHOT */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#0D9488]">See it in action</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">A personalized letter in seconds</h2>
-            </div>
-          </RevealOnView>
-          <ProductScreenshot
-            className="mt-12"
-            src="/images/product/cover-letter.svg"
-            alt="The LaunchCV AI cover letter generator drafting a personalized, professional cover letter with an adjustable tone."
-            caption="Pick a tone; get a role-specific, ready-to-send letter in about a minute."
-          />
-        </div>
-      </section>
-
-      {/* TONES */}
-      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-20">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">Pick your voice</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Two tones, same job description, different letters
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Tone shapes how the letter reads. Pick the one that matches the role before you generate.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            {tones.map((t, i) => (
-              <RevealOnView key={t.k}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <p className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-                    Tone · {String(i + 1).padStart(2, "0")}
-                  </p>
-                  <p className="mt-3 text-[18px] font-semibold tracking-tight text-[#0F172A]">{t.k}</p>
-                  <p className="mt-2 text-[13px] leading-[1.65] text-[#475569]">{t.d}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PREVIEW */}
-      <section id="preview" className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">A real example</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Same JD. Two tones. Pick the one that fits.
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            <div className="rounded-xl border border-[#E2E8F0] bg-white p-7">
-              <div className="flex items-center gap-2">
-                <span className="rounded-md bg-[#F1F5F9] px-2 py-0.5 text-[11px] font-semibold text-[#475569]">Formal</span>
-              </div>
-              <p className="mt-5 text-[15px] leading-[1.7] text-[#0F172A]">
-                &ldquo;I am writing to express my interest in the Senior Product Manager role at Northwind Labs. With seven years of B2B SaaS experience — most recently leading the activation workstream at my current company — I believe my background in technical product strategy and developer-tools positioning aligns with the responsibilities outlined in your job description.&rdquo;
-              </p>
-            </div>
-            <div className="rounded-xl border border-teal-200 bg-teal-50/50 p-7">
-              <div className="flex items-center gap-2">
-                <span className="rounded-md bg-teal-100 px-2 py-0.5 text-[11px] font-semibold text-teal-800">Neutral</span>
-              </div>
-              <p className="mt-5 text-[15px] leading-[1.7] text-[#0F172A]">
-                &ldquo;I&apos;m applying for the Senior PM role at Northwind Labs. I&apos;ve spent the last three years leading activation work at a B2B SaaS company, and the problems your job description describes — onboarding, retention, developer-tools positioning — are the ones I want to keep solving.&rdquo;
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BENEFITS */}
-      <section className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">What&apos;s included</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Built like a copywriter, not like a template
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((b) => (
-              <RevealOnView key={b.t}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#0D9488]" />
-                  <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{b.t}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{b.d}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* STEPS */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="mb-12 max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">Workflow</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Pasted JD to finished letter, before your coffee cools
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <div className="space-y-3">
-            {steps.map((s, i) => (
-              <RevealOnView key={s.t}>
-                <div className="flex items-start gap-5 rounded-xl border border-[#E2E8F0] bg-white p-5">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
-                    <s.i className="h-5 w-5" />
-                  </span>
-                  <div className="flex-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">Step {String(i + 1).padStart(2, "0")}</p>
-                    <h3 className="mt-1 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
-                    <p className="mt-1 text-[14px] leading-[1.65] text-[#475569]">{s.d}</p>
-                  </div>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* COMPARISON */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">Why not a template</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Blank page vs. an AI cover letter generator
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                A recycled template reads like a recycled template. A personalized cover letter — pulled from the company, the role, and your resume — reads like you meant it.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-10 overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
-              <thead>
-                <tr className="border-b border-[#E2E8F0]">
-                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#0D9488]">LaunchCV</th>
-                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Template or blank page</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { k: "Starting point", a: "Reads the role and required skills from the JD", b: "An empty document and a deadline" },
-                  { k: "Personalization", a: "Grounded in your actual resume, not a generic paragraph", b: "One generic paragraph for every job" },
-                  { k: "Tone", a: "Formal or Neutral to match the employer", b: "One stiff, one-size voice" },
-                  { k: "Speed", a: "A finished letter in about a minute", b: "An hour of second-guessing" },
-                  { k: "Formatting", a: "ATS-safe, ready for email or PDF", b: "Formatting that breaks on upload" },
-                ].map((r) => (
-                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
-                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
-                    <td className="py-4 px-4">
-                      <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#0D9488]" />
-                        <span className="text-[#0F172A]">{r.a}</span>
-                      </span>
-                    </td>
-                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* SCENARIO */}
-      <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
-        <div className="mx-auto max-w-[820px] px-6">
-          <RevealOnView>
-            <p className="lc-overline text-[#0D9488]">A real use scenario</p>
-            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-              How Noah stopped dreading the cover letter
-            </h2>
-            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
-              <p>
-                Noah wanted to apply to eight companies in a weekend, but every job application cover letter took him the better part of an hour. By Saturday afternoon he had written two and given up.
-              </p>
-              <p>
-                He connected his resume, pasted the first job description, and let the cover letter generator do the reading. The AI grounded the draft in his real experience and the exact stack in the posting. He picked the <span className="font-medium text-[#0F172A]">Neutral</span> tone and had a tailored first draft in about a minute.
-              </p>
-              <p>
-                Because each letter starts from the specific role instead of a blank page, the remaining six took a weekend afternoon instead of a week. Every one was grounded in the same real experience — different company, different framing — and ready to paste straight into an email or attach as a clean PDF.
-              </p>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/features/jd-alignment" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
-                Match the resume first <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link href="/features/interview-prep" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
-                Then drill the interview <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* WHY IT WORKS */}
-      <section className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#0D9488]">Why it works</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Letters grounded in what&apos;s actually true</h2>
-            </div>
-          </RevealOnView>
-          <div className="mt-12 grid gap-5 lg:grid-cols-2">
-            {whyItWorks.map((w) => (
-              <RevealOnView key={w.t}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
-                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* RELATED */}
-      <section className="border-t border-[#E2E8F0] py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Pairs well with</p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            {[
-              { href: "/features/jd-alignment", t: "JD Alignment", d: "Match resume keywords to the JD.", icon: Target },
-              { href: "/features/resume-builder", t: "Resume Builder", d: "ATS-tested templates and bullets.", icon: FileText },
-              { href: "/features/interview-prep", t: "Interview Prep", d: "Drill the role before you call.", icon: MessageSquare },
-            ].map((r) => (
-              <Link
-                key={r.href}
-                href={r.href}
-                className="group flex items-start gap-3 rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
-              >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-50 text-teal-700">
-                  <r.icon className="h-4 w-4" />
-                </span>
-                <div>
-                  <p className="text-[14px] font-semibold text-[#0F172A]">{r.t}</p>
-                  <p className="mt-0.5 text-[13px] text-[#64748B]">{r.d}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-[#FAFBFC] py-20">
-        <div className="mx-auto max-w-[900px] px-6 text-center">
-          <h2 className="lc-section-headline text-[#0F172A]">
-            Write a letter you&apos;d actually be proud to send
-          </h2>
-          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Personalized, professional, and ready in about a minute. No blank-page anxiety.
-          </p>
-          <CtaLink cta="get_started" location="feature_cover_letter"
-            href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#0D9488] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#0F766E]"
-          >
-            Write my first letter
-            <ArrowRight className="h-4 w-4" />
-          </CtaLink>
-        </div>
-      </section>
-
-      <FeatureRelatedLinks
-        accent="teal"
-        useCases={[
-          {
-            href: "/use-cases/product-managers",
-            title: "Resumes for product managers",
-            desc: "Pair a tailored PM resume with a cover letter that speaks the company's language.",
-          },
-          {
-            href: "/use-cases/designers",
-            title: "Resumes for designers",
-            desc: "Send a design-focused resume and a letter that shows you understand the brief.",
-          },
-        ]}
-        reading={[
-          {
-            href: "/blog/cover-letter-tips-that-actually-work",
-            title: "7 cover letter tips that get interviews",
-            desc: "Evidence-based tips for letters hiring managers actually read.",
-          },
-          {
-            href: "/blog/how-to-tailor-your-resume-for-every-job",
-            title: "How to tailor your resume for every job",
-            desc: "Match your application to the job description in minutes.",
-          },
-          {
-            href: "/blog/how-to-prepare-for-a-job-interview-with-ai",
-            title: "How to prepare for an interview with AI",
-            desc: "Turn a strong application into a confident, well-rehearsed interview.",
-          },
-        ]}
-      />
-
-      <FaqSection items={faqs} accent="#0D9488" />
-
-      <StickyCta
-        primaryHref="/register"
-        primaryLabel="Try free"
-        primaryClassName="bg-[#0D9488] hover:bg-[#0F766E]"
-        location="feature_cover_letter"
-      />
-
-      <LandingFooter />
-    </div>
-  );
+  return <FeaturePage f={f} />;
 }

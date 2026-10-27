@@ -74,10 +74,10 @@ const filterFacts = [
 ];
 
 const fields = [
-  { href: "/use-cases/software-engineers", label: "Software engineers", sub: "Backend, frontend, full-stack", img: "/images/photos/role-software-engineer.webp", alt: "Software engineer coding on a laptop" },
-  { href: "/use-cases/product-managers", label: "Product managers", sub: "Associate to director", img: "/images/photos/role-product-manager.webp", alt: "Product manager smiling in an office" },
-  { href: "/use-cases/designers", label: "Designers", sub: "UX, product and visual", img: "/images/photos/role-designer.webp", alt: "Designer at her desk" },
-  { href: "/use-cases", label: "Every other role", sub: "Analysts, marketers, support and more", img: "/images/photos/role-data-analyst.webp", alt: "Analyst on a video call" },
+  { href: "/resume-examples/software-engineer", label: "Software engineers", sub: "Backend, frontend, full-stack", img: "/images/photos/role-software-engineer.webp", alt: "Software engineer coding on a laptop" },
+  { href: "/resume-examples/product-manager", label: "Product managers", sub: "Associate to director", img: "/images/photos/role-product-manager.webp", alt: "Product manager smiling in an office" },
+  { href: "/resume-examples/ux-designer", label: "Designers", sub: "UX, product and visual", img: "/images/photos/role-designer.webp", alt: "Designer at her desk" },
+  { href: "/resume-examples", label: "Every other role", sub: "Analysts, marketers, support and more", img: "/images/photos/role-data-analyst.webp", alt: "Analyst on a video call" },
 ];
 
 const templates = [
@@ -98,7 +98,7 @@ const faqs = [
   },
   {
     q: "What file formats can I download?",
-    a: "PDF and DOCX, both ATS-clean. A plain-text view is also available for email pasting or LinkedIn import.",
+    a: "PDF. It's text-based, so applicant tracking systems can read it, and it keeps names in any script intact.",
   },
   {
     q: "Will it make up experience I don't have?",
@@ -328,7 +328,7 @@ export default async function Home() {
           <h2 className={h2}>
             Built for your field. <span className={grey}>Not a generic template.</span>
           </h2>
-          <Link href="/use-cases" className="font-medium text-[#1D4ED8] hover:underline">
+          <Link href="/resume-examples" className="font-medium text-[#1D4ED8] hover:underline">
             All use cases →
           </Link>
         </div>

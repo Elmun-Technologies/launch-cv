@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
       { source: "/annual", destination: "/pricing", statusCode: 301 },
       // The feature page and the free tool targeted the same queries; one page ranks better than two.
       { source: "/features/ats-score", destination: "/free-ats-check", statusCode: 301 },
+      // Role pages now live under /resume-examples (one page per intent).
+      { source: "/use-cases", destination: "/resume-examples", statusCode: 301 },
+      { source: "/use-cases/software-engineers", destination: "/resume-examples/software-engineer", statusCode: 301 },
+      { source: "/use-cases/product-managers", destination: "/resume-examples/product-manager", statusCode: 301 },
+      { source: "/use-cases/designers", destination: "/resume-examples/ux-designer", statusCode: 301 },
     ];
   },
 };

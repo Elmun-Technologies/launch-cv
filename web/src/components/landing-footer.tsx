@@ -18,10 +18,9 @@ const companyLinks = [
 
 const resourceLinks = [
   { label: "Resume Examples", href: "/resume-examples" },
-  { label: "Use Cases", href: "/use-cases" },
-  { label: "For Designers", href: "/use-cases/designers" },
-  { label: "For Engineers", href: "/use-cases/software-engineers" },
-  { label: "For PMs", href: "/use-cases/product-managers" },
+  { label: "Software engineer resume", href: "/resume-examples/software-engineer" },
+  { label: "Product manager resume", href: "/resume-examples/product-manager" },
+  { label: "UX designer resume", href: "/resume-examples/ux-designer" },
   { label: "Best ATS Checkers", href: "/compare/ats-resume-checkers" },
   { label: "Blog", href: "/blog" },
   { label: "Privacy Policy", href: "/legal/privacy" },

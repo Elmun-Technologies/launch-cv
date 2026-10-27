@@ -1,342 +1,130 @@
+import Image from "next/image";
 import Link from "next/link";
-import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { RevealOnView } from "@/components/reveal-on-view";
-import { StickyCta } from "@/components/sticky-cta";
-import { Target, FileText, Mail, MessageSquare, BarChart3, Mic, ArrowRight, Sparkles } from "lucide-react";
-import { KeyFacts } from "@/components/key-facts";
-import { buildMarketingMetadata } from "@/lib/build-metadata";
-import { speakableLd } from "@/lib/geo";
+import { CtaLink } from "@/components/cta-link";
+import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
-import { FaqSection } from "@/components/faq-section";
-import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
-import { ProductScreenshot } from "@/components/product-screenshot";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
-  title: "Features — The Complete AI Job Search Toolkit",
+  title: "Resume Tools — ATS Checker, Builder, JD Match, Cover Letters",
   description:
-    "Six AI tools in one product: JD alignment, resume builder, ATS scanner, cover letters, interview prep, and voice input — one subscription, one workflow.",
+    "Every LaunchCV tool in one place: a free ATS checker, an ATS-friendly resume builder, job-description matching, cover letters, interview prep and voice input.",
   pathname: "/features",
-  keywords: ["LaunchCV features", "JD alignment", "ATS score", "interview prep", "cover letter AI", "AI resume builder"],
+  image: FEATURES_OG_IMAGE,
+  keywords: ["resume tools", "ATS checker", "AI resume builder", "match resume to job description", "AI cover letter", "interview prep"],
 });
 
-const features = [
+const tools = [
   {
-    icon: Target,
-    title: "JD Alignment",
-    description: "Paste a job description. AI maps every requirement and rewrites your bullets to close the gaps.",
-    href: "/features/jd-alignment",
-    iconBg: "bg-blue-50 text-blue-700",
-    stats: [{ k: "Ranked", v: "Keyword gaps" }, { k: "Minutes", v: "Per alignment" }],
-  },
-  {
-    icon: FileText,
-    title: "AI Resume Builder",
-    description: "Plain English in. ATS-tested, quantified bullets out. 4 templates, minutes from blank to PDF.",
-    href: "/features/resume-builder",
-    iconBg: "bg-blue-50 text-blue-700",
-    stats: [{ k: "4", v: "Templates" }, { k: "Minutes", v: "To first draft" }],
-  },
-  {
-    icon: BarChart3,
-    title: "ATS Score Checker",
-    description: "Every parser-breaking format issue, named and ranked, with a plain-English fix list.",
     href: "/free-ats-check",
-    iconBg: "bg-orange-50 text-orange-700",
-    stats: [{ k: "0–100", v: "ATS score scale" }, { k: "Free", v: "No signup" }],
+    name: "ATS resume checker",
+    d: "Your 0–100 score, what the parser can't read and a fix for each issue.",
+    tag: "Free",
+    photo: { src: "/images/photos/resume-clipboard.webp", alt: "Resume on a clipboard next to a laptop" },
   },
   {
-    icon: Mail,
-    title: "Cover Letter Generator",
-    description: "Personalized to the role and company, grounded in your resume. Formal or Neutral tone, in about a minute.",
+    href: "/features/resume-builder",
+    name: "Resume builder",
+    d: "Four ATS-friendly templates, AI bullet rewrites and a PDF that matches the preview.",
+    photo: { src: "/images/photos/resume-review-desk.webp", alt: "Resume being reviewed at a desk" },
+  },
+  {
+    href: "/features/jd-alignment",
+    name: "Job description match",
+    d: "Match score, covered keywords, missing skills and rewrites for one specific posting.",
+    photo: { src: "/images/photos/job-seeker-laptop.webp", alt: "Job seeker comparing a resume with a posting" },
+  },
+  {
     href: "/features/cover-letter",
-    iconBg: "bg-teal-50 text-teal-700",
-    stats: [{ k: "Minutes", v: "Per letter" }, { k: "2", v: "Tones" }],
+    name: "Cover letters",
+    d: "A letter for this job, written from your resume, in a formal or neutral tone.",
+    photo: { src: "/images/photos/handshake-desk.webp", alt: "Two people shaking hands across a desk" },
   },
   {
-    icon: MessageSquare,
-    title: "Interview Prep",
-    description: "Role-specific questions, each with a model answer outline to prepare against. Practice until your worst day still wins.",
     href: "/features/interview-prep",
-    iconBg: "bg-emerald-50 text-emerald-700",
-    stats: [{ k: "Role-specific", v: "Questions" }, { k: "Model", v: "Answer outlines" }],
+    name: "Interview prep",
+    d: "Ten likely questions for the role, with answer outlines from your experience.",
+    photo: { src: "/images/photos/interview-panel.webp", alt: "Candidate in an interview with a hiring panel" },
   },
   {
-    icon: Mic,
-    title: "Voice Input",
-    description: "Click the mic, describe your work to a friend, watch it become a polished bullet.",
     href: "/features/voice-input",
-    iconBg: "bg-pink-50 text-pink-700",
-    stats: [{ k: "Speak", v: "It writes" }, { k: "0", v: "Audio stored" }],
-  },
-];
-
-const faqs: FaqItem[] = [
-  {
-    q: "What AI tools does LaunchCV include?",
-    a: "LaunchCV includes six AI tools under one subscription: JD Alignment, AI Resume Builder, ATS Score Checker, Cover Letter Generator, Interview Prep, and Voice Input. Together they cover every stage of the job hunt — match, write, score, send, practice, and speak — with each tool's output feeding the next.",
-  },
-  {
-    q: "Which LaunchCV feature should I start with?",
-    a: "Start with the AI Resume Builder if you need a resume, since it turns plain English into ATS-tested, quantified bullets in minutes. Its output then feeds the ATS Score Checker and JD Alignment, so beginning there seeds the rest of the workflow automatically.",
-  },
-  {
-    q: "How much can LaunchCV improve my ATS score?",
-    a: "LaunchCV's ATS Score Checker names and ranks every parser-breaking format issue and returns a prioritized fix list, built for how common ATS platforms parse resumes. Separately, JD Alignment scores your job match and rewrites bullets to close the gaps before you apply.",
-  },
-  {
-    q: "Is LaunchCV one subscription or do I pay per tool?",
-    a: "LaunchCV is one subscription that includes all six tools on every plan, so you never pay per tool or copy-paste between tabs. The AI usage ceilings scale with your tier, letting you pick whichever plan matches how hard you are currently applying.",
-  },
-  {
-    q: "Can LaunchCV write a cover letter and prep me for interviews?",
-    a: "Yes, LaunchCV's Cover Letter Generator personalizes letters to the role and company in about a minute, in a Formal or Neutral tone. Interview Prep then generates role-specific questions, each with a model answer outline you can prepare against.",
-  },
-  {
-    q: "Can I build my resume by voice with LaunchCV?",
-    a: "Yes, LaunchCV's Voice Input lets you click the mic, describe your work as if talking to a friend, and watch it become a polished, ATS-ready bullet. No audio is stored, and the output flows straight into the Resume Builder so nothing is retyped.",
+    name: "Voice input",
+    d: "Talk through your experience; turn the transcript into results-first bullets.",
+    photo: { src: "/images/photos/role-customer-service.webp", alt: "Professionals wearing headsets" },
   },
 ];
 
 const ld = {
   "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      name: "Features | LaunchCV",
-      description: "Six AI-powered tools for job seekers under one subscription.",
-      url: absoluteUrl("/features"),
-    },
-    {
-      "@type": "ItemList",
-      itemListElement: features.map((f, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        name: f.title,
-        url: absoluteUrl(f.href),
-      })),
-    },
-    speakableLd(["h1", ".lc-key-facts-lead"]),
-    faqPageLd(faqs),
-  ],
+  "@type": "ItemList",
+  name: "LaunchCV tools",
+  itemListElement: tools.map((t, i) => ({ "@type": "ListItem", position: i + 1, name: t.name, url: absoluteUrl(t.href) })),
 };
 
 export default function FeaturesPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={ld} />
       <LandingNav />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[96px]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 0%, rgba(59,130,246,0.06), transparent 45%), radial-gradient(circle at 90% 10%, rgba(124,58,237,0.05), transparent 50%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-12">
-          <div className="max-w-[760px]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" /> 6 tools · 1 subscription
-            </span>
-            <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-              The complete AI job search toolkit
-            </h1>
-            <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
-              LaunchCV isn&apos;t a resume builder with a chatbot bolted on. It&apos;s six purpose-built AI tools for every stage of the job hunt — match, write, score, send, practice, speak — wired together under one paid plan.
-            </p>
+      <main className="flex-1">
+        <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
+          <h1 className="max-w-[820px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
+            Everything between your resume <span className="text-[#8A8A86]">and the interview.</span>
+          </h1>
+          <p className="mt-5 max-w-[600px] text-[17px] leading-[1.6] text-[#3F3F3F]">
+            Start with the free ATS check. Every other tool is included in each plan, from{" "}
+            {PUBLIC_PLANS.starter.priceDisplay}/month — plans only differ in monthly limits.
+          </p>
+        </section>
 
-            <KeyFacts
-              className="mt-8 max-w-[600px]"
-              lead="LaunchCV combines six AI tools in one subscription: JD alignment, AI resume builder, ATS score checker, cover letter generator, interview prep, and voice input. Each tool's output feeds the next — the resume feeds the ATS scan, the JD match seeds the cover letter — so there's no copy-pasting between tabs."
-              facts={[
-                "Six tools, one paid plan — every tool included on every tier.",
-                "JD alignment maps every requirement and rewrites your bullets to close the gaps.",
-                "ATS checker scores your resume 0–100 with a prioritized fix list.",
-                "Free ATS score check — no account needed to start.",
-              ]}
-            />
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <CtaLink cta="get_started" location="features_index"
-                href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
-              >
-                Get started
-                <ArrowRight className="h-4 w-4" />
-              </CtaLink>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
-              >
-                View pricing
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PRODUCT SCREENSHOT */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#2563EB]">Inside the product</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">One workspace for the whole job search</h2>
-            </div>
-          </RevealOnView>
-          <ProductScreenshot
-            className="mt-12"
-            src="/images/product/resume-builder.svg"
-            alt="The LaunchCV workspace turning rough, plain-language work notes into quantified, ATS-ready resume bullet points with a live preview."
-            caption="From rough notes to ATS-ready bullets — every tool lives in one editor."
-          />
-        </div>
-      </section>
-
-      {/* GRID */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="grid gap-5 lg:grid-cols-3">
-              {features.map((f) => (
-                <Link
-                  key={f.href}
-                  href={f.href}
-                  className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
-                >
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${f.iconBg}`}>
-                    <f.icon className="h-5 w-5" />
-                  </span>
-                  <h2 className="mt-5 text-[20px] font-semibold tracking-tight text-[#0F172A]">{f.title}</h2>
-                  <p className="mt-2 flex-1 text-[14px] leading-[1.65] text-[#475569]">{f.description}</p>
-
-                  <div className="mt-5 flex items-end justify-between border-t border-[#E2E8F0] pt-4">
-                    <div className="flex gap-5">
-                      {f.stats.map((s) => (
-                        <div key={s.v}>
-                          <p className="text-[18px] font-bold leading-none tracking-tight text-[#0F172A]">{s.k}</p>
-                          <p className="mt-1 text-[11px] uppercase tracking-wider text-[#94A3B8]">{s.v}</p>
-                        </div>
-                      ))}
-                    </div>
-                    <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB] opacity-0 transition group-hover:opacity-100">
-                      Learn more
-                      <ArrowRight className="h-3.5 w-3.5" />
+        <section className="mx-auto max-w-[1200px] px-5 pt-14 sm:px-8">
+          <div className="grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {tools.map((t) => (
+              <Link key={t.href} href={t.href} className="group flex flex-col">
+                <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-[#F5F5F3]">
+                  <Image
+                    src={t.photo.src}
+                    alt={t.photo.alt}
+                    fill
+                    sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition duration-300 group-hover:scale-[1.02]"
+                  />
+                  {t.tag ? (
+                    <span className="absolute left-3 top-3 rounded-full bg-white px-2.5 py-1 text-[12px] font-medium text-[#0E7A48]">
+                      {t.tag}
                     </span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* WORKFLOW */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">A single workflow</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Tools that don&apos;t just sit side by side — they hand off
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Every output is the next tool&apos;s input. The resume feeds the ATS scan. The JD alignment seeds the cover letter. The cover letter seeds the interview prep. No copy-pasting between tabs.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <RevealOnView>
-            <div className="mt-12 overflow-x-auto">
-              <div className="flex min-w-[800px] items-center justify-between gap-4">
-                {[
-                  { l: "Voice / paste", t: "Raw input", c: "bg-pink-50 text-pink-700" },
-                  { l: "Resume Builder", t: "AI bullets", c: "bg-blue-50 text-blue-700" },
-                  { l: "ATS Scanner", t: "Score + fixes", c: "bg-orange-50 text-orange-700" },
-                  { l: "JD Alignment", t: "Keyword match", c: "bg-blue-50 text-blue-700" },
-                  { l: "Cover Letter", t: "Personalized letter", c: "bg-teal-50 text-teal-700" },
-                  { l: "Interview Prep", t: "Scored answers", c: "bg-emerald-50 text-emerald-700" },
-                ].map((s, i, arr) => (
-                  <div key={s.l} className="flex items-center gap-3">
-                    <div className="flex flex-col items-center">
-                      <span className={`flex h-12 w-12 items-center justify-center rounded-full text-[14px] font-bold ${s.c}`}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <p className="mt-3 text-[13px] font-semibold text-[#0F172A]">{s.l}</p>
-                      <p className="text-[11px] text-[#94A3B8]">{s.t}</p>
-                    </div>
-                    {i < arr.length - 1 && <ArrowRight className="h-4 w-4 text-[#CBD5E1]" />}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* EXPLORE MORE — keep the visitor moving */}
-      <section className="border-t border-[#E2E8F0] py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Keep exploring</p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            {[
-              { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
-              { href: "/free-ats-check", t: "Free ATS check", d: "Score your current resume in seconds — no signup." },
-              { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
-            ].map((r) => (
-              <Link
-                key={r.href}
-                href={r.href}
-                className="group flex items-start justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white p-6 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
-              >
-                <div>
-                  <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
-                  <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
+                  ) : null}
                 </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#2563EB]" />
+                <p className="mt-4 text-[18px] font-semibold group-hover:text-[#1D4ED8]">{t.name}</p>
+                <p className="mt-1 text-[15px] leading-[1.55] text-[#3F3F3F]">{t.d}</p>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20">
-        <div className="mx-auto max-w-[900px] px-6 text-center">
-          <h2 className="lc-section-headline text-[#0F172A]">
-            One subscription, six superpowers
-          </h2>
-          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Every tool included on every plan. AI ceilings scale with the tier — pick whichever matches how hard you&apos;re applying.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              href="/pricing"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
+        <section className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 sm:py-[104px]">
+          <div className="flex flex-col items-start justify-between gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:p-12">
+            <div>
+              <h2 className="text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
+                Not sure where to start? <span className="text-[#8A8A86]">Check your resume.</span>
+              </h2>
+              <p className="mt-2 text-[16px] text-[#3F3F3F]">Free, no sign-up, about 10 seconds.</p>
+            </div>
+            <CtaLink
+              cta="free_ats_check"
+              location="features_index"
+              href="/free-ats-check"
+              className="inline-flex h-12 shrink-0 items-center rounded-full bg-[#2563EB] px-6 text-[15px] font-medium text-white hover:bg-[#1D4ED8]"
             >
-              View pricing
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <CtaLink cta="get_started" location="features_index" href="/register" className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]">
-              Or create an account
+              Check my resume — free
             </CtaLink>
           </div>
-        </div>
-      </section>
-
-      <FaqSection items={faqs} accent="#2563EB" />
-
-      <StickyCta
-        primaryHref="/register"
-        primaryLabel="Try free"
-        location="features_index"
-      />
+        </section>
+      </main>
 
       <LandingFooter />
     </div>
