@@ -5,6 +5,8 @@ import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
 import { chatJson } from "@/lib/openai-client";
 import { allowAiEvidence } from "@/lib/rate-limit-presets";
+import { assertAiUsageAllowed } from "@/lib/usage-limits";
+import { jsonUsageBlocked } from "@/lib/usage-response";
 import { trackEvent } from "@/lib/analytics";
 
 const schema = z.object({
@@ -32,6 +34,8 @@ export async function POST(req: Request) {
   if (!allowAiEvidence(session.sub)) {
     return NextResponse.json({ error: "AI limit: exceeded hourly allowance." }, { status: 429 });
   }
+  const usage = await assertAiUsageAllowed(session.sub, "jd");
+  if (!usage.ok) return jsonUsageBlocked(usage);
   let body: unknown;
   try {
     body = await req.json();
@@ -54,14 +58,6 @@ export async function POST(req: Request) {
     for (const b of ex.bullets) {
       const nums = extractNumbers(b.text);
       for (const n of nums) metricTexts.push({ text: n, bulletId: b.id });
-      if (b.evidenceIds.length === 0 && b.text.length > 40) {
-        heuristicIssues.push({
-          severity: "med",
-          bulletId: b.id,
-          message: "Bullet has no linked evidence source.",
-          suggestion: "Add a source in the evidence section or shorten the bullet.",
-        });
-      }
     }
   }
 
@@ -89,8 +85,8 @@ ${JSON.stringify(metricTexts)}`;
         ...heuristicIssues,
         {
           severity: "low" as const,
-          message: "AI check failed (key or network). Results based on heuristic rules.",
-          suggestion: "Check your OPENAI_API_KEY.",
+          message: "The full check couldn't run right now, so only the basic checks are shown.",
+          suggestion: "Try again in a few minutes.",
         },
       ],
     };

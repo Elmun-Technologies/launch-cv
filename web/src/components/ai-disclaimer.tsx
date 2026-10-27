@@ -1,12 +1,10 @@
-import { AlertTriangle } from "lucide-react";
+import { Info } from "lucide-react";
 
 export function AiDisclaimer() {
   return (
-    <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
-      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-      <p className="text-xs leading-relaxed text-amber-800">
-        AI suggestions may not always be accurate. The system is designed to avoid fabricating metrics or unverified facts, but always review the results carefully.
-      </p>
-    </div>
+    <p className="flex items-start gap-2 text-[13px] leading-relaxed text-[#6B6B6B]">
+      <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden />
+      AI suggestions only use what&apos;s in your resume and the job post, but they can still be wrong. Review each one before you use it.
+    </p>
   );
 }

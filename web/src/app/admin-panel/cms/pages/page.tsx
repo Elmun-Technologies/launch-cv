@@ -38,26 +38,26 @@ export default async function AdminPagesIndex() {
         description="Edit marketing-page text without touching code. Each key maps to a section on the public site."
       >
         <SectionCard flush>
-          <ul className="divide-y divide-[#E2E8F0]">
+          <ul className="divide-y divide-[#E5E5E2]">
             {PAGE_KEYS.map((p) => {
               const row = byKey.get(p.key);
               return (
                 <li key={p.key}>
                   <Link
                     href={`/admin-panel/cms/pages/${encodeURIComponent(p.key)}`}
-                    className="group flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-[#FAFBFC]"
+                    className="group flex items-center justify-between gap-4 px-5 py-4 transition hover:bg-[#FAFAF9]"
                   >
                     <div className="flex items-start gap-3">
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
                         <Layers className="h-4 w-4" />
                       </span>
                       <div>
-                        <p className="text-[14px] font-semibold text-[#0F172A]">{p.label}</p>
-                        <p className="font-mono text-[11px] text-[#94A3B8]">{p.key}</p>
-                        <p className="mt-1 text-[12px] text-[#64748B]">{p.description}</p>
+                        <p className="text-[14px] font-semibold text-[#111111]">{p.label}</p>
+                        <p className="font-mono text-[11px] text-[#8A8A86]">{p.key}</p>
+                        <p className="mt-1 text-[12px] text-[#6B6B6B]">{p.description}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 text-[12px] text-[#94A3B8]">
+                    <div className="flex items-center gap-3 text-[12px] text-[#8A8A86]">
                       {row ? (
                         <span>Updated {dateFmt.format(row.updatedAt)}</span>
                       ) : (
@@ -65,7 +65,7 @@ export default async function AdminPagesIndex() {
                           Using code defaults
                         </span>
                       )}
-                      <ArrowRight className="h-4 w-4 text-[#CBD5E1] transition group-hover:text-[#2563EB]" />
+                      <ArrowRight className="h-4 w-4 text-[#D9D9D5] transition group-hover:text-[#2563EB]" />
                     </div>
                   </Link>
                 </li>

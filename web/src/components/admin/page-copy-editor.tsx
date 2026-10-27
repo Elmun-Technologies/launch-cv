@@ -52,14 +52,14 @@ export function PageCopyEditor({ pageKey, label, description, initialJson }: Pag
         <div className="flex items-start gap-3">
           <Link
             href="/admin-panel/cms/pages"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#475569] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E5E5E2] bg-white text-[#3F3F3F] transition hover:bg-[#FAFAF9] hover:text-[#111111]"
             aria-label="Back"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
-            <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">{label}</h1>
-            <p className="mt-1 font-mono text-[12px] text-[#94A3B8]">{pageKey}</p>
+            <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">{label}</h1>
+            <p className="mt-1 font-mono text-[12px] text-[#8A8A86]">{pageKey}</p>
             {savedAt ? (
               <p className="mt-1 inline-flex items-center gap-1 text-[12px] text-emerald-700">
                 <CheckCircle2 className="h-3 w-3" /> Saved at {savedAt.toLocaleTimeString()}
@@ -71,14 +71,14 @@ export function PageCopyEditor({ pageKey, label, description, initialJson }: Pag
           type="button"
           onClick={save}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F172A] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#111111] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
           Save
         </button>
       </div>
 
-      <p className="text-[13px] leading-[1.6] text-[#475569]">{description}</p>
+      <p className="text-[13px] leading-[1.6] text-[#3F3F3F]">{description}</p>
 
       {error ? (
         <p className="inline-flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-[13px] text-red-700">
@@ -95,7 +95,7 @@ export function PageCopyEditor({ pageKey, label, description, initialJson }: Pag
           value={text}
           onChange={(e) => setText(e.target.value)}
           spellCheck={false}
-          className="block min-h-[420px] w-full resize-y rounded-lg border border-[#E2E8F0] bg-white p-4 font-mono text-[13px] leading-[1.65] text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
+          className="block min-h-[420px] w-full resize-y rounded-lg border border-[#E5E5E2] bg-white p-4 font-mono text-[13px] leading-[1.65] text-[#111111] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
         />
       </SectionCard>
     </div>

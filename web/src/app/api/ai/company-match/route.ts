@@ -6,6 +6,8 @@ import { parseResumeContent } from "@/lib/resume-json";
 import { chatJson } from "@/lib/openai-client";
 import { getCompanyById, type CompanyRequirement } from "@/lib/company-requirements";
 import { allowAiJd } from "@/lib/rate-limit-presets";
+import { assertAiUsageAllowed, incrementAiUsage } from "@/lib/usage-limits";
+import { jsonUsageBlocked } from "@/lib/usage-response";
 
 const schema = z.object({
   resumeId: z.string().min(1),
@@ -30,6 +32,8 @@ export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   if (!allowAiJd(session.sub)) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  const usage = await assertAiUsageAllowed(session.sub, "role_fit");
+  if (!usage.ok) return jsonUsageBlocked(usage);
 
   let body: unknown;
   try { body = await req.json(); } catch { return NextResponse.json({ error: "JSON expected" }, { status: 400 }); }
@@ -75,6 +79,7 @@ Rules:
     if (!result || typeof result.matchScore !== "number") {
       return NextResponse.json({ error: "AI response invalid" }, { status: 502 });
     }
+    await incrementAiUsage(session.sub, "role_fit");
     return NextResponse.json({ result });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Error" }, { status: 502 });

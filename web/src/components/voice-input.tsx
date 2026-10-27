@@ -161,14 +161,14 @@ export function VoiceInput({
       <button
         type="button"
         onClick={startRecording}
-        className={`group flex items-center gap-2.5 rounded-xl border border-dashed border-gray-200 px-4 py-3 transition hover:border-[#2563EB]/30 hover:bg-blue-50/30 ${className}`}
+        className={`group flex items-center gap-2.5 rounded-xl border border-dashed border-[#E5E5E2] px-4 py-3 transition hover:border-[#2563EB]/30 hover:bg-[#EEF3FF]/30 ${className}`}
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 transition group-hover:bg-[#2563EB] group-hover:text-white">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5F5F3] transition group-hover:bg-[#2563EB] group-hover:text-white">
           <Mic className="h-4 w-4" />
         </div>
         <div className="text-left">
-          <p className="text-[13px] font-medium text-gray-700">{placeholder}</p>
-          <p className="text-[11px] text-gray-400">Click to start — speak freely, confirm when done</p>
+          <p className="text-[13px] font-medium text-[#3F3F3F]">{placeholder}</p>
+          <p className="text-[11px] text-[#8A8A86]">Click to start — speak freely, confirm when done</p>
         </div>
       </button>
     );
@@ -183,8 +183,8 @@ export function VoiceInput({
               <Mic className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-[14px] font-bold text-red-600">Recording... {formatTime(duration)}</p>
-              <p className="text-[12px] text-gray-500">Speak your experience freely. Click stop when finished.</p>
+              <p className="text-[14px] font-semibold text-red-600">Recording... {formatTime(duration)}</p>
+              <p className="text-[12px] text-[#6B6B6B]">Speak your experience freely. Click stop when finished.</p>
             </div>
           </div>
           <button
@@ -199,15 +199,15 @@ export function VoiceInput({
 
         {(rawText || interim) ? (
           <div className="mt-4 rounded-xl bg-white p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Live transcript</p>
-            <p className="mt-2 text-[13px] leading-relaxed text-gray-700">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">Live transcript</p>
+            <p className="mt-2 text-[13px] leading-relaxed text-[#3F3F3F]">
               {rawText}
-              {interim ? <span className="text-gray-400 italic"> {interim}</span> : null}
+              {interim ? <span className="text-[#8A8A86] italic"> {interim}</span> : null}
             </p>
           </div>
         ) : (
           <div className="mt-4 rounded-xl bg-white/50 p-4 text-center">
-            <p className="text-[13px] text-gray-400">Start speaking... your words will appear here</p>
+            <p className="text-[13px] text-[#8A8A86]">Start speaking... your words will appear here</p>
           </div>
         )}
       </div>
@@ -216,33 +216,33 @@ export function VoiceInput({
 
   if (mode === "enhancing") {
     return (
-      <div className={`rounded-2xl border border-[#2563EB]/20 bg-blue-50/30 p-5 text-center ${className}`}>
+      <div className={`rounded-2xl border border-[#2563EB]/20 bg-[#EEF3FF]/30 p-5 text-center ${className}`}>
         <Loader2 className="mx-auto h-8 w-8 animate-spin text-[#2563EB]" />
-        <p className="mt-3 text-[14px] font-semibold text-gray-900">AI is enhancing your text...</p>
-        <p className="mt-1 text-[12px] text-gray-500">Making it impact-driven with quantifiable results</p>
+        <p className="mt-3 text-[14px] font-semibold text-[#111111]">AI is enhancing your text...</p>
+        <p className="mt-1 text-[12px] text-[#6B6B6B]">Making it impact-driven with quantifiable results</p>
       </div>
     );
   }
 
   // Review mode
   return (
-    <div className={`rounded-2xl border border-gray-200 bg-white p-5 ${className}`}>
+    <div className={`rounded-2xl border border-[#E5E5E2] bg-white p-5 ${className}`}>
       <div className="flex items-center justify-between">
-        <p className="text-[14px] font-bold text-gray-900">Review your input</p>
-        <button type="button" onClick={reset} className="text-[12px] font-medium text-gray-400 transition hover:text-gray-600">
+        <p className="text-[14px] font-semibold text-[#111111]">Review your input</p>
+        <button type="button" onClick={reset} className="text-[12px] font-medium text-[#8A8A86] transition hover:text-[#6B6B6B]">
           <RotateCcw className="mr-1 inline h-3 w-3" />Start over
         </button>
       </div>
 
-      <div className="mt-4 rounded-xl bg-gray-50 p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">What you said</p>
-        <p className="mt-2 text-[13px] leading-relaxed text-gray-700">{rawText}</p>
+      <div className="mt-4 rounded-xl bg-[#FAFAF9] p-4">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-[#8A8A86]">What you said</p>
+        <p className="mt-2 text-[13px] leading-relaxed text-[#3F3F3F]">{rawText}</p>
       </div>
 
       {enhanced ? (
-        <div className="mt-3 rounded-xl border border-[#2563EB]/20 bg-blue-50/30 p-4">
+        <div className="mt-3 rounded-xl border border-[#2563EB]/20 bg-[#EEF3FF]/30 p-4">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">AI-Enhanced version</p>
-          <p className="mt-2 text-[13px] font-medium leading-relaxed text-gray-900">{enhanced}</p>
+          <p className="mt-2 text-[13px] font-medium leading-relaxed text-[#111111]">{enhanced}</p>
         </div>
       ) : null}
 
@@ -250,7 +250,7 @@ export function VoiceInput({
         <button
           type="button"
           onClick={() => confirmAndAdd(enhanced ?? rawText)}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
+          className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
         >
           <Check className="h-4 w-4" />
           {enhanced ? "Use Enhanced Version" : "Add to Resume"}
@@ -260,7 +260,7 @@ export function VoiceInput({
           <button
             type="button"
             onClick={() => void enhanceWithAI()}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#2563EB]/20 px-4 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#2563EB]/20 px-4 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#EEF3FF]"
           >
             <Sparkles className="h-4 w-4" />
             Enhance with AI
@@ -269,7 +269,7 @@ export function VoiceInput({
           <button
             type="button"
             onClick={() => confirmAndAdd(rawText)}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 px-4 py-2.5 text-[13px] font-medium text-gray-600 transition hover:bg-gray-50"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-[#E5E5E2] px-4 py-2.5 text-[13px] font-medium text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
           >
             Use Original Instead
           </button>
@@ -278,7 +278,7 @@ export function VoiceInput({
         <button
           type="button"
           onClick={startRecording}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-gray-200 px-4 py-2.5 text-[13px] font-medium text-gray-600 transition hover:bg-gray-50"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-[#E5E5E2] px-4 py-2.5 text-[13px] font-medium text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
         >
           <Mic className="h-3.5 w-3.5" />
           Record Again
@@ -287,7 +287,7 @@ export function VoiceInput({
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center gap-1.5 px-3 py-2.5 text-[13px] text-gray-400 transition hover:text-gray-600"
+          className="inline-flex items-center gap-1.5 px-3 py-2.5 text-[13px] text-[#8A8A86] transition hover:text-[#6B6B6B]"
         >
           <X className="h-3.5 w-3.5" />
           Cancel

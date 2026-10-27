@@ -1,43 +1,30 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { HomeClient } from "@/components/home-client";
-import { LandingHero } from "@/components/landing-hero";
-import { ProductShowcase } from "@/components/product-showcase";
-import { ResumeTemplateGallery } from "@/components/resume-template-gallery";
-import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-reveal";
+import { ResumePage, ResumeThumb, SAMPLE_RESUMES } from "@/components/home/sample-resume";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
-import {
-  ArrowRight,
-  Check,
-  Sparkles,
-  Download,
-  Target,
-  FileText,
-  Mail,
-  MessageSquare,
-  BarChart3,
-  Mic,
-} from "lucide-react";
+import { ArrowRight, FileText } from "lucide-react";
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: "AI Resume Builder & Job Search Platform",
-  description: `AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep — all in one plan. Check your resume's ATS score free. Plans from ${planPriceLabel("starter")}.`,
+  title: "Free ATS Resume Checker & AI Resume Builder",
+  description: `Get a free ATS score for your resume in about 10 seconds, see every issue in plain English, then fix it and tailor it to each job. Plans from ${planPriceLabel("starter")}.`,
   pathname: "/",
   keywords: [
-    "AI resume builder",
     "ATS resume checker",
-    "JD alignment",
+    "free ATS score",
+    "AI resume builder",
+    "resume tailoring",
     "cover letter generator",
     "interview prep AI",
-    "resume optimization",
   ],
 });
 
@@ -46,86 +33,58 @@ const homeLd = {
   "@graph": [
     {
       "@type": "WebPage",
-      name: "LaunchCV — AI Resume Builder & Job Search Platform",
+      name: "LaunchCV — Free ATS Resume Checker & AI Resume Builder",
       description:
-        "AI resume builder with JD alignment, ATS scoring, cover letters, and interview prep — under one subscription.",
+        "Check your resume against applicant tracking systems for free, then fix it, tailor it to each job, and write a matching cover letter.",
       url: absoluteUrl("/"),
       isPartOf: { "@type": "WebSite", name: "LaunchCV", url: getSiteUrl() },
     },
   ],
 };
 
-const features = [
+const tools = [
+  { href: "/free-ats-check", label: "ATS check" },
+  { href: "/features/resume-builder", label: "Resume builder" },
+  { href: "/features/jd-alignment", label: "Job tailoring" },
+  { href: "/features/cover-letter", label: "Cover letters" },
+  { href: "/features/interview-prep", label: "Interview prep" },
+  { href: "/features/voice-input", label: "Voice input" },
+];
+
+const reportRows = [
+  { issue: "Contact details are inside a table", impact: "High" },
+  { issue: "Missing 6 keywords for Product Manager roles", impact: "High" },
+  { issue: "6 bullets list duties, not results", impact: "Medium" },
+  { issue: "Heading \"My Journey\" isn't recognized", impact: "Medium" },
+];
+
+const filterFacts = [
   {
-    href: "/features/jd-alignment",
-    title: "JD Alignment",
-    desc: "Paste any job description. AI maps every requirement to your resume and rewrites bullets to lift your match score.",
-    icon: Target,
-    iconBg: "bg-blue-50 text-blue-700",
+    t: "Software reads your resume first",
+    d: "Applicant tracking systems parse and rank applications before a recruiter opens them.",
   },
   {
-    href: "/features/resume-builder",
-    title: "AI Resume Builder",
-    desc: "Four ATS-tested templates. Plain-English input becomes quantified, professional bullets.",
-    icon: FileText,
-    iconBg: "bg-blue-50 text-blue-700",
+    t: "Formatting can hide your experience",
+    d: "Tables, columns and text boxes can scramble or drop whole sections.",
   },
   {
-    href: "/features/ats-score",
-    title: "ATS Score Checker",
-    desc: "Check your resume against the formatting and keyword signals ATS software relies on. Get a 0–100 score and a prioritized fix list.",
-    icon: BarChart3,
-    iconBg: "bg-orange-50 text-orange-700",
-  },
-  {
-    href: "/features/cover-letter",
-    title: "Cover Letter Generator",
-    desc: "Personalized letters in under a minute. Multiple tones and languages. ATS-safe formatting.",
-    icon: Mail,
-    iconBg: "bg-teal-50 text-teal-700",
-  },
-  {
-    href: "/features/interview-prep",
-    title: "Interview Prep",
-    desc: "Role-specific questions, each with a model answer outline to practice against.",
-    icon: MessageSquare,
-    iconBg: "bg-emerald-50 text-emerald-700",
-  },
-  {
-    href: "/features/voice-input",
-    title: "Voice Input",
-    desc: "Speak naturally and LaunchCV turns your words into ATS-ready resume bullets — no typing required.",
-    icon: Mic,
-    iconBg: "bg-pink-50 text-pink-700",
+    t: "Keywords decide the ranking",
+    d: "If the job asks for \"stakeholder management\" and you wrote \"worked with teams\", you rank lower.",
   },
 ];
 
-// Honest capability strip — real product facts, not fabricated logos or metrics.
-const capabilities = [
-  { icon: BarChart3, label: "Free ATS score — no signup" },
-  { icon: FileText, label: "4 ATS-tested templates" },
-  { icon: Sparkles, label: "6 AI tools, one plan" },
-  { icon: Download, label: "PDF & DOCX export" },
+const fields = [
+  { href: "/resume-examples/software-engineer", label: "Software engineers", sub: "Backend, frontend, full-stack", img: "/images/photos/role-software-engineer.webp", alt: "Software engineer coding on a laptop" },
+  { href: "/resume-examples/product-manager", label: "Product managers", sub: "Associate to director", img: "/images/photos/role-product-manager.webp", alt: "Product manager smiling in an office" },
+  { href: "/resume-examples/ux-designer", label: "Designers", sub: "UX, product and visual", img: "/images/photos/role-designer.webp", alt: "Designer at her desk" },
+  { href: "/resume-examples", label: "Every other role", sub: "Analysts, marketers, support and more", img: "/images/photos/role-data-analyst.webp", alt: "Analyst on a video call" },
 ];
 
-// "Why it works" — persuasive, benefit-led copy grounded in what the product
-// actually does. No invented reviews, ratings, or user counts.
-const benefits = [
-  {
-    icon: Target,
-    title: "Tailored to each job, not generic",
-    desc: "Paste the job description and LaunchCV maps every requirement to your resume, then rewrites bullets to close the gaps — so you apply with a resume built for that role.",
-  },
-  {
-    icon: BarChart3,
-    title: "See what the software sees",
-    desc: "Get a 0–100 ATS score with a prioritized, plain-English fix list before a recruiter ever opens your file — no guessing why applications stall.",
-  },
-  {
-    icon: Sparkles,
-    title: "One workspace, every step",
-    desc: "Resume, JD alignment, ATS score, cover letter, and interview prep share the same context, so each tool builds on the last. No copy-pasting between tabs.",
-  },
+const templates = [
+  { resume: SAMPLE_RESUMES.engineer, name: "Classic" },
+  { resume: SAMPLE_RESUMES.finance, name: "Executive" },
+  { resume: SAMPLE_RESUMES.designer, name: "Modern" },
+  { resume: SAMPLE_RESUMES.marketing, name: "Minimal" },
 ];
 
 const faqs = [
@@ -139,23 +98,23 @@ const faqs = [
   },
   {
     q: "What file formats can I download?",
-    a: "PDF and DOCX, both ATS-clean. A plain-text view is also available for email pasting or LinkedIn import.",
+    a: "PDF. It's text-based, so applicant tracking systems can read it, and it keeps names in any script intact.",
   },
   {
-    q: "How is this different from other resume builders?",
-    a: "LaunchCV pairs the builder with JD alignment, ATS scoring, cover letters, and interview prep — under one paid plan with predictable AI limits and no upsell modals.",
+    q: "Will it make up experience I don't have?",
+    a: "No. Rewrites only use facts that are already in your resume or that you add yourself. You review every change before it's applied.",
   },
   {
     q: "Is my data safe and private?",
-    a: "Yes. Your data is encrypted in transit and at rest, and we never sell it. Voice audio is processed in-memory and discarded after transcription.",
+    a: "Your data is encrypted in transit and at rest, and we never sell it. Resume text is sent to our AI provider only to produce the results you ask for. Voice input uses your browser's speech recognition; we receive the text, not the audio.",
   },
   {
     q: "How long does building a resume take?",
-    a: "Most users finish a polished, ATS-tested PDF in under five minutes with AI suggestions and the live preview.",
+    a: "Most people finish a polished, ATS-friendly PDF in one sitting with the suggestions and the live preview.",
   },
   {
     q: "Does it work for all industries?",
-    a: "Yes. The templates work across tech, finance, healthcare, marketing, design, operations, and management, and the AI is calibrated per vertical so the language fits your field.",
+    a: "Yes. The templates work across tech, finance, healthcare, marketing, design, operations, and management, and the AI is calibrated per field so the language fits your role.",
   },
   {
     q: "What is the Lifetime plan?",
@@ -176,321 +135,256 @@ const faqLd = {
 // ISR: keep the homepage fast while surfacing the latest blog posts.
 export const revalidate = 300;
 
+const h2 = "text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111] sm:text-[40px]";
+const grey = "text-[#8A8A86]";
+
 export default async function Home() {
   const latestPosts = (await getPublishedPosts()).slice(0, 3);
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={homeLd} />
       <JsonLd data={faqLd} />
       <LandingNav />
 
       {/* HERO */}
-      <LandingHero />
-
-      {/* CAPABILITY STRIP — honest product facts */}
-      <section className="border-y border-[#E2E8F0] bg-[#FAFBFC] py-6">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 sm:gap-x-10">
-            {capabilities.map((c) => (
-              <span
-                key={c.label}
-                className="inline-flex items-center gap-2 text-[13px] font-medium text-[#475569] sm:text-[14px]"
+      <section className="mx-auto w-full max-w-[1200px] px-6 pt-[112px] sm:pt-[136px]">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-16">
+          <h1 className="flex-1 text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px] lg:text-[62px]">
+            Find out why your resume isn&apos;t getting interviews. <span className={grey}>Then fix it.</span>
+          </h1>
+          <div className="flex max-w-[420px] flex-col gap-5">
+            <p className="text-[17px] leading-[1.6] text-[#3F3F3F]">
+              LaunchCV checks your resume the way applicant tracking systems read it, explains every issue in plain
+              English, and helps you rewrite it for each job you apply to.
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <CtaLink
+                cta="check_resume"
+                location="home_hero"
+                href="/free-ats-check"
+                className="inline-flex h-12 items-center rounded-full bg-[#2563EB] px-6 text-[15px] font-medium text-white transition hover:bg-[#1D4ED8]"
               >
-                <c.icon className="h-4 w-4 shrink-0 text-[#2563EB]" />
-                {c.label}
+                Check my resume — free
+              </CtaLink>
+              <span className="text-[14px] text-[#6B6B6B]">No sign-up needed</span>
+            </div>
+          </div>
+        </div>
+
+        <CtaLink
+          cta="upload_bar"
+          location="home_hero"
+          href="/free-ats-check"
+          className="mx-auto mt-10 flex max-w-[620px] items-center gap-3 rounded-full border border-[#D9D9D5] bg-white py-2 pl-5 pr-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:border-[#111111]"
+        >
+          <FileText className="h-5 w-5 shrink-0 text-[#6B6B6B]" aria-hidden="true" />
+          <span className="flex-1 text-[15px] text-[#3F3F3F]">
+            <span className="font-medium text-[#2563EB]">Upload</span> or drop your resume<span className="hidden sm:inline"> — PDF or Word</span>
+          </span>
+          <span className="inline-flex h-10 items-center rounded-full bg-[#111111] px-4 text-[14px] font-medium text-white">
+            Get my score
+          </span>
+        </CtaLink>
+
+        {/* Real resumes are the hero image */}
+        <div
+          className="relative mt-12 h-[340px] overflow-hidden rounded-[20px] bg-[#F5F5F3] sm:h-[520px]"
+          aria-hidden="true"
+        >
+          <div className="absolute left-1/2 top-16 hidden -translate-x-[560px] -rotate-[5deg] md:block">
+            <div className="origin-top-left scale-[0.62] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.25)]">
+              <ResumePage resume={SAMPLE_RESUMES.engineer} />
+            </div>
+          </div>
+          <div className="absolute left-1/2 top-10 z-10 -translate-x-[150px] md:-translate-x-[186px]">
+            <div className="origin-top-left scale-[0.5] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.32)] md:scale-[0.66]">
+              <ResumePage resume={SAMPLE_RESUMES.pm} />
+            </div>
+            <div className="absolute left-[150px] top-[-14px] flex items-center md:left-[340px] md:top-[18px] gap-2.5 rounded-xl border border-[#E5E5E2] bg-white px-3.5 py-2.5 text-[14px] shadow-[0_10px_24px_-12px_rgba(0,0,0,0.25)]">
+              <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border-[3px] border-[#12A15E] text-[13px] font-bold">
+                91
               </span>
-            ))}
+              <span>
+                <span className="block font-semibold">ATS score</span>
+                <span className="block text-[12px] text-[#6B6B6B]">up from 54</span>
+              </span>
+            </div>
+          </div>
+          <div className="absolute left-1/2 top-[92px] hidden translate-x-[210px] rotate-[5deg] md:block">
+            <div className="origin-top-left scale-[0.62] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.25)]">
+              <ResumePage resume={SAMPLE_RESUMES.marketing} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* PRODUCT SHOWCASE */}
-      <ProductShowcase />
-
-      {/* RESUME TEMPLATE GALLERY */}
-      <ResumeTemplateGallery />
-
-      {/* FEATURE GRID */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">The toolkit</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Six AI tools for every stage of the job search
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Match, write, score, send, practice, and speak — every output feeds the next tool. No copy-pasting between tabs.
-              </p>
-            </div>
-          </MotionReveal>
-
-          <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((f) => (
-              <MotionItem key={f.href} className="h-full">
-                <Link
-                  href={f.href}
-                  className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.22)]"
-                >
-                  <span className={`flex h-10 w-10 items-center justify-center rounded-lg transition-transform duration-300 group-hover:scale-110 ${f.iconBg}`}>
-                    <f.icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{f.title}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{f.desc}</p>
-                  <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
-                    Learn more
-                    <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
-              </MotionItem>
-            ))}
-          </MotionStagger>
-        </div>
-      </section>
-
-      {/* POPULAR RESOURCES — keyword-rich internal linking hub */}
-      <section className="border-t border-[#E2E8F0] py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Most popular</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Start with the two tools job seekers use most
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Two free-to-start tools do the heavy lifting: check whether your resume can pass
-                the software, then tailor it to the exact job you want.
-              </p>
-            </div>
-          </MotionReveal>
-
-          <div className="mt-10 grid gap-5 lg:grid-cols-2">
-            <MotionReveal>
-              <Link
-                href="/features/ats-score"
-                className="group flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2)]"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
-                  <BarChart3 className="h-5 w-5" />
-                </span>
-                <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
-                  Free ATS score checker — see how your resume reads to ATS software
-                </h3>
-                <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
-                  Upload your resume and get a 0–100 ATS score in seconds, with a
-                  prioritized list of every formatting and keyword fix. See{" "}
-                  <span className="font-semibold text-[#2563EB] underline-offset-2 group-hover:underline">
-                    how to check your resume&apos;s ATS score
-                  </span>
-                  .
-                </p>
-                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
-                  Check my ATS score
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </MotionReveal>
-
-            <MotionReveal>
-              <Link
-                href="/features/jd-alignment"
-                className="group flex h-full flex-col rounded-2xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.2)]"
-              >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
-                  <Target className="h-5 w-5" />
-                </span>
-                <h3 className="mt-5 text-[19px] font-semibold text-[#0F172A]">
-                  JD alignment — match your resume to any job description
-                </h3>
-                <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">
-                  Paste a job description and AI runs a keyword gap analysis, then rewrites your
-                  bullets to close the gaps and lift your match score —{" "}
-                  <span className="font-semibold text-[#2563EB] underline-offset-2 group-hover:underline">
-                    tailor your resume to the job
-                  </span>{" "}
-                  in under a minute.
-                </p>
-                <span className="mt-5 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
-                  Align my resume
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                </span>
-              </Link>
-            </MotionReveal>
-          </div>
-
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[14px] text-[#475569]">
-            <span className="font-semibold text-[#94A3B8]">Popular guides:</span>
-            <Link href="/blog/what-is-an-ats-score" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              What is an ATS score?
+      {/* TOOLS + REPORT */}
+      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
+        <h2 className={`${h2} max-w-[760px]`}>
+          Everything you need to apply with confidence. <span className={grey}>In one place.</span>
+        </h2>
+        <nav aria-label="Tools" className="mt-8 flex flex-wrap gap-1.5">
+          {tools.map((t, i) => (
+            <Link
+              key={t.href}
+              href={t.href}
+              className={`inline-flex h-10 items-center rounded-full px-4 text-[15px] font-medium transition ${
+                i === 0 ? "bg-[#111111] text-white" : "bg-[#F5F5F3] text-[#3F3F3F] hover:bg-[#EBEBE8]"
+              }`}
+            >
+              {t.label}
             </Link>
-            <Link href="/blog/how-to-check-ats-score-of-resume" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              How to check your ATS score
-            </Link>
-            <Link href="/blog/resume-keywords-for-software-engineers" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              Resume keywords for software engineers
-            </Link>
-            <Link href="/compare/ats-resume-checkers" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              Best ATS resume checkers
+          ))}
+        </nav>
+        <div className="mt-6 flex flex-col gap-10 overflow-hidden rounded-[20px] bg-[#EEF3FF] px-6 pt-10 sm:px-12 sm:pt-12 lg:flex-row lg:items-end">
+          <div className="flex max-w-[360px] flex-col gap-3.5 lg:pb-12">
+            <p className="text-[24px] font-semibold leading-[1.25] tracking-[-0.02em]">
+              See your resume the way hiring software does
+            </p>
+            <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
+              A score out of 100, the issues behind it ranked by impact, and a clear fix for each one.
+            </p>
+            <Link href="/free-ats-check" className="inline-flex items-center gap-1 font-medium text-[#1D4ED8] hover:underline">
+              Check my resume <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">How it works</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                A complete application in three steps
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Go from raw experience to an ATS-clean resume and a matching cover letter in one sitting.
-              </p>
+          <div className="flex min-w-0 flex-1 flex-col gap-7 rounded-t-[14px] bg-white p-7 shadow-[0_-10px_40px_-20px_rgba(29,78,216,0.35)] sm:flex-row">
+            <div className="flex shrink-0 flex-col items-center gap-2 sm:w-[180px]">
+              <svg width="150" height="150" viewBox="0 0 120 120" role="img" aria-label="Example ATS score: 54 out of 100">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#F0F0EE" strokeWidth="10" />
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#E8890C" strokeWidth="10" strokeLinecap="round" strokeDasharray="170 314" transform="rotate(-90 60 60)" />
+                <text x="60" y="68" textAnchor="middle" fontSize="30" fontWeight="600" fill="#111111">54</text>
+              </svg>
+              <p className="font-semibold">Needs work</p>
+              <p className="text-[13px] text-[#6B6B6B]">11 issues found</p>
             </div>
-          </MotionReveal>
-
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {[
-              {
-                n: "01",
-                title: "Bring your raw experience",
-                copy: "Paste an existing resume, type your history plainly, or speak it with voice input. No formatting required.",
-              },
-              {
-                n: "02",
-                title: "AI writes, scores, and matches",
-                copy: "Quantified bullets. Keywords mapped to the JD. An ATS score with a prioritized fix list. All within seconds.",
-              },
-              {
-                n: "03",
-                title: "Export and apply",
-                copy: "PDF, DOCX, or plain text. Cover letter generated from the same JD. Interview drills ready to start.",
-              },
-            ].map((s) => (
-              <MotionReveal key={s.n}>
-                <div className="flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#EFF6FF] text-[13px] font-bold text-[#2563EB]">
-                    {s.n}
-                  </span>
-                  <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">{s.title}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{s.copy}</p>
-                </div>
-              </MotionReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* STATS */}
-      <HomeClient />
-
-      {/* WHY IT WORKS */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Why it works</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Built to get you seen — not just to format a resume
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Every tool targets the real reason applications stall: a resume that doesn&apos;t
-                match the job or clear the software screening it first.
-              </p>
-            </div>
-          </MotionReveal>
-
-          <MotionStagger className="mt-12 grid gap-5 lg:grid-cols-3">
-            {benefits.map((b) => (
-              <MotionItem key={b.title} className="h-full">
-                <div className="flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
-                    <b.icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{b.title}</h3>
-                  <p className="mt-2 flex-1 text-[14px] leading-[1.7] text-[#475569]">{b.desc}</p>
-                </div>
-              </MotionItem>
-            ))}
-          </MotionStagger>
-        </div>
-      </section>
-
-      {/* PRICING TEASER */}
-      <section className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
-              <div className="lg:col-span-7">
-                <p className="lc-overline text-[#2563EB]">Pricing</p>
-                <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                  Pay monthly or once
-                </h2>
+            <div className="min-w-0 flex-1">
+              <div className="flex justify-between border-b border-[#EEEEEB] pb-2.5 text-[13px] text-[#6B6B6B]">
+                <span>Issue</span>
+                <span>Impact</span>
               </div>
-              <p className="text-[16px] leading-[1.65] text-[#475569] lg:col-span-5">
-                Every tool is included on every plan. The only thing that changes is the monthly AI ceiling.
-              </p>
+              {reportRows.map((r) => (
+                <div key={r.issue} className="flex justify-between gap-3 border-b border-[#EEEEEB] py-3.5 text-[15px]">
+                  <span>{r.issue}</span>
+                  <span className={`shrink-0 font-medium ${r.impact === "High" ? "text-[#C2341B]" : "text-[#B2610A]"}`}>
+                    {r.impact}
+                  </span>
+                </div>
+              ))}
+              <p className="py-3.5 text-[15px] text-[#6B6B6B]">7 more</p>
             </div>
-          </MotionReveal>
+          </div>
+        </div>
+      </section>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {/* TEMPLATES */}
+      <section className="pt-24 sm:pt-28">
+        <div className="mx-auto flex max-w-[1200px] flex-wrap items-end justify-between gap-6 px-6">
+          <h2 className={`${h2} max-w-[700px]`}>
+            Templates recruiters can skim in seconds. <span className={grey}>And software can read.</span>
+          </h2>
+          <Link
+            href="/features/resume-builder"
+            className="inline-flex h-11 items-center rounded-full border border-[#D9D9D5] px-5 text-[15px] font-medium transition hover:border-[#111111]"
+          >
+            All templates
+          </Link>
+        </div>
+        <div className="mt-10 flex justify-start gap-6 overflow-x-auto px-6 pb-2 lg:justify-center">
+          {templates.map((t) => (
+            <figure key={t.name} className="m-0 shrink-0">
+              <ResumeThumb resume={t.resume} scale={0.415} height={330} />
+              <figcaption className="mt-3 text-[15px] font-medium">{t.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      {/* WHY RESUMES GET FILTERED */}
+      <section className="px-6 pt-24 sm:pt-28">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-12 rounded-[20px] bg-[#111111] px-8 py-12 text-white sm:px-16 sm:py-20 lg:flex-row">
+          <h2 className="flex-1 text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[44px]">
+            You&apos;re probably not being rejected by people.{" "}
+            <span className="text-[#8A8A86]">You&apos;re being filtered before they see you.</span>
+          </h2>
+          <ol className="flex flex-1 flex-col gap-6">
+            {filterFacts.map((f, i) => (
+              <li key={f.t} className="flex gap-5">
+                <span className="pt-0.5 text-[14px] text-[#8A8A86]">0{i + 1}</span>
+                <span>
+                  <span className="block text-[17px] font-semibold">{f.t}</span>
+                  <span className="mt-1 block text-[15px] leading-[1.6] text-[#B5B5B0]">{f.d}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* BY FIELD */}
+      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <h2 className={h2}>
+            Built for your field. <span className={grey}>Not a generic template.</span>
+          </h2>
+          <Link href="/resume-examples" className="font-medium text-[#1D4ED8] hover:underline">
+            All use cases →
+          </Link>
+        </div>
+        <div className="mt-8 grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+          {fields.map((f) => (
+            <Link key={f.label} href={f.href} className="group block">
+              <Image
+                src={f.img}
+                alt={f.alt}
+                width={640}
+                height={480}
+                sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
+                className="aspect-[4/3] w-full rounded-[14px] object-cover"
+              />
+              <span className="mt-3 flex items-center justify-between text-[16px] font-medium">
+                {f.label}
+                <ArrowRight className="h-4 w-4 text-[#8A8A86] transition group-hover:translate-x-0.5" aria-hidden="true" />
+              </span>
+              <span className="mt-0.5 block text-[14px] text-[#6B6B6B]">{f.sub}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* PRICING */}
+      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
+        <div className="flex flex-col gap-10 border-t border-[#EEEEEB] pt-12 lg:flex-row">
+          <div className="flex-1">
+            <h2 className={h2}>
+              Free to check. <span className={grey}>Plans from {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
+            </h2>
+            <p className="mt-4 max-w-[440px] text-[17px] leading-[1.6] text-[#3F3F3F]">
+              Every AI tool is included on every plan. Cancel monthly plans in one click, or pay once with Lifetime.
+            </p>
+          </div>
+          <div className="grid flex-1 gap-3 sm:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
-              const popular = !!cfg.popular;
-              const tagline: Record<string, string> = {
-                starter: "Try the workflow — monthly, cancel anytime.",
-                professional: "Best balance of limits and price.",
-                lifetime: "One payment. Forever access.",
-              };
               return (
-                <div
+                <CtaLink
                   key={key}
-                  className={`flex flex-col rounded-xl bg-white p-7 ${
-                    popular ? "border-2 border-[#2563EB] shadow-[0_20px_40px_-20px_rgba(26,86,219,0.25)]" : "border border-[#E2E8F0]"
+                  cta="choose_plan"
+                  plan={key}
+                  location="home_pricing"
+                  selectsPlan
+                  href="/pricing"
+                  className={`flex flex-col rounded-[14px] p-5 transition ${
+                    cfg.popular ? "border-2 border-[#111111]" : "border border-[#E5E5E2] hover:border-[#111111]"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="text-[16px] font-semibold text-[#0F172A]">{cfg.title}</p>
-                    {popular && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#2563EB]">
-                        Most chosen
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-1 text-[13px] text-[#64748B]">{tagline[key]}</p>
-                  <div className="mt-5 flex items-baseline gap-1.5">
-                    <span className="text-[40px] font-bold leading-none tracking-tight text-[#0F172A]">{cfg.priceDisplay}</span>
-                    <span className="text-[14px] text-[#94A3B8]">{cfg.periodLabel}</span>
-                  </div>
-                  <p className="mt-2 text-[12px] text-[#94A3B8]">{cfg.billingExplainer}</p>
-                  <ul className="mt-6 flex-1 space-y-2.5 text-[14px] text-[#334155]">
-                    {[
-                      "All 6 AI tools",
-                      key === "starter" ? "Monthly fair-use limits" : "Generous AI ceilings",
-                      "PDF + DOCX export",
-                      key === "lifetime" ? "Lifetime updates · no renewal" : "Cancel anytime",
-                    ].map((b) => (
-                      <li key={b} className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/pricing"
-                    className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
-                      popular
-                        ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
-                        : "border border-[#E2E8F0] bg-white text-[#0F172A] hover:bg-[#F8FAFC]"
-                    }`}
-                  >
-                    {key === "lifetime" ? "Buy Lifetime" : `Choose ${cfg.title}`}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
+                  <span className="text-[15px] text-[#6B6B6B]">{cfg.title}</span>
+                  <span className="mt-1 text-[32px] font-semibold tracking-[-0.03em]">
+                    {cfg.priceDisplay}
+                    <span className="ml-1 text-[14px] font-normal tracking-normal text-[#6B6B6B]">{cfg.periodLabel}</span>
+                  </span>
+                </CtaLink>
               );
             })}
           </div>
@@ -498,96 +392,72 @@ export default async function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <div className="grid gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <p className="lc-overline text-[#2563EB]">FAQ</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Frequently asked questions
-              </h2>
-              <p className="mt-4 text-[14px] leading-[1.7] text-[#475569]">
-                Can&apos;t find what you need?{" "}
-                <Link href="/contact" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-                  Email support
-                </Link>{" "}
-                — we reply within one business day.
-              </p>
-            </div>
-            <div className="lg:col-span-8">
-              <HomeClient faqItems={faqs} />
-            </div>
-          </div>
-        </div>
+      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
+        <h2 className={`${h2} text-center`}>Questions</h2>
+        <HomeClient faqItems={faqs} />
       </section>
 
       {/* BLOG */}
       {latestPosts.length > 0 ? (
-        <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
-          <div className="mx-auto max-w-[1200px] px-6">
-            <div className="flex items-end justify-between gap-4">
-              <div>
-                <p className="lc-overline text-[#2563EB]">From the blog</p>
-                <h2 className="mt-3 lc-section-headline text-[#0F172A]">Career &amp; resume guides</h2>
-              </div>
+        <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className={h2}>
+              Resume guides. <span className={grey}>Written for job seekers.</span>
+            </h2>
+            <Link href="/blog" className="hidden shrink-0 font-medium text-[#1D4ED8] hover:underline sm:inline">
+              All articles →
+            </Link>
+          </div>
+          <div className="mt-8 grid gap-5 sm:grid-cols-3">
+            {latestPosts.map((post) => (
               <Link
-                href="/blog"
-                className="hidden shrink-0 items-center gap-1 text-[14px] font-semibold text-[#2563EB] hover:underline sm:inline-flex"
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group flex flex-col border-t border-[#E5E5E2] pt-5"
               >
-                All articles <ArrowRight className="h-4 w-4" />
+                <span className="text-[13px] text-[#6B6B6B]">{post.category}</span>
+                <span className="mt-2 text-[17px] font-semibold leading-snug group-hover:text-[#1D4ED8]">{post.title}</span>
+                <span className="mt-2 line-clamp-2 text-[14px] leading-[1.6] text-[#3F3F3F]">{post.description}</span>
               </Link>
-            </div>
-            <div className="mt-10 grid gap-5 sm:grid-cols-3">
-              {latestPosts.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="group flex h-full flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
-                >
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">
-                    {post.category}
-                  </span>
-                  <h3 className="mt-2 text-[16px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#2563EB]">
-                    {post.title}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 flex-1 text-[13px] leading-[1.65] text-[#475569]">
-                    {post.description}
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold text-[#2563EB]">
-                    Read article
-                    <ArrowRight className="h-3 w-3 transition group-hover:translate-x-0.5" />
-                  </span>
-                </Link>
-              ))}
-            </div>
+            ))}
           </div>
         </section>
       ) : null}
 
-      {/* CTA */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20">
-        <div className="mx-auto max-w-[900px] px-6 text-center">
-          <h2 className="lc-section-headline text-[#0F172A]">
-            Start your next job search the right way
-          </h2>
-          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            Create an account, choose a plan, and paste your first job description — LaunchCV tailors your resume, scores it against ATS, and drafts the cover letter.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <CtaLink cta="get_started" location="home"
-              href="/register"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
-            >
-              Get started
-              <ArrowRight className="h-4 w-4" />
-            </CtaLink>
-            <Link
-              href="/pricing"
-              className="text-[14px] font-semibold text-[#475569] hover:text-[#0F172A]"
-            >
-              From {PUBLIC_PLANS.starter.priceDisplay} a month · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
-            </Link>
-          </div>
+      {/* FINAL CTA */}
+      <section className="mx-auto w-full max-w-[1200px] px-6 pb-24 pt-24 sm:pt-28">
+        <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] lg:flex-row">
+        <div className="flex flex-1 flex-col justify-center gap-6 p-8 sm:p-14">
+        <h2 className="text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[48px]">
+          See your score in about 10 seconds. <span className={grey}>Then go get the interview.</span>
+        </h2>
+        <div className="flex flex-wrap gap-2.5">
+          <CtaLink
+            cta="check_resume"
+            location="home_footer"
+            href="/free-ats-check"
+            className="inline-flex h-[52px] items-center rounded-full bg-[#2563EB] px-7 text-[16px] font-medium text-white transition hover:bg-[#1D4ED8]"
+          >
+            Check my resume — free
+          </CtaLink>
+          <CtaLink
+            cta="get_started"
+            location="home_footer"
+            href="/register"
+            className="inline-flex h-[52px] items-center rounded-full border border-[#D9D9D5] px-6 text-[16px] font-medium transition hover:border-[#111111]"
+          >
+            Build a new resume
+          </CtaLink>
+        </div>
+        </div>
+        <Image
+          src="/images/photos/colleagues-celebrate.webp"
+          alt="Two colleagues celebrating at a desk"
+          width={1400}
+          height={900}
+          sizes="(min-width: 1024px) 560px, 100vw"
+          className="h-[260px] w-full object-cover lg:h-auto lg:w-[48%]"
+        />
         </div>
       </section>
 

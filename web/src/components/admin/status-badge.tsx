@@ -3,17 +3,17 @@ import type { ReactNode } from "react";
 type Tone = "default" | "blue" | "green" | "amber" | "red" | "violet" | "slate";
 
 const toneClass: Record<Tone, string> = {
-  default: "bg-[#F1F5F9] text-[#475569] ring-1 ring-inset ring-[#E2E8F0]",
+  default: "bg-[#F5F5F3] text-[#3F3F3F] ring-1 ring-inset ring-[#E5E5E2]",
   blue: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200",
   green: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200",
   amber: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
   red: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
   violet: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200",
-  slate: "bg-[#0F172A] text-white",
+  slate: "bg-[#111111] text-white",
 };
 
 const dotClass: Record<Tone, string> = {
-  default: "bg-[#64748B]",
+  default: "bg-[#6B6B6B]",
   blue: "bg-blue-500",
   green: "bg-emerald-500",
   amber: "bg-amber-500",

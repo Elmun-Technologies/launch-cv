@@ -108,16 +108,16 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
         <div className="flex items-start gap-3">
           <Link
             href="/admin-panel/cms/testimonials"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E2E8F0] bg-white text-[#475569] transition hover:bg-[#FAFBFC] hover:text-[#0F172A]"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E5E5E2] bg-white text-[#3F3F3F] transition hover:bg-[#FAFAF9] hover:text-[#111111]"
             aria-label="Back"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
-            <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">
+            <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">
               {isNew ? "New testimonial" : data.authorName || "Untitled"}
             </h1>
-            <p className="mt-1 text-[12px] text-[#64748B]">
+            <p className="mt-1 text-[12px] text-[#6B6B6B]">
               {data.published ? "Published" : "Hidden"} · Order {data.order}
             </p>
           </div>
@@ -126,7 +126,7 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
           type="button"
           onClick={save}
           disabled={saving}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F172A] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#111111] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
           {isNew ? "Create" : "Save"}
@@ -169,7 +169,7 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
                   <label
                     key={p.value}
                     className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 text-[13px] transition ${
-                      checked ? "border-[#2563EB] bg-[#EFF6FF] text-[#0F172A]" : "border-[#E2E8F0] bg-white text-[#475569] hover:bg-[#FAFBFC]"
+                      checked ? "border-[#2563EB] bg-[#EFF6FF] text-[#111111]" : "border-[#E5E5E2] bg-white text-[#3F3F3F] hover:bg-[#FAFAF9]"
                     }`}
                   >
                     <input

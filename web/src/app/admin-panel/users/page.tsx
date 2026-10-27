@@ -14,7 +14,8 @@ interface UserRow {
   email: string;
   role: string;
   createdAt: string;
-  _count: { resumes: number; jobApplications: number };
+  resumeCount: number;
+  appCount: number;
 }
 
 const PER_PAGE = 20;
@@ -29,11 +30,11 @@ export default function AdminUsersPage() {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
-      if (search) params.set("search", search);
+      const params = new URLSearchParams({ page: String(page), pageSize: String(PER_PAGE) });
+      if (search.trim()) params.set("q", search.trim());
       const res = await fetch(`/api/admin-panel/users?${params}`);
       const data = await res.json();
-      setUsers(data.users ?? []);
+      setUsers(data.rows ?? []);
       setTotal(data.total ?? 0);
     } catch {
       // ignore
@@ -58,12 +59,12 @@ export default function AdminUsersPage() {
       header: "User",
       render: (u) => (
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[11px] font-semibold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#111111] text-[11px] font-semibold text-white">
             {(u.name || u.email)[0].toUpperCase()}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-[13px] font-medium text-[#0F172A]">{u.name || "—"}</p>
-            <p className="truncate text-[12px] text-[#64748B]">{u.email}</p>
+            <p className="truncate text-[13px] font-medium text-[#111111]">{u.name || "—"}</p>
+            <p className="truncate text-[12px] text-[#6B6B6B]">{u.email}</p>
           </div>
         </div>
       ),
@@ -77,21 +78,21 @@ export default function AdminUsersPage() {
       key: "resumes",
       header: "Resumes",
       align: "right",
-      render: (u) => <span className="font-mono text-[12px] text-[#475569]">{u._count.resumes}</span>,
+      render: (u) => <span className="font-mono text-[12px] text-[#3F3F3F]">{u.resumeCount}</span>,
     },
     {
       key: "apps",
       header: "Apps",
       align: "right",
       render: (u) => (
-        <span className="font-mono text-[12px] text-[#475569]">{u._count.jobApplications}</span>
+        <span className="font-mono text-[12px] text-[#3F3F3F]">{u.appCount}</span>
       ),
     },
     {
       key: "created",
       header: "Created",
       render: (u) => (
-        <span className="text-[12px] text-[#64748B]">
+        <span className="text-[12px] text-[#6B6B6B]">
           {new Date(u.createdAt).toLocaleDateString()}
         </span>
       ),
@@ -104,7 +105,7 @@ export default function AdminUsersPage() {
         <div className="flex items-center justify-end gap-1">
           <Link
             href={`/admin-panel/users/${u.id}`}
-            className="rounded-md p-1.5 text-[#94A3B8] transition hover:bg-[#F1F5F9] hover:text-[#2563EB]"
+            className="rounded-md p-1.5 text-[#8A8A86] transition hover:bg-[#F5F5F3] hover:text-[#2563EB]"
             aria-label="Edit user"
           >
             <Pencil className="h-4 w-4" />
@@ -112,7 +113,7 @@ export default function AdminUsersPage() {
           <button
             type="button"
             onClick={() => handleDelete(u.id)}
-            className="rounded-md p-1.5 text-[#94A3B8] transition hover:bg-red-50 hover:text-red-600"
+            className="rounded-md p-1.5 text-[#8A8A86] transition hover:bg-red-50 hover:text-red-600"
             aria-label="Delete user"
           >
             <Trash2 className="h-4 w-4" />
@@ -138,12 +139,12 @@ export default function AdminUsersPage() {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="block w-full rounded-lg border border-[#E2E8F0] bg-white px-3 py-2 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
+            className="block w-full rounded-lg border border-[#E5E5E2] bg-white px-3 py-2 text-[13px] text-[#111111] outline-none transition placeholder:text-[#8A8A86] hover:border-[#D9D9D5] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
           />
         </div>
 
         {loading ? (
-          <div className="rounded-xl border border-[#E2E8F0] bg-white px-5 py-12 text-center text-[13px] text-[#94A3B8]">
+          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#8A8A86]">
             Loading…
           </div>
         ) : (
@@ -158,13 +159,13 @@ export default function AdminUsersPage() {
                 <button
                   type="button"
                   onClick={() => setSearch("")}
-                  className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC]"
+                  className="inline-flex items-center gap-1 rounded-lg border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
                 >
                   Clear search
                 </button>
               }
             />
-            <div className="mt-4 flex items-center justify-between text-[12px] text-[#64748B]">
+            <div className="mt-4 flex items-center justify-between text-[12px] text-[#6B6B6B]">
               <p>
                 <UsersIcon className="mr-1 inline h-3 w-3 align-text-bottom" />
                 {total.toLocaleString()} total
@@ -174,7 +175,7 @@ export default function AdminUsersPage() {
                   type="button"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Previous
                 </button>
@@ -185,7 +186,7 @@ export default function AdminUsersPage() {
                   type="button"
                   onClick={() => setPage((p) => p + 1)}
                   disabled={page >= Math.ceil(total / PER_PAGE)}
-                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Next
                 </button>

@@ -1,592 +1,88 @@
-import Link from "next/link";
-import { CtaLink } from "@/components/cta-link";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
-import { JsonLd } from "@/components/json-ld";
-import { KeyFacts } from "@/components/key-facts";
-import { RevealOnView } from "@/components/reveal-on-view";
-import { FeatureRelatedLinks } from "@/components/feature-related-links";
-import { StickyCta } from "@/components/sticky-cta";
+import { FeaturePage, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
-import { speakableLd } from "@/lib/geo";
-import { absoluteUrl } from "@/lib/site";
-import { FaqSection } from "@/components/faq-section";
-import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
-import { ProductScreenshot } from "@/components/product-screenshot";
-import {
-  Mic,
-  ArrowRight,
-  Check,
-  Wand2,
-  Shield,
-  Globe,
-  Target,
-  FileText,
-  MessageSquare,
-} from "lucide-react";
 
 export const metadata = buildMarketingMetadata({
-  title: "Voice-to-Text Resume Builder: Speak, Don't Type",
+  title: "Voice Input Resume Builder — Speak Your Experience",
   description:
-    "Modern resume builders let you talk, not type. Speak your career and AI turns it into quantified, ATS-ready bullets. Try voice free →",
+    "Talk through your experience instead of typing it. Your browser turns speech into text in the field you're editing; then AI rewrites it into results-focused bullets.",
   pathname: "/features/voice-input",
   image: FEATURES_OG_IMAGE,
   keywords: [
     "voice to resume",
-    "voice to text resume builder",
     "voice resume builder",
-    "speak to resume AI",
-    "voice input resume",
-    "AI transcription resume",
+    "speech to text resume",
+    "speak to resume",
     "hands free resume builder",
   ],
 });
 
-const faqs: FaqItem[] = [
-  {
-    q: "Can I build a resume by voice with LaunchCV?",
-    a: "Yes, you can build a resume entirely by voice with LaunchCV. Click the mic, describe your work the way you would to a friend, and the AI turns your spoken words into quantified, ATS-ready bullets. The mic is available in every section, from Experience to Skills and Projects.",
+const f: FeaturePageData = {
+  path: "/features/voice-input",
+  name: "Voice Input",
+  h1: "Say it the way you'd tell a friend.",
+  h1Tail: "Then turn it into a bullet.",
+  lead:
+    "Press the microphone next to a field and talk about what you did. Your words appear as text in that field; edit them, then use the AI rewrite to shape them into a results-focused bullet.",
+  facts: ["No app to install", "Works in your browser", "English (US) recognition"],
+  photo: { src: "/images/photos/role-customer-service.webp", alt: "Professionals wearing headsets at work" },
+  example: {
+    title: "From what you said to what you send",
+    caption: "Example. Speech is transcribed by your browser; the rewrite keeps your facts and doesn't invent numbers.",
+    body: (
+      <BeforeAfter
+        before="so basically I set up the new onboarding thing for clinics and no-shows went down by like twenty-three percent across forty-one clinics"
+        after="Launched clinic onboarding for self-scheduling, reducing no-shows by 23% across 41 clinics."
+      />
+    ),
   },
-  {
-    q: "What languages does LaunchCV voice input support?",
-    a: "You can speak naturally in your own words and the AI reframes what you say into polished, formal English resume bullets. That's especially helpful for non-native English speakers, who can describe their work in casual phrasing and let the AI handle the professional English framing.",
+  steps: [
+    { t: "Open a section", d: "Experience bullets and your summary both have a microphone button." },
+    { t: "Speak", d: "Talk naturally. Your browser shows the text as you go." },
+    { t: "Confirm and edit", d: "Fix names or numbers the recognition got wrong." },
+    { t: "Rewrite with AI", d: "Turn the spoken version into a concise bullet that leads with the result." },
+  ],
+  gets: [
+    { t: "Faster first drafts", d: "Most people say more about their work than they'd ever type." },
+    { t: "Browser speech recognition", d: "Uses the Web Speech API in Chrome, Edge and Safari." },
+    { t: "Edit before saving", d: "Nothing is added to your resume until you confirm it." },
+    { t: "AI rewrite", d: "Shape the transcript into a results-first bullet." },
+    { t: "No recordings kept by LaunchCV", d: "We receive the text, not your audio." },
+    { t: "Accessible", d: "Helpful if typing is slow or tiring for you." },
+  ],
+  banner: {
+    photo: { src: "/images/photos/job-seeker-laptop.webp", alt: "Person talking through their experience at a laptop" },
+    title: "The hardest part is the blank page.",
+    text: "Talking gets the raw material out. The editor and AI rewrite turn it into a resume.",
   },
-  {
-    q: "Does LaunchCV store my voice recordings?",
-    a: "No, LaunchCV never stores your voice recordings. Audio is streamed to transcription, processed in-memory, and discarded immediately, so no audio file is saved on our servers. Each request is scoped and dropped, with no fine-tuning on your voice. The feature is fully GDPR and CCPA compliant.",
-  },
-  {
-    q: "Do I need to install an app to use voice input?",
-    a: "No, you do not need to install any app or plug-in to use voice input. It runs natively in your browser on Chrome, Edge, and Safari. Just grant mic access and start speaking. Because it works in the browser, you can walk and talk your resume from any phone.",
-  },
-  {
-    q: "Can I fix mistakes in the voice transcription?",
-    a: "Yes, you can fix any mistranscription before transforming it into a bullet. Your words appear on screen in real time as you speak, and you can edit them inline. Once the text looks right, the AI reframes it into a polished, quantified bullet ready for your resume.",
-  },
-  {
-    q: "Is voice input good for non-native English speakers or people with dyslexia?",
-    a: "Yes, voice input is built for non-native English speakers, people with dyslexia, career switchers, and returners. Speak in your strongest language or in casual phrasing, and the AI handles structure, spelling, and formal framing. It turns a spoken story into professional bullets without you ever facing a blank page.",
-  },
-];
-
-const ld = {
-  "@context": "https://schema.org",
-  "@graph": [
+  faqs: [
     {
-      "@type": "WebPage",
-      name: "Voice Input | LaunchCV",
-      url: absoluteUrl("/features/voice-input"),
-      description: "Speak your career. AI turns it into ATS-ready bullets.",
+      q: "Can I build a resume by voice?",
+      a: "You can dictate your summary and experience bullets, then edit and rewrite them. Contact details and dates are quicker to type.",
     },
     {
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-        { "@type": "ListItem", position: 2, name: "Features", item: absoluteUrl("/features") },
-        { "@type": "ListItem", position: 3, name: "Voice Input", item: absoluteUrl("/features/voice-input") },
-      ],
+      q: "Which languages are supported?",
+      a: "Recognition is set to English (US). Other accents of English usually work; other languages aren't supported yet.",
     },
-    speakableLd(["h1", ".lc-key-facts-lead"]),
-    faqPageLd(faqs),
+    {
+      q: "Does LaunchCV store my voice?",
+      a: "No. Speech is converted to text by your browser's speech service, and LaunchCV only receives the resulting text. Your browser provider's own privacy terms apply to the recognition.",
+    },
+    {
+      q: "Which browsers work?",
+      a: "Browsers with the Web Speech API — current Chrome, Edge and Safari. Firefox doesn't support it yet.",
+    },
+    {
+      q: "Is voice input included in my plan?",
+      a: "Yes, voice input is available in the editor; the AI rewrite is included in every paid plan.",
+    },
+  ],
+  related: [
+    { kind: "Tool", label: "AI resume builder", href: "/features/resume-builder" },
+    { kind: "Guide", label: "Voice to resume: how it works", href: "/blog/voice-to-resume" },
+    { kind: "Tool", label: "Free ATS resume checker", href: "/free-ats-check" },
   ],
 };
 
-const keyFacts = [
-  "Speak your experience and AI turns it into quantified, ATS-ready bullet points.",
-  "Real-time transcription you can edit inline before transforming.",
-  "Runs natively in Chrome, Edge, and Safari — no app to install.",
-  "Privacy-first: audio is processed in-memory and discarded after transcription.",
-];
-
-const benefits = [
-  { t: "Natural speech to polished bullets", d: "Speak the way you&apos;d describe a job to a friend. AI handles the formal framing." },
-  { t: "Real-time transcription", d: "Words appear as you speak. Edit any mistranscription inline before transforming." },
-  { t: "Works across every section", d: "Experience, Skills, Projects, Summary, Certifications — mic available everywhere a bullet lives." },
-  { t: "No app, no plug-ins", d: "Runs natively in Chrome, Edge, Safari. Permit mic access — nothing to install." },
-  { t: "Privacy-first", d: "Audio is processed in-memory and discarded immediately after transcription. Never sold, never used to train models." },
-  { t: "No typing required", d: "Describe your work out loud and let the AI structure it — no blank page, no formatting to fight." },
-];
-
-// Why it works — honest, benefit-led copy. No fabricated user quotes or company names.
-const whyItWorks = [
-  {
-    t: "Built for the blank-page problem",
-    d: "If starting from nothing is the hard part, talking through your work out loud is often easier than typing it — the AI structures it for you.",
-  },
-  {
-    t: "Nothing is stored",
-    d: "Audio is transcribed and discarded in-memory — it's never saved as a file or used to train a model.",
-  },
-];
-
 export default function VoiceInputPage() {
-  return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
-      <JsonLd data={ld} />
-      <LandingNav />
-
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[96px]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 12% 0%, rgba(219,39,119,0.06), transparent 50%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-20 pt-12 lg:pb-24">
-          <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-6">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-                <Mic className="h-3.5 w-3.5 text-[#DB2777]" />
-                Voice Input
-              </span>
-
-              <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-                Speak your experience — AI writes the resume
-              </h1>
-
-              <p className="mt-6 max-w-[560px] text-[17px] leading-[1.65] text-[#475569]">
-                The hardest part of a resume isn&apos;t the layout — it&apos;s the blank page. Click the mic, describe your work to a friend, and LaunchCV turns your words into quantified, ATS-ready bullets.
-              </p>
-
-              <KeyFacts
-                className="mt-8 max-w-[560px]"
-                lead="Voice Input lets you build a resume by speaking. The voice-to-text builder transcribes your words in real time and AI turns them into quantified, ATS-ready bullet points across every resume section. No app to install, and audio is discarded in-memory after transcription."
-                facts={keyFacts}
-              />
-
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <CtaLink cta="get_started" location="feature_voice_input"
-                  href="/register"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#DB2777] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(219,39,119,0.4)] transition hover:bg-[#BE185D]"
-                >
-                  Start speaking
-                  <ArrowRight className="h-4 w-4" />
-                </CtaLink>
-                <Link
-                  href="#privacy"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white px-6 py-3 text-[14px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]"
-                >
-                  How privacy works
-                </Link>
-              </div>
-
-              <div className="mt-8 grid grid-cols-3 gap-6 border-t border-[#E2E8F0] pt-6">
-                {[
-                  { v: "0", l: "Audio stored" },
-                  { v: "Free", l: "Included on every plan" },
-                  { v: "∞", l: "Sections supported" },
-                ].map((s) => (
-                  <div key={s.l}>
-                    <p className="text-[24px] font-bold tracking-tight text-[#0F172A]">{s.v}</p>
-                    <p className="mt-1 text-[12px] uppercase tracking-wider text-[#94A3B8]">{s.l}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* VOICE MOCKUP */}
-            <div className="lg:col-span-6">
-              <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-[0_30px_60px_-20px_rgba(15,23,42,0.18)]">
-                <div className="flex items-center gap-1.5 border-b border-[#E2E8F0] bg-[#FAFBFC] px-4 py-2.5">
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#FEBC2E]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#28C840]" />
-                  <span className="ml-3 text-[11px] font-medium text-[#94A3B8]">Voice to bullet</span>
-                  <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-pink-50 px-2 py-0.5 text-[11px] font-semibold text-pink-700 ring-1 ring-pink-200">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-pink-500" />
-                    recording
-                  </span>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex flex-col items-center gap-4 rounded-xl bg-pink-50/40 p-6">
-                    <div className="relative">
-                      <div className="absolute inset-0 animate-ping rounded-full bg-pink-300/40" />
-                      <div className="relative flex h-14 w-14 items-center justify-center rounded-full bg-[#DB2777] text-white">
-                        <Mic className="h-6 w-6" />
-                      </div>
-                    </div>
-                    <div className="flex h-10 items-end gap-1" aria-hidden>
-                      {[14, 22, 16, 30, 18, 36, 24, 28, 14, 32, 20, 26, 14, 28, 18, 22, 28, 16, 24, 30].map((h, idx) => (
-                        <span
-                          key={idx}
-                          className="lc-wave-bar text-[#DB2777]"
-                          style={{ height: h, animationDelay: `${idx * 0.06}s` }}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-[11px] uppercase tracking-wider text-[#94A3B8]">00:14 · transcribing live</p>
-                  </div>
-
-                  <div className="mt-4 rounded-lg bg-[#FAFBFC] p-4">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[#94A3B8]">Heard</p>
-                    <p className="mt-2 text-[13px] italic leading-[1.6] text-[#475569]">
-                      &ldquo;i managed a team of five doing customer support and we trained twelve new hires over three years&rdquo;
-                    </p>
-                  </div>
-
-                  <div className="my-3 flex items-center gap-2 text-pink-700">
-                    <Wand2 className="h-4 w-4" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider">Transforming…</span>
-                  </div>
-
-                  <div className="rounded-lg bg-pink-50/60 p-4 ring-1 ring-pink-200">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-pink-700">AI bullet</p>
-                    <p className="mt-2 text-[13px] leading-[1.6] text-[#0F172A]">
-                      Managed a <span className="rounded bg-pink-100 px-1 text-pink-800">5-person customer support team</span>, cutting avg resolution time by 30% and onboarding <span className="rounded bg-pink-100 px-1 text-pink-800">12 new hires</span> over three years.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PRODUCT SCREENSHOT */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="mx-auto max-w-[680px] text-center">
-              <p className="lc-overline text-[#DB2777]">See it in action</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Speak it. We structure it.</h2>
-            </div>
-          </RevealOnView>
-          <ProductScreenshot
-            className="mt-12"
-            src="/images/product/voice-input.svg"
-            alt="The LaunchCV voice input feature transcribing spoken work experience and converting it into structured, quantified resume bullet points."
-            caption="Describe your work out loud; LaunchCV turns the transcript into polished, ATS-ready bullets."
-          />
-        </div>
-      </section>
-
-      {/* WHO IT'S FOR */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#DB2777]">Who it&apos;s for</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Some of the best careers don&apos;t start with a typed paragraph
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { t: "Non-native English speakers", d: "Speak in your strongest tongue. AI translates and reframes into formal English bullets." },
-              { t: "Career switchers", d: "New to the vocabulary? Talk about what you did — we find the industry phrasing." },
-              { t: "People with dyslexia", d: "Writing is hard. Speaking your career story is natural. AI handles structure and spelling." },
-              { t: "Trade and service workers", d: "When the job is hands-on, the resume can be hands-free. Tell it, don&apos;t type it." },
-              { t: "Returners after a break", d: "Caregivers, military, recovery. Speak the story without staring at a blank page." },
-              { t: "Anyone with a phone", d: "Voice input runs in the browser. No app, no install. Walk-and-talk your resume." },
-            ].map((p) => (
-              <RevealOnView key={p.t}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{p.t}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: p.d }} />
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PRIVACY */}
-      <section id="privacy" className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="grid gap-10 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <p className="lc-overline text-[#DB2777]">Privacy</p>
-                <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                  Your voice stays your voice
-                </h2>
-              </div>
-              <div className="lg:col-span-8">
-                <ul className="space-y-5 text-[15px] leading-[1.65] text-[#475569]">
-                  {[
-                    { i: Shield, t: "Audio is never persisted", d: "Recorded chunks are streamed to transcription, then discarded in-memory. No audio file on our servers." },
-                    { i: Shield, t: "Transcription is request-scoped", d: "Each request is processed and dropped. No fine-tuning on your voice, no training corpus contribution." },
-                    { i: Globe, t: "Your data, exportable anytime", d: "Export or delete your account data whenever you want. We never sell user data." },
-                  ].map((p) => (
-                    <li key={p.t} className="flex items-start gap-4">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-pink-50 text-pink-700">
-                        <p.i className="h-5 w-5" />
-                      </span>
-                      <div>
-                        <p className="text-[15px] font-semibold text-[#0F172A]">{p.t}</p>
-                        <p className="mt-1 text-[#475569]">{p.d}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* BENEFITS */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#DB2777]">Capabilities</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Audio app on the input. Resume-grade writing on the output.
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {benefits.map((b) => (
-              <RevealOnView key={b.t}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#DB2777]" />
-                  <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{b.t}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: b.d }} />
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW IT WORKS */}
-      <section id="how-it-works" className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#DB2777]">How it works</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Five steps from spoken words to ATS-ready bullets
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                The voice to text resume builder turns talking into writing. Speak-to-resume AI handles the formal framing, so a hands free resume builder is all it takes to fill the page.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { n: "01", t: "Click the mic", d: "Voice input is available in every section where a bullet lives — Experience, Skills, Projects, Summary, and more." },
-              { n: "02", t: "Speak naturally", d: "Describe the job the way you would tell a friend. Real-time transcription shows your words as you talk." },
-              { n: "03", t: "AI transforms your words", d: "The AI transcription resume engine turns plain speech into quantified, ATS-ready bullets." },
-              { n: "04", t: "Edit inline", d: "Fix any mistranscription, then accept the bullet or regenerate for a different angle." },
-              { n: "05", t: "Audio is discarded", d: "The recording is processed in-memory and never stored after transcription." },
-            ].map((s) => (
-              <RevealOnView key={s.n}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-pink-50 text-[13px] font-bold text-[#DB2777]">
-                    {s.n}
-                  </span>
-                  <h3 className="mt-5 text-[17px] font-semibold text-[#0F172A]">{s.t}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{s.d}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* COMPARISON */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#DB2777]">Why speak it</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Typing vs. a voice resume builder
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                The hardest part of a resume is the blank page. A voice input resume skips it — you talk, the AI writes.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-10 overflow-x-auto">
-            <table className="w-full min-w-[640px] border-collapse text-left text-[14px]">
-              <thead>
-                <tr className="border-b border-[#E2E8F0]">
-                  <th className="py-3 pr-4 text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">What matters</th>
-                  <th className="py-3 px-4 text-[13px] font-semibold text-[#DB2777]">Voice input</th>
-                  <th className="py-3 pl-4 text-[13px] font-semibold text-[#64748B]">Typing from scratch</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { k: "Input", a: "Speak naturally, hands free", b: "Fight a blank page and a blinking cursor" },
-                  { k: "Output", a: "Quantified, ATS-ready bullets", b: "Vague duties you rewrite five times" },
-                  { k: "Transcription", a: "Real-time and editable inline", b: "None" },
-                  { k: "Accessibility", a: "No typing skill or formal phrasing needed", b: "Whatever you can type well" },
-                  { k: "Privacy", a: "Audio never stored after transcription", b: "Not applicable" },
-                  { k: "Setup", a: "Runs in the browser — no app, no plug-ins", b: "Install something or nothing at all" },
-                ].map((r) => (
-                  <tr key={r.k} className="border-b border-[#F1F5F9] align-top">
-                    <td className="py-4 pr-4 font-medium text-[#0F172A]">{r.k}</td>
-                    <td className="py-4 px-4">
-                      <span className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#DB2777]" />
-                        <span className="text-[#0F172A]">{r.a}</span>
-                      </span>
-                    </td>
-                    <td className="py-4 pl-4 text-[#64748B]">{r.b}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* SCENARIO */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[820px] px-6">
-          <RevealOnView>
-            <p className="lc-overline text-[#DB2777]">A real use scenario</p>
-            <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-              How Maria built a resume on her phone between shifts
-            </h2>
-            <div className="mt-6 space-y-4 text-[16px] leading-[1.75] text-[#475569]">
-              <p>
-                Maria had eight years of care work and no patience for writing about it. English is her second language, and formal resume phrasing had always felt like a wall. So the resume never got written.
-              </p>
-              <p>
-                On a break she opened the voice to resume tool on her phone, tapped the mic, and just talked: <span className="font-medium text-[#0F172A]">&ldquo;I managed a team of five doing customer support and we trained twelve new hires over three years.&rdquo;</span> The AI turned it into a quantified, ATS-ready bullet — resolution time down 30%, twelve hires onboarded — while her audio was discarded the moment it was transcribed.
-              </p>
-              <p>
-                Section by section, she spoke her whole history and let the speak-to-resume AI do the framing. What had felt impossible on a blank page took one afternoon of talking, and it came out in polished English she was proud to send.
-              </p>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/features/resume-builder" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
-                Build the full resume <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link href="/features/ats-score" className="inline-flex items-center gap-1.5 rounded-lg border border-[#E2E8F0] bg-white px-4 py-2 text-[13px] font-semibold text-[#0F172A] transition hover:bg-[#F8FAFC]">
-                Check the ATS score <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </div>
-          </RevealOnView>
-        </div>
-      </section>
-
-      {/* WHY IT WORKS */}
-      <section className="bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <div className="grid gap-5 lg:grid-cols-2">
-            {whyItWorks.map((w) => (
-              <RevealOnView key={w.t}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{w.t}</h3>
-                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{w.d}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* RELATED */}
-      <section className="border-t border-[#E2E8F0] py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Pairs well with</p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            {[
-              { href: "/features/resume-builder", t: "Resume Builder", d: "Templates + AI bullets.", icon: FileText },
-              { href: "/features/jd-alignment", t: "JD Alignment", d: "Match resume to a target role.", icon: Target },
-              { href: "/features/interview-prep", t: "Interview Prep", d: "Practice with voice or text.", icon: MessageSquare },
-            ].map((r) => (
-              <Link
-                key={r.href}
-                href={r.href}
-                className="group flex items-start gap-3 rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
-              >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pink-50 text-pink-700">
-                  <r.icon className="h-4 w-4" />
-                </span>
-                <div>
-                  <p className="text-[14px] font-semibold text-[#0F172A]">{r.t}</p>
-                  <p className="mt-0.5 text-[13px] text-[#64748B]">{r.d}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-[#FAFBFC] py-20">
-        <div className="mx-auto max-w-[900px] px-6 text-center">
-          <h2 className="lc-section-headline text-[#0F172A]">
-            Your best stories are already in your head
-          </h2>
-          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            You just need to say them out loud. AI takes the recording from there.
-          </p>
-          <CtaLink cta="get_started" location="feature_voice_input"
-            href="/register"
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#DB2777] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#BE185D]"
-          >
-            Start speaking
-            <ArrowRight className="h-4 w-4" />
-          </CtaLink>
-        </div>
-      </section>
-
-      {/* FURTHER READING */}
-      <section className="border-t border-[#E2E8F0] bg-white py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Further reading</p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            {[
-              { href: "/blog/voice-to-resume", t: "Voice to resume", d: "Build your resume by speaking — the full guide." },
-              { href: "/blog/how-to-check-ats-score-of-resume", t: "Check your ATS score", d: "Make your spoken resume ATS-ready before applying." },
-              { href: "/blog/what-is-an-ats-score", t: "What is an ATS score?", d: "Meaning, full form, and how to improve it." },
-            ].map((r) => (
-              <Link
-                key={r.href}
-                href={r.href}
-                className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
-              >
-                <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">{r.t}</p>
-                <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <FeatureRelatedLinks
-        accent="pink"
-        useCases={[
-          {
-            href: "/use-cases/designers",
-            title: "Resumes for designers",
-            desc: "Talk through portfolio work and let AI shape it into polished design bullets.",
-          },
-          {
-            href: "/use-cases/software-engineers",
-            title: "Resumes for software engineers",
-            desc: "Speak your projects and stack; AI writes quantified, ATS-ready engineering bullets.",
-          },
-        ]}
-      />
-
-      <FaqSection items={faqs} accent="#DB2777" />
-
-      <StickyCta
-        primaryHref="/register"
-        primaryLabel="Try free"
-        primaryClassName="bg-[#DB2777] hover:bg-[#BE185D]"
-        location="feature_voice_input"
-      />
-
-      <LandingFooter />
-    </div>
-  );
+  return <FeaturePage f={f} />;
 }

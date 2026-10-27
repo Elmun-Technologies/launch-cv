@@ -33,8 +33,8 @@ export default async function AdminTestimonialsPage() {
       truncate: "max-w-[200px]",
       render: (r) => (
         <div className="min-w-0">
-          <p className="truncate text-[13px] font-medium text-[#0F172A]">{r.authorName}</p>
-          <p className="truncate text-[12px] text-[#64748B]">{r.authorRole || "—"}</p>
+          <p className="truncate text-[13px] font-medium text-[#111111]">{r.authorName}</p>
+          <p className="truncate text-[12px] text-[#6B6B6B]">{r.authorRole || "—"}</p>
         </div>
       ),
     },
@@ -42,7 +42,7 @@ export default async function AdminTestimonialsPage() {
       key: "quote",
       header: "Quote",
       truncate: "max-w-[360px]",
-      render: (r) => <span className="text-[13px] text-[#475569]">&ldquo;{r.quote}&rdquo;</span>,
+      render: (r) => <span className="text-[13px] text-[#3F3F3F]">&ldquo;{r.quote}&rdquo;</span>,
     },
     {
       key: "placement",
@@ -50,10 +50,10 @@ export default async function AdminTestimonialsPage() {
       render: (r) => (
         <div className="flex flex-wrap gap-1">
           {r.placement.length === 0 ? (
-            <span className="text-[12px] text-[#94A3B8]">None</span>
+            <span className="text-[12px] text-[#8A8A86]">None</span>
           ) : (
             r.placement.map((p) => (
-              <span key={p} className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[11px] text-[#475569]">
+              <span key={p} className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[11px] text-[#3F3F3F]">
                 {p}
               </span>
             ))
@@ -65,7 +65,7 @@ export default async function AdminTestimonialsPage() {
       key: "order",
       header: "Order",
       align: "right",
-      render: (r) => <span className="font-mono text-[12px] text-[#475569]">{r.order}</span>,
+      render: (r) => <span className="font-mono text-[12px] text-[#3F3F3F]">{r.order}</span>,
     },
     {
       key: "status",
@@ -84,7 +84,7 @@ export default async function AdminTestimonialsPage() {
       render: (r) => (
         <Link
           href={`/admin-panel/cms/testimonials/${r.id}`}
-          className="inline-flex items-center gap-1 rounded-md border border-[#E2E8F0] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC]"
+          className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
         >
           <Pencil className="h-3 w-3" />
           Edit

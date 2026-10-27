@@ -1,7 +1,8 @@
 "use client";
 
+import { ToolNotice } from "@/components/tool-notice";
+
 import Link from "next/link";
-import { trackCtaClick } from "@/lib/analytics-client";
 import { useState } from "react";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
@@ -13,8 +14,7 @@ import {
   X,
   AlertTriangle,
   ArrowRight,
-  CreditCard,
-} from "lucide-react";
+  } from "lucide-react";
 
 function StatusDot({ status }: { status: string }) {
   if (status === "met")
@@ -143,23 +143,7 @@ export function JdClient({ resumeId }: { resumeId: string }) {
         {loading ? "AI is processing..." : "Analyze"}
       </button>
 
-      {error ? (
-        <div className="soha-card flex items-start gap-3 border-red-200 bg-red-50">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-          <div>
-            <p className="text-sm text-red-600">{error}</p>
-            {upgrade ? (
-              <Link
-                href="/dashboard/settings"
-                onClick={() => trackCtaClick({ cta: "upgrade", location: "jd_paywall" })}
-                className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
-              >
-                <CreditCard className="h-3 w-3" /> Upgrade to Pro
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+      {error ? <ToolNotice message={error} upgrade={upgrade} location="jd_paywall" /> : null}
 
       {loading ? <Skeleton /> : null}
 
@@ -169,14 +153,14 @@ export function JdClient({ resumeId }: { resumeId: string }) {
           <section className="soha-card flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-8">
             <div className="flex flex-col items-center">
               <div className={`flex h-24 w-24 items-center justify-center rounded-full border-4 ${result.match_score >= 75 ? "border-emerald-400" : result.match_score >= 50 ? "border-amber-400" : "border-red-400"}`}>
-                <span className="text-3xl font-bold text-gray-900">{result.match_score}</span>
+                <span className="text-3xl font-bold text-[#111111]">{result.match_score}</span>
               </div>
-              <p className="mt-2 text-xs font-semibold text-gray-500">ATS Match Score</p>
+              <p className="mt-2 text-xs font-semibold text-[#6B6B6B]">ATS Match Score</p>
             </div>
             <div className="flex-1">
               {result.keyword_coverage.length > 0 ? (
                 <div>
-                  <h3 className="text-xs font-semibold text-gray-700">Keywords matched</h3>
+                  <h3 className="text-xs font-semibold text-[#3F3F3F]">Keywords matched</h3>
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {result.keyword_coverage.map((kw) => (
                       <span key={kw} className="soha-badge-emerald text-[10px]">{kw}</span>
@@ -190,10 +174,10 @@ export function JdClient({ resumeId }: { resumeId: string }) {
           {/* Skill Gap Analysis */}
           {result.skill_gaps.length > 0 ? (
             <section className="soha-card">
-              <h2 className="mb-4 text-sm font-semibold text-gray-900">Skill Gap Analysis</h2>
-              <div className="overflow-x-auto rounded-lg border border-gray-200">
+              <h2 className="mb-4 text-sm font-semibold text-[#111111]">Skill Gap Analysis</h2>
+              <div className="overflow-x-auto rounded-lg border border-[#E5E5E2]">
                 <table className="w-full min-w-[500px] text-left text-sm">
-                  <thead className="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
+                  <thead className="border-b border-[#E5E5E2] bg-[#F5F5F3] text-xs text-[#6B6B6B]">
                     <tr>
                       <th className="px-3 py-2.5 font-medium">Skill</th>
                       <th className="px-3 py-2.5 font-medium">Status</th>
@@ -202,10 +186,10 @@ export function JdClient({ resumeId }: { resumeId: string }) {
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {result.skill_gaps.map((sg, i) => (
-                      <tr key={i} className="transition hover:bg-gray-50">
-                        <td className="px-3 py-2.5 font-medium text-gray-700">{sg.skill}</td>
+                      <tr key={i} className="transition hover:bg-[#F5F5F3]">
+                        <td className="px-3 py-2.5 font-medium text-[#3F3F3F]">{sg.skill}</td>
                         <td className="px-3 py-2.5"><StatusDot status={sg.status === "strong" ? "met" : sg.status === "partial" ? "partial" : "missing"} /></td>
-                        <td className="px-3 py-2.5 text-gray-500">{sg.recommendation}</td>
+                        <td className="px-3 py-2.5 text-[#6B6B6B]">{sg.recommendation}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -216,12 +200,12 @@ export function JdClient({ resumeId }: { resumeId: string }) {
 
           {/* Gap map */}
           <section className="soha-card">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900">
+            <h2 className="mb-4 text-sm font-semibold text-[#111111]">
               Gap map
             </h2>
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <div className="overflow-x-auto rounded-lg border border-[#E5E5E2]">
               <table className="w-full min-w-[500px] text-left text-sm">
-                <thead className="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
+                <thead className="border-b border-[#E5E5E2] bg-[#F5F5F3] text-xs text-[#6B6B6B]">
                   <tr>
                     <th className="px-3 py-2.5 font-medium">Requirement</th>
                     <th className="px-3 py-2.5 font-medium">Status</th>
@@ -232,15 +216,15 @@ export function JdClient({ resumeId }: { resumeId: string }) {
                   {result.gap_map.map((row, i) => (
                     <tr
                       key={i}
-                      className="transition hover:bg-gray-50"
+                      className="transition hover:bg-[#F5F5F3]"
                     >
-                      <td className="px-3 py-2.5 text-gray-700">
+                      <td className="px-3 py-2.5 text-[#3F3F3F]">
                         {row.requirement}
                       </td>
                       <td className="px-3 py-2.5">
                         <StatusDot status={row.status} />
                       </td>
-                      <td className="px-3 py-2.5 text-gray-500">
+                      <td className="px-3 py-2.5 text-[#6B6B6B]">
                         {row.evidence ?? "—"}
                       </td>
                     </tr>
@@ -252,17 +236,17 @@ export function JdClient({ resumeId }: { resumeId: string }) {
 
           {/* Rewritten bullets */}
           <section className="soha-card">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900">
+            <h2 className="mb-4 text-sm font-semibold text-[#111111]">
               Bullet variants
             </h2>
             <div className="space-y-3">
               {result.rewritten_bullets.map((b, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+                  className="rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4"
                 >
-                  <p className="text-sm text-gray-800">{b.new_text}</p>
-                  <p className="mt-2 text-xs text-gray-500">{b.reason}</p>
+                  <p className="text-sm text-[#1c1c1c]">{b.new_text}</p>
+                  <p className="mt-2 text-xs text-[#6B6B6B]">{b.reason}</p>
                   <button
                     type="button"
                     disabled={
@@ -291,18 +275,18 @@ export function JdClient({ resumeId }: { resumeId: string }) {
 
           {result.remove_suggestions.length > 0 ? (
             <section className="soha-card">
-              <h2 className="mb-3 text-sm font-semibold text-gray-900">
+              <h2 className="mb-3 text-sm font-semibold text-[#111111]">
                 Removal suggestions
               </h2>
               <ul className="space-y-2">
                 {result.remove_suggestions.map((r, i) => (
                   <li
                     key={i}
-                    className="flex items-start gap-2 text-sm text-gray-600"
+                    className="flex items-start gap-2 text-sm text-[#3F3F3F]"
                   >
                     <X className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-400" />
                     <span>
-                      <code className="text-xs text-gray-400">
+                      <code className="text-xs text-[#8A8A86]">
                         {r.bulletId}
                       </code>{" "}
                       — {r.reason}
@@ -315,12 +299,12 @@ export function JdClient({ resumeId }: { resumeId: string }) {
 
           {result.explanations.length > 0 ? (
             <section className="soha-card">
-              <h2 className="mb-3 text-sm font-semibold text-gray-900">
+              <h2 className="mb-3 text-sm font-semibold text-[#111111]">
                 Explanations
               </h2>
               <ul className="space-y-1.5">
                 {result.explanations.map((e, i) => (
-                  <li key={i} className="text-sm text-gray-600">
+                  <li key={i} className="text-sm text-[#3F3F3F]">
                     • {e}
                   </li>
                 ))}
@@ -331,7 +315,7 @@ export function JdClient({ resumeId }: { resumeId: string }) {
           {/* Save to applications */}
           {jdRunId ? (
             <section className="soha-card">
-              <h2 className="mb-3 text-sm font-semibold text-gray-900">
+              <h2 className="mb-3 text-sm font-semibold text-[#111111]">
                 Add to applications
               </h2>
               <div className="grid gap-2 sm:grid-cols-2">
@@ -368,7 +352,7 @@ export function JdClient({ resumeId }: { resumeId: string }) {
                 </Link>
               </div>
               {saveMsg ? (
-                <p className="mt-2 text-xs text-gray-500">{saveMsg}</p>
+                <p className="mt-2 text-xs text-[#6B6B6B]">{saveMsg}</p>
               ) : null}
             </section>
           ) : null}

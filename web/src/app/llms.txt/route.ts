@@ -24,7 +24,7 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   {
     title: "AI Resume Builder",
     path: "/features/resume-builder",
-    summary: "Build an ATS-friendly resume in minutes with 4 templates, AI-written bullet points, a live preview, and PDF or DOCX export.",
+    summary: "Build an ATS-friendly resume in minutes with 4 templates, AI-written bullet points, a live preview that matches the exported PDF.",
   },
   {
     title: "JD Alignment Match",
@@ -33,7 +33,7 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   },
   {
     title: "ATS Score Checker",
-    path: "/features/ats-score",
+    path: "/free-ats-check",
     summary: "Upload a resume to get a 0–100 ATS score in seconds, built for how ATS platforms like Workday, Greenhouse, and Lever parse resumes, with a prioritized fix list.",
   },
   {
@@ -49,30 +49,30 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   {
     title: "Voice Input",
     path: "/features/voice-input",
-    summary: "Speak your experience instead of typing it; the voice-to-text resume builder transcribes your words and turns them into quantified, ATS-ready bullets.",
+    summary: "Dictate your summary and experience bullets in the browser (English), then use the AI rewrite to turn the transcript into results-first bullets.",
   },
 ];
 
 const USE_CASE_PAGES: { title: string; path: string; summary: string }[] = [
   {
-    title: "Use cases overview",
-    path: "/use-cases",
-    summary: "See how LaunchCV tailors resumes to specific fields with role-specific AI bullets for software engineers, product managers, and designers.",
+    title: "Resume examples",
+    path: "/resume-examples",
+    summary: "Resume examples by job, each with summary and bullet examples, role keywords, ATS tips and an FAQ.",
   },
   {
-    title: "For Software Engineers",
-    path: "/use-cases/software-engineers",
-    summary: "AI rewrites engineering bullets to quantify latency, throughput, scope, and ownership and surfaces the exact technical keywords recruiters and ATS filters search for.",
+    title: "Software engineer resume example",
+    path: "/resume-examples/software-engineer",
+    summary: "A senior backend engineer resume with quantified bullets and the language and tool keywords engineering recruiters search for.",
   },
   {
-    title: "For Product Managers",
-    path: "/use-cases/product-managers",
-    summary: "Turns roadmaps, OKRs, and A/B tests into quantified, baselined, ATS-clean resume bullets in the language PM recruiters scan for.",
+    title: "Product manager resume example",
+    path: "/resume-examples/product-manager",
+    summary: "A product manager resume built around activation, retention and revenue outcomes, plus PM keywords and ATS tips.",
   },
   {
-    title: "For Designers",
-    path: "/use-cases/designers",
-    summary: "Writes ATS-clean design resume bullets that quantify impact and shipping speed so your resume lands the interview your portfolio deserves.",
+    title: "UX designer resume example",
+    path: "/resume-examples/ux-designer",
+    summary: "A parseable product designer resume with measurable design outcomes and research and tool keywords.",
   },
 ];
 
@@ -203,6 +203,7 @@ ${billingNote}
 - Home: ${baseUrl}/
 - Pricing: ${baseUrl}/pricing
 - Free ATS Check (no account): ${baseUrl}/free-ats-check
+- Resume examples by job, with keywords and bullet examples: ${baseUrl}/resume-examples
 - Blog: ${baseUrl}/blog
 - About: ${baseUrl}/about
 - Contact: ${baseUrl}/contact

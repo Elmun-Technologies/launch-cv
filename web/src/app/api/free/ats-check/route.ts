@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { chatJson } from "@/lib/openai-client";
@@ -6,14 +7,18 @@ import { analyzeAtsSignals } from "@/lib/ats-signals";
 import { hashClientIp } from "@/lib/request-ip";
 import { allowFreeAtsBurst } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
-import type { FreeAtsResult } from "@/types/ai-results";
+import type { FreeAtsFix, FreeAtsReport, FreeAtsResult } from "@/types/ai-results";
 
 /** One free trial per IP inside this window. */
 const TRIAL_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
 const DIMENSIONS = ["Formatting", "Keywords", "Structure", "Readability"] as const;
 
-type RawFix = { priority?: unknown };
+type RawFix = { priority?: unknown; title?: unknown; fix?: unknown };
+
+/** How many fixes are shown in full before sign-up. */
+const PREVIEW_FIXES = 3;
+const PRIORITY_ORDER = { High: 0, Medium: 1, Low: 2 } as const;
 type RawScore = { overall?: unknown; dimensions?: unknown; fixes?: unknown };
 
 function clampScore(n: unknown): number {
@@ -21,9 +26,17 @@ function clampScore(n: unknown): number {
   return Math.max(0, Math.min(100, Math.round(v)));
 }
 
-/** Shape the model output into the gated public result. The fix *text* never
- *  leaves this function — only per-priority counts do. */
-function toPublicResult(raw: RawScore): FreeAtsResult {
+function toFix(f: RawFix): FreeAtsFix | null {
+  const p = String(f?.priority ?? "").toLowerCase();
+  const priority = p === "high" ? "High" : p === "medium" ? "Medium" : p === "low" ? "Low" : null;
+  const title = typeof f?.title === "string" ? f.title.trim().slice(0, 200) : "";
+  if (!priority || !title) return null;
+  const fix = typeof f?.fix === "string" ? f.fix.trim().slice(0, 600) : "";
+  return { priority, title, fix };
+}
+
+/** Shape the model output into the full report we store for the visitor. */
+function toReport(raw: RawScore): FreeAtsReport {
   const dimSource = Array.isArray(raw.dimensions) ? (raw.dimensions as Record<string, unknown>[]) : [];
   const dimensions = DIMENSIONS.map((name) => {
     const match = dimSource.find(
@@ -32,21 +45,28 @@ function toPublicResult(raw: RawScore): FreeAtsResult {
     return { name, score: clampScore(match?.score) };
   });
 
-  const fixes = Array.isArray(raw.fixes) ? (raw.fixes as RawFix[]) : [];
-  const issueCounts = { high: 0, medium: 0, low: 0 };
-  for (const f of fixes) {
-    const p = String(f?.priority ?? "").toLowerCase();
-    if (p === "high") issueCounts.high += 1;
-    else if (p === "medium") issueCounts.medium += 1;
-    else if (p === "low") issueCounts.low += 1;
-  }
+  const fixes = (Array.isArray(raw.fixes) ? (raw.fixes as RawFix[]) : [])
+    .map(toFix)
+    .filter((f): f is FreeAtsFix => f !== null)
+    .sort((a, b) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority]);
+  const issueCounts = {
+    high: fixes.filter((f) => f.priority === "High").length,
+    medium: fixes.filter((f) => f.priority === "Medium").length,
+    low: fixes.filter((f) => f.priority === "Low").length,
+  };
 
   return {
     overall: clampScore(raw.overall),
     dimensions,
     issueCounts,
-    totalFixes: issueCounts.high + issueCounts.medium + issueCounts.low,
+    totalFixes: fixes.length,
+    fixes,
   };
+}
+
+/** The public result: everything except the fixes beyond the preview. */
+function toPublicResult({ fixes, ...rest }: FreeAtsReport): FreeAtsResult {
+  return { ...rest, preview: fixes.slice(0, PREVIEW_FIXES) };
 }
 
 export async function POST(req: Request) {
@@ -67,7 +87,7 @@ export async function POST(req: Request) {
   if (priorTrial) {
     return NextResponse.json(
       {
-        error: "You've used your free ATS check. Create an account for unlimited scans and the full fix list.",
+        error: "You've already used this month's free ATS check from this network.",
         alreadyUsed: true,
       },
       { status: 429 },
@@ -119,7 +139,7 @@ export async function POST(req: Request) {
       await prisma.freeAtsTrial.delete({ where: { id: reservation.id } }).catch(() => null);
       return NextResponse.json(
         {
-          error: "You've used your free ATS check. Create an account for unlimited scans and the full fix list.",
+          error: "You've already used this month's free ATS check from this network.",
           alreadyUsed: true,
         },
         { status: 429 },
@@ -149,7 +169,7 @@ JSON shape:
     { "name": "Structure", "score": 0-100 },
     { "name": "Readability", "score": 0-100 }
   ],
-  "fixes": [ { "priority": "High" | "Medium" | "Low", "title": string } ]
+  "fixes": [ { "priority": "High" | "Medium" | "Low", "title": string, "fix": string } ]
 }
 Scoring guidance:
 - Formatting: penalize columnOrTableHint and allCapsHeavy. Structure: reward the four
@@ -160,6 +180,7 @@ Scoring guidance:
   them (e.g. never claim contact info is missing when hasEmail/hasPhone is true).
 Rules:
 - Provide 4-10 concrete fixes ranked by priority. Base every fix on the actual text and signals.
+- "title" names the problem in plain English (under 12 words). "fix" says exactly what to change, in 1-2 sentences.
 - Do not fabricate metrics. Be honest and specific.`;
 
   const user = `SIGNALS (deterministic, treat as ground truth):
@@ -168,10 +189,10 @@ ${JSON.stringify(signals)}
 RESUME TEXT:
 ${resumeText.slice(0, 12000)}`;
 
-  let result: FreeAtsResult;
+  let report: FreeAtsReport;
   try {
     const raw = await chatJson<RawScore>({ system, user });
-    result = toPublicResult(raw);
+    report = toReport(raw);
   } catch (e) {
     console.error("[free/ats-check] scoring error:", e);
     await releaseReservation();
@@ -184,9 +205,9 @@ ${resumeText.slice(0, 12000)}`;
   // Guard against a garbage/empty model response — don't spend the user's
   // one free trial on a result we couldn't actually produce.
   const emptyResult =
-    result.overall === 0 &&
-    result.totalFixes === 0 &&
-    result.dimensions.every((d) => d.score === 0);
+    report.overall === 0 &&
+    report.totalFixes === 0 &&
+    report.dimensions.every((d) => d.score === 0);
   if (emptyResult) {
     await releaseReservation();
     return NextResponse.json(
@@ -195,11 +216,19 @@ ${resumeText.slice(0, 12000)}`;
     );
   }
 
-  // 6. Finalize the reserved trial with the score and track the funnel event.
+  // 6. Finalize the reserved trial with the full report so the visitor can
+  //    claim it after sign-up, and track the funnel event.
+  const result = toPublicResult(report);
+  let claimToken: string | null = null;
   if (reservation) {
-    await prisma.freeAtsTrial
-      .update({ where: { id: reservation.id }, data: { score: result.overall } })
+    const token = randomBytes(24).toString("base64url");
+    const saved = await prisma.freeAtsTrial
+      .update({
+        where: { id: reservation.id },
+        data: { score: report.overall, report: report as object, claimToken: token },
+      })
       .catch(() => null);
+    if (saved) claimToken = token;
   }
   await trackEvent("free_ats_check", {
     meta: {
@@ -210,5 +239,5 @@ ${resumeText.slice(0, 12000)}`;
     },
   });
 
-  return NextResponse.json({ result });
+  return NextResponse.json({ result, claimToken });
 }

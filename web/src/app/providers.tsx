@@ -4,8 +4,11 @@ import { useEffect, useRef, useState, type ComponentType } from "react";
 import { usePathname } from "next/navigation";
 import type { PostHog } from "posthog-js";
 import type { Mixpanel } from "mixpanel-browser";
+import { trackSignUpComplete } from "@/lib/analytics-client";
 import {
   analyticsAllowed,
+  isAppPath,
+  SIGNUP_FLAG_COOKIE,
   currentEnvName,
   isPreviewHost,
   readInternalFlag,
@@ -19,9 +22,9 @@ type PostHogProviderComp = ComponentType<{ client: PostHog; children: React.Reac
  * configured. Loading it via dynamic `import()` keeps it out of the initial JS bundle
  * that every page pays for, instead of a static top-level import.
  *
- * It initialises ONLY on the production marketing site — never on `/admin-panel`
- * or `/dashboard`, and never on preview / local builds — so team and preview
- * traffic don't pollute product analytics. Internal/team browsers are tagged with
+ * It initialises ONLY on the production site — never on `/admin-panel`, and never
+ * on preview / local builds — so team and preview traffic don't pollute product
+ * analytics. In the signed-in app it sends explicit events only (no autocapture). Internal/team browsers are tagged with
  * `is_internal: true` so PostHog's "Filter test accounts" rule can exclude them.
  *
  * Mixpanel (`mixpanel-browser`) is initialised the same way, right alongside
@@ -41,6 +44,25 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     syncInternalTrafficFlag();
   }, [pathname]);
+
+  // Google sign-ups complete server-side; fire sign_up_complete once the
+  // analytics clients have loaded (or after a few seconds regardless).
+  useEffect(() => {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${SIGNUP_FLAG_COOKIE}=([^;]*)`));
+    if (!m) return;
+    document.cookie = `${SIGNUP_FLAG_COOKIE}=; Max-Age=0; Path=/`;
+    const method = decodeURIComponent(m[1]);
+    let tries = 0;
+    const id = window.setInterval(() => {
+      tries += 1;
+      const ready = !key || !!(window as unknown as { posthog?: unknown }).posthog;
+      if (ready || tries >= 20) {
+        window.clearInterval(id);
+        trackSignUpComplete({ method });
+      }
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [key]);
 
   useEffect(() => {
     if (!key) return;
@@ -69,6 +91,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
         person_profiles: "identified_only",
         capture_pageview: true,
         capture_pageleave: true,
+        // Inside the app, only explicit events (checkout_start, …) are sent:
+        // autocaptured clicks there could carry resume text.
+        before_send: (ev) => (ev?.event === "$autocapture" && isAppPath(window.location.pathname) ? null : ev),
       });
       // Attach as a super property so it rides on every event — PostHog's
       // "Filter test accounts" rule (is_internal = true) can then exclude team

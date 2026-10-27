@@ -5,162 +5,167 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/site-header";
-import { LogoMark } from "@/components/logo";
+import { Logo } from "@/components/logo";
 import {
   Home, FileText, Briefcase, Users, Building2, Target,
-  Settings, Puzzle, Gift, HelpCircle, Menu, X, Zap, Sparkles,
+  Settings, Puzzle, Gift, HelpCircle, Menu, X,
 } from "lucide-react";
-import { PUBLIC_PLANS, PUBLIC_PRICING } from "@/lib/monetization";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 
-const mainMenu = [
-  { href: "/dashboard", label: "Dashboard", icon: Home, exact: true },
-  { href: "/dashboard/resumes", label: "Resume Builder", icon: FileText },
-  { href: "/dashboard/job-tracker", label: "Job Tracker", icon: Briefcase },
+type NavItem = { href: string; label: string; icon: typeof Home; exact?: boolean; exclude?: string };
+
+const mainMenu: NavItem[] = [
+  { href: "/dashboard", label: "Home", icon: Home, exact: true },
+  { href: "/dashboard/resumes", label: "Resumes", icon: FileText },
+  { href: "/dashboard/job-tracker", label: "Job tracker", icon: Briefcase },
+  { href: "/dashboard/company-matcher", label: "Company matcher", icon: Target },
   { href: "/dashboard/contacts", label: "Contacts", icon: Users },
   { href: "/dashboard/companies", label: "Companies", icon: Building2 },
-  { href: "/dashboard/company-matcher", label: "Company Match", icon: Target },
-  { href: "/dashboard/support", label: "Support", icon: HelpCircle },
 ];
 
-const othersMenu = [
-  { href: "/dashboard/settings", label: "Account", icon: Settings },
-  { href: "/dashboard/settings/email-templates", label: "Extensions", icon: Puzzle },
+const othersMenu: NavItem[] = [
+  { href: "/dashboard/settings", label: "Settings", icon: Settings, exclude: "/dashboard/settings/email-templates" },
+  { href: "/dashboard/settings/email-templates", label: "Email templates", icon: Puzzle },
   { href: "/dashboard/referrals", label: "Referrals", icon: Gift },
+  { href: "/dashboard/support", label: "Help", icon: HelpCircle },
 ];
 
-function UpgradeCard() {
+type Usage = {
+  paid: boolean;
+  plan: string;
+  limits: { jd: number; packet: number; roleFit: number };
+  used: { jd: number; packet: number; roleFit: number };
+};
+
+const PLAN_TITLES: Record<string, string> = {
+  starter: PUBLIC_PLANS.starter.title,
+  professional: PUBLIC_PLANS.professional.title,
+  elite: PUBLIC_PLANS.elite.title,
+  lifetime: PUBLIC_PLANS.lifetime.title,
+};
+
+function Meter({ label, used, limit }: { label: string; used: number; limit: number }) {
+  const pct = limit > 0 ? Math.min(100, Math.round((used / limit) * 100)) : 0;
   return (
-    <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-50 px-4 py-5 text-center">
-      <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl bg-[#2563EB] text-white shadow-sm">
-        <Zap className="h-5 w-5" />
-      </div>
-      <p className="mt-3 text-[13px] font-bold text-gray-900">
-        Plans from {PUBLIC_PLANS.starter.priceDisplay}
-        {PUBLIC_PLANS.starter.periodLabel}
+    <div className="mt-2.5">
+      <p className="text-[12px] text-[#6B6B6B]">
+        {label} · {used} of {limit.toLocaleString("en-US")}
       </p>
-      <p className="mt-1 text-[11px] leading-snug text-gray-500">{PUBLIC_PRICING.upsellHook}</p>
-      <Link
-        href="/dashboard/settings/subscription"
-        className="mt-4 block w-full rounded-xl bg-[#2563EB] py-2.5 text-[12px] font-bold text-white transition hover:bg-[#1D4ED8]"
-      >
-        Upgrade
-      </Link>
+      <div className="mt-1 h-[5px] rounded-full bg-[#EEEEEB]">
+        <div className={`h-[5px] rounded-full ${pct >= 90 ? "bg-[#C2341B]" : "bg-[#111111]"}`} style={{ width: `${pct}%` }} />
+      </div>
     </div>
+  );
+}
+
+function PlanCard({ usage }: { usage: Usage }) {
+  if (!usage.paid) {
+    return (
+      <div className="rounded-[14px] border border-[#E5E5E2] p-3.5">
+        <p className="text-[13px] font-medium text-[#111111]">No plan yet</p>
+        <p className="mt-1 text-[12px] leading-snug text-[#6B6B6B]">
+          Unlock AI rewrites, job matching and cover letters from {PUBLIC_PLANS.starter.priceDisplay}/month.
+        </p>
+        <Link
+          href="/dashboard/settings/subscription"
+          className="mt-3 flex h-9 items-center justify-center rounded-full bg-[#2563EB] text-[13px] font-medium text-white hover:bg-[#1D4ED8]"
+        >
+          See plans
+        </Link>
+      </div>
+    );
+  }
+  return (
+    <Link href="/dashboard/settings/subscription" className="block rounded-[14px] border border-[#E5E5E2] p-3.5 hover:border-[#111111]">
+      <p className="flex justify-between text-[13px]">
+        <span className="font-medium text-[#111111]">{PLAN_TITLES[usage.plan] ?? "Your plan"}</span>
+        <span className="text-[#6B6B6B]">This month</span>
+      </p>
+      <Meter label="Job matching" used={usage.used.jd} limit={usage.limits.jd} />
+      <Meter label="Packets" used={usage.used.packet} limit={usage.limits.packet} />
+    </Link>
   );
 }
 
 export function DashboardShell({ children, email, pageTitle }: { children: React.ReactNode; email?: string | null; pageTitle?: string }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [planLoaded, setPlanLoaded] = useState(false);
-  const [isPro, setIsPro] = useState(false);
+  const [usage, setUsage] = useState<Usage | null>(null);
 
   useEffect(() => {
     let c = true;
     (async () => {
-      try {
-        const r = await fetch("/api/subscription/status");
-        const j = (await r.json().catch(() => ({}))) as { pro?: boolean; paid?: boolean };
-        if (c && r.ok) {
-          const paid = typeof j.paid === "boolean" ? j.paid : !!j.pro;
-          setIsPro(paid);
-        }
-      } finally {
-        if (c) setPlanLoaded(true);
-      }
+      const r = await fetch("/api/usage").catch(() => null);
+      if (!r?.ok) return;
+      const j = (await r.json().catch(() => null)) as Usage | null;
+      if (c && j) setUsage(j);
     })();
     return () => {
       c = false;
     };
   }, []);
 
-  function isActive(href: string, exact?: boolean) {
-    if (exact) return pathname === href;
-    return pathname === href || pathname.startsWith(`${href}/`);
+  function isActive(item: NavItem) {
+    if (item.exact) return pathname === item.href;
+    if (item.exclude && pathname.startsWith(item.exclude)) return false;
+    return pathname === item.href || pathname.startsWith(`${item.href}/`);
   }
 
-  const showUpsell = planLoaded && !isPro;
   const hideTopBanner = pathname.startsWith("/dashboard/settings/subscription");
 
-  function renderNavItems() {
+  function navList(items: NavItem[]) {
     return (
-      <>
-        <div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-gray-400">Main Menu</div>
-        <div className="space-y-0.5 px-2">
-          {mainMenu.map((item) => {
-            const active = isActive(item.href, item.exact);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                data-tooltip={item.label}
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition ${
-                  active
-                    ? "bg-[#2563EB] text-white shadow-sm shadow-blue-500/20"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                }`}
-              >
-                <item.icon className={`h-[18px] w-[18px] ${active ? "text-white" : ""}`} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-
-        <div className="mb-3 mt-8 px-3 text-[10px] font-bold uppercase tracking-[0.08em] text-gray-400">Others</div>
-        <div className="space-y-0.5 px-2">
-          {othersMenu.map((item) => {
-            const active = isActive(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                data-tooltip={item.label}
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-medium transition ${
-                  active
-                    ? "bg-[#2563EB] text-white shadow-sm shadow-blue-500/20"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                }`}
-              >
-                <item.icon className={`h-[18px] w-[18px] ${active ? "text-white" : ""}`} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </>
+      <div className="flex flex-col gap-0.5">
+        {items.map((item) => {
+          const active = isActive(item);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              aria-current={active ? "page" : undefined}
+              className={`flex h-9 items-center gap-2.5 rounded-[9px] px-3 text-[14px] transition ${
+                active ? "bg-[#F5F5F3] font-medium text-[#111111]" : "text-[#3F3F3F] hover:bg-[#FAFAF9] hover:text-[#111111]"
+              }`}
+            >
+              <item.icon className={`h-4 w-4 ${active ? "text-[#111111]" : "text-[#8A8A86]"}`} aria-hidden />
+              {item.label}
+            </Link>
+          );
+        })}
+      </div>
     );
   }
 
-  return (
-    <div className="flex h-screen overflow-hidden bg-[#FAFAFA]">
-      <aside className="hidden w-[220px] shrink-0 flex-col border-r border-gray-100 bg-white lg:flex">
-        <div className="flex h-[60px] items-center gap-2.5 border-b border-gray-100 px-5">
-          <LogoMark size={32} />
-          <span className="text-[15px] font-bold tracking-tight">
-            <span className="text-[#0F172A]">launch</span>
-            <span className="text-[#2563EB]">cv</span>
-          </span>
+  const sidebar = (
+    <>
+      <nav aria-label="Dashboard" className="flex-1 overflow-y-auto px-3 py-4">
+        {navList(mainMenu)}
+        <div className="mx-3 my-3 h-px bg-[#EEEEEB]" />
+        {navList(othersMenu)}
+      </nav>
+      {usage ? (
+        <div className="px-3 pb-4">
+          <PlanCard usage={usage} />
         </div>
+      ) : null}
+    </>
+  );
 
-        <nav className="flex-1 overflow-y-auto py-5">
-          {renderNavItems()}
-        </nav>
-
-        {showUpsell ? (
-          <div className="border-t border-gray-100 px-4 pb-5 pt-4">
-            <UpgradeCard />
-          </div>
-        ) : null}
+  return (
+    <div className="flex h-screen overflow-hidden bg-[#FAFAF9] text-[#111111]">
+      <aside className="hidden w-[240px] shrink-0 flex-col border-r border-[#EEEEEB] bg-white lg:flex">
+        <div className="flex h-[60px] shrink-0 items-center px-5">
+          <Logo variant="light" size="md" href="/dashboard" />
+        </div>
+        {sidebar}
       </aside>
 
       <AnimatePresence>
         {mobileOpen ? (
           <div className="fixed inset-0 z-50 lg:hidden">
             <motion.div
-              className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/25"
               onClick={() => setMobileOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -168,72 +173,57 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
               transition={{ duration: 0.2 }}
             />
             <motion.aside
-              className="absolute left-0 top-0 flex h-full w-[260px] flex-col overflow-y-auto bg-white shadow-xl"
+              className="absolute left-0 top-0 flex h-full w-[264px] flex-col bg-white shadow-xl"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.26, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="flex h-[60px] shrink-0 items-center justify-between border-b border-gray-100 px-5">
-                <div className="flex items-center gap-2.5">
-                  <LogoMark size={30} />
-                  <span className="text-[15px] font-bold">
-                    <span className="text-[#0F172A]">launch</span>
-                    <span className="text-[#2563EB]">cv</span>
-                  </span>
-                </div>
-                <button type="button" onClick={() => setMobileOpen(false)} className="text-gray-400">
+              <div className="flex h-[60px] shrink-0 items-center justify-between px-5">
+                <Logo variant="light" size="md" href="/dashboard" />
+                <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close menu" className="text-[#6B6B6B]">
                   <X className="h-5 w-5" />
                 </button>
               </div>
-              <nav className="flex-1 py-5">{renderNavItems()}</nav>
-              {showUpsell ? (
-                <div className="border-t border-gray-100 p-4">
-                  <UpgradeCard />
-                </div>
-              ) : null}
+              {sidebar}
             </motion.aside>
           </div>
         ) : null}
       </AnimatePresence>
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex items-center">
+        <div className="flex items-center bg-white">
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="ml-4 flex h-10 w-10 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-100 lg:hidden"
+            aria-label="Open menu"
+            className="ml-3 flex h-10 w-10 items-center justify-center rounded-full text-[#3F3F3F] hover:bg-[#F5F5F3] lg:hidden"
           >
             <Menu className="h-5 w-5" />
           </button>
-          <div className="flex-1">
+          <div className="min-w-0 flex-1">
             <SiteHeader email={email} pageTitle={pageTitle} />
           </div>
         </div>
 
-        {showUpsell && !hideTopBanner ? (
-          <div className="border-b border-blue-100 bg-gradient-to-r from-blue-50 via-white to-blue-50/30 px-4 py-2.5 sm:px-7">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <p className="flex items-start gap-2 text-[13px] text-gray-700 sm:items-center">
-                <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB] sm:mt-0" />
-                <span>
-                  <span className="font-bold text-gray-900">Activate a plan</span> — from{" "}
-                  {PUBLIC_PLANS.starter.priceDisplay}
-                  {PUBLIC_PLANS.starter.periodLabel} or {PUBLIC_PLANS.lifetime.title} {PUBLIC_PLANS.lifetime.priceDisplay}{" "}
-                  {PUBLIC_PLANS.lifetime.periodLabel}. {PUBLIC_PRICING.upsellHook}
-                </span>
-              </p>
-              <Link
-                href="/dashboard/settings/subscription"
-                className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#2563EB] px-4 py-2 text-[12px] font-bold text-white transition hover:bg-[#1D4ED8]"
-              >
-                Upgrade
-              </Link>
-            </div>
+        {usage && !usage.paid && !hideTopBanner ? (
+          <div className="flex items-center justify-between gap-3 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px]">
+            <p className="min-w-0 text-[#111111]">
+              <span className="sm:hidden">AI tools from {PUBLIC_PLANS.starter.priceDisplay}/mo</span>
+              <span className="hidden sm:inline">
+                AI tools unlock on a plan — from {PUBLIC_PLANS.starter.priceDisplay}/month or {PUBLIC_PLANS.lifetime.priceDisplay} once.
+              </span>
+            </p>
+            <Link
+              href="/dashboard/settings/subscription"
+              className="inline-flex h-8 shrink-0 items-center justify-center rounded-full bg-[#2563EB] px-4 text-[13px] font-medium text-white hover:bg-[#1D4ED8]"
+            >
+              See plans
+            </Link>
           </div>
         ) : null}
 
-        <main className="flex-1 overflow-y-auto p-5 sm:p-7">{children}</main>
+        <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8">{children}</main>
       </div>
     </div>
   );

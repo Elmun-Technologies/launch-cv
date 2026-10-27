@@ -36,13 +36,13 @@ export function ResumesToolbar({ q, sort }: { q: string; sort: string }) {
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3">
-      <div className="relative w-72">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="relative sm:w-[320px]">
+        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
         <input
           type="search"
           aria-label="Search resumes"
-          className="soha-input h-10 pl-9"
+          className="soha-input pl-9"
           placeholder="Search resumes..."
           value={value}
           onChange={(e) => onSearch(e.target.value)}
@@ -50,7 +50,7 @@ export function ResumesToolbar({ q, sort }: { q: string; sort: string }) {
       </div>
       <select
         aria-label="Sort resumes"
-        className="soha-select !h-10 !w-40 !text-[13px]"
+        className="soha-select sm:!w-44"
         value={sort}
         onChange={(e) => pushParams({ sort: e.target.value })}
       >

@@ -7,7 +7,7 @@ import { LogoMark } from "@/components/logo";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
   FileText, Loader2, UploadCloud, CheckCircle, AlertTriangle,
-  ArrowRight, BarChart3, Target, Sparkles, X, ArrowLeft,
+  ArrowRight, BarChart3, Target, Sparkles, ArrowLeft,
   ChevronDown, Check, AlertCircle, Info, Building2, Plus,
   Lightbulb, Zap, Mic, Search, MessageSquare, FileUp,
   ArrowUpRight, RefreshCw, Shield,
@@ -23,7 +23,7 @@ type DiagnosticResult = {
 const SEVERITY_CONFIG = {
   high: { label: "Critical Issues", bg: "bg-red-50", text: "text-red-600", border: "border-l-red-500", badge: "bg-red-100 text-red-700", Icon: AlertCircle },
   medium: { label: "Medium Priority", bg: "bg-amber-50", text: "text-amber-600", border: "border-l-amber-400", badge: "bg-amber-100 text-amber-700", Icon: AlertTriangle },
-  low: { label: "Low Priority", bg: "bg-gray-50", text: "text-gray-500", border: "border-l-gray-300", badge: "bg-gray-100 text-gray-600", Icon: Info },
+  low: { label: "Low Priority", bg: "bg-[#FAFAF9]", text: "text-[#6B6B6B]", border: "border-l-gray-300", badge: "bg-[#F5F5F3] text-[#6B6B6B]", Icon: Info },
 } as const;
 
 const SEVERITY_ORDER: ("high" | "medium" | "low")[] = ["high", "medium", "low"];
@@ -38,7 +38,7 @@ function getScoreInfo(score: number) {
 export default function NewResumePage() {
   const [creating, setCreating] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [uploading, setUploading] = useState(false);
+  const [, setUploading] = useState(false);
   const [uploadStep, setUploadStep] = useState<"idle" | "parsing" | "scoring" | "done" | "error">("idle");
   const [uploadErr, setUploadErr] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
@@ -243,17 +243,17 @@ export default function NewResumePage() {
       `}</style>
 
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-gray-100 bg-white px-6 py-3.5">
+      <header className="flex items-center justify-between border-b border-[#EEEEEB] bg-white px-6 py-3.5">
         <Link href="/dashboard" className="flex items-center gap-2.5">
           <LogoMark size={30} />
-          <span className="text-[15px] font-bold">
+          <span className="text-[15px] font-semibold">
             <span className="text-[#0F172A]">launch</span>
             <span className="text-[#2563EB]">cv</span>
           </span>
         </Link>
         <Link
           href="/dashboard"
-          className="flex items-center gap-1.5 rounded-xl border border-gray-100 px-4 py-2 text-[13px] font-medium text-gray-500 transition hover:border-gray-200 hover:bg-gray-50 hover:text-gray-700"
+          className="flex items-center gap-1.5 rounded-xl border border-[#EEEEEB] px-4 py-2 text-[13px] font-medium text-[#6B6B6B] transition hover:border-[#E5E5E2] hover:bg-[#FAFAF9] hover:text-[#3F3F3F]"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Dashboard
@@ -267,14 +267,14 @@ export default function NewResumePage() {
           {uploadStep === "idle" && (
             <div className="anim-in">
               <div className="text-center">
-                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF]">
+                <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#111111]">
                   <Sparkles className="h-7 w-7 text-white" />
                 </div>
-                <h1 className="text-[32px] font-extrabold tracking-tight text-gray-900 sm:text-[36px]">
+                <h1 className="text-[32px] font-extrabold tracking-tight text-[#111111] sm:text-[36px]">
                   Let&apos;s build your resume
                 </h1>
-                <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-gray-500">
-                  Choose how you&apos;d like to get started. Either way, our AI will guide you every step.
+                <p className="mx-auto mt-3 max-w-lg text-[15px] leading-relaxed text-[#6B6B6B]">
+                  Start from a blank page or import the resume you already have. You can switch later.
                 </p>
               </div>
 
@@ -284,24 +284,24 @@ export default function NewResumePage() {
                   type="button"
                   onClick={() => void handleCreate()}
                   disabled={creating}
-                  className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-blue-100/50 disabled:opacity-60"
+                  className="group relative flex flex-col rounded-2xl border-2 border-[#EEEEEB] bg-white p-8 text-left transition-all duration-200 hover:border-[#2563EB]/30 hover:shadow-xl hover:shadow-blue-100/50 disabled:opacity-60"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#9B7DFF] shadow-lg shadow-blue-200/50">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F3] text-[#111111] [&_svg]:!text-[#111111]">
                     <Sparkles className="h-8 w-8 text-white" />
                   </div>
-                  <h2 className="mt-6 text-[20px] font-bold text-gray-900">Start from Scratch</h2>
-                  <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
-                    Perfect if you want full control. Our AI will guide you step by step.
+                  <h2 className="mt-6 text-[20px] font-semibold text-[#111111]">Start from Scratch</h2>
+                  <p className="mt-2 text-[14px] leading-relaxed text-[#6B6B6B]">
+                    Fill in each section with a live preview that matches the PDF you download.
                   </p>
 
                   <div className="mt-5 space-y-2.5">
                     {[
-                      { icon: Zap, text: "AI-powered suggestions" },
-                      { icon: FileText, text: "12+ industry templates" },
-                      { icon: Mic, text: "Voice input supported" },
+                      { icon: Zap, text: "AI rewrites for weak bullets" },
+                      { icon: FileText, text: "4 ATS-friendly templates" },
+                      { icon: Mic, text: "Dictate bullets by voice" },
                     ].map((b) => (
-                      <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-gray-600">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                      <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-[#6B6B6B]">
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[#EEF3FF]">
                           <b.icon className="h-3.5 w-3.5 text-[#2563EB]" />
                         </div>
                         {b.text}
@@ -309,7 +309,7 @@ export default function NewResumePage() {
                     ))}
                   </div>
 
-                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl bg-[#2563EB] py-3.5 text-[14px] font-semibold text-white transition-colors group-hover:bg-[#1D4ED8]">
+                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-full bg-[#2563EB] py-3.5 text-[14px] font-semibold text-white transition-colors group-hover:bg-[#1D4ED8]">
                     {creating ? <Loader2 className="h-4.5 w-4.5 animate-spin" /> : <Sparkles className="h-4.5 w-4.5" />}
                     {creating ? "Creating…" : "Start Fresh"}
                   </div>
@@ -319,23 +319,23 @@ export default function NewResumePage() {
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
-                  className="group relative flex flex-col rounded-2xl border-2 border-gray-100 bg-white p-8 text-left transition-all duration-200 hover:border-amber-200 hover:shadow-xl hover:shadow-amber-100/40"
+                  className="group relative flex flex-col rounded-2xl border-2 border-[#EEEEEB] bg-white p-8 text-left transition-all duration-200 hover:border-amber-200 hover:shadow-xl hover:shadow-amber-100/40"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-400 to-amber-500 shadow-lg shadow-amber-200/50">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F3] text-[#111111] [&_svg]:!text-[#111111]">
                     <UploadCloud className="h-8 w-8 text-white" />
                   </div>
-                  <h2 className="mt-6 text-[20px] font-bold text-gray-900">Upload &amp; Improve</h2>
-                  <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
-                    Already have a resume? Upload it and we&apos;ll score it, find issues, and help you fix them.
+                  <h2 className="mt-6 text-[20px] font-semibold text-[#111111]">Upload &amp; Improve</h2>
+                  <p className="mt-2 text-[14px] leading-relaxed text-[#6B6B6B]">
+                    Upload a PDF or DOCX and every section is filled in for you to review and edit.
                   </p>
 
                   <div className="mt-5 space-y-2.5">
                     {[
-                      { icon: BarChart3, text: "Instant AI scoring" },
-                      { icon: Search, text: "Find missing keywords" },
-                      { icon: MessageSquare, text: "Get improvement suggestions" },
+                      { icon: BarChart3, text: "Role-fit score on any plan" },
+                      { icon: Search, text: "Checks for missing sections" },
+                      { icon: MessageSquare, text: "Keep editing in the builder" },
                     ].map((b) => (
-                      <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-gray-600">
+                      <div key={b.text} className="flex items-center gap-2.5 text-[13px] text-[#6B6B6B]">
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-50">
                           <b.icon className="h-3.5 w-3.5 text-amber-600" />
                         </div>
@@ -344,14 +344,14 @@ export default function NewResumePage() {
                     ))}
                   </div>
 
-                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#2563EB] py-3.5 text-[14px] font-semibold text-[#2563EB] transition-colors group-hover:bg-blue-50">
+                  <div className="mt-8 flex w-full items-center justify-center gap-2.5 rounded-xl border-2 border-[#2563EB] py-3.5 text-[14px] font-semibold text-[#2563EB] transition-colors group-hover:bg-[#EEF3FF]">
                     <UploadCloud className="h-4.5 w-4.5" /> Upload File
                   </div>
-                  <p className="mt-3 text-center text-[12px] text-gray-400">PDF, DOCX (max 4MB)</p>
+                  <p className="mt-3 text-center text-[12px] text-[#8A8A86]">PDF, DOCX (max 4MB)</p>
                 </button>
               </div>
 
-              <p className="mt-8 text-center text-[13px] text-gray-400">
+              <p className="mt-8 text-center text-[13px] text-[#8A8A86]">
                 Not sure?{" "}
                 <button type="button" onClick={() => void handleCreate()} className="font-medium text-[#2563EB] underline underline-offset-2 transition hover:text-[#1D4ED8]">
                   Start fresh
@@ -366,7 +366,7 @@ export default function NewResumePage() {
           {/* ── PROCESSING: Clean Stepper ── */}
           {(uploadStep === "parsing" || uploadStep === "scoring") && (
             <div className="anim-in mx-auto max-w-xl">
-              <div className="rounded-2xl border border-gray-100 bg-white px-8 py-12 shadow-sm">
+              <div className="rounded-2xl border border-[#EEEEEB] bg-white px-8 py-12 shadow-sm">
                 {/* Stepper */}
                 <div className="mx-auto flex max-w-md items-start justify-between">
                   {progressSteps.map((step, idx) => {
@@ -375,24 +375,24 @@ export default function NewResumePage() {
                       <div key={step.key} className="relative flex flex-1 flex-col items-center">
                         {idx > 0 && (
                           <div className="absolute right-1/2 top-[18px] h-[2px] w-full">
-                            <div className={`h-full w-full rounded-full transition-all duration-700 ${status === "pending" ? "bg-gray-200" : "bg-[#2563EB]"}`} />
+                            <div className={`h-full w-full rounded-full transition-all duration-700 ${status === "pending" ? "bg-[#EEEEEB]" : "bg-[#2563EB]"}`} />
                           </div>
                         )}
                         <div
-                          className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-bold transition-all duration-300 ${
+                          className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-semibold transition-all duration-300 ${
                             status === "done"
                               ? "bg-emerald-500 text-white"
                               : status === "active"
                                 ? "pulse-violet bg-[#2563EB] text-white"
-                                : "bg-gray-100 text-gray-400"
+                                : "bg-[#F5F5F3] text-[#8A8A86]"
                           }`}
                         >
                           {status === "done" ? <Check className="h-4 w-4" /> : idx + 1}
                         </div>
-                        <span className={`mt-2.5 text-[12px] font-semibold ${status === "active" ? "text-[#2563EB]" : status === "done" ? "text-emerald-600" : "text-gray-400"}`}>
+                        <span className={`mt-2.5 text-[12px] font-semibold ${status === "active" ? "text-[#2563EB]" : status === "done" ? "text-emerald-600" : "text-[#8A8A86]"}`}>
                           {step.label}
                         </span>
-                        <span className={`mt-0.5 text-[11px] ${status === "active" ? "text-[#2563EB]/70" : "text-gray-300"}`}>
+                        <span className={`mt-0.5 text-[11px] ${status === "active" ? "text-[#2563EB]/70" : "text-[#A3A3A0]"}`}>
                           {step.desc}
                         </span>
                       </div>
@@ -401,25 +401,25 @@ export default function NewResumePage() {
                 </div>
 
                 <div className="mt-12 text-center">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF3FF]">
                     <Loader2 className="h-7 w-7 animate-spin text-[#2563EB]" />
                   </div>
-                  <h2 className="mt-5 text-[20px] font-bold text-gray-900">
+                  <h2 className="mt-5 text-[20px] font-semibold text-[#111111]">
                     {uploadStep === "parsing" ? "Parsing your resume…" : "Running AI diagnostics…"}
                   </h2>
-                  <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
+                  <p className="mt-2 text-[14px] leading-relaxed text-[#6B6B6B]">
                     {uploadStep === "parsing"
                       ? `Extracting structured data from your file`
                       : "Scoring content, finding gaps, and generating suggestions"}
                   </p>
                 </div>
 
-                <div className="mx-auto mt-8 flex max-w-sm items-center gap-3 rounded-xl bg-gray-50 px-4 py-3">
-                  <FileUp className="h-4 w-4 shrink-0 text-gray-400" />
-                  <p className="truncate text-[13px] font-medium text-gray-600">{fileName}</p>
+                <div className="mx-auto mt-8 flex max-w-sm items-center gap-3 rounded-xl bg-[#FAFAF9] px-4 py-3">
+                  <FileUp className="h-4 w-4 shrink-0 text-[#8A8A86]" />
+                  <p className="truncate text-[13px] font-medium text-[#6B6B6B]">{fileName}</p>
                 </div>
 
-                <p className="mt-4 text-center text-[12px] text-gray-400">This usually takes 15–30 seconds</p>
+                <p className="mt-4 text-center text-[12px] text-[#8A8A86]">This usually takes 15–30 seconds</p>
               </div>
             </div>
           )}
@@ -431,8 +431,8 @@ export default function NewResumePage() {
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-red-50">
                   <AlertTriangle className="h-8 w-8 text-red-500" />
                 </div>
-                <h2 className="mt-6 text-[22px] font-bold text-gray-900">Something went wrong</h2>
-                <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
+                <h2 className="mt-6 text-[22px] font-semibold text-[#111111]">Something went wrong</h2>
+                <p className="mt-2 text-[14px] leading-relaxed text-[#6B6B6B]">
                   We couldn&apos;t process your file. Here&apos;s what happened:
                 </p>
                 <div className="mx-auto mt-4 max-w-sm rounded-xl bg-red-50 px-4 py-3">
@@ -443,14 +443,14 @@ export default function NewResumePage() {
                   <button
                     type="button"
                     onClick={() => { setUploadStep("idle"); setUploadErr(null); }}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
                   >
                     <RefreshCw className="h-4 w-4" /> Try Again
                   </button>
                   <button
                     type="button"
                     onClick={() => { setUploadStep("idle"); setUploadErr(null); }}
-                    className="inline-flex items-center gap-2 rounded-xl border-2 border-gray-200 px-6 py-3 text-[14px] font-semibold text-gray-700 transition hover:bg-gray-50"
+                    className="inline-flex items-center gap-2 rounded-xl border-2 border-[#E5E5E2] px-6 py-3 text-[14px] font-semibold text-[#3F3F3F] transition hover:bg-[#FAFAF9]"
                   >
                     <FileText className="h-4 w-4" /> Try DOCX Instead
                   </button>
@@ -458,7 +458,7 @@ export default function NewResumePage() {
                 <button
                   type="button"
                   onClick={() => void handleCreate()}
-                  className="mt-4 text-[13px] font-medium text-gray-400 underline underline-offset-2 transition hover:text-[#2563EB]"
+                  className="mt-4 text-[13px] font-medium text-[#8A8A86] underline underline-offset-2 transition hover:text-[#2563EB]"
                 >
                   Or start from scratch
                 </button>
@@ -479,9 +479,9 @@ export default function NewResumePage() {
                   <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50">
                     <CheckCircle className="h-6 w-6 text-emerald-500" />
                   </div>
-                  <h2 className="mt-4 text-[28px] font-extrabold tracking-tight text-gray-900">Resume Analysis Complete</h2>
-                  <p className="mt-1.5 text-[14px] text-gray-500">
-                    Full diagnostic report for <span className="font-semibold text-gray-700">{fileName}</span>
+                  <h2 className="mt-4 text-[28px] font-extrabold tracking-tight text-[#111111]">Resume Analysis Complete</h2>
+                  <p className="mt-1.5 text-[14px] text-[#6B6B6B]">
+                    Full diagnostic report for <span className="font-semibold text-[#3F3F3F]">{fileName}</span>
                   </p>
                 </div>
 
@@ -489,7 +489,7 @@ export default function NewResumePage() {
                   {/* ── Left Column ── */}
                   <div className="space-y-6">
                     {/* Score Card */}
-                    <div className="anim-d1 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                    <div className="anim-d1 overflow-hidden rounded-2xl border border-[#EEEEEB] bg-white shadow-sm">
                       <div className={`relative bg-gradient-to-r ${info.gradient} px-8 py-8`}>
                         <div className="shimmer absolute inset-0" />
                         <div className="relative flex items-center gap-6">
@@ -500,7 +500,7 @@ export default function NewResumePage() {
                             </div>
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-[18px] font-bold text-white">{info.label}</p>
+                            <p className="text-[18px] font-semibold text-white">{info.label}</p>
                             <p className="mt-1 text-[14px] leading-relaxed text-white/80">{info.desc}</p>
                           </div>
                         </div>
@@ -517,14 +517,14 @@ export default function NewResumePage() {
                           </div>
                         </div>
                       </div>
-                      <div className="flex divide-x divide-gray-100 border-t border-gray-100">
+                      <div className="flex divide-x divide-[#EEEEEB] border-t border-[#EEEEEB]">
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
                           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50">
                             <AlertCircle className="h-4.5 w-4.5 text-red-500" />
                           </div>
                           <div>
-                            <p className="text-[18px] font-bold text-gray-900">{highCount}</p>
-                            <p className="text-[12px] text-gray-400">Critical</p>
+                            <p className="text-[18px] font-semibold text-[#111111]">{highCount}</p>
+                            <p className="text-[12px] text-[#8A8A86]">Critical</p>
                           </div>
                         </div>
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
@@ -532,17 +532,17 @@ export default function NewResumePage() {
                             <AlertTriangle className="h-4.5 w-4.5 text-amber-500" />
                           </div>
                           <div>
-                            <p className="text-[18px] font-bold text-gray-900">{medCount}</p>
-                            <p className="text-[12px] text-gray-400">Medium</p>
+                            <p className="text-[18px] font-semibold text-[#111111]">{medCount}</p>
+                            <p className="text-[12px] text-[#8A8A86]">Medium</p>
                           </div>
                         </div>
                         <div className="flex flex-1 items-center gap-3 px-5 py-4">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EEF3FF]">
                             <BarChart3 className="h-4.5 w-4.5 text-[#2563EB]" />
                           </div>
                           <div>
-                            <p className="text-[18px] font-bold text-gray-900">{diagnostic.keywords.length}</p>
-                            <p className="text-[12px] text-gray-400">Keywords</p>
+                            <p className="text-[18px] font-semibold text-[#111111]">{diagnostic.keywords.length}</p>
+                            <p className="text-[12px] text-[#8A8A86]">Keywords</p>
                           </div>
                         </div>
                       </div>
@@ -550,10 +550,10 @@ export default function NewResumePage() {
 
                     {/* Issues Section */}
                     {diagnostic.issues.length > 0 && (
-                      <div className="anim-d2 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                      <div className="anim-d2 rounded-2xl border border-[#EEEEEB] bg-white p-6 shadow-sm">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-[17px] font-bold text-gray-900">Here&apos;s what we found</h3>
-                          <span className="rounded-full bg-gray-100 px-2.5 py-1 text-[12px] font-bold text-gray-600">
+                          <h3 className="text-[17px] font-semibold text-[#111111]">Here&apos;s what we found</h3>
+                          <span className="rounded-full bg-[#F5F5F3] px-2.5 py-1 text-[12px] font-semibold text-[#6B6B6B]">
                             {diagnostic.issues.length} issues
                           </span>
                         </div>
@@ -573,10 +573,10 @@ export default function NewResumePage() {
                                   className="flex w-full items-center gap-2.5"
                                 >
                                   <ChevronDown
-                                    className={`h-4 w-4 text-gray-400 transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`}
+                                    className={`h-4 w-4 text-[#8A8A86] transition-transform duration-200 ${collapsed ? "-rotate-90" : ""}`}
                                   />
-                                  <span className={`text-[14px] font-bold ${cfg.text}`}>{cfg.label}</span>
-                                  <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${cfg.badge}`}>
+                                  <span className={`text-[14px] font-semibold ${cfg.text}`}>{cfg.label}</span>
+                                  <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${cfg.badge}`}>
                                     {items.length}
                                   </span>
                                 </button>
@@ -589,18 +589,18 @@ export default function NewResumePage() {
                                       return (
                                         <div
                                           key={i}
-                                          className={`relative overflow-hidden rounded-xl border border-gray-100 border-l-[4px] ${cfg.border} bg-white transition-shadow hover:shadow-sm`}
+                                          className={`relative overflow-hidden rounded-xl border border-[#EEEEEB] border-l-[4px] ${cfg.border} bg-white transition-shadow hover:shadow-sm`}
                                         >
                                           <div className="flex items-start gap-3.5 p-4">
                                             <cfg.Icon className={`mt-0.5 h-5 w-5 shrink-0 ${cfg.text}`} />
                                             <div className="min-w-0 flex-1">
                                               <div className="flex items-center gap-2">
-                                                <span className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide ${cfg.badge}`}>
+                                                <span className={`inline-block rounded-md px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${cfg.badge}`}>
                                                   {issue.type}
                                                 </span>
-                                                <span className="ml-auto text-[11px] font-medium text-gray-300">#{i + 1}</span>
+                                                <span className="ml-auto text-[11px] font-medium text-[#A3A3A0]">#{i + 1}</span>
                                               </div>
-                                              <p className="mt-1.5 text-[13px] leading-relaxed text-gray-700">{issue.message}</p>
+                                              <p className="mt-1.5 text-[13px] leading-relaxed text-[#3F3F3F]">{issue.message}</p>
                                               <button
                                                 type="button"
                                                 onClick={() => toggleFix(globalIdx)}
@@ -612,8 +612,8 @@ export default function NewResumePage() {
                                             </div>
                                           </div>
                                           {isFixExpanded && (
-                                            <div className="border-t border-gray-100 bg-blue-50/50 px-4 py-3">
-                                              <p className="text-[12px] leading-relaxed text-gray-600">
+                                            <div className="border-t border-[#EEEEEB] bg-[#EEF3FF]/50 px-4 py-3">
+                                              <p className="text-[12px] leading-relaxed text-[#6B6B6B]">
                                                 {fixSuggestions[issue.type] ?? "Open the editor to address this issue with AI-powered guidance."}
                                               </p>
                                             </div>
@@ -631,8 +631,8 @@ export default function NewResumePage() {
                     )}
 
                     {/* Keywords */}
-                    <div className="anim-d3 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                      <h3 className="flex items-center gap-2 text-[17px] font-bold text-gray-900">
+                    <div className="anim-d3 rounded-2xl border border-[#EEEEEB] bg-white p-6 shadow-sm">
+                      <h3 className="flex items-center gap-2 text-[17px] font-semibold text-[#111111]">
                         <Shield className="h-5 w-5 text-[#2563EB]" />
                         Skills we detected
                       </h3>
@@ -649,20 +649,20 @@ export default function NewResumePage() {
                           ))}
                         </div>
                       ) : (
-                        <div className="mt-4 rounded-xl bg-gray-50 px-4 py-6 text-center">
-                          <Search className="mx-auto h-6 w-6 text-gray-300" />
-                          <p className="mt-2 text-[13px] text-gray-500">No skills detected — add them in the editor</p>
+                        <div className="mt-4 rounded-xl bg-[#FAFAF9] px-4 py-6 text-center">
+                          <Search className="mx-auto h-6 w-6 text-[#A3A3A0]" />
+                          <p className="mt-2 text-[13px] text-[#6B6B6B]">No skills detected — add them in the editor</p>
                         </div>
                       )}
 
                       {diagnostic.suggestions.length > 0 && (
                         <div className="mt-5">
-                          <p className="text-[12px] font-semibold uppercase tracking-wider text-gray-400">Consider Adding</p>
+                          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#8A8A86]">Consider Adding</p>
                           <div className="mt-2.5 flex flex-wrap gap-2">
                             {diagnostic.suggestions.map((s, i) => (
                               <span
                                 key={i}
-                                className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-gray-300 bg-gray-50 px-3.5 py-1.5 text-[13px] font-medium text-gray-500"
+                                className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-[#D9D9D5] bg-[#FAFAF9] px-3.5 py-1.5 text-[13px] font-medium text-[#6B6B6B]"
                               >
                                 <Plus className="h-3 w-3" />
                                 {s}
@@ -677,12 +677,12 @@ export default function NewResumePage() {
                   {/* ── Right Column ── */}
                   <div className="space-y-6">
                     {/* What to do next */}
-                    <div className="anim-d2 rounded-2xl border-2 border-[#2563EB]/20 bg-gradient-to-b from-blue-50/60 to-white p-6 shadow-sm">
-                      <h3 className="flex items-center gap-2 text-[17px] font-bold text-gray-900">
+                    <div className="anim-d2 rounded-2xl border border-[#E5E5E2] bg-white p-6">
+                      <h3 className="flex items-center gap-2 text-[17px] font-semibold text-[#111111]">
                         <Target className="h-5 w-5 text-[#2563EB]" />
                         What to do next
                       </h3>
-                      <p className="mt-1 text-[13px] text-gray-500">Follow these steps to improve your score</p>
+                      <p className="mt-1 text-[13px] text-[#6B6B6B]">Follow these steps to improve your score</p>
 
                       <div className="mt-5 space-y-1">
                         {[
@@ -696,42 +696,42 @@ export default function NewResumePage() {
                             href={step.href}
                             className="group flex items-center gap-3 rounded-xl px-3 py-3 transition hover:bg-white hover:shadow-sm"
                           >
-                            <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-[12px] font-bold ${step.color}`}>
+                            <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#F5F5F3] text-[12px] font-semibold ${step.color}`}>
                               {step.num}
                             </div>
-                            <span className="flex-1 text-[13px] font-medium text-gray-700">{step.text}</span>
-                            <ArrowUpRight className="h-4 w-4 text-gray-300 transition group-hover:text-[#2563EB]" />
+                            <span className="flex-1 text-[13px] font-medium text-[#3F3F3F]">{step.text}</span>
+                            <ArrowUpRight className="h-4 w-4 text-[#A3A3A0] transition group-hover:text-[#2563EB]" />
                           </Link>
                         ))}
                       </div>
                     </div>
 
                     {/* Quick Actions */}
-                    <div className="anim-d3 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                      <h3 className="text-[15px] font-bold text-gray-900">Quick Actions</h3>
+                    <div className="anim-d3 rounded-2xl border border-[#EEEEEB] bg-white p-6 shadow-sm">
+                      <h3 className="text-[15px] font-semibold text-[#111111]">Quick Actions</h3>
                       <div className="mt-4 space-y-2.5">
                         <Link
                           href={`/resume/${resumeId}/edit`}
-                          className="flex items-center justify-center gap-2 rounded-xl bg-[#2563EB] py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-md hover:shadow-blue-200/50"
+                          className="flex items-center justify-center gap-2 rounded-full bg-[#2563EB] py-3 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-md hover:shadow-blue-200/50"
                         >
                           <Sparkles className="h-4 w-4" /> Open in Editor
                         </Link>
                         <Link
                           href={`/resume/${resumeId}/jd`}
-                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#2563EB] py-3 text-[14px] font-semibold text-[#2563EB] transition hover:bg-blue-50"
+                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#2563EB] py-3 text-[14px] font-semibold text-[#2563EB] transition hover:bg-[#EEF3FF]"
                         >
                           <Target className="h-4 w-4" /> Tailor to Job Description
                         </Link>
                         <Link
                           href="/dashboard/company-matcher"
-                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-gray-200 py-3 text-[14px] font-semibold text-gray-600 transition hover:bg-gray-50"
+                          className="flex items-center justify-center gap-2 rounded-xl border-2 border-[#E5E5E2] py-3 text-[14px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
                         >
                           <Building2 className="h-4 w-4" /> Match to Company
                         </Link>
                         <button
                           type="button"
                           onClick={() => { setUploadStep("idle"); setDiagnostic(null); setFileName(""); }}
-                          className="flex w-full items-center justify-center gap-1.5 py-2 text-[13px] font-medium text-gray-400 transition hover:text-[#2563EB]"
+                          className="flex w-full items-center justify-center gap-1.5 py-2 text-[13px] font-medium text-[#8A8A86] transition hover:text-[#2563EB]"
                         >
                           <UploadCloud className="h-3.5 w-3.5" /> Upload Different File
                         </button>
@@ -746,17 +746,17 @@ export default function NewResumePage() {
           {/* Done but no diagnostic */}
           {uploadStep === "done" && !diagnostic && (
             <div className="anim-in mx-auto max-w-md">
-              <div className="rounded-2xl border border-gray-100 bg-white p-12 text-center shadow-sm">
+              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-12 text-center shadow-sm">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50">
                   <CheckCircle className="h-8 w-8 text-emerald-500" />
                 </div>
-                <h2 className="mt-6 text-[22px] font-bold text-gray-900">Resume Uploaded!</h2>
-                <p className="mt-2 text-[14px] leading-relaxed text-gray-500">
+                <h2 className="mt-6 text-[22px] font-semibold text-[#111111]">Resume Uploaded!</h2>
+                <p className="mt-2 text-[14px] leading-relaxed text-[#6B6B6B]">
                   Your resume has been parsed and saved successfully. Open the editor to start improving it.
                 </p>
                 <Link
                   href={`/resume/${resumeId}/edit`}
-                  className="mt-8 inline-flex items-center gap-2 rounded-xl bg-[#2563EB] px-8 py-3.5 text-[14px] font-bold text-white transition hover:bg-[#1D4ED8]"
+                  className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-8 py-3.5 text-[14px] font-semibold text-white transition hover:bg-[#1D4ED8]"
                 >
                   Open in Editor <ArrowRight className="h-4 w-4" />
                 </Link>

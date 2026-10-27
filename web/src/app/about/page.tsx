@@ -1,26 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
-import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { MotionReveal, MotionStagger, MotionItem } from "@/components/motion-reveal";
-import { AboutHero } from "@/components/about/about-hero";
-import { AboutStats } from "@/components/about/about-stats";
-import { AboutTransformation } from "@/components/about/about-transformation";
-import { AboutTools } from "@/components/about/about-tools";
-import { ResumeTemplateGallery } from "@/components/resume-template-gallery";
-import { StickyCta } from "@/components/sticky-cta";
-import { ArrowRight, Target, Shield, Zap, Users, Code2, Database, Brain } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { SITE_AUTHOR } from "@/lib/author";
 
 export const metadata = buildMarketingMetadata({
-  title: "About — The Story Behind LaunchCV",
+  title: "About LaunchCV — Who We Are and Why We Built It",
   description:
-    "LaunchCV levels the playing field between job seekers and Applicant Tracking Systems — built by people who watched great candidates lose to format errors.",
+    "LaunchCV shows job seekers what applicant tracking software sees in their resume and helps them fix it — without inventing anything. Built by Elmun Technologies.",
   pathname: "/about",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["LaunchCV", "about", "mission", "AI resume builder", "resume platform team"],
+  keywords: ["LaunchCV", "about LaunchCV", "Elmun Technologies", "ATS resume checker", "AI resume builder"],
 });
 
 const aboutLd = {
@@ -28,314 +21,139 @@ const aboutLd = {
   "@type": "AboutPage",
   name: "About LaunchCV",
   url: absoluteUrl("/about"),
-  description: "The story behind LaunchCV — built to level the playing field between candidates and ATS.",
+  description: "Who builds LaunchCV and why.",
+  mainEntity: {
+    "@type": "Organization",
+    name: "LaunchCV",
+    legalName: "Elmun Technologies LLC",
+    url: absoluteUrl("/"),
+    email: "support@launch-cv.com",
+    founder: { "@type": "Person", name: SITE_AUTHOR.name, jobTitle: SITE_AUTHOR.role },
+  },
 };
 
-const values = [
-  {
-    icon: Target,
-    title: "Results, not resumes",
-    d: "We don’t measure success by signups. We measure it by interview replies in your inbox.",
-    bg: "bg-blue-50",
-    text: "text-blue-600",
-  },
-  {
-    icon: Shield,
-    title: "Honest AI",
-    d: "Our AI never fabricates experience or numbers. It works with what you actually did — and tells your story sharper.",
-    bg: "bg-emerald-50",
-    text: "text-emerald-600",
-  },
-  {
-    icon: Zap,
-    title: "Speed and quality",
-    d: "Five minutes from blank page to PDF, ATS-clean. Every time.",
-    bg: "bg-amber-50",
-    text: "text-amber-600",
-  },
-  {
-    icon: Users,
-    title: "Users shape the product",
-    d: "We talk to job seekers weekly. Roadmap priorities are decided by the inbox, not the dashboard.",
-    bg: "bg-blue-50",
-    text: "text-blue-600",
-  },
+const principles = [
+  { t: "Your data stays yours", d: "We never sell or share resumes. You can delete your account and everything in it." },
+  { t: "No made-up experience", d: "Rewrites only use facts from your resume, and you approve every change." },
+  { t: "Plain prices", d: "A free ATS check, two monthly plans and Lifetime. 7-day refund on monthly plans." },
 ];
 
-const techStack = [
-  { icon: Code2, name: "Next.js (App Router)", d: "Server-first React with streaming, edge rendering, and route-level caching." },
-  { icon: Brain, name: "OpenAI GPT-4 + custom prompts", d: "Each AI tool has its own evaluation harness. Quality regressions get caught before they ship." },
-  { icon: Database, name: "Prisma + PostgreSQL", d: "Type-safe schema, managed Postgres, predictable migrations." },
-];
-
-const milestones = [
-  { y: "2024", t: "Founded", d: "Started after watching one too many qualified friends lose interviews to ATS filtering." },
-  { y: "2025", t: "Public launch", d: "First 1,000 paying users in 90 days. Featured in Product Hunt’s resume category." },
-  { y: "2026", t: "Six tools, one product", d: "Voice input, JD alignment, ATS scanner, cover letter, interview prep — under one subscription." },
-  { y: "Next", t: "Human review add-on", d: "Optional 1:1 reviews with vetted recruiters, layered onto the AI workflow." },
+const roles = [
+  { src: "/images/photos/role-software-engineer.webp", label: "Software engineers", alt: "Software engineer working at a laptop" },
+  { src: "/images/photos/role-designer.webp", label: "Designers", alt: "Designer reviewing work on screen" },
+  { src: "/images/photos/role-customer-service.webp", label: "Customer service", alt: "Customer service specialist with a headset" },
+  { src: "/images/photos/role-data-analyst.webp", label: "Data analysts", alt: "Data analyst looking at charts" },
 ];
 
 export default function AboutPage() {
+  const initials = SITE_AUTHOR.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("");
+
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={aboutLd} />
       <LandingNav />
 
-      {/* HERO */}
-      <AboutHero />
+      <main className="flex-1">
+        <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
+          <h1 className="max-w-[900px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[60px]">
+            We build tools for the part of job hunting nobody sees.{" "}
+            <span className="text-[#8A8A86]">The software.</span>
+          </h1>
+        </section>
 
-      {/* STATS STRIP */}
-      <AboutStats />
-
-      {/* TRANSFORMATION (before/after visual) */}
-      <AboutTransformation />
-
-      {/* RESUME TEMPLATE GALLERY (realistic template previews) */}
-      <ResumeTemplateGallery />
-
-      {/* SIX TOOLS BENTO */}
-      <AboutTools />
-
-      {/* MISSION */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <MotionReveal>
-            <div className="grid gap-10 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <p className="lc-overline text-[#2563EB]">Mission</p>
-                <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                  Level the field between candidates and machines
-                </h2>
-              </div>
-              <div className="space-y-5 text-[16px] leading-[1.7] text-[#334155] lg:col-span-8">
-                <p>
-                  The hiring process has a problem nobody talks about: qualified people get filtered out by software
-                  before any human ever reads their work. Not because they lack the skills — because they lack the
-                  keywords, the format, or the time.
-                </p>
-                <p>
-                  LaunchCV exists to close that gap. We combine AI resume building, JD alignment, ATS scoring, cover
-                  letter generation, and interview prep into one professional platform. We charge for it so we can build
-                  something reliable and continuously improved — not a freemium tool that monetizes your data.
-                </p>
-                <p className="text-[#475569]">
-                  Our goal is simple: give every job seeker the same advantage that candidates with $200/hour recruiters
-                  or $5,000 résumé writers have — delivered by AI, in minutes, at the price of a small subscription.
-                </p>
-              </div>
-            </div>
-          </MotionReveal>
-        </div>
-      </section>
-
-      {/* VALUES */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">What we stand for</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Four principles, carved into every decision
-              </h2>
-            </div>
-          </MotionReveal>
-
-          <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-2">
-            {values.map((v) => (
-              <MotionItem key={v.title} className="h-full">
-                <div className="h-full rounded-2xl border border-[#E2E8F0] bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.18)]">
-                  <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${v.bg} ${v.text}`}>
-                    <v.icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">{v.title}</h3>
-                  <p className="mt-2 text-[15px] leading-[1.65] text-[#475569]">{v.d}</p>
-                </div>
-              </MotionItem>
-            ))}
-          </MotionStagger>
-        </div>
-      </section>
-
-      {/* TIMELINE */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[860px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Timeline</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Built in public, funded by users
-              </h2>
-            </div>
-          </MotionReveal>
-
-          <div className="relative mt-12 pl-8">
-            {/* connecting line */}
-            <span
-              className="absolute left-[11px] top-2 bottom-2 w-px bg-gradient-to-b from-[#2563EB] via-[#3B82F6] to-[#E2E8F0]"
-              aria-hidden
-            />
-            <MotionStagger className="space-y-6">
-              {milestones.map((m) => (
-                <MotionItem key={m.t}>
-                  <div className="relative">
-                    <span className="absolute -left-[29px] top-1.5 flex h-6 w-6 items-center justify-center rounded-full border-4 border-white bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] shadow-sm" aria-hidden>
-                      <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                    </span>
-                    <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_36px_-20px_rgba(15,23,42,0.18)]">
-                      <div className="flex items-center gap-3">
-                        <span className="inline-flex rounded-full bg-[#EFF6FF] px-3 py-1 text-[12px] font-bold text-[#2563EB]">
-                          {m.y}
-                        </span>
-                        <h3 className="text-[17px] font-semibold text-[#0F172A]">{m.t}</h3>
-                      </div>
-                      <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{m.d}</p>
-                    </div>
-                  </div>
-                </MotionItem>
-              ))}
-            </MotionStagger>
-          </div>
-        </div>
-      </section>
-
-      {/* TECH */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Under the hood</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Boring tech, predictable outcomes
-              </h2>
-            </div>
-          </MotionReveal>
-
-          <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-3">
-            {techStack.map((t) => (
-              <MotionItem key={t.name} className="h-full">
-                <div className="h-full rounded-2xl border border-[#E2E8F0] bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.15)]">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
-                    <t.icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{t.name}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]">{t.d}</p>
-                </div>
-              </MotionItem>
-            ))}
-          </MotionStagger>
-        </div>
-      </section>
-
-      {/* TEAM */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <MotionReveal>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Team</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">Small, fast, hands-on</h2>
-            </div>
-          </MotionReveal>
-
-          <MotionStagger className="mt-12 grid gap-5 sm:grid-cols-2">
-            <MotionItem className="h-full">
-              <div className="h-full rounded-2xl border border-[#E2E8F0] bg-white p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_40px_-20px_rgba(15,23,42,0.15)]">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[20px] font-semibold text-white shadow-sm">
-                  NE
-                </div>
-                <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">Nazir Elmurodov</h3>
-                <p className="text-[13px] font-medium text-[#2563EB]">Founder · Building everything</p>
-                <p className="mt-3 text-[14px] leading-[1.65] text-[#475569]">
-                  Built LaunchCV after watching hundreds of qualified candidates get filtered out by ATS. Obsessed with
-                  making hiring fairer through better tools.
-                </p>
-              </div>
-            </MotionItem>
-            <MotionItem className="h-full">
-              <div className="h-full rounded-2xl border-2 border-dashed border-[#E2E8F0] bg-white p-7">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#F1F5F9] text-[24px] font-semibold text-[#94A3B8]">
-                  +
-                </div>
-                <h3 className="mt-5 text-[18px] font-semibold text-[#0F172A]">We&apos;re hiring</h3>
-                <p className="text-[13px] font-medium text-[#94A3B8]">Engineers, designers, recruiters</p>
-                <p className="mt-3 text-[14px] leading-[1.65] text-[#475569]">
-                  Building a small, opinionated team. If you&apos;ve felt the friction of a modern job search and want to
-                  fix it for the next million people —{" "}
-                  <a href="mailto:hello@launch-cv.com" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-                    hello@launch-cv.com
-                  </a>
-                  .
-                </p>
-              </div>
-            </MotionItem>
-          </MotionStagger>
-        </div>
-      </section>
-
-      {/* EXPLORE MORE — keep the visitor moving */}
-      <section className="border-t border-[#E2E8F0] py-16">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">Keep exploring</p>
-          <div className="mt-5 grid gap-4 sm:grid-cols-3">
-            {[
-              { href: "/features", t: "All 6 tools", d: "The full AI toolkit under one subscription." },
-              { href: "/use-cases", t: "Resume by role", d: "Guides tuned for engineers, PMs, and designers." },
-              { href: "/blog", t: "Career blog", d: "Evidence-based tactics to land interviews faster." },
-            ].map((r) => (
-              <Link
-                key={r.href}
-                href={r.href}
-                className="group flex items-start justify-between gap-4 rounded-xl border border-[#E2E8F0] bg-white p-6 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
-              >
-                <div>
-                  <p className="text-[16px] font-semibold text-[#0F172A]">{r.t}</p>
-                  <p className="mt-1 text-[13px] leading-[1.6] text-[#64748B]">{r.d}</p>
-                </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-[#94A3B8] transition group-hover:translate-x-0.5 group-hover:text-[#2563EB]" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="px-6 pb-20 pt-4">
-        <div className="relative mx-auto max-w-[1000px] overflow-hidden rounded-3xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] px-6 py-16 text-center shadow-[0_30px_60px_-25px_rgba(26,86,219,0.5)]">
-          <div
-            className="pointer-events-none absolute inset-0 opacity-30"
-            aria-hidden
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 15% 20%, rgba(255,255,255,0.25), transparent 40%), radial-gradient(circle at 85% 80%, rgba(255,255,255,0.2), transparent 40%)",
-            }}
-          />
-          <div className="relative">
-            <h2 className="text-[28px] font-bold tracking-tight text-white sm:text-[34px]">
-              Run a serious job search
-            </h2>
-            <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-white/85">
-              Create an account, choose a plan, paste your first JD. The whole hunt under one roof.
+        <section className="mx-auto flex max-w-[1200px] flex-col gap-12 px-5 pt-14 sm:px-8 lg:flex-row lg:gap-16">
+          <div className="flex flex-col gap-5 text-[17px] leading-[1.65] text-[#3F3F3F] lg:w-[62%]">
+            <p>
+              LaunchCV started in 2024 after watching qualified friends apply to dozens of jobs and hear nothing back.
+              Their experience was fine. Their resumes just weren&apos;t being read — tables the software skipped,
+              headings it didn&apos;t recognize, keywords it couldn&apos;t find.
             </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <CtaLink cta="get_started" location="about"
-                href="/register"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-[14px] font-bold text-[#2563EB] shadow-lg transition hover:scale-[1.02]"
-              >
-                Create account
-                <ArrowRight className="h-4 w-4" />
-              </CtaLink>
-              <Link href="/pricing" className="text-[14px] font-semibold text-white/90 transition hover:text-white">
-                View pricing
-              </Link>
+            <p>
+              So we built a checker that shows you exactly what that software sees, and tools that help you fix it
+              without inventing anything. Every suggestion uses facts from your own resume, and you approve every
+              change.
+            </p>
+            <p>We&apos;re a small team at Elmun Technologies, and we read every support email.</p>
+            <div className="mt-2 flex items-center gap-4">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[#F5F5F3] font-semibold text-[#111111]">
+                {initials}
+              </span>
+              <div>
+                <p className="font-semibold text-[#111111]">{SITE_AUTHOR.name}</p>
+                <p className="text-[15px] text-[#6B6B6B]">Founder</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+          <div className="flex flex-1 flex-col border-b border-[#EEEEEB]">
+            {principles.map((p) => (
+              <div key={p.t} className="border-t border-[#EEEEEB] py-5">
+                <p className="font-semibold">{p.t}</p>
+                <p className="mt-1 text-[15px] leading-[1.6] text-[#3F3F3F]">{p.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <StickyCta
-        primaryHref="/register"
-        primaryLabel="Try free"
-        location="about"
-      />
+        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-[104px]">
+          <h2 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[36px]">
+            Who we build for. <span className="text-[#8A8A86]">Anyone applying through a form.</span>
+          </h2>
+          <div className="mt-7 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+            {roles.map((r) => (
+              <figure key={r.label}>
+                <Image
+                  src={r.src}
+                  alt={r.alt}
+                  width={800}
+                  height={1000}
+                  sizes="(min-width: 1024px) 280px, 50vw"
+                  className="h-[220px] w-full rounded-2xl object-cover object-[center_30%] sm:h-[300px]"
+                />
+                <figcaption className="mt-2.5 text-[15px] font-medium">{r.label}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 sm:py-[104px]">
+          <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] md:flex-row">
+            <div className="flex flex-1 flex-col justify-center gap-4 p-8 sm:p-12">
+              <h2 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[36px]">
+                Get in touch. <span className="text-[#8A8A86]">A person reads every email.</span>
+              </h2>
+              <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
+                Questions about billing, your account or the product — write to us and we&apos;ll get back to you.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-3">
+                <a
+                  href="mailto:support@launch-cv.com"
+                  className="inline-flex h-12 items-center rounded-full bg-[#111111] px-6 text-[15px] font-medium text-white hover:bg-black"
+                >
+                  support@launch-cv.com
+                </a>
+                <Link
+                  href="/contact"
+                  className="inline-flex h-12 items-center rounded-full border border-[#D9D9D5] bg-white px-6 text-[15px] font-medium hover:border-[#111111]"
+                >
+                  All contact options
+                </Link>
+              </div>
+            </div>
+            <div className="relative min-h-[260px] md:w-[42%]">
+              <Image
+                src="/images/photos/colleagues-celebrate.webp"
+                alt="Colleagues celebrating good news at work"
+                fill
+                sizes="(min-width: 768px) 42vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </section>
+      </main>
 
       <LandingFooter />
     </div>

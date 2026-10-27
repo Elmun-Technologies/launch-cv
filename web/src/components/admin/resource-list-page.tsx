@@ -32,9 +32,9 @@ export function ResourceListPage({
       {/* Page header */}
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">{title}</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">{title}</h1>
           {description ? (
-            <p className="mt-1 max-w-[640px] text-[13px] leading-[1.6] text-[#64748B]">
+            <p className="mt-1 max-w-[640px] text-[13px] leading-[1.6] text-[#6B6B6B]">
               {description}
             </p>
           ) : null}
@@ -42,7 +42,7 @@ export function ResourceListPage({
         {primaryAction ? (
           <Link
             href={primaryAction.href}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#0F172A] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B]"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[#111111] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B]"
           >
             <Plus className="h-4 w-4" />
             {primaryAction.label}
@@ -57,13 +57,13 @@ export function ResourceListPage({
         <div className="flex flex-wrap items-center gap-3">
           {searchValue !== undefined ? (
             <form className="relative flex-1 min-w-[220px] max-w-[360px]">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3B8]" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A8A86]" />
               <input
                 type="search"
                 name="q"
                 defaultValue={searchValue}
                 placeholder={searchPlaceholder}
-                className="block w-full rounded-lg border border-[#E2E8F0] bg-white py-2 pl-9 pr-3 text-[13px] text-[#0F172A] outline-none transition placeholder:text-[#94A3B8] hover:border-[#CBD5E1] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
+                className="block w-full rounded-lg border border-[#E5E5E2] bg-white py-2 pl-9 pr-3 text-[13px] text-[#111111] outline-none transition placeholder:text-[#8A8A86] hover:border-[#D9D9D5] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
               />
             </form>
           ) : null}

@@ -57,6 +57,20 @@ export async function upsertSubscriptionFromPolar(sub: PolarSubscription, userId
     cancelAtPeriodEnd,
   };
 
+  // One row per user, so guard against events that would clobber better access:
+  // a Lifetime order must not be overwritten by a later subscription event, and
+  // a cancel/revoke for an old subscription must not wipe a newer active one.
+  const existing = await prisma.subscription.findUnique({
+    where: { userId },
+    select: { stripeSubscriptionId: true, status: true },
+  });
+  if (existing && existing.stripeSubscriptionId !== sub.id) {
+    if (existing.stripeSubscriptionId.startsWith("order:") && existing.status === "active") return;
+    const incomingActive = sub.status === "active" || sub.status === "trialing";
+    const existingActive = existing.status === "active" || existing.status === "trialing";
+    if (existingActive && !incomingActive) return;
+  }
+
   await prisma.subscription.upsert({
     where: { userId },
     create: { userId, ...data },

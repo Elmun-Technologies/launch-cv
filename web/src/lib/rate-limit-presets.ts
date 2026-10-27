@@ -27,6 +27,12 @@ export function allowAiEvidence(userId: string) {
   return consumeRateLimit(`ai:evidence:${userId}`, 48, 3_600_000);
 }
 
+/** Resume import (file / LinkedIn text) calls the model on every request and
+ *  is open to unpaid accounts, so it needs its own cap. */
+export function allowImport(userId: string) {
+  return consumeRateLimit(`import:${userId}`, 10, 3_600_000);
+}
+
 export function allowPdfUser(userId: string) {
   return consumeRateLimit(`pdf:user:${userId}`, 60, 3_600_000);
 }

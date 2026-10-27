@@ -12,18 +12,18 @@ export type KpiCardProps = {
 
 export function KpiCard({ label, value, icon: Icon, hint, delta }: KpiCardProps) {
   return (
-    <div className="rounded-xl border border-[#E2E8F0] bg-white p-5">
+    <div className="rounded-xl border border-[#E5E5E2] bg-white p-5">
       <div className="flex items-start justify-between gap-3">
-        <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">
+        <p className="text-[12px] font-semibold uppercase tracking-wider text-[#8A8A86]">
           {label}
         </p>
         {Icon ? (
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F1F5F9] text-[#475569]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#F5F5F3] text-[#3F3F3F]">
             <Icon className="h-4 w-4" />
           </span>
         ) : null}
       </div>
-      <p className="mt-3 text-[28px] font-bold leading-none tracking-tight text-[#0F172A]">
+      <p className="mt-3 text-[28px] font-bold leading-none tracking-tight text-[#111111]">
         {typeof value === "number" ? value.toLocaleString() : value}
       </p>
       {(hint || delta) && (
@@ -42,7 +42,7 @@ export function KpiCard({ label, value, icon: Icon, hint, delta }: KpiCardProps)
               {delta.value}
             </span>
           ) : null}
-          {hint ? <span className="text-[#94A3B8]">{hint}</span> : null}
+          {hint ? <span className="text-[#8A8A86]">{hint}</span> : null}
         </div>
       )}
     </div>

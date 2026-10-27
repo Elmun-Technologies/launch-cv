@@ -32,12 +32,12 @@ export default async function AdminRolesPage() {
     <AdminShell email={admin.email} pageTitle="Roles">
       <div className="space-y-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Roles &amp; access</h1>
-          <p className="mt-1 max-w-[680px] text-[13px] leading-[1.6] text-[#64748B]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Roles &amp; access</h1>
+          <p className="mt-1 max-w-[680px] text-[13px] leading-[1.6] text-[#6B6B6B]">
             Admin access is granted in two ways: an email in the{" "}
-            <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[12px] text-[#0F172A]">ADMIN_EMAILS</code>{" "}
+            <code className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[12px] text-[#111111]">ADMIN_EMAILS</code>{" "}
             environment variable, or a User row in the database with{" "}
-            <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[12px] text-[#0F172A]">role = &quot;admin&quot;</code>.
+            <code className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[12px] text-[#111111]">role = &quot;admin&quot;</code>.
             Promote new admins from{" "}
             <a href="/admin-panel/settings" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
               Settings → Promote user to admin
@@ -59,7 +59,7 @@ export default async function AdminRolesPage() {
           flush
         >
           {dbAdmins.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">
+            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">
               No DB admins yet. Promote via{" "}
               <a href="/admin-panel/settings" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
                 Settings
@@ -67,19 +67,19 @@ export default async function AdminRolesPage() {
               .
             </p>
           ) : (
-            <ul className="divide-y divide-[#E2E8F0]">
+            <ul className="divide-y divide-[#E5E5E2]">
               {dbAdmins.map((a) => (
-                <li key={a.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
+                <li key={a.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFAF9]">
                   <div className="flex items-center gap-3">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] text-[12px] font-semibold text-white">
                       {(a.name || a.email)[0].toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-medium text-[#0F172A]">{a.name || "—"}</p>
-                      <p className="truncate text-[11px] text-[#64748B]">{a.email}</p>
+                      <p className="truncate text-[13px] font-medium text-[#111111]">{a.name || "—"}</p>
+                      <p className="truncate text-[11px] text-[#6B6B6B]">{a.email}</p>
                     </div>
                   </div>
-                  <span className="text-[11px] text-[#94A3B8]">
+                  <span className="text-[11px] text-[#8A8A86]">
                     since {a.createdAt.toLocaleDateString()}
                   </span>
                 </li>
@@ -95,14 +95,14 @@ export default async function AdminRolesPage() {
           flush
         >
           {envEmails.length === 0 ? (
-            <p className="px-5 py-8 text-center text-[13px] text-[#94A3B8]">
+            <p className="px-5 py-8 text-center text-[13px] text-[#8A8A86]">
               ADMIN_EMAILS is empty. Set it in Vercel → Settings → Environment Variables.
             </p>
           ) : (
-            <ul className="divide-y divide-[#E2E8F0]">
+            <ul className="divide-y divide-[#E5E5E2]">
               {envEmails.map((e) => (
                 <li key={e} className="flex items-center justify-between gap-4 px-5 py-3">
-                  <span className="font-mono text-[12px] text-[#0F172A]">{e}</span>
+                  <span className="font-mono text-[12px] text-[#111111]">{e}</span>
                   {envOnly.includes(e) ? (
                     <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700 ring-1 ring-amber-200">
                       Pending registration
@@ -122,18 +122,18 @@ export default async function AdminRolesPage() {
           title="How access works"
           action={<KeyRound className="h-4 w-4 text-[#2563EB]" />}
         >
-          <ol className="space-y-2 text-[13px] leading-[1.7] text-[#475569]">
+          <ol className="space-y-2 text-[13px] leading-[1.7] text-[#3F3F3F]">
             <li>
-              <span className="font-semibold text-[#0F172A]">1.</span> A logged-in user&apos;s email is compared against{" "}
-              <code className="rounded bg-[#F1F5F9] px-1 font-mono text-[12px] text-[#0F172A]">ADMIN_EMAILS</code> (case-insensitive).
+              <span className="font-semibold text-[#111111]">1.</span> A logged-in user&apos;s email is compared against{" "}
+              <code className="rounded bg-[#F5F5F3] px-1 font-mono text-[12px] text-[#111111]">ADMIN_EMAILS</code> (case-insensitive).
             </li>
             <li>
-              <span className="font-semibold text-[#0F172A]">2.</span> If not found, their{" "}
-              <code className="rounded bg-[#F1F5F9] px-1 font-mono text-[12px] text-[#0F172A]">User.role</code> column is checked for{" "}
-              <code className="rounded bg-[#F1F5F9] px-1 font-mono text-[12px] text-[#0F172A]">&quot;admin&quot;</code>.
+              <span className="font-semibold text-[#111111]">2.</span> If not found, their{" "}
+              <code className="rounded bg-[#F5F5F3] px-1 font-mono text-[12px] text-[#111111]">User.role</code> column is checked for{" "}
+              <code className="rounded bg-[#F5F5F3] px-1 font-mono text-[12px] text-[#111111]">&quot;admin&quot;</code>.
             </li>
             <li>
-              <span className="font-semibold text-[#0F172A]">3.</span> Either match → admin panel. Otherwise → access-denied page.
+              <span className="font-semibold text-[#111111]">3.</span> Either match → admin panel. Otherwise → access-denied page.
             </li>
           </ol>
         </SectionCard>

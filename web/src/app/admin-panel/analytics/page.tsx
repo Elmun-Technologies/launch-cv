@@ -50,8 +50,8 @@ export default async function AdminAnalyticsPage() {
     <AdminShell email={admin.email} pageTitle="Analytics">
       <div className="space-y-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Analytics</h1>
-          <p className="mt-1 text-[13px] text-[#64748B]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Analytics</h1>
+          <p className="mt-1 text-[13px] text-[#6B6B6B]">
             Daily signups for the last week, top tracked events, and most recent activity.
           </p>
         </div>
@@ -72,10 +72,10 @@ export default async function AdminAnalyticsPage() {
                       style={{ height: `${heightPct}%`, minHeight: d.count > 0 ? 4 : 0 }}
                     />
                   </div>
-                  <span className="text-[16px] font-semibold leading-none tracking-tight text-[#0F172A]">
+                  <span className="text-[16px] font-semibold leading-none tracking-tight text-[#111111]">
                     {d.count}
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-[#94A3B8]">
+                  <span className="text-[10px] uppercase tracking-wider text-[#8A8A86]">
                     {d.label.split(",")[0]}
                   </span>
                 </div>
@@ -91,7 +91,7 @@ export default async function AdminAnalyticsPage() {
             action={<BarChart3 className="h-4 w-4 text-[#2563EB]" />}
           >
             {allEvents.length === 0 ? (
-              <p className="py-8 text-center text-[13px] text-[#94A3B8]">No events recorded.</p>
+              <p className="py-8 text-center text-[13px] text-[#8A8A86]">No events recorded.</p>
             ) : (
               <ul className="space-y-3">
                 {allEvents.map((e) => {
@@ -99,10 +99,10 @@ export default async function AdminAnalyticsPage() {
                   return (
                     <li key={e.name}>
                       <div className="flex items-center justify-between text-[12px]">
-                        <span className="font-mono font-semibold text-[#0F172A]">{e.name}</span>
-                        <span className="text-[#64748B]">{e._count.name.toLocaleString()}</span>
+                        <span className="font-mono font-semibold text-[#111111]">{e.name}</span>
+                        <span className="text-[#6B6B6B]">{e._count.name.toLocaleString()}</span>
                       </div>
-                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[#F1F5F9]">
+                      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-[#F5F5F3]">
                         <div
                           className="h-full rounded-full bg-[#2563EB]"
                           style={{ width: `${pct}%` }}
@@ -122,18 +122,18 @@ export default async function AdminAnalyticsPage() {
             flush
           >
             {recentEvents.length === 0 ? (
-              <p className="py-8 text-center text-[13px] text-[#94A3B8]">No events yet.</p>
+              <p className="py-8 text-center text-[13px] text-[#8A8A86]">No events yet.</p>
             ) : (
-              <ul className="max-h-[420px] divide-y divide-[#E2E8F0] overflow-y-auto">
+              <ul className="max-h-[420px] divide-y divide-[#E5E5E2] overflow-y-auto">
                 {recentEvents.map((e) => (
-                  <li key={e.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFBFC]">
+                  <li key={e.id} className="flex items-center justify-between gap-4 px-5 py-3 hover:bg-[#FAFAF9]">
                     <div className="min-w-0">
-                      <p className="truncate font-mono text-[12px] font-semibold text-[#0F172A]">{e.name}</p>
-                      <p className="truncate text-[11px] text-[#64748B]">
+                      <p className="truncate font-mono text-[12px] font-semibold text-[#111111]">{e.name}</p>
+                      <p className="truncate text-[11px] text-[#6B6B6B]">
                         {e.userId ? `user ${e.userId.slice(0, 8)}…` : "anonymous"}
                       </p>
                     </div>
-                    <p className="shrink-0 text-[11px] text-[#94A3B8]">{dateTimeFmt.format(e.createdAt)}</p>
+                    <p className="shrink-0 text-[11px] text-[#8A8A86]">{dateTimeFmt.format(e.createdAt)}</p>
                   </li>
                 ))}
               </ul>

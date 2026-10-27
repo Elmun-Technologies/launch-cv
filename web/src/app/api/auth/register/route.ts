@@ -3,7 +3,6 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/password";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
-import { emptyResumeContent } from "@/types/resume";
 import { allowRegisterIp } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
 import { sendEmailVerification } from "@/lib/send-verification";
@@ -56,15 +55,6 @@ export async function POST(req: Request) {
     res.cookies.set(COOKIE_NAME, token, {
       ...sessionCookieBase(),
       maxAge: 60 * 60 * 24 * 14,
-    });
-    await prisma.resume.create({
-      data: {
-        userId: user.id,
-        title: "My first resume",
-        vertical: "software",
-        regionMode: "us",
-        content: emptyResumeContent() as object,
-      },
     });
 
     if (referralCode) {

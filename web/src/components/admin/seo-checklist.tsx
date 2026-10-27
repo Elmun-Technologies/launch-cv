@@ -102,7 +102,7 @@ const ICON: Record<CheckState, typeof CheckCircle2> = {
 const TONE: Record<CheckState, string> = {
   pass: "text-emerald-600",
   fail: "text-amber-600",
-  neutral: "text-[#94A3B8]",
+  neutral: "text-[#8A8A86]",
 };
 
 export function SeoChecklist(input: SeoChecklistInput) {
@@ -113,8 +113,8 @@ export function SeoChecklist(input: SeoChecklistInput) {
   return (
     <div className="space-y-2.5">
       <div className="flex items-center justify-between">
-        <span className="text-[12px] font-semibold text-[#0F172A]">SEO checklist</span>
-        <span className="text-[11px] font-semibold text-[#64748B]">
+        <span className="text-[12px] font-semibold text-[#111111]">SEO checklist</span>
+        <span className="text-[11px] font-semibold text-[#6B6B6B]">
           {passed}/{scorable} passed
         </span>
       </div>
@@ -122,11 +122,11 @@ export function SeoChecklist(input: SeoChecklistInput) {
         {checks.map((check, i) => {
           const Icon = ICON[check.state];
           return (
-            <li key={i} className="flex items-start gap-2 text-[12px] leading-snug text-[#334155]">
+            <li key={i} className="flex items-start gap-2 text-[12px] leading-snug text-[#3F3F3F]">
               <Icon className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${TONE[check.state]}`} />
               <span>
                 {check.label}
-                {check.detail ? <span className="ml-1 text-[#94A3B8]">· {check.detail}</span> : null}
+                {check.detail ? <span className="ml-1 text-[#8A8A86]">· {check.detail}</span> : null}
               </span>
             </li>
           );

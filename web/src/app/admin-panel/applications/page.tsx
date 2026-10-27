@@ -16,7 +16,8 @@ interface AppRow {
   user: { name: string | null; email: string };
 }
 
-const STATUS_OPTIONS = ["all", "draft", "applied", "interview", "offer", "rejected"];
+// Values the job tracker actually stores.
+const STATUS_OPTIONS = ["all", "bookmarked", "applying", "interviewing", "negotiating", "accepted", "rejected"];
 const PER_PAGE = 20;
 
 export default function AdminApplicationsPage() {
@@ -29,11 +30,11 @@ export default function AdminApplicationsPage() {
   const fetchApps = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page: String(page), perPage: String(PER_PAGE) });
+      const params = new URLSearchParams({ page: String(page), pageSize: String(PER_PAGE) });
       if (statusFilter !== "all") params.set("status", statusFilter);
       const res = await fetch(`/api/admin-panel/applications?${params}`);
       const data = await res.json();
-      setApps(data.applications ?? []);
+      setApps(data.rows ?? []);
       setTotal(data.total ?? 0);
     } catch {
       // ignore
@@ -51,20 +52,20 @@ export default function AdminApplicationsPage() {
       key: "title",
       header: "Role",
       truncate: "max-w-[240px]",
-      render: (a) => <span className="font-medium text-[#0F172A]">{a.title || "Untitled"}</span>,
+      render: (a) => <span className="font-medium text-[#111111]">{a.title || "Untitled"}</span>,
     },
     {
       key: "company",
       header: "Company",
-      render: (a) => <span className="text-[12px] text-[#475569]">{a.company || "—"}</span>,
+      render: (a) => <span className="text-[12px] text-[#3F3F3F]">{a.company || "—"}</span>,
     },
     {
       key: "user",
       header: "User",
       render: (a) => (
         <div className="min-w-0">
-          <p className="truncate text-[12px] text-[#0F172A]">{a.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#94A3B8]">{a.user.email}</p>
+          <p className="truncate text-[12px] text-[#111111]">{a.user.name || "—"}</p>
+          <p className="truncate text-[11px] text-[#8A8A86]">{a.user.email}</p>
         </div>
       ),
     },
@@ -77,7 +78,7 @@ export default function AdminApplicationsPage() {
       key: "created",
       header: "Created",
       render: (a) => (
-        <span className="text-[12px] text-[#64748B]">{new Date(a.createdAt).toLocaleDateString()}</span>
+        <span className="text-[12px] text-[#6B6B6B]">{new Date(a.createdAt).toLocaleDateString()}</span>
       ),
     },
   ];
@@ -101,8 +102,8 @@ export default function AdminApplicationsPage() {
                 }}
                 className={`rounded-full px-3 py-1 text-[12px] font-semibold capitalize transition ${
                   statusFilter === s
-                    ? "bg-[#0F172A] text-white"
-                    : "bg-[#F1F5F9] text-[#475569] hover:bg-[#E2E8F0]"
+                    ? "bg-[#111111] text-white"
+                    : "bg-[#F5F5F3] text-[#3F3F3F] hover:bg-[#E5E5E2]"
                 }`}
               >
                 {s}
@@ -112,7 +113,7 @@ export default function AdminApplicationsPage() {
         }
       >
         {loading ? (
-          <div className="rounded-xl border border-[#E2E8F0] bg-white px-5 py-12 text-center text-[13px] text-[#94A3B8]">
+          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#8A8A86]">
             Loading…
           </div>
         ) : (
@@ -124,7 +125,7 @@ export default function AdminApplicationsPage() {
               emptyTitle="No applications for this filter"
               emptyDescription="Switch to a different status filter or All."
             />
-            <div className="mt-4 flex items-center justify-between text-[12px] text-[#64748B]">
+            <div className="mt-4 flex items-center justify-between text-[12px] text-[#6B6B6B]">
               <p>
                 <Briefcase className="mr-1 inline h-3 w-3 align-text-bottom" />
                 {total.toLocaleString()} total
@@ -134,7 +135,7 @@ export default function AdminApplicationsPage() {
                   type="button"
                   onClick={() => setPage((p) => Math.max(1, p - 1))}
                   disabled={page === 1}
-                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Previous
                 </button>
@@ -143,7 +144,7 @@ export default function AdminApplicationsPage() {
                   type="button"
                   onClick={() => setPage((p) => p + 1)}
                   disabled={page >= totalPages}
-                  className="rounded-md border border-[#E2E8F0] bg-white px-3 py-1 font-semibold text-[#0F172A] transition hover:bg-[#FAFBFC] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Next
                 </button>

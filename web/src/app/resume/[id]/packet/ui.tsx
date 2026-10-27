@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { trackCtaClick } from "@/lib/analytics-client";
+import { ToolNotice } from "@/components/tool-notice";
+
 import { useState } from "react";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
@@ -9,8 +9,6 @@ import { useAiUsage } from "@/hooks/use-ai-usage";
 import type { PacketResult } from "@/types/ai-results";
 import {
   Loader2,
-  AlertTriangle,
-  CreditCard,
   Copy,
   Check,
   MessageSquare,
@@ -32,7 +30,7 @@ function CopyButton({ text }: { text: string }) {
       className="soha-btn-ghost !px-2 !py-1 text-xs"
     >
       {copied ? (
-        <Check className="h-3 w-3 text-blue-500" />
+        <Check className="h-3 w-3 text-[#2563EB]" />
       ) : (
         <Copy className="h-3 w-3" />
       )}
@@ -118,23 +116,7 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
         {loading ? "Generating..." : "Generate packet"}
       </button>
 
-      {error ? (
-        <div className="soha-card flex items-start gap-3 border-red-200 bg-red-50">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-          <div>
-            <p className="text-sm text-red-600">{error}</p>
-            {upgrade ? (
-              <Link
-                href="/dashboard/settings"
-                onClick={() => trackCtaClick({ cta: "upgrade", location: "packet_paywall" })}
-                className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
-              >
-                <CreditCard className="h-3 w-3" /> Upgrade to Pro
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+      {error ? <ToolNotice message={error} upgrade={upgrade} location="packet_paywall" /> : null}
 
       {loading ? <Skeleton /> : null}
 
@@ -143,13 +125,13 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
           {/* Cover letter */}
           <section className="soha-card">
             <div className="flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                <MessageSquare className="h-4 w-4 text-blue-500" /> Cover
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#111111]">
+                <MessageSquare className="h-4 w-4 text-[#2563EB]" /> Cover
                 letter
               </h2>
               <CopyButton text={result.cover_letter} />
             </div>
-            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700">
+            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4 text-sm leading-relaxed text-[#3F3F3F]">
               {result.cover_letter}
             </pre>
           </section>
@@ -157,36 +139,36 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
           {/* Elevator pitch */}
           <section className="soha-card">
             <div className="flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
-                <Mic className="h-4 w-4 text-blue-500" /> Elevator pitch
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-[#111111]">
+                <Mic className="h-4 w-4 text-[#2563EB]" /> Elevator pitch
               </h2>
               <CopyButton text={result.elevator_pitch} />
             </div>
-            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm leading-relaxed text-gray-700">
+            <pre className="mt-3 whitespace-pre-wrap rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4 text-sm leading-relaxed text-[#3F3F3F]">
               {result.elevator_pitch}
             </pre>
           </section>
 
           {/* Questions */}
           <section className="soha-card">
-            <h2 className="mb-4 text-sm font-semibold text-gray-900">
+            <h2 className="mb-4 text-sm font-semibold text-[#111111]">
               Interview questions
             </h2>
             <div className="space-y-3">
               {result.interview_questions.map((q, i) => (
                 <div
                   key={i}
-                  className="rounded-lg border border-gray-200 bg-gray-50 p-4"
+                  className="rounded-lg border border-[#E5E5E2] bg-[#F5F5F3] p-4"
                 >
                   <div className="flex items-start gap-2.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-50 text-[10px] font-bold text-blue-600">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#EEF3FF] text-[10px] font-semibold text-[#2563EB]">
                       {i + 1}
                     </span>
                     <div>
-                      <p className="text-sm font-medium text-gray-800">
+                      <p className="text-sm font-medium text-[#1c1c1c]">
                         {q.question}
                       </p>
-                      <p className="mt-2 text-xs leading-relaxed text-gray-500">
+                      <p className="mt-2 text-xs leading-relaxed text-[#6B6B6B]">
                         {q.answer_outline}
                       </p>
                     </div>

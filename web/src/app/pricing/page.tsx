@@ -3,45 +3,50 @@ import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { RevealOnView } from "@/components/reveal-on-view";
-import { Check, ArrowRight, Sparkles, Infinity as InfinityIcon, Minus, ChevronDown } from "lucide-react";
-import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel, planNameList, planBillingDuration } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
+import Image from "next/image";
+import { Check, ChevronDown } from "lucide-react";
+import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel, planBillingDuration } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, type CheckoutPlan } from "@/lib/plan-config";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
-const registerHref = `/register?next=${encodeURIComponent(SUB_NEXT)}`;
+/** Carries the chosen plan through sign-up so checkout opens right after. */
+const planHref = (plan: string) => `/register?next=${encodeURIComponent(`${SUB_NEXT}?plan=${plan}`)}`;
 
 export const metadata = buildMarketingMetadata({
-  title: "Pricing — Monthly, Yearly, or Pay Once",
+  title: "Pricing — Pay Monthly or Once",
   description: `LaunchCV pricing: ${CHECKOUT_PLAN_ORDER.map(
     (key) => `${PUBLIC_PLANS[key].title} ${planPriceLabel(key)}`,
-  ).join(", ")}. Every AI tool included on every plan. No freemium games.`,
+  ).join(", ")}. Every AI tool on every plan; the ATS check is free.`,
   pathname: "/pricing",
   keywords: ["LaunchCV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
 });
 
 const faqs = [
   {
-    q: "Is there a free tier?",
-    a: `No. LaunchCV is a professional product. AI workflows unlock after you choose a paid plan: ${planNameList()}. You can create an account to manage billing — checkout activates the AI.`,
+    q: "Is there a free plan?",
+    a: "The ATS check is free and needs no account. The AI tools — rewriting bullets, matching your resume to a job, cover letters and interview prep — unlock on a paid plan.",
   },
   {
-    q: "How does billing work?",
-    a: "Starter is billed monthly and Professional is billed yearly — both renew automatically through Polar until you cancel. Lifetime is a one-time purchase. Receipts and renewals live in your Polar customer portal.",
+    q: "How do I cancel?",
+    a: "Open the billing portal from Settings → Subscription and cancel in one click. You keep access until the end of the period you paid for, and you aren't charged again.",
   },
   {
-    q: "Can I change plans later?",
-    a: "Yes. Upgrade at any time for higher monthly ceilings. Cancel a subscription and you keep access until the paid period ends. Lifetime never renews — it stays active while the product is offered.",
+    q: "Can I switch plans?",
+    a: "Yes. Change your plan from the billing portal at any time. Starter and Professional renew monthly; Lifetime is a single payment that never renews.",
   },
   {
     q: "Do you offer refunds?",
-    a: "Yes — a 7-day money-back guarantee on subscription plans, where Polar policy allows. Email support and we&apos;ll coordinate with our payment provider.",
+    a: "Monthly plans have a 7-day money-back guarantee — email support within 7 days of paying. Lifetime can be refunded within 14 days. Details are in our Terms.",
   },
   {
-    q: "What's the fair-use cap on Lifetime?",
-    a: "Lifetime users get the most generous monthly AI limits we offer: 2,000 JD analyses, 1,000 packets, 2,000 role-fit checks. Pay once, use forever — within those healthy ceilings.",
+    q: "What does fair use mean on Lifetime?",
+    a: "Lifetime comes with the highest monthly limits we offer: 2,000 job-description analyses, 1,000 application packets and 2,000 role-fit checks every month. Limits reset monthly.",
+  },
+  {
+    q: "Which payment methods do you accept?",
+    a: "Checkout runs on Polar, which accepts major credit and debit cards. Prices are in US dollars; sales tax or VAT is added where your country requires it.",
   },
 ];
 
@@ -84,7 +89,7 @@ const ld = {
       "@type": "Product",
       name: "LaunchCV",
       description:
-        "AI resume builder with JD alignment, ATS scoring, cover letter generation, interview prep, and voice input. Every tool included on every paid plan.",
+        "AI resume builder with job-description matching, ATS scoring, cover letters, interview prep and voice input. Every tool is included on every paid plan.",
       brand: { "@type": "Brand", name: "LaunchCV" },
       offers: {
         "@type": "AggregateOffer",
@@ -107,351 +112,243 @@ const ld = {
 };
 
 function planCtaLabel(key: CheckoutPlan): string {
-  if (key === "lifetime") return "Buy Lifetime";
-  if (key === "starter") return "Start with Starter";
-  if (key === "elite") return "Get Elite";
-  return "Get Professional";
+  return key === "lifetime" ? "Buy Lifetime" : `Choose ${PUBLIC_PLANS[key].title}`;
 }
 
 const planTagline: Record<CheckoutPlan, string> = {
-  starter: "For the one-shot, focused hunt",
-  professional: "For most active job seekers",
+  starter: "For a focused job search",
+  professional: "For applying to many roles a week",
   lifetime: "Pay once, no renewals",
-  elite: "For volume applicants",
+  elite: "For high-volume applicants",
 };
 
-const compareGroups = [
-  {
-    g: "AI ceilings (per month)",
-    rows: [
-      { l: "JD analyses", v: { starter: "35", professional: "120", elite: "320", lifetime: "2,000" } },
-      { l: "Application packets", v: { starter: "15", professional: "55", elite: "160", lifetime: "1,000" } },
-      { l: "Role-fit checks", v: { starter: "35", professional: "120", elite: "320", lifetime: "2,000" } },
-    ],
-  },
-  {
-    g: "Tools (all included)",
-    rows: [
-      { l: "AI Resume Builder", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "JD Alignment", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "ATS Scanner", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "Cover Letter Generator", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "Interview Prep", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "Voice Input", v: { starter: false, professional: true, elite: true, lifetime: true } },
-      { l: "Company Matcher", v: { starter: false, professional: true, elite: true, lifetime: true } },
-    ],
-  },
-  {
-    g: "Export & extras",
-    rows: [
-      { l: "PDF + DOCX export", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "All 4 templates", v: { starter: "Core only", professional: true, elite: true, lifetime: true } },
-      { l: "Job tracker, contacts, companies", v: { starter: true, professional: true, elite: true, lifetime: true } },
-      { l: "Email support", v: { starter: "Standard", professional: "Standard", elite: "Priority", lifetime: "Priority" } },
-      { l: "Priority feature rollouts", v: { starter: false, professional: false, elite: true, lifetime: true } },
-    ],
-  },
-];
+const limitRows = [
+  { l: "Job-description analyses", k: "jd" },
+  { l: "Application packets", k: "packet" },
+  { l: "Role-fit checks", k: "roleFit" },
+] as const;
 
-function CellValue({ v }: { v: boolean | string }) {
-  if (v === true) return <Check className="mx-auto h-4 w-4 text-[#059669]" />;
-  if (v === false) return <Minus className="mx-auto h-4 w-4 text-[#CBD5E1]" />;
-  return <span className="text-[12px] font-semibold text-[#0F172A]">{v}</span>;
-}
+const toolRows = [
+  "Resume editor and PDF export",
+  "All 4 resume templates",
+  "Bullet rewrites and summary writer",
+  "Cover letters and interview prep",
+  "Company matcher and voice input",
+  "Job tracker, contacts and companies",
+];
 
 export default function PricingPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={ld} />
       <LandingNav />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[96px]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 20% 0%, rgba(59,130,246,0.06), transparent 45%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-12 pt-12">
-          <div className="max-w-[760px]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Sparkles className="h-3.5 w-3.5 text-[#2563EB]" /> Pricing
-            </span>
-            <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-              Pay monthly, yearly, or once — for life
-            </h1>
-            <p className="mt-6 max-w-[640px] text-[17px] leading-[1.65] text-[#475569]">
-              Three subscription tiers plus a Lifetime option for people who&apos;d rather not think about renewals. No freemium games. No data harvesting. No surprise upgrades.
-            </p>
-          </div>
-        </div>
-      </section>
+      <main className="flex-1">
+        {/* HERO */}
+        <section className="mx-auto max-w-[1200px] px-5 pt-[120px] sm:px-8">
+          <h1 className="max-w-[760px] text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
+            Pay monthly or once. <span className="text-[#8A8A86]">Checking your resume is always free.</span>
+          </h1>
+          <p className="mt-5 max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">
+            Every AI tool is on every plan. Plans only differ in how much you can use them each month.
+          </p>
+        </section>
 
-      {/* PLAN CARDS */}
-      <section className="pb-20 pt-8">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* PLAN CARDS */}
+        <section className="mx-auto max-w-[1200px] px-5 pt-12 sm:px-8">
+          <div className="grid gap-4 md:grid-cols-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const popular = !!cfg.popular;
-              const bullets = planMarketingBullets(key);
-              const isLifetime = key === "lifetime";
-
               return (
-                <RevealOnView key={key}>
-                  <div
-                    className={`flex h-full flex-col rounded-2xl bg-white p-7 ${
+                <div
+                  key={key}
+                  className={`flex flex-col gap-6 rounded-[20px] p-7 ${
+                    popular ? "border-2 border-[#111111]" : "border border-[#E5E5E2]"
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <p className="text-[15px] text-[#6B6B6B]">{cfg.title}</p>
+                      {popular ? (
+                        <span className="rounded-full bg-[#EEF3FF] px-2.5 py-1 text-[12px] font-medium text-[#1D4ED8]">
+                          Most picked
+                        </span>
+                      ) : null}
+                    </div>
+                    <p className="mt-1.5 text-[44px] font-semibold tracking-[-0.04em] [font-feature-settings:'tnum']">
+                      {cfg.priceDisplay}
+                      <span className="text-[15px] font-normal tracking-normal text-[#6B6B6B]">
+                        {" "}
+                        {key === "lifetime" ? "once" : "/month"}
+                      </span>
+                    </p>
+                    <p className="mt-1 text-[14px] text-[#6B6B6B]">{planTagline[key]}</p>
+                  </div>
+                  <CtaLink
+                    cta="choose_plan"
+                    plan={key}
+                    location="pricing_card"
+                    selectsPlan
+                    href={planHref(key)}
+                    className={`flex h-12 items-center justify-center rounded-full text-[15px] font-medium transition ${
                       popular
-                        ? "border-2 border-[#2563EB] shadow-[0_20px_60px_-20px_rgba(26,86,219,0.25)]"
-                        : "border border-[#E2E8F0]"
+                        ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
+                        : "border border-[#D9D9D5] text-[#111111] hover:border-[#111111]"
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <p className="text-[17px] font-semibold text-[#0F172A]">{cfg.title}</p>
-                      {popular && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#EFF6FF] px-2 py-0.5 text-[11px] font-semibold text-[#2563EB]">
-                          <Sparkles className="h-3 w-3" /> Most chosen
-                        </span>
-                      )}
-                      {isLifetime && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#F0FDF4] px-2 py-0.5 text-[11px] font-semibold text-[#15803D]">
-                          <InfinityIcon className="h-3 w-3" /> Pay once
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 text-[13px] text-[#64748B]">{planTagline[key]}</p>
-
-                    <div className="mt-6 flex items-baseline gap-1.5">
-                      <span className="text-[48px] font-bold leading-none tracking-tight text-[#0F172A]">{cfg.priceDisplay}</span>
-                      <span className="text-[14px] font-medium text-[#94A3B8]">{cfg.periodLabel}</span>
-                    </div>
-                    <p className="mt-2 text-[12px] leading-relaxed text-[#94A3B8]">{cfg.billingExplainer}</p>
-
-                    <ul className="mt-6 flex-1 space-y-2.5">
-                      {bullets.map((b) => (
-                        <li key={b} className="flex items-start gap-2.5 text-[14px] leading-snug text-[#334155]">
-                          <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <CtaLink
-                      cta="choose_plan"
-                      plan={key}
-                      location="pricing_card"
-                      selectsPlan
-                      href={registerHref}
-                      className={`mt-7 inline-flex w-full items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition ${
-                        popular
-                          ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
-                          : "border border-[#E2E8F0] bg-white text-[#0F172A] hover:bg-[#F8FAFC]"
-                      }`}
-                    >
-                      {planCtaLabel(key)}
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </CtaLink>
-                  </div>
-                </RevealOnView>
+                    {planCtaLabel(key)}
+                  </CtaLink>
+                  <ul className="flex flex-col gap-2.5">
+                    {planMarketingBullets(key).map((b) => (
+                      <li key={b} className="flex gap-2.5 text-[15px] leading-[1.5] text-[#3F3F3F]">
+                        <Check className="mt-[3px] h-4 w-4 shrink-0 text-[#111111]" aria-hidden />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               );
             })}
           </div>
-
-          <p className="mx-auto mt-8 max-w-[720px] text-center text-[13px] leading-relaxed text-[#94A3B8]">
-            After signup, complete checkout in{" "}
-            <Link href={SUB_NEXT} className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              Subscription settings
-            </Link>
-            . Already have an account?{" "}
-            <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              Sign in
-            </Link>
-            . 7-day money-back where Polar allows.
+          <p className="mt-5 flex flex-col gap-x-3 gap-y-1 text-[14px] text-[#6B6B6B] sm:flex-row sm:flex-wrap">
+            <span>7-day money-back guarantee on monthly plans</span>
+            <span aria-hidden className="hidden sm:inline">·</span>
+            <span>Secure checkout by Polar</span>
+            <span aria-hidden className="hidden sm:inline">·</span>
+            <span>Prices in USD, tax added by country</span>
+            <span aria-hidden className="hidden sm:inline">·</span>
+            <span>
+              Already have an account?{" "}
+              <Link href={`/login?next=${encodeURIComponent(SUB_NEXT)}`} className="text-[#1D4ED8] hover:underline">
+                Sign in
+              </Link>
+            </span>
           </p>
-        </div>
-      </section>
+        </section>
 
-      {/* COMPARISON TABLE */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Compare plans</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Every AI tool included — only the ceilings change
-              </h2>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-10 overflow-hidden rounded-xl border border-[#E2E8F0]">
-            <div className="grid grid-cols-[1.6fr_repeat(3,1fr)] bg-white">
-              <div className="border-b border-[#E2E8F0] px-5 py-4 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-                Feature
-              </div>
-              {CHECKOUT_PLAN_ORDER.map((key) => {
-                const cfg = PUBLIC_PLANS[key];
-                return (
-                  <div
-                    key={key}
-                    className={`border-b border-[#E2E8F0] px-5 py-4 text-center ${cfg.popular ? "bg-[#EFF6FF]/50" : ""}`}
-                  >
-                    <p className={`text-[13px] font-semibold ${cfg.popular ? "text-[#2563EB]" : "text-[#0F172A]"}`}>
-                      {cfg.title}
-                    </p>
-                    <p className={`text-[11px] ${cfg.popular ? "text-[#475569]" : "text-[#94A3B8]"}`}>
-                      {planPriceLabel(key)}
-                      {cfg.popular ? " · popular" : ""}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="divide-y divide-[#E2E8F0] bg-white">
-              {compareGroups.map((g) => (
-                <div key={g.g}>
-                  <div className="bg-[#FAFBFC] px-5 py-2.5">
-                    <p className="text-[11px] font-semibold uppercase tracking-wider text-[#475569]">{g.g}</p>
-                  </div>
-                  {g.rows.map((r) => (
-                    <div key={r.l} className="grid grid-cols-[1.6fr_repeat(3,1fr)] items-center">
-                      <div className="px-5 py-3 text-[13px] text-[#0F172A]">{r.l}</div>
-                      <div className="px-5 py-3 text-center"><CellValue v={r.v.starter} /></div>
-                      <div className="bg-[#EFF6FF]/30 px-5 py-3 text-center"><CellValue v={r.v.professional} /></div>
-                      <div className="px-5 py-3 text-center"><CellValue v={r.v.lifetime} /></div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <p className="mt-6 text-center text-[13px] text-[#94A3B8]">
-            Every plan includes all six AI tools — only the monthly ceilings and support priority change.
-          </p>
-        </div>
-      </section>
-
-      {/* VALUE GRID */}
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <RevealOnView>
-            <div className="max-w-[680px]">
-              <p className="lc-overline text-[#2563EB]">Why pay for resume software</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                A real product, funded by users — not ads
-              </h2>
-              <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-                Most resume tools monetize you instead. We charge up front so we can build something reliable, predictable, and continuously improved.
-              </p>
-            </div>
-          </RevealOnView>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              { k: "No data sold", d: "Your resume, applications, and interview practice — never shared, never sold, never used for ads." },
-              { k: "No watermarks", d: "Every PDF, DOCX, and cover letter exports clean. No &lsquo;Made with LaunchCV&rsquo; baked in." },
-              { k: "Predictable limits", d: "Every plan publishes its monthly AI ceiling. No mystery throttling, no surprise paywalls." },
-              { k: "Real human support", d: "Reply in under a business day. Same email queue the founder reads." },
-              { k: "Cancel without drama", d: "One click in the Polar portal. No retention pop-ups, no &lsquo;are you sure&rsquo; flows." },
-              { k: "Lifetime really is lifetime", d: "One payment. Updates included. Active while the product exists." },
-            ].map((p) => (
-              <RevealOnView key={p.k}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-6">
-                  <Check className="h-5 w-5 text-[#2563EB]" />
-                  <h3 className="mt-4 text-[17px] font-semibold text-[#0F172A]">{p.k}</h3>
-                  <p className="mt-2 text-[14px] leading-[1.65] text-[#475569]" dangerouslySetInnerHTML={{ __html: p.d }} />
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHY IT WORKS */}
-      <section className="border-t border-[#E2E8F0] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <div className="mx-auto max-w-[680px] text-center">
-            <h2 className="lc-section-headline text-[#0F172A]">Every tool, one predictable price</h2>
-            <p className="mt-4 text-[16px] leading-[1.65] text-[#475569]">
-              No upsell modals and no feature paywalled behind a higher tier — every plan gets the full toolkit, with fair-use AI limits that scale with the price.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-5 lg:grid-cols-3">
-            {[
-              { t: "Nothing gated by tier", d: "JD alignment, resume builder, ATS score, cover letters, interview prep, and voice input — included on every paid plan." },
-              { t: "Cancel anytime", d: "Monthly and yearly plans cancel with no penalty. The Lifetime plan is a one-time payment with no renewal." },
-              { t: "Free to start", d: "Check your ATS score with no account, then upgrade only when you want the full toolkit." },
-            ].map((b) => (
-              <RevealOnView key={b.t}>
-                <div className="h-full rounded-xl border border-[#E2E8F0] bg-white p-7">
-                  <h3 className="text-[17px] font-semibold text-[#0F172A]">{b.t}</h3>
-                  <p className="mt-3 text-[15px] leading-[1.7] text-[#475569]">{b.d}</p>
-                </div>
-              </RevealOnView>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20 sm:py-24">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <div className="grid gap-12 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <p className="lc-overline text-[#2563EB]">FAQ</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                Frequently asked questions
-              </h2>
-              <p className="mt-4 text-[14px] leading-[1.7] text-[#475569]">
-                Need something specific?{" "}
-                <Link href="/contact" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-                  Email support
-                </Link>{" "}
-                — we reply within one business day.
-              </p>
-            </div>
-            <div className="lg:col-span-8">
-              <div className="divide-y divide-[#E2E8F0] rounded-xl border border-[#E2E8F0] bg-white">
-                {faqs.map((f) => (
-                  <details key={f.q} className="group px-6 py-5">
-                    <summary className="flex cursor-pointer items-center justify-between gap-4 text-[15px] font-semibold text-[#0F172A]">
-                      {f.q}
-                      <ChevronDown className="h-4 w-4 shrink-0 text-[#94A3B8] transition-transform group-open:rotate-180" />
-                    </summary>
-                    <p className="mt-3 text-[14px] leading-[1.7] text-[#475569]" dangerouslySetInnerHTML={{ __html: f.a }} />
-                  </details>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="bg-white py-20">
-        <div className="mx-auto max-w-[900px] px-6 text-center">
-          <h2 className="lc-section-headline text-[#0F172A]">
-            Pick a plan, start applying
+        {/* COMPARE */}
+        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-[104px]">
+          <h2 className="text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[40px]">
+            Compare plans <span className="text-[#8A8A86]">— only the limits change.</span>
           </h2>
-          <p className="mx-auto mt-4 max-w-[520px] text-[16px] leading-[1.65] text-[#475569]">
-            One paste. Six AI tools. The job search you wish you&apos;d run a year ago.
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-[15px] [font-feature-settings:'tnum']">
+              <thead>
+                <tr className="border-b border-[#EEEEEB] text-[#6B6B6B]">
+                  <th className="w-[40%] py-4 text-left font-medium">
+                    <span className="sr-only">Feature</span>
+                  </th>
+                  <th className="py-4 font-medium">Free</th>
+                  {CHECKOUT_PLAN_ORDER.map((key) => (
+                    <th key={key} className={`py-4 font-medium ${PUBLIC_PLANS[key].popular ? "text-[#111111]" : ""}`}>
+                      {PUBLIC_PLANS[key].title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-[#EEEEEB]">
+                  <td className="py-4">ATS score and report</td>
+                  <td className="py-4 text-center">
+                    <Check className="mx-auto h-4 w-4" aria-label="Included" />
+                  </td>
+                  {CHECKOUT_PLAN_ORDER.map((key) => (
+                    <td key={key} className="py-4 text-center">
+                      <Check className="mx-auto h-4 w-4" aria-label="Included" />
+                    </td>
+                  ))}
+                </tr>
+                {limitRows.map((r) => (
+                  <tr key={r.k} className="border-b border-[#EEEEEB]">
+                    <td className="py-4">{r.l} / month</td>
+                    <td className="py-4 text-center text-[#8A8A86]">—</td>
+                    {CHECKOUT_PLAN_ORDER.map((key) => (
+                      <td key={key} className="py-4 text-center">
+                        {PLAN_MONTHLY_LIMITS[key][r.k].toLocaleString("en-US")}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                {toolRows.map((l) => (
+                  <tr key={l} className="border-b border-[#EEEEEB]">
+                    <td className="py-4">{l}</td>
+                    <td className="py-4 text-center text-[#8A8A86]">—</td>
+                    {CHECKOUT_PLAN_ORDER.map((key) => (
+                      <td key={key} className="py-4 text-center">
+                        <Check className="mx-auto h-4 w-4" aria-label="Included" />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                <tr>
+                  <td className="py-4">Billing</td>
+                  <td className="py-4 text-center text-[#8A8A86]">—</td>
+                  {CHECKOUT_PLAN_ORDER.map((key) => (
+                    <td key={key} className="py-4 text-center">
+                      {key === "lifetime" ? "One-time" : "Monthly"}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {/* GUARANTEE */}
+        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-[104px]">
+          <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] md:flex-row">
+            <div className="flex flex-1 flex-col justify-center gap-4 p-8 sm:p-14">
+              <h2 className="text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[40px]">
+                If it doesn&apos;t help, <span className="text-[#8A8A86]">you get your money back.</span>
+              </h2>
+              <p className="max-w-[440px] text-[16px] leading-[1.6] text-[#3F3F3F]">
+                Email us within 7 days of paying for a monthly plan and we&apos;ll refund you in full. Lifetime can be
+                refunded within 14 days.
+              </p>
+              <Link href="/legal/terms" className="text-[15px] text-[#1D4ED8] hover:underline">
+                Read the refund terms
+              </Link>
+            </div>
+            <div className="relative min-h-[260px] md:min-h-[360px] md:w-[46%]">
+              <Image
+                src="/images/photos/handshake-desk.webp"
+                alt="Two people shaking hands across a desk"
+                fill
+                sizes="(min-width: 768px) 46vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mx-auto max-w-[860px] px-5 py-24 sm:px-8 sm:py-[104px]">
+          <h2 className="text-center text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[40px]">
+            Billing questions
+          </h2>
+          <div className="mt-6 border-b border-[#E5E5E2]">
+            {faqs.map((f, i) => (
+              <details key={f.q} open={i === 0} className="group border-t border-[#E5E5E2] py-5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                  <ChevronDown
+                    className="h-4 w-4 shrink-0 text-[#8A8A86] transition-transform group-open:rotate-180"
+                    aria-hidden
+                  />
+                </summary>
+                <p className="mt-2.5 text-[16px] leading-[1.65] text-[#3F3F3F]">{f.a}</p>
+              </details>
+            ))}
+          </div>
+          <p className="mt-8 text-center text-[15px] text-[#6B6B6B]">
+            Something else?{" "}
+            <Link href="/contact" className="text-[#1D4ED8] hover:underline">
+              Email support
+            </Link>
           </p>
-          <CtaLink
-            cta="get_started"
-            location="pricing_footer"
-            href={registerHref}
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
-          >
-            Create my account
-            <ArrowRight className="h-4 w-4" />
-          </CtaLink>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <LandingFooter />
     </div>

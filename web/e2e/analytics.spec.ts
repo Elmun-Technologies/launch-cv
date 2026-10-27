@@ -89,7 +89,7 @@ test("cta_click fires with plan from a pricing card", async ({ page }) => {
   await page.addInitScript(INIT);
   await page.goto("/pricing", { waitUntil: "domcontentloaded" });
   await preventNavigation(page);
-  await page.locator("a", { hasText: "Start with Starter" }).first().click();
+  await page.locator("a", { hasText: "Choose Starter" }).first().click();
   await waitForEvent(page, "cta_click");
 
   const gtag = (await gtagEvents(page)).filter((e) => e.name === "cta_click");

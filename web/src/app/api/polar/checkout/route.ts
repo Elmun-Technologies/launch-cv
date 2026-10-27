@@ -34,6 +34,7 @@ export async function POST(req: Request) {
   const accessToken = process.env.POLAR_ACCESS_TOKEN;
   const productId = productIdForCheckoutPlan(plan);
   if (!accessToken || !productId) {
+    console.error(`[polar/checkout] missing POLAR_ACCESS_TOKEN or product id for plan "${plan}"`);
     return NextResponse.json(
       {
         error: `Configure POLAR_ACCESS_TOKEN and a product id for "${plan}" (e.g. POLAR_PRODUCT_${plan.toUpperCase()}).`,
@@ -45,6 +46,26 @@ export async function POST(req: Request) {
   const user = await prisma.user.findUnique({ where: { id: session.sub } });
   if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
+  // A second checkout would start a second, parallel subscription and bill twice.
+  const existing = await prisma.subscription.findUnique({
+    where: { userId: user.id },
+    select: { stripeSubscriptionId: true, status: true },
+  });
+  if (existing && (existing.status === "active" || existing.status === "trialing")) {
+    const isLifetime = existing.stripeSubscriptionId.startsWith("order:");
+    if (isLifetime || plan !== "lifetime") {
+      return NextResponse.json(
+        {
+          error: isLifetime
+            ? "You already have Lifetime access."
+            : "You already have an active subscription. Change or cancel it in the billing portal.",
+          code: "HAS_SUBSCRIPTION",
+        },
+        { status: 409 },
+      );
+    }
+  }
+
   const base = appBaseUrl();
 
   // Carry first-touch campaign attribution through checkout so the server-side
@@ -54,7 +75,7 @@ export async function POST(req: Request) {
 
   const body = {
     products: [productId],
-    success_url: `${base}/dashboard/settings?checkout=success`,
+    success_url: `${base}/dashboard/settings/subscription?checkout=success`,
     customer_email: user.email,
     ...(user.name ? { customer_name: user.name } : {}),
     external_customer_id: user.id,

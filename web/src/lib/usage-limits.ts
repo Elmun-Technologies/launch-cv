@@ -1,9 +1,10 @@
+import { PUBLIC_PLANS } from "@/lib/monetization";
 import { prisma } from "@/lib/prisma";
 import { getUserPlanId, limitsForPlan, type PlanId } from "@/lib/plans";
 
 export type UsageKind = "jd" | "packet" | "role_fit";
 
-function monthKey(d = new Date()) {
+export function monthKey(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
@@ -38,8 +39,8 @@ export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
       max,
       kind,
       message: paid
-        ? "Monthly AI limit reached for your plan. Resets next month, or upgrade in Subscription."
-        : "Activate a plan to use AI features. LaunchCV is paid-only — choose Starter, Professional, or Lifetime on the Pricing page.",
+        ? "You've used this month's AI limit on your plan. It resets on the 1st, or you can move to a higher plan now."
+        : `AI tools are included in every plan, from ${PUBLIC_PLANS.starter.priceDisplay}/month. Everything you've written stays saved.`,
     };
   }
   return { ok: true as const, plan, paid, used, max, kind };

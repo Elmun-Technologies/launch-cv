@@ -109,21 +109,15 @@ export function planPricingSummary(): string {
 
 export function planMarketingBullets(plan: CheckoutPlan): string[] {
   const L = PLAN_MONTHLY_LIMITS[plan];
+  const n = (v: number) => v.toLocaleString("en-US");
   const base = [
-    `${L.jd} JD analyses / month`,
-    `${L.roleFit} role-fit checks / month`,
-    `${L.packet} application packets / month`,
+    `${n(L.jd)} job-description analyses / month`,
+    `${n(L.roleFit)} role-fit checks / month`,
+    `${n(L.packet)} application packets / month`,
   ];
-  if (plan === "starter") {
-    return [...base, "Resume editor, PDF export, core templates", "Job tracker, contacts & companies"];
-  }
-  if (plan === "professional") {
-    return [...base, "Company matcher & voice input", "All resume templates + email support"];
-  }
-  if (plan === "elite") {
-    return [...base, "Priority feature rollouts", "Company matcher & voice input", "Priority support"];
-  }
-  return [...base, "All Professional features", "No renewal — pay once", "Fair-use monthly AI caps (see Terms)"];
+  // Every tool ships on every plan; only the monthly limits differ.
+  if (plan === "lifetime") return [...base, "Every AI tool and template", "Pay once, never renews"];
+  return [...base, "Every AI tool and template", "Cancel anytime"];
 }
 
 /** Legacy single-price block — maps to Professional for old UI strings. */

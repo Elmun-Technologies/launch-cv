@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/session";
+import { allowImport } from "@/lib/rate-limit-presets";
 import { chatJson } from "@/lib/openai-client";
 import type { ResumeContent } from "@/types/resume";
 
@@ -11,6 +12,9 @@ const schema = z.object({
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!allowImport(session.sub)) {
+    return NextResponse.json({ error: "Too many imports. Try again in an hour." }, { status: 429 });
+  }
 
   let body: unknown;
   try { body = await req.json(); } catch { return NextResponse.json({ error: "JSON expected" }, { status: 400 }); }

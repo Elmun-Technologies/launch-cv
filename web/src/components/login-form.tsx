@@ -81,12 +81,12 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
     <AuthLayout mode="login">
       {/* Header */}
       <div className="mb-5">
-        <h1 className="text-[24px] font-semibold leading-[1.15] tracking-tight text-[#0F172A]">
+        <h1 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111]">
           Sign in to LaunchCV
         </h1>
         <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
+          <Link href="/register" className="font-semibold text-[#1D4ED8] hover:underline">
             Create one
           </Link>
         </p>
@@ -109,7 +109,7 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
           <input
             type="email"
             required
-            className="soha-input"
+            className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
@@ -124,7 +124,7 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
             </label>
             <Link
               href="/auth/forgot-password"
-              className="text-[12px] font-semibold text-[#2563EB] underline-offset-2 hover:underline"
+              className="text-[12px] font-semibold text-[#1D4ED8] hover:underline"
             >
               Forgot password?
             </Link>
@@ -134,7 +134,7 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
               type={showPw ? "text" : "password"}
               required
               minLength={8}
-              className="soha-input pr-10"
+              className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5 pr-10"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"

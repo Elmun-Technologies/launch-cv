@@ -1,18 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { ArrowRight, Mail, MessageSquare, FileText, ShieldCheck, Building2 } from "lucide-react";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
+const EMAIL = "support@launch-cv.com";
+
 export const metadata = buildMarketingMetadata({
-  title: "Contact LaunchCV — Support, Billing & Partnerships",
-  description:
-    "Get in touch with LaunchCV. Support, billing, partnerships, press, and security — every inbox replies within one business day. Reach the right team fast.",
+  title: "Contact LaunchCV — Support, Billing and Partnerships",
+  description: "Questions about your account, billing, refunds, partnerships or security? Email the LaunchCV team.",
   pathname: "/contact",
   image: DEFAULT_OG_IMAGE,
-  keywords: ["LaunchCV contact", "support", "press", "partnerships", "billing"],
+  keywords: ["LaunchCV contact", "LaunchCV support", "LaunchCV billing", "LaunchCV refund"],
 });
 
 const ld = {
@@ -20,153 +21,96 @@ const ld = {
   "@type": "ContactPage",
   name: "Contact LaunchCV",
   url: absoluteUrl("/contact"),
+  mainEntity: {
+    "@type": "Organization",
+    name: "LaunchCV",
+    legalName: "Elmun Technologies LLC",
+    email: EMAIL,
+    address: { "@type": "PostalAddress", addressLocality: "Tashkent", addressCountry: "UZ" },
+  },
 };
 
-const channels = [
-  {
-    icon: MessageSquare,
-    name: "General support",
-    description: "Account, AI features, exports, anything product-related.",
-    email: "support@launch-cv.com",
-  },
-  {
-    icon: FileText,
-    name: "Billing & refunds",
-    description: "Plan changes, invoices, refunds. We coordinate with Polar on your behalf.",
-    email: "billing@launch-cv.com",
-  },
-  {
-    icon: Building2,
-    name: "Partnerships & press",
-    description: "Career-services partners, university outreach, journalists, podcasts.",
-    email: "hello@launch-cv.com",
-  },
-  {
-    icon: ShieldCheck,
-    name: "Security",
-    description: "Coordinated disclosure for vulnerabilities. PGP available on request.",
-    email: "security@launch-cv.com",
-  },
+const topics = [
+  { t: "Account and product", d: "Sign-in, the editor, PDF export, AI tools.", subject: "Support" },
+  { t: "Billing and refunds", d: "Plan changes, invoices, the 7-day refund on monthly plans.", subject: "Billing" },
+  { t: "Partnerships and press", d: "Career services, universities, journalists.", subject: "Partnership" },
+  { t: "Security", d: "Report a vulnerability. Please don't include real user data.", subject: "Security" },
 ];
 
 export default function ContactPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
+    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={ld} />
       <LandingNav />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-white pt-[96px]">
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden
-          style={{
-            backgroundImage: "radial-gradient(circle at 12% 0%, rgba(26,86,219,0.06), transparent 50%)",
-          }}
-        />
-        <div className="relative mx-auto max-w-[1200px] px-6 pb-16 pt-12">
-          <div className="max-w-[760px]">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-              <Mail className="h-3.5 w-3.5 text-[#2563EB]" />
-              Contact
-            </span>
-            <h1 className="mt-6 lc-hero-headline text-[#0F172A]">
-              Talk to a real human at LaunchCV
+      <main className="flex-1">
+        <section className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 pt-[120px] sm:px-8 lg:flex-row lg:items-center lg:gap-14">
+          <div className="flex-1">
+            <h1 className="text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px]">
+              Get in touch. <span className="text-[#8A8A86]">A person reads every email.</span>
             </h1>
-            <p className="mt-6 max-w-[600px] text-[17px] leading-[1.65] text-[#475569]">
-              Pick the inbox that matches your need. Every queue is read every business day, with replies within one business day. No bots, no ticket triage layer — the team responds directly.
+            <p className="mt-5 max-w-[520px] text-[17px] leading-[1.6] text-[#3F3F3F]">
+              Write to{" "}
+              <a href={`mailto:${EMAIL}`} className="text-[#1D4ED8] hover:underline">
+                {EMAIL}
+              </a>{" "}
+              and put the topic in the subject so it reaches the right person.
             </p>
+            <a
+              href={`mailto:${EMAIL}`}
+              className="mt-6 inline-flex h-12 items-center rounded-full bg-[#111111] px-6 text-[15px] font-medium text-white hover:bg-black"
+            >
+              Email us
+            </a>
           </div>
-        </div>
-      </section>
+          <div className="relative h-[280px] overflow-hidden rounded-[20px] sm:h-[380px] lg:w-[44%] lg:shrink-0">
+            <Image
+              src="/images/photos/role-customer-service.webp"
+              alt="Support team members wearing headsets"
+              fill
+              priority
+              sizes="(min-width: 1024px) 520px, 100vw"
+              className="object-cover"
+            />
+          </div>
+        </section>
 
-      {/* CHANNELS */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-20">
-        <div className="mx-auto max-w-[1200px] px-6">
-          <div className="grid gap-5 sm:grid-cols-2">
-            {channels.map((c) => (
+        <section className="mx-auto max-w-[1200px] px-5 pt-20 sm:px-8">
+          <div className="grid gap-x-10 sm:grid-cols-2">
+            {topics.map((x) => (
               <a
-                key={c.email}
-                href={`mailto:${c.email}`}
-                className="group flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-7 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
+                key={x.t}
+                href={`mailto:${EMAIL}?subject=${encodeURIComponent(x.subject)}`}
+                className="group border-t border-[#EEEEEB] py-5"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#EFF6FF] text-[#2563EB]">
-                  <c.icon className="h-5 w-5" />
-                </span>
-                <h2 className="mt-5 text-[18px] font-semibold tracking-tight text-[#0F172A]">{c.name}</h2>
-                <p className="mt-2 flex-1 text-[14px] leading-[1.65] text-[#475569]">{c.description}</p>
-                <p className="mt-5 inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#2563EB]">
-                  {c.email}
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                </p>
+                <p className="text-[17px] font-semibold group-hover:text-[#1D4ED8]">{x.t}</p>
+                <p className="mt-1 text-[15px] leading-[1.55] text-[#3F3F3F]">{x.d}</p>
+                <p className="mt-1.5 text-[13px] text-[#6B6B6B]">Subject: {x.subject}</p>
               </a>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* SLA / EXPECTATIONS */}
-      <section className="py-20">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <div className="grid gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-5">
-              <p className="lc-overline text-[#2563EB]">What to expect</p>
-              <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-                One business day. Real human. No ticket loop.
-              </h2>
-              <p className="mt-4 text-[15px] leading-[1.7] text-[#475569]">
-                We&apos;re a small team and reply directly. If your message lands on a weekend or public holiday, expect a reply on the next business day.
-              </p>
+        <section className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8">
+          <div className="flex flex-col gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:justify-between sm:p-12">
+            <div>
+              <p className="text-[17px] font-semibold">Elmun Technologies LLC</p>
+              <p className="mt-1 text-[15px] text-[#3F3F3F]">Tashkent, Uzbekistan</p>
             </div>
-            <div className="lg:col-span-7">
-              <dl className="divide-y divide-[#E2E8F0] rounded-xl border border-[#E2E8F0] bg-white">
-                {[
-                  { k: "Response time", v: "Under 1 business day · Mon–Fri" },
-                  { k: "Languages", v: "English (primary), Spanish, German, Russian" },
-                  { k: "Office hours", v: "9:00 — 18:00 GMT+5 (Tashkent)" },
-                  { k: "Bug bounty", v: "Coordinated disclosure — email security@launch-cv.com" },
-                  { k: "Mailing address", v: "Elmun Technologies LLC · Tashkent, Uzbekistan" },
-                ].map((row) => (
-                  <div key={row.k} className="flex items-start justify-between gap-6 px-6 py-4">
-                    <dt className="text-[13px] font-semibold text-[#475569]">{row.k}</dt>
-                    <dd className="text-right text-[14px] text-[#0F172A]">{row.v}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SUPPORT-FIRST POINTERS */}
-      <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-16">
-        <div className="mx-auto max-w-[1100px] px-6">
-          <p className="lc-overline text-[#2563EB]">Self-serve first</p>
-          <h2 className="mt-3 lc-section-headline text-[#0F172A]">
-            Many answers are on these pages
-          </h2>
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {[
-              { href: "/pricing", t: "Pricing & billing", d: "Plan limits, refunds, Polar details." },
-              { href: "/features", t: "Feature overview", d: "What each AI tool does and when to use it." },
-              { href: "/legal/privacy", t: "Privacy & data", d: "What we store, how long, and your rights." },
-            ].map((r) => (
-              <Link
-                key={r.href}
-                href={r.href}
-                className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
-              >
-                <p className="text-[15px] font-semibold text-[#0F172A]">{r.t}</p>
-                <p className="mt-1 text-[13px] text-[#64748B]">{r.d}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-[13px] font-semibold text-[#2563EB]">
-                  Open
-                  <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
-                </span>
+            <p className="text-[15px] text-[#3F3F3F]">
+              Billing questions? See{" "}
+              <Link href="/pricing" className="text-[#1D4ED8] hover:underline">
+                plans and refunds
+              </Link>{" "}
+              or the{" "}
+              <Link href="/legal/terms" className="text-[#1D4ED8] hover:underline">
+                terms
               </Link>
-            ))}
+              .
+            </p>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <LandingFooter />
     </div>

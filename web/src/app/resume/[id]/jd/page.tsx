@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ResumeToolLayout } from "@/components/resume-tool-layout";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -17,20 +17,14 @@ export default async function JdPage({ params }: Props) {
   if (!resume) notFound();
 
   return (
-    <main className="mx-auto max-w-4xl px-4 py-10">
-      <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-zinc-400">
-        <Link href={`/resume/${id}/edit`} className="hover:text-white">
-          ← Edit
-        </Link>
-        <Link href="/dashboard" className="hover:text-white">
-          Dashboard
-        </Link>
-      </div>
-      <h1 className="mt-6 text-2xl font-semibold text-white">JD alignment (3 layers)</h1>
-      <p className="mt-2 text-sm text-zinc-400">
-        Paste a job description: gap map, bullet rewrite, removal suggestions.
-      </p>
+    <ResumeToolLayout
+      resumeId={id}
+      resumeTitle={resume.title}
+      active="jd"
+      title="Match to a job"
+      lead="Paste a job description to see your match score, the keywords you cover, missing skills and rewrites for your bullets."
+    >
       <JdClient resumeId={id} />
-    </main>
+    </ResumeToolLayout>
   );
 }

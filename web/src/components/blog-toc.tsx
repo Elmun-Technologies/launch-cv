@@ -1,5 +1,4 @@
 import type { TocEntry } from "@/lib/toc";
-import { List } from "lucide-react";
 
 /**
  * Auto-generated table of contents for long posts. Anchor links jump to the
@@ -10,19 +9,16 @@ export function BlogToc({ entries }: { entries: TocEntry[] }) {
   if (entries.length === 0) return null;
 
   return (
-    <nav
-      aria-label="Table of contents"
-      className="mt-10 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-5 sm:p-6"
-    >
-      <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-[#64748B]">
-        <List className="h-3.5 w-3.5" /> On this page
-      </p>
-      <ul className="mt-3 space-y-1.5">
+    <nav aria-label="Table of contents">
+      <p className="mb-2 text-[13px] text-[#6B6B6B]">In this guide</p>
+      <ul className="border-l border-[#E5E5E2]">
         {entries.map((e) => (
-          <li key={e.id} className={e.depth === 3 ? "pl-4" : ""}>
+          <li key={e.id}>
             <a
               href={`#${e.id}`}
-              className="text-[13px] leading-snug text-[#475569] underline-offset-2 transition hover:text-[#2563EB] hover:underline"
+              className={`-ml-px block border-l border-transparent py-1.5 text-[14px] leading-snug text-[#3F3F3F] hover:border-[#111111] hover:text-[#111111] ${
+                e.depth === 3 ? "pl-6" : "pl-3.5"
+              }`}
             >
               {e.text}
             </a>

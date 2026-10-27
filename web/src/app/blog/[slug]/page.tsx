@@ -9,13 +9,13 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { KeyFacts } from "@/components/key-facts";
-import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { BLOG_HOWTO, blogKeyFacts, howToLd } from "@/lib/geo";
 import { absoluteUrl } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
-import { ArrowLeft, Clock, Calendar, Tag, ChevronRight, ArrowRight, RefreshCw } from "lucide-react";
+import { ArrowLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { BlogFaq } from "@/components/blog-faq";
 import { BlogCover } from "@/components/blog-cover";
 import { BlogToc } from "@/components/blog-toc";
@@ -41,12 +41,12 @@ type FeatureLink = { href: string; title: string; desc: string };
 // at least one relevant product feature with descriptive, keyword-rich anchors.
 const RELATED_FEATURES: Record<string, FeatureLink[]> = {
   "Job Search": [
-    { href: "/features/ats-score", title: "ATS Score Checker", desc: "See how your resume reads to ATS software and fix what's filtering you out." },
+    { href: "/free-ats-check", title: "ATS Score Checker", desc: "See how your resume reads to ATS software and fix what's filtering you out." },
     { href: "/features/jd-alignment", title: "JD Alignment", desc: "Match your resume to any job description and close every keyword gap." },
   ],
   "Resume Tips": [
     { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Turn plain-language notes into quantified, ATS-ready resume bullets." },
-    { href: "/features/ats-score", title: "ATS Score Checker", desc: "Get a 0–100 ATS score with a prioritized list of formatting fixes." },
+    { href: "/free-ats-check", title: "ATS Score Checker", desc: "Get a 0–100 ATS score with a prioritized list of formatting fixes." },
   ],
   "Cover Letters": [
     { href: "/features/cover-letter", title: "AI Cover Letter Generator", desc: "Write a personalized, company-specific cover letter in about a minute." },
@@ -60,7 +60,7 @@ const RELATED_FEATURES: Record<string, FeatureLink[]> = {
 
 const DEFAULT_RELATED_FEATURES: FeatureLink[] = [
   { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Build an ATS-ready resume with AI-written bullets in minutes." },
-  { href: "/features/ats-score", title: "ATS Score Checker", desc: "Check your resume's ATS score before you apply." },
+  { href: "/free-ats-check", title: "ATS Score Checker", desc: "Check your resume's ATS score before you apply." },
 ];
 
 // ISR with revalidatePath() invalidation from admin mutations.
@@ -86,7 +86,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     pathname: `/blog/${post.slug}`,
     keywords: post.tags,
     canonicalUrl: post.canonicalUrl || undefined,
-    image: post.ogImageUrl || post.coverUrl || DEFAULT_OG_IMAGE,
+    // Social cards can't use SVG; fall back to this post's generated card.
+    image: [post.ogImageUrl, post.coverUrl].find((u) => u && !/\.svg(\?|$)/i.test(u)) || absoluteUrl(`/blog/${post.slug}/opengraph-image`),
     type: "article",
     article: {
       publishedTime: post.date,
@@ -195,7 +196,7 @@ export default async function BlogPostPage({
     datePublished: post.date,
     dateModified: post.dateModified,
     url: absoluteUrl(`/blog/${post.slug}`),
-    image: post.ogImageUrl || absoluteUrl("/opengraph-image"),
+    image: post.ogImageUrl && !/\.svg(\?|$)/i.test(post.ogImageUrl) ? post.ogImageUrl : absoluteUrl(`/blog/${post.slug}/opengraph-image`),
     author: {
       "@type": "Person",
       name: SITE_AUTHOR.name,
@@ -208,7 +209,7 @@ export default async function BlogPostPage({
       "@type": "Organization",
       name: "LaunchCV",
       url: absoluteUrl("/"),
-      logo: { "@type": "ImageObject", url: absoluteUrl("/icon.png") },
+      logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png") },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
     keywords: post.tags.join(", "),
@@ -268,277 +269,232 @@ export default async function BlogPostPage({
       />
       <LandingNav />
 
-      <main className="pt-[80px]">
-        {/* Preview banner */}
+      <main className="flex-1 pt-[96px] text-[#111111]">
         {previewAllowed ? (
-          <div className="border-b border-amber-200 bg-amber-50 px-6 py-2">
-            <div className="mx-auto flex max-w-[800px] items-center gap-2 text-[12px] font-semibold text-amber-800">
+          <div className="border-b border-amber-200 bg-amber-50 px-5 py-2">
+            <div className="mx-auto flex max-w-[880px] items-center gap-2 text-[12px] font-semibold text-amber-800">
               <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[10px] uppercase tracking-wider">Preview</span>
               Viewing draft / scheduled post. Not visible to the public.
             </div>
           </div>
         ) : null}
 
-        {/* Breadcrumb */}
-        <div className="border-b border-[#E2E8F0] bg-[#FAFBFC]">
-          <div className="mx-auto flex max-w-[800px] items-center gap-2 px-6 py-3 text-[13px] text-[#94A3B8]">
-            <Link href="/" className="transition hover:text-[#2563EB]">Home</Link>
-            <ChevronRight className="h-3.5 w-3.5" />
-            <Link href="/blog" className="transition hover:text-[#2563EB]">Blog</Link>
-            <ChevronRight className="h-3.5 w-3.5" />
-            <span className="truncate text-[#334155]">{post.category}</span>
+        <header className="mx-auto max-w-[880px] px-5 pt-10 sm:px-8">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[13px] text-[#6B6B6B]">
+            <Link href="/" className="hover:text-[#111111]">
+              Home
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+            <Link href="/blog" className="hover:text-[#111111]">
+              Guides
+            </Link>
+            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+            <span className="truncate text-[#3F3F3F]">{post.category}</span>
+          </nav>
+          <h1 className="mt-5 text-[34px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[52px]">
+            {post.title}
+          </h1>
+          <p className="speakable-description mt-5 text-[18px] leading-[1.6] text-[#3F3F3F] sm:text-[20px]">
+            {post.description}
+          </p>
+          <div className="mt-6 flex items-center gap-3.5 border-b border-[#EEEEEB] pb-7 text-[14px] text-[#6B6B6B]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={SITE_AUTHOR.avatar} alt="" width={40} height={40} className="h-10 w-10 shrink-0 rounded-full" />
+            <span>
+              <Link href="/about" rel="author" className="block font-medium text-[#111111] hover:text-[#1D4ED8]">
+                {SITE_AUTHOR.name}
+              </Link>
+              {showUpdated ? (
+                <>
+                  Updated <time dateTime={post.dateModified}>{updatedLabel}</time>
+                </>
+              ) : (
+                <>
+                  Published <time dateTime={post.date}>{publishedLabel}</time>
+                </>
+              )}{" "}
+              · {post.readingTime} min read
+            </span>
           </div>
+        </header>
+
+        <div className="mx-auto max-w-[1040px] px-5 pt-8 sm:px-8">
+          <BlogCover post={post} size="hero" priority />
         </div>
 
-        <div className="mx-auto max-w-[800px] px-6 py-14">
-          <Link
-            href="/blog"
-            className="mb-8 inline-flex items-center gap-2 text-[13px] font-semibold text-[#64748B] transition hover:text-[#2563EB]"
-          >
-            <ArrowLeft className="h-4 w-4" /> Back to Blog
-          </Link>
-
-          <header>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-[#EFF6FF] px-3 py-1 text-[12px] font-semibold text-[#2563EB]">
-                {post.category}
-              </span>
-              <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
-                <Calendar className="h-3.5 w-3.5" />
-                Published{" "}
-                <time dateTime={post.date}>{publishedLabel}</time>
-              </span>
-              {showUpdated ? (
-                <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
-                  <RefreshCw className="h-3.5 w-3.5" />
-                  Updated{" "}
-                  <time dateTime={post.dateModified}>{updatedLabel}</time>
-                </span>
-              ) : null}
-              <span className="flex items-center gap-1 text-[12px] text-[#94A3B8]">
-                <Clock className="h-3.5 w-3.5" /> {post.readingTime} min read
-              </span>
-            </div>
-
-            <h1 className="mt-5 text-[32px] font-semibold leading-[1.15] tracking-tight text-[#0F172A] sm:text-[40px]">
-              {post.title}
-            </h1>
-
-            <p className="speakable-description mt-5 text-[18px] leading-[1.75] text-[#475569]">
-              {post.description}
-            </p>
-
-            {/* Cover */}
-            <div className="mt-8">
-              <BlogCover post={post} size="hero" />
-            </div>
-
-            <div className="mt-6 flex items-start gap-4 border-t border-[#E2E8F0] pt-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={SITE_AUTHOR.avatar}
-                alt={SITE_AUTHOR.name}
-                width={44}
-                height={44}
-                className="h-11 w-11 flex-shrink-0 rounded-full"
-              />
-              <div>
-                <p className="text-[13px] font-semibold text-[#0F172A]">
-                  <Link href="/about" className="transition hover:text-[#2563EB]" rel="author">
-                    {SITE_AUTHOR.name}
-                  </Link>
-                </p>
-                <p className="text-[12px] text-[#94A3B8]">{SITE_AUTHOR.role}</p>
-                <p className="mt-1.5 max-w-[560px] text-[12px] leading-[1.6] text-[#64748B]">
-                  {SITE_AUTHOR.bio}{" "}
-                  <Link
-                    href="/about"
-                    className="font-semibold text-[#2563EB] underline-offset-2 hover:underline"
-                  >
-                    More about the author
-                  </Link>
-                </p>
+        <div className="mx-auto flex max-w-[1040px] justify-center gap-16 px-5 pb-20 pt-10 sm:px-8">
+          <div className="min-w-0 max-w-[680px] flex-1">
+            {showToc ? (
+              <div className="mb-8 lg:hidden">
+                <BlogToc entries={toc} />
               </div>
-            </div>
+            ) : null}
 
-            {showToc ? <BlogToc entries={toc} /> : null}
-          </header>
+            <KeyFacts title="Key facts" lead={keyFacts.lead} facts={keyFacts.facts} />
 
-          {/* Key facts / TL;DR — concise, liftable answer box near the top */}
-          <KeyFacts className="mt-10" title="Key facts" lead={keyFacts.lead} facts={keyFacts.facts} />
-
-          {/* Article body */}
-          <article className="prose-article mt-10 max-w-none text-[16px] leading-[1.85] text-[#334155]">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                h1: ({ ...props }) => (
-                  <h2 className="mt-10 scroll-mt-[96px] text-[24px] font-semibold leading-snug tracking-tight text-[#0F172A]" {...props} />
-                ),
-                h2: ({ node, ...props }) => (
-                  <h2
-                    id={headingSlug(hastText(node as HastNode | undefined))}
-                    className="mt-10 scroll-mt-[96px] text-[22px] font-semibold leading-snug tracking-tight text-[#0F172A]"
-                    {...props}
-                  />
-                ),
-                h3: ({ node, ...props }) => (
-                  <h3
-                    id={headingSlug(hastText(node as HastNode | undefined))}
-                    className="mt-8 scroll-mt-[96px] text-[18px] font-semibold leading-snug tracking-tight text-[#0F172A]"
-                    {...props}
-                  />
-                ),
-                p: ({ ...props }) => <p className="mt-4" {...props} />,
-                ul: ({ ...props }) => <ul className="mt-4 list-disc space-y-1.5 pl-6" {...props} />,
-                ol: ({ ...props }) => <ol className="mt-4 list-decimal space-y-1.5 pl-6" {...props} />,
-                a: ({ href, ...props }) => {
-                  const external = typeof href === "string" && /^https?:\/\//.test(href);
-                  return (
-                    <a
-                      href={href}
-                      className="font-semibold text-[#2563EB] underline-offset-2 hover:underline"
-                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+            <article className="prose-article mt-10 max-w-none text-[17px] leading-[1.75] text-[#3F3F3F]">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  h1: ({ ...props }) => (
+                    <h2 className="mt-12 scroll-mt-[96px] text-[26px] font-semibold leading-snug tracking-[-0.02em] text-[#111111]" {...props} />
+                  ),
+                  h2: ({ node, ...props }) => (
+                    <h2
+                      id={headingSlug(hastText(node as HastNode | undefined))}
+                      className="mt-12 scroll-mt-[96px] text-[26px] font-semibold leading-snug tracking-[-0.02em] text-[#111111]"
                       {...props}
                     />
-                  );
-                },
-                code: ({ ...props }) => (
-                  <code className="rounded bg-[#F1F5F9] px-1.5 py-0.5 font-mono text-[14px] text-[#0F172A]" {...props} />
-                ),
-                blockquote: ({ ...props }) => (
-                  <blockquote
-                    className="mt-6 border-l-4 border-[#E2E8F0] pl-4 italic text-[#475569]"
-                    {...props}
-                  />
-                ),
-                img: ({ src, alt }) =>
-                  typeof src === "string" && src.length > 0 ? (
-                    <Image
-                      src={src}
-                      alt={alt ?? ""}
-                      width={1600}
-                      height={900}
-                      sizes="(max-width: 800px) 100vw, 800px"
-                      className="mt-6 h-auto w-full rounded-xl border border-[#E2E8F0]"
+                  ),
+                  h3: ({ node, ...props }) => (
+                    <h3
+                      id={headingSlug(hastText(node as HastNode | undefined))}
+                      className="mt-8 scroll-mt-[96px] text-[20px] font-semibold leading-snug tracking-[-0.01em] text-[#111111]"
+                      {...props}
                     />
-                  ) : null,
-              }}
-            >
-              {post.bodyMd}
-            </ReactMarkdown>
-          </article>
-
-          {post.faqs && post.faqs.length > 0 ? (
-            <section id="faq" className="mt-14">
-              <h2 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">Frequently Asked Questions</h2>
-              <BlogFaq items={post.faqs} />
-            </section>
-          ) : null}
-
-          <div className="mt-12 flex flex-wrap gap-2 border-t border-[#E2E8F0] pt-8">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-[#FAFBFC] px-3 py-1.5 text-[12px] text-[#475569]"
+                  ),
+                  p: ({ ...props }) => <p className="mt-5" {...props} />,
+                  ul: ({ ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6 marker:text-[#8A8A86]" {...props} />,
+                  ol: ({ ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6 marker:text-[#8A8A86]" {...props} />,
+                  strong: ({ ...props }) => <strong className="font-semibold text-[#111111]" {...props} />,
+                  a: ({ href, ...props }) => {
+                    const external = typeof href === "string" && /^https?:\/\//.test(href);
+                    return (
+                      <a
+                        href={href}
+                        className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-[3px] hover:decoration-[#1D4ED8]"
+                        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        {...props}
+                      />
+                    );
+                  },
+                  code: ({ ...props }) => (
+                    <code className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[15px] text-[#111111]" {...props} />
+                  ),
+                  blockquote: ({ ...props }) => (
+                    <blockquote className="mt-6 border-l-2 border-[#111111] pl-5 text-[#3F3F3F]" {...props} />
+                  ),
+                  table: ({ ...props }) => (
+                    <div className="mt-6 overflow-x-auto">
+                      <table className="w-full border-collapse text-[15px]" {...props} />
+                    </div>
+                  ),
+                  th: ({ ...props }) => (
+                    <th className="border-b border-[#E5E5E2] py-2.5 pr-4 text-left font-medium text-[#6B6B6B]" {...props} />
+                  ),
+                  td: ({ ...props }) => <td className="border-b border-[#EEEEEB] py-2.5 pr-4" {...props} />,
+                  img: ({ src, alt }) =>
+                    typeof src === "string" && src.length > 0 ? (
+                      <Image
+                        src={src}
+                        alt={alt ?? ""}
+                        width={1600}
+                        height={900}
+                        sizes="(max-width: 680px) 100vw, 680px"
+                        className="mt-6 h-auto w-full rounded-2xl"
+                      />
+                    ) : null,
+                }}
               >
-                <Tag className="h-3 w-3 text-[#94A3B8]" /> {tag}
-              </span>
-            ))}
-          </div>
+                {post.bodyMd}
+              </ReactMarkdown>
+            </article>
 
-          <div className="mt-12 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-7 text-center">
-            <p className="text-[20px] font-semibold tracking-tight text-[#0F172A]">Apply these tips now</p>
-            <p className="mx-auto mt-2 max-w-[440px] text-[14px] leading-[1.65] text-[#475569]">
-              Build your ATS-optimized resume with AI in under five minutes.
-            </p>
-            <CtaLink cta="get_started" location="blog_post"
-              href="/register"
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-6 py-3 text-[14px] font-semibold text-white shadow-[0_1px_2px_rgba(15,23,42,0.06),0_8px_24px_-12px_rgba(26,86,219,0.4)] transition hover:bg-[#1D4ED8]"
-            >
-              Build my resume
-              <ArrowRight className="h-4 w-4" />
-            </CtaLink>
-          </div>
-
-          {newerPost || olderPost ? (
-            <nav className="mt-12 grid gap-4 border-t border-[#E2E8F0] pt-8 sm:grid-cols-2">
-              {newerPost ? (
-                <Link
-                  href={`/blog/${newerPost.slug}`}
-                  className={`group flex flex-col rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1] ${
-                    olderPost ? "" : "sm:col-span-2"
-                  }`}
-                >
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-                    <ArrowLeft className="h-3 w-3" /> Newer article
-                  </span>
-                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#2563EB]">
-                    {newerPost.title}
-                  </p>
-                </Link>
-              ) : null}
-              {olderPost ? (
-                <Link
-                  href={`/blog/${olderPost.slug}`}
-                  className={`group flex flex-col items-end rounded-xl border border-[#E2E8F0] bg-white p-5 text-right transition hover:border-[#CBD5E1] ${
-                    newerPost ? "sm:col-start-2" : "sm:col-span-2"
-                  }`}
-                >
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-                    Older article <ArrowRight className="h-3 w-3" />
-                  </span>
-                  <p className="mt-1.5 text-[14px] font-semibold leading-snug text-[#0F172A] transition group-hover:text-[#2563EB]">
-                    {olderPost.title}
-                  </p>
-                </Link>
-              ) : null}
-            </nav>
-          ) : null}
-
-          {/* Related features — every post points to at least one relevant tool */}
-          <section className="mt-12 border-t border-[#E2E8F0] pt-8">
-            <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-              Related features
-            </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              {relatedFeatures.map((f) => (
-                <Link
-                  key={f.href}
-                  href={f.href}
-                  className="group rounded-xl border border-[#E2E8F0] bg-white p-5 transition hover:border-[#CBD5E1]"
-                >
-                  <p className="text-[14px] font-semibold text-[#0F172A] transition group-hover:text-[#2563EB]">
-                    {f.title}
-                  </p>
-                  <p className="mt-1 text-[13px] text-[#64748B]">{f.desc}</p>
-                </Link>
-              ))}
+            <div className="mt-12 flex flex-col items-start justify-between gap-5 rounded-2xl border border-[#E5E5E2] p-6 sm:flex-row sm:items-center">
+              <div>
+                <p className="text-[18px] font-semibold">Check your resume now</p>
+                <p className="mt-1 text-[15px] text-[#6B6B6B]">Free, no sign-up, about 10 seconds.</p>
+              </div>
+              <CtaLink
+                cta="free_ats_check"
+                location="blog_post"
+                href="/free-ats-check"
+                className="inline-flex h-[46px] shrink-0 items-center rounded-full bg-[#111111] px-5 text-[15px] font-medium text-white hover:bg-black"
+              >
+                Check my resume
+              </CtaLink>
             </div>
-          </section>
+
+            {post.faqs && post.faqs.length > 0 ? (
+              <section id="faq" className="mt-14">
+                <h2 className="text-[26px] font-semibold tracking-[-0.02em]">Frequently asked questions</h2>
+                <BlogFaq items={post.faqs} />
+              </section>
+            ) : null}
+
+            {post.tags.length > 0 ? (
+              <p className="mt-12 flex flex-wrap gap-2 border-t border-[#EEEEEB] pt-8">
+                {post.tags.map((tag) => (
+                  <span key={tag} className="rounded-full border border-[#E5E5E2] px-3 py-1.5 text-[13px] text-[#3F3F3F]">
+                    {tag}
+                  </span>
+                ))}
+              </p>
+            ) : null}
+
+            <section className="mt-12 border-t border-[#EEEEEB] pt-8">
+              <p className="text-[14px] text-[#6B6B6B]">Tools for this step</p>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {relatedFeatures.map((f) => (
+                  <Link key={f.href} href={f.href} className="group rounded-2xl border border-[#E5E5E2] p-5 hover:border-[#111111]">
+                    <p className="text-[16px] font-semibold group-hover:text-[#1D4ED8]">{f.title}</p>
+                    <p className="mt-1 text-[14px] leading-[1.5] text-[#6B6B6B]">{f.desc}</p>
+                  </Link>
+                ))}
+              </div>
+            </section>
+
+            {newerPost || olderPost ? (
+              <nav aria-label="More guides" className="mt-12 grid gap-4 border-t border-[#EEEEEB] pt-8 sm:grid-cols-2">
+                {newerPost ? (
+                  <Link
+                    href={`/blog/${newerPost.slug}`}
+                    className={`group flex flex-col ${olderPost ? "" : "sm:col-span-2"}`}
+                  >
+                    <span className="inline-flex items-center gap-1 text-[13px] text-[#6B6B6B]">
+                      <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Newer
+                    </span>
+                    <span className="mt-1 text-[16px] font-semibold leading-snug group-hover:text-[#1D4ED8]">
+                      {newerPost.title}
+                    </span>
+                  </Link>
+                ) : null}
+                {olderPost ? (
+                  <Link
+                    href={`/blog/${olderPost.slug}`}
+                    className={`group flex flex-col sm:items-end sm:text-right ${newerPost ? "sm:col-start-2" : "sm:col-span-2"}`}
+                  >
+                    <span className="inline-flex items-center gap-1 text-[13px] text-[#6B6B6B]">
+                      Older <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                    </span>
+                    <span className="mt-1 text-[16px] font-semibold leading-snug group-hover:text-[#1D4ED8]">
+                      {olderPost.title}
+                    </span>
+                  </Link>
+                ) : null}
+              </nav>
+            ) : null}
+          </div>
+
+          {showToc ? (
+            <aside className="sticky top-[96px] hidden w-[200px] shrink-0 self-start lg:block">
+              <BlogToc entries={toc} />
+            </aside>
+          ) : null}
         </div>
 
         {related.length > 0 ? (
-          <section className="border-t border-[#E2E8F0] bg-[#FAFBFC] py-16">
-            <div className="mx-auto max-w-[1280px] px-6">
-              <h2 className="text-[20px] font-semibold tracking-tight text-[#0F172A]">Related articles</h2>
-              <div className="mt-8 grid gap-5 sm:grid-cols-3">
+          <section className="bg-[#F5F5F3] py-16 sm:py-[72px]">
+            <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
+              <h2 className="text-[28px] font-semibold tracking-[-0.025em]">Keep reading</h2>
+              <div className="mt-6 grid gap-8 sm:grid-cols-3">
                 {related.map((rp) => (
-                  <Link
-                    key={rp.slug}
-                    href={`/blog/${rp.slug}`}
-                    className="group flex flex-col overflow-hidden rounded-xl border border-[#E2E8F0] bg-white p-4 transition hover:border-[#CBD5E1] hover:shadow-[0_10px_30px_-15px_rgba(15,23,42,0.15)]"
-                  >
+                  <Link key={rp.slug} href={`/blog/${rp.slug}`} className="group flex flex-col">
                     <BlogCover post={rp} size="sm" />
-                    <div className="mt-4 px-1 pb-1">
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">
-                        {rp.category}
-                      </span>
-                      <h3 className="mt-2 text-[15px] font-semibold leading-snug text-[#0F172A] transition-colors group-hover:text-[#2563EB]">
-                        {rp.title}
-                      </h3>
-                      <p className="mt-1.5 text-[12px] text-[#94A3B8]">{rp.readingTime} min read</p>
-                    </div>
+                    <span className="mt-4 text-[13px] text-[#6B6B6B]">{rp.category}</span>
+                    <span className="mt-1 text-[17px] font-semibold leading-snug group-hover:text-[#1D4ED8]">
+                      {rp.title}
+                    </span>
                   </Link>
                 ))}
               </div>
@@ -548,8 +504,8 @@ export default async function BlogPostPage({
       </main>
 
       <StickyCta
-        primaryHref="/register"
-        primaryLabel="Build my resume"
+        primaryHref="/free-ats-check"
+        primaryLabel="Check my resume — free"
         location="blog_post"
         revealAfter={900}
       />

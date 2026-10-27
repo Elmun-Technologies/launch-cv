@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { JobTrackerProClient, type JobRow } from "./job-tracker-pro-client";
+import { JobTrackerClient, type JobRow } from "./job-tracker-client";
 
 export default async function JobTrackerPage() {
   const session = await getSession();
@@ -27,14 +27,15 @@ export default async function JobTrackerPage() {
     title: r.title,
     company: r.company,
     status: r.status,
-    checklist: r.checklist,
+    jdExcerpt: r.jdText.slice(0, 1200),
     createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
     resume: r.resume,
   }));
 
   return (
-    <DashboardShell pageTitle="Job Tracker" email={session.email}>
-      <JobTrackerProClient initial={initial} resumes={resumes} />
+    <DashboardShell pageTitle="Job tracker" email={session.email}>
+      <JobTrackerClient initial={initial} resumes={resumes} />
     </DashboardShell>
   );
 }

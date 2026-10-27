@@ -1,66 +1,75 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
-import { JsonLd } from "@/components/json-ld";
-import { ArrowLeft, Mail, Shield } from "lucide-react";
+import { LegalPage, type LegalSection } from "@/components/marketing/legal-page";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
-import { absoluteUrl } from "@/lib/site";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Privacy Policy",
   description:
-    "How LaunchCV collects, stores, and protects your data. Session cookies, AI processing, export and deletion rights.",
+    "How LaunchCV collects, stores and protects your data: cookies and analytics, AI processing, payments, and your export and deletion rights.",
   pathname: "/legal/privacy",
   image: DEFAULT_OG_IMAGE,
   keywords: ["LaunchCV privacy policy", "GDPR", "CCPA", "data protection"],
 });
 
-const ld = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  name: "Privacy Policy | LaunchCV",
-  url: absoluteUrl("/legal/privacy"),
-};
-
-const sections = [
+const sections: LegalSection[] = [
   {
-    h: "Session cookies",
+    h: "Cookies and analytics",
     body: (
-      <p>
-        We use a single HTTP-only session cookie to keep you signed in. It is not used for tracking, advertising,
-        or third-party analytics. The cookie expires when your session ends.
-      </p>
+      <>
+        <p>
+          We use one HTTP-only session cookie to keep you signed in. It is never used for advertising.
+        </p>
+        <p className="mt-3">
+          To understand how the site is used, we run analytics tools — Google Analytics, PostHog and Mixpanel —
+          which set their own cookies or local storage. After you sign in, events are linked to your account ID,
+          not your name or email. Inside the app (your resumes, job tracker and settings) we record page views
+          and named events such as &ldquo;resume created&rdquo;, never what you type. You can block these tools with your
+          browser&apos;s privacy settings or a content blocker; the product keeps working.
+        </p>
+      </>
     ),
   },
   {
     h: "What we store",
     body: (
       <ul className="list-disc space-y-2 pl-5">
-        <li>Email and (optional) display name.</li>
-        <li>Password hash (bcrypt, never the plain password).</li>
-        <li>Resume content as structured JSON.</li>
-        <li>Job description analysis history and snapshots.</li>
-        <li>Internal product analytics: event names and timestamps. No PII inside event payloads.</li>
+        <li>Your email and, if you add it, your name.</li>
+        <li>A password hash (bcrypt), never the password itself. Google sign-in stores your Google account ID.</li>
+        <li>Your resumes, job applications, contacts, companies and email templates.</li>
+        <li>Job-description analyses, saved resume versions and monthly AI usage counts.</li>
+        <li>Your plan status from our payment provider.</li>
       </ul>
     ),
   },
   {
-    h: "Third-party processing",
+    h: "Who processes your data",
     body: (
-      <p>
-        Resume and job description fragments are sent to the OpenAI API to generate bullet rewrites, ATS
-        analyses, cover letters, and interview drills. Audio captured for Voice Input is streamed for
-        transcription and discarded immediately after — no audio file is persisted.
-      </p>
+      <ul className="list-disc space-y-2 pl-5">
+        <li>
+          <span className="font-medium text-[#111111]">OpenAI</span> — resume and job-description text you send to an
+          AI tool, to generate rewrites, analyses, cover letters and interview questions.
+        </li>
+        <li>
+          <span className="font-medium text-[#111111]">Polar</span> — checkout and billing. We never see or store card
+          details.
+        </li>
+        <li>
+          <span className="font-medium text-[#111111]">Google Analytics, PostHog, Mixpanel</span> — usage analytics, as
+          described above.
+        </li>
+        <li>
+          <span className="font-medium text-[#111111]">Google</span> — only if you choose &ldquo;Continue with
+          Google&rdquo;.
+        </li>
+      </ul>
     ),
   },
   {
-    h: "Payments",
+    h: "Voice input",
     body: (
       <p>
-        Subscriptions and one-time purchases are processed by Polar. We do not store credit-card
-        details. Polar holds the payment record; you can manage billing in their customer portal.
+        Voice input uses your browser&apos;s built-in speech recognition. LaunchCV receives the text, not the audio,
+        and stores no recordings. Your browser vendor may process the audio under its own policy.
       </p>
     ),
   },
@@ -68,27 +77,27 @@ const sections = [
     h: "Your rights",
     body: (
       <ul className="list-disc space-y-2 pl-5">
-        <li>Export your account data as JSON from the dashboard.</li>
-        <li>Delete your account (and all associated data) with password confirmation.</li>
-        <li>Request a manual erasure or export by emailing support — we respond within one business day.</li>
+        <li>Download all your data as JSON from Settings → Your data.</li>
+        <li>
+          Delete your account and everything in it from Settings → Your data. Cancel an active subscription in the
+          billing portal first.
+        </li>
+        <li>
+          Ask us to correct, export or erase your data by emailing{" "}
+          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline-offset-2 hover:underline">
+            support@launch-cv.com
+          </a>
+          .
+        </li>
       </ul>
-    ),
-  },
-  {
-    h: "Compliance",
-    body: (
-      <p>
-        LaunchCV is built to align with GDPR (EU) and CCPA (California). This page is a plain-language
-        overview; a full DPA is available on request for paid plans.
-      </p>
     ),
   },
   {
     h: "Updates",
     body: (
       <p>
-        Material changes to this policy will be announced via email and a banner inside the app. Last updated:{" "}
-        <span className="font-semibold text-[#0F172A]">May 14, 2026</span>.
+        If we change this policy in a material way, we&apos;ll tell signed-in users by email. Last updated:{" "}
+        <span className="font-medium text-[#111111]">October 27, 2026</span>.
       </p>
     ),
   },
@@ -96,59 +105,12 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#0F172A]">
-      <JsonLd data={ld} />
-      <LandingNav />
-
-      <section className="bg-[#FAFBFC] pt-[112px]">
-        <div className="mx-auto max-w-[860px] px-6 pb-12">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline">
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to home
-          </Link>
-          <span className="mt-6 inline-flex items-center gap-1.5 rounded-full border border-[#E2E8F0] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#475569]">
-            <Shield className="h-3.5 w-3.5 text-[#2563EB]" /> Legal
-          </span>
-          <h1 className="mt-4 lc-hero-headline text-[#0F172A]">Privacy Policy</h1>
-          <p className="mt-4 max-w-[640px] text-[15px] leading-[1.7] text-[#475569]">
-            How LaunchCV collects, stores, and protects your data. This is a plain-language summary of our
-            practices — for the full Data Processing Addendum, email{" "}
-            <a href="mailto:security@launch-cv.com" className="font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-              security@launch-cv.com
-            </a>
-            .
-          </p>
-        </div>
-      </section>
-
-      <section className="border-t border-[#E2E8F0] py-16">
-        <div className="mx-auto max-w-[860px] px-6">
-          <div className="space-y-10">
-            {sections.map((s, i) => (
-              <article key={s.h} className="border-l-2 border-[#E2E8F0] pl-6">
-                <p className="text-[12px] font-semibold uppercase tracking-wider text-[#94A3B8]">
-                  Section {String(i + 1).padStart(2, "0")}
-                </p>
-                <h2 className="mt-2 text-[22px] font-semibold tracking-tight text-[#0F172A]">{s.h}</h2>
-                <div className="mt-3 text-[15px] leading-[1.75] text-[#475569]">{s.body}</div>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-16 rounded-xl border border-[#E2E8F0] bg-[#FAFBFC] p-6">
-            <p className="text-[13px] font-semibold uppercase tracking-wider text-[#94A3B8]">Questions?</p>
-            <p className="mt-2 text-[15px] text-[#0F172A]">
-              Email{" "}
-              <a href="mailto:security@launch-cv.com" className="inline-flex items-center gap-1 font-semibold text-[#2563EB] underline-offset-2 hover:underline">
-                security@launch-cv.com
-                <Mail className="h-3.5 w-3.5" />
-              </a>{" "}
-              and we&apos;ll respond within one business day.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <LandingFooter />
-    </div>
+    <LegalPage
+      title="Privacy Policy"
+      updated="October 27, 2026"
+      pathname="/legal/privacy"
+      intro="What LaunchCV stores, who processes it, and how to download or delete it. Plain language, no surprises."
+      sections={sections}
+    />
   );
 }

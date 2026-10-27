@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ResumeToolLayout } from "@/components/resume-tool-layout";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
@@ -18,18 +18,14 @@ export default async function SnapshotsPage({ params }: Props) {
   if (!resume) notFound();
 
   return (
-    <main className="mx-auto max-w-2xl px-4 py-10">
-      <div className="flex flex-wrap gap-3 text-sm text-zinc-400">
-        <Link href={`/resume/${id}/edit`} className="hover:text-white">
-          ← Edit
-        </Link>
-        <Link href="/dashboard" className="hover:text-white">
-          Dashboard
-        </Link>
-      </div>
-      <h1 className="mt-6 text-2xl font-semibold text-white">Resume snapshots</h1>
-      <p className="mt-2 text-sm text-zinc-400">Restore to a previous version (overwrites the current resume).</p>
+    <ResumeToolLayout
+      resumeId={id}
+      resumeTitle={resume.title}
+      active="snapshots"
+      title="Versions"
+      lead="Save a version before big changes or for each application. Restoring a version replaces the current resume."
+    >
       <SnapshotsClient resumeId={id} initial={resume.snapshots.map((s) => ({ id: s.id, label: s.label, createdAt: s.createdAt.toISOString() }))} />
-    </main>
+    </ResumeToolLayout>
   );
 }

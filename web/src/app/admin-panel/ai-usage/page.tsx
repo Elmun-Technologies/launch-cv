@@ -35,40 +35,40 @@ export default async function AdminAiUsagePage() {
       header: "User",
       render: (u) => (
         <div className="min-w-0">
-          <p className="truncate text-[13px] font-medium text-[#0F172A]">{u.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#94A3B8]">{u.user.email}</p>
+          <p className="truncate text-[13px] font-medium text-[#111111]">{u.user.name || "—"}</p>
+          <p className="truncate text-[11px] text-[#8A8A86]">{u.user.email}</p>
         </div>
       ),
     },
     {
       key: "month",
       header: "Month",
-      render: (u) => <span className="font-mono text-[12px] font-semibold text-[#0F172A]">{u.month}</span>,
+      render: (u) => <span className="font-mono text-[12px] font-semibold text-[#111111]">{u.month}</span>,
     },
     {
       key: "jd",
       header: "JD",
       align: "right",
-      render: (u) => <span className="font-mono text-[12px] text-[#475569]">{u.jdCount}</span>,
+      render: (u) => <span className="font-mono text-[12px] text-[#3F3F3F]">{u.jdCount}</span>,
     },
     {
       key: "rf",
       header: "RoleFit",
       align: "right",
-      render: (u) => <span className="font-mono text-[12px] text-[#475569]">{u.roleFitCount}</span>,
+      render: (u) => <span className="font-mono text-[12px] text-[#3F3F3F]">{u.roleFitCount}</span>,
     },
     {
       key: "pk",
       header: "Packets",
       align: "right",
-      render: (u) => <span className="font-mono text-[12px] text-[#475569]">{u.packetCount}</span>,
+      render: (u) => <span className="font-mono text-[12px] text-[#3F3F3F]">{u.packetCount}</span>,
     },
     {
       key: "total",
       header: "Total",
       align: "right",
       render: (u) => (
-        <span className="font-mono text-[12px] font-semibold text-[#0F172A]">
+        <span className="font-mono text-[12px] font-semibold text-[#111111]">
           {u.jdCount + u.roleFitCount + u.packetCount}
         </span>
       ),
@@ -79,8 +79,8 @@ export default async function AdminAiUsagePage() {
     <AdminShell email={admin.email} pageTitle="AI usage">
       <div className="space-y-6">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#0F172A]">AI usage</h1>
-          <p className="mt-1 text-[13px] text-[#64748B]">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">AI usage</h1>
+          <p className="mt-1 text-[13px] text-[#6B6B6B]">
             Per-user monthly counters across the three rate-limited AI surfaces. Top 100 records shown.
           </p>
         </div>

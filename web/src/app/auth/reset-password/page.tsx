@@ -27,7 +27,7 @@ function Form() {
     const j = await res.json().catch(() => ({}));
     setLoading(false);
     if (!res.ok) {
-      setErr(j.error ?? "Couldn&apos;t reset password. The link may be expired.");
+      setErr(j.error ?? "Couldn't reset password. The link may be expired.");
       return;
     }
     setOk(true);

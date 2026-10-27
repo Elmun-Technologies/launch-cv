@@ -350,9 +350,17 @@ model FreeAtsTrial {
   fingerprint String?
   /// The score we returned, for funnel analytics.
   score       Int?
+  /// Full report (scores + every fix) so it can be shown after sign-up.
+  report      Json?
+  /// Unguessable token handed to the visitor; claiming it attaches the
+  /// report to their account.
+  claimToken  String?  @unique
+  /// Set once a signed-in user claims the report.
+  userId      String?
   createdAt   DateTime @default(now())
 
   @@index([ipHash, createdAt])
+  @@index([userId])
 }
 
 model AuditLog {
