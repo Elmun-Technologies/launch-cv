@@ -106,7 +106,7 @@ const faqs = [
   },
   {
     q: "Is my data safe and private?",
-    a: "Yes. Your data is encrypted in transit and at rest, and we never sell it. Voice audio is processed in-memory and discarded after transcription.",
+    a: "Your data is encrypted in transit and at rest, and we never sell it. Resume text is sent to our AI provider only to produce the results you ask for. Voice input uses your browser's speech recognition; we receive the text, not the audio.",
   },
   {
     q: "How long does building a resume take?",

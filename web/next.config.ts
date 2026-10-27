@@ -24,6 +24,8 @@ const nextConfig: NextConfig = {
       { source: "/use-cases/software-engineers", destination: "/resume-examples/software-engineer", statusCode: 301 },
       { source: "/use-cases/product-managers", destination: "/resume-examples/product-manager", statusCode: 301 },
       { source: "/use-cases/designers", destination: "/resume-examples/ux-designer", statusCode: 301 },
+      { source: "/dashboard/settings/notifications", destination: "/dashboard/settings", statusCode: 301 },
+      { source: "/dashboard/settings/overview", destination: "/dashboard", statusCode: 301 },
     ];
   },
 };

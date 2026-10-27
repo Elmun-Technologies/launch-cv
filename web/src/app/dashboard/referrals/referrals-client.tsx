@@ -13,7 +13,6 @@ import {
   UserPlus,
   Users,
   X,
-  Zap,
 } from "lucide-react";
 
 export type ReferralRow = {
@@ -54,12 +53,8 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
     () => rows.filter((r) => Boolean(r.referredEmail)).length,
     [rows],
   );
-  const creditedCount = useMemo(
-    () => rows.filter((r) => r.status === "credited").length,
-    [rows],
-  );
-  const creditsEarned = useMemo(
-    () => rows.filter((r) => r.status === "credited").reduce((sum, r) => sum + r.creditAmount, 0),
+  const signedUpCount = useMemo(
+    () => rows.filter((r) => r.status === "registered" || r.status === "credited").length,
     [rows],
   );
 
@@ -119,8 +114,6 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
     }
   }
 
-  const progressCurrent = totalReferrals % 5;
-  const progressPct = Math.min(100, Math.round((progressCurrent / 5) * 100));
 
   const [inviteDescription, setInviteDescription] = useState(
     `I've been using LaunchCV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
@@ -134,14 +127,13 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
 
   const stats = [
     { label: "Total Invited", value: totalReferrals, icon: Users, color: "bg-blue-50 text-[#2563EB]" },
-    { label: "Credited", value: creditedCount, icon: Check, color: "bg-emerald-50 text-emerald-600" },
-    { label: "Credits Earned", value: `$${creditsEarned}`, icon: Zap, color: "bg-amber-50 text-amber-600" },
+    { label: "Signed up", value: signedUpCount, icon: Check, color: "bg-emerald-50 text-emerald-600" },
   ];
 
   const steps = [
     { step: 1, icon: Link2, title: "Share your link", desc: "Send your unique referral link to friends" },
-    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "They create a LaunchCV account and activate a plan" },
-    { step: 3, icon: Gift, title: "Earn credits", desc: "Get $9 for every 5 successful referrals" },
+    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "Their account is linked to your invite" },
+    { step: 3, icon: Gift, title: "They start free", desc: "Everyone can run the ATS check before choosing a plan" },
   ];
 
   return (
@@ -159,7 +151,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
           </div>
           <h2 className="text-[15px] font-bold text-gray-900">Invite Friends to LaunchCV</h2>
           <p className="mt-1.5 text-[13px] leading-relaxed text-gray-500">
-            Get $9 in credit for every 5 people you refer. Share your unique link below.
+            Share your personal link. You can see here who signed up through it.
           </p>
 
           <div className="mt-6 flex items-center gap-2">
@@ -195,7 +187,7 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
       </div>
 
       {/* Stats Row */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         {stats.map((s) => (
           <div
             key={s.label}
@@ -233,23 +225,6 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-        <div className="flex items-center justify-between">
-          <h2 className="text-[15px] font-bold text-gray-900">Progress to next reward</h2>
-          <span className="text-[13px] font-semibold text-[#2563EB]">{progressCurrent}/5 referrals</span>
-        </div>
-        <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-blue-100">
-          <div
-            className="h-full rounded-full bg-[#2563EB] transition-all duration-500"
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-        <p className="mt-2 text-[13px] text-gray-500">
-          {5 - progressCurrent} more referral{5 - progressCurrent !== 1 ? "s" : ""} to earn your next $9 credit
-        </p>
       </div>
 
       {/* Share Section */}

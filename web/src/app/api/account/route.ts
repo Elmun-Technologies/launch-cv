@@ -9,6 +9,7 @@ import { trackEvent } from "@/lib/analytics";
 const patchSchema = z.object({
   name: z.string().max(120).optional(),
   newPassword: z.string().min(8).optional(),
+  currentPassword: z.string().min(1).optional(),
 });
 
 export async function PATCH(req: Request) {
@@ -26,7 +27,15 @@ export async function PATCH(req: Request) {
 
   const data: Record<string, unknown> = {};
   if (parsed.data.name !== undefined) data.name = parsed.data.name.trim() || null;
-  if (parsed.data.newPassword) data.passwordHash = await hashPassword(parsed.data.newPassword);
+  if (parsed.data.newPassword) {
+    // Changing an existing password requires the current one; Google-only accounts can set a first password.
+    const user = await prisma.user.findUnique({ where: { id: session.sub }, select: { passwordHash: true } });
+    if (user?.passwordHash) {
+      const ok = parsed.data.currentPassword ? await verifyPassword(parsed.data.currentPassword, user.passwordHash) : false;
+      if (!ok) return NextResponse.json({ error: "Your current password is incorrect." }, { status: 403 });
+    }
+    data.passwordHash = await hashPassword(parsed.data.newPassword);
+  }
 
   if (Object.keys(data).length === 0) {
     return NextResponse.json({ error: "No fields to update" }, { status: 400 });
@@ -37,7 +46,9 @@ export async function PATCH(req: Request) {
 }
 
 const deleteSchema = z.object({
-  password: z.string().min(1),
+  password: z.string().min(1).optional(),
+  /** Google-only accounts have no password; they confirm by typing their email. */
+  confirmEmail: z.string().min(1).optional(),
 });
 
 export async function DELETE(req: Request) {
@@ -51,22 +62,18 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "JSON" }, { status: 400 });
   }
   const parsed = deleteSchema.safeParse(body);
-  if (!parsed.success) return NextResponse.json({ error: "Password required" }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: "Validation error" }, { status: 400 });
 
   const user = await prisma.user.findUnique({ where: { id: session.sub } });
   if (!user) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  // Accounts created via Google have no password set — they can't confirm
-  // deletion with one. Ask them to set a password first (Account settings).
-  if (!user.passwordHash) {
-    return NextResponse.json(
-      { error: "Set a password before deleting your account.", code: "no_password" },
-      { status: 403 },
-    );
+  if (user.passwordHash) {
+    const ok = parsed.data.password ? await verifyPassword(parsed.data.password, user.passwordHash) : false;
+    if (!ok) return NextResponse.json({ error: "Incorrect password" }, { status: 403 });
+  } else if (parsed.data.confirmEmail?.trim().toLowerCase() !== user.email.toLowerCase()) {
+    // Accounts created with Google have no password; typing the email confirms intent.
+    return NextResponse.json({ error: "Type your account email to confirm." }, { status: 403 });
   }
-
-  const ok = await verifyPassword(parsed.data.password, user.passwordHash);
-  if (!ok) return NextResponse.json({ error: "Incorrect password" }, { status: 403 });
 
   await trackEvent("account_delete", { userId: user.id });
   await prisma.user.delete({ where: { id: user.id } });

@@ -2,17 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {
-  Loader2,
-  CreditCard,
-  Check,
-  Sparkles,
-  Crown,
-  HelpCircle,
-  Receipt,
-  ExternalLink,
-  Zap,
-} from "lucide-react";
+import { Check, ExternalLink, Loader2 } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { trackCheckoutStart, trackCtaClick, trackPlanSelected, getGaClientId } from "@/lib/analytics-client";
@@ -28,13 +18,6 @@ type StatusPayload = {
 
 /** Polar customer portal — set NEXT_PUBLIC_POLAR_PORTAL_URL to your org portal URL. */
 const PORTAL_URL = process.env.NEXT_PUBLIC_POLAR_PORTAL_URL || "https://polar.sh/purchases";
-
-const PLAN_ICONS: Record<CheckoutPlan, typeof Sparkles> = {
-  starter: Sparkles,
-  professional: Crown,
-  elite: Zap,
-  lifetime: Crown,
-};
 
 function planLabel(p: string | null | undefined): string {
   if (!p || p === "none") return "No active plan";
@@ -137,35 +120,38 @@ export function SubscriptionSettingsClient() {
     else setCheckoutError(typeof j.error === "string" ? j.error : "Couldn't open checkout. Please try again.");
   }
 
+  const renewDate = status?.currentPeriodEnd
+    ? new Date(status.currentPeriodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+    : null;
+
   return (
-    <div className="mx-auto max-w-6xl space-y-8 p-6">
+    <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
       <div>
-        <h1 className="text-[28px] font-bold text-gray-900">Subscription</h1>
-        <p className="mt-1 text-[15px] text-gray-500">
-          LaunchCV is a paid product — pick a plan that matches your search intensity. Upgrade anytime; Lifetime is a
-          one-time purchase.
-        </p>
+        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+          Plan &amp; billing <span className="text-[#8A8A86]">— every tool on every plan.</span>
+        </h1>
+        <p className="mt-1 text-[15px] text-[#6B6B6B]">Plans differ only in monthly limits. Cancel anytime from the billing portal.</p>
       </div>
 
       {returned ? (
         <div
           role="status"
-          className={`rounded-2xl border p-5 ${
-            returned === "slow" ? "border-amber-200 bg-amber-50" : "border-emerald-200 bg-emerald-50"
+          className={`rounded-[14px] border px-5 py-4 ${
+            returned === "slow" ? "border-[#F4D9B0] bg-[#FDF6EC]" : "border-[#CDEBDB] bg-[#EFFAF4]"
           }`}
         >
-          <p className="text-[14px] font-bold text-gray-900">
+          <p className="text-[15px] font-medium text-[#111111]">
             {returned === "confirmed"
               ? "Payment received — you're all set."
               : returned === "waiting"
                 ? "Payment received. Activating your plan…"
                 : "Payment received. Your plan is still activating."}
           </p>
-          <p className="mt-1 text-[13px] text-gray-700">
+          <p className="mt-1 text-[14px] text-[#3F3F3F]">
             {returned === "confirmed" ? (
               <>
                 Every AI tool is unlocked.{" "}
-                <Link href="/dashboard/resumes" className="font-semibold text-[#2563EB] hover:underline">
+                <Link href="/dashboard/resumes" className="font-medium text-[#1D4ED8] hover:underline">
                   Go to my resumes
                 </Link>
               </>
@@ -179,169 +165,122 @@ export function SubscriptionSettingsClient() {
       ) : null}
 
       {checkoutError ? (
-        <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-5">
-          <p className="text-[14px] font-bold text-red-900">{checkoutError}</p>
-          <p className="mt-1 text-[13px] text-red-800">
-            <a href={PORTAL_URL} target="_blank" rel="noreferrer" className="font-semibold underline">
+        <div role="alert" className="rounded-[14px] border border-[#F6D3CD] bg-[#FDF2F0] px-5 py-4">
+          <p className="text-[15px] font-medium text-[#B42318]">{checkoutError}</p>
+          <p className="mt-1 text-[14px] text-[#3F3F3F]">
+            <a href={PORTAL_URL} target="_blank" rel="noreferrer" className="font-medium underline">
               Open billing portal
             </a>{" "}
             ·{" "}
-            <Link href="/dashboard/support" className="font-semibold underline">
+            <Link href="/dashboard/support" className="font-medium underline">
               Contact support
             </Link>
           </p>
         </div>
       ) : null}
 
-      {!statusLoading && !paid && !returned ? (
-        <div className="rounded-2xl border border-amber-200 bg-amber-50/80 p-5 shadow-sm">
-          <p className="text-[14px] font-bold text-amber-950">No active plan</p>
-          <p className="mt-1 text-[13px] leading-relaxed text-amber-900/90">
-            AI features stay locked until checkout completes. Choose Starter, Professional, or Lifetime below.
-          </p>
+      <section className="flex flex-col gap-4 rounded-[14px] border border-[#E5E5E2] bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-[13px] text-[#6B6B6B]">Current plan</p>
+          {statusLoading ? (
+            <p className="mt-1 inline-flex items-center gap-2 text-[17px] text-[#6B6B6B]">
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading…
+            </p>
+          ) : (
+            <>
+              <p className="mt-0.5 text-[20px] font-semibold text-[#111111]">{paid ? planLabel(status?.plan ?? null) : "No plan yet"}</p>
+              <p className="mt-1 text-[14px] text-[#3F3F3F]">
+                {!paid
+                  ? "The ATS check stays free. Pick a plan below to unlock the AI tools."
+                  : currentPlan === "lifetime"
+                    ? "One-time purchase — no renewals."
+                    : renewDate
+                      ? `${status?.cancelAtPeriodEnd ? "Cancelled — access until" : "Renews on"} ${renewDate}.`
+                      : "Active."}
+              </p>
+            </>
+          )}
         </div>
-      ) : null}
-
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-[13px] font-medium text-gray-500">Current plan:</span>
-        {statusLoading ? (
-          <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-[12px] font-semibold text-gray-500">
-            <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            Loading…
-          </span>
-        ) : (
-          <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-semibold ${
-              paid ? "bg-blue-100 text-[#5B3FD9]" : "bg-gray-100 text-gray-700"
-            }`}
-          >
-            {paid ? <Crown className="h-3.5 w-3.5" /> : <Sparkles className="h-3.5 w-3.5" />}
-            {planLabel(status?.plan ?? null)}
-          </span>
-        )}
-      </div>
-
-      {paid && status?.currentPeriodEnd && currentPlan !== "lifetime" ? (
-        <p className="text-[13px] text-gray-500">
-          {status.cancelAtPeriodEnd ? "Access until " : "Renews "}
-          <span className="font-semibold text-gray-800">
-            {new Date(status.currentPeriodEnd).toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </span>
-          . Manage billing in your{" "}
+        {paid ? (
           <a
             href={PORTAL_URL}
             target="_blank"
             rel="noreferrer"
-            className="font-semibold text-[#2563EB] underline-offset-2 hover:underline"
+            className="soha-btn-secondary inline-flex shrink-0 items-center justify-center gap-1.5"
           >
-            Polar customer portal
-            <ExternalLink className="mb-0.5 ml-0.5 inline h-3 w-3" />
+            Manage billing &amp; invoices <ExternalLink className="h-3.5 w-3.5" aria-hidden />
           </a>
-          .
-        </p>
-      ) : null}
+        ) : null}
+      </section>
 
-      {paid && currentPlan === "lifetime" ? (
-        <p className="text-[13px] text-gray-500">
-          You are on <span className="font-semibold text-gray-800">Lifetime</span> — no renewals. Receipts are in your
-          Polar customer portal.
-        </p>
-      ) : null}
-
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-3">
         {CHECKOUT_PLAN_ORDER.map((key) => {
           const cfg = PUBLIC_PLANS[key];
-          const Icon = PLAN_ICONS[key];
           const bullets = planMarketingBullets(key);
           const isCurrent = paid && currentPlan === key;
           const isPopular = !!cfg.popular;
           return (
             <div
               key={key}
-              className={`relative flex flex-col rounded-2xl border-2 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] ${
-                isPopular ? "border-[#2563EB] shadow-[0_4px_24px_rgba(37, 99, 235,0.12)]" : "border-gray-100"
+              className={`relative flex flex-col rounded-[14px] border bg-white p-6 ${
+                isCurrent ? "border-[#111111]" : isPopular ? "border-[#2563EB] ring-1 ring-[#2563EB]" : "border-[#E5E5E2]"
               }`}
             >
-              {isPopular ? (
-                <span className="absolute -top-3 left-4 inline-flex rounded-full bg-[#2563EB] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white">
-                  Popular
+              {isCurrent ? (
+                <span className="absolute -top-2.5 left-5 rounded-full bg-[#111111] px-2.5 py-0.5 text-[12px] font-medium text-white">
+                  Your plan
+                </span>
+              ) : isPopular ? (
+                <span className="absolute -top-2.5 left-5 rounded-full bg-[#2563EB] px-2.5 py-0.5 text-[12px] font-medium text-white">
+                  Most popular
                 </span>
               ) : null}
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
-                <Icon className="h-5 w-5" />
-              </div>
-              <p className="mt-4 text-[15px] font-bold text-gray-900">{cfg.title}</p>
-              <p className="mt-1 min-h-[36px] text-[12px] leading-snug text-gray-500">{cfg.valueLine}</p>
-              <div className="mt-4 flex flex-wrap items-baseline gap-1">
-                <span className="text-[28px] font-bold text-gray-900">{cfg.priceDisplay}</span>
-                <span className="text-[13px] font-semibold text-gray-500">{cfg.periodLabel}</span>
-              </div>
-              <p className="mt-2 text-[11px] leading-snug text-gray-400">{cfg.billingExplainer}</p>
-              <div className="mt-5 flex-1 border-t border-gray-100 pt-5">
-                <ul className="space-y-2.5">
-                  {bullets.map((t) => (
-                    <li key={t} className="flex items-start gap-2 text-[12px] text-gray-600">
-                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#2563EB]" />
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <p className="text-[15px] font-semibold text-[#111111]">{cfg.title}</p>
+              <p className="mt-1 min-h-[40px] text-[13px] leading-snug text-[#6B6B6B]">{cfg.valueLine}</p>
+              <p className="mt-4 flex items-baseline gap-1">
+                <span className="text-[32px] font-semibold tracking-[-0.02em] text-[#111111]">{cfg.priceDisplay}</span>
+                <span className="text-[14px] text-[#6B6B6B]">{cfg.periodLabel}</span>
+              </p>
+              <p className="mt-1 text-[12px] leading-snug text-[#8A8A86]">{cfg.billingExplainer}</p>
+              <ul className="mt-5 flex-1 space-y-2.5 border-t border-[#EEEEEB] pt-5">
+                {bullets.map((t) => (
+                  <li key={t} className="flex items-start gap-2 text-[13px] text-[#3F3F3F]">
+                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#12A15E]" aria-hidden />
+                    {t}
+                  </li>
+                ))}
+              </ul>
               <button
                 type="button"
                 onClick={() => void startCheckout(key)}
                 disabled={!!loadingPlan || statusLoading || isCurrent}
-                className={`mt-6 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[13px] font-semibold transition ${
-                  isPopular
-                    ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8] disabled:opacity-50"
-                    : "border border-gray-200 text-gray-800 hover:border-gray-300 hover:bg-gray-50 disabled:opacity-50"
+                className={`mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium transition disabled:opacity-50 ${
+                  isPopular && !isCurrent
+                    ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
+                    : "border border-[#D9D9D5] text-[#111111] hover:border-[#111111]"
                 }`}
               >
-                {loadingPlan === key ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <CreditCard className="h-4 w-4" />
-                )}
-                {isCurrent ? "Current plan" : loadingPlan === key ? "Redirecting…" : `Choose ${cfg.title}`}
+                {loadingPlan === key ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                {isCurrent ? "Current plan" : loadingPlan === key ? "Opening checkout…" : `Choose ${cfg.title}`}
               </button>
             </div>
           );
         })}
       </div>
 
-      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-        <h2 className="text-[15px] font-bold text-gray-900">Billing history</h2>
-        <div className="mt-6 flex flex-col items-center py-8">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gray-50 text-gray-400">
-            <Receipt className="h-5 w-5" />
-          </div>
-          <p className="mt-3 text-[13px] font-medium text-gray-500">Invoices live in Polar</p>
-          <p className="mt-1 max-w-sm text-center text-[12px] text-gray-400">
-            After checkout, receipts and renewal history appear in your Polar customer portal.
-          </p>
-          <a
-            href={PORTAL_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-4 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline"
-          >
-            Open customer portal <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-center gap-2 pb-4">
-        <HelpCircle className="h-4 w-4 text-gray-400" />
-        <span className="text-[13px] text-gray-500">
-          Need help?{" "}
-          <Link href="/dashboard/support" className="font-semibold text-[#2563EB] transition hover:text-[#1D4ED8]">
+      <div className="flex flex-col gap-1 text-center text-[13px] text-[#6B6B6B]">
+        <p>
+          Secure checkout by Polar. 7-day money-back guarantee on monthly plans, 14 days on Lifetime.{" "}
+          <Link href="/legal/terms" className="underline hover:text-[#111111]">
+            Terms
+          </Link>
+        </p>
+        <p>
+          Questions about billing?{" "}
+          <Link href="/dashboard/support" className="font-medium text-[#1D4ED8] hover:underline">
             Contact support
           </Link>
-        </span>
+        </p>
       </div>
     </div>
   );

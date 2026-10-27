@@ -1,29 +1,72 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
-import {
-  ChevronRight, Loader2, X, Eye, EyeOff,
-  User, Lock, Link2, Briefcase, Sparkles, Check,
-} from "lucide-react";
-import { subscriptionRowGrantsPro } from "@/lib/entitlements";
-import { PUBLIC_PLANS, PUBLIC_PRICING } from "@/lib/monetization";
+import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
+import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
+import { PUBLIC_PLANS } from "@/lib/monetization";
+import { AccountDataSection } from "./account-data-section";
 
-type Sub = { status: string; currentPeriodEnd: string | null } | null;
+type Sub = { status: string; currentPeriodEnd: string | null; cancelAtPeriodEnd: boolean; lifetime: boolean } | null;
+type Msg = { ok: boolean; text: string } | null;
 
-const settingsNav = [
-  { href: "/dashboard/settings", label: "Edit Profile", exact: true },
-  { href: "/dashboard/settings/overview", label: "Overview" },
-  { href: "/dashboard/settings/subscription", label: "Subscription" },
-  { href: "/dashboard/referrals", label: "Referrals" },
-  { href: "/dashboard/settings/notifications", label: "Notification" },
-];
+function Card({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
+  return (
+    <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
+      <h2 className="text-[17px] font-semibold text-[#111111]">{title}</h2>
+      {sub ? <p className="mt-1 text-[14px] text-[#6B6B6B]">{sub}</p> : null}
+      <div className="mt-5">{children}</div>
+    </section>
+  );
+}
+
+function Status({ msg }: { msg: Msg }) {
+  if (!msg) return null;
+  return (
+    <p role={msg.ok ? "status" : "alert"} className={`text-[14px] ${msg.ok ? "text-[#0E7A48]" : "text-[#B42318]"}`}>
+      {msg.text}
+    </p>
+  );
+}
+
+function PasswordInput({
+  value,
+  onChange,
+  autoComplete,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  autoComplete: string;
+}) {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="relative">
+      <input
+        type={show ? "text" : "password"}
+        autoComplete={autoComplete}
+        className="soha-input pr-10"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      <button
+        type="button"
+        aria-label={show ? "Hide password" : "Show password"}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8A8A86] hover:text-[#111111]"
+        onClick={() => setShow((s) => !s)}
+      >
+        {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+      </button>
+    </div>
+  );
+}
+
+const fmtDate = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 
 export function SettingsClient({
   subscription,
   userName,
   userEmail,
+  emailVerified = false,
   hasPassword = true,
   googleLinked = false,
 }: {
@@ -32,309 +75,174 @@ export function SettingsClient({
   googleLinked?: boolean;
   subscription: Sub;
   userName?: string | null;
-  userEmail?: string | null;
+  userEmail: string;
 }) {
-  const pathname = usePathname();
-  const isPro = subscriptionRowGrantsPro(
+  const paid = subscriptionRowGrantsPaid(
     subscription
-      ? {
-          status: subscription.status,
-          currentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null,
-        }
+      ? { status: subscription.status, currentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null }
       : null,
   );
+  const renews = paid && subscription && !subscription.lifetime && !subscription.cancelAtPeriodEnd;
 
-  const [firstName, setFirstName] = useState(userName?.split(" ")[0] ?? "");
-  const [lastName, setLastName] = useState(userName?.split(" ").slice(1).join(" ") ?? "");
-  const [email, setEmail] = useState(userEmail ?? "");
-  const [phone, setPhone] = useState("");
-  const [username, setUsername] = useState("");
-  const [wantEmails, setWantEmails] = useState(true);
-  const [jobTitle, setJobTitle] = useState("");
-  const [profileUrl, setProfileUrl] = useState("");
+  const [name, setName] = useState(userName ?? "");
+  const [savingName, setSavingName] = useState(false);
+  const [nameMsg, setNameMsg] = useState<Msg>(null);
+
+  const [havePassword, setHavePassword] = useState(hasPassword);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showNewPw, setShowNewPw] = useState(false);
-  const [showConfirmPw, setShowConfirmPw] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [billingMsg, setBillingMsg] = useState<string | null>(null);
+  const [savingPw, setSavingPw] = useState(false);
+  const [pwMsg, setPwMsg] = useState<Msg>(null);
 
-  async function saveProfile() {
-    setSaving(true);
-    setBillingMsg(null);
-    const body: Record<string, string> = {};
-    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
-    if (fullName) body.name = fullName;
-    if (newPassword && newPassword === confirmPassword) body.newPassword = newPassword;
-    if (newPassword && newPassword !== confirmPassword) {
-      setBillingMsg("Passwords do not match");
-      setSaving(false);
-      return;
-    }
+  async function patch(body: Record<string, string>): Promise<Msg> {
     const res = await fetch("/api/account", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
-    });
-    setSaving(false);
-    if (!res.ok) {
-      const j = await res.json().catch(() => ({}));
-      setBillingMsg(j.error ?? "Could not save");
-      return;
-    }
-    setBillingMsg("Profile saved successfully!");
+    }).catch(() => null);
+    if (res?.ok) return null;
+    const j = res ? await res.json().catch(() => ({})) : {};
+    return { ok: false, text: typeof j.error === "string" ? j.error : "Couldn't save. Please try again." };
+  }
+
+  async function saveName(e: React.FormEvent) {
+    e.preventDefault();
+    setSavingName(true);
+    setNameMsg(null);
+    const err = await patch({ name: name.trim() });
+    setSavingName(false);
+    setNameMsg(err ?? { ok: true, text: "Saved." });
+  }
+
+  async function savePassword(e: React.FormEvent) {
+    e.preventDefault();
+    setPwMsg(null);
+    if (newPassword.length < 8) return setPwMsg({ ok: false, text: "Use at least 8 characters." });
+    if (newPassword !== confirmPassword) return setPwMsg({ ok: false, text: "The two passwords don't match." });
+    setSavingPw(true);
+    const err = await patch(havePassword ? { currentPassword, newPassword } : { newPassword });
+    setSavingPw(false);
+    if (err) return setPwMsg(err);
+    setPwMsg({ ok: true, text: havePassword ? "Password updated." : "Password set. You can now sign in with your email too." });
+    setHavePassword(true);
+    setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
   }
 
-  const isSuccess = billingMsg === "Profile saved successfully!";
-
   return (
-    <div className="flex gap-8">
-      {/* ── Left Nav ── */}
-      <div className="hidden w-56 shrink-0 lg:block">
-        <h2 className="text-[17px] font-bold text-gray-900">Settings</h2>
-        <nav className="mt-5 space-y-1">
-          {settingsNav.map((item) => {
-            const active = item.exact ? pathname === item.href : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center justify-between rounded-xl px-3 py-2.5 text-[13px] transition-all ${
-                  active
-                    ? "bg-[#2563EB] font-semibold text-white shadow-[0_2px_8px_rgba(37, 99, 235,0.25)]"
-                    : "text-gray-500 hover:bg-blue-50 hover:text-gray-900"
-                }`}
-              >
-                <span>{item.label}</span>
-                <ChevronRight className={`h-4 w-4 ${active ? "text-white/70" : "text-gray-300"}`} />
-              </Link>
-            );
-          })}
-        </nav>
+    <div className="mx-auto flex max-w-[720px] flex-col gap-5">
+      <div>
+        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">Settings</h1>
+        <p className="mt-1 text-[15px] text-[#6B6B6B]">Your profile, sign-in and data.</p>
       </div>
 
-      {/* ── Right Content ── */}
-      <div className="min-w-0 flex-1">
-        {!isPro ? (
-          <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[#2563EB]/20 bg-gradient-to-r from-blue-50 to-white p-5 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-start gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2563EB] text-white">
-                <Sparkles className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[14px] font-bold text-gray-900">
-                  Plans from {PUBLIC_PLANS.starter.priceDisplay}
-                  {PUBLIC_PLANS.starter.periodLabel} · Lifetime {PUBLIC_PLANS.lifetime.priceDisplay}
-                </p>
-                <p className="mt-1 text-[12px] leading-relaxed text-gray-600">{PUBLIC_PRICING.upsellHook}</p>
-              </div>
-            </div>
-            <Link
-              href="/dashboard/settings/subscription"
-              className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#2563EB] px-5 py-2.5 text-[13px] font-bold text-white transition hover:bg-[#1D4ED8]"
-            >
-              Upgrade
-            </Link>
-          </div>
-        ) : null}
-        <div className="rounded-2xl border border-gray-100 bg-white p-8 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          {/* Header */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100">
-                <User className="h-4 w-4 text-[#2563EB]" />
-              </div>
-              <div>
-                <h2 className="text-[28px] font-bold leading-tight text-gray-900">Profile Information</h2>
-                <p className="mt-0.5 text-[13px] text-gray-400">Manage your personal details and preferences</p>
-              </div>
-            </div>
-            <button type="button" className="flex h-9 w-9 items-center justify-center rounded-xl text-gray-400 transition hover:bg-gray-50 hover:text-gray-600">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-
-          <div className="mt-8 space-y-0">
-            {/* ── Section: Personal Details ── */}
-            <div className="pb-7">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
-                  <User className="h-3.5 w-3.5 text-[#2563EB]" />
-                </div>
-                <h3 className="text-[15px] font-bold text-gray-900">Personal Details</h3>
-              </div>
-
-              <div className="mt-5 space-y-5">
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="text-[12px] font-semibold text-gray-700">First Name*</label>
-                    <input className="soha-input mt-1.5" value={firstName} onChange={(e) => setFirstName(e.target.value)} placeholder="First name" />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-semibold text-gray-700">Last Name*</label>
-                    <input className="soha-input mt-1.5" value={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last name" />
-                  </div>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div>
-                    <label className="text-[12px] font-semibold text-gray-700">Email*</label>
-                    <input className="soha-input mt-1.5" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
-                  </div>
-                  <div>
-                    <label className="text-[12px] font-semibold text-gray-700">Phone*</label>
-                    <input className="soha-input mt-1.5" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+888+" />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-[12px] font-semibold text-gray-700">Username*</label>
-                  <div className="mt-1.5 flex">
-                    <span className="flex items-center rounded-l-xl border border-r-0 border-gray-100 bg-[#FAFAFA] px-3 text-[13px] text-gray-400">HTTPS://</span>
-                    <input className="soha-input rounded-l-none" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="www.linkedin.com" />
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2.5">
-                  <input type="checkbox" checked={wantEmails} onChange={(e) => setWantEmails(e.target.checked)} className="h-4 w-4 rounded border-gray-200 text-[#2563EB] accent-[#2563EB]" />
-                  <span className="text-[13px] text-gray-500">Yes, I want to receive emails</span>
-                </div>
-
-                <div>
-                  <label className="text-[12px] font-semibold text-gray-700">Photo*</label>
-                  <div className="mt-2 flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#2563EB] to-[#60A5FA] text-sm font-bold text-white shadow-[0_2px_8px_rgba(37, 99, 235,0.3)]">
-                      {firstName?.[0]?.toUpperCase() ?? "U"}
-                    </div>
-                    <button type="button" className="rounded-xl bg-[#2563EB] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)]">Upload</button>
-                    <button type="button" className="rounded-xl border border-[#2563EB]/20 px-4 py-2 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50">Reset</button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-[12px] font-semibold text-gray-700">
-                    <span className="flex items-center gap-1.5">
-                      <Briefcase className="h-3 w-3 text-gray-400" />
-                      Job Title
-                    </span>
-                  </label>
-                  <textarea className="soha-textarea mt-1.5 min-h-[80px]" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} placeholder="Senior Product Designer" />
-                  <p className="mt-1 text-[11px] text-gray-400">Brief description for your profile. URLs are hyperlinked</p>
-                </div>
-              </div>
-            </div>
-
-            {/* ── Section: Social Links ── */}
-            <div className="border-t border-gray-100 pb-7 pt-7">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
-                  <Link2 className="h-3.5 w-3.5 text-[#2563EB]" />
-                </div>
-                <h3 className="text-[15px] font-bold text-gray-900">Social Links</h3>
-              </div>
-
-              <div className="mt-5">
-                <label className="text-[12px] font-semibold text-gray-700">URL</label>
-                <div className="mt-1.5 flex">
-                  <span className="flex items-center rounded-l-xl border border-r-0 border-gray-100 bg-[#FAFAFA] px-3 text-[13px] text-gray-400">HTTPS://</span>
-                  <input className="soha-input rounded-l-none" value={profileUrl} onChange={(e) => setProfileUrl(e.target.value)} placeholder="www.linkedin.com" />
-                </div>
-              </div>
-            </div>
-
-            {/* ── Section: Security ── */}
-            <div className="border-t border-gray-100 pb-7 pt-7">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-50">
-                  <Lock className="h-3.5 w-3.5 text-[#2563EB]" />
-                </div>
-                <div>
-                  <h3 className="text-[15px] font-bold text-gray-900">
-                    {hasPassword ? "Change Password" : "Set a Password"}
-                  </h3>
-                  <p className="mt-0.5 text-[12px] text-gray-400">
-                    {hasPassword
-                      ? "Update your password to keep your account secure"
-                      : "Add a password so you can also sign in with email — and delete your account later if you choose"}
-                  </p>
-                </div>
-              </div>
-
-              {googleLinked ? (
-                <div className="mt-4 flex items-center gap-2.5 rounded-xl border border-gray-100 bg-[#FAFAFA] px-4 py-3">
-                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100">
-                    <Check className="h-3 w-3 text-emerald-600" />
-                  </span>
-                  <p className="text-[12px] text-gray-600">
-                    Connected to <span className="font-semibold text-gray-800">Google</span>
-                    {userEmail ? ` (${userEmail})` : ""}. You can sign in with Google
-                    {hasPassword ? " or your email password." : "."}
-                  </p>
-                </div>
-              ) : null}
-
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="text-[12px] font-semibold text-gray-700">
-                    {hasPassword ? "New Password" : "Password"}
-                  </label>
-                  <div className="relative mt-1.5">
-                    <input type={showNewPw ? "text" : "password"} className="soha-input pr-10" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="••••••••••" />
-                    <button type="button" tabIndex={-1} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-600" onClick={() => setShowNewPw((s) => !s)}>
-                      {showNewPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-[12px] font-semibold text-gray-700">Confirm Password</label>
-                  <div className="relative mt-1.5">
-                    <input type={showConfirmPw ? "text" : "password"} className="soha-input pr-10" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="••••••••••" />
-                    <button type="button" tabIndex={-1} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 transition hover:text-gray-600" onClick={() => setShowConfirmPw((s) => !s)}>
-                      {showConfirmPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* ── Footer: Terms + Actions ── */}
-            <div className="border-t border-gray-100 pt-6">
-              <div className="flex items-center gap-2.5">
-                <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} className="h-4 w-4 rounded border-gray-200 text-[#2563EB] accent-[#2563EB]" />
-                <span className="text-[13px] text-gray-500">I agree to the Terms, Privacy and Fees</span>
-              </div>
-
-              {billingMsg && (
-                <div className={`mt-4 rounded-xl px-4 py-3 text-[13px] font-medium ${
-                  isSuccess
-                    ? "bg-emerald-50 text-emerald-700"
-                    : "bg-red-50 text-red-600"
-                }`}>
-                  {billingMsg}
-                </div>
+      <Card title="Profile">
+        <form onSubmit={saveName} className="flex flex-col gap-4">
+          <label>
+            <span className="soha-label mb-1.5">Full name</span>
+            <input
+              className="soha-input"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              maxLength={120}
+              autoComplete="name"
+            />
+          </label>
+          <div>
+            <span className="soha-label mb-1.5">Email</span>
+            <div className="flex h-[42px] items-center justify-between gap-3 rounded-[10px] border border-[#EEEEEB] bg-[#FAFAF9] px-3 text-[14px] text-[#3F3F3F]">
+              <span className="truncate">{userEmail}</span>
+              {emailVerified ? (
+                <span className="inline-flex shrink-0 items-center gap-1 text-[13px] text-[#0E7A48]">
+                  <Check className="h-3.5 w-3.5" aria-hidden /> Verified
+                </span>
+              ) : (
+                <span className="shrink-0 text-[13px] text-[#B2610A]">Not verified</span>
               )}
-
-              <div className="mt-5 flex gap-3">
-                <button
-                  type="button"
-                  disabled={saving}
-                  onClick={() => void saveProfile()}
-                  className="rounded-xl bg-[#2563EB] px-6 py-2.5 text-[13px] font-semibold text-white transition-all hover:bg-[#1D4ED8] hover:shadow-[0_4px_12px_rgba(37, 99, 235,0.25)] disabled:opacity-60"
-                >
-                  {saving ? <Loader2 className="mr-1.5 inline h-4 w-4 animate-spin" /> : null}
-                  Save Changes
-                </button>
-                <button type="button" className="rounded-xl border border-[#2563EB]/20 px-6 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-blue-50">
-                  Cancel
-                </button>
-              </div>
             </div>
+            <p className="mt-1.5 text-[13px] text-[#8A8A86]">
+              To change your email, write to{" "}
+              <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] hover:underline">
+                support@launch-cv.com
+              </a>
+              .
+            </p>
           </div>
+          <div className="flex items-center gap-4">
+            <button type="submit" disabled={savingName} className="soha-btn-primary inline-flex items-center gap-2 disabled:opacity-60">
+              {savingName ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+              Save
+            </button>
+            <Status msg={nameMsg} />
+          </div>
+        </form>
+      </Card>
+
+      <Card
+        title="Sign-in"
+        sub={havePassword ? "Change the password you use with your email." : "Add a password so you can also sign in with your email."}
+      >
+        {googleLinked ? (
+          <p className="mb-5 flex items-center gap-2 rounded-[10px] border border-[#EEEEEB] bg-[#FAFAF9] px-3 py-2.5 text-[14px] text-[#3F3F3F]">
+            <Check className="h-4 w-4 shrink-0 text-[#0E7A48]" aria-hidden />
+            Google sign-in is connected.
+          </p>
+        ) : null}
+        <form onSubmit={savePassword} className="flex flex-col gap-4">
+          {havePassword ? (
+            <label>
+              <span className="soha-label mb-1.5">Current password</span>
+              <PasswordInput value={currentPassword} onChange={setCurrentPassword} autoComplete="current-password" />
+            </label>
+          ) : null}
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label>
+              <span className="soha-label mb-1.5">{havePassword ? "New password" : "Password"}</span>
+              <PasswordInput value={newPassword} onChange={setNewPassword} autoComplete="new-password" />
+            </label>
+            <label>
+              <span className="soha-label mb-1.5">Repeat it</span>
+              <PasswordInput value={confirmPassword} onChange={setConfirmPassword} autoComplete="new-password" />
+            </label>
+          </div>
+          <div className="flex items-center gap-4">
+            <button
+              type="submit"
+              disabled={savingPw || !newPassword || (havePassword && !currentPassword)}
+              className="soha-btn-primary inline-flex items-center gap-2 disabled:opacity-60"
+            >
+              {savingPw ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+              {havePassword ? "Update password" : "Set password"}
+            </button>
+            <Status msg={pwMsg} />
+          </div>
+        </form>
+      </Card>
+
+      <Card title="Plan">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[14px] text-[#3F3F3F]">
+            {!paid ? (
+              <>No plan yet. Plans start at {PUBLIC_PLANS.starter.priceDisplay}/month.</>
+            ) : subscription?.lifetime ? (
+              <>Lifetime access.</>
+            ) : subscription?.currentPeriodEnd ? (
+              <>
+                {renews ? "Renews" : "Active until"} {fmtDate(subscription.currentPeriodEnd)}.
+              </>
+            ) : (
+              <>Active.</>
+            )}
+          </p>
+          <Link href="/dashboard/settings/subscription" className="soha-btn-secondary shrink-0 text-center">
+            {paid ? "Manage plan" : "See plans"}
+          </Link>
         </div>
-      </div>
+      </Card>
+
+      <AccountDataSection hasPassword={havePassword} email={userEmail} hasActiveSubscription={!!renews} />
     </div>
   );
 }

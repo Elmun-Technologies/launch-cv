@@ -14,12 +14,12 @@ import {
 } from "lucide-react";
 
 const FAQ = [
-  { q: "How do I create a new resume?", a: "Go to Resume Builder and click 'Start fresh' to create a new resume from scratch, or upload an existing one." },
+  { q: "How do I create a new resume?", a: "Open Resumes and click New resume. Start from scratch, or upload a PDF or DOCX to fill in every section for you." },
   { q: "How does the JD alignment work?", a: "Paste a job description and our AI will analyze how well your resume matches the requirements, then suggest improvements." },
   { q: "Can I export my resume as PDF?", a: "Yes! Open any resume in the editor and click the PDF button in the top toolbar to download it instantly." },
-  { q: "How do I track my job applications?", a: "Use the Job Tracker to organize your applications through stages: Bookmarked, Applying, Interviewing, Negotiating, and Accepted." },
-  { q: "Is my data secure?", a: "Yes. All data is encrypted in transit and at rest. We never share your personal information with third parties." },
-  { q: "What are referral credits?", a: "Invite friends using your referral link. For every 5 people who sign up, you earn $9 in credits toward premium features." },
+  { q: "How do I track my job applications?", a: "Add each job in the Job Tracker with the posting and the resume you sent, then move it through Saved, Applied, Interviewing, Offer, Accepted or Closed." },
+  { q: "Is my data secure?", a: "Data is encrypted in transit and at rest, and we never sell it. Resume text is sent to our AI provider only to generate the results you request. You can export or delete your account from Settings." },
+  { q: "How do referrals work?", a: "Share your personal link from the Referrals page. You can see who signed up through it." },
 ];
 
 const ARTICLES = [

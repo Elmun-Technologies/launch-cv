@@ -12,14 +12,23 @@ export default async function SettingsPage() {
   const sub = await prisma.subscription.findUnique({ where: { userId: session.sub } });
 
   return (
-    <DashboardShell pageTitle="Overview" email={session.email}>
+    <DashboardShell pageTitle="Settings" email={session.email}>
       <SettingsClient
         emailVerified={!!user?.emailVerifiedAt}
         hasPassword={!!user?.passwordHash}
         googleLinked={!!user?.googleId}
-        subscription={sub ? { status: sub.status, currentPeriodEnd: sub.currentPeriodEnd?.toISOString() ?? null } : null}
+        subscription={
+          sub
+            ? {
+                status: sub.status,
+                currentPeriodEnd: sub.currentPeriodEnd?.toISOString() ?? null,
+                cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
+                lifetime: sub.stripeSubscriptionId.startsWith("order:"),
+              }
+            : null
+        }
         userName={user?.name}
-        userEmail={user?.email}
+        userEmail={user?.email ?? session.email}
       />
     </DashboardShell>
   );
