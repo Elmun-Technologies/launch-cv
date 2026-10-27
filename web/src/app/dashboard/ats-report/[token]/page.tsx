@@ -84,10 +84,10 @@ export default async function AtsReportPage({ params }: { params: Promise<{ toke
                 Import your resume, apply the fixes with AI rewrites and download a clean PDF.
               </p>
               <Link
-                href="/dashboard/resumes"
+                href="/resume/new"
                 className="mt-4 inline-flex h-11 items-center rounded-full bg-white px-5 text-[14px] font-medium text-[#111111]"
               >
-                Open my resumes
+                Import my resume
               </Link>
             </div>
             <Link

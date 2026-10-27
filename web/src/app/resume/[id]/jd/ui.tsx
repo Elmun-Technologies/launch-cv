@@ -1,7 +1,8 @@
 "use client";
 
+import { ToolNotice } from "@/components/tool-notice";
+
 import Link from "next/link";
-import { trackCtaClick } from "@/lib/analytics-client";
 import { useState } from "react";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
@@ -13,8 +14,7 @@ import {
   X,
   AlertTriangle,
   ArrowRight,
-  CreditCard,
-} from "lucide-react";
+  } from "lucide-react";
 
 function StatusDot({ status }: { status: string }) {
   if (status === "met")
@@ -143,23 +143,7 @@ export function JdClient({ resumeId }: { resumeId: string }) {
         {loading ? "AI is processing..." : "Analyze"}
       </button>
 
-      {error ? (
-        <div className="soha-card flex items-start gap-3 border-red-200 bg-red-50">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-          <div>
-            <p className="text-sm text-red-600">{error}</p>
-            {upgrade ? (
-              <Link
-                href="/dashboard/settings/subscription"
-                onClick={() => trackCtaClick({ cta: "upgrade", location: "jd_paywall" })}
-                className="mt-1 inline-flex items-center gap-1 text-xs text-blue-600 hover:underline"
-              >
-                <CreditCard className="h-3 w-3" /> Upgrade to Pro
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+      {error ? <ToolNotice message={error} upgrade={upgrade} location="jd_paywall" /> : null}
 
       {loading ? <Skeleton /> : null}
 

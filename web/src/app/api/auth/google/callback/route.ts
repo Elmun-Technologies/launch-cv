@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
-import { emptyResumeContent } from "@/types/resume";
 import { trackEvent } from "@/lib/analytics";
 import { SIGNUP_FLAG_COOKIE } from "@/lib/analytics-enabled";
 import { isAdminUser } from "@/lib/admin-guard";
@@ -142,15 +141,6 @@ export async function GET(req: Request) {
         },
       });
       isNewUser = true;
-      await prisma.resume.create({
-        data: {
-          userId: user.id,
-          title: "My first resume",
-          vertical: "software",
-          regionMode: "us",
-          content: emptyResumeContent() as object,
-        },
-      });
       if (stateCookie.ref) {
         await creditReferral(stateCookie.ref, user.id, user.email).catch(() => undefined);
       }

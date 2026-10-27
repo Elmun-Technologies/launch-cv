@@ -402,10 +402,15 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         </div>
 
         {enhanceError ? (
-          <div className="mt-2 rounded-2xl border border-red-200 bg-red-50 p-4">
-            <p className="text-[13px] text-red-700">{enhanceError.message}</p>
+          <div
+            role={enhanceError.upgrade ? "status" : "alert"}
+            className={`mt-2 flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between ${
+              enhanceError.upgrade ? "border-[#DCE6FF] bg-[#EEF3FF]" : "border-red-200 bg-red-50"
+            }`}
+          >
+            <p className={`text-[14px] ${enhanceError.upgrade ? "text-[#111111]" : "text-red-700"}`}>{enhanceError.message}</p>
             {enhanceError.upgrade ? (
-              <Link href="/dashboard/settings/subscription" className="mt-2.5 inline-flex rounded-full bg-[#2563EB] px-3.5 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8]">See plans</Link>
+              <Link href="/dashboard/settings/subscription" className="inline-flex h-9 shrink-0 items-center justify-center rounded-full bg-[#2563EB] px-4 text-[13px] font-medium text-white transition hover:bg-[#1D4ED8]">See plans</Link>
             ) : null}
           </div>
         ) : null}

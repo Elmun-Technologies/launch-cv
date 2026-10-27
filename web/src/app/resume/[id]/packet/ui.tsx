@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { trackCtaClick } from "@/lib/analytics-client";
+import { ToolNotice } from "@/components/tool-notice";
+
 import { useState } from "react";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
@@ -9,8 +9,6 @@ import { useAiUsage } from "@/hooks/use-ai-usage";
 import type { PacketResult } from "@/types/ai-results";
 import {
   Loader2,
-  AlertTriangle,
-  CreditCard,
   Copy,
   Check,
   MessageSquare,
@@ -118,23 +116,7 @@ export function PacketClient({ resumeId }: { resumeId: string }) {
         {loading ? "Generating..." : "Generate packet"}
       </button>
 
-      {error ? (
-        <div className="soha-card flex items-start gap-3 border-red-200 bg-red-50">
-          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
-          <div>
-            <p className="text-sm text-red-600">{error}</p>
-            {upgrade ? (
-              <Link
-                href="/dashboard/settings/subscription"
-                onClick={() => trackCtaClick({ cta: "upgrade", location: "packet_paywall" })}
-                className="mt-1 inline-flex items-center gap-1 text-xs text-[#2563EB] hover:underline"
-              >
-                <CreditCard className="h-3 w-3" /> Upgrade to Pro
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
+      {error ? <ToolNotice message={error} upgrade={upgrade} location="packet_paywall" /> : null}
 
       {loading ? <Skeleton /> : null}
 

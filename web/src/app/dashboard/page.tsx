@@ -27,6 +27,10 @@ const STAGE: Record<string, "saved" | "applied" | "interview" | "offer"> = {
   accepted: "offer",
 };
 
+function joinedToday(d: Date): boolean {
+  return Date.now() - d.getTime() < 24 * 60 * 60 * 1000;
+}
+
 function ago(d: Date): string {
   const s = Math.max(0, (Date.now() - d.getTime()) / 1000);
   if (s < 60 * 60) return `${Math.max(1, Math.round(s / 60))} min ago`;
@@ -46,7 +50,7 @@ export default async function DashboardHomePage() {
   if (!session) redirect("/login");
 
   const [user, plan, resumes, resumeCount, apps, ats] = await Promise.all([
-    prisma.user.findUnique({ where: { id: session.sub }, select: { name: true } }),
+    prisma.user.findUnique({ where: { id: session.sub }, select: { name: true, createdAt: true } }),
     getUserPlanId(session.sub),
     prisma.resume.findMany({
       where: { userId: session.sub },
@@ -69,6 +73,7 @@ export default async function DashboardHomePage() {
 
   const firstName = user?.name?.trim().split(/\s+/)[0];
   const paid = plan !== "none";
+  const isNew = !!user && joinedToday(user.createdAt);
   const report = ats && isReport(ats.report) ? ats.report : null;
   const topFix = report?.fixes.find((f) => f.priority === "High") ?? report?.fixes[0];
 
@@ -83,7 +88,8 @@ export default async function DashboardHomePage() {
       <div className="mx-auto flex max-w-[1180px] flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-[26px] font-semibold tracking-[-0.025em] sm:text-[28px]">
-            {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+            {isNew ? "Welcome" : "Welcome back"}
+            {firstName ? `, ${firstName}` : ""}
           </h1>
           <div className="flex gap-2">
             <Link
@@ -251,13 +257,13 @@ function NextStep({
     return (
       <div className={`${box} border-[#DCE6FF] bg-[#EEF3FF]`}>
         <div className="flex-1">
-          <p className="text-[17px] font-semibold">Start by checking the resume you have</p>
+          <p className="text-[17px] font-semibold">Start with the resume you already have</p>
           <p className="mt-1 text-[15px] text-[#3F3F3F]">
-            Get your ATS score and the fixes that matter most, then edit it here.
+            Upload a PDF or Word file and every section is filled in for you to edit. No resume yet? Build one from scratch.
           </p>
         </div>
-        <CtaLink cta="free_ats_check" location="dashboard_next_step" href="/free-ats-check" className={btn}>
-          Check my resume
+        <CtaLink cta="import_resume" location="dashboard_next_step" href="/resume/new" className={btn}>
+          Import my resume
         </CtaLink>
       </div>
     );
