@@ -12,6 +12,7 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { RESUME_EXAMPLES, exampleResumeText, getResumeExample } from "@/lib/resume-examples";
+import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 
 type Params = { slug: string };
 
@@ -229,6 +230,17 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
               <p className="text-[17px] leading-[1.65] text-[#3F3F3F]">
                 <strong className="font-semibold text-[#111111]">Why it works:</strong> {e.whyItWorks}
               </p>
+              {getCoverLetterExample(e.slug) ? (
+                <p className="text-[16px] text-[#3F3F3F]">
+                  Applying with a cover letter?{" "}
+                  <Link
+                    href={`/cover-letter-examples/${e.slug}`}
+                    className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
+                  >
+                    See {r.name.split(" ")[0]}&apos;s cover letter, annotated
+                  </Link>
+                </p>
+              ) : null}
             </section>
 
             {/* SUMMARIES */}

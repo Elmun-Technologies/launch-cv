@@ -55,6 +55,11 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
 
 const USE_CASE_PAGES: { title: string; path: string; summary: string }[] = [
   {
+    title: "Cover letter examples",
+    path: "/cover-letter-examples",
+    summary: "Annotated cover letter examples by job, each written by the same person as the matching resume example, with tips and an FAQ.",
+  },
+  {
     title: "Resume templates",
     path: "/resume-templates",
     summary: "Four ATS-friendly resume templates (Classic, Modern, Minimal, Executive): single column, standard headings, real text, PDF export.",
