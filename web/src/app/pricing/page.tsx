@@ -115,12 +115,6 @@ function planCtaLabel(key: CheckoutPlan): string {
   return key === "lifetime" ? "Buy Lifetime" : `Choose ${PUBLIC_PLANS[key].title}`;
 }
 
-const planTagline: Record<CheckoutPlan, string> = {
-  starter: "For a focused job search",
-  professional: "For applying to many roles a week",
-  lifetime: "Pay once, no renewals",
-  elite: "For high-volume applicants",
-};
 
 const limitRows = [
   { l: "Job-description analyses", k: "jd" },
@@ -128,13 +122,14 @@ const limitRows = [
   { l: "Role-fit checks", k: "roleFit" },
 ] as const;
 
+/** `free`: available without a plan. The AI tools are the paid part. */
 const toolRows = [
-  "Resume editor and PDF export",
-  "All 4 resume templates",
-  "Bullet rewrites and summary writer",
-  "Cover letters and interview prep",
-  "Company matcher and voice input",
-  "Job tracker, contacts and companies",
+  { l: "Resume editor and PDF export", free: true },
+  { l: "All 4 resume templates", free: true },
+  { l: "Job tracker, contacts and companies", free: true },
+  { l: "Bullet rewrites and summary writer", free: false },
+  { l: "Cover letters and interview prep", free: false },
+  { l: "Company matcher and email drafts", free: false },
 ];
 
 export default function PricingPage() {
@@ -183,7 +178,7 @@ export default function PricingPage() {
                         {key === "lifetime" ? "once" : "/month"}
                       </span>
                     </p>
-                    <p className="mt-1 text-[14px] text-[#6B6B6B]">{planTagline[key]}</p>
+                    <p className="mt-1 text-[14px] text-[#6B6B6B]">{cfg.valueLine}</p>
                   </div>
                   <CtaLink
                     cta="choose_plan"
@@ -236,12 +231,12 @@ export default function PricingPage() {
             <table className="w-full min-w-[640px] border-collapse text-[15px] [font-feature-settings:'tnum']">
               <thead>
                 <tr className="border-b border-[#EEEEEB] text-[#6B6B6B]">
-                  <th className="w-[40%] py-4 text-left font-medium">
+                  <th className="w-[36%] py-4 text-left font-medium">
                     <span className="sr-only">Feature</span>
                   </th>
-                  <th className="py-4 font-medium">Free</th>
+                  <th className="w-[16%] py-4 font-medium">Free</th>
                   {CHECKOUT_PLAN_ORDER.map((key) => (
-                    <th key={key} className={`py-4 font-medium ${PUBLIC_PLANS[key].popular ? "text-[#111111]" : ""}`}>
+                    <th key={key} className={`w-[16%] py-4 font-medium ${PUBLIC_PLANS[key].popular ? "text-[#111111]" : ""}`}>
                       {PUBLIC_PLANS[key].title}
                     </th>
                   ))}
@@ -249,7 +244,7 @@ export default function PricingPage() {
               </thead>
               <tbody>
                 <tr className="border-b border-[#EEEEEB]">
-                  <td className="py-4">ATS score and report</td>
+                  <td className="py-4">ATS check and report</td>
                   <td className="py-4 text-center">
                     <Check className="mx-auto h-4 w-4" aria-label="Included" />
                   </td>
@@ -270,10 +265,12 @@ export default function PricingPage() {
                     ))}
                   </tr>
                 ))}
-                {toolRows.map((l) => (
-                  <tr key={l} className="border-b border-[#EEEEEB]">
-                    <td className="py-4">{l}</td>
-                    <td className="py-4 text-center text-[#6E6E6A]">—</td>
+                {toolRows.map((r) => (
+                  <tr key={r.l} className="border-b border-[#EEEEEB]">
+                    <td className="py-4">{r.l}</td>
+                    <td className="py-4 text-center text-[#6E6E6A]">
+                      {r.free ? <Check className="mx-auto h-4 w-4 text-[#111111]" aria-label="Included" /> : "—"}
+                    </td>
                     {CHECKOUT_PLAN_ORDER.map((key) => (
                       <td key={key} className="py-4 text-center">
                         <Check className="mx-auto h-4 w-4" aria-label="Included" />
@@ -316,7 +313,7 @@ export default function PricingPage() {
                 alt="Two people shaking hands across a desk"
                 fill
                 sizes="(min-width: 768px) 46vw, 100vw"
-                className="object-cover"
+                className="object-cover object-[50%_70%]"
               />
             </div>
           </div>

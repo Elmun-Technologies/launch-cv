@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { DashboardShell } from "@/components/dashboard-shell";
+import { normalizeChecklist } from "@/lib/application-checklist";
 import { JobTrackerClient, type JobRow } from "./job-tracker-client";
 
 export default async function JobTrackerPage() {
@@ -28,6 +29,7 @@ export default async function JobTrackerPage() {
     company: r.company,
     status: r.status,
     jdExcerpt: r.jdText.slice(0, 1200),
+    checklist: normalizeChecklist(r.checklist),
     createdAt: r.createdAt.toISOString(),
     updatedAt: r.updatedAt.toISOString(),
     resume: r.resume,

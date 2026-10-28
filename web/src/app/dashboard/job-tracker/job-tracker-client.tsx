@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, Plus, Search, X } from "lucide-react";
+import { Check, Loader2, Plus, Search, X } from "lucide-react";
+import { normalizeChecklist, type ChecklistItem } from "@/lib/application-checklist";
 
 export type JobRow = {
   id: string;
@@ -13,6 +14,7 @@ export type JobRow = {
   jdExcerpt: string;
   createdAt: string;
   updatedAt: string;
+  checklist: ChecklistItem[];
   resume: { id: string; title: string };
 };
 
@@ -81,6 +83,17 @@ export function JobTrackerClient({
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
+    }).catch(() => null);
+    if (!res?.ok) setRows(prev);
+  }
+
+  async function updateChecklist(id: string, checklist: ChecklistItem[]) {
+    const prev = rows;
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, checklist } : r)));
+    const res = await fetch(`/api/applications/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ checklist }),
     }).catch(() => null);
     if (!res?.ok) setRows(prev);
   }
@@ -182,6 +195,7 @@ export function JobTrackerClient({
           app={selected}
           onClose={() => setSelectedId(null)}
           onStage={(s) => void updateStage(selected.id, s)}
+          onChecklist={(next) => void updateChecklist(selected.id, next)}
           onDelete={() => void remove(selected.id)}
         />
       ) : null}
@@ -204,11 +218,13 @@ function ApplicationDrawer({
   app,
   onClose,
   onStage,
+  onChecklist,
   onDelete,
 }: {
   app: JobRow;
   onClose: () => void;
   onStage: (s: StageKey) => void;
+  onChecklist: (next: ChecklistItem[]) => void;
   onDelete: () => void;
 }) {
   const [notes, setNotes] = useState<NoteRow[] | null>(null);
@@ -284,6 +300,37 @@ function ApplicationDrawer({
                 );
               })}
             </div>
+          </div>
+
+          <div>
+            <p className={labelCls}>
+              Checklist{" "}
+              <span className="font-normal text-[#6E6E6A]">
+                {app.checklist.filter((i) => i.done).length}/{app.checklist.length}
+              </span>
+            </p>
+            <ul className="flex flex-col gap-1">
+              {app.checklist.map((item) => (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    role="checkbox"
+                    aria-checked={item.done}
+                    onClick={() => onChecklist(app.checklist.map((i) => (i.id === item.id ? { ...i, done: !i.done } : i)))}
+                    className="flex w-full items-center gap-2.5 rounded-[8px] py-1 text-left text-[14px] hover:bg-[#FAFAF9]"
+                  >
+                    <span
+                      className={`flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-[5px] border ${
+                        item.done ? "border-[#111111] bg-[#111111] text-white" : "border-[#D9D9D5] bg-white"
+                      }`}
+                    >
+                      {item.done ? <Check className="h-3 w-3" aria-hidden /> : null}
+                    </span>
+                    <span className={item.done ? "text-[#6E6E6A] line-through" : "text-[#111111]"}>{item.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>
@@ -417,6 +464,7 @@ function CreateDialog({
       title: form.title.trim() || null,
       status: form.status,
       jdExcerpt: form.jdText.trim().slice(0, 1200),
+      checklist: normalizeChecklist(j.application.checklist),
       createdAt: now,
       updatedAt: now,
       resume: { id: form.resumeId, title: resumes.find((x) => x.id === form.resumeId)?.title ?? "Resume" },

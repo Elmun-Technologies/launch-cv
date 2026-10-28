@@ -232,7 +232,7 @@ export function SubscriptionSettingsClient() {
                 </span>
               ) : isPopular ? (
                 <span className="absolute -top-2.5 left-5 rounded-full bg-[#2563EB] px-2.5 py-0.5 text-[12px] font-medium text-white">
-                  Most popular
+                  Most picked
                 </span>
               ) : null}
               <p className="text-[15px] font-semibold text-[#111111]">{cfg.title}</p>

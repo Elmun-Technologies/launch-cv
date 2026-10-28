@@ -207,7 +207,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
         </div>
 
         {usage && !usage.paid && !hideTopBanner ? (
-          <div role="region" aria-label="Plan" className="flex items-center justify-between gap-3 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px]">
+          <div role="region" aria-label="Plan" className="flex items-center justify-between gap-3 border-b border-[#DCE6FF] bg-[#EEF3FF] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px] lg:hidden">
             <p className="min-w-0 text-[#111111]">
               <span className="sm:hidden">AI tools from {PUBLIC_PLANS.starter.priceDisplay}/mo</span>
               <span className="hidden sm:inline">

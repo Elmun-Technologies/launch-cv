@@ -8,9 +8,10 @@ import { ResumePreview, type TemplateStyle } from "@/components/resume-preview";
 import { TEMPLATE_SPECS, TEMPLATE_STYLES, parseTemplate } from "@/lib/resume-templates";
 import { VoiceInput } from "@/components/voice-input";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
+import { LogoMark } from "@/components/logo";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import {
-  Award, Loader2, Check, MessageSquare, Plus, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download, Save,
+  Award, Loader2, Check, MessageSquare, Plus, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download,
   Home, FileText, Briefcase, Users, Building2, HelpCircle, Settings, Puzzle, Gift,
   User, GraduationCap, AlignLeft, Wrench, ChevronRight, ChevronLeft, ArrowLeft,
 } from "lucide-react";
@@ -53,10 +54,10 @@ function generateLocalFixes(c: ResumeContent): string[] {
 }
 
 const TABS = [
-  { key: "details", label: "Your Details", subtitle: "Contact info & personal details", icon: User },
+  { key: "details", label: "Contact", subtitle: "Name, email and links", icon: User },
   { key: "experience", label: "Experience", subtitle: "Work history & achievements", icon: Briefcase },
   { key: "education", label: "Education", subtitle: "Degrees & certifications", icon: GraduationCap },
-  { key: "shortbio", label: "Short Bio", subtitle: "Summary, headline & template", icon: AlignLeft },
+  { key: "shortbio", label: "Summary", subtitle: "Summary, headline & template", icon: AlignLeft },
   { key: "skills", label: "Skills", subtitle: "Technical & professional skills", icon: Wrench },
 ] as const;
 type TabKey = (typeof TABS)[number]["key"];
@@ -64,10 +65,10 @@ type TabKey = (typeof TABS)[number]["key"];
 const NAV_TOP = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
   { href: "/dashboard/resumes", icon: FileText, label: "Resumes" },
-  { href: "/dashboard/job-tracker", icon: Briefcase, label: "Job Tracker" },
+  { href: "/dashboard/job-tracker", icon: Briefcase, label: "Job tracker" },
   { href: "/dashboard/contacts", icon: Users, label: "Contacts" },
   { href: "/dashboard/companies", icon: Building2, label: "Companies" },
-  { href: "/dashboard/support", icon: HelpCircle, label: "Support" },
+  { href: "/dashboard/support", icon: HelpCircle, label: "Help" },
 ];
 
 const NAV_BOTTOM = [
@@ -87,11 +88,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>("details");
-  const [twitter, setTwitter] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [stateVal, setStateVal] = useState("");
-  const [websiteVal, setWebsiteVal] = useState("");
   const [newSkill, setNewSkill] = useState("");
   const [, setShowSkillInput] = useState(false);
   // Remembered per resume in this browser; sent with every PDF export.
@@ -178,9 +174,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const addRec = () => setContent((c) => ({ ...c, recommendations: [...(c.recommendations ?? []), { id: uid(), recommenderName: "", recommenderRole: "", company: "", relationship: "", text: "" }] }));
   const delRec = (id: string) => setContent((c) => ({ ...c, recommendations: (c.recommendations ?? []).filter((x) => x.id !== id) }));
 
-  const firstName = content.contact.fullName?.split(" ")[0] ?? "";
-  const lastName = content.contact.fullName?.split(" ").slice(1).join(" ") ?? "";
-  function setName(f: string, l: string) { setContent((c) => ({ ...c, contact: { ...c.contact, fullName: `${f} ${l}`.trim() } })); }
 
   const activeTabIdx = TABS.findIndex((t) => t.key === activeTab);
 
@@ -213,7 +206,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           type="button"
           onClick={prevTab}
           disabled={isFirst}
-          className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E2] px-5 py-2.5 text-[13px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-full border border-[#D9D9D5] px-5 py-2.5 text-[13px] font-medium text-[#3F3F3F] transition hover:border-[#111111] disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="h-4 w-4" /> Back
         </button>
@@ -231,7 +224,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           className="inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-          {isLast ? "Save & Finish" : "Save & Next"}
+          {isLast ? "Finish" : "Next"}
           {!isLast && <ChevronRight className="h-4 w-4" />}
         </button>
       </div>
@@ -259,66 +252,55 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   }
 
   function renderDetailsTab() {
+    const links = content.contact.links ?? [];
+    const setContact = (patch: Partial<ResumeContent["contact"]>) => setContent((c) => ({ ...c, contact: { ...c.contact, ...patch } }));
+    /** links[0] is LinkedIn, links[1] a portfolio or website; renderers skip empty slots. */
+    const setLink = (i: number, v: string) => {
+      const next = [links[0] ?? "", links[1] ?? "", ...links.slice(2)];
+      next[i] = v.trim();
+      while (next.length && !next[next.length - 1]) next.pop();
+      setContact({ links: next });
+    };
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-[18px] font-semibold text-[#111111]">Contact Information</h2>
-          <p className="mt-1 text-[13px] text-[#6B6B6B]">This is how recruiters will reach you</p>
+          <h2 className="text-[18px] font-semibold text-[#111111]">Contact details</h2>
+          <p className="mt-1 text-[14px] text-[#6B6B6B]">The top of your resume — how a recruiter reaches you.</p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">First Name <span className="text-red-400">*</span></label>
-            <input className="soha-input mt-1.5" value={firstName} onChange={(e) => setName(e.target.value, lastName)} placeholder="John" />
-          </div>
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">Last Name <span className="text-red-400">*</span></label>
-            <input className="soha-input mt-1.5" value={lastName} onChange={(e) => setName(firstName, e.target.value)} placeholder="Doe" />
-          </div>
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">Email <span className="text-red-400">*</span></label>
-            <input className="soha-input mt-1.5" type="email" value={content.contact.email} onChange={(e) => setContent((c) => ({ ...c, contact: { ...c.contact, email: e.target.value } }))} placeholder="john@example.com" />
-          </div>
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">Phone <span className="text-red-400">*</span></label>
-            <input className="soha-input mt-1.5" value={content.contact.phone ?? ""} onChange={(e) => setContent((c) => ({ ...c, contact: { ...c.contact, phone: e.target.value } }))} placeholder="+1 (555) 123-4567" />
-          </div>
-        </div>
-
-        <div>
-          <label className="text-[13px] font-semibold text-[#3F3F3F]">LinkedIn</label>
-          <div className="mt-1.5 flex">
-            <span className="flex items-center rounded-l-xl border border-r-0 border-[#E5E5E2] bg-[#FAFAF9] px-3 text-[13px] text-[#6E6E6A]">https://</span>
-            <input className="soha-input rounded-l-none" value={(content.contact.links ?? [])[0]?.replace(/^https?:\/\//i, "") ?? ""} onChange={(e) => setContent((c) => ({ ...c, contact: { ...c.contact, links: [`https://${e.target.value.replace(/^https?:\/\//i, "")}`] } }))} placeholder="linkedin.com/in/your-name" />
-          </div>
-        </div>
-
-        <div>
-          <label className="text-[13px] font-semibold text-[#3F3F3F]">Twitter / X</label>
-          <input className="soha-input mt-1.5" value={twitter} onChange={(e) => setTwitter(e.target.value)} placeholder="@username" />
-        </div>
-
-        <div className="border-t border-[#EEEEEB] pt-5">
-          <h3 className="text-[16px] font-semibold text-[#111111]">Address</h3>
-          <p className="mt-1 text-[12px] text-[#6E6E6A]">Optional — some jobs require a location</p>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">Address</label>
-            <input className="soha-input mt-1.5" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="123 Main St" />
-          </div>
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">City</label>
-            <input className="soha-input mt-1.5" value={city} onChange={(e) => setCity(e.target.value)} placeholder="San Francisco" />
-          </div>
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">State</label>
-            <input className="soha-input mt-1.5" value={stateVal} onChange={(e) => setStateVal(e.target.value)} placeholder="CA" />
-          </div>
-          <div>
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">Website</label>
-            <input className="soha-input mt-1.5" value={websiteVal} onChange={(e) => setWebsiteVal(e.target.value)} placeholder="www.example.com" />
-          </div>
+          <label className="sm:col-span-2">
+            <span className="soha-label mb-1.5">Full name</span>
+            <input className="soha-input" value={content.contact.fullName} onChange={(e) => setContact({ fullName: e.target.value })} placeholder="Maria Lopez" autoComplete="name" />
+          </label>
+          <label>
+            <span className="soha-label mb-1.5">Email</span>
+            <input className="soha-input" type="email" value={content.contact.email} onChange={(e) => setContact({ email: e.target.value })} placeholder="maria.lopez@email.com" autoComplete="email" />
+          </label>
+          <label>
+            <span className="soha-label mb-1.5">
+              Phone <span className="font-normal text-[#6E6E6A]">· optional</span>
+            </span>
+            <input className="soha-input" type="tel" value={content.contact.phone ?? ""} onChange={(e) => setContact({ phone: e.target.value })} placeholder="(512) 555-0142" autoComplete="tel" />
+          </label>
+          <label className="sm:col-span-2">
+            <span className="soha-label mb-1.5">
+              Location <span className="font-normal text-[#6E6E6A]">· optional</span>
+            </span>
+            <input className="soha-input" value={content.contact.location ?? ""} onChange={(e) => setContact({ location: e.target.value })} placeholder="Austin, TX — or Remote" autoComplete="address-level2" />
+            <span className="mt-1.5 block text-[13px] text-[#6E6E6A]">City and state or country is enough. Leave out your street address.</span>
+          </label>
+          <label>
+            <span className="soha-label mb-1.5">
+              LinkedIn <span className="font-normal text-[#6E6E6A]">· optional</span>
+            </span>
+            <input className="soha-input" value={links[0] ?? ""} onChange={(e) => setLink(0, e.target.value)} placeholder="linkedin.com/in/marialopez" />
+          </label>
+          <label>
+            <span className="soha-label mb-1.5">
+              Portfolio or website <span className="font-normal text-[#6E6E6A]">· optional</span>
+            </span>
+            <input className="soha-input" value={links[1] ?? ""} onChange={(e) => setLink(1, e.target.value)} placeholder="marialopez.com" autoComplete="url" />
+          </label>
         </div>
 
         {renderNavFooter()}
@@ -334,7 +316,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             Briefcase,
             "No experience added yet",
             "Click the button below or use voice input to describe your work history. Our AI will help you write impactful bullet points.",
-            "Add Experience",
+            "Add experience",
             addExp,
           )}
           {renderNavFooter()}
@@ -351,11 +333,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         {content.experience.map((ex) => (
           <div key={ex.id} className="rounded-xl border border-[#EEEEEB] bg-white p-4 transition hover:shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-[15px] font-semibold text-[#111111]">{ex.role || ex.company || "New Experience"}{ex.company && ex.role ? ` at ${ex.company}` : ""}</h3>
+              <h3 className="text-[15px] font-semibold text-[#111111]">{ex.role || ex.company || "New job"}{ex.company && ex.role ? ` at ${ex.company}` : ""}</h3>
               <button type="button" onClick={() => delExp(ex.id)} className="rounded-lg p-1.5 text-[#8A8A86] transition hover:bg-red-50 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
             </div>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
-              <input className="soha-input" value={ex.role} onChange={(e) => setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, role: e.target.value } : x) }))} placeholder="Job Title" />
+              <input className="soha-input" value={ex.role} onChange={(e) => setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, role: e.target.value } : x) }))} placeholder="Job title" />
               <input className="soha-input" value={ex.company} onChange={(e) => setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, company: e.target.value } : x) }))} placeholder="Company" />
               <input className="soha-input" value={ex.location ?? ""} onChange={(e) => setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, location: e.target.value } : x) }))} placeholder="Location" />
               <input className="soha-input" value={`${ex.start}${ex.end ? ` - ${ex.end}` : ""}`} onChange={(e) => { const parts = e.target.value.split(" - "); setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, start: parts[0] ?? "", end: parts[1] ?? "" } : x) })); }} placeholder="Jun 2022 - Dec 2023" />
@@ -387,7 +369,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         ))}
 
         <div className="flex flex-wrap gap-3">
-          <button type="button" onClick={addExp} className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"><Plus className="h-4 w-4" />Add Experience</button>
+          <button type="button" onClick={addExp} className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB] px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"><Plus className="h-4 w-4" />Add experience</button>
           <button type="button" disabled={enhancing || content.experience.length === 0} onClick={async () => {
             setEnhancing(true); setEnhanceResult(null); setEnhanceError(null);
             const r = await fetch("/api/ai/impact-rewrite", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) }).catch(() => null);
@@ -454,14 +436,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {content.education.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-[#E5E5E2] p-6 text-center">
               <p className="text-[13px] text-[#6E6E6A]">No education added yet</p>
-              <button type="button" onClick={addEdu} className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#2563EB] px-4 py-2 text-[12px] font-semibold text-white"><Plus className="h-3.5 w-3.5" />Add Education</button>
+              <button type="button" onClick={addEdu} className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#2563EB] px-4 py-2 text-[12px] font-semibold text-white"><Plus className="h-3.5 w-3.5" />Add education</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
               {content.education.map((ed) => (
                 <div key={ed.id} className="rounded-xl border border-[#EEEEEB] p-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-[14px] font-semibold text-[#111111]">{ed.school || "New School"}</p>
+                    <p className="text-[14px] font-semibold text-[#111111]">{ed.school || "New school"}</p>
                     <button type="button" onClick={() => delEdu(ed.id)} className="rounded-lg p-1 text-[#8A8A86] hover:text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -473,7 +455,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addEdu} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addEdu} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add another</button>
             </div>
           )}
         </div>
@@ -487,14 +469,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {certs.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-[#E5E5E2] p-5 text-center">
               <p className="text-[13px] text-[#6E6E6A]">No certifications yet — add AWS, Google, PMP, etc.</p>
-              <button type="button" onClick={addCert} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Certification</button>
+              <button type="button" onClick={addCert} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add certification</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
               {certs.map((c) => (
                 <div key={c.id} className="rounded-xl border border-[#EEEEEB] p-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-[14px] font-semibold text-[#111111]">{c.name || "New Certification"}</p>
+                    <p className="text-[14px] font-semibold text-[#111111]">{c.name || "New certification"}</p>
                     <button type="button" onClick={() => delCert(c.id)} className="rounded-lg p-1 text-[#8A8A86] hover:text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -505,7 +487,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addCert} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addCert} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add another</button>
             </div>
           )}
         </div>
@@ -519,14 +501,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {achievements.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-[#E5E5E2] p-5 text-center">
               <p className="text-[13px] text-[#6E6E6A]">Stand out — add awards, scholarships, or notable achievements</p>
-              <button type="button" onClick={addAchievement} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Achievement</button>
+              <button type="button" onClick={addAchievement} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add achievement</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
               {achievements.map((a) => (
                 <div key={a.id} className="rounded-xl border border-[#EEEEEB] p-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-[14px] font-semibold text-[#111111]">{a.title || "New Achievement"}</p>
+                    <p className="text-[14px] font-semibold text-[#111111]">{a.title || "New achievement"}</p>
                     <button type="button" onClick={() => delAchievement(a.id)} className="rounded-lg p-1 text-[#8A8A86] hover:text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -536,7 +518,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addAchievement} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addAchievement} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add another</button>
             </div>
           )}
         </div>
@@ -550,14 +532,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {recs.length === 0 ? (
             <div className="mt-3 rounded-xl border border-dashed border-[#E5E5E2] p-5 text-center">
               <p className="text-[13px] text-[#6E6E6A]">Add references — recruiters value peer endorsements</p>
-              <button type="button" onClick={addRec} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Recommendation</button>
+              <button type="button" onClick={addRec} className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add recommendation</button>
             </div>
           ) : (
             <div className="mt-3 space-y-3">
               {recs.map((r) => (
                 <div key={r.id} className="rounded-xl border border-[#EEEEEB] p-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-[14px] font-semibold text-[#111111]">{r.recommenderName || "New Recommendation"}</p>
+                    <p className="text-[14px] font-semibold text-[#111111]">{r.recommenderName || "New recommendation"}</p>
                     <button type="button" onClick={() => delRec(r.id)} className="rounded-lg p-1 text-[#8A8A86] hover:text-red-500"><Trash2 className="h-3.5 w-3.5" /></button>
                   </div>
                   <div className="mt-3 grid gap-2 sm:grid-cols-2">
@@ -569,7 +551,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={addRec} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add Another</button>
+              <button type="button" onClick={addRec} className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB]"><Plus className="h-3.5 w-3.5" />Add another</button>
             </div>
           )}
         </div>
@@ -583,7 +565,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-[18px] font-semibold text-[#111111]">Professional Summary &amp; Bio</h2>
+          <h2 className="text-[18px] font-semibold text-[#111111]">Summary and headline</h2>
           <p className="mt-1 text-[13px] text-[#6B6B6B]">A strong summary is the first thing recruiters read</p>
         </div>
 
@@ -593,7 +575,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         </div>
 
         <div>
-          <label className="text-[13px] font-semibold text-[#3F3F3F]">Professional Summary</label>
+          <label className="text-[13px] font-semibold text-[#3F3F3F]">Summary</label>
           <textarea className="soha-textarea mt-1.5 min-h-[140px]" value={content.summary} onChange={(e) => setContent((c) => ({ ...c, summary: e.target.value }))} placeholder="Write a compelling professional summary highlighting your key achievements and career goals..." />
           <div className="mt-2 flex items-center justify-between">
             <p className="text-[12px] text-[#6E6E6A]">{content.summary.length}/500 characters recommended</p>
@@ -605,7 +587,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         </div>
 
         <div className="border-t border-[#EEEEEB] pt-5">
-          <h3 className="text-[16px] font-semibold text-[#111111]">Choose Template</h3>
+          <h3 className="text-[16px] font-semibold text-[#111111]">Template</h3>
           <p className="mt-1 text-[12px] text-[#6E6E6A]">This affects how your resume looks when exported</p>
           <div className="mt-4 grid grid-cols-4 gap-3">
             {TEMPLATE_STYLES.map((t) => (
@@ -651,14 +633,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
         <div className="w-full max-w-lg rounded-2xl border border-[#EEEEEB] bg-white p-6 shadow-2xl">
           <div className="flex items-center justify-between">
-            <h3 className="text-[18px] font-semibold text-[#111111]">Import Work History</h3>
+            <h3 className="text-[18px] font-semibold text-[#111111]">Import work history</h3>
             <button type="button" onClick={() => setShowOverwrite(false)} className="rounded-lg p-1.5 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"><X className="h-5 w-5" /></button>
           </div>
           <p className="mt-1 text-[13px] text-[#6B6B6B]">This will overwrite your current resume content</p>
 
           <div className="mt-5 space-y-4">
             <div>
-              <label className="text-[13px] font-semibold text-[#3F3F3F]">Paste LinkedIn Profile Text</label>
+              <label className="text-[13px] font-semibold text-[#3F3F3F]">Paste your LinkedIn profile text</label>
               <textarea className="soha-textarea mt-1.5 min-h-[100px]" placeholder="Copy your LinkedIn profile page text and paste it here..." value={linkedinText} onChange={(e) => setLinkedinText(e.target.value)} />
               <button type="button" disabled={linkedinImporting || linkedinText.length < 50} onClick={async () => {
                 setLinkedinImporting(true); setImportErr(null);
@@ -736,7 +718,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             Wrench,
             "No skills added yet",
             "Type a skill below and press Enter, or use voice input. Aim for 8-15 relevant skills that match your target role.",
-            "Start Adding Skills",
+            "Add your first skill",
             () => setShowSkillInput(true),
           )}
           <div className="flex gap-2">
@@ -754,9 +736,9 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           <h2 className="text-[18px] font-semibold text-[#111111]">Skills</h2>
           <p className="mt-1 text-[13px] text-[#6B6B6B]">Skills are auto-grouped. Click the X to remove any skill.</p>
         </div>
-        {renderSkillCategory("Industry Knowledge", industrySkills)}
+        {renderSkillCategory("Industry knowledge", industrySkills)}
         {renderSkillCategory("Tools & Technologies", toolsSkills)}
-        {renderSkillCategory("Other Skills", otherSkills)}
+        {renderSkillCategory("Other skills", otherSkills)}
         <div className="border-t border-[#EEEEEB] pt-4">
           <label className="text-[13px] font-semibold text-[#3F3F3F]">Add a new skill</label>
           <div className="mt-1.5 flex gap-2">
@@ -774,8 +756,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
       <div className="flex min-h-0 flex-1">
         {/* ── Sidebar ── */}
         <aside className="hidden w-[64px] shrink-0 flex-col items-center border-r border-[#EEEEEB] bg-white py-4 lg:flex">
-          <Link href="/dashboard" className="flex h-9 w-9 items-center justify-center rounded-full bg-[#2563EB] text-[12px] font-semibold text-white">
-            L
+          <Link href="/dashboard" aria-label="LaunchCV dashboard" className="flex h-9 w-9 items-center justify-center">
+            <LogoMark size={32} />
           </Link>
 
           <nav aria-label="App" className="mt-5 flex flex-col items-center gap-1">
@@ -840,6 +822,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               <nav aria-label="Resume tools" className="hidden items-center gap-1 lg:flex">
                 {[
                   { href: `/resume/${resumeId}/jd`, label: "Match to a job" },
+                  { href: `/resume/${resumeId}/fit`, label: "Role fit" },
                   { href: `/resume/${resumeId}/packet`, label: "Cover letter & interview" },
                   { href: `/resume/${resumeId}/snapshots`, label: "Versions" },
                 ].map((l) => (
@@ -850,24 +833,28 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               </nav>
             </div>
             <div className="flex shrink-0 items-center gap-2.5">
-              <span className="hidden text-[12px] text-[#6E6E6A] sm:block">
-                {justSaved ? "All changes saved" : saving ? "Saving..." : "Auto-save on"}
+              <span role="status" className="hidden items-center gap-1.5 text-[13px] text-[#6E6E6A] sm:inline-flex">
+                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <Check className="h-3.5 w-3.5" aria-hidden />}
+                {saving ? "Saving…" : justSaved ? "Saved" : "Changes save automatically"}
               </span>
               <button
                 type="button"
                 onClick={onPdfExportClick}
-                className="inline-flex h-9 items-center gap-1.5 rounded-full border border-[#D9D9D5] px-4 text-[13px] font-medium text-[#111111] transition hover:border-[#111111]"
+                className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#111111] px-4 text-[13px] font-medium text-white transition hover:bg-black"
               >
-                <Download className="h-4 w-4" /> PDF
-              </button>
-              <button type="button" onClick={() => void doSave()} className="inline-flex h-9 items-center gap-1.5 rounded-full bg-[#111111] px-4 text-[13px] font-medium text-white transition hover:bg-black">
-                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : justSaved ? <Check className="h-4 w-4" /> : <Save className="h-4 w-4" />}
-                {saving ? "Saving..." : justSaved ? "Saved" : "Save"}
+                <Download className="h-4 w-4" aria-hidden /> Download PDF
               </button>
             </div>
           </header>
 
-          {error ? <div className="bg-red-50 px-6 py-2 text-[13px] font-medium text-red-600">{error}</div> : null}
+          {error ? (
+            <div role="alert" className="flex items-center justify-between gap-3 bg-[#FDF2F0] px-6 py-2 text-[13px] text-[#B42318]">
+              <span>Couldn&apos;t save your last change: {error}</span>
+              <button type="button" onClick={() => void doSave()} className="shrink-0 font-medium underline underline-offset-2">
+                Try again
+              </button>
+            </div>
+          ) : null}
 
           <nav aria-label="Resume tools" className="flex gap-1 overflow-x-auto border-b border-[#EEEEEB] bg-white px-4 py-2 lg:hidden">
             {[
@@ -969,7 +956,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                         <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-xl">
                           <Sparkles className="h-6 w-6 text-[#2563EB]" />
                         </div>
-                        <p className="mt-3 rounded-full bg-white/90 px-4 py-1.5 text-[13px] font-semibold text-[#111111] shadow-lg backdrop-blur">View Score</p>
+                        <p className="mt-3 rounded-full bg-white/90 px-4 py-1.5 text-[13px] font-semibold text-[#111111] shadow-lg backdrop-blur">View score</p>
                       </div>
                     </div>
                   </div>

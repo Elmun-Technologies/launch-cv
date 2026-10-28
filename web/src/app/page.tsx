@@ -6,7 +6,11 @@ import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { HomeClient } from "@/components/home-client";
-import { ResumePage, ResumeThumb, SAMPLE_RESUMES } from "@/components/home/sample-resume";
+import { ResumePage, SAMPLE_RESUMES } from "@/components/home/sample-resume";
+import { ResumePreview } from "@/components/resume-preview";
+import { getResumeExample } from "@/lib/resume-examples";
+import { exampleToContent } from "@/lib/example-to-content";
+import { TEMPLATE_SPECS, type TemplateStyle } from "@/lib/resume-templates";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
@@ -80,12 +84,18 @@ const fields = [
   { href: "/resume-examples", label: "Every other role", sub: "Analysts, marketers, support and more", img: "/images/photos/role-data-analyst.webp", alt: "Analyst on a video call" },
 ];
 
-const templates = [
-  { resume: SAMPLE_RESUMES.engineer, name: "Classic" },
-  { resume: SAMPLE_RESUMES.finance, name: "Executive" },
-  { resume: SAMPLE_RESUMES.designer, name: "Modern" },
-  { resume: SAMPLE_RESUMES.marketing, name: "Minimal" },
-];
+/** The real templates, rendered by the same component as the editor preview. */
+const templates = (
+  [
+    { template: "classic", example: "software-engineer" },
+    { template: "modern", example: "product-manager" },
+    { template: "minimal", example: "marketing-manager" },
+    { template: "executive", example: "financial-analyst" },
+  ] as { template: TemplateStyle; example: string }[]
+).flatMap((t) => {
+  const e = getResumeExample(t.example);
+  return e ? [{ ...t, content: exampleToContent(e) }] : [];
+});
 
 const faqs = [
   {
@@ -202,7 +212,7 @@ export default async function Home() {
             <div className="origin-top-left scale-[0.5] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.32)] md:scale-[0.66]">
               <ResumePage resume={SAMPLE_RESUMES.pm} />
             </div>
-            <div className="absolute left-[150px] top-[-14px] flex items-center md:left-[340px] md:top-[18px] gap-2.5 rounded-xl border border-[#E5E5E2] bg-white px-3.5 py-2.5 text-[14px] shadow-[0_10px_24px_-12px_rgba(0,0,0,0.25)]">
+            <div className="absolute left-[150px] top-[-14px] flex items-center md:left-[300px] md:top-[-22px] gap-2.5 rounded-xl border border-[#E5E5E2] bg-white px-3.5 py-2.5 text-[14px] shadow-[0_10px_24px_-12px_rgba(0,0,0,0.25)]">
               <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border-[3px] border-[#12A15E] text-[13px] font-bold">
                 91
               </span>
@@ -238,8 +248,8 @@ export default async function Home() {
             </Link>
           ))}
         </nav>
-        <div className="mt-6 flex flex-col gap-10 overflow-hidden rounded-[20px] bg-[#EEF3FF] px-6 pt-10 sm:px-12 sm:pt-12 lg:flex-row lg:items-end">
-          <div className="flex max-w-[360px] flex-col gap-3.5 lg:pb-12">
+        <div className="mt-6 flex flex-col gap-10 overflow-hidden rounded-[20px] bg-[#EEF3FF] px-6 py-10 sm:px-12 sm:py-12 lg:flex-row lg:items-center">
+          <div className="flex max-w-[360px] flex-col gap-3.5">
             <p className="text-[24px] font-semibold leading-[1.25] tracking-[-0.02em]">
               See your resume the way hiring software does
             </p>
@@ -250,7 +260,7 @@ export default async function Home() {
               Check my resume <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-7 rounded-t-[14px] bg-white p-7 shadow-[0_-10px_40px_-20px_rgba(29,78,216,0.35)] sm:flex-row">
+          <div className="flex min-w-0 flex-1 flex-col gap-7 rounded-[14px] bg-white p-7 shadow-[0_20px_50px_-24px_rgba(29,78,216,0.35)] sm:flex-row">
             <div className="flex shrink-0 flex-col items-center gap-2 sm:w-[180px]">
               <svg width="150" height="150" viewBox="0 0 120 120" role="img" aria-label="Example ATS score: 54 out of 100">
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#F0F0EE" strokeWidth="10" />
@@ -286,18 +296,20 @@ export default async function Home() {
             Templates recruiters can skim in seconds. <span className={grey}>And software can read.</span>
           </h2>
           <Link
-            href="/features/resume-builder"
+            href="/resume-templates"
             className="inline-flex h-11 items-center rounded-full border border-[#D9D9D5] px-5 text-[15px] font-medium transition hover:border-[#111111]"
           >
             All templates
           </Link>
         </div>
-        <div className="mt-10 flex justify-start gap-6 overflow-x-auto px-6 pb-2 lg:justify-center">
+        <div className="mx-auto mt-10 flex max-w-[1200px] gap-5 overflow-x-auto px-6 pb-2 lg:grid lg:grid-cols-4 lg:overflow-visible">
           {templates.map((t) => (
-            <figure key={t.name} className="m-0 shrink-0">
-              <ResumeThumb resume={t.resume} scale={0.415} height={330} />
-              <figcaption className="mt-3 text-[15px] font-medium">{t.name}</figcaption>
-            </figure>
+            <Link key={t.template} href="/resume-templates" className="group block w-[240px] shrink-0 lg:w-auto">
+              <span className="block rounded-[14px] bg-[#F5F5F3] p-5 transition group-hover:bg-[#EEEEEB]" aria-hidden="true">
+                <ResumePreview content={t.content} template={t.template} />
+              </span>
+              <span className="mt-3 block text-[15px] font-medium">{TEMPLATE_SPECS[t.template].label}</span>
+            </Link>
           ))}
         </div>
       </section>
@@ -312,7 +324,7 @@ export default async function Home() {
           <ol className="flex flex-1 flex-col gap-6">
             {filterFacts.map((f, i) => (
               <li key={f.t} className="flex gap-5">
-                <span className="pt-0.5 text-[14px] text-[#A3A3A0]">0{i + 1}</span>
+                <span className="w-6 shrink-0 pt-0.5 text-[14px] tabular-nums text-[#A3A3A0]">0{i + 1}</span>
                 <span>
                   <span className="block text-[17px] font-semibold">{f.t}</span>
                   <span className="mt-1 block text-[15px] leading-[1.6] text-[#B5B5B0]">{f.d}</span>
@@ -365,7 +377,7 @@ export default async function Home() {
               Every AI tool is included on every plan. Cancel monthly plans in one click, or pay once with Lifetime.
             </p>
           </div>
-          <div className="grid flex-1 gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-3 lg:flex-[1.3]">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               return (
@@ -384,6 +396,10 @@ export default async function Home() {
                   <span className="mt-1 text-[32px] font-semibold tracking-[-0.03em]">
                     {cfg.priceDisplay}
                     <span className="ml-1 text-[14px] font-normal tracking-normal text-[#6B6B6B]">{cfg.periodLabel}</span>
+                  </span>
+                  <span className="mt-1 flex-1 text-[14px] leading-[1.5] text-[#3F3F3F]">{cfg.valueLine}</span>
+                  <span className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-[14px] font-medium text-[#111111]">
+                    Details <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                   </span>
                 </CtaLink>
               );

@@ -345,10 +345,10 @@ export function JdClient({ resumeId }: { resumeId: string }) {
                   Save
                 </button>
                 <Link
-                  href="/dashboard/applications"
+                  href="/dashboard/job-tracker"
                   className="soha-btn-secondary text-xs"
                 >
-                  Applications
+                  Job tracker
                 </Link>
               </div>
               {saveMsg ? (

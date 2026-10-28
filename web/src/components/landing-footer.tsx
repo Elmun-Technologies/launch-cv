@@ -2,31 +2,28 @@ import Link from "next/link";
 import { Logo } from "@/components/logo";
 
 const productLinks = [
-  { label: "Free ATS Check", href: "/free-ats-check" },
-  { label: "JD Alignment", href: "/features/jd-alignment" },
-  { label: "Resume Builder", href: "/features/resume-builder" },
-  { label: "Cover Letter", href: "/features/cover-letter" },
-  { label: "Interview Prep", href: "/features/interview-prep" },
-  { label: "Voice Input", href: "/features/voice-input" },
+  { label: "Free ATS check", href: "/free-ats-check" },
+  { label: "Resume builder", href: "/features/resume-builder" },
+  { label: "Job matching", href: "/features/jd-alignment" },
+  { label: "Cover letters", href: "/features/cover-letter" },
+  { label: "Interview prep", href: "/features/interview-prep" },
+  { label: "Voice input", href: "/features/voice-input" },
   { label: "Pricing", href: "/pricing" },
 ];
 
 const companyLinks = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+  { label: "Privacy policy", href: "/legal/privacy" },
+  { label: "Terms of service", href: "/legal/terms" },
 ];
 
 const resourceLinks = [
-  { label: "Resume Templates", href: "/resume-templates" },
-  { label: "Resume Examples", href: "/resume-examples" },
-  { label: "Cover Letter Examples", href: "/cover-letter-examples" },
-  { label: "Software engineer resume", href: "/resume-examples/software-engineer" },
-  { label: "Product manager resume", href: "/resume-examples/product-manager" },
-  { label: "UX designer resume", href: "/resume-examples/ux-designer" },
-  { label: "Best ATS Checkers", href: "/compare/ats-resume-checkers" },
+  { label: "Resume templates", href: "/resume-templates" },
+  { label: "Resume examples", href: "/resume-examples" },
+  { label: "Cover letter examples", href: "/cover-letter-examples" },
+  { label: "Best ATS checkers", href: "/compare/ats-resume-checkers" },
   { label: "Blog", href: "/blog" },
-  { label: "Privacy Policy", href: "/legal/privacy" },
-  { label: "Terms of Service", href: "/legal/terms" },
 ];
 
 export function LandingFooter() {
@@ -90,17 +87,9 @@ export function LandingFooter() {
           <p className="text-[13px] text-[#6B6B6B]">
             © {new Date().getFullYear()} LaunchCV. All rights reserved.
           </p>
-          <div className="flex items-center gap-5">
-            <Link href="/legal/privacy" className="text-[13px] text-[#6B6B6B] transition hover:text-[#0F172A]">
-              Privacy
-            </Link>
-            <Link href="/legal/terms" className="text-[13px] text-[#6B6B6B] transition hover:text-[#0F172A]">
-              Terms
-            </Link>
-            <Link href="/contact" className="text-[13px] text-[#6B6B6B] transition hover:text-[#0F172A]">
-              Contact
-            </Link>
-          </div>
+          <a href="mailto:support@launch-cv.com" className="text-[13px] text-[#6B6B6B] transition hover:text-[#111111]">
+            support@launch-cv.com
+          </a>
         </div>
       </div>
     </footer>
