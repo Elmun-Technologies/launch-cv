@@ -85,7 +85,7 @@ export default async function DashboardHomePage() {
 
   return (
     <DashboardShell email={session.email} pageTitle="Home">
-      <div className="mx-auto flex max-w-[1180px] flex-col gap-6">
+      <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <h1 className="text-[26px] font-semibold tracking-[-0.025em] sm:text-[28px]">
             {isNew ? "Welcome" : "Welcome back"}

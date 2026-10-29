@@ -8,7 +8,7 @@ export default async function SupportPage() {
   if (!session) redirect("/login");
 
   return (
-    <DashboardShell email={session.email} pageTitle="Support Center">
+    <DashboardShell email={session.email} pageTitle="Help">
       <SupportClient />
     </DashboardShell>
   );

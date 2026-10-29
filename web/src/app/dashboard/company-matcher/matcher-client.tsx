@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useMemo, useCallback } from "react";
 import {
-  Search, ChevronDown, Sparkles, ExternalLink, RotateCcw,
+  Search, ChevronDown, ExternalLink, RotateCcw,
   Check, X, AlertTriangle, Plus, Building2,
 } from "lucide-react";
 import { CopyButton } from "@/components/copy-button";
@@ -70,12 +70,14 @@ async function requestMatch(body: unknown): Promise<{ data: MatchResult } | { er
 
 const TIERS = [
   { key: "all", label: "All" },
-  { key: "faang", label: "FAANG+" },
+  { key: "faang", label: "Big Tech" },
   { key: "tech", label: "Tech" },
   { key: "finance", label: "Finance" },
   { key: "consulting", label: "Consulting" },
   { key: "startup", label: "Startup" },
 ] as const;
+
+const TIER_LABEL: Record<string, string> = Object.fromEntries(TIERS.map((t) => [t.key, t.label]));
 
 const TIER_COLORS: Record<string, string> = {
   faang: "bg-[#F5F5F3] text-[#3F3F3F]",
@@ -218,7 +220,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
       {/* Header */}
       <div>
         <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
@@ -231,11 +233,12 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
       {/* Resume Selector */}
       <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
-        <label className="mb-2 block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#6E6E6A]">
-          Select Resume
+        <label htmlFor="matcher-resume" className="soha-label mb-1.5">
+          Resume to compare
         </label>
         <div className="relative w-full max-w-sm">
           <select
+            id="matcher-resume"
             value={selectedResumeId}
             onChange={(e) => setSelectedResumeId(e.target.value)}
             className="h-11 w-full appearance-none rounded-xl border border-[#E5E5E2] bg-white pl-4 pr-10 text-[13px] font-medium text-[#111111] transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
@@ -277,14 +280,14 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     </h2>
                     <p className="mt-1 text-[13px] text-[#6B6B6B]">
                       {result.score >= 80
-                        ? "Excellent match! Your resume aligns strongly with this company."
+                        ? "Strong match. Your resume already covers most of what this company looks for."
                         : result.score >= 60
-                          ? "Good foundation, but there are areas to improve for a stronger match."
-                          : "Significant gaps found. Focus on the recommendations below."}
+                          ? "A good base. The gaps below would make it a stronger match."
+                          : "Several gaps. Start with the recommendations below."}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       <span className={`rounded-full px-3 py-1 text-[11px] font-semibold ${TIER_COLORS[selectedCompany.tier]}`}>
-                        {selectedCompany.tier.toUpperCase()}
+                        {TIER_LABEL[selectedCompany.tier] ?? selectedCompany.tier}
                       </span>
                       <span className="rounded-full bg-[#FAFAF9] px-3 py-1 text-[11px] font-semibold text-[#6B6B6B]">
                         {selectedCompany.industry}
@@ -296,7 +299,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
               {/* Keyword Gaps */}
               <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Keyword Analysis</h3>
+                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Keywords</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left">
                     <thead>
@@ -321,7 +324,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
               {/* Culture Fit */}
               <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Culture Fit</h3>
+                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Culture fit</h3>
                 <div className="space-y-4">
                   {result.cultureFit.map((item, i) => (
                     <div key={i}>
@@ -345,7 +348,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
 
               {/* Format Recommendations */}
               <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Format Recommendations</h3>
+                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Format</h3>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {result.formatRecommendations.map((rec, i) => (
                     <div
@@ -368,7 +371,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               {/* Bullet Rewrites */}
               {bulletRewrites.length > 0 && (
                 <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Bullet Rewrites</h3>
+                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Bullet rewrites</h3>
                   <div className="space-y-4">
                     {bulletRewrites.map((bullet, i) => (
                       <div key={i} className="rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
@@ -380,7 +383,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                             </p>
                           </div>
                           <div>
-                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-emerald-500">Improved</span>
+                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#0E7A48]">Improved</span>
                             <p className="text-[13px] font-medium leading-relaxed text-[#111111]">
                               {bullet.improved}
                             </p>
@@ -398,7 +401,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               {/* Overall Advice */}
               {result.advice.length > 0 && (
                 <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Overall Advice</h3>
+                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Overall advice</h3>
                   <div className="space-y-3">
                     {result.advice.map((tip, i) => (
                       <div key={i} className="flex gap-3 rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
@@ -482,13 +485,13 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                     {company.logo}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate text-[14px] font-semibold text-[#111111]">
+                    <h2 className="truncate text-[14px] font-semibold text-[#111111]">
                       {company.name}
-                    </h3>
+                    </h2>
                     <p className="text-[12px] text-[#6E6E6A]">{company.industry}</p>
                   </div>
-                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase ${TIER_COLORS[company.tier]}`}>
-                    {company.tier}
+                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-medium ${TIER_COLORS[company.tier]}`}>
+                    {TIER_LABEL[company.tier] ?? company.tier}
                   </span>
                 </div>
                 <div className="mt-3 flex flex-wrap gap-1.5">
@@ -512,7 +515,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   disabled={!selectedResumeId}
                   className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full border border-[#D9D9D5] text-[13px] font-medium text-[#111111] transition hover:border-[#111111] disabled:opacity-40"
                 >
-                  <Sparkles className="h-3.5 w-3.5" /> Analyze Match
+                  Check my match
                 </button>
               </div>
             ))}
@@ -528,14 +531,14 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   <div className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-current">
                     <Plus className="h-5 w-5" />
                   </div>
-                  <span className="text-[13px] font-semibold">Custom Company</span>
+                  <span className="text-[13px] font-semibold">Another company</span>
                   <span className="text-[12px]">Paste a job description</span>
                 </button>
               ) : (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-[#2563EB]" />
-                    <span className="text-[13px] font-semibold text-[#111111]">Custom Company</span>
+                    <span className="text-[13px] font-semibold text-[#111111]">Another company</span>
                   </div>
                   <input
                     type="text"
@@ -554,7 +557,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                   <textarea
                     value={customJD}
                     onChange={(e) => setCustomJD(e.target.value)}
-                    placeholder="Paste job description here..."
+                    placeholder="Paste the job post (optional)"
                     rows={4}
                     className="w-full resize-none rounded-xl border border-[#E5E5E2] bg-white px-3 py-2.5 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
                   />
@@ -565,9 +568,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                       disabled={!selectedResumeId || !customName.trim()}
                       className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-40"
                     >
-                      <span className="inline-flex items-center gap-1.5">
-                        <Sparkles className="h-3.5 w-3.5" /> Analyze
-                      </span>
+                      Check my match
                     </button>
                     <button
                       type="button"

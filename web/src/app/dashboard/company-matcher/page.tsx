@@ -15,7 +15,7 @@ export default async function CompanyMatcherPage() {
   });
 
   return (
-    <DashboardShell email={session.email} pageTitle="Company Matcher">
+    <DashboardShell email={session.email} pageTitle="Company matcher">
       <MatcherClient
         resumes={resumes.map((r) => ({
           id: r.id,

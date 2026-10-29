@@ -1,19 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  Check,
-  Copy,
-  Gift,
-  Link2,
-  Mail,
-  MessageSquare,
-  Send,
-  Share2,
-  UserPlus,
-  Users,
-  X,
-} from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Check, Copy, Loader2, Mail } from "lucide-react";
 
 export type ReferralRow = {
   id: string;
@@ -25,367 +13,185 @@ export type ReferralRow = {
 };
 
 function baseUrl() {
-  if (typeof window !== "undefined") {
-    return process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
-  }
+  if (typeof window !== "undefined") return process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
   return process.env.NEXT_PUBLIC_APP_URL || "";
+}
+
+/** Show enough of an address to recognise a friend without printing it in full. */
+function maskEmail(email: string) {
+  const [user, domain] = email.split("@");
+  if (!domain) return email;
+  return `${user.slice(0, 2)}${"•".repeat(Math.max(1, Math.min(6, user.length - 2)))}@${domain}`;
+}
+
+const defaultMessage = (link: string) =>
+  `I've been using LaunchCV for my job search. The ATS check is free and shows what applicant tracking software can't read on your resume. Here's my link: ${link}`;
+
+function useCopy() {
+  const [copied, setCopied] = useState<string | null>(null);
+  async function copy(key: string, text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(key);
+      setTimeout(() => setCopied((c) => (c === key ? null : c)), 2000);
+    } catch {
+      setCopied(null);
+    }
+  }
+  return { copied, copy };
 }
 
 export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
   const [rows, setRows] = useState(initial);
   const [generating, setGenerating] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { copied, copy } = useCopy();
 
-  const [showInviteMsg, setShowInviteMsg] = useState(false);
-  const [showEmailInvites, setShowEmailInvites] = useState(false);
-  const [emailInviteVal, setEmailInviteVal] = useState("");
+  const pending = useMemo(() => rows.find((r) => r.status === "pending" && !r.referredEmail) ?? null, [rows]);
+  const link = pending ? `${baseUrl()}/register?ref=${pending.code}` : "";
+  const joined = useMemo(() => rows.filter((r) => r.referredEmail), [rows]);
 
-  const activePendingCode = useMemo(
-    () => rows.find((r) => r.status === "pending" && !r.referredEmail) ?? null,
-    [rows],
-  );
-  const referralLink = activePendingCode
-    ? `${baseUrl()}/register?ref=${activePendingCode.code}`
-    : "";
+  const [message, setMessage] = useState("");
+  const [edited, setEdited] = useState(false);
+  const shownMessage = edited ? message : link ? defaultMessage(link) : "";
 
-  const totalReferrals = useMemo(
-    () => rows.filter((r) => Boolean(r.referredEmail)).length,
-    [rows],
-  );
-  const signedUpCount = useMemo(
-    () => rows.filter((r) => r.status === "registered" || r.status === "credited").length,
-    [rows],
-  );
-
-  const generateCode = useCallback(async (forceNew = false) => {
+  const generateCode = useCallback(async () => {
     setGenerating(true);
     setError(null);
-    try {
-      const res = await fetch("/api/referrals/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ forceNew }),
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? "Failed to generate referral code");
-        return;
-      }
-      const r = json.referral;
-      setRows((prev) => {
-        const nextRow: ReferralRow = {
-          id: r.id,
-          code: r.code,
-          referredEmail: r.referredEmail ?? null,
-          status: r.status,
-          creditAmount: r.creditAmount,
-          createdAt: r.createdAt,
-        };
-        const idx = prev.findIndex((x) => x.id === nextRow.id);
-        if (idx >= 0) {
-          const copy = [...prev];
-          copy[idx] = nextRow;
-          return copy;
-        }
-        return [nextRow, ...prev];
-      });
-    } catch {
-      setError("Network error");
-    } finally {
-      setGenerating(false);
-    }
+    const res = await fetch("/api/referrals/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ forceNew: false }),
+    }).catch(() => null);
+    const j = res ? await res.json().catch(() => ({})) : {};
+    setGenerating(false);
+    if (!res?.ok || !j.referral) return setError(typeof j.error === "string" ? j.error : "Couldn't create your link. Refresh to try again.");
+    const r = j.referral;
+    setRows((prev) => [
+      { id: r.id, code: r.code, referredEmail: r.referredEmail ?? null, status: r.status, creditAmount: r.creditAmount, createdAt: r.createdAt },
+      ...prev.filter((x) => x.id !== r.id),
+    ]);
   }, []);
 
+  // Create the link once on first visit; a failure shows the error instead of retrying in a loop.
+  const requested = useRef(false);
   useEffect(() => {
-    if (!activePendingCode && !generating) {
-      void generateCode();
-    }
-  }, [activePendingCode, generateCode, generating]);
+    if (pending || requested.current) return;
+    requested.current = true;
+    queueMicrotask(() => void generateCode());
+  }, [pending, generateCode]);
 
-  async function copyLink() {
-    if (!referralLink) return;
-    try {
-      await navigator.clipboard.writeText(referralLink);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setError("Failed to copy");
-    }
-  }
-
-
-  const [inviteDescription, setInviteDescription] = useState(
-    `I've been using LaunchCV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
-  );
-
-  useEffect(() => {
-    setInviteDescription(
-      `I've been using LaunchCV to manage my job search. I've found it really helpful so far and think you might too! Create an account and pick a plan here: ${referralLink}`,
-    );
-  }, [referralLink]);
-
-  const stats = [
-    { label: "Total Invited", value: totalReferrals, icon: Users, color: "bg-[#EEF3FF] text-[#2563EB]" },
-    { label: "Signed up", value: signedUpCount, icon: Check, color: "bg-emerald-50 text-emerald-600" },
-  ];
-
-  const steps = [
-    { step: 1, icon: Link2, title: "Share your link", desc: "Send your unique referral link to friends" },
-    { step: 2, icon: UserPlus, title: "Friends sign up", desc: "Their account is linked to your invite" },
-    { step: 3, icon: Gift, title: "They start free", desc: "Everyone can run the ATS check before choosing a plan" },
-  ];
+  const shareLinks = link
+    ? [
+        { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}` },
+        { label: "X", href: `https://x.com/intent/post?text=${encodeURIComponent(shownMessage)}` },
+        { label: "Email", href: `mailto:?subject=${encodeURIComponent("A free resume check I've been using")}&body=${encodeURIComponent(shownMessage)}` },
+      ]
+    : [];
 
   return (
-    <div className="space-y-6">
-      {/* Page Title */}
-      <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
-        Referrals
-      </h1>
+    <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
+      <div>
+        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
+          Referrals <span className="text-[#8A8A86]">— share LaunchCV with a friend.</span>
+        </h1>
+        <p className="mt-1 text-[15px] text-[#6B6B6B]">
+          Anyone who signs up through your link shows up below. Their ATS check is free, like yours.
+        </p>
+      </div>
 
-      {/* Invite Friends Card */}
-      <div className="rounded-2xl border border-[#EEEEEB] bg-white p-8">
-        <div className="mx-auto max-w-xl text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#EEF3FF]">
-            <Gift className="h-7 w-7 text-[#2563EB]" />
-          </div>
-          <h2 className="text-[15px] font-semibold text-[#111111]">Invite Friends to LaunchCV</h2>
-          <p className="mt-1.5 text-[13px] leading-relaxed text-[#6B6B6B]">
-            Share your personal link. You can see here who signed up through it.
+      <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
+        <h2 className="text-[17px] font-semibold text-[#111111]">Your link</h2>
+        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <label className="min-w-0 flex-1">
+            <span className="sr-only">Your referral link</span>
+            <input
+              readOnly
+              value={link}
+              placeholder={generating ? "Creating your link…" : ""}
+              onFocus={(e) => e.currentTarget.select()}
+              className="soha-input bg-[#FAFAF9] text-[#3F3F3F]"
+            />
+          </label>
+          <button
+            type="button"
+            onClick={() => void copy("link", link)}
+            disabled={!link}
+            className="soha-btn-primary inline-flex shrink-0 items-center justify-center gap-2 disabled:opacity-60"
+          >
+            {generating ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            ) : copied === "link" ? (
+              <Check className="h-4 w-4" aria-hidden />
+            ) : (
+              <Copy className="h-4 w-4" aria-hidden />
+            )}
+            {copied === "link" ? "Copied" : "Copy link"}
+          </button>
+        </div>
+        {error ? (
+          <p role="alert" className="mt-3 text-[14px] text-[#B42318]">
+            {error}
           </p>
+        ) : null}
 
-          <div className="mt-6 flex items-center gap-2">
-            <div className="relative flex-1">
-              <input
-                readOnly
-                value={referralLink}
-                placeholder="Generating your invite link..."
-                className="soha-input h-11 w-full rounded-xl border-[#E5E5E2] bg-[#FAFAF9] pl-4 pr-4 text-[13px] text-[#3F3F3F]"
-              />
-            </div>
+        <div className="mt-6 border-t border-[#EEEEEB] pt-5">
+          <label htmlFor="ref-message" className="soha-label mb-1.5">
+            Message
+          </label>
+          <textarea
+            id="ref-message"
+            className="soha-textarea min-h-[96px]"
+            value={shownMessage}
+            onChange={(e) => {
+              setEdited(true);
+              setMessage(e.target.value);
+            }}
+          />
+          <div className="mt-3 flex flex-wrap items-center gap-2">
             <button
               type="button"
-              onClick={() => void copyLink()}
-              disabled={!referralLink}
-              className="inline-flex h-11 items-center gap-2 rounded-full bg-[#2563EB] px-5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-60"
+              onClick={() => void copy("msg", shownMessage)}
+              disabled={!shownMessage}
+              className="soha-btn-secondary inline-flex items-center gap-2 disabled:opacity-60"
             >
-              {copied ? (
-                <>
-                  <Check className="h-4 w-4" />
-                  Copied!
-                </>
-              ) : (
-                <>
-                  <Copy className="h-4 w-4" />
-                  Copy Link
-                </>
-              )}
+              {copied === "msg" ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
+              {copied === "msg" ? "Copied" : "Copy message"}
             </button>
-          </div>
-          {error && <p className="mt-3 text-[13px] text-red-500">{error}</p>}
-        </div>
-      </div>
-
-      {/* Stats Row */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {stats.map((s) => (
-          <div
-            key={s.label}
-            className="rounded-2xl border border-[#EEEEEB] bg-white px-5 py-5"
-          >
-            <div className="flex items-center gap-3">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.color}`}>
-                <s.icon className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-[13px] text-[#6B6B6B]">{s.label}</p>
-                <p className="text-[22px] font-semibold tracking-[-0.02em] text-[#111111]">{s.value}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* How It Works */}
-      <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-        <h2 className="text-[15px] font-semibold text-[#111111]">How it works</h2>
-        <div className="mt-5 grid gap-4 sm:grid-cols-3">
-          {steps.map((s) => (
-            <div
-              key={s.step}
-              className="flex items-start gap-3 rounded-xl border border-[#EEEEEB] p-4 transition hover:border-[#2563EB]/20 hover:bg-[#EEF3FF]/30"
-            >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-[13px] font-semibold text-white">
-                {s.step}
-              </div>
-              <div>
-                <p className="text-[13px] font-semibold text-[#111111]">{s.title}</p>
-                <p className="mt-0.5 text-[13px] leading-relaxed text-[#6B6B6B]">{s.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Share Section */}
-      <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-        <h2 className="text-[15px] font-semibold text-[#111111]">Share with your network</h2>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <a
-            href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralLink)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#E5E5E2] px-5 text-[13px] font-semibold text-[#3F3F3F] transition hover:border-[#0A66C2] hover:bg-[#EEF3FF] hover:text-[#0A66C2]"
-          >
-            <Link2 className="h-4 w-4" />
-            LinkedIn
-          </a>
-          <a
-            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out LaunchCV – the best tool to manage your job search! ${referralLink}`)}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#E5E5E2] px-5 text-[13px] font-semibold text-[#3F3F3F] transition hover:border-[#1DA1F2] hover:bg-sky-50 hover:text-[#1DA1F2]"
-          >
-            <Send className="h-4 w-4" />
-            Twitter
-          </a>
-          <button
-            type="button"
-            onClick={() => setShowEmailInvites(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#E5E5E2] px-5 text-[13px] font-semibold text-[#3F3F3F] transition hover:border-[#2563EB] hover:bg-[#EEF3FF] hover:text-[#2563EB]"
-          >
-            <Mail className="h-4 w-4" />
-            Email
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowInviteMsg(true)}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#E5E5E2] px-5 text-[13px] font-semibold text-[#3F3F3F] transition hover:border-[#2563EB] hover:bg-[#EEF3FF] hover:text-[#2563EB]"
-          >
-            <Mail className="h-4 w-4" />
-            Custom Message
-          </button>
-        </div>
-      </div>
-
-      {/* ── Invite Message Modal ── */}
-      {showInviteMsg && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-[#EEEEEB] bg-white p-7 shadow-xl">
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-[15px] font-semibold text-[#111111]">Invite Message</h3>
-              <button
-                type="button"
-                onClick={() => setShowInviteMsg(false)}
-                className="rounded-lg p-1 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"
+            {shareLinks.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.label === "Email" ? undefined : "_blank"}
+                rel="noreferrer"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-[#D9D9D5] px-4 text-[14px] font-medium text-[#111111] hover:border-[#111111]"
               >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <label className="text-[13px] font-semibold text-[#3F3F3F]">Message</label>
-            <textarea
-              className="soha-textarea mt-1.5 min-h-[120px] rounded-xl text-[13px]"
-              value={inviteDescription}
-              onChange={(e) => setInviteDescription(e.target.value)}
-            />
-
-            <div className="mt-5 grid grid-cols-3 gap-3">
-              {[
-                { label: "LinkedIn", icon: Share2, color: "#0A66C2", bg: "bg-[#EEF3FF]" },
-                { label: "Twitter", icon: MessageSquare, color: "#1DA1F2", bg: "bg-sky-50" },
-                { label: "Email", icon: Mail, color: "#2563EB", bg: "bg-[#EEF3FF]" },
-              ].map((s) => (
-                <button
-                  key={s.label}
-                  type="button"
-                  className="flex flex-col items-center gap-1.5 rounded-xl border border-[#E5E5E2] py-3 transition hover:border-[#2563EB]/30 hover:bg-[#EEF3FF]/30"
-                >
-                  <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${s.bg}`}>
-                    <s.icon className="h-4 w-4" style={{ color: s.color }} />
-                  </div>
-                  <span className="text-[13px] font-medium text-[#3F3F3F]">{s.label}</span>
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-6 flex gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  void navigator.clipboard.writeText(inviteDescription);
-                  setShowInviteMsg(false);
-                }}
-                className="h-10 rounded-full bg-[#2563EB] px-6 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
-              >
-                Copy Message
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowInviteMsg(false)}
-                className="h-10 rounded-xl border border-[#E5E5E2] px-6 text-[13px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
-              >
-                Cancel
-              </button>
-            </div>
+                {s.label === "Email" ? <Mail className="h-4 w-4" aria-hidden /> : null}
+                {s.label === "Email" ? "Email" : `Share on ${s.label}`}
+              </a>
+            ))}
           </div>
         </div>
-      )}
+      </section>
 
-      {/* ── Email Invites Modal ── */}
-      {showEmailInvites && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4">
-          <div className="w-full max-w-lg rounded-2xl border border-[#EEEEEB] bg-white p-7 shadow-xl">
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="text-[15px] font-semibold text-[#111111]">Email Invites</h3>
-              <button
-                type="button"
-                onClick={() => setShowEmailInvites(false)}
-                className="rounded-lg p-1 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#6B6B6B]"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <p className="text-[13px] text-[#6B6B6B]">
-              Add one or more emails, separated by commas.
-            </p>
-            <input
-              type="text"
-              placeholder="name@email.com, name2@email.com"
-              className="soha-input mt-3 h-11 w-full rounded-xl text-[13px]"
-              value={emailInviteVal}
-              onChange={(e) => setEmailInviteVal(e.target.value)}
-            />
-
-            <label className="mt-4 inline-flex items-center gap-2 text-[13px] text-[#6B6B6B]">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="h-4 w-4 rounded border-[#D9D9D5] text-[#2563EB] accent-[#2563EB]"
-              />
-              Your credentials are encrypted &amp; can be revoked at any time
-            </label>
-
-            <div className="mt-6 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setShowEmailInvites(false)}
-                className="h-10 rounded-full bg-[#2563EB] px-6 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
-              >
-                Send Invites
-              </button>
-              <button
-                type="button"
-                onClick={() => setShowEmailInvites(false)}
-                className="h-10 rounded-xl border border-[#E5E5E2] px-6 text-[13px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
+      <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="text-[17px] font-semibold text-[#111111]">Signed up through your link</h2>
+          <span className="text-[14px] tabular-nums text-[#6B6B6B]">{joined.length}</span>
         </div>
-      )}
+        {joined.length === 0 ? (
+          <p className="mt-2 text-[14px] text-[#6B6B6B]">No one yet. When a friend creates an account from your link, they&apos;ll appear here.</p>
+        ) : (
+          <ul className="mt-4 divide-y divide-[#EEEEEB] border-t border-[#EEEEEB]">
+            {joined.map((r) => (
+              <li key={r.id} className="flex items-center justify-between gap-3 py-3 text-[14px]">
+                <span className="truncate text-[#111111]">{maskEmail(r.referredEmail ?? "")}</span>
+                <span className="shrink-0 text-[#0E7A48]">Signed up</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
     </div>
   );
 }
