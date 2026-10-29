@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, LogOut, User, CreditCard } from "lucide-react";
+import { ChevronDown, LogOut, User, CreditCard, ShieldCheck } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { resetUser } from "@/lib/analytics-client";
 
-export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTitle?: string }) {
+export function SiteHeader({ email, pageTitle, isAdmin = false }: { email?: string | null; pageTitle?: string; isAdmin?: boolean }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -59,6 +59,16 @@ export function SiteHeader({ email, pageTitle }: { email?: string | null; pageTi
               >
                 <CreditCard className="h-4 w-4 text-[#6B6B6B]" aria-hidden /> Plan and billing
               </Link>
+              {isAdmin ? (
+                <Link
+                  href="/admin-panel"
+                  role="menuitem"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2.5 text-[14px] text-[#111111] hover:bg-[#F5F5F3]"
+                >
+                  <ShieldCheck className="h-4 w-4 text-[#6B6B6B]" aria-hidden /> Admin panel
+                </Link>
+              ) : null}
               <button
                 type="button"
                 role="menuitem"
