@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Logo } from "@/components/logo";
 import {
   Home, FileText, Briefcase, Users, Building2, Target,
-  Settings, Puzzle, Gift, HelpCircle, Menu, X,
+  Settings, Puzzle, Gift, HelpCircle, Menu, X, ShieldCheck,
 } from "lucide-react";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 
@@ -35,6 +35,7 @@ type Usage = {
   plan: string;
   limits: { jd: number; packet: number; roleFit: number };
   used: { jd: number; packet: number; roleFit: number };
+  isAdmin?: boolean;
 };
 
 const PLAN_TITLES: Record<string, string> = {
@@ -143,6 +144,12 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
         {navList(mainMenu)}
         <div className="mx-3 my-3 h-px bg-[#EEEEEB]" />
         {navList(othersMenu)}
+        {usage?.isAdmin ? (
+          <>
+            <div className="mx-3 my-3 h-px bg-[#EEEEEB]" />
+            {navList([{ href: "/admin-panel", label: "Admin panel", icon: ShieldCheck }])}
+          </>
+        ) : null}
       </nav>
       {usage ? (
         <div className="px-3 pb-4">
@@ -202,7 +209,7 @@ export function DashboardShell({ children, email, pageTitle }: { children: React
             <Menu className="h-5 w-5" />
           </button>
           <div className="min-w-0 flex-1">
-            <SiteHeader email={email} pageTitle={pageTitle} />
+            <SiteHeader email={email} pageTitle={pageTitle} isAdmin={!!usage?.isAdmin} />
           </div>
         </div>
 
