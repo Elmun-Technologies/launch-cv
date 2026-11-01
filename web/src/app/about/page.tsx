@@ -24,6 +24,7 @@ const aboutLd = {
   description: "Who builds LaunchCV and why.",
   mainEntity: {
     "@type": "Organization",
+    "@id": absoluteUrl("/#organization"),
     name: "LaunchCV",
     legalName: "Elmun Technologies LLC",
     url: absoluteUrl("/"),

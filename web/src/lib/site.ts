@@ -9,3 +9,8 @@ export function absoluteUrl(pathname: string): string {
   const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
   return `${base}${path}`;
 }
+
+/** Stable JSON-LD node ids so every page's structured data links to one Organization/WebSite. */
+export const ORG_ID = `${getSiteUrl()}/#organization`;
+export const WEBSITE_ID = `${getSiteUrl()}/#website`;
+export const orgRef = { "@id": ORG_ID };

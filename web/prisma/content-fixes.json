@@ -1,0 +1,47 @@
+[
+  {
+    "from": "75% of resumes are filtered out before a human sees them. Learn exactly how Applicant Tracking Systems work and how to optimize your resume to pass every ATS scan.",
+    "to": "Most employers screen applications with software before a recruiter reads them. Learn how applicant tracking systems parse a resume and how to format yours so nothing gets lost."
+  },
+  {
+    "from": ", and studies estimate that 75% of resumes are rejected before a recruiter ever reads them.",
+    "to": ". You may also have read that 75% of resumes are rejected by ATS before a person sees them; that figure has no published research behind it. The real risk is quieter: a parser misreads your resume, so a recruiter searching the system for your skills never finds you."
+  },
+  {
+    "from": "Here's exactly how they work, why 75% of resumes fail, and how to beat them every time.",
+    "to": "Here's how they work, why good resumes get lost in them, and how to format yours so it doesn't."
+  },
+  {
+    "slug": "what-is-ats-and-how-does-it-work",
+    "field": "seoTitle",
+    "set": "What Is an ATS? How Applicant Tracking Systems Work",
+    "onlyIf": [
+      null
+    ]
+  },
+  {
+    "slug": "ai-resume-builder-complete-guide",
+    "field": "seoTitle",
+    "set": "How to Build Your Resume With AI: A Complete Guide",
+    "onlyIf": [
+      null
+    ]
+  },
+  {
+    "slug": "resume-keywords-for-software-engineers",
+    "field": "seoTitle",
+    "set": "Software Engineer Resume Keywords (2026 List)",
+    "onlyIf": [
+      null,
+      "Resume Keywords for Software Engineers (2026 List + How to Use)"
+    ]
+  },
+  {
+    "slug": "how-to-tailor-your-resume-for-every-job",
+    "field": "seoTitle",
+    "set": "How to Tailor Your Resume for Every Job (AI Method)",
+    "onlyIf": [
+      null
+    ]
+  }
+]

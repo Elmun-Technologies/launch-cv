@@ -1,477 +1,701 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import { SiteShell } from "@/components/site/site-shell";
 import { CtaLink } from "@/components/cta-link";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
-import { HomeClient } from "@/components/home-client";
-import { FreeAtsClient } from "@/components/free-ats-client";
-import { XrayDemo } from "@/components/home/xray-demo";
-import { FixDemo } from "@/components/home/fix-demo";
-import { CountUp, FloatingChips, Magnetic, Marker, Marquee, Reveal, Spotlight, Tilt, WordReveal } from "@/components/home/fx";
 import { ResumePreview } from "@/components/resume-preview";
+import { TemplateFan } from "@/components/site/template-fan";
 import { getResumeExample, RESUME_EXAMPLES } from "@/lib/resume-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 import { TEMPLATE_SPECS, type TemplateStyle } from "@/lib/resume-templates";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
-import { getPublishedPosts } from "@/lib/cms/blog";
-import { absoluteUrl, getSiteUrl } from "@/lib/site";
-import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
-import { ArrowRight, Check, Minus } from "lucide-react";
+import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
+import { PUBLIC_PLANS } from "@/lib/monetization";
+import { getSettings } from "@/lib/app-settings";
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: "Free ATS Resume Checker & AI Resume Builder",
-  description: `Get a free ATS score for your resume in about 10 seconds, see every issue in plain English, then fix it and tailor it to each job. Plans from ${planPriceLabel("starter")}.`,
+  title: "LaunchCV — Get Your Resume Past the ATS",
+  description:
+    "See what applicant tracking software reads from your resume, fix every issue in plain English, and tailor it to each job. The ATS check is free, no sign-up.",
   pathname: "/",
-  keywords: [
-    "ATS resume checker",
-    "free ATS score",
-    "AI resume builder",
-    "resume tailoring",
-    "cover letter generator",
-    "interview prep AI",
-  ],
 });
 
-const homeLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebPage",
-      name: "LaunchCV — Free ATS Resume Checker & AI Resume Builder",
-      description:
-        "Check your resume against applicant tracking systems for free, then fix it, tailor it to each job, and write a matching cover letter.",
-      url: absoluteUrl("/"),
-      isPartOf: { "@type": "WebSite", name: "LaunchCV", url: getSiteUrl() },
-    },
-  ],
-};
+// Plan quotas come from Admin → Limits; refresh the cached page every minute.
+export const revalidate = 60;
 
-/** One job post, marked up the way the matcher reads it. */
-const JOB_KEYWORDS = [
-  { k: "roadmap", have: true },
-  { k: "SQL", have: true },
-  { k: "A/B testing", have: true },
-  { k: "customer interviews", have: true },
-  { k: "stakeholder management", have: false },
-  { k: "pricing", have: true },
-  { k: "B2B SaaS", have: true },
-  { k: "OKRs", have: false },
-];
-
-const FACTS = [
-  { n: "~10 s", l: "to your ATS score" },
-  { n: "0", l: "files kept after the check" },
-  { n: "4", l: "ATS-safe templates, free PDF" },
-  { n: "16", l: "role examples with cover letters" },
-];
-
-/** The real templates, rendered by the same component as the editor preview. */
-const templates = (
-  [
-    { template: "classic", example: "software-engineer" },
-    { template: "modern", example: "product-manager" },
-    { template: "minimal", example: "marketing-manager" },
-    { template: "executive", example: "financial-analyst" },
-  ] as { template: TemplateStyle; example: string }[]
-).flatMap((t) => {
-  const e = getResumeExample(t.example);
-  return e ? [{ ...t, content: exampleToContent(e) }] : [];
-});
-
-const faqs = [
+const FAQS = [
   {
-    q: "Is there a free plan?",
-    a: `You can check your ATS score for free — no account needed. Upload your resume and get a 0–100 score with a full parser breakdown instantly. The full prioritized fix list and the rest of the AI toolkit (JD alignment, cover letters, interview prep) are on a paid plan: ${planNameList()}.`,
+    q: "Is the ATS check really free?",
+    a: "Yes. Upload a PDF or Word file, or paste the text, and you get your score and top fixes without an account. A free account saves the full report.",
   },
   {
-    q: "Why does ATS matter?",
-    a: "Most companies run resumes through Applicant Tracking Systems that scan and rank them before a human reads them, so formatting and keywords decide whether you get seen. LaunchCV checks your resume against the signals these systems rely on and shows you exactly what to fix.",
+    q: "Do you keep my resume file?",
+    a: "No. The file is read once to pull out its text and isn't stored. Your report is kept so you can save it to an account after you sign up.",
   },
   {
-    q: "What file formats can I download?",
-    a: "PDF. It's text-based, so applicant tracking systems can read it, and it keeps names in any script intact.",
+    q: "Will the AI make up experience?",
+    a: "No. Rewrites only use facts that are already in your resume or that you add yourself, and you approve every change before it's applied.",
   },
   {
-    q: "Will it make up experience I don't have?",
-    a: "No. Rewrites only use facts that are already in your resume or that you add yourself. You review every change before it's applied.",
+    q: "What file do I download?",
+    a: "A text-based PDF. Applicant tracking systems can read it, and the layout stays exactly as you see it in the preview.",
   },
   {
-    q: "Is my data safe and private?",
-    a: "Your data is encrypted in transit and at rest, and we never sell it. Resume text is sent to our AI provider only to produce the results you ask for. Voice input uses your browser's speech recognition; we receive the text, not the audio.",
-  },
-  {
-    q: "How long does building a resume take?",
-    a: "Most people finish a polished, ATS-friendly PDF in one sitting with the suggestions and the live preview.",
-  },
-  {
-    q: "Does it work for all industries?",
-    a: "Yes. The templates work across tech, finance, healthcare, marketing, design, operations, and management, and the AI is calibrated per field so the language fits your role.",
-  },
-  {
-    q: "What is the Lifetime plan?",
-    a: `A one-time payment of ${PUBLIC_PLANS.lifetime.priceDisplay} with no renewals. Generous monthly fair-use AI caps included. Pay once, keep using.`,
+    q: "Can I cancel or get a refund?",
+    a: "Monthly plans can be canceled anytime from the billing portal, and you keep access until the end of the period you paid for. Monthly plans have a 7-day money-back guarantee; Lifetime can be refunded within 14 days.",
   },
 ];
 
-const faqLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
+const FEATURED_ROLES = [
+  "registered-nurse",
+  "software-engineer",
+  "product-manager",
+  "teacher",
+  "data-analyst",
+  "accountant",
+  "sales-representative",
+  "ux-designer",
+];
 
-// ISR: keep the homepage fast while surfacing the latest blog posts.
-export const revalidate = 300;
+const TEMPLATE_EXAMPLES: { template: TemplateStyle; example: string }[] = [
+  { template: "classic", example: "software-engineer" },
+  { template: "modern", example: "product-manager" },
+  { template: "minimal", example: "marketing-manager" },
+  { template: "executive", example: "financial-analyst" },
+];
 
-const h2 = "text-[32px] font-semibold leading-[1.08] tracking-[-0.035em] text-[#111111] sm:text-[46px]";
-const grey = "text-[#8A8A86]";
+const BUILD_HREF = `/register?next=${encodeURIComponent("/resume/new")}`;
+const btn = "lc-btn-lift inline-flex items-center justify-center gap-2 rounded-full px-[26px] py-[17px] text-[16px] font-semibold";
+const label = "text-[18px] font-semibold tracking-[-0.01em] text-[#5440e8] sm:text-[20px]";
+
+function Check() {
+  return <span className="font-bold text-[#0b7a4f]" aria-label="found">✓</span>;
+}
 
 export default async function Home() {
-  const latestPosts = (await getPublishedPosts()).slice(0, 3);
-  const pm = getResumeExample("product-manager");
+  const { planLimits } = await getSettings();
+  const roles = FEATURED_ROLES.map((slug) => getResumeExample(slug)).filter((e) => !!e);
+  const templates = TEMPLATE_EXAMPLES.flatMap((t) => {
+    const e = getResumeExample(t.example);
+    return e ? [{ key: t.template, label: TEMPLATE_SPECS[t.template].label, node: <ResumePreview content={exampleToContent(e)} template={t.template} /> }] : [];
+  });
+  const plans = [
+    { id: "starter" as const, cta: "Choose Starter" },
+    { id: "professional" as const, cta: "Choose Professional" },
+    { id: "lifetime" as const, cta: "Buy Lifetime" },
+  ];
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${absoluteUrl("/")}#webpage`,
+        url: absoluteUrl("/"),
+        name: "LaunchCV — Get your resume past the ATS",
+        isPartOf: { "@id": WEBSITE_ID },
+        about: orgRef,
+        inLanguage: "en-US",
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+      },
+    ],
+  };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
-      <JsonLd data={homeLd} />
-      <JsonLd data={faqLd} />
-      <LandingNav />
-      <main>
-        {/* HERO — the real check, right here */}
-        <section
-          id="check"
-          className="scroll-mt-16 bg-[#FAFAF7] bg-[radial-gradient(#E4E2DC_1px,transparent_1px)] [background-size:22px_22px]"
-        >
-          <Spotlight className="pb-16 pt-[112px] sm:pt-[132px]">
-          <div className="mx-auto max-w-[1100px] px-5 text-center sm:px-6">
-            <p className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-[#E5E5E2] bg-white px-3.5 py-1.5 text-[12px] text-[#3F3F3F] sm:gap-x-3 sm:px-4 sm:text-[13px]">
-              <span>Free ATS check</span>
-              <span className="text-[#C9C9C4]">·</span>
-              <span>No sign-up</span>
-              <span className="text-[#C9C9C4]">·</span>
-              <span>Your file isn&apos;t stored</span>
-            </p>
-            <h1 className="mx-auto mt-6 max-w-[920px] text-[42px] font-semibold leading-[1.02] tracking-[-0.045em] sm:text-[64px] lg:text-[76px]">
-              <WordReveal text="Find out why your resume" />{" "}
-              <Marker delay={700}>
-                <WordReveal text="isn't getting interviews." delay={0.3} />
-              </Marker>
-            </h1>
-            <p className="mx-auto mt-6 max-w-[600px] text-[17px] leading-[1.6] text-[#3F3F3F] sm:text-[19px]">
-              Most applications are read by software before a person sees them. Upload yours and see what that software
-              gets wrong — with a fix for every issue.
-            </p>
-          </div>
-          <Reveal delay={0.5} className="relative mx-auto mt-10 max-w-[1100px] px-5 sm:px-6">
-            <FloatingChips />
-            <FreeAtsClient />
-          </Reveal>
-          <div className="mx-auto mt-14 max-w-[1100px] px-5 sm:px-6">
-            <p className="text-center text-[13px] text-[#6B6B6B]">Checked against the parsing rules common to</p>
-            <div className="mt-3">
-              <Marquee items={["Workday", "Greenhouse", "Lever", "iCIMS", "Taleo", "SuccessFactors", "SmartRecruiters", "Ashby", "Jobvite", "BambooHR"]} />
-            </div>
-          </div>
-          </Spotlight>
-        </section>
+    <SiteShell>
+      <JsonLd data={ld} />
 
-        {/* X-RAY */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-28">
-          <Reveal className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      {/* HERO — copy. Static HTML: the headline and CTAs never wait for JavaScript. */}
+      <section className="mx-auto grid max-w-[1280px] items-end gap-6 px-4 pt-4 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-10 lg:pt-10">
+        <div>
+          <p className="inline-flex items-center gap-2 rounded-full bg-[#e4dfff] py-1.5 pl-1.5 pr-3.5 text-[13px] font-semibold text-[#3a2bb8] sm:text-[14px]">
+            <span className="rounded-full bg-[#5440e8] px-2 py-0.5 text-[11px] text-white sm:text-[12px]">Free</span>
+            ATS resume check · no sign-up
+          </p>
+          <h1 className="mt-4 text-[42px] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-6 sm:text-[60px] lg:text-[72px] lg:leading-[1.03]">
+            See your resume the way hiring software <span className="text-[#5440e8]">reads it.</span>
+          </h1>
+        </div>
+        <div className="lg:pb-1.5">
+          <p className="text-[17px] leading-[1.55] sm:text-[19px]">
+            Upload your resume. In about ten seconds you&apos;ll see what an applicant tracking system pulls out of it — and
+            a plain-English fix for every issue.
+          </p>
+          <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
+            <CtaLink cta="check_resume" location="home_hero" href="/free-ats-check" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
+              Check my resume — free
+            </CtaLink>
+            <CtaLink cta="build_resume" location="home_hero" href={BUILD_HREF} className={`${btn} bg-white text-[#121226]`}>
+              Build a resume
+            </CtaLink>
+          </div>
+          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">PDF or Word · your file isn&apos;t stored</p>
+        </div>
+      </section>
+
+      {/* HERO — stage */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-7 sm:px-6 lg:px-10 lg:pt-12">
+        <div className="relative h-[470px] overflow-hidden rounded-[28px] bg-[#5440e8] sm:h-[560px] lg:h-[600px] lg:rounded-[36px]">
+          <p aria-hidden="true" className="lc-poster absolute inset-x-0 top-5 m-0 text-center text-[74px] leading-[68px] text-[#c9c0ff] sm:top-8 sm:text-[120px] sm:leading-[112px] lg:text-[168px] lg:leading-[160px]">
+            GET <br className="sm:hidden" />
+            HIRED
+          </p>
+          <div aria-hidden="true" className="absolute bottom-[-150px] left-1/2 h-[340px] w-[340px] -translate-x-1/2 rounded-full bg-[#4430d6] lg:bottom-[-210px] lg:h-[560px] lg:w-[560px]" />
+          <Image
+            src="/images/people/woman-red-top.webp"
+            alt="Laughing woman in a red top"
+            width={747}
+            height={1080}
+            priority
+            sizes="(min-width: 1024px) 333px, 222px"
+            className="absolute bottom-0 left-1/2 h-[320px] w-auto -translate-x-1/2 sm:h-[400px] lg:h-[480px]"
+          />
+
+          {/* ATS score */}
+          <div className="lc-float lc-drift absolute left-2.5 top-[318px] flex items-center gap-2.5 rounded-[18px] bg-white px-3 py-2.5 sm:left-8 sm:top-[260px] lg:left-16 lg:top-[232px] lg:w-[250px] lg:gap-3.5 lg:rounded-3xl lg:p-[18px]">
+            <svg viewBox="0 0 64 64" aria-hidden="true" className="h-10 w-10 lg:h-16 lg:w-16">
+              <circle cx="32" cy="32" r="27" fill="none" stroke="#efedf7" strokeWidth="7" />
+              <circle cx="32" cy="32" r="27" fill="none" stroke="#22b07d" strokeWidth="7" strokeLinecap="round" strokeDasharray="154 170" transform="rotate(-90 32 32)" />
+            </svg>
             <div>
-              <p className="text-[14px] font-medium text-[#6B6B6B]">Why good resumes get filtered</p>
-              <h2 className={`${h2} mt-3`}>
-                It looks fine to you. <span className={grey}>The software reads something else.</span>
-              </h2>
-              <p className="mt-5 text-[17px] leading-[1.65] text-[#3F3F3F]">
-                Columns, text boxes and headers are the usual culprits. The parser reads left to right, line by line, and
-                the email, dates or skills end up in the wrong field — or nowhere.
+              <p className="text-[12px] font-medium text-[#4a4862] lg:text-[14px]">ATS score</p>
+              <p className="text-[24px] font-bold leading-[26px] tracking-[-0.03em] lg:text-[34px] lg:leading-[38px]">
+                91<span className="text-[11px] font-medium tracking-normal text-[#66647c] lg:text-[14px]">/100</span>
               </p>
-              <p className="mt-4 text-[17px] leading-[1.65] text-[#3F3F3F]">
-                LaunchCV reads your resume the same way and shows you exactly what came out.
-              </p>
+              <p className="hidden text-[12px] text-[#66647c] lg:block">Example result</p>
             </div>
-            <XrayDemo />
-          </Reveal>
-        </section>
-
-        {/* FIX DEMO */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
-          <div className="max-w-[760px]">
-            <p className="text-[14px] font-medium text-[#6B6B6B]">From report to ready</p>
-            <h2 className={`${h2} mt-3`}>
-              Every issue comes with the fix. <span className={grey}>Try it on this one.</span>
-            </h2>
           </div>
-          <Reveal className="mt-10">
-            <FixDemo />
-          </Reveal>
-        </section>
+          <span aria-hidden="true" className="lc-poster absolute left-[118px] top-[300px] rotate-[8deg] rounded-full bg-[#ff7a33] px-2.5 py-1.5 text-[11px] text-[#111118] sm:left-[200px] sm:top-[244px] lg:left-[270px] lg:top-[212px] lg:px-3.5 lg:py-2 lg:text-[14px]">
+            FREE
+          </span>
 
-        {/* TAILOR */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
-          <Reveal className="grid gap-10 lg:grid-cols-2 lg:items-center">
-            <div className="order-2 lg:order-1">
-              <div className="rounded-[18px] border border-[#E5E5E2] bg-white p-6 sm:p-8">
-                <p className="text-[13px] text-[#6B6B6B]">Job post · Senior Product Manager · Northwind</p>
-                <p className="mt-3 text-[15px] leading-[1.75] text-[#3F3F3F]">
-                  You&apos;ll own the <Marker delay={180}>roadmap</Marker> for our <Marker delay={360}>B2B SaaS</Marker>{" "}
-                  scheduling product, run <Marker delay={540}>customer interviews</Marker> and use{" "}
-                  <Marker delay={720}>SQL</Marker> and <Marker delay={900}>A/B testing</Marker> to decide what ships.
-                  Strong <Marker delay={1080}>stakeholder management</Marker> across sales and legal, experience with{" "}
-                  <Marker delay={1260}>pricing</Marker>, and a habit of setting clear <Marker delay={1440}>OKRs</Marker>.
-                </p>
-                <div className="mt-6 border-t border-[#EEEEEB] pt-5">
-                  <div className="flex items-baseline justify-between">
-                    <p className="text-[15px] font-semibold">Your resume covers</p>
-                    <p className="text-[15px] font-semibold tabular-nums">
-                      {JOB_KEYWORDS.filter((k) => k.have).length} of {JOB_KEYWORDS.length}
-                    </p>
-                  </div>
-                  <div className="mt-2 h-2 rounded-full bg-[#EEEEEB]">
-                    <div
-                      className="h-2 rounded-full bg-[#111111] transition-[width] duration-1000"
-                      style={{ width: `${(JOB_KEYWORDS.filter((k) => k.have).length / JOB_KEYWORDS.length) * 100}%` }}
-                    />
-                  </div>
-                  <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-[14px]">
-                    {JOB_KEYWORDS.map((k) => (
-                      <li key={k.k} className={`flex items-center gap-2 ${k.have ? "text-[#111111]" : "text-[#C2341B]"}`}>
-                        {k.have ? <Check className="h-3.5 w-3.5 shrink-0" aria-hidden /> : <Minus className="h-3.5 w-3.5 shrink-0" aria-hidden />}
-                        {k.k}
-                        <span className="sr-only">{k.have ? "(covered)" : "(missing)"}</span>
-                      </li>
-                    ))}
-                  </ul>
+          {/* File chip */}
+          <div className="lc-float lc-drift-2 absolute bottom-4 left-3 flex items-center gap-2 rounded-full bg-[#111118] py-[7px] pl-[7px] pr-3.5 text-white lg:bottom-auto lg:left-16 lg:top-[382px] lg:gap-3 lg:py-2.5 lg:pl-2.5 lg:pr-[22px]">
+            <span className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#c9c0ff] lg:h-[42px] lg:w-[42px]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111118" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+                <path d="M14 3v5h5" />
+              </svg>
+            </span>
+            <span>
+              <span className="hidden text-[15px] font-semibold lg:block">maria-lopez-resume.pdf</span>
+              <span className="block text-[12px] font-semibold lg:text-[13px] lg:font-normal lg:text-[#c9c7d8]">Read in 9 seconds</span>
+            </span>
+          </div>
+          <div className="lc-float lc-drift-3 absolute left-16 top-[470px] hidden w-[280px] rounded-[18px] bg-white px-4 py-3.5 lg:block">
+            <p className="flex justify-between text-[14px] font-semibold">
+              <span>Contact details found</span>
+              <Check />
+            </p>
+            <p className="mt-2 flex justify-between text-[14px] font-semibold">
+              <span>Standard section headings</span>
+              <Check />
+            </p>
+          </div>
+
+          {/* Chat */}
+          <div className="absolute right-2.5 top-[300px] flex w-[150px] flex-col gap-1.5 sm:right-8 sm:top-[250px] sm:w-[220px] lg:right-16 lg:top-[226px] lg:w-[300px]">
+            <span className="lc-float self-end rounded-[18px_18px_5px_18px] bg-[#111118] px-3 py-2.5 text-[13px] font-medium text-white lg:rounded-[22px_22px_6px_22px] lg:px-4 lg:py-3 lg:text-[16px] lg:shadow-none">
+              Is my resume ATS-ready?
+            </span>
+            <span className="lc-float self-start rounded-[18px_18px_18px_5px] bg-white px-3 py-2.5 text-[13px] font-medium lg:rounded-[22px_22px_22px_6px] lg:px-4 lg:py-3 lg:text-[16px] lg:shadow-none">
+              Two fixes and you&apos;re there.
+            </span>
+          </div>
+          {/* Keywords */}
+          <div className="lc-float lc-drift-2 absolute right-16 top-[352px] hidden w-[280px] overflow-hidden rounded-[18px] bg-white lg:block">
+            <div className="flex justify-between bg-[#111118] px-4 py-3 text-[14px] font-semibold text-white">
+              <span>Keywords from the job post</span>
+              <span>6/8</span>
+            </div>
+            {[
+              ["SQL", true],
+              ["Roadmapping", true],
+              ["Stakeholder management", false],
+            ].map(([k, ok], i) => (
+              <div key={k as string} className={`flex justify-between px-4 py-[11px] text-[14px] font-medium ${i ? "border-t border-[#e2e0ea]" : ""}`}>
+                <span>{k}</span>
+                {ok ? <Check /> : <span className="font-bold text-[#c42b30]">Missing</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-14 sm:px-6 lg:px-10">
+        <ol className="grid gap-8 sm:grid-cols-3 sm:gap-10">
+          {[
+            ["Upload or paste", "PDF, Word or plain text. No account needed for the check."],
+            ["See what the software reads", "Fields it found, missed or mixed up — and why, in plain English."],
+            ["Fix it and download", "Edit in the builder and export a clean, readable PDF for free."],
+          ].map(([t, d], i) => (
+            <li key={t} className="border-t-2 border-[#121226] pt-5">
+              <p className="lc-mono text-[13px] text-[#5440e8]">0{i + 1}</p>
+              <p className="mt-2.5 text-[22px] font-bold tracking-[-0.02em]">{t}</p>
+              <p className="mt-1.5 text-[16px] leading-[25px] text-[#4a4862]">{d}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* ATS CHECK (dark) */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-20 sm:px-6 lg:px-10 lg:pt-[120px]">
+        <div className="lc-reveal rounded-[28px] bg-[#111118] px-5 pb-10 pt-12 text-white sm:px-10 lg:rounded-[36px] lg:px-16 lg:pb-16 lg:pt-[72px]">
+          <div className="mx-auto max-w-[820px] text-center">
+            <p className={`${label} !text-[#c9c0ff]`}>/ ATS check</p>
+            <h2 className="lc-h2 mt-5 text-white">
+              It looks fine to you. <span className="!text-[#9a97b3]">The software reads something else.</span>
+            </h2>
+            <p className="mx-auto mt-5 max-w-[640px] text-[17px] leading-7 text-[#c9c7d8] sm:text-[18px]">
+              Columns, text boxes and page headers are the usual culprits. Many parsers read a page line by line, so your
+              email, dates and skills land in the wrong field — or nowhere.
+            </p>
+          </div>
+          <div className="mt-12 grid items-center gap-6 lg:mt-14 lg:grid-cols-[1fr_120px_1fr] lg:gap-0">
+            <div>
+              <span className="inline-block rounded-full bg-white px-3.5 py-[7px] text-[14px] font-semibold text-[#121226]">What a recruiter sees</span>
+              <div className="mt-3.5 flex h-[300px] overflow-hidden rounded-xl bg-white text-[12px] leading-[18px] text-[#1c1c28]" aria-label="Example two-column resume">
+                <div className="w-[38%] bg-[#24324a] px-[18px] py-6 text-white">
+                  <p className="text-[19px] font-extrabold leading-[22px]">Maria Lopez</p>
+                  <p className="mt-0.5 text-[#c9d2dd]">Product Manager</p>
+                  <p className="mt-4 break-words text-[#c9d2dd]">
+                    maria.lopez@email.com
+                    <br />
+                    (512) 555-0142
+                    <br />
+                    Austin, TX
+                  </p>
+                  <p className="mb-1 mt-4 text-[10px] font-bold tracking-[0.12em] text-[#8fa3b8]">SKILLS</p>
+                  <p>
+                    SQL · Amplitude
+                    <br />
+                    A/B testing
+                    <br />
+                    Roadmaps
+                  </p>
+                </div>
+                <div className="flex-1 px-5 py-6">
+                  <p className="text-[10px] font-bold tracking-[0.12em] text-[#66647c]">MY JOURNEY</p>
+                  <p className="mt-2.5 font-bold">Product Manager, Brightpath</p>
+                  <p className="text-[#66647c]">’22 — now</p>
+                  <p className="mt-1">• Launched self-scheduling; no-shows fell 23%</p>
+                  <p>• Led 9 engineers and 2 designers</p>
+                  <p className="mt-3 font-bold">Associate PM, Fieldnote</p>
+                  <p className="text-[#66647c]">Mar 2019 – 2022</p>
+                  <p className="mt-1">• Activation 38% → 57%</p>
+                  <p>• Responsible for the pricing page</p>
                 </div>
               </div>
             </div>
-            <div className="order-1 lg:order-2">
-              <p className="text-[14px] font-medium text-[#6B6B6B]">One resume, many jobs</p>
-              <h2 className={`${h2} mt-3`}>
-                Paste the job post. <span className={grey}>See what it&apos;s looking for.</span>
-              </h2>
-              <p className="mt-5 text-[17px] leading-[1.65] text-[#3F3F3F]">
-                LaunchCV pulls out the skills and phrases the employer uses, checks which ones your resume already says,
-                and suggests rewrites for the bullets that should — using only what you actually did.
-              </p>
-              <p className="mt-4 text-[17px] leading-[1.65] text-[#3F3F3F]">
-                Then write the cover letter and prepare for the interview from the same job post.
-              </p>
-              <Link
-                href="/features/jd-alignment"
-                className="mt-6 inline-flex items-center gap-1.5 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
-              >
-                How job matching works <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
+            <div className="flex items-center justify-center gap-2.5 lg:flex-col lg:pt-10">
+              <span className="inline-flex h-14 w-14 rotate-90 items-center justify-center rounded-full bg-[#5440e8] lg:rotate-0">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M5 12h14" />
+                  <path d="m13 6 6 6-6 6" />
+                </svg>
+              </span>
+              <span className="text-[13px] font-semibold text-[#c9c7d8]">ATS parser</span>
             </div>
-          </Reveal>
-        </section>
-
-        {/* FACTS */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-28">
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-[#E5E5E2] bg-[#E5E5E2] lg:grid-cols-4">
-            {FACTS.map((f) => (
-              <div key={f.l} className="group bg-white px-6 py-7 transition-colors hover:bg-[#FFFBEA]">
-                <dt className="sr-only">{f.l}</dt>
-                <dd className="text-[40px] font-semibold leading-none tracking-[-0.04em] sm:text-[48px]">
-                  <CountUp value={f.n} />
-                </dd>
-                <dd className="mt-2 text-[14px] text-[#6B6B6B]">{f.l}</dd>
+            <div>
+              <span className="inline-block rounded-full bg-[#ff7a33] px-3.5 py-[7px] text-[14px] font-semibold text-[#111118]">What the software reads</span>
+              <div className="lc-mono mt-3.5 h-[300px] overflow-x-auto rounded-xl border border-[#2f2d48] bg-[#1d1c2e] p-6 text-[13px] leading-[30px] text-[#e9e7f3]">
+                <p className="text-[#9a97b3]">{"// fields extracted"}</p>
+                {[
+                  ["name", <>Maria Lopez Product Manager</>],
+                  ["email", <Bad key="e">not found</Bad>],
+                  ["phone", <Bad key="p">not found</Bad>],
+                  ["dates", <Bad key="d">’22 — now: unreadable</Bad>],
+                  ["skills", <Bad key="s">empty</Bad>],
+                  ["section", <>“My Journey” <Bad key="u">unknown</Bad></>],
+                ].map(([k, v]) => (
+                  <p key={k as string} className="whitespace-nowrap">
+                    <span className="inline-block w-[68px] text-[#c9c0ff]">{k}</span> {v}
+                  </p>
+                ))}
               </div>
-            ))}
-          </dl>
-        </section>
+            </div>
+          </div>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <span className="inline-flex items-center gap-2.5 rounded-full bg-white py-2.5 pl-2.5 pr-[18px] text-[15px] font-semibold text-[#121226]">
+              <span className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#fbe2e3] font-extrabold text-[#c42b30]">!</span>
+              Two-column layout hides your contact details
+            </span>
+            <CtaLink cta="check_resume" location="home_xray" href="/free-ats-check" className={`${btn} bg-[#5440e8] !px-[22px] !py-3.5 !text-[15px] text-white hover:bg-[#4430d6]`}>
+              Check mine — free
+            </CtaLink>
+          </div>
+        </div>
+      </section>
 
-        {/* TEMPLATES */}
-        <section className="pt-24 sm:pt-32">
-          <div className="mx-auto flex max-w-[1100px] flex-wrap items-end justify-between gap-6 px-5 sm:px-6">
-            <h2 className={`${h2} max-w-[700px]`}>
-              Four templates. <span className={grey}>All one column, all readable by the software.</span>
+      {/* REPORT */}
+      <section className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 pt-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-[72px] lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal">
+          <p className={label}>/ Your report</p>
+          <h2 className="lc-h2 mt-5">
+            Every issue comes with the fix. <span>Most take a minute.</span>
+          </h2>
+          <p className="mt-5 text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+            Your score, the issues behind it ranked by impact, and exactly what to change. The free check shows your top
+            fixes; a free account saves the full report.
+          </p>
+          <div className="lc-rise mt-8 rounded-3xl bg-[#c9c0ff] px-6 py-[22px] text-[#111118]">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[12px] font-bold tracking-[0.08em]">BULLET REWRITE</p>
+              <span className="rounded-full bg-[#111118] px-2.5 py-[5px] text-[12px] font-semibold text-white">Paid plans</span>
+            </div>
+            <p className="mt-3 text-[15px] text-[#3d3a5c] line-through">Responsible for the onboarding project</p>
+            <p className="mt-1.5 text-[19px] font-semibold leading-[27px]">Redesigned onboarding; week-1 activation rose from 38% to 57%.</p>
+            <p className="mt-2.5 text-[13px] text-[#3d3a5c]">Uses only facts already in your resume. You approve every change.</p>
+          </div>
+        </div>
+        <div className="lc-reveal relative pt-14">
+          <div className="lc-card rounded-3xl p-5 sm:p-8 lg:mr-24">
+            <div className="flex items-center gap-5">
+              <svg width="108" height="108" viewBox="0 0 112 112" role="img" aria-label="Example score 54 out of 100" className="shrink-0">
+                <circle cx="56" cy="56" r="46" fill="none" stroke="#f1eff8" strokeWidth="12" />
+                <circle cx="56" cy="56" r="46" fill="none" stroke="#f2a91f" strokeWidth="12" strokeLinecap="round" strokeDasharray="156 289" transform="rotate(-90 56 56)" />
+                <text x="56" y="66" textAnchor="middle" fontSize="30" fontWeight="700" fill="#121226">
+                  54
+                </text>
+              </svg>
+              <div>
+                <p className="text-[14px] text-[#66647c]">Example ATS score</p>
+                <p className="mt-0.5 text-[26px] font-bold tracking-[-0.02em]">Needs work</p>
+                <p className="mt-0.5 text-[14px] text-[#4a4862]">11 issues · 4 high priority</p>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-col gap-2">
+              <Issue title="Contact details sit in the page header" level="High" fix="Move your email and phone into the body, under your name." />
+              <Issue title="“My Journey” isn’t a heading it knows" level="High" fix="Rename it “Experience”." />
+              <Issue title="6 bullets list duties, not results" level="Medium" />
+              <Issue title="Dates use three different formats" level="Medium" />
+            </div>
+            <div className="mt-4 flex items-center justify-between rounded-2xl bg-[#dcf5ea] px-[18px] py-3.5 text-[#0b4f35]">
+              <span className="text-[15px] font-semibold">Score after these 4 fixes</span>
+              <span className="text-[26px] font-bold tracking-[-0.03em]">91</span>
+            </div>
+          </div>
+          <div className="absolute right-0 top-0 hidden h-[220px] w-[220px] overflow-hidden rounded-full border-[6px] border-[#eeecf4] bg-[#c9c0ff] lg:block">
+            <Image
+              src="/images/people/man-white-tee.webp"
+              alt="Smiling man in a white t-shirt"
+              width={739}
+              height={1080}
+              sizes="206px"
+              className="absolute left-1/2 top-3.5 h-[300px] w-auto max-w-none -translate-x-1/2"
+            />
+          </div>
+          <span className="lc-float lc-drift absolute right-[170px] top-1.5 hidden max-w-[200px] rounded-[22px_22px_6px_22px] bg-[#111118] px-4 py-[11px] text-[15px] font-medium text-white lg:block">
+            Which fix matters most?
+          </span>
+        </div>
+      </section>
+
+      {/* JOB MATCH */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal flex flex-col justify-between gap-5 lg:flex-row lg:items-end lg:gap-12">
+          <div className="max-w-[760px]">
+            <p className={label}>/ Job match</p>
+            <h2 className="lc-h2 mt-5">
+              Paste the job post. <span>See what it&apos;s looking for.</span>
             </h2>
-            <Link
-              href="/resume-templates"
-              className="inline-flex h-11 items-center rounded-full border border-[#D9D9D5] px-5 text-[15px] font-medium transition hover:border-[#111111]"
-            >
-              See the templates
+          </div>
+          <p className="max-w-[380px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+            Skills the employer asks for, which ones your resume already says, and rewrites for the bullets that should —
+            using only what you did.
+          </p>
+        </div>
+        <div className="lc-reveal relative mt-10 overflow-hidden rounded-[28px] bg-[#e4dfff] p-4 pb-0 sm:p-6 sm:pb-0 lg:mt-12 lg:h-[600px] lg:rounded-[36px] lg:p-0">
+          <div aria-hidden="true" className="absolute bottom-[-200px] left-1/2 hidden h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#c9c0ff] lg:block" />
+          <div className="relative z-10 grid gap-3 sm:grid-cols-2 lg:contents">
+            <div className="lc-float rounded-3xl bg-white p-6 lg:absolute lg:left-12 lg:top-12 lg:w-[380px]">
+              <p className="text-[13px] text-[#66647c]">Job post · Senior Product Manager (example)</p>
+              <p className="mt-3 text-[16px] leading-[29px]">
+                You&apos;ll own the <Hit>roadmap</Hit> for a <Hit>B2B SaaS</Hit> product, use <Hit>SQL</Hit> and <Hit>A/B testing</Hit> to
+                decide what ships, and lead <Miss>stakeholder management</Miss> across sales and support. Experience setting <Miss>OKRs</Miss> is a plus.
+              </p>
+              <div className="mt-4 flex gap-3.5 text-[13px] text-[#4a4862]">
+                <span>
+                  <span className="mr-1 inline-block h-2.5 w-2.5 rounded-[3px] bg-[#c9c0ff] align-[-1px]" /> On your resume
+                </span>
+                <span>
+                  <span className="mr-1 inline-block h-2.5 w-2.5 rounded-[3px] bg-[#ffd3bd] align-[-1px]" /> Missing
+                </span>
+              </div>
+            </div>
+            <div className="lc-float rounded-3xl bg-white p-6 lg:absolute lg:right-12 lg:top-12 lg:w-[320px]">
+              <p className="text-[14px] text-[#4a4862]">Match score</p>
+              <p className="mt-0.5 text-[44px] font-bold leading-[48px] tracking-[-0.04em]">
+                72 <span className="text-[20px] text-[#7c7a94]">→</span> <span className="text-[#0b7a4f]">86</span>
+              </p>
+              <div className="mt-3.5 h-2 overflow-hidden rounded-full bg-[#efedf7]">
+                <div className="h-full w-[86%] bg-[#22b07d]" />
+              </div>
+              <p className="mt-2 text-[13px] text-[#66647c]">After adding two missing skills (example)</p>
+              <div className="mt-[18px] flex flex-wrap gap-1.5">
+                {["Roadmap", "SQL", "A/B testing"].map((k) => (
+                  <span key={k} className="rounded-full bg-[#dcf5ea] px-2.5 py-[5px] text-[12px] font-bold text-[#0b7a4f]">
+                    ✓ {k}
+                  </span>
+                ))}
+                {["Stakeholder mgmt", "OKRs"].map((k) => (
+                  <span key={k} className="rounded-full bg-[#fbe2e3] px-2.5 py-[5px] text-[12px] font-bold text-[#c42b30]">
+                    + {k}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="relative mx-auto mt-4 h-[360px] lg:absolute lg:inset-x-0 lg:bottom-0 lg:mt-0 lg:h-[540px]">
+            <Image
+              src="/images/people/woman-hoodie.webp"
+              alt="Young woman in a denim jacket and hoodie, smiling"
+              width={856}
+              height={1080}
+              sizes="(min-width: 1024px) 428px, 285px"
+              className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2"
+            />
+          </div>
+          <CtaLink
+            cta="job_match"
+            location="home_job_match"
+            href="/features/jd-alignment"
+            className={`${btn} lc-float absolute bottom-4 right-4 z-10 bg-[#111118] !px-5 !py-3.5 !text-[15px] text-white hover:bg-[#2a2940] lg:bottom-12 lg:right-12 lg:!px-[26px] lg:!py-[17px] lg:!text-[16px]`}
+          >
+            Match my resume to a job
+          </CtaLink>
+          <span className="absolute bottom-4 left-4 z-10 hidden rounded-full bg-white px-3.5 py-[9px] text-[13px] font-semibold text-[#4a4862] sm:block lg:bottom-12 lg:left-12">
+            Starter plan and up
+          </span>
+        </div>
+      </section>
+
+      {/* TEMPLATES */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal mx-auto max-w-[980px] text-center">
+          <p className={label}>/ Templates</p>
+          <h2 className="lc-h2 mt-5">
+            Four templates. <span>Every one readable by the software.</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-[600px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+            Build with a live preview, switch templates any time, and download a PDF free.
+          </p>
+        </div>
+        <TemplateFan items={templates} />
+      </section>
+
+      {/* EXAMPLES */}
+      <section className="mx-auto grid max-w-[1280px] items-stretch gap-6 px-4 pt-24 sm:px-6 lg:grid-cols-2 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal relative min-h-[460px] overflow-hidden rounded-[28px] bg-[#e4dfff] lg:min-h-[580px] lg:rounded-[36px]">
+          <div aria-hidden="true" className="absolute bottom-[-160px] left-1/2 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-[#c9c0ff]" />
+          <Image
+            src="/images/people/nurse-arms-crossed.webp"
+            alt="Smiling nurse in blue scrubs with a stethoscope, arms crossed"
+            width={759}
+            height={1080}
+            sizes="(min-width: 1024px) 337px, 270px"
+            className="absolute bottom-0 left-1/2 h-[380px] w-auto max-w-none -translate-x-1/2 lg:h-[480px]"
+          />
+          <div className="lc-float lc-drift absolute left-4 top-4 w-[220px] rounded-3xl bg-white p-[18px] lg:left-7 lg:top-7">
+            <p className="text-[13px] text-[#66647c]">Example</p>
+            <p className="mt-0.5 text-[18px] font-bold">Registered Nurse</p>
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {["BLS", "Patient care", "Epic EHR"].map((k) => (
+                <span key={k} className="rounded-full bg-[#f1eff8] px-2.5 py-[5px] text-[12px] font-bold">
+                  {k}
+                </span>
+              ))}
+            </div>
+          </div>
+          <CtaLink
+            cta="start_from_example"
+            location="home_examples"
+            href={`/register?next=${encodeURIComponent("/resume/new?example=registered-nurse")}`}
+            className="lc-float lc-btn-lift absolute bottom-4 right-4 flex items-center gap-2.5 rounded-full bg-[#111118] py-2 pl-2 pr-[18px] text-white lg:bottom-7 lg:right-7"
+          >
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#c9c0ff]">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111118" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+            <span className="text-[14px] font-semibold">Start from this example</span>
+          </CtaLink>
+        </div>
+        <div className="lc-reveal flex flex-col justify-center lg:pl-10">
+          <p className={label}>/ Examples</p>
+          <h2 className="lc-h2 mt-5">
+            Real examples. <span>Not a blank page.</span>
+          </h2>
+          <p className="mt-5 text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+            {RESUME_EXAMPLES.length} roles, each with a full resume, the keywords for that job and an annotated cover letter.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-2">
+            {roles.map((r, i) => (
+              <Link
+                key={r.slug}
+                href={`/resume-examples/${r.slug}`}
+                className={`lc-btn-lift rounded-full px-[17px] py-[11px] text-[15px] font-semibold ${i === 0 ? "bg-[#111118] text-white" : "bg-white text-[#121226] hover:bg-[#121226] hover:text-white"}`}
+              >
+                {r.role}
+              </Link>
+            ))}
+            <Link href="/resume-examples" className="rounded-full px-[17px] py-[11px] text-[15px] font-semibold text-[#5440e8] hover:underline">
+              All {RESUME_EXAMPLES.length} roles →
             </Link>
           </div>
-          <div className="mx-auto mt-10 flex max-w-[1100px] gap-5 overflow-x-auto px-5 pb-2 sm:px-6 lg:grid lg:grid-cols-4 lg:overflow-visible">
-            {templates.map((t) => (
-              <Link key={t.template} href="/resume-templates" className="group block w-[240px] shrink-0 lg:w-auto">
-                <Tilt>
-                  <span className="block rounded-[14px] bg-[#F3F1EC] p-5 transition-[background-color,box-shadow] duration-300 group-hover:bg-[#ECE9E2] group-hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]" aria-hidden="true">
-                    <ResumePreview content={t.content} template={t.template} />
-                  </span>
-                </Tilt>
-                <span className="mt-3 flex items-center justify-between text-[15px] font-medium">
-                  {TEMPLATE_SPECS[t.template].label}
-                  <span className="translate-x-[-4px] text-[13px] text-[#1D4ED8] opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
-                    Use it →
-                  </span>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
+        </div>
+      </section>
 
-        {/* EXAMPLES INDEX */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
-          <Reveal className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-            <div>
-              <h2 className={h2}>
-                Start from a real example. <span className={grey}>Not a blank page.</span>
-              </h2>
-              <p className="mt-5 text-[17px] leading-[1.65] text-[#3F3F3F]">
-                Each one has a full resume, the keywords for that role and an annotated cover letter by the same person.
-                Open it in the editor and replace the details with yours.
-              </p>
-              {pm ? (
-                <Link
-                  href="/resume-examples/product-manager"
-                  className="mt-6 inline-flex items-center gap-1.5 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
-                >
-                  See the {pm.role.toLowerCase()} example <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              ) : null}
-            </div>
-            <ul className="grid gap-x-8 sm:grid-cols-2">
-              {RESUME_EXAMPLES.map((e) => (
-                <li key={e.slug} className="border-t border-[#E5E5E2]">
-                  <Link
-                    href={`/resume-examples/${e.slug}`}
-                    className="group -mx-3 flex items-center justify-between gap-3 rounded-[10px] px-3 py-3.5 transition-colors hover:bg-[#F3F1EC]"
-                  >
-                    <span>
-                      <span className="block text-[16px] font-medium group-hover:text-[#1D4ED8]">{e.role}</span>
-                      <span className="block text-[13px] text-[#6B6B6B]">{e.level}</span>
-                    </span>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-[#8A8A86] transition group-hover:translate-x-0.5 group-hover:text-[#1D4ED8]" aria-hidden="true" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </section>
-
-        {/* PRICING */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
-          <div className="flex flex-col gap-10 lg:flex-row">
-            <div className="flex-1">
-              <h2 className={h2}>
-                The check is free. <span className={grey}>The AI tools start at {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
-              </h2>
-              <p className="mt-5 max-w-[440px] text-[17px] leading-[1.6] text-[#3F3F3F]">
-                The editor, PDF export and templates are free too. Every plan has every AI tool; they differ only in monthly
-                limits. Cancel in one click, or pay once with Lifetime.
-              </p>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-3 lg:flex-[1.3]">
-              {CHECKOUT_PLAN_ORDER.map((key) => {
-                const cfg = PUBLIC_PLANS[key];
-                return (
-                  <CtaLink
-                    key={key}
-                    cta="choose_plan"
-                    plan={key}
-                    location="home_pricing"
-                    selectsPlan
-                    href="/pricing"
-                    className={`group flex flex-col rounded-[14px] bg-white p-5 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_-28px_rgba(0,0,0,0.35)] ${
-                      cfg.popular ? "border-2 border-[#111111]" : "border border-[#E5E5E2] hover:border-[#111111]"
-                    }`}
-                  >
-                    <span className="text-[15px] text-[#6B6B6B]">{cfg.title}</span>
-                    <span className="mt-1 text-[32px] font-semibold tracking-[-0.03em]">
-                      {cfg.priceDisplay}
-                      <span className="ml-1 text-[14px] font-normal tracking-normal text-[#6B6B6B]">{cfg.periodLabel}</span>
-                    </span>
-                    <span className="mt-1 flex-1 text-[14px] leading-[1.5] text-[#3F3F3F]">{cfg.valueLine}</span>
-                    <span className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-[14px] font-medium text-[#111111]">
-                      Details <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" aria-hidden="true" />
-                    </span>
-                  </CtaLink>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
-          <h2 className={`${h2} text-center`}>Questions</h2>
-          <HomeClient faqItems={faqs} />
-        </section>
-
-        {/* BLOG */}
-        {latestPosts.length > 0 ? (
-          <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-28">
-            <div className="flex items-end justify-between gap-4">
-              <h2 className={h2}>
-                Resume guides. <span className={grey}>Written for job seekers.</span>
-              </h2>
-              <Link
-                href="/blog"
-                className="hidden shrink-0 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8] sm:inline"
+      {/* PRICING */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal mx-auto max-w-[980px] text-center">
+          <p className={label}>/ Pricing</p>
+          <h2 className="lc-h2 mt-5">
+            The check is free. <span>AI tools from {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
+          </h2>
+          <p className="mx-auto mt-5 max-w-[620px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+            The ATS check, editor, PDF export and all four templates are free on every account. Paid plans add the AI tools
+            and differ only in monthly limits.
+          </p>
+        </div>
+        <div className="mt-10 grid items-stretch gap-4 md:grid-cols-3 lg:mt-12">
+          {plans.map(({ id, cta }) => {
+            const p = PUBLIC_PLANS[id];
+            const l = planLimits[id];
+            const hot = !!p.popular;
+            const n = (x: number) => x.toLocaleString("en-US");
+            return (
+              <div
+                key={id}
+                className={`lc-reveal lc-rise relative flex flex-col gap-5 rounded-3xl p-[30px] ${hot ? "bg-[#5440e8] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)]" : "lc-card"}`}
               >
-                All articles →
-              </Link>
-            </div>
-            <div className="mt-8 grid gap-5 sm:grid-cols-3">
-              {latestPosts.map((post) => (
-                <Link key={post.slug} href={`/blog/${post.slug}`} className="group flex flex-col border-t border-[#E5E5E2] pt-5">
-                  <span className="text-[13px] text-[#6B6B6B]">{post.category}</span>
-                  <span className="mt-2 text-[17px] font-semibold leading-snug group-hover:text-[#1D4ED8]">{post.title}</span>
-                  <span className="mt-2 line-clamp-2 text-[14px] leading-[1.6] text-[#3F3F3F]">{post.description}</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        {/* FINAL CTA */}
-        <section className="mx-auto w-full max-w-[1100px] px-5 pb-24 pt-24 sm:px-6 sm:pt-32">
-          <div className="relative overflow-hidden rounded-[24px] bg-[#111111] px-7 py-14 text-center text-white sm:px-14 sm:py-20">
-            <div
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(#2A2A2A_1px,transparent_1px)] [background-size:22px_22px] opacity-70"
-              aria-hidden="true"
-            />
-            <div className="relative">
-              <h2 className="mx-auto max-w-[760px] text-[34px] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[56px]">
-                Ten seconds to see what the software sees.
-              </h2>
-              <p className="mx-auto mt-5 max-w-[520px] text-[17px] leading-[1.6] text-[#B5B5B0]">
-                Free, no account, and your file isn&apos;t kept. If it finds nothing to fix, you&apos;ve lost ten seconds.
-              </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-3">
-                <Magnetic>
-                  <CtaLink
-                    cta="check_resume"
-                    location="home_footer"
-                    href="#check"
-                    className="lcv-shine inline-flex h-[52px] items-center rounded-full bg-[#FFE27A] px-7 text-[16px] font-medium text-[#111111] transition hover:bg-[#FFD84D]"
-                  >
-                    Check my resume — free
-                  </CtaLink>
-                </Magnetic>
+                {hot ? <span className="absolute right-6 top-[26px] rounded-full bg-[#ff7a33] px-3 py-[7px] text-[12px] font-bold text-[#111118]">Most picked</span> : null}
+                <div>
+                  <p className={`text-[16px] font-semibold ${hot ? "text-[#e4dfff]" : "text-[#4a4862]"}`}>{p.title}</p>
+                  <p className="mt-2 text-[54px] font-bold leading-[58px] tracking-[-0.04em]">
+                    {p.priceDisplay}
+                    <span className={`text-[16px] font-medium tracking-normal ${hot ? "text-[#e4dfff]" : "text-[#66647c]"}`}> {p.periodLabel}</span>
+                  </p>
+                  <p className={`mt-1.5 text-[14px] ${hot ? "text-[#e4dfff]" : "text-[#66647c]"}`}>{p.valueLine}</p>
+                </div>
+                <ul className={`flex flex-col gap-2.5 border-t pt-5 text-[15px] ${hot ? "border-white/25" : "border-[#e2e0ea]"}`}>
+                  <li>✓ {n(l.jd)} job matches a month</li>
+                  <li>✓ {n(l.roleFit)} role-fit checks a month</li>
+                  <li>✓ {n(l.packet)} cover letter &amp; interview packets{id === "lifetime" ? " a month" : ""}</li>
+                  <li>✓ {id === "lifetime" ? "No renewals" : "Cancel anytime"}</li>
+                </ul>
                 <CtaLink
-                  cta="get_started"
-                  location="home_footer"
-                  href="/register"
-                  className="inline-flex h-[52px] items-center rounded-full border border-white/25 px-6 text-[16px] font-medium text-white transition hover:border-white"
+                  cta="choose_plan"
+                  plan={id}
+                  selectsPlan
+                  location="home_pricing"
+                  href={`/register?next=${encodeURIComponent(`/dashboard/settings/subscription?plan=${id}`)}`}
+                  className={`lc-btn-lift mt-auto rounded-full p-4 text-center text-[15px] font-semibold ${hot ? "bg-white text-[#121226]" : "bg-[#f1eff8] text-[#121226] hover:bg-[#e4dfff]"}`}
                 >
-                  Build a new resume
+                  {cta}
                 </CtaLink>
               </div>
+            );
+          })}
+        </div>
+        <p className="mt-5 text-center text-[14px] text-[#66647c]">
+          Secure checkout by Polar · 7-day refund on monthly plans, 14 days on Lifetime · Prices in USD
+        </p>
+      </section>
+
+      {/* FAQ */}
+      <section className="mx-auto grid max-w-[1280px] items-start gap-10 px-4 pt-24 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal">
+          <p className={label}>/ Questions</p>
+          <h2 className="lc-h2 mt-5">
+            Asked a lot. <span>Answered plainly.</span>
+          </h2>
+          <p className="mt-5 text-[16px] leading-[25px] text-[#4a4862]">
+            Something else?{" "}
+            <a href="mailto:support@launch-cv.com" className="font-semibold text-[#5440e8] hover:underline">
+              support@launch-cv.com
+            </a>
+          </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          {FAQS.map((f, i) => (
+            <details key={f.q} className="lc-faq group rounded-3xl bg-white px-6 py-[22px] transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)]" open={i === 0}>
+              <summary className="flex items-center justify-between gap-4">
+                <span className="text-[17px] font-bold sm:text-[18px]">{f.q}</span>
+                <span className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] group-hover:bg-[#e4dfff]" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#121226" strokeWidth="2.2" strokeLinecap="round">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                </span>
+              </summary>
+              <p className="mt-3 text-[16px] leading-[26px] text-[#4a4862]">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal relative flex flex-col overflow-hidden rounded-[28px] bg-[#111118] text-white sm:block sm:h-[560px] lg:rounded-[36px]">
+          <p aria-hidden="true" className="lc-poster px-6 pt-8 text-[56px] leading-[56px] text-[#c9c0ff] sm:absolute sm:left-[60px] sm:p-0 sm:top-14 sm:text-[84px] sm:leading-[84px] lg:text-[112px] lg:leading-[112px]">
+            NEXT
+            <br className="sm:hidden" /> JOB
+          </p>
+          <div aria-hidden="true" className="absolute -bottom-[180px] -right-[60px] h-[360px] w-[360px] rounded-full bg-[#5440e8] sm:h-[420px] sm:w-[420px] lg:h-[560px] lg:w-[560px]" />
+          <Image
+            src="/images/people/woman-blazer-laptop.webp"
+            alt="Smiling woman in a grey blazer"
+            width={620}
+            height={1080}
+            sizes="(min-width: 1024px) 270px, 200px"
+            className="relative order-last ml-auto mt-2 h-[300px] w-auto sm:absolute sm:bottom-0 sm:right-0 sm:mt-0 sm:h-[400px] lg:h-[470px]"
+          />
+          <div className="relative z-10 px-6 pt-6 sm:absolute sm:bottom-16 sm:left-16 sm:max-w-[500px] sm:p-0">
+            <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em] sm:text-[40px]">Ten seconds to see what the software sees.</h2>
+            <p className="mt-3.5 text-[17px] leading-[26px] text-[#c9c7d8]">Free, no account, and your file isn&apos;t kept.</p>
+            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
+              <CtaLink cta="check_resume" location="home_final" href="/free-ats-check" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
+                Check my resume — free
+              </CtaLink>
+              <CtaLink cta="build_resume" location="home_final" href={BUILD_HREF} className={`${btn} bg-white text-[#111118]`}>
+                Build a resume
+              </CtaLink>
             </div>
           </div>
-        </section>
-      </main>
-      <LandingFooter />
+          <span aria-hidden="true" className="lc-poster absolute right-6 top-[120px] hidden -rotate-[8deg] rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[14px] text-[#111118] sm:block lg:left-[600px] lg:right-auto lg:top-[210px]">
+            NO SIGN-UP
+          </span>
+        </div>
+      </section>
+    </SiteShell>
+  );
+}
+
+function Bad({ children }: { children: React.ReactNode }) {
+  return <span className="rounded-[5px] bg-[#ff7a33] px-[7px] py-0.5 text-[#111118]">{children}</span>;
+}
+
+function Hit({ children }: { children: React.ReactNode }) {
+  return <span className="rounded bg-[#c9c0ff] px-1 py-px">{children}</span>;
+}
+
+function Miss({ children }: { children: React.ReactNode }) {
+  return <span className="rounded bg-[#ffd3bd] px-1 py-px">{children}</span>;
+}
+
+function Issue({ title, level, fix }: { title: string; level: "High" | "Medium"; fix?: string }) {
+  return (
+    <div className="rounded-2xl bg-[#f7f6fb] px-4 py-3.5 transition-colors hover:bg-[#efedf7]">
+      <div className="flex justify-between gap-3">
+        <span className="text-[15px] font-bold">{title}</span>
+        <span className={`h-fit shrink-0 rounded-full px-2.5 py-[5px] text-[12px] font-bold ${level === "High" ? "bg-[#fbe2e3] text-[#c42b30]" : "bg-[#fdf0d5] text-[#a15c00]"}`}>{level}</span>
+      </div>
+      {fix ? <p className="mt-1 text-[14px] text-[#4a4862]">Fix: {fix}</p> : null}
     </div>
   );
 }

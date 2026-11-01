@@ -19,6 +19,7 @@ export default async function AdminMediaPage() {
   const assets = await prisma.mediaAsset.findMany({
     orderBy: { createdAt: "desc" },
     take: 60,
+    omit: { data: true },
     include: { uploadedBy: { select: { email: true } } },
   });
 

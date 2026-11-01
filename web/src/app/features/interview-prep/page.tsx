@@ -2,7 +2,7 @@ import { FeaturePage, type FeaturePageData } from "@/components/marketing/featur
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Interview Prep — Likely Questions for Your Job, With Answer Outlines",
+  title: "AI Interview Prep — Likely Questions for Your Job",
   description:
     "Get the ten questions you're most likely to be asked for a specific job, each with an answer outline built from your resume, plus an elevator pitch.",
   pathname: "/features/interview-prep",
@@ -60,7 +60,7 @@ const f: FeaturePageData = {
     { t: "Practise out loud", d: "Use the elevator pitch for “tell me about yourself” and rehearse the rest." },
   ],
   gets: [
-    { t: "10 likely questions", d: "A mix of role, experience and behavioural questions for this job." },
+    { t: "10 likely questions", d: "A mix of role, experience and behavioral questions for this job." },
     { t: "Answer outlines", d: "Which of your experiences to use and what points to hit." },
     { t: "Elevator pitch", d: "25–40 seconds, written for this role." },
     { t: "Cover letter", d: "Included in the same packet." },

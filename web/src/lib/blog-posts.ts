@@ -414,7 +414,7 @@ You bring the experience; the tools handle the blank page, the formatting, and t
     readingTime: 9,
     category: "Resume Tips",
     tags: ["resume keywords for software engineers", "software engineer resume", "ats keywords", "tech resume", "resume optimization"],
-    seoTitle: "Resume Keywords for Software Engineers (2026 List + How to Use)",
+    seoTitle: "Software Engineer Resume Keywords (2026 List)",
     seoDescription:
       "A categorized list of resume keywords for software engineers plus a simple method to pick the right ones for each job description and pass ATS screening.",
     author: {
@@ -553,7 +553,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       "Gallery of ATS-friendly, single-column resume templates in LaunchCV, each tested against major applicant tracking systems.",
     title: "How to Write an ATS-Friendly Resume (Complete Guide)",
     description:
-      "75% of resumes are filtered out before a human sees them. Learn exactly how Applicant Tracking Systems work and how to optimize your resume to pass every ATS scan.",
+      "Most employers screen applications with software before a recruiter reads them. Learn how applicant tracking systems parse a resume and how to format yours so nothing gets lost.",
     date: "2025-04-10",
     readingTime: 9,
     category: "Resume Tips",
@@ -568,7 +568,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     sections: [
       {
         heading: "What is an ATS and why does it matter?",
-        body: "An Applicant Tracking System (ATS) is software that companies use to collect, filter, and rank job applications automatically. [Research from Jobscan](https://www.jobscan.co/applicant-tracking-systems) shows that over 98% of Fortune 500 companies use ATS systems, and studies estimate that 75% of resumes are rejected before a recruiter ever reads them. Common platforms include [Workday](https://www.workday.com/), [Greenhouse](https://www.greenhouse.com/), Lever, iCIMS, and Taleo. Each has slightly different parsing rules, but all share the same core vulnerability: they rely on keyword matching and structured formatting.",
+        body: "An Applicant Tracking System (ATS) is software that companies use to collect, filter, and rank job applications automatically. [Research from Jobscan](https://www.jobscan.co/applicant-tracking-systems) shows that over 98% of Fortune 500 companies use ATS systems. You may also have read that 75% of resumes are rejected by ATS before a person sees them; that figure has no published research behind it. The real risk is quieter: a parser misreads your resume, so a recruiter searching the system for your skills never finds you. Common platforms include [Workday](https://www.workday.com/), [Greenhouse](https://www.greenhouse.com/), Lever, iCIMS, and Taleo. Each has slightly different parsing rules, but all share the same core vulnerability: they rely on keyword matching and structured formatting.",
       },
       {
         heading: "The 7 most common ATS rejection reasons",
@@ -607,6 +607,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     coverAlt:
       "LaunchCV job-description alignment view highlighting matched keywords and a rising match score after tailoring a resume.",
     title: "How to Tailor Your Resume for Every Job Application (AI Method)",
+    seoTitle: "How to Tailor Your Resume for Every Job (AI Method)",
     description:
       "Sending the same resume to every job? That's why you're not getting callbacks. Learn a systematic AI-assisted process to tailor your resume to each job description in under 10 minutes.",
     date: "2025-04-08",
@@ -764,8 +765,9 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     coverAlt:
       "LaunchCV ATS score report explaining how an applicant tracking system parses and ranks a resume across four scoring categories.",
     title: "What is an ATS? How Applicant Tracking Systems Work (Plain English)",
+    seoTitle: "What Is an ATS? How Applicant Tracking Systems Work",
     description:
-      "Applicant Tracking Systems decide whether a human ever sees your resume. Here's exactly how they work, why 75% of resumes fail, and how to beat them every time.",
+      "Applicant Tracking Systems decide whether a human ever sees your resume. Here's how they work, why good resumes get lost in them, and how to format yours so it doesn't.",
     date: "2025-03-28",
     readingTime: 6,
     category: "Job Search",
@@ -811,6 +813,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     coverAlt:
       "LaunchCV AI resume builder converting plain-language work history into polished, ATS-optimized resume bullet points.",
     title: "AI Resume Builder: The Complete Guide to Writing Your Resume With AI",
+    seoTitle: "How to Build Your Resume With AI: A Complete Guide",
     description:
       "AI resume builders write bullet points, optimize keywords, and format your resume for ATS — in minutes. Here's how they work, what to look for, and how to use one effectively.",
     date: "2025-03-24",

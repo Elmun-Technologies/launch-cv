@@ -1449,3 +1449,73 @@ button:hover, [role="button"]:hover, a:hover {
 @media (prefers-reduced-motion: reduce) {
   .lcv-shine:hover::after { animation: none; }
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   v5 marketing design (components/site/*). Scoped to .lc-site so app
+   pages keep their own styles until they move over.
+   ══════════════════════════════════════════════════════════════════════ */
+.lc-site {
+  background: #eeecf4;
+  color: #121226;
+  font-family: var(--font-figtree), "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.lc-site ::selection { background: #c9c0ff; color: #111118; }
+.lc-site :focus-visible { outline: 3px solid #5440e8; outline-offset: 3px; border-radius: 8px; }
+.lc-poster {
+  font-family: var(--font-archivo), "Arial Black", sans-serif;
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+.lc-mono { font-family: var(--font-jbmono), ui-monospace, monospace; }
+.lc-card {
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(18, 18, 38, 0.04), 0 10px 30px -18px rgba(18, 18, 38, 0.22);
+}
+.lc-float { box-shadow: 0 24px 48px -20px rgba(36, 24, 120, 0.35); }
+.lc-h2 {
+  font-size: clamp(34px, 5.2vw, 54px);
+  line-height: 1.07;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+.lc-h2 > span { color: #7c7a94; }
+
+/* Hover: buttons lift, cards rise. */
+.lc-btn-lift { transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+.lc-btn-lift:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgba(36, 24, 120, 0.55); }
+.lc-btn-lift:active { transform: translateY(0); }
+.lc-rise { transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease; }
+.lc-rise:hover { transform: translateY(-4px); box-shadow: 0 30px 60px -30px rgba(36, 24, 120, 0.45); }
+.lc-link { background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.25s ease, color 0.2s; }
+.lc-link:hover { background-size: 100% 1px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Floating widgets drift gently; each gets its own phase. */
+  @keyframes lc-drift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+  .lc-drift { animation: lc-drift 6s ease-in-out infinite; }
+  .lc-drift-2 { animation: lc-drift 7s ease-in-out -2s infinite; }
+  .lc-drift-3 { animation: lc-drift 8s ease-in-out -4s infinite; }
+
+  /* Below-the-fold reveal with scroll-driven animations. Content is fully
+     visible where unsupported, and nothing above the fold uses it (LCP). */
+  @supports (animation-timeline: view()) {
+    @keyframes lc-reveal { from { opacity: 0; translate: 0 28px; } to { opacity: 1; translate: 0 0; } }
+    .lc-reveal { animation: lc-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 40%; }
+  }
+
+  /* Template papers fan out on hover. */
+  .lc-fan .lc-paper { transition: transform 0.45s cubic-bezier(.2,.8,.2,1), z-index 0s; }
+  .lc-fan:hover .lc-paper[data-i="0"] { transform: rotate(-11deg) translate(-26px, 6px); }
+  .lc-fan:hover .lc-paper[data-i="1"] { transform: rotate(-4deg) translate(-10px, -8px); }
+  .lc-fan:hover .lc-paper[data-i="2"] { transform: rotate(4deg) translate(10px, -8px); }
+  .lc-fan:hover .lc-paper[data-i="3"] { transform: rotate(11deg) translate(26px, 6px); }
+  .lc-fan .lc-paper[data-active="true"] { transform: rotate(0deg) translateY(-18px) scale(1.04) !important; }
+
+  .lc-faq summary .lc-plus { transition: transform 0.25s ease, background-color 0.2s; }
+  .lc-faq[open] summary .lc-plus { transform: rotate(45deg); }
+}
+.lc-faq summary { list-style: none; cursor: pointer; }
+.lc-faq summary::-webkit-details-marker { display: none; }

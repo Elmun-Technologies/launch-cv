@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
-import { storeUpload, UploadError } from "@/lib/cms/storage";
+import { readUpload, UploadError } from "@/lib/cms/storage";
 import { recordAudit } from "@/lib/cms/audit";
 
 export const runtime = "nodejs";
@@ -24,16 +24,23 @@ export async function POST(req: NextRequest) {
   const alt = typeof formData.get("alt") === "string" ? (formData.get("alt") as string) : null;
 
   try {
-    const stored = await storeUpload(file);
+    const img = await readUpload(file);
 
-    const asset = await prisma.mediaAsset.create({
+    const created = await prisma.mediaAsset.create({
       data: {
-        url: stored.url,
-        alt,
-        mimeType: stored.mimeType,
-        sizeBytes: stored.bytes,
+        url: "",
+        data: new Uint8Array(img.bytes),
+        alt: alt?.slice(0, 300) ?? null,
+        mimeType: img.mimeType,
+        sizeBytes: img.bytes.length,
         uploadedById: admin.sub,
       },
+      select: { id: true },
+    });
+    const asset = await prisma.mediaAsset.update({
+      where: { id: created.id },
+      data: { url: `/media/${created.id}.${img.ext}` },
+      select: { id: true, url: true, alt: true, mimeType: true, sizeBytes: true, createdAt: true },
     });
 
     await recordAudit({

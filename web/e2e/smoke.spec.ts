@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 
 test("home page renders", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /find out why your resume/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /see your resume the way hiring software/i })).toBeVisible();
 });
 
 test("login page renders", async ({ page }) => {
@@ -21,9 +21,12 @@ test("free ATS check page renders without an account", async ({ page }) => {
   await expect(page.getByPlaceholder(/paste your resume text/i)).toBeVisible();
 });
 
-test("home hero runs the free ATS check in place", async ({ page }) => {
+test("home hero sends visitors to the free ATS check", async ({ page }) => {
   await page.goto("/");
-  // The hero embeds the checker itself, so the upload is one click from landing.
-  await expect(page.locator("#check").getByRole("button", { name: /upload your resume/i })).toBeVisible();
-  await expect(page.locator("#check").getByRole("tab", { name: /paste text/i })).toBeVisible();
+  // One page per query: the checker lives on /free-ats-check, the home hero links to it.
+  const cta = page.getByRole("link", { name: /check my resume — free/i }).first();
+  await expect(cta).toHaveAttribute("href", "/free-ats-check");
+  await cta.click();
+  await expect(page).toHaveURL(/\/free-ats-check$/);
+  await expect(page.getByRole("button", { name: /upload your resume/i })).toBeVisible();
 });

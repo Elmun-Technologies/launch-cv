@@ -36,7 +36,7 @@ const f: FeaturePageData = {
         />
         <BeforeAfter
           before="Helped the team with reporting."
-          after="Built the weekly revenue report the sales team used to prioritise renewals."
+          after="Built the weekly revenue report the sales team used to prioritize renewals."
         />
       </div>
     ),

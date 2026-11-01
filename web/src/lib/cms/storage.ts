@@ -1,25 +1,14 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
-import crypto from "node:crypto";
-
 /**
- * Image upload abstraction. v1 = local filesystem under web/public/uploads/cms/.
- * Swap implementation here when moving to S3/R2/UploadThing — public API stays the same.
+ * Image uploads for the CMS. Bytes are stored in the database (MediaAsset.data)
+ * and served from /media/<id>.<ext> by app/media/[file]/route.ts, so uploads
+ * work on serverless hosting where the filesystem isn't writable or shared.
  */
 
-export type StoredAsset = {
-  url: string; // public URL beginning with /uploads/cms/...
-  bytes: number;
+export type ValidatedImage = {
+  bytes: Buffer;
   mimeType: string;
+  ext: string;
 };
-
-const ALLOWED_MIME = new Set([
-  "image/png",
-  "image/jpeg",
-  "image/webp",
-  "image/gif",
-  "image/avif",
-]);
 
 const MAX_BYTES = 5 * 1024 * 1024; // 5 MB
 
@@ -31,46 +20,33 @@ export class UploadError extends Error {
   }
 }
 
-function extFromMime(mime: string): string {
-  switch (mime) {
-    case "image/png": return "png";
-    case "image/jpeg": return "jpg";
-    case "image/webp": return "webp";
-    case "image/gif": return "gif";
-    case "image/avif": return "avif";
-    default: return "bin";
-  }
+/** Identify the image type from its first bytes — the browser-sent type can't be trusted. */
+export function sniffImage(buf: Buffer): { mimeType: string; ext: string } | null {
+  const b = (i: number) => buf[i];
+  if (buf.length < 12) return null;
+  if (b(0) === 0x89 && b(1) === 0x50 && b(2) === 0x4e && b(3) === 0x47) return { mimeType: "image/png", ext: "png" };
+  if (b(0) === 0xff && b(1) === 0xd8 && b(2) === 0xff) return { mimeType: "image/jpeg", ext: "jpg" };
+  if (buf.toString("ascii", 0, 4) === "RIFF" && buf.toString("ascii", 8, 12) === "WEBP") return { mimeType: "image/webp", ext: "webp" };
+  if (buf.toString("ascii", 0, 6) === "GIF87a" || buf.toString("ascii", 0, 6) === "GIF89a") return { mimeType: "image/gif", ext: "gif" };
+  if (buf.toString("ascii", 4, 8) === "ftyp" && /^avi[fs]$/.test(buf.toString("ascii", 8, 12))) return { mimeType: "image/avif", ext: "avif" };
+  return null;
 }
 
-/** Persists a single uploaded file and returns its public URL + metadata. */
-export async function storeUpload(file: File): Promise<StoredAsset> {
-  if (!ALLOWED_MIME.has(file.type)) {
-    throw new UploadError(`Unsupported file type: ${file.type || "unknown"}`, 415);
-  }
+export const MEDIA_MIME_BY_EXT: Record<string, string> = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  webp: "image/webp",
+  gif: "image/gif",
+  avif: "image/avif",
+};
+
+/** Validates an uploaded file (size + real image type). */
+export async function readUpload(file: File): Promise<ValidatedImage> {
   if (file.size > MAX_BYTES) {
     throw new UploadError(`File too large (max ${MAX_BYTES / 1024 / 1024} MB)`, 413);
   }
-
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
-
-  const now = new Date();
-  const yyyy = String(now.getUTCFullYear());
-  const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
-  const hash = crypto.randomBytes(8).toString("hex");
-  const ext = extFromMime(file.type);
-
-  const relDir = path.join("uploads", "cms", yyyy, mm);
-  const absDir = path.join(process.cwd(), "public", relDir);
-  await fs.mkdir(absDir, { recursive: true });
-
-  const filename = `${hash}.${ext}`;
-  const absPath = path.join(absDir, filename);
-  await fs.writeFile(absPath, buffer);
-
-  return {
-    url: "/" + path.join(relDir, filename).replace(/\\/g, "/"),
-    bytes: file.size,
-    mimeType: file.type,
-  };
+  const bytes = Buffer.from(await file.arrayBuffer());
+  const kind = sniffImage(bytes);
+  if (!kind) throw new UploadError("Upload a PNG, JPEG, WebP, GIF or AVIF image.", 415);
+  return { bytes, ...kind };
 }
