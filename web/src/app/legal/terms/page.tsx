@@ -43,7 +43,7 @@ const sections: LegalSection[] = [
   {
     h: "Acceptable use",
     body: (
-      <ul className="list-disc space-y-2 pl-5">
+      <ul className="list-disc space-y-2 pl-5 marker:text-[#5440e8]">
         <li>No spam, harassment or illegal content.</li>
         <li>No content that infringes someone else&apos;s intellectual property or privacy.</li>
         <li>No automated scraping or attempts to get around plan limits.</li>
@@ -63,7 +63,7 @@ const sections: LegalSection[] = [
         <p className="mt-3">
           Monthly plans come with a 7-day money-back guarantee, and Lifetime can be refunded within 14 days of purchase.
           Email{" "}
-          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
+          <a href="mailto:support@launch-cv.com" className="text-[#5440e8] underline decoration-[#5440e8]/40 underline-offset-2 hover:decoration-[#5440e8]">
             support@launch-cv.com
           </a>{" "}
           from your account email to request one.
@@ -85,7 +85,7 @@ const sections: LegalSection[] = [
     body: (
       <p>
         How we handle your data, including analytics and the providers we use, is described in the{" "}
-        <Link href="/legal/privacy" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
+        <Link href="/legal/privacy" className="text-[#5440e8] underline decoration-[#5440e8]/40 underline-offset-2 hover:decoration-[#5440e8]">
           Privacy Policy
         </Link>
         .

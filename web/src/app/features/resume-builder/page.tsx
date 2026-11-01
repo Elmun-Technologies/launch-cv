@@ -1,5 +1,7 @@
-import { FeaturePage, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
+import Image from "next/image";
+import { FeaturePage, Stage, ExampleTag, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
   title: "AI Resume Builder — ATS-Friendly Resume, PDF Export",
@@ -16,6 +18,47 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const TEMPLATES = ["Classic", "Modern", "Minimal", "Executive"];
+
+const stage = (
+  <Stage bg="#5440e8" poster="BUILD" posterColor="#6a58ee">
+    <Image
+      src="/images/people/woman-red-top.webp"
+      alt="Laughing woman in a red top"
+      width={747}
+      height={1080}
+      priority
+      sizes="(min-width: 1024px) 298px, 220px"
+      className="absolute bottom-0 right-[-12px] h-[270px] w-auto max-w-none sm:h-[320px] lg:right-[-20px] lg:h-[430px]"
+    />
+    <div className="lc-float lc-drift absolute left-4 top-[88px] w-[220px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[280px] lg:left-8 lg:top-[150px] lg:w-[290px] xl:w-[330px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="flex justify-between gap-2 text-[11px] font-bold tracking-[0.06em] text-[#66647c] lg:text-[12px]">
+        <span>EXPERIENCE · BULLET 2</span>
+        <ExampleTag />
+      </p>
+      <p className="mt-1.5 text-[13px] text-[#66647c] line-through lg:mt-2 lg:text-[14px]">Responsible for onboarding</p>
+      <p className="mt-1 text-[14px] font-semibold leading-[19px] lg:text-[16px] lg:leading-[22px]">Redesigned onboarding; week-1 activation rose from 38% to 57%.</p>
+      <div className="mt-2.5 flex gap-1.5 lg:mt-3">
+        <span className="rounded-full bg-[#5440e8] px-2.5 py-[5px] text-[12px] font-bold text-white">Use rewrite</span>
+        <span className="rounded-full bg-[#f1eff8] px-2.5 py-[5px] text-[12px] font-bold">Keep mine</span>
+      </div>
+    </div>
+    <div className="lc-float lc-drift-2 absolute left-4 top-[250px] rounded-[18px] bg-white p-3 text-[#121226] lg:left-8 lg:top-[400px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="sr-only">Templates:</p>
+      <ul className="grid grid-cols-2 gap-1.5 lg:flex">
+        {TEMPLATES.map((t) => (
+          <li key={t} className={`rounded-full px-3 py-[7px] text-center text-[12px] font-semibold lg:text-[13px] ${t === "Modern" ? "bg-[#c9c0ff]" : "bg-[#f1eff8]"}`}>
+            {t}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <span className="lc-poster absolute bottom-6 left-6 -rotate-[5deg] rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[12px] text-[#111118] lg:bottom-10 lg:left-10 lg:text-[13px]">
+      FREE PDF
+    </span>
+  </Stage>
+);
+
 const f: FeaturePageData = {
   path: "/features/resume-builder",
   name: "Resume Builder",
@@ -24,23 +67,22 @@ const f: FeaturePageData = {
   lead:
     "Start from scratch, import a file or paste your LinkedIn profile. Fill in each section with a live preview, turn duty-style bullets into results with AI, and export a PDF that applicant tracking systems can parse.",
   facts: ["4 ATS-friendly templates", "Import PDF, DOCX or LinkedIn", "Preview matches the PDF"],
-  photo: { src: "/images/photos/resume-review-desk.webp", alt: "Hands reviewing a printed resume next to a laptop" },
+  cta: { label: "Build my resume — free", href: `/register?next=${encodeURIComponent("/resume/new")}` },
+  stage,
   example: {
-    title: "What the bullet rewrite does",
+    title: "What the bullet rewrite does.",
     caption: "Example rewrite. Suggestions keep your facts; if no number can be inferred, the wording changes instead of a figure being invented.",
     body: (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3 sm:gap-4">
         <BeforeAfter
           before="Responsible for onboarding new customers."
           after="Owned onboarding for new B2B customers, cutting time to first value from 14 days to 6."
         />
-        <BeforeAfter
-          before="Helped the team with reporting."
-          after="Built the weekly revenue report the sales team used to prioritize renewals."
-        />
+        <BeforeAfter before="Helped the team with reporting." after="Built the weekly revenue report the sales team used to prioritize renewals." />
       </div>
     ),
   },
+  stepsTail: "From blank page to PDF.",
   steps: [
     { t: "Start or import", d: "Begin with a blank resume, upload a PDF or DOCX, or paste your LinkedIn profile text." },
     { t: "Fill each section", d: "Contact, summary, experience, education, skills, certifications and achievements — with a live preview." },
@@ -56,9 +98,9 @@ const f: FeaturePageData = {
     { t: "Consistency check", d: "Flags mismatched dates, formats and claims across your resume." },
   ],
   banner: {
-    photo: { src: "/images/photos/resume-clipboard.webp", alt: "Resume on a clipboard ready for review" },
     title: "Written for people, readable by software.",
     text: "Clean PDFs with real text — names, dates and skills a parser can pick up, in any language your name is written in.",
+    note: `The editor, all four templates and PDF export are free. AI rewrites come with paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month.`,
   },
   faqs: [
     {
