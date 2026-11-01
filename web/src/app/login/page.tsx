@@ -3,6 +3,7 @@ import { getSession } from "@/lib/session";
 import { safeNextPath } from "@/lib/safe-next";
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 import { LoginForm } from "@/components/login-form";
 import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 
@@ -19,7 +20,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const googleEnabled = await isGoogleOAuthConfigured();
   return (
     <Suspense
-      fallback={<div className="mx-auto max-w-md px-4 py-24 text-sm text-zinc-400">Loading...</div>}
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-[#eeecf4]">
+          <Loader2 className="h-8 w-8 text-[#5440e8] motion-safe:animate-spin" aria-label="Loading" />
+        </div>
+      }
     >
       <LoginForm googleEnabled={googleEnabled} />
     </Suspense>

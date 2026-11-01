@@ -4,7 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Loader2, Eye, EyeOff, ArrowRight, Gift, BarChart3 } from "lucide-react";
-import { AuthLayout } from "@/components/auth-layout";
+import {
+  AuthLayout,
+  AuthNotice,
+  authEyeBtnCls,
+  authH1Cls,
+  authHintCls,
+  authInlineLinkCls,
+  authInputCls,
+  authLabelCls,
+  authLeadCls,
+  authSubmitCls,
+} from "@/components/auth-layout";
 import { GoogleSignInButton, AuthDivider } from "@/components/google-sign-in-button";
 import { trackSignUpStart, trackSignUpComplete, identifyUser } from "@/lib/analytics-client";
 
@@ -80,41 +91,34 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
   return (
     <AuthLayout mode="register">
       {/* Header */}
-      <div className="mb-5">
-        <h1 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111]">
-          {fromReport ? (
-            <>
-              Save your report. <span className="text-[#8A8A86]">It&apos;s free.</span>
-            </>
-          ) : (
-            <>
-              Create your account. <span className="text-[#8A8A86]">It&apos;s free.</span>
-            </>
-          )}
+      <div>
+        <h1 className={authH1Cls}>
+          {fromReport ? "Save your report." : "Create your account."} <span className="text-[#7c7a94]">It&apos;s free.</span>
         </h1>
-        <p className="mt-2.5 text-[15px] leading-[1.6] text-[#3F3F3F]">
+        <p className={authLeadCls}>
           {fromReport
             ? "See every issue we found and keep it with your resume. No credit card."
             : "Check and fix your resume, then pick a plan when you need the AI tools."}{" "}
           Already have an account?{" "}
-          <Link href="/login" className="font-semibold text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
+          <Link href="/login" className={authInlineLinkCls}>
             Sign in
           </Link>
         </p>
         {referralCode ? (
-          <div className="mt-4 flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2">
-            <Gift className="h-3.5 w-3.5 shrink-0 text-blue-600" />
-            <p className="text-[12px] font-semibold text-blue-700">
-              Referral applied: <span className="font-bold">{referralCode}</span>
+          <div className="mt-4 flex items-center gap-2.5 rounded-2xl bg-[#e4dfff] px-4 py-3">
+            <Gift className="h-4 w-4 shrink-0 text-[#3a2bb8]" aria-hidden="true" />
+            <p className="text-[14px] font-semibold text-[#3a2bb8]">
+              Referral applied: <span className="font-extrabold">{referralCode}</span>
             </p>
           </div>
         ) : null}
         {atsScore !== null ? (
-          <div className="mt-4 flex items-center gap-2.5 rounded-[12px] bg-[#F5F5F3] px-3.5 py-3">
-            <BarChart3 className="h-4 w-4 shrink-0 text-[#111111]" />
-            <p className="text-[13px] leading-snug text-[#3F3F3F]">
-              Your ATS score: <span className="font-bold">{atsScore}/100</span>. Create your
-              account to see every fix.
+          <div className="lc-card mt-4 flex items-center gap-3 rounded-2xl px-4 py-3.5">
+            <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#e4dfff]">
+              <BarChart3 className="h-[18px] w-[18px] text-[#5440e8]" aria-hidden="true" />
+            </span>
+            <p className="text-[14px] leading-snug text-[#4a4862]">
+              Your ATS score: <span className="font-bold text-[#121226]">{atsScore}/100</span>. Create your account to see every fix.
             </p>
           </div>
         ) : null}
@@ -122,21 +126,21 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
 
       {/* Social sign-up */}
       {googleEnabled ? (
-        <div className="mb-5 space-y-4">
+        <div className="mt-7 space-y-5">
           <GoogleSignInButton mode="register" next={next} referralCode={referralCode || null} />
-          <AuthDivider label="or sign up with email" />
+          <AuthDivider label="or with email" />
         </div>
       ) : null}
 
       {/* Form */}
-      <form onSubmit={onSubmit} className="space-y-3.5">
+      <form onSubmit={onSubmit} className={googleEnabled ? "mt-5" : "mt-7"}>
         <div>
-          <label htmlFor="reg-name" className="mb-1.5 block text-[13px] font-medium text-[#111111]">
-            Full name <span className="font-normal text-[#6B6B6B]">(optional)</span>
+          <label htmlFor="reg-name" className={authLabelCls}>
+            Full name <span className={authHintCls}>(optional)</span>
           </label>
           <input
-              id="reg-name"
-            className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
+            id="reg-name"
+            className={authInputCls}
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Alex Johnson"
@@ -144,23 +148,26 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
           />
         </div>
 
-        <div>
-          <label htmlFor="reg-email" className="mb-1.5 block text-[13px] font-medium text-[#111111]">Email</label>
+        <div className="mt-4">
+          <label htmlFor="reg-email" className={authLabelCls}>
+            Email
+          </label>
           <input
-              id="reg-email"
+            id="reg-email"
             type="email"
             required
-            className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
+            className={authInputCls}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
             autoComplete="email"
+            aria-describedby={error ? "reg-error" : undefined}
           />
         </div>
 
-        <div>
-          <label htmlFor="reg-password" className="mb-1.5 block text-[13px] font-medium text-[#111111]">
-            Password <span className="font-normal text-[#6B6B6B]">(min 8)</span>
+        <div className="mt-4">
+          <label htmlFor="reg-password" className={authLabelCls}>
+            Password <span className={authHintCls}>(min 8)</span>
           </label>
           <div className="relative">
             <input
@@ -168,44 +175,53 @@ export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolea
               type={showPw ? "text" : "password"}
               required
               minLength={8}
-              className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5 pr-10"
+              className={`${authInputCls} pr-14`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="new-password"
+              placeholder="••••••••"
+              aria-describedby={error ? "reg-error" : undefined}
             />
             <button
               type="button"
               tabIndex={-1}
               aria-label={showPw ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] transition hover:text-[#475569]"
+              className={`${authEyeBtnCls} mt-[3px]`}
               onClick={() => setShowPw((s) => !s)}
             >
-              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPw ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
             </button>
           </div>
         </div>
 
         {error ? (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2">
-            <p className="text-[13px] text-red-700">{error}</p>
+          <div id="reg-error" className="mt-4">
+            <AuthNotice tone="error">
+              <p>{error}</p>
+            </AuthNotice>
           </div>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 h-[50px] rounded-full bg-[#2563EB] text-[15px] font-medium text-white transition hover:bg-[#1D4ED8] disabled:opacity-60"
-        >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+        <button type="submit" disabled={loading} className={`${authSubmitCls} group mt-6`}>
           {loading ? "Creating account…" : "Create my account"}
+          {loading ? (
+            <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" />
+          ) : (
+            <ArrowRight className="h-4 w-4 transition-transform motion-safe:group-hover:translate-x-0.5" aria-hidden="true" />
+          )}
         </button>
       </form>
 
-      <p className="mt-5 text-[11px] leading-[1.55] text-[#6E6E6A]">
+      <p className="mt-4 text-[12px] leading-[18px] text-[#66647c]">
         By creating an account you agree to our{" "}
-        <Link href="/legal/terms" className="font-semibold text-[#475569] underline underline-offset-2 hover:text-[#0F172A]">Terms</Link>{" "}
+        <Link href="/legal/terms" className="font-semibold text-[#4a4862] underline underline-offset-2 transition-colors hover:text-[#5440e8]">
+          Terms
+        </Link>{" "}
         and{" "}
-        <Link href="/legal/privacy" className="font-semibold text-[#475569] underline underline-offset-2 hover:text-[#0F172A]">Privacy Policy</Link>.
+        <Link href="/legal/privacy" className="font-semibold text-[#4a4862] underline underline-offset-2 transition-colors hover:text-[#5440e8]">
+          Privacy Policy
+        </Link>
+        .
       </p>
     </AuthLayout>
   );
