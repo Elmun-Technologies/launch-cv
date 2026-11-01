@@ -106,7 +106,7 @@ export function AuthLayout({ children, mode, stageNote }: AuthLayoutProps) {
   return (
     <div className={`lc-site ${siteFontVars} min-h-screen lg:grid lg:grid-cols-2`}>
       {/* PHONE / TABLET BANNER */}
-      <div
+      <header
         className={`relative mx-2 mt-2 overflow-hidden rounded-[28px] bg-[#5440e8] lg:hidden ${
           s.tallBanner ? "h-[200px] sm:h-[250px]" : "h-[180px] sm:h-[230px]"
         }`}
@@ -133,13 +133,13 @@ export function AuthLayout({ children, mode, stageNote }: AuthLayoutProps) {
           sizes="(min-width: 640px) 160px, 120px"
           className={`absolute bottom-0 w-auto max-w-none ${s.mobileImgCls}`}
         />
-      </div>
+      </header>
 
       {/* FORM */}
       <div className="flex min-h-[calc(100svh-208px)] flex-col px-[18px] pb-8 pt-7 sm:px-10 lg:min-h-screen lg:px-14 lg:py-8">
-        <div className="hidden lg:block">
+        <header className="hidden lg:block">
           <SiteLogo size={36} />
-        </div>
+        </header>
         <main className="mx-auto flex w-full max-w-[440px] flex-1 flex-col lg:justify-center lg:py-10">{children}</main>
         <footer className="mx-auto mt-12 w-full max-w-[440px] text-[13px] text-[#66647c] lg:mx-0 lg:mt-0 lg:max-w-none">
           <p>

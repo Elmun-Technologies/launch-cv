@@ -399,7 +399,7 @@ export default async function BlogPostPage({
                 ),
                 hr: () => <hr className="my-10 border-[#e2e0ea]" />,
                 table: ({ ...props }) => (
-                  <div className="mt-6 overflow-x-auto rounded-2xl bg-white p-1 [overflow-wrap:normal]">
+                  <div className="relative mt-6 overflow-x-auto rounded-2xl bg-white p-1 [overflow-wrap:normal]">
                     <table className="w-full border-collapse text-[15px] leading-6" {...props} />
                   </div>
                 ),

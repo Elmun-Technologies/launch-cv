@@ -208,7 +208,7 @@ function PosterWidget({ kind }: { kind: Widget }) {
     case "rewrite":
       return (
         <Box className="w-[180px] text-[12px] leading-[17px]">
-          <span className="font-medium text-[#7c7a94] line-through">Responsible for onboarding</span>
+          <span className="font-medium text-[#66647c] line-through">Responsible for onboarding</span>
           <br />
           Activation 38% → 57%
         </Box>

@@ -662,17 +662,12 @@ button:hover, [role="button"]:hover, a:hover {
 
 /* ── Scroll reveal (extended stagger) ── */
 @media (prefers-reduced-motion: no-preference) {
-  .lc-reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-  .lc-reveal.is-visible { opacity: 1; transform: translateY(0); }
   .lc-stagger-1 { transition-delay: 0.08s; }
   .lc-stagger-2 { transition-delay: 0.16s; }
   .lc-stagger-3 { transition-delay: 0.24s; }
   .lc-stagger-4 { transition-delay: 0.32s; }
   .lc-stagger-5 { transition-delay: 0.40s; }
   .lc-stagger-6 { transition-delay: 0.48s; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .lc-reveal { opacity: 1; transform: none; }
 }
 
 /* ── Primary CTA button (landing, new blue) ── */
@@ -757,15 +752,6 @@ button:hover, [role="button"]:hover, a:hover {
   text-transform: uppercase;
 }
 
-/* ── Landing card ── */
-.lc-card {
-  background: #fff;
-  border: 1px solid #E2E8F0;
-  border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-  transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
-}
-.lc-card:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.10); transform: translateY(-2px); }
 
 /* ── Progress bar ── */
 .lc-progress-bar {
@@ -834,14 +820,6 @@ button:hover, [role="button"]:hover, a:hover {
   text-transform: uppercase;
   color: #2563EB;
 }
-.lc-h2 {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  font-size: clamp(26px, 3.4vw, 40px);
-  font-weight: 700;
-  line-height: 1.12;
-  letter-spacing: -0.02em;
-  color: #0F172A;
-}
 .lc-h1 {
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(36px, 5.2vw, 60px);
@@ -891,16 +869,6 @@ button:hover, [role="button"]:hover, a:hover {
    ANIMATIONS — PROFESSIONAL MOTION SYSTEM
    ════════════════════════════════════════════ */
 
-/* ── Float: hero card gentle up/down ── */
-@keyframes lc-float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .lc-float { animation: lc-float 6s ease-in-out infinite; }
-  .lc-float-slow { animation: lc-float 9s ease-in-out infinite; }
-  .lc-float-delay { animation: lc-float 6s ease-in-out 2s infinite; }
-}
 
 /* ── Gradient border: animated glow around cards ── */
 @keyframes lc-gradient-border {
@@ -1454,6 +1422,7 @@ button:hover, [role="button"]:hover, a:hover {
    v5 marketing design (components/site/*). Scoped to .lc-site so app
    pages keep their own styles until they move over.
    ══════════════════════════════════════════════════════════════════════ */
+@layer components {
 .lc-site {
   background: #eeecf4;
   color: #121226;
@@ -1519,3 +1488,4 @@ button:hover, [role="button"]:hover, a:hover {
 }
 .lc-faq summary { list-style: none; cursor: pointer; }
 .lc-faq summary::-webkit-details-marker { display: none; }
+} /* end @layer components (v5) */

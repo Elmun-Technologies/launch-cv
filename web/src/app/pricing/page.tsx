@@ -459,7 +459,7 @@ export default async function PricingPage() {
             Same tools. <span>Different monthly limits.</span>
           </h2>
         </div>
-        <div className="lc-card mt-6 overflow-x-auto rounded-3xl px-4 pb-4 pt-2 sm:px-7 lg:mt-10">
+        <div role="region" aria-label="Plan comparison table" tabIndex={0} className="lc-card relative mt-6 overflow-x-auto rounded-3xl px-4 pb-4 pt-2 sm:px-7 lg:mt-10">
           <table className="w-full min-w-[620px] border-collapse text-[15px] [font-feature-settings:'tnum']">
             <caption className="sr-only">Plan comparison: monthly limits and included tools</caption>
             <thead>

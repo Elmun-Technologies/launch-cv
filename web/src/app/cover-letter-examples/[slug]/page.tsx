@@ -267,7 +267,7 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
             <h2 className={labelCls}>
               <span aria-hidden="true">/ </span>Related cover letters
             </h2>
-            <Link href="/cover-letter-examples" className="lc-link text-[15px] font-semibold text-[#5440e8]">
+            <Link href="/cover-letter-examples" className="inline-flex min-h-11 items-center text-[15px] font-semibold text-[#5440e8] hover:underline">
               All {COVER_LETTER_EXAMPLES.length} cover letters →
             </Link>
           </div>

@@ -200,7 +200,7 @@ export default function CompareAtsCheckersPage() {
             A full check vs. <span>a keyword counter.</span>
           </h2>
         </div>
-        <div className="lc-card lc-reveal mt-4 overflow-x-auto rounded-3xl px-4 pb-2 pt-1 sm:mt-10 sm:px-7 sm:pb-3 sm:pt-2">
+        <div className="lc-card lc-reveal relative mt-4 overflow-x-auto rounded-3xl px-4 pb-2 pt-1 sm:mt-10 sm:px-7 sm:pb-3 sm:pt-2">
           <table className="w-full border-collapse text-[13px] sm:text-[15px]">
             <caption className="sr-only">LaunchCV compared with keyword-match scanners</caption>
             <colgroup>

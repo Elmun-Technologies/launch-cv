@@ -459,6 +459,7 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
               <div className="m-1.5 mt-2.5 lg:m-2 lg:mt-3">
                 <button
                   type="button"
+                  aria-label={fileName ? `Upload your resume — selected: ${fileName}` : "Upload your resume — drop a PDF or DOCX here, or choose a file"}
                   onClick={() => fileRef.current?.click()}
                   onDragOver={(e) => {
                     e.preventDefault();

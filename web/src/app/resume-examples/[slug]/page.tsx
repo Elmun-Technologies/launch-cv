@@ -362,7 +362,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             <h2 className={labelCls}>
               <span aria-hidden="true">/ </span>Related examples
             </h2>
-            <Link href="/resume-examples" className="lc-link text-[15px] font-semibold text-[#5440e8]">
+            <Link href="/resume-examples" className="inline-flex min-h-11 items-center text-[15px] font-semibold text-[#5440e8] hover:underline">
               All {RESUME_EXAMPLES.length} examples →
             </Link>
           </div>
