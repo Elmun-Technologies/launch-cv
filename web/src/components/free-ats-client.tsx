@@ -238,11 +238,14 @@ export function FreeAtsClient() {
           <div className="mt-3">
             <button
               onClick={() => fileRef.current?.click()}
-              className="flex w-full flex-col items-center justify-center gap-2.5 rounded-[14px] border-[1.5px] border-dashed border-[#C9C9C4] bg-[#FAFAF9] px-6 py-12 transition hover:border-[#111111]"
+              className="group flex w-full flex-col items-center justify-center gap-2.5 rounded-[14px] border-[1.5px] border-dashed border-[#C9C9C4] bg-[#FAFAF9] px-6 py-12 transition duration-300 hover:border-[#111111] hover:bg-[#FFFBEA]"
             >
-              <FileText className="h-8 w-8 text-[#111111]" aria-hidden />
+              <FileText className="h-8 w-8 text-[#111111] transition duration-300 group-hover:-translate-y-1 group-hover:scale-110" aria-hidden />
               <span className="text-[17px] font-medium text-[#111111]">{fileName ?? "Upload your resume"}</span>
               <span className="text-[14px] text-[#6B6B6B]">PDF or DOCX · up to 4 MB</span>
+              <span className="lcv-shine mt-2 inline-flex h-11 items-center rounded-full bg-[#2563EB] px-6 text-[15px] font-medium text-white transition group-hover:bg-[#1D4ED8]">
+                Choose a file
+              </span>
             </button>
             <input
               ref={fileRef}
