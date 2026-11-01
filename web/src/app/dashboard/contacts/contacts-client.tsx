@@ -1,7 +1,26 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Loader2, Plus, Search, X } from "lucide-react";
+import { CalendarClock, ChevronRight, ExternalLink, Loader2, Plus, Trash2, Users } from "lucide-react";
+import {
+  CloseButton,
+  EmptyState,
+  ErrorNote,
+  FilterChip,
+  InitialTile,
+  PageHeader,
+  SearchField,
+  SelectField,
+  appBtnDanger,
+  appBtnPrimary,
+  drawerPanelCls,
+  fieldCls,
+  focusCls,
+  labelCls,
+  overlayCls,
+  textareaCls,
+  useDialogFocus,
+} from "@/components/app/jobs/ui";
 
 export type ContactRow = {
   id: string;
@@ -82,7 +101,8 @@ function normalizeUrl(v: string) {
   return /^https?:\/\//i.test(t) ? t : `https://${t}`;
 }
 
-const labelCls = "mb-1.5 block text-[13px] font-medium text-[#3F3F3F]";
+/** Desktop table columns: name, relationship, status, next step, open. */
+const GRID = "md:grid-cols-[1.6fr_1fr_1fr_1.2fr_56px]";
 
 function ContactDrawer({
   initial,
@@ -100,6 +120,7 @@ function ContactDrawer({
   const [f, setF] = useState<Form>(initial);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const formRef = useDialogFocus<HTMLFormElement>();
   const set = (k: keyof Form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setF((p) => ({ ...p, [k]: e.target.value }));
 
@@ -165,97 +186,91 @@ function ContactDrawer({
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label={editing ? "Edit contact" : "Add a contact"}>
-      <div className="absolute inset-0 bg-black/25" onClick={onClose} />
-      <form onSubmit={save} className="relative flex h-full w-full max-w-[480px] flex-col bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-[#EEEEEB] px-6 py-5">
-          <p className="text-[19px] font-semibold">{editing ? editing.name : "Add a contact"}</p>
-          <button type="button" onClick={onClose} aria-label="Close" className="rounded-full p-1.5 text-[#6B6B6B] hover:bg-[#F5F5F3]">
-            <X className="h-5 w-5" />
-          </button>
+      <div className={overlayCls} onClick={onClose} />
+      <form ref={formRef} onSubmit={save} className={drawerPanelCls}>
+        <div className="flex items-center justify-between gap-4 px-5 pb-2 pt-6 sm:px-7 sm:pt-7">
+          <h2 className="min-w-0 break-words text-[22px] font-extrabold tracking-[-0.02em] sm:text-[24px]">{editing ? editing.name : "Add a contact"}</h2>
+          <CloseButton onClick={onClose} />
         </div>
-        <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-5">
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-5 py-4 sm:px-7">
           <label>
             <span className={labelCls}>Name</span>
-            <input className="soha-input" value={f.name} onChange={set("name")} autoFocus={!editing} placeholder="Alex Morgan" />
+            <input className={fieldCls} value={f.name} onChange={set("name")} autoFocus={!editing} placeholder="Alex Morgan" />
           </label>
           <div className="grid gap-4 sm:grid-cols-2">
             <label>
               <span className={labelCls}>Role</span>
-              <input className="soha-input" value={f.role} onChange={set("role")} placeholder="Engineering manager" />
+              <input className={fieldCls} value={f.role} onChange={set("role")} placeholder="Engineering manager" />
             </label>
             <label>
               <span className={labelCls}>Company</span>
-              <input className="soha-input" value={f.company} onChange={set("company")} placeholder="Northwind" />
+              <input className={fieldCls} value={f.company} onChange={set("company")} placeholder="Northwind" />
             </label>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <label>
               <span className={labelCls}>How you know them</span>
-              <select className="soha-select" value={f.relationship} onChange={set("relationship")}>
+              <SelectField value={f.relationship} onChange={set("relationship")}>
                 {RELATIONSHIPS.map((r) => (
                   <option key={r}>{r}</option>
                 ))}
-              </select>
+              </SelectField>
             </label>
             <label>
               <span className={labelCls}>Status</span>
-              <select className="soha-select" value={f.status} onChange={set("status")}>
+              <SelectField value={f.status} onChange={set("status")}>
                 {STATUSES.map((s) => (
                   <option key={s}>{s}</option>
                 ))}
-              </select>
+              </SelectField>
             </label>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <label>
               <span className={labelCls}>Last contact</span>
-              <input type="date" className="soha-input" value={f.lastContactAt} onChange={set("lastContactAt")} />
+              <input type="date" className={fieldCls} value={f.lastContactAt} onChange={set("lastContactAt")} />
             </label>
             <label>
               <span className={labelCls}>Follow up on</span>
-              <input type="date" className="soha-input" value={f.followUpAt} onChange={set("followUpAt")} />
+              <input type="date" className={fieldCls} value={f.followUpAt} onChange={set("followUpAt")} />
             </label>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <label>
               <span className={labelCls}>Email</span>
-              <input type="email" className="soha-input" value={f.email} onChange={set("email")} />
+              <input type="email" className={fieldCls} value={f.email} onChange={set("email")} />
             </label>
             <label>
               <span className={labelCls}>Phone</span>
-              <input type="tel" className="soha-input" value={f.phone} onChange={set("phone")} />
+              <input type="tel" className={fieldCls} value={f.phone} onChange={set("phone")} />
             </label>
           </div>
           <label>
             <span className={labelCls}>LinkedIn</span>
-            <input className="soha-input" value={f.linkedinUrl} onChange={set("linkedinUrl")} placeholder="linkedin.com/in/alex-morgan" />
+            <input className={fieldCls} value={f.linkedinUrl} onChange={set("linkedinUrl")} placeholder="linkedin.com/in/alex-morgan" />
           </label>
           <label>
             <span className={labelCls}>Notes</span>
             <textarea
-              className="soha-textarea min-h-[96px]"
+              className={textareaCls}
               value={f.goal}
               onChange={set("goal")}
               maxLength={2000}
               placeholder="What you talked about, what you're asking for, who introduced you."
             />
           </label>
-          {err ? (
-            <p role="alert" className="text-[14px] text-[#B42318]">
-              {err}
-            </p>
-          ) : null}
+          {err ? <ErrorNote>{err}</ErrorNote> : null}
         </div>
-        <div className="flex items-center justify-between gap-3 border-t border-[#EEEEEB] px-6 py-4">
+        <div className="flex items-center justify-between gap-3 border-t border-[#e2e0ea] px-5 py-4 sm:px-7">
           {editing ? (
-            <button type="button" onClick={() => void del()} className="text-[14px] text-[#B42318] hover:underline">
-              Delete
+            <button type="button" onClick={() => void del()} className={`${appBtnDanger} -ml-3`}>
+              <Trash2 className="h-4 w-4" aria-hidden /> Delete
             </button>
           ) : (
             <span />
           )}
-          <button type="submit" disabled={saving} className="soha-btn-primary inline-flex items-center gap-2">
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+          <button type="submit" disabled={saving} className={appBtnPrimary}>
+            {saving ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
             {editing ? "Save" : "Add contact"}
           </button>
         </div>
@@ -285,97 +300,108 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
     setDrawer(null);
   }
 
+  const openNew = () => setDrawer({ form: EMPTY, editing: null });
+
   return (
-    <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
-            Contacts <span className="text-[#8A8A86]">— the people who can get you hired.</span>
-          </h1>
-          <p className="mt-1 text-[15px] text-[#6B6B6B]">Recruiters, referrals and hiring managers, with a reminder to follow up.</p>
-        </div>
-        <button type="button" onClick={() => setDrawer({ form: EMPTY, editing: null })} className="soha-btn-primary inline-flex shrink-0 items-center gap-1.5">
-          <Plus className="h-4 w-4" aria-hidden /> Add contact
-        </button>
-      </div>
+    <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-5 text-[#121226] sm:gap-6">
+      <PageHeader
+        title="Contacts"
+        lead="Recruiters, referrals and hiring managers, with a reminder to follow up."
+        actions={
+          <button type="button" onClick={openNew} className={appBtnPrimary}>
+            <Plus className="h-4 w-4" aria-hidden strokeWidth={2.2} /> Add contact
+          </button>
+        }
+      />
 
       {rows.length === 0 ? (
-        <div className="rounded-[14px] border border-dashed border-[#D9D9D5] bg-white px-6 py-14 text-center">
-          <p className="text-[17px] font-semibold">No contacts yet</p>
-          <p className="mx-auto mt-1 max-w-[420px] text-[14px] text-[#6B6B6B]">
-            Most offers come through people. Add the recruiter who messaged you or the friend who can refer you, and set a
-            date to follow up.
-          </p>
-          <button type="button" onClick={() => setDrawer({ form: EMPTY, editing: null })} className="soha-btn-secondary mt-5">
-            Add your first contact
-          </button>
-        </div>
+        <EmptyState
+          icon={<Users className="h-8 w-8" aria-hidden strokeWidth={1.8} />}
+          title="No contacts yet"
+          actions={
+            <button type="button" onClick={openNew} className={appBtnPrimary}>
+              <Plus className="h-4 w-4" aria-hidden strokeWidth={2.2} /> Add your first contact
+            </button>
+          }
+        >
+          Most offers come through people. Add the recruiter who messaged you or the friend who can refer you, and set a date
+          to follow up.
+        </EmptyState>
       ) : (
         <>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <div className="relative sm:w-[320px]">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" aria-hidden />
-              <input
-                className="soha-input pl-9"
-                placeholder="Search name, company or email"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                aria-label="Search contacts"
-              />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <SearchField
+              value={query}
+              onChange={setQuery}
+              label="Search contacts"
+              placeholder="Search name, company or email"
+              className="w-full sm:w-[340px]"
+            />
+            <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter contacts">
+              <FilterChip pressed={!dueOnly} onClick={() => setDueOnly(false)}>
+                All
+              </FilterChip>
+              <FilterChip pressed={dueOnly} onClick={() => setDueOnly((d) => !d)}>
+                Follow-ups due{dueCount ? ` · ${dueCount}` : ""}
+              </FilterChip>
             </div>
-            <button
-              type="button"
-              aria-pressed={dueOnly}
-              onClick={() => setDueOnly((d) => !d)}
-              className={`h-9 self-start rounded-full px-4 text-[13px] sm:self-auto ${
-                dueOnly ? "bg-[#111111] text-white" : "border border-[#D9D9D5] text-[#3F3F3F] hover:border-[#111111]"
-              }`}
-            >
-              Follow-ups due{dueCount ? ` · ${dueCount}` : ""}
-            </button>
           </div>
 
-          <div className="overflow-hidden rounded-[14px] border border-[#E5E5E2] bg-white">
-            <div className="hidden grid-cols-[1.6fr_1fr_1fr_0.7fr_0.7fr] gap-4 border-b border-[#EEEEEB] px-5 py-3 text-[13px] text-[#6B6B6B] md:grid">
+          <div className="lc-card overflow-hidden rounded-[24px]">
+            <div className={`hidden gap-4 px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c] md:grid ${GRID}`} aria-hidden="true">
               <span>Name</span>
               <span>How you know them</span>
               <span>Status</span>
-              <span>Last contact</span>
-              <span>Follow up</span>
+              <span>Next</span>
+              <span />
             </div>
             {shown.length === 0 ? (
-              <p className="px-5 py-8 text-center text-[14px] text-[#6B6B6B]">No contacts match.</p>
+              <p className="border-t border-[#e2e0ea] px-5 py-10 text-center text-[14px] text-[#66647c]">No contacts match.</p>
             ) : (
               <ul>
-                {shown.map((c) => (
-                  <li key={c.id} className="border-t border-[#EEEEEB] first:border-t-0">
-                    <button
-                      type="button"
-                      onClick={() => setDrawer({ form: toForm(c), editing: c })}
-                      className="grid w-full gap-1 px-5 py-3.5 text-left hover:bg-[#FAFAF9] md:grid-cols-[1.6fr_1fr_1fr_0.7fr_0.7fr] md:items-center md:gap-4"
-                    >
-                      <span className="min-w-0">
-                        <span className="flex items-center gap-1.5 truncate text-[15px] font-medium text-[#111111]">
-                          {c.name}
-                          {c.linkedinUrl ? <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[#6E6E6A]" aria-label="Has LinkedIn" /> : null}
+                {shown.map((c) => {
+                  const due = isDue(c, t);
+                  const status = c.status && c.status !== "active" ? c.status : null;
+                  return (
+                    <li key={c.id} className="border-t border-[#e2e0ea] first:border-t-0 md:first:border-t">
+                      <button
+                        type="button"
+                        onClick={() => setDrawer({ form: toForm(c), editing: c })}
+                        className={`grid w-full grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1 px-4 py-4 text-left text-[14px] transition-colors hover:bg-[#f7f6fb] motion-reduce:transition-none sm:px-5 md:gap-4 ${GRID} ${focusCls} focus-visible:-outline-offset-[3px]!`}
+                      >
+                        <span className="flex min-w-0 items-center gap-2.5">
+                          <InitialTile name={c.name} size={32} />
+                          <span className="min-w-0">
+                            <span className="flex items-center gap-1.5 truncate text-[15px] font-bold text-[#121226]">
+                              {c.name}
+                              {c.linkedinUrl ? <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[#66647c]" aria-label="Has LinkedIn" /> : null}
+                            </span>
+                            <span className="block truncate text-[13px] text-[#66647c]">
+                              {[c.role, c.company].filter(Boolean).join(" · ") || c.email || "—"}
+                            </span>
+                            {/* Phone: relationship, status and dates as one line. */}
+                            <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-[#4a4862] md:hidden">
+                              {c.relationship ? <span>{c.relationship}</span> : null}
+                              {status ? <StatusBadge status={status} /> : null}
+                            </span>
+                            <span className="mt-1 block text-[13px] md:hidden">
+                              <NextStep c={c} due={due} today={t} />
+                            </span>
+                          </span>
                         </span>
-                        <span className="block truncate text-[13px] text-[#6B6B6B]">
-                          {[c.role, c.company].filter(Boolean).join(" · ") || c.email || "—"}
+                        <span className="hidden text-[#24223a] md:block">{c.relationship || "—"}</span>
+                        <span className="hidden md:block">{status ? <StatusBadge status={status} /> : <span className="text-[#4a4862]">—</span>}</span>
+                        <span className="hidden md:block">
+                          <NextStep c={c} due={due} today={t} />
                         </span>
-                      </span>
-                      <span className="text-[14px] text-[#3F3F3F]">{c.relationship || "—"}</span>
-                      <span className="text-[14px] text-[#3F3F3F]">{c.status && c.status !== "active" ? c.status : "—"}</span>
-                      <span className="text-[14px] text-[#6B6B6B]">
-                        <span className="md:hidden">Last contact </span>
-                        {fmt(c.lastContactAt)}
-                      </span>
-                      <span className={`text-[14px] ${isDue(c, t) ? "font-medium text-[#C2341B]" : "text-[#6B6B6B]"}`}>
-                        <span className="md:hidden">Follow up </span>
-                        {isDue(c, t) && c.followUpAt?.slice(0, 10) === t ? "Today" : fmt(c.followUpAt)}
-                      </span>
-                    </button>
-                  </li>
-                ))}
+                        <span className="inline-flex items-center justify-end font-bold text-[#5440e8]">
+                          <span className="hidden md:inline">Open</span>
+                          <ChevronRight className="h-5 w-5 md:hidden" aria-hidden />
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>
@@ -396,5 +422,34 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
         />
       ) : null}
     </div>
+  );
+}
+
+function StatusBadge({ status }: { status: string }) {
+  const tone =
+    status === "Connected" || status === "Replied" || status === "Meeting scheduled"
+      ? "bg-[#dcf5ea] text-[#0b4f35]"
+      : status === "Follow up"
+        ? "bg-[#fdf0d5] text-[#7a4600]"
+        : status === "Contacted"
+          ? "bg-[#e4dfff] text-[#3a2bb8]"
+          : "bg-[#f1eff8] text-[#4a4862]";
+  return <span className={`inline-block rounded-full px-2.5 py-[5px] text-[12px] font-bold ${tone}`}>{status}</span>;
+}
+
+/** Follow-up date first (red when due), last contact underneath. */
+function NextStep({ c, due, today: day }: { c: ContactRow; due: boolean; today: string }) {
+  return (
+    <span className="flex flex-col gap-0.5">
+      {c.followUpAt ? (
+        <span className={`inline-flex items-center gap-1.5 ${due ? "font-bold text-[#c42b30]" : "text-[#24223a]"}`}>
+          <CalendarClock className="h-4 w-4 shrink-0" aria-hidden />
+          Follow up {due && c.followUpAt.slice(0, 10) === day ? "today" : fmt(c.followUpAt)}
+        </span>
+      ) : (
+        <span className="text-[#66647c]">No follow-up set</span>
+      )}
+      {c.lastContactAt ? <span className="text-[12px] text-[#66647c]">Last contact {fmt(c.lastContactAt)}</span> : null}
+    </span>
   );
 }
