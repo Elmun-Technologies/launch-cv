@@ -20,6 +20,7 @@ export const metadata = buildMarketingMetadata({
 
 const SAID =
   "so basically I set up the new onboarding thing for clinics and no-shows went down by like twenty-three percent across forty-one clinics";
+const SAID_SHORT = "so basically I set up the new onboarding thing for clinics and no-shows went down…";
 const BULLET = "Launched clinic onboarding for self-scheduling, reducing no-shows by 23% across 41 clinics.";
 const BARS = [12, 26, 18, 34, 22, 30, 14, 28, 20, 10, 24, 16];
 
@@ -57,9 +58,9 @@ const stage = (
         <span>YOU SAID</span>
         <ExampleTag />
       </p>
-      <p className="mt-1 text-[13px] leading-[18px] text-[#4a4862] lg:mt-1.5 lg:text-[14px] lg:leading-5">“{SAID}”</p>
+      <p className="mt-1 text-[13px] leading-[18px] text-[#4a4862] lg:mt-1.5 lg:text-[14px] lg:leading-5">“{SAID_SHORT}”</p>
     </div>
-    <div className="lc-float lc-drift-3 absolute left-4 top-[288px] w-[180px] rounded-[18px] bg-[#111118] p-3.5 text-white sm:w-[260px] lg:left-8 lg:top-[440px] lg:w-[320px] lg:rounded-[22px] lg:p-[18px]">
+    <div className="lc-float lc-drift-3 absolute left-4 top-[284px] w-[200px] rounded-[18px] bg-[#111118] p-3.5 text-white sm:w-[260px] lg:left-8 lg:top-[440px] lg:w-[320px] lg:rounded-[22px] lg:p-[18px]">
       <p className="text-[11px] font-bold tracking-[0.06em] text-[#c9c0ff] lg:text-[12px]">BULLET</p>
       <p className="mt-1 text-[13px] font-semibold leading-[18px] lg:mt-1.5 lg:text-[15px] lg:leading-[21px]">{BULLET}</p>
     </div>
@@ -74,7 +75,7 @@ const f: FeaturePageData = {
   lead:
     "Press the microphone next to a field and talk about what you did. Your words appear as text in that field; edit them, then use the AI rewrite to shape them into a results-focused bullet.",
   facts: ["No app to install", "Works in your browser", "English (US) recognition"],
-  cta: { label: "Try it now", href: `/register?next=${encodeURIComponent("/resume/new")}` },
+  cta: { label: "Try it now", href: "/register" },
   stage,
   example: {
     title: "From what you said to what you send.",

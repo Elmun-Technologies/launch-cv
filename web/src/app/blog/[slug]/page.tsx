@@ -1,27 +1,26 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CtaLink } from "@/components/cta-link";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
+import { CtaLink } from "@/components/cta-link";
 import { JsonLd } from "@/components/json-ld";
-import { KeyFacts } from "@/components/key-facts";
+import { StickyCta } from "@/components/sticky-cta";
+import { SiteShell } from "@/components/site/site-shell";
+import { labelCls } from "@/components/site/ui";
+import { BlogPoster } from "@/components/site/content/blog-poster";
+import { BlogCard, initials } from "@/components/site/content/blog-cards";
+import { ContentToc, ContentTocMobile } from "@/components/site/content/content-toc";
+import { FaqList, KeyFactsCard } from "@/components/site/content/key-facts";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { BLOG_HOWTO, blogKeyFacts, howToLd } from "@/lib/geo";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
-import { ArrowLeft, ChevronRight, ArrowRight } from "lucide-react";
-import { BlogFaq } from "@/components/blog-faq";
-import { BlogCover } from "@/components/blog-cover";
-import { BlogToc } from "@/components/blog-toc";
 import { SITE_AUTHOR } from "@/lib/author";
 import { extractToc, createSlugger } from "@/lib/toc";
-import { StickyCta } from "@/components/sticky-cta";
 
 type Params = { slug: string };
 type SearchParams = { preview?: string };
@@ -118,6 +117,18 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   };
 }
 
+/** Article body typography (v5). Long URLs and code wrap or scroll inside the column. */
+const articleCls = [
+  "text-[17px] leading-[28px] text-[#24223a] sm:text-[18px] sm:leading-[30px] [overflow-wrap:anywhere]",
+  "[&>h2:first-child]:mt-0 [&>p:first-child]:mt-0",
+  "[&_em]:italic [&_li>p]:mt-0",
+  "[&_pre]:mt-5 [&_pre]:overflow-x-auto [&_pre]:rounded-2xl [&_pre]:bg-[#111118] [&_pre]:p-5 [&_pre]:text-[14px] [&_pre]:leading-6 [&_pre]:text-[#e9e7f3] [&_pre]:[overflow-wrap:normal]",
+  "[&_pre_code]:bg-transparent [&_pre_code]:p-0 [&_pre_code]:text-inherit",
+].join(" ");
+
+const h2Cls = "mt-10 scroll-mt-6 text-[26px] font-extrabold leading-[31px] tracking-[-0.02em] text-[#121226] sm:mt-[52px] sm:text-[32px] sm:leading-[38px] sm:tracking-[-0.025em]";
+const h3Cls = "mt-7 scroll-mt-6 text-[20px] font-extrabold leading-snug tracking-[-0.01em] text-[#121226] sm:text-[21px]";
+
 export default async function BlogPostPage({
   params,
   searchParams,
@@ -170,6 +181,7 @@ export default async function BlogPostPage({
   const wordCount = post.bodyMd.split(/\s+/).filter(Boolean).length;
 
   const canonicalUrl = post.canonicalUrl?.trim() || absoluteUrl(`/blog/${post.slug}`);
+  const postUrl = absoluteUrl(`/blog/${post.slug}`);
 
   // Table of contents (H2/H3). Only shown on longer posts; `slug` mirrors the
   // slugger used when rendering the Markdown headings so anchors line up.
@@ -249,8 +261,24 @@ export default async function BlogPostPage({
   // Key-facts / TL;DR answer box derived from the post's own description and FAQs.
   const keyFacts = blogKeyFacts(post);
 
+  const share = [
+    { label: "LinkedIn", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}` },
+    { label: "X", href: `https://x.com/intent/post?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.title)}` },
+    { label: "Email", href: `mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(postUrl)}` },
+  ];
+
+  // Three columns (TOC · article · sidebar) on wide screens; the sidebar drops
+  // below the article on narrower ones. Without a TOC the sidebar sits beside
+  // the article from lg up.
+  const gridCls = showToc
+    ? "lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-x-12 xl:grid-cols-[240px_minmax(0,1fr)_260px] xl:gap-x-14"
+    : "lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-x-14";
+  const asideCls = showToc
+    ? "lg:col-start-2 xl:col-start-3 xl:row-start-1 xl:sticky xl:top-6 xl:self-start"
+    : "lg:col-start-2 lg:row-start-1 lg:sticky lg:top-6 lg:self-start";
+
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <SiteShell>
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -262,43 +290,51 @@ export default async function BlogPostPage({
           ],
         }}
       />
-      <LandingNav />
 
-      <main className="flex-1 pt-[96px] text-[#111111]">
-        {previewAllowed ? (
-          <div className="border-b border-amber-200 bg-amber-50 px-5 py-2">
-            <div className="mx-auto flex max-w-[880px] items-center gap-2 text-[12px] font-semibold text-amber-800">
-              <span className="rounded-md bg-amber-100 px-2 py-0.5 text-[10px] uppercase tracking-wider">Preview</span>
-              Viewing draft / scheduled post. Not visible to the public.
-            </div>
-          </div>
-        ) : null}
-
-        <header className="mx-auto max-w-[880px] px-5 pt-10 sm:px-8">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[13px] text-[#6B6B6B]">
-            <Link href="/" className="hover:text-[#111111]">
-              Home
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-            <Link href="/blog" className="hover:text-[#111111]">
-              Guides
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-            <span className="truncate text-[#3F3F3F]">{post.category}</span>
-          </nav>
-          <h1 className="mt-5 text-[34px] font-semibold leading-[1.08] tracking-[-0.035em] sm:text-[52px]">
-            {post.title}
-          </h1>
-          <p className="speakable-description mt-5 text-[18px] leading-[1.6] text-[#3F3F3F] sm:text-[20px]">
-            {post.description}
+      {previewAllowed ? (
+        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10">
+          <p className="flex items-center gap-2 rounded-2xl bg-[#fdf0d5] px-4 py-2.5 text-[13px] font-semibold text-[#7a4600]">
+            <span className="rounded-full bg-white px-2 py-0.5 text-[11px] uppercase tracking-wider">Preview</span>
+            Viewing draft / scheduled post. Not visible to the public.
           </p>
-          <div className="mt-6 flex items-center gap-3.5 border-b border-[#EEEEEB] pb-7 text-[14px] text-[#6B6B6B]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={SITE_AUTHOR.avatar} alt="" width={40} height={40} className="h-10 w-10 shrink-0 rounded-full" />
-            <span>
-              <Link href="/about" rel="author" className="block font-medium text-[#111111] hover:text-[#1D4ED8]">
-                {SITE_AUTHOR.name}
+        </div>
+      ) : null}
+
+      {/* ARTICLE HEAD */}
+      <header className="mx-auto max-w-[1280px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
+        <nav aria-label="Breadcrumb" className="text-[12px] text-[#66647c] sm:text-[14px]">
+          <ol className="flex flex-wrap items-center gap-1.5">
+            <li className="flex items-center gap-1.5">
+              <Link href="/" className="lc-link hover:text-[#5440e8]">
+                Home
               </Link>
+              <span aria-hidden="true">/</span>
+            </li>
+            <li className="flex items-center gap-1.5">
+              <Link href="/blog" className="lc-link hover:text-[#5440e8]">
+                Blog
+              </Link>
+              <span aria-hidden="true">/</span>
+            </li>
+            <li className="font-semibold text-[#121226]">{post.category}</li>
+          </ol>
+        </nav>
+        <h1 className="mt-3.5 max-w-[1040px] text-[32px] font-extrabold leading-[36px] tracking-[-0.04em] sm:mt-[22px] sm:text-[48px] sm:leading-[52px] lg:text-[60px] lg:leading-[64px] lg:tracking-[-0.045em]">
+          {post.title}
+        </h1>
+        <p className="speakable-description mt-4 max-w-[780px] text-[17px] leading-[27px] text-[#4a4862] sm:mt-5 sm:text-[20px] sm:leading-[31px]">
+          {post.description}
+        </p>
+        <div className="mt-4 flex items-center gap-2.5 text-[13px] sm:mt-[26px] sm:gap-3.5 sm:text-[15px]">
+          <span aria-hidden="true" className="inline-flex h-9 w-9 flex-none items-center justify-center rounded-full bg-[#e4dfff] font-extrabold text-[#3a2bb8] sm:h-11 sm:w-11">
+            {initials(SITE_AUTHOR.name)}
+          </span>
+          <span>
+            <Link href="/about" rel="author" className="lc-link block w-fit font-bold text-[#121226] hover:text-[#5440e8]">
+              {SITE_AUTHOR.name}
+            </Link>
+            <span className="block text-[#66647c]">
+              <span className="hidden sm:inline">{SITE_AUTHOR.role} · </span>
               {showUpdated ? (
                 <>
                   Updated <time dateTime={post.dateModified}>{updatedLabel}</time>
@@ -310,202 +346,214 @@ export default async function BlogPostPage({
               )}{" "}
               · {post.readingTime} min read
             </span>
-          </div>
-        </header>
-
-        <div className="mx-auto max-w-[1040px] px-5 pt-8 sm:px-8">
-          <BlogCover post={post} size="hero" priority />
+          </span>
         </div>
+      </header>
 
-        <div className="mx-auto flex max-w-[1040px] justify-center gap-16 px-5 pb-20 pt-10 sm:px-8">
-          <div className="min-w-0 max-w-[680px] flex-1">
-            {showToc ? (
-              <div className="mb-8 lg:hidden">
-                <BlogToc entries={toc} />
-              </div>
-            ) : null}
+      <div className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10 lg:pt-10">
+        <BlogPoster post={post} size="hero" priority />
+      </div>
 
-            <KeyFacts title="Key facts" lead={keyFacts.lead} facts={keyFacts.facts} />
+      {/* BODY */}
+      <div className={`mx-auto grid max-w-[1280px] items-start gap-y-8 px-4 pt-5 sm:px-6 sm:pt-10 lg:px-10 lg:pt-16 ${gridCls}`}>
+        {showToc ? (
+          <div className="hidden lg:sticky lg:top-6 lg:row-span-2 lg:block lg:self-start">
+            <ContentToc entries={toc} />
+          </div>
+        ) : null}
 
-            <article className="prose-article mt-10 max-w-none text-[17px] leading-[1.75] text-[#3F3F3F]">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  h1: ({ ...props }) => (
-                    <h2 className="mt-12 scroll-mt-[96px] text-[26px] font-semibold leading-snug tracking-[-0.02em] text-[#111111]" {...props} />
-                  ),
-                  h2: ({ node, ...props }) => (
-                    <h2
-                      id={headingSlug(hastText(node as HastNode | undefined))}
-                      className="mt-12 scroll-mt-[96px] text-[26px] font-semibold leading-snug tracking-[-0.02em] text-[#111111]"
-                      {...props}
-                    />
-                  ),
-                  h3: ({ node, ...props }) => (
-                    <h3
-                      id={headingSlug(hastText(node as HastNode | undefined))}
-                      className="mt-8 scroll-mt-[96px] text-[20px] font-semibold leading-snug tracking-[-0.01em] text-[#111111]"
-                      {...props}
-                    />
-                  ),
-                  p: ({ ...props }) => <p className="mt-5" {...props} />,
-                  ul: ({ ...props }) => <ul className="mt-5 list-disc space-y-2 pl-6 marker:text-[#6E6E6A]" {...props} />,
-                  ol: ({ ...props }) => <ol className="mt-5 list-decimal space-y-2 pl-6 marker:text-[#6E6E6A]" {...props} />,
-                  strong: ({ ...props }) => <strong className="font-semibold text-[#111111]" {...props} />,
-                  a: ({ href, ...props }) => {
-                    const external = typeof href === "string" && /^https?:\/\//.test(href);
-                    return (
-                      <a
-                        href={href}
-                        className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-[3px] hover:decoration-[#1D4ED8]"
-                        {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                        {...props}
-                      />
-                    );
-                  },
-                  code: ({ ...props }) => (
-                    <code className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[15px] text-[#111111]" {...props} />
-                  ),
-                  blockquote: ({ ...props }) => (
-                    <blockquote className="mt-6 border-l-2 border-[#111111] pl-5 text-[#3F3F3F]" {...props} />
-                  ),
-                  table: ({ ...props }) => (
-                    <div className="mt-6 overflow-x-auto">
-                      <table className="w-full border-collapse text-[15px]" {...props} />
-                    </div>
-                  ),
-                  th: ({ ...props }) => (
-                    <th className="border-b border-[#E5E5E2] py-2.5 pr-4 text-left font-medium text-[#6B6B6B]" {...props} />
-                  ),
-                  td: ({ ...props }) => <td className="border-b border-[#EEEEEB] py-2.5 pr-4" {...props} />,
-                  img: ({ src, alt }) =>
-                    typeof src === "string" && src.length > 0 ? (
-                      <Image
-                        src={src}
-                        alt={alt ?? ""}
-                        width={1600}
-                        height={900}
-                        sizes="(max-width: 680px) 100vw, 680px"
-                        className="mt-6 h-auto w-full rounded-2xl"
-                      />
-                    ) : null,
-                }}
-              >
-                {post.bodyMd}
-              </ReactMarkdown>
-            </article>
-
-            <div className="mt-12 flex flex-col items-start justify-between gap-5 rounded-2xl border border-[#E5E5E2] p-6 sm:flex-row sm:items-center">
-              <div>
-                <p className="text-[18px] font-semibold">Check your resume now</p>
-                <p className="mt-1 text-[15px] text-[#6B6B6B]">Free, no sign-up, about 10 seconds.</p>
-              </div>
-              <CtaLink
-                cta="free_ats_check"
-                location="blog_post"
-                href="/free-ats-check"
-                className="inline-flex h-[46px] shrink-0 items-center rounded-full bg-[#111111] px-5 text-[15px] font-medium text-white hover:bg-black"
-              >
-                Check my resume
-              </CtaLink>
+        <div className="min-w-0 max-w-[720px]">
+          {showToc ? (
+            <div className="mb-7 lg:hidden">
+              <ContentTocMobile entries={toc} />
             </div>
+          ) : null}
 
-            {post.faqs && post.faqs.length > 0 ? (
-              <section id="faq" className="mt-14">
-                <h2 className="text-[26px] font-semibold tracking-[-0.02em]">Frequently asked questions</h2>
-                <BlogFaq items={post.faqs} />
-              </section>
-            ) : null}
+          <KeyFactsCard title="Key facts" lead={keyFacts.lead} facts={keyFacts.facts} />
 
-            {post.tags.length > 0 ? (
-              <p className="mt-12 flex flex-wrap gap-2 border-t border-[#EEEEEB] pt-8">
-                {post.tags.map((tag) => (
-                  <span key={tag} className="rounded-full border border-[#E5E5E2] px-3 py-1.5 text-[13px] text-[#3F3F3F]">
-                    {tag}
-                  </span>
-                ))}
-              </p>
-            ) : null}
+          <article className={`mt-10 ${articleCls}`}>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({ ...props }) => <h2 className={h2Cls} {...props} />,
+                h2: ({ node, ...props }) => <h2 id={headingSlug(hastText(node as HastNode | undefined))} className={h2Cls} {...props} />,
+                h3: ({ node, ...props }) => <h3 id={headingSlug(hastText(node as HastNode | undefined))} className={h3Cls} {...props} />,
+                p: ({ ...props }) => <p className="mt-4" {...props} />,
+                ul: ({ ...props }) => <ul className="mt-4 flex list-disc flex-col gap-2 pl-[22px] marker:text-[#5440e8]" {...props} />,
+                ol: ({ ...props }) => <ol className="mt-4 flex list-decimal flex-col gap-2 pl-[22px] marker:font-bold marker:text-[#5440e8]" {...props} />,
+                strong: ({ ...props }) => <strong className="font-bold text-[#121226]" {...props} />,
+                a: ({ href, ...props }) => {
+                  const external = typeof href === "string" && /^https?:\/\//.test(href);
+                  return (
+                    <a
+                      href={href}
+                      className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/40 underline-offset-[3px] transition-colors hover:text-[#4430d6] hover:decoration-[#4430d6]"
+                      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                      {...props}
+                    />
+                  );
+                },
+                code: ({ ...props }) => <code className="lc-mono rounded-md bg-[#f1eff8] px-1.5 py-0.5 text-[0.85em] text-[#121226]" {...props} />,
+                blockquote: ({ ...props }) => (
+                  <blockquote className="mt-6 rounded-r-2xl border-l-4 border-[#5440e8] bg-white px-5 py-4 text-[#4a4862] [&>p:first-child]:mt-0" {...props} />
+                ),
+                hr: () => <hr className="my-10 border-[#e2e0ea]" />,
+                table: ({ ...props }) => (
+                  <div className="mt-6 overflow-x-auto rounded-2xl bg-white p-1 [overflow-wrap:normal]">
+                    <table className="w-full border-collapse text-[15px] leading-6" {...props} />
+                  </div>
+                ),
+                th: ({ ...props }) => <th className="border-b border-[#e2e0ea] px-4 py-3 text-left font-bold text-[#121226]" {...props} />,
+                td: ({ ...props }) => <td className="border-b border-[#efedf7] px-4 py-3 align-top" {...props} />,
+                img: ({ src, alt }) =>
+                  typeof src === "string" && src.length > 0 ? (
+                    <Image
+                      src={src}
+                      alt={alt ?? ""}
+                      width={1600}
+                      height={900}
+                      sizes="(min-width: 768px) 720px, 100vw"
+                      className="mt-6 h-auto w-full rounded-[20px]"
+                    />
+                  ) : null,
+              }}
+            >
+              {post.bodyMd}
+            </ReactMarkdown>
+          </article>
 
-            <section className="mt-12 border-t border-[#EEEEEB] pt-8">
-              <p className="text-[14px] text-[#6B6B6B]">Tools for this step</p>
-              <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                {relatedFeatures.map((f) => (
-                  <Link key={f.href} href={f.href} className="group rounded-2xl border border-[#E5E5E2] p-5 hover:border-[#111111]">
-                    <p className="text-[16px] font-semibold group-hover:text-[#1D4ED8]">{f.title}</p>
-                    <p className="mt-1 text-[14px] leading-[1.5] text-[#6B6B6B]">{f.desc}</p>
-                  </Link>
-                ))}
+          {post.faqs && post.faqs.length > 0 ? (
+            <section id="faq" aria-labelledby="faq-title" className="mt-14 scroll-mt-6">
+              <h2 id="faq-title" className="text-[26px] font-extrabold leading-[31px] tracking-[-0.02em] sm:text-[32px] sm:leading-[38px]">
+                Frequently asked questions
+              </h2>
+              <div className="mt-5">
+                <FaqList items={post.faqs} />
               </div>
             </section>
-
-            {newerPost || olderPost ? (
-              <nav aria-label="More guides" className="mt-12 grid gap-4 border-t border-[#EEEEEB] pt-8 sm:grid-cols-2">
-                {newerPost ? (
-                  <Link
-                    href={`/blog/${newerPost.slug}`}
-                    className={`group flex flex-col ${olderPost ? "" : "sm:col-span-2"}`}
-                  >
-                    <span className="inline-flex items-center gap-1 text-[13px] text-[#6B6B6B]">
-                      <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Newer
-                    </span>
-                    <span className="mt-1 text-[16px] font-semibold leading-snug group-hover:text-[#1D4ED8]">
-                      {newerPost.title}
-                    </span>
-                  </Link>
-                ) : null}
-                {olderPost ? (
-                  <Link
-                    href={`/blog/${olderPost.slug}`}
-                    className={`group flex flex-col sm:items-end sm:text-right ${newerPost ? "sm:col-start-2" : "sm:col-span-2"}`}
-                  >
-                    <span className="inline-flex items-center gap-1 text-[13px] text-[#6B6B6B]">
-                      Older <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                    </span>
-                    <span className="mt-1 text-[16px] font-semibold leading-snug group-hover:text-[#1D4ED8]">
-                      {olderPost.title}
-                    </span>
-                  </Link>
-                ) : null}
-              </nav>
-            ) : null}
-          </div>
-
-          {showToc ? (
-            <aside className="sticky top-[96px] hidden w-[200px] shrink-0 self-start lg:block">
-              <BlogToc entries={toc} />
-            </aside>
           ) : null}
-        </div>
 
-        {related.length > 0 ? (
-          <section className="bg-[#F5F5F3] py-16 sm:py-[72px]">
-            <div className="mx-auto max-w-[1200px] px-5 sm:px-8">
-              <h2 className="text-[28px] font-semibold tracking-[-0.025em]">Keep reading</h2>
-              <div className="mt-6 grid gap-8 sm:grid-cols-3">
-                {related.map((rp) => (
-                  <Link key={rp.slug} href={`/blog/${rp.slug}`} className="group flex flex-col">
-                    <BlogCover post={rp} size="sm" />
-                    <span className="mt-4 text-[13px] text-[#6B6B6B]">{rp.category}</span>
-                    <span className="mt-1 text-[17px] font-semibold leading-snug group-hover:text-[#1D4ED8]">
-                      {rp.title}
-                    </span>
-                  </Link>
+          {post.tags.length > 0 ? (
+            <ul aria-label="Topics" className="mt-12 flex flex-wrap gap-2 border-t border-[#d9d4f2] pt-8">
+              {post.tags.map((tag) => (
+                <li key={tag} className="rounded-full bg-white px-3 py-1.5 text-[13px] font-semibold text-[#4a4862]">
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          ) : null}
+
+          {/* Author + share */}
+          <div className="mt-8 flex flex-col gap-5 rounded-[24px] bg-white p-5 sm:flex-row sm:items-start sm:p-6">
+            <span aria-hidden="true" className="inline-flex h-14 w-14 flex-none items-center justify-center rounded-full bg-[#5440e8] text-[18px] font-extrabold text-white">
+              {initials(SITE_AUTHOR.name)}
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">WRITTEN BY</p>
+              <Link href="/about" rel="author" className="lc-link mt-1 inline-block text-[18px] font-extrabold text-[#121226] hover:text-[#5440e8]">
+                {SITE_AUTHOR.name}
+              </Link>
+              <p className="text-[14px] text-[#66647c]">{SITE_AUTHOR.role}</p>
+              <p className="mt-2.5 text-[15px] leading-6 text-[#4a4862]">{SITE_AUTHOR.bio}</p>
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <span className="mr-1 text-[13px] font-semibold text-[#66647c]">Share</span>
+                {share.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    {...(s.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="lc-btn-lift inline-flex min-h-[44px] items-center rounded-full bg-[#f1eff8] px-4 text-[14px] font-semibold text-[#121226] hover:bg-[#e4dfff]"
+                  >
+                    {s.label}
+                    {s.href.startsWith("http") ? <span className="sr-only"> (opens in a new tab)</span> : null}
+                  </a>
                 ))}
               </div>
             </div>
-          </section>
-        ) : null}
-      </main>
+          </div>
+        </div>
 
-      <StickyCta
-        primaryHref="/free-ats-check"
-        primaryLabel="Check my resume — free"
-        location="blog_post"
-        revealAfter={900}
-      />
+        {/* SIDEBAR — CTA and tools for this step */}
+        <aside aria-label="Check your resume" className={`flex min-w-0 max-w-[720px] flex-col gap-3 ${asideCls}`}>
+          <div className="rounded-[24px] bg-[#5440e8] p-[22px] text-white sm:rounded-[28px] sm:p-6">
+            <p className="text-[22px] font-extrabold leading-[27px] tracking-[-0.02em]">What&apos;s your ATS score?</p>
+            <p className="mt-2 text-[14px] leading-[21px] text-[#e4dfff]">Free, no sign-up, about 10 seconds.</p>
+            <CtaLink
+              cta="free_ats_check"
+              location="blog_post"
+              href="/free-ats-check"
+              className="lc-btn-lift mt-4 inline-flex w-full items-center justify-center rounded-full bg-white p-3.5 text-[15px] font-semibold text-[#121226] sm:w-auto xl:w-full"
+            >
+              Check my resume
+            </CtaLink>
+          </div>
+          <div className="lc-card rounded-[24px] p-5">
+            <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">TOOLS FOR THIS STEP</p>
+            <ul className="mt-3 flex flex-col gap-2">
+              {relatedFeatures.map((f) => (
+                <li key={f.href}>
+                  <Link href={f.href} className="group block rounded-2xl bg-[#f7f6fb] px-4 py-3 transition-colors hover:bg-[#e4dfff]">
+                    <span className="block text-[15px] font-bold text-[#121226] group-hover:text-[#3a2bb8]">{f.title} →</span>
+                    <span className="mt-0.5 block text-[13px] leading-5 text-[#4a4862]">{f.desc}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </aside>
+      </div>
 
-      <LandingFooter />
-    </div>
+      {/* NEWER / OLDER */}
+      {newerPost || olderPost ? (
+        <nav aria-label="More guides" className="mx-auto grid max-w-[1280px] gap-3 px-4 pt-12 sm:grid-cols-2 sm:px-6 lg:px-10 lg:pt-16">
+          {newerPost ? (
+            <Link href={`/blog/${newerPost.slug}`} className={`lc-card lc-rise group flex flex-col rounded-[24px] p-5 sm:p-6 ${olderPost ? "" : "sm:col-span-2"}`}>
+              <span className="text-[13px] font-semibold text-[#66647c]">← Newer</span>
+              <span className="mt-1.5 text-[17px] font-extrabold leading-snug group-hover:text-[#5440e8]">{newerPost.title}</span>
+            </Link>
+          ) : null}
+          {olderPost ? (
+            <Link
+              href={`/blog/${olderPost.slug}`}
+              className={`lc-card lc-rise group flex flex-col rounded-[24px] p-5 sm:items-end sm:p-6 sm:text-right ${newerPost ? "sm:col-start-2" : "sm:col-span-2"}`}
+            >
+              <span className="text-[13px] font-semibold text-[#66647c]">Older →</span>
+              <span className="mt-1.5 text-[17px] font-extrabold leading-snug group-hover:text-[#5440e8]">{olderPost.title}</span>
+            </Link>
+          ) : null}
+        </nav>
+      ) : null}
+
+      {/* RELATED */}
+      {related.length > 0 ? (
+        <section aria-labelledby="read-next" className="mx-auto max-w-[1280px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[110px]">
+          <div className="flex items-end justify-between gap-4">
+            <h2 id="read-next" className={labelCls}>
+              / Read next
+            </h2>
+            <Link href="/blog" className="lc-link text-[15px] font-semibold text-[#5440e8]">
+              All guides →
+            </Link>
+          </div>
+          <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+            {related.map((rp) => (
+              <li key={rp.slug} className="lc-reveal">
+                <BlogCard post={rp} variant="related" />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <div className="xl:hidden">
+        <StickyCta
+          primaryHref="/free-ats-check"
+          primaryLabel="Check my resume — free"
+          primaryClassName="bg-[#5440e8] hover:bg-[#4430d6]"
+          location="blog_post"
+          revealAfter={900}
+        />
+      </div>
+    </SiteShell>
   );
 }
