@@ -531,8 +531,8 @@ export default async function BlogPostPage({
             <h2 id="read-next" className={labelCls}>
               / Read next
             </h2>
-            <Link href="/blog" className="lc-link text-[15px] font-semibold text-[#5440e8]">
-              All guides →
+            <Link href="/blog" className="inline-flex min-h-[44px] items-center text-[15px] font-semibold text-[#5440e8] hover:text-[#4430d6]">
+              <span className="lc-link">All guides →</span>
             </Link>
           </div>
           <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">

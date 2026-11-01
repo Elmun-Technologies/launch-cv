@@ -38,7 +38,7 @@ const principles = [
     t: "Your data stays yours",
     d: "We never sell your resumes or use them to advertise. You can download or delete everything in your account.",
     card: "bg-[#5440e8] text-white",
-    num: "text-[#c9c0ff]",
+    num: "text-[#e4dfff]",
     body: "text-[#e4dfff]",
   },
   {
@@ -144,7 +144,7 @@ export default function AboutPage() {
                     alt={r.alt}
                     width={r.w}
                     height={1080}
-                    sizes="(min-width: 1024px) 200px, 40vw"
+                    sizes="(min-width: 1024px) 280px, 45vw"
                     className="absolute left-1/2 top-[6%] h-[140%] w-auto max-w-none -translate-x-1/2 transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transition-none"
                   />
                 </div>

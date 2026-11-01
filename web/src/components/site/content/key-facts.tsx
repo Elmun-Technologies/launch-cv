@@ -30,8 +30,8 @@ export function FaqList({ items }: { items: { q: string; a: string }[] }) {
   return (
     <div className="flex flex-col gap-2">
       {items.map((f, i) => (
-        <details key={f.q} open={i === 0} className="lc-faq group rounded-[24px] bg-white px-5 py-[18px] transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)] sm:px-6 sm:py-[22px]">
-          <summary className="flex min-h-[34px] items-center justify-between gap-4">
+        <details key={f.q} open={i === 0} className="lc-faq group rounded-[24px] bg-white px-5 transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)] sm:px-6">
+          <summary className="flex min-h-[44px] items-center justify-between gap-4 py-[18px] sm:py-[22px]">
             <span className="text-[16px] font-bold leading-6 sm:text-[18px]">{f.q}</span>
             <span className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] group-hover:bg-[#e4dfff]" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#121226" strokeWidth="2.2" strokeLinecap="round">
@@ -39,7 +39,7 @@ export function FaqList({ items }: { items: { q: string; a: string }[] }) {
               </svg>
             </span>
           </summary>
-          <p className="mt-3 text-[16px] leading-[26px] text-[#4a4862]">{f.a}</p>
+          <p className="-mt-1 pb-[18px] text-[16px] leading-[26px] text-[#4a4862] sm:pb-[22px]">{f.a}</p>
         </details>
       ))}
     </div>

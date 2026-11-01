@@ -77,7 +77,7 @@ export function ContentTocMobile({ entries, numbered = false }: { entries: Conte
         <ol className={`mt-1 pb-2 text-[14px] text-[#4a4862] ${numbered ? "list-decimal pl-[18px]" : ""}`}>
           {entries.map((e) => (
             <li key={e.id} className={`border-t border-[#e2e0ea] ${e.depth === 3 ? "pl-4" : ""}`}>
-              <a href={`#${e.id}`} className="block py-2.5 leading-5 hover:text-[#5440e8]">
+              <a href={`#${e.id}`} className="block py-3 leading-5 hover:text-[#5440e8]">
                 {e.text}
               </a>
             </li>
