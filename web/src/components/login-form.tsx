@@ -90,14 +90,10 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
 
   return (
     <AuthLayout mode="login">
-      {/* Header — the visible "Sign in to LaunchCV." line is folded into the H1 for assistive tech. */}
       <div>
-        <h1 className={authH1Cls}>
-          Welcome back.<span className="sr-only"> Sign in to LaunchCV</span>
-        </h1>
+        <h1 className={authH1Cls}>Welcome back.</h1>
         <p className={authLeadCls}>
-          <span aria-hidden="true">Sign in to LaunchCV. </span>
-          Don&apos;t have an account?{" "}
+          Sign in to LaunchCV. Don&apos;t have an account?{" "}
           <Link href="/register" className={authInlineLinkCls}>
             Create one
           </Link>

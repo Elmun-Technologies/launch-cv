@@ -1,6 +1,5 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { blogCoverPhoto } from "@/components/blog-cover";
 
 /** Minimal post shape the cover needs (works for the DB BlogPost type). */
 type PosterPost = {
@@ -102,7 +101,7 @@ export function BlogPoster({
   );
 
   if (hasCustomCover(post)) {
-    const photo = blogCoverPhoto(post);
+    const photo = { src: post.coverUrl as string, alt: post.coverAlt?.trim() || post.category };
     const wide = size === "hero" || size === "featured";
     return (
       <div className={`relative overflow-hidden bg-[#e4dfff] ${s.frame} ${className}`}>

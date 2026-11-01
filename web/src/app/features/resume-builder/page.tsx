@@ -31,7 +31,7 @@ const stage = (
       sizes="(min-width: 1024px) 298px, 220px"
       className="absolute bottom-0 right-[-12px] h-[270px] w-auto max-w-none sm:h-[320px] lg:right-[-20px] lg:h-[430px]"
     />
-    <div className="lc-float lc-drift absolute left-4 top-[88px] w-[220px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[280px] lg:left-8 lg:top-[150px] lg:w-[330px] lg:rounded-[22px] lg:p-[18px]">
+    <div className="lc-float lc-drift absolute left-4 top-[88px] w-[220px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[280px] lg:left-8 lg:top-[150px] lg:w-[290px] xl:w-[330px] lg:rounded-[22px] lg:p-[18px]">
       <p className="flex justify-between gap-2 text-[11px] font-bold tracking-[0.06em] text-[#66647c] lg:text-[12px]">
         <span>EXPERIENCE · BULLET 2</span>
         <ExampleTag />

@@ -36,7 +36,7 @@ const stage = (
     {/* Same example text as the panel below, so it's hidden from screen readers here. */}
     <div
       aria-hidden="true"
-      className="lc-float absolute left-4 top-[96px] w-[210px] -rotate-3 rounded-lg bg-white p-4 text-[12px] leading-[18px] text-[#24223a] sm:w-[280px] lg:left-8 lg:top-[150px] lg:h-[420px] lg:w-[330px] lg:p-[26px] lg:text-[13px] lg:leading-[21px]"
+      className="lc-float absolute left-4 top-[96px] w-[210px] -rotate-3 rounded-lg bg-white p-4 text-[12px] leading-[18px] text-[#24223a] sm:w-[280px] lg:left-8 lg:top-[150px] lg:h-[420px] lg:w-[290px] xl:w-[330px] lg:p-[26px] lg:text-[13px] lg:leading-[21px]"
     >
       <p className="lc-mono text-[11px] text-[#66647c]">Example draft</p>
       <p className="mt-2 font-bold">Dear Hiring Team,</p>
