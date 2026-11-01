@@ -1,5 +1,7 @@
-import { FeaturePage, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
+import Image from "next/image";
+import { FeaturePage, Stage, ExampleTag, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
   title: "Voice Input Resume Builder — Speak Your Experience",
@@ -16,6 +18,54 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const SAID =
+  "so basically I set up the new onboarding thing for clinics and no-shows went down by like twenty-three percent across forty-one clinics";
+const BULLET = "Launched clinic onboarding for self-scheduling, reducing no-shows by 23% across 41 clinics.";
+const BARS = [12, 26, 18, 34, 22, 30, 14, 28, 20, 10, 24, 16];
+
+const stage = (
+  <Stage bg="#c9c0ff" poster="SPEAK" posterColor="#b8adff">
+    <div className="absolute bottom-[19px] right-[19px] h-[180px] w-[180px] overflow-hidden rounded-full bg-[#ff7a33] sm:h-[220px] sm:w-[220px] lg:bottom-8 lg:right-8 lg:h-[300px] lg:w-[300px]">
+      <Image
+        src="/images/people/man-white-tee.webp"
+        alt="Smiling man in a white t-shirt"
+        width={739}
+        height={1080}
+        priority
+        sizes="(min-width: 1024px) 274px, 199px"
+        className="absolute left-1/2 top-2 h-[240px] w-auto max-w-none -translate-x-1/2 sm:h-[290px] lg:top-3.5 lg:h-[400px]"
+      />
+    </div>
+    <div className="lc-float lc-drift absolute left-4 top-[86px] rounded-[18px] bg-white p-3 lg:left-8 lg:top-[150px] lg:rounded-[22px] lg:p-[18px]">
+      <div className="flex items-center gap-2.5 lg:gap-3">
+        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#c42b30] lg:h-11 lg:w-11">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" aria-hidden="true" className="h-3.5 w-3.5 lg:h-[18px] lg:w-[18px]">
+            <rect x="9" y="3" width="6" height="12" rx="3" />
+            <path d="M5 11a7 7 0 0 0 14 0M12 18v3" />
+          </svg>
+          <span className="sr-only">Recording</span>
+        </span>
+        <span aria-hidden="true" className="flex h-6 items-center gap-[3px] lg:h-9 lg:gap-1">
+          {BARS.map((h, i) => (
+            <span key={i} className="w-1 rounded-full bg-[#5440e8] lg:w-1.5" style={{ height: `${Math.round((h / 34) * 100)}%` }} />
+          ))}
+        </span>
+      </div>
+    </div>
+    <div className="lc-float lc-drift-2 absolute left-4 top-[146px] w-[210px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[280px] lg:left-8 lg:top-[250px] lg:w-[320px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="flex justify-between text-[11px] font-bold tracking-[0.06em] text-[#66647c] lg:text-[12px]">
+        <span>YOU SAID</span>
+        <ExampleTag />
+      </p>
+      <p className="mt-1 text-[13px] leading-[18px] text-[#4a4862] lg:mt-1.5 lg:text-[14px] lg:leading-5">“{SAID}”</p>
+    </div>
+    <div className="lc-float lc-drift-3 absolute left-4 top-[288px] w-[180px] rounded-[18px] bg-[#111118] p-3.5 text-white sm:w-[260px] lg:left-8 lg:top-[440px] lg:w-[320px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="text-[11px] font-bold tracking-[0.06em] text-[#c9c0ff] lg:text-[12px]">BULLET</p>
+      <p className="mt-1 text-[13px] font-semibold leading-[18px] lg:mt-1.5 lg:text-[15px] lg:leading-[21px]">{BULLET}</p>
+    </div>
+  </Stage>
+);
+
 const f: FeaturePageData = {
   path: "/features/voice-input",
   name: "Voice Input",
@@ -24,17 +74,14 @@ const f: FeaturePageData = {
   lead:
     "Press the microphone next to a field and talk about what you did. Your words appear as text in that field; edit them, then use the AI rewrite to shape them into a results-focused bullet.",
   facts: ["No app to install", "Works in your browser", "English (US) recognition"],
-  photo: { src: "/images/photos/role-customer-service.webp", alt: "Professionals wearing headsets at work" },
+  cta: { label: "Try it now", href: `/register?next=${encodeURIComponent("/resume/new")}` },
+  stage,
   example: {
-    title: "From what you said to what you send",
+    title: "From what you said to what you send.",
     caption: "Example. Speech is transcribed by your browser; the rewrite keeps your facts and doesn't invent numbers.",
-    body: (
-      <BeforeAfter
-        before="so basically I set up the new onboarding thing for clinics and no-shows went down by like twenty-three percent across forty-one clinics"
-        after="Launched clinic onboarding for self-scheduling, reducing no-shows by 23% across 41 clinics."
-      />
-    ),
+    body: <BeforeAfter beforeLabel="TRANSCRIPT" afterLabel="BULLET" strike={false} before={`“${SAID}”`} after={BULLET} />,
   },
+  stepsTail: "Talk first, polish after.",
   steps: [
     { t: "Open a section", d: "Experience bullets and your summary both have a microphone button." },
     { t: "Speak", d: "Talk naturally. Your browser shows the text as you go." },
@@ -50,9 +97,9 @@ const f: FeaturePageData = {
     { t: "Accessible", d: "Helpful if typing is slow or tiring for you." },
   ],
   banner: {
-    photo: { src: "/images/photos/job-seeker-laptop.webp", alt: "Person talking through their experience at a laptop" },
     title: "The hardest part is the blank page.",
     text: "Talking gets the raw material out. The editor and AI rewrite turn it into a resume.",
+    note: `Voice input is free in the editor. The AI rewrite comes with paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month.`,
   },
   faqs: [
     {
