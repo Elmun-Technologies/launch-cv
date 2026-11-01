@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { CtaLink } from "@/components/cta-link";
 import { LandingNav } from "@/components/landing-nav";
 import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { HomeClient } from "@/components/home-client";
-import { ResumePage, SAMPLE_RESUMES } from "@/components/home/sample-resume";
+import { FreeAtsClient } from "@/components/free-ats-client";
+import { XrayDemo } from "@/components/home/xray-demo";
+import { FixDemo } from "@/components/home/fix-demo";
+import { CountUp, FloatingChips, Magnetic, Marker, Marquee, Reveal, Spotlight, Tilt, WordReveal } from "@/components/home/fx";
 import { ResumePreview } from "@/components/resume-preview";
-import { getResumeExample } from "@/lib/resume-examples";
+import { getResumeExample, RESUME_EXAMPLES } from "@/lib/resume-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 import { TEMPLATE_SPECS, type TemplateStyle } from "@/lib/resume-templates";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
@@ -16,7 +18,7 @@ import { getPublishedPosts } from "@/lib/cms/blog";
 import { absoluteUrl, getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planNameList } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
-import { ArrowRight, FileText } from "lucide-react";
+import { ArrowRight, Check, Minus } from "lucide-react";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Free ATS Resume Checker & AI Resume Builder",
@@ -46,42 +48,23 @@ const homeLd = {
   ],
 };
 
-const tools = [
-  { href: "/free-ats-check", label: "ATS check" },
-  { href: "/features/resume-builder", label: "Resume builder" },
-  { href: "/features/jd-alignment", label: "Job tailoring" },
-  { href: "/features/cover-letter", label: "Cover letters" },
-  { href: "/features/interview-prep", label: "Interview prep" },
-  { href: "/features/voice-input", label: "Voice input" },
+/** One job post, marked up the way the matcher reads it. */
+const JOB_KEYWORDS = [
+  { k: "roadmap", have: true },
+  { k: "SQL", have: true },
+  { k: "A/B testing", have: true },
+  { k: "customer interviews", have: true },
+  { k: "stakeholder management", have: false },
+  { k: "pricing", have: true },
+  { k: "B2B SaaS", have: true },
+  { k: "OKRs", have: false },
 ];
 
-const reportRows = [
-  { issue: "Contact details are inside a table", impact: "High" },
-  { issue: "Missing 6 keywords for Product Manager roles", impact: "High" },
-  { issue: "6 bullets list duties, not results", impact: "Medium" },
-  { issue: "Heading \"My Journey\" isn't recognized", impact: "Medium" },
-];
-
-const filterFacts = [
-  {
-    t: "Software reads your resume first",
-    d: "Applicant tracking systems parse and rank applications before a recruiter opens them.",
-  },
-  {
-    t: "Formatting can hide your experience",
-    d: "Tables, columns and text boxes can scramble or drop whole sections.",
-  },
-  {
-    t: "Keywords decide the ranking",
-    d: "If the job asks for \"stakeholder management\" and you wrote \"worked with teams\", you rank lower.",
-  },
-];
-
-const fields = [
-  { href: "/resume-examples/software-engineer", label: "Software engineers", sub: "Backend, frontend, full-stack", img: "/images/photos/role-software-engineer.webp", alt: "Software engineer coding on a laptop" },
-  { href: "/resume-examples/product-manager", label: "Product managers", sub: "Associate to director", img: "/images/photos/role-product-manager.webp", alt: "Product manager smiling in an office" },
-  { href: "/resume-examples/ux-designer", label: "Designers", sub: "UX, product and visual", img: "/images/photos/role-designer.webp", alt: "Designer at her desk" },
-  { href: "/resume-examples", label: "Every other role", sub: "Analysts, marketers, support and more", img: "/images/photos/role-data-analyst.webp", alt: "Analyst on a video call" },
+const FACTS = [
+  { n: "~10 s", l: "to your ATS score" },
+  { n: "0", l: "files kept after the check" },
+  { n: "4", l: "ATS-safe templates, free PDF" },
+  { n: "16", l: "role examples with cover letters" },
 ];
 
 /** The real templates, rendered by the same component as the editor preview. */
@@ -145,11 +128,12 @@ const faqLd = {
 // ISR: keep the homepage fast while surfacing the latest blog posts.
 export const revalidate = 300;
 
-const h2 = "text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111] sm:text-[40px]";
-const grey = "text-[#6E6E6A]";
+const h2 = "text-[32px] font-semibold leading-[1.08] tracking-[-0.035em] text-[#111111] sm:text-[46px]";
+const grey = "text-[#8A8A86]";
 
 export default async function Home() {
   const latestPosts = (await getPublishedPosts()).slice(0, 3);
+  const pm = getResumeExample("product-manager");
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#111111]">
@@ -157,327 +141,335 @@ export default async function Home() {
       <JsonLd data={faqLd} />
       <LandingNav />
       <main>
-
-      {/* HERO */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pt-[112px] sm:pt-[136px]">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-16">
-          <h1 className="flex-1 text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[56px] lg:text-[62px]">
-            Find out why your resume isn&apos;t getting interviews. <span className={grey}>Then fix it.</span>
-          </h1>
-          <div className="flex max-w-[420px] flex-col gap-5">
-            <p className="text-[17px] leading-[1.6] text-[#3F3F3F]">
-              LaunchCV checks your resume the way applicant tracking systems read it, explains every issue in plain
-              English, and helps you rewrite it for each job you apply to.
-            </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <CtaLink
-                cta="check_resume"
-                location="home_hero"
-                href="/free-ats-check"
-                className="inline-flex h-12 items-center rounded-full bg-[#2563EB] px-6 text-[15px] font-medium text-white transition hover:bg-[#1D4ED8]"
-              >
-                Check my resume — free
-              </CtaLink>
-              <span className="text-[14px] text-[#6B6B6B]">No sign-up needed</span>
-            </div>
-          </div>
-        </div>
-
-        <CtaLink
-          cta="upload_bar"
-          location="home_hero"
-          href="/free-ats-check"
-          className="mx-auto mt-10 flex max-w-[620px] items-center gap-3 rounded-full border border-[#D9D9D5] bg-white py-2 pl-5 pr-2 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition hover:border-[#111111]"
+        {/* HERO — the real check, right here */}
+        <section
+          id="check"
+          className="scroll-mt-16 bg-[#FAFAF7] bg-[radial-gradient(#E4E2DC_1px,transparent_1px)] [background-size:22px_22px]"
         >
-          <FileText className="h-5 w-5 shrink-0 text-[#6B6B6B]" aria-hidden="true" />
-          <span className="flex-1 text-[15px] text-[#3F3F3F]">
-            <span className="font-medium text-[#2563EB]">Upload</span> or drop your resume<span className="hidden sm:inline"> — PDF or Word</span>
-          </span>
-          <span className="inline-flex h-10 items-center rounded-full bg-[#111111] px-4 text-[14px] font-medium text-white">
-            Get my score
-          </span>
-        </CtaLink>
-
-        {/* Real resumes are the hero image */}
-        <div
-          className="relative mt-12 h-[340px] overflow-hidden rounded-[20px] bg-[#F5F5F3] sm:h-[520px]"
-          aria-hidden="true"
-        >
-          <div className="absolute left-1/2 top-16 hidden -translate-x-[560px] -rotate-[5deg] md:block">
-            <div className="origin-top-left scale-[0.62] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.25)]">
-              <ResumePage resume={SAMPLE_RESUMES.engineer} />
-            </div>
-          </div>
-          <div className="absolute left-1/2 top-10 z-10 -translate-x-[150px] md:-translate-x-[186px]">
-            <div className="origin-top-left scale-[0.5] shadow-[0_40px_70px_-24px_rgba(0,0,0,0.32)] md:scale-[0.66]">
-              <ResumePage resume={SAMPLE_RESUMES.pm} />
-            </div>
-            <div className="absolute left-[150px] top-[-14px] flex items-center md:left-[300px] md:top-[-22px] gap-2.5 rounded-xl border border-[#E5E5E2] bg-white px-3.5 py-2.5 text-[14px] shadow-[0_10px_24px_-12px_rgba(0,0,0,0.25)]">
-              <span className="flex h-[34px] w-[34px] items-center justify-center rounded-full border-[3px] border-[#12A15E] text-[13px] font-bold">
-                91
-              </span>
-              <span>
-                <span className="block font-semibold">ATS score</span>
-                <span className="block text-[12px] text-[#6B6B6B]">Ready to apply</span>
-              </span>
-            </div>
-          </div>
-          <div className="absolute left-1/2 top-[92px] hidden translate-x-[210px] rotate-[5deg] md:block">
-            <div className="origin-top-left scale-[0.62] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.25)]">
-              <ResumePage resume={SAMPLE_RESUMES.marketing} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TOOLS + REPORT */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
-        <h2 className={`${h2} max-w-[760px]`}>
-          Everything you need to apply with confidence. <span className={grey}>In one place.</span>
-        </h2>
-        <nav aria-label="Tools" className="mt-8 flex flex-wrap gap-1.5">
-          {tools.map((t, i) => (
-            <Link
-              key={t.href}
-              href={t.href}
-              className={`inline-flex h-10 items-center rounded-full px-4 text-[15px] font-medium transition ${
-                i === 0 ? "bg-[#111111] text-white" : "bg-[#F5F5F3] text-[#3F3F3F] hover:bg-[#EBEBE8]"
-              }`}
-            >
-              {t.label}
-            </Link>
-          ))}
-        </nav>
-        <div className="mt-6 flex flex-col gap-10 overflow-hidden rounded-[20px] bg-[#EEF3FF] px-6 py-10 sm:px-12 sm:py-12 lg:flex-row lg:items-center">
-          <div className="flex max-w-[360px] flex-col gap-3.5">
-            <p className="text-[24px] font-semibold leading-[1.25] tracking-[-0.02em]">
-              See your resume the way hiring software does
+          <Spotlight className="pb-16 pt-[112px] sm:pt-[132px]">
+          <div className="mx-auto max-w-[1100px] px-5 text-center sm:px-6">
+            <p className="inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 rounded-full border border-[#E5E5E2] bg-white px-3.5 py-1.5 text-[12px] text-[#3F3F3F] sm:gap-x-3 sm:px-4 sm:text-[13px]">
+              <span>Free ATS check</span>
+              <span className="text-[#C9C9C4]">·</span>
+              <span>No sign-up</span>
+              <span className="text-[#C9C9C4]">·</span>
+              <span>Your file isn&apos;t stored</span>
             </p>
-            <p className="text-[16px] leading-[1.6] text-[#3F3F3F]">
-              A score out of 100, the issues behind it ranked by impact, and a clear fix for each one.
+            <h1 className="mx-auto mt-6 max-w-[920px] text-[42px] font-semibold leading-[1.02] tracking-[-0.045em] sm:text-[64px] lg:text-[76px]">
+              <WordReveal text="Find out why your resume" />{" "}
+              <Marker delay={700}>
+                <WordReveal text="isn't getting interviews." delay={0.3} />
+              </Marker>
+            </h1>
+            <p className="mx-auto mt-6 max-w-[600px] text-[17px] leading-[1.6] text-[#3F3F3F] sm:text-[19px]">
+              Most applications are read by software before a person sees them. Upload yours and see what that software
+              gets wrong — with a fix for every issue.
             </p>
-            <Link href="/free-ats-check" className="inline-flex items-center gap-1 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-              Check my resume <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
           </div>
-          <div className="flex min-w-0 flex-1 flex-col gap-7 rounded-[14px] bg-white p-7 shadow-[0_20px_50px_-24px_rgba(29,78,216,0.35)] sm:flex-row">
-            <div className="flex shrink-0 flex-col items-center gap-2 sm:w-[180px]">
-              <svg width="150" height="150" viewBox="0 0 120 120" role="img" aria-label="Example ATS score: 54 out of 100">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#F0F0EE" strokeWidth="10" />
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#C2700A" strokeWidth="10" strokeLinecap="round" strokeDasharray="170 314" transform="rotate(-90 60 60)" />
-                <text x="60" y="68" textAnchor="middle" fontSize="30" fontWeight="600" fill="#111111">54</text>
-              </svg>
-              <p className="font-semibold">Needs work</p>
-              <p className="text-[13px] text-[#6B6B6B]">11 issues found</p>
+          <Reveal delay={0.5} className="relative mx-auto mt-10 max-w-[1100px] px-5 sm:px-6">
+            <FloatingChips />
+            <FreeAtsClient />
+          </Reveal>
+          <div className="mx-auto mt-14 max-w-[1100px] px-5 sm:px-6">
+            <p className="text-center text-[13px] text-[#6B6B6B]">Checked against the parsing rules common to</p>
+            <div className="mt-3">
+              <Marquee items={["Workday", "Greenhouse", "Lever", "iCIMS", "Taleo", "SuccessFactors", "SmartRecruiters", "Ashby", "Jobvite", "BambooHR"]} />
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex justify-between border-b border-[#EEEEEB] pb-2.5 text-[13px] text-[#6B6B6B]">
-                <span>Issue</span>
-                <span>Impact</span>
-              </div>
-              {reportRows.map((r) => (
-                <div key={r.issue} className="flex justify-between gap-3 border-b border-[#EEEEEB] py-3.5 text-[15px]">
-                  <span>{r.issue}</span>
-                  <span className={`shrink-0 font-medium ${r.impact === "High" ? "text-[#C2341B]" : "text-[#B2610A]"}`}>
-                    {r.impact}
-                  </span>
+          </div>
+          </Spotlight>
+        </section>
+
+        {/* X-RAY */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-28">
+          <Reveal className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <p className="text-[14px] font-medium text-[#6B6B6B]">Why good resumes get filtered</p>
+              <h2 className={`${h2} mt-3`}>
+                It looks fine to you. <span className={grey}>The software reads something else.</span>
+              </h2>
+              <p className="mt-5 text-[17px] leading-[1.65] text-[#3F3F3F]">
+                Columns, text boxes and headers are the usual culprits. The parser reads left to right, line by line, and
+                the email, dates or skills end up in the wrong field — or nowhere.
+              </p>
+              <p className="mt-4 text-[17px] leading-[1.65] text-[#3F3F3F]">
+                LaunchCV reads your resume the same way and shows you exactly what came out.
+              </p>
+            </div>
+            <XrayDemo />
+          </Reveal>
+        </section>
+
+        {/* FIX DEMO */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
+          <div className="max-w-[760px]">
+            <p className="text-[14px] font-medium text-[#6B6B6B]">From report to ready</p>
+            <h2 className={`${h2} mt-3`}>
+              Every issue comes with the fix. <span className={grey}>Try it on this one.</span>
+            </h2>
+          </div>
+          <Reveal className="mt-10">
+            <FixDemo />
+          </Reveal>
+        </section>
+
+        {/* TAILOR */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
+          <Reveal className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div className="order-2 lg:order-1">
+              <div className="rounded-[18px] border border-[#E5E5E2] bg-white p-6 sm:p-8">
+                <p className="text-[13px] text-[#6B6B6B]">Job post · Senior Product Manager · Northwind</p>
+                <p className="mt-3 text-[15px] leading-[1.75] text-[#3F3F3F]">
+                  You&apos;ll own the <Marker delay={180}>roadmap</Marker> for our <Marker delay={360}>B2B SaaS</Marker>{" "}
+                  scheduling product, run <Marker delay={540}>customer interviews</Marker> and use{" "}
+                  <Marker delay={720}>SQL</Marker> and <Marker delay={900}>A/B testing</Marker> to decide what ships.
+                  Strong <Marker delay={1080}>stakeholder management</Marker> across sales and legal, experience with{" "}
+                  <Marker delay={1260}>pricing</Marker>, and a habit of setting clear <Marker delay={1440}>OKRs</Marker>.
+                </p>
+                <div className="mt-6 border-t border-[#EEEEEB] pt-5">
+                  <div className="flex items-baseline justify-between">
+                    <p className="text-[15px] font-semibold">Your resume covers</p>
+                    <p className="text-[15px] font-semibold tabular-nums">
+                      {JOB_KEYWORDS.filter((k) => k.have).length} of {JOB_KEYWORDS.length}
+                    </p>
+                  </div>
+                  <div className="mt-2 h-2 rounded-full bg-[#EEEEEB]">
+                    <div
+                      className="h-2 rounded-full bg-[#111111] transition-[width] duration-1000"
+                      style={{ width: `${(JOB_KEYWORDS.filter((k) => k.have).length / JOB_KEYWORDS.length) * 100}%` }}
+                    />
+                  </div>
+                  <ul className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 text-[14px]">
+                    {JOB_KEYWORDS.map((k) => (
+                      <li key={k.k} className={`flex items-center gap-2 ${k.have ? "text-[#111111]" : "text-[#C2341B]"}`}>
+                        {k.have ? <Check className="h-3.5 w-3.5 shrink-0" aria-hidden /> : <Minus className="h-3.5 w-3.5 shrink-0" aria-hidden />}
+                        {k.k}
+                        <span className="sr-only">{k.have ? "(covered)" : "(missing)"}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              ))}
-              <p className="py-3.5 text-[15px] text-[#6B6B6B]">7 more</p>
+              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TEMPLATES */}
-      <section className="pt-24 sm:pt-28">
-        <div className="mx-auto flex max-w-[1200px] flex-wrap items-end justify-between gap-6 px-6">
-          <h2 className={`${h2} max-w-[700px]`}>
-            Templates recruiters can skim in seconds. <span className={grey}>And software can read.</span>
-          </h2>
-          <Link
-            href="/resume-templates"
-            className="inline-flex h-11 items-center rounded-full border border-[#D9D9D5] px-5 text-[15px] font-medium transition hover:border-[#111111]"
-          >
-            All templates
-          </Link>
-        </div>
-        <div className="mx-auto mt-10 flex max-w-[1200px] gap-5 overflow-x-auto px-6 pb-2 lg:grid lg:grid-cols-4 lg:overflow-visible">
-          {templates.map((t) => (
-            <Link key={t.template} href="/resume-templates" className="group block w-[240px] shrink-0 lg:w-auto">
-              <span className="block rounded-[14px] bg-[#F5F5F3] p-5 transition group-hover:bg-[#EEEEEB]" aria-hidden="true">
-                <ResumePreview content={t.content} template={t.template} />
-              </span>
-              <span className="mt-3 block text-[15px] font-medium">{TEMPLATE_SPECS[t.template].label}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* WHY RESUMES GET FILTERED */}
-      <section className="px-6 pt-24 sm:pt-28">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-12 rounded-[20px] bg-[#111111] px-8 py-12 text-white sm:px-16 sm:py-20 lg:flex-row">
-          <h2 className="flex-1 text-[32px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[44px]">
-            You&apos;re probably not being rejected by people.{" "}
-            <span className="text-[#8A8A86]">You&apos;re being filtered before they see you.</span>
-          </h2>
-          <ol className="flex flex-1 flex-col gap-6">
-            {filterFacts.map((f, i) => (
-              <li key={f.t} className="flex gap-5">
-                <span className="w-6 shrink-0 pt-0.5 text-[14px] tabular-nums text-[#A3A3A0]">0{i + 1}</span>
-                <span>
-                  <span className="block text-[17px] font-semibold">{f.t}</span>
-                  <span className="mt-1 block text-[15px] leading-[1.6] text-[#B5B5B0]">{f.d}</span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* BY FIELD */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <h2 className={h2}>
-            Built for your field. <span className={grey}>Not a generic template.</span>
-          </h2>
-          <Link href="/resume-examples" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-            All use cases →
-          </Link>
-        </div>
-        <div className="mt-8 grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-          {fields.map((f) => (
-            <Link key={f.label} href={f.href} className="group block">
-              <Image
-                src={f.img}
-                alt={f.alt}
-                width={640}
-                height={480}
-                sizes="(min-width: 1024px) 280px, (min-width: 640px) 50vw, 100vw"
-                className="aspect-[4/3] w-full rounded-[14px] object-cover"
-              />
-              <span className="mt-3 flex items-center justify-between text-[16px] font-medium">
-                {f.label}
-                <ArrowRight className="h-4 w-4 text-[#6E6E6A] transition group-hover:translate-x-0.5" aria-hidden="true" />
-              </span>
-              <span className="mt-0.5 block text-[14px] text-[#6B6B6B]">{f.sub}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* PRICING */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
-        <div className="flex flex-col gap-10 border-t border-[#EEEEEB] pt-12 lg:flex-row">
-          <div className="flex-1">
-            <h2 className={h2}>
-              Free to check. <span className={grey}>Plans from {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
-            </h2>
-            <p className="mt-4 max-w-[440px] text-[17px] leading-[1.6] text-[#3F3F3F]">
-              Every AI tool is included on every plan. Cancel monthly plans in one click, or pay once with Lifetime.
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3 lg:flex-[1.3]">
-            {CHECKOUT_PLAN_ORDER.map((key) => {
-              const cfg = PUBLIC_PLANS[key];
-              return (
-                <CtaLink
-                  key={key}
-                  cta="choose_plan"
-                  plan={key}
-                  location="home_pricing"
-                  selectsPlan
-                  href="/pricing"
-                  className={`flex flex-col rounded-[14px] p-5 transition ${
-                    cfg.popular ? "border-2 border-[#111111]" : "border border-[#E5E5E2] hover:border-[#111111]"
-                  }`}
-                >
-                  <span className="text-[15px] text-[#6B6B6B]">{cfg.title}</span>
-                  <span className="mt-1 text-[32px] font-semibold tracking-[-0.03em]">
-                    {cfg.priceDisplay}
-                    <span className="ml-1 text-[14px] font-normal tracking-normal text-[#6B6B6B]">{cfg.periodLabel}</span>
-                  </span>
-                  <span className="mt-1 flex-1 text-[14px] leading-[1.5] text-[#3F3F3F]">{cfg.valueLine}</span>
-                  <span className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-[14px] font-medium text-[#111111]">
-                    Details <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                  </span>
-                </CtaLink>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
-        <h2 className={`${h2} text-center`}>Questions</h2>
-        <HomeClient faqItems={faqs} />
-      </section>
-
-      {/* BLOG */}
-      {latestPosts.length > 0 ? (
-        <section className="mx-auto w-full max-w-[1200px] px-6 pt-24 sm:pt-28">
-          <div className="flex items-end justify-between gap-4">
-            <h2 className={h2}>
-              Resume guides. <span className={grey}>Written for job seekers.</span>
-            </h2>
-            <Link href="/blog" className="hidden shrink-0 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8] sm:inline">
-              All articles →
-            </Link>
-          </div>
-          <div className="mt-8 grid gap-5 sm:grid-cols-3">
-            {latestPosts.map((post) => (
+            <div className="order-1 lg:order-2">
+              <p className="text-[14px] font-medium text-[#6B6B6B]">One resume, many jobs</p>
+              <h2 className={`${h2} mt-3`}>
+                Paste the job post. <span className={grey}>See what it&apos;s looking for.</span>
+              </h2>
+              <p className="mt-5 text-[17px] leading-[1.65] text-[#3F3F3F]">
+                LaunchCV pulls out the skills and phrases the employer uses, checks which ones your resume already says,
+                and suggests rewrites for the bullets that should — using only what you actually did.
+              </p>
+              <p className="mt-4 text-[17px] leading-[1.65] text-[#3F3F3F]">
+                Then write the cover letter and prepare for the interview from the same job post.
+              </p>
               <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="group flex flex-col border-t border-[#E5E5E2] pt-5"
+                href="/features/jd-alignment"
+                className="mt-6 inline-flex items-center gap-1.5 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
               >
-                <span className="text-[13px] text-[#6B6B6B]">{post.category}</span>
-                <span className="mt-2 text-[17px] font-semibold leading-snug group-hover:text-[#1D4ED8]">{post.title}</span>
-                <span className="mt-2 line-clamp-2 text-[14px] leading-[1.6] text-[#3F3F3F]">{post.description}</span>
+                How job matching works <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* FACTS */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-28">
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border border-[#E5E5E2] bg-[#E5E5E2] lg:grid-cols-4">
+            {FACTS.map((f) => (
+              <div key={f.l} className="group bg-white px-6 py-7 transition-colors hover:bg-[#FFFBEA]">
+                <dt className="sr-only">{f.l}</dt>
+                <dd className="text-[40px] font-semibold leading-none tracking-[-0.04em] sm:text-[48px]">
+                  <CountUp value={f.n} />
+                </dd>
+                <dd className="mt-2 text-[14px] text-[#6B6B6B]">{f.l}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        {/* TEMPLATES */}
+        <section className="pt-24 sm:pt-32">
+          <div className="mx-auto flex max-w-[1100px] flex-wrap items-end justify-between gap-6 px-5 sm:px-6">
+            <h2 className={`${h2} max-w-[700px]`}>
+              Four templates. <span className={grey}>All one column, all readable by the software.</span>
+            </h2>
+            <Link
+              href="/resume-templates"
+              className="inline-flex h-11 items-center rounded-full border border-[#D9D9D5] px-5 text-[15px] font-medium transition hover:border-[#111111]"
+            >
+              See the templates
+            </Link>
+          </div>
+          <div className="mx-auto mt-10 flex max-w-[1100px] gap-5 overflow-x-auto px-5 pb-2 sm:px-6 lg:grid lg:grid-cols-4 lg:overflow-visible">
+            {templates.map((t) => (
+              <Link key={t.template} href="/resume-templates" className="group block w-[240px] shrink-0 lg:w-auto">
+                <Tilt>
+                  <span className="block rounded-[14px] bg-[#F3F1EC] p-5 transition-[background-color,box-shadow] duration-300 group-hover:bg-[#ECE9E2] group-hover:shadow-[0_30px_60px_-30px_rgba(0,0,0,0.35)]" aria-hidden="true">
+                    <ResumePreview content={t.content} template={t.template} />
+                  </span>
+                </Tilt>
+                <span className="mt-3 flex items-center justify-between text-[15px] font-medium">
+                  {TEMPLATE_SPECS[t.template].label}
+                  <span className="translate-x-[-4px] text-[13px] text-[#1D4ED8] opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
+                    Use it →
+                  </span>
+                </span>
               </Link>
             ))}
           </div>
         </section>
-      ) : null}
 
-      {/* FINAL CTA */}
-      <section className="mx-auto w-full max-w-[1200px] px-6 pb-24 pt-24 sm:pt-28">
-        <div className="flex flex-col overflow-hidden rounded-[20px] bg-[#F5F5F3] lg:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-6 p-8 sm:p-14">
-        <h2 className="text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[48px]">
-          See your score in about 10 seconds. <span className={grey}>Then go get the interview.</span>
-        </h2>
-        <div className="flex flex-wrap gap-2.5">
-          <CtaLink
-            cta="check_resume"
-            location="home_footer"
-            href="/free-ats-check"
-            className="inline-flex h-[52px] items-center rounded-full bg-[#2563EB] px-7 text-[16px] font-medium text-white transition hover:bg-[#1D4ED8]"
-          >
-            Check my resume — free
-          </CtaLink>
-          <CtaLink
-            cta="get_started"
-            location="home_footer"
-            href="/register"
-            className="inline-flex h-[52px] items-center rounded-full border border-[#D9D9D5] px-6 text-[16px] font-medium transition hover:border-[#111111]"
-          >
-            Build a new resume
-          </CtaLink>
-        </div>
-        </div>
-        <Image
-          src="/images/photos/colleagues-celebrate.webp"
-          alt="Two colleagues celebrating at a desk"
-          width={1400}
-          height={900}
-          sizes="(min-width: 1024px) 560px, 100vw"
-          className="h-[260px] w-full object-cover lg:h-auto lg:w-[48%]"
-        />
-        </div>
-      </section>
+        {/* EXAMPLES INDEX */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
+          <Reveal className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <h2 className={h2}>
+                Start from a real example. <span className={grey}>Not a blank page.</span>
+              </h2>
+              <p className="mt-5 text-[17px] leading-[1.65] text-[#3F3F3F]">
+                Each one has a full resume, the keywords for that role and an annotated cover letter by the same person.
+                Open it in the editor and replace the details with yours.
+              </p>
+              {pm ? (
+                <Link
+                  href="/resume-examples/product-manager"
+                  className="mt-6 inline-flex items-center gap-1.5 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
+                >
+                  See the {pm.role.toLowerCase()} example <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              ) : null}
+            </div>
+            <ul className="grid gap-x-8 sm:grid-cols-2">
+              {RESUME_EXAMPLES.map((e) => (
+                <li key={e.slug} className="border-t border-[#E5E5E2]">
+                  <Link
+                    href={`/resume-examples/${e.slug}`}
+                    className="group -mx-3 flex items-center justify-between gap-3 rounded-[10px] px-3 py-3.5 transition-colors hover:bg-[#F3F1EC]"
+                  >
+                    <span>
+                      <span className="block text-[16px] font-medium group-hover:text-[#1D4ED8]">{e.role}</span>
+                      <span className="block text-[13px] text-[#6B6B6B]">{e.level}</span>
+                    </span>
+                    <ArrowRight className="h-4 w-4 shrink-0 text-[#8A8A86] transition group-hover:translate-x-0.5 group-hover:text-[#1D4ED8]" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </section>
 
+        {/* PRICING */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
+          <div className="flex flex-col gap-10 lg:flex-row">
+            <div className="flex-1">
+              <h2 className={h2}>
+                The check is free. <span className={grey}>The AI tools start at {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
+              </h2>
+              <p className="mt-5 max-w-[440px] text-[17px] leading-[1.6] text-[#3F3F3F]">
+                The editor, PDF export and templates are free too. Every plan has every AI tool; they differ only in monthly
+                limits. Cancel in one click, or pay once with Lifetime.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3 lg:flex-[1.3]">
+              {CHECKOUT_PLAN_ORDER.map((key) => {
+                const cfg = PUBLIC_PLANS[key];
+                return (
+                  <CtaLink
+                    key={key}
+                    cta="choose_plan"
+                    plan={key}
+                    location="home_pricing"
+                    selectsPlan
+                    href="/pricing"
+                    className={`group flex flex-col rounded-[14px] bg-white p-5 transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_50px_-28px_rgba(0,0,0,0.35)] ${
+                      cfg.popular ? "border-2 border-[#111111]" : "border border-[#E5E5E2] hover:border-[#111111]"
+                    }`}
+                  >
+                    <span className="text-[15px] text-[#6B6B6B]">{cfg.title}</span>
+                    <span className="mt-1 text-[32px] font-semibold tracking-[-0.03em]">
+                      {cfg.priceDisplay}
+                      <span className="ml-1 text-[14px] font-normal tracking-normal text-[#6B6B6B]">{cfg.periodLabel}</span>
+                    </span>
+                    <span className="mt-1 flex-1 text-[14px] leading-[1.5] text-[#3F3F3F]">{cfg.valueLine}</span>
+                    <span className="mt-4 inline-flex items-center gap-1 whitespace-nowrap text-[14px] font-medium text-[#111111]">
+                      Details <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-1" aria-hidden="true" />
+                    </span>
+                  </CtaLink>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-32">
+          <h2 className={`${h2} text-center`}>Questions</h2>
+          <HomeClient faqItems={faqs} />
+        </section>
+
+        {/* BLOG */}
+        {latestPosts.length > 0 ? (
+          <section className="mx-auto w-full max-w-[1100px] px-5 pt-24 sm:px-6 sm:pt-28">
+            <div className="flex items-end justify-between gap-4">
+              <h2 className={h2}>
+                Resume guides. <span className={grey}>Written for job seekers.</span>
+              </h2>
+              <Link
+                href="/blog"
+                className="hidden shrink-0 font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8] sm:inline"
+              >
+                All articles →
+              </Link>
+            </div>
+            <div className="mt-8 grid gap-5 sm:grid-cols-3">
+              {latestPosts.map((post) => (
+                <Link key={post.slug} href={`/blog/${post.slug}`} className="group flex flex-col border-t border-[#E5E5E2] pt-5">
+                  <span className="text-[13px] text-[#6B6B6B]">{post.category}</span>
+                  <span className="mt-2 text-[17px] font-semibold leading-snug group-hover:text-[#1D4ED8]">{post.title}</span>
+                  <span className="mt-2 line-clamp-2 text-[14px] leading-[1.6] text-[#3F3F3F]">{post.description}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {/* FINAL CTA */}
+        <section className="mx-auto w-full max-w-[1100px] px-5 pb-24 pt-24 sm:px-6 sm:pt-32">
+          <div className="relative overflow-hidden rounded-[24px] bg-[#111111] px-7 py-14 text-center text-white sm:px-14 sm:py-20">
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(#2A2A2A_1px,transparent_1px)] [background-size:22px_22px] opacity-70"
+              aria-hidden="true"
+            />
+            <div className="relative">
+              <h2 className="mx-auto max-w-[760px] text-[34px] font-semibold leading-[1.05] tracking-[-0.04em] sm:text-[56px]">
+                Ten seconds to see what the software sees.
+              </h2>
+              <p className="mx-auto mt-5 max-w-[520px] text-[17px] leading-[1.6] text-[#B5B5B0]">
+                Free, no account, and your file isn&apos;t kept. If it finds nothing to fix, you&apos;ve lost ten seconds.
+              </p>
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <Magnetic>
+                  <CtaLink
+                    cta="check_resume"
+                    location="home_footer"
+                    href="#check"
+                    className="lcv-shine inline-flex h-[52px] items-center rounded-full bg-[#FFE27A] px-7 text-[16px] font-medium text-[#111111] transition hover:bg-[#FFD84D]"
+                  >
+                    Check my resume — free
+                  </CtaLink>
+                </Magnetic>
+                <CtaLink
+                  cta="get_started"
+                  location="home_footer"
+                  href="/register"
+                  className="inline-flex h-[52px] items-center rounded-full border border-white/25 px-6 text-[16px] font-medium text-white transition hover:border-white"
+                >
+                  Build a new resume
+                </CtaLink>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
       <LandingFooter />
     </div>

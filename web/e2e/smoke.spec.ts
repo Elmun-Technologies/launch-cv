@@ -21,8 +21,9 @@ test("free ATS check page renders without an account", async ({ page }) => {
   await expect(page.getByPlaceholder(/paste your resume text/i)).toBeVisible();
 });
 
-test("home hero CTA points to the free ATS check", async ({ page }) => {
+test("home hero runs the free ATS check in place", async ({ page }) => {
   await page.goto("/");
-  const cta = page.getByRole("link", { name: /check my resume — free/i }).first();
-  await expect(cta).toHaveAttribute("href", "/free-ats-check");
+  // The hero embeds the checker itself, so the upload is one click from landing.
+  await expect(page.locator("#check").getByRole("button", { name: /upload your resume/i })).toBeVisible();
+  await expect(page.locator("#check").getByRole("tab", { name: /paste text/i })).toBeVisible();
 });
