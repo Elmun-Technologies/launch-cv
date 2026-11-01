@@ -13,7 +13,7 @@ function formatBytes(bytes: number) {
 }
 
 export default async function AdminMediaPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const assets = await prisma.mediaAsset.findMany({

@@ -26,7 +26,7 @@ export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
     getUserPlanId(userId) as Promise<PlanId>,
     getUsageRow(userId),
   ]);
-  const limits = limitsForPlan(plan);
+  const limits = await limitsForPlan(plan);
   const used = kind === "jd" ? row.jdCount : kind === "packet" ? row.packetCount : row.roleFitCount;
   const max = kind === "jd" ? limits.jd : kind === "packet" ? limits.packet : limits.roleFit;
   const paid = plan !== "none";

@@ -10,7 +10,7 @@ import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 export default async function RegisterPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const session = await getSession();
   if (session) redirect(safeNextPath((await searchParams).next) ?? "/dashboard");
-  const googleEnabled = isGoogleOAuthConfigured();
+  const googleEnabled = await isGoogleOAuthConfigured();
   return (
     <Suspense
       fallback={

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
-import { chatJson } from "@/lib/openai-client";
+import { aiErrorResponse, chatJson } from "@/lib/openai-client";
 import { allowAiJd } from "@/lib/rate-limit-presets";
 import { assertAiUsageAllowed, incrementAiUsage } from "@/lib/usage-limits";
 import { jsonUsageBlocked } from "@/lib/usage-response";
@@ -27,7 +27,7 @@ type EmailResult = {
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowAiJd(session.sub)) {
+  if (!(await allowAiJd(session.sub))) {
     return NextResponse.json({ error: "Rate limit exceeded. Try again shortly." }, { status: 429 });
   }
   const usage = await assertAiUsageAllowed(session.sub, "packet");
@@ -69,13 +69,13 @@ ${resumeContext}
 Generate a professional ${type} email.`;
 
   try {
-    const result = await chatJson<EmailResult>({ system, user: userPrompt });
+    const result = await chatJson<EmailResult>({ system, user: userPrompt, tool: "email", userId: session.sub, paid: usage.paid });
     if (!result || typeof result.subject !== "string") {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
     }
     await incrementAiUsage(session.sub, "packet");
     return NextResponse.json({ result });
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : "Error" }, { status: 502 });
+    return aiErrorResponse(e);
   }
 }

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ShieldOff, ArrowLeft, ArrowRight } from "lucide-react";
 import { getSession } from "@/lib/session";
-import { requireAdmin } from "@/lib/admin-guard";
+import { adminState } from "@/lib/admin-guard";
 
 /**
  * Rendered when a logged-in user without admin privileges hits any
@@ -14,10 +14,25 @@ export default async function AccessDeniedPage() {
   const session = await getSession();
   if (!session) redirect("/login?next=/admin-panel");
 
-  // If the user actually IS an admin (e.g. they revisited this page after
-  // their role was upgraded) send them back into the panel.
-  const admin = await requireAdmin();
-  if (admin) redirect("/admin-panel");
+  // Staff who still owe a 2FA code go to the code screen; staff with access go back in.
+  const state = await adminState();
+  if (state.state === "setup_2fa" || state.state === "verify_2fa") redirect("/admin-2fa");
+  if (state.state === "ok") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#FAFAF9] px-6">
+        <div className="w-full max-w-[460px] rounded-2xl border border-[#E5E5E2] bg-white p-8 text-center">
+          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Your role can&apos;t open that page</h1>
+          <p className="mt-2 text-[14px] leading-[1.65] text-[#3F3F3F]">
+            You&apos;re signed in as <span className="font-semibold text-[#111111]">{state.staff.email}</span> with the{" "}
+            <span className="font-semibold capitalize text-[#111111]">{state.staff.role}</span> role. Ask an owner if you need more access.
+          </p>
+          <Link href="/admin-panel" className="mt-6 inline-flex items-center gap-1.5 rounded-lg bg-[#111111] px-4 py-2 text-[13px] font-semibold text-white">
+            <ArrowLeft className="h-3.5 w-3.5" /> Back to the admin panel
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#FAFAF9] px-6">
@@ -35,15 +50,9 @@ export default async function AccessDeniedPage() {
         </p>
 
         <div className="mt-6 rounded-lg border border-[#E5E5E2] bg-[#FAFAF9] p-4 text-left text-[13px] leading-[1.65] text-[#3F3F3F]">
-          To gain access, ask an existing admin to add your email to{" "}
-          <code className="rounded bg-white px-1.5 py-0.5 font-mono text-[12px] text-[#111111] ring-1 ring-[#E5E5E2]">
-            ADMIN_EMAILS
-          </code>{" "}
-          (Vercel env), or promote your user from{" "}
-          <code className="rounded bg-white px-1.5 py-0.5 font-mono text-[12px] text-[#111111] ring-1 ring-[#E5E5E2]">
-            /admin-panel/settings
-          </code>
-          .
+          To get access, ask an owner to add you in{" "}
+          <span className="font-semibold text-[#111111]">Admin → Security → Team</span>. You&apos;ll be asked to set up an
+          authenticator app the first time you sign in.
         </div>
 
         <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">

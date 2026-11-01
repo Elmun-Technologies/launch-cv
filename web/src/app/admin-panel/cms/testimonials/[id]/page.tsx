@@ -5,7 +5,7 @@ import { AdminShell } from "@/components/admin-shell";
 import { TestimonialEditor, type TestimonialEditorData } from "@/components/admin/testimonial-editor";
 
 export default async function EditTestimonialPage({ params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const { id } = await params;

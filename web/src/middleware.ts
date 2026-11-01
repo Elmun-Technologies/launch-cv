@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { COOKIE_NAME, verifySessionToken } from "@/lib/auth-token";
+import { ADMIN_2FA_COOKIE, COOKIE_NAME, sessionCookieBase, signPurposeToken, verifyPurposeToken, verifySessionToken } from "@/lib/auth-token";
 
 /** Path prefixes that require an authenticated session. */
 const PROTECTED_PREFIXES = ["/dashboard", "/resume", "/admin-panel"];
@@ -36,6 +36,22 @@ export async function middleware(req: NextRequest) {
     const next = safeNextPath(pathname + req.nextUrl.search);
     if (next) url.searchParams.set("next", next);
     return NextResponse.redirect(url);
+  }
+
+  // Admin idle timeout: each admin page view pushes the 2FA cookie's expiry forward
+  // by its own window; with no activity for that long, the code is asked again.
+  if (pathMatches(pathname, "/admin-panel")) {
+    const t = req.cookies.get(ADMIN_2FA_COOKIE)?.value;
+    const ok = t ? await verifyPurposeToken(t, `admin2fa:${session.sub}`) : null;
+    if (ok && ok.ttl > 0) {
+      const res = NextResponse.next();
+      res.cookies.set(ADMIN_2FA_COOKIE, await signPurposeToken(session.sub, `admin2fa:${session.sub}`, ok.ttl), {
+        ...sessionCookieBase(),
+        sameSite: "strict",
+        maxAge: ok.ttl,
+      });
+      return res;
+    }
   }
   return NextResponse.next();
 }

@@ -1,49 +1,47 @@
 import { getClientIp } from "@/lib/request-ip";
-import { consumeRateLimit } from "@/lib/rate-limit";
+import { consumeRateLimitShared } from "@/lib/rate-limit";
+import { getSettings } from "@/lib/app-settings";
 
-export function allowRegisterIp(req: Request) {
-  return consumeRateLimit(`register:${getClientIp(req)}`, 8, 3_600_000);
+/** Limits are edited in Admin → Limits & budgets and shared across servers. */
+const HOUR = 3_600_000;
+
+async function limits() {
+  return (await getSettings()).rateLimits;
+}
+
+export async function allowRegisterIp(req: Request) {
+  return consumeRateLimitShared(`register:${getClientIp(req)}`, (await limits()).registerPerIpPerHour, HOUR);
 }
 
 /** Per IP+email pair (on localhost IP is often "unknown" — prevents all users sharing a single rate limit). */
-export function allowLoginAttempt(req: Request, normalizedEmail: string) {
+export async function allowLoginAttempt(req: Request, normalizedEmail: string) {
   const ip = getClientIp(req);
-  return consumeRateLimit(`login:${ip}:${normalizedEmail.toLowerCase()}`, 40, 900_000);
+  return consumeRateLimitShared(`login:${ip}:${normalizedEmail.toLowerCase()}`, (await limits()).loginPer15Min, 900_000);
 }
 
-export function allowAiJd(userId: string) {
-  return consumeRateLimit(`ai:jd:${userId}`, 24, 3_600_000);
+async function ai(kind: string, userId: string) {
+  return consumeRateLimitShared(`ai:${kind}:${userId}`, (await limits()).aiPerUserPerHour, HOUR);
 }
-
-export function allowAiRoleFit(userId: string) {
-  return consumeRateLimit(`ai:fit:${userId}`, 24, 3_600_000);
-}
-
-export function allowAiPacket(userId: string) {
-  return consumeRateLimit(`ai:packet:${userId}`, 16, 3_600_000);
-}
-
-export function allowAiEvidence(userId: string) {
-  return consumeRateLimit(`ai:evidence:${userId}`, 48, 3_600_000);
-}
+export const allowAiJd = (userId: string) => ai("jd", userId);
+export const allowAiRoleFit = (userId: string) => ai("fit", userId);
+export const allowAiPacket = (userId: string) => ai("packet", userId);
+export const allowAiEvidence = (userId: string) => ai("evidence", userId);
 
 /** Resume import (file / LinkedIn text) calls the model on every request and
  *  is open to unpaid accounts, so it needs its own cap. */
-export function allowImport(userId: string) {
-  return consumeRateLimit(`import:${userId}`, 10, 3_600_000);
+export async function allowImport(userId: string) {
+  return consumeRateLimitShared(`import:${userId}`, (await limits()).importPerUserPerHour, HOUR);
 }
 
-export function allowPdfUser(userId: string) {
-  return consumeRateLimit(`pdf:user:${userId}`, 60, 3_600_000);
+export async function allowPdfUser(userId: string) {
+  return consumeRateLimitShared(`pdf:user:${userId}`, (await limits()).pdfPerUserPerHour, HOUR);
 }
 
-export function allowForgotPasswordIp(req: Request) {
-  return consumeRateLimit(`forgot:${getClientIp(req)}`, 6, 3_600_000);
+export async function allowForgotPasswordIp(req: Request) {
+  return consumeRateLimitShared(`forgot:${getClientIp(req)}`, (await limits()).forgotPerIpPerHour, HOUR);
 }
 
-/** Burst guard for the public free ATS check — cheap in-memory backstop in
- *  front of the durable per-IP DB quota. Blocks rapid retries even when the
- *  30-day DB row hasn't been written yet (or a cold serverless instance). */
-export function allowFreeAtsBurst(req: Request) {
-  return consumeRateLimit(`free-ats:${getClientIp(req)}`, 5, 3_600_000);
+/** Burst guard for the public free ATS check, in front of the per-IP monthly quota. */
+export async function allowFreeAtsBurst(req: Request) {
+  return consumeRateLimitShared(`free-ats:${getClientIp(req)}`, (await limits()).freeAtsPerIpPerHour, HOUR);
 }

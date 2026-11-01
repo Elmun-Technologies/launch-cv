@@ -13,7 +13,7 @@ const blank: FaqEditorData = {
 };
 
 export default async function NewFaqPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   return (

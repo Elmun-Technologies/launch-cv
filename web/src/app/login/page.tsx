@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
   const session = await getSession();
   if (session) redirect(safeNextPath((await searchParams).next) ?? "/dashboard");
-  const googleEnabled = isGoogleOAuthConfigured();
+  const googleEnabled = await isGoogleOAuthConfigured();
   return (
     <Suspense
       fallback={<div className="mx-auto max-w-md px-4 py-24 text-sm text-zinc-400">Loading...</div>}

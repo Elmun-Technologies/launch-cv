@@ -24,7 +24,16 @@ export type AuditAction =
   | "user.delete"
   | "subscription.cancel"
   | "subscription.refund"
-  | "ai-usage.limit.override";
+  | "ai-usage.limit.override"
+  // Platform configuration and admin security
+  | "integration.update"
+  | "integration.test"
+  | "settings.update"
+  | "admin.2fa.enable"
+  | "admin.2fa.reset"
+  | "admin.2fa.failed"
+  | "admin.reauth"
+  | "admin.reauth.failed";
 
 export type AuditPayload = {
   actorId: string | null;

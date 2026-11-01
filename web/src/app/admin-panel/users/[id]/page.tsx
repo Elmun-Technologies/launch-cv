@@ -2,7 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, FileText, Briefcase, CreditCard } from "lucide-react";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/admin-guard";
+import { can, requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
 import { SectionCard } from "@/components/admin/section-card";
 import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
@@ -13,7 +13,7 @@ export default async function AdminUserDetailPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const { id } = await params;
@@ -110,7 +110,7 @@ export default async function AdminUserDetailPage({
             </SectionCard>
           </div>
 
-          <UserDetailActions userId={user.id} currentRole={user.role} />
+          <UserDetailActions userId={user.id} currentRole={user.role} canChangeRole={can(admin.role, "roles")} />
         </div>
 
         <SectionCard

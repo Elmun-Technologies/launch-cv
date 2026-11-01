@@ -6,10 +6,11 @@ export async function sendTransactionalEmail(args: {
   html: string;
   text?: string;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
-  const key = process.env.RESEND_API_KEY;
-  const from = process.env.RESEND_FROM_EMAIL;
+  const { getIntegrationValue } = await import("@/lib/integrations");
+  const key = await getIntegrationValue("resend", "apiKey");
+  const from = await getIntegrationValue("resend", "fromEmail");
   if (!key || !from) {
-    return { ok: false, error: "RESEND_API_KEY or RESEND_FROM_EMAIL is not configured" };
+    return { ok: false, error: "Resend API key or sender is not configured (Admin → Integrations)" };
   }
   const res = await fetch(RESEND_API, {
     method: "POST",

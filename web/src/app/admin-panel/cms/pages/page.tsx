@@ -17,7 +17,7 @@ const PAGE_KEYS = [
 ];
 
 export default async function AdminPagesIndex() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const rows = await prisma.pageCopy.findMany({

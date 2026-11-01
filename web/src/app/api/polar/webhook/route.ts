@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { trackPurchaseCompleted } from "@/lib/analytics-server";
 import { isOneTimePlan, planIdFromPolarProductId } from "@/lib/polar";
+import { getIntegrationValue } from "@/lib/integrations";
 import { attributionFromRecord } from "@/lib/utm";
 import {
   resolvePolarUserId,
@@ -62,9 +63,9 @@ function toMajorUnits(minor: number | null | undefined): number | null {
 }
 
 export async function POST(req: Request) {
-  const secret = process.env.POLAR_WEBHOOK_SECRET;
+  const secret = await getIntegrationValue("polar", "webhookSecret");
   if (!secret) {
-    return NextResponse.json({ error: "POLAR_WEBHOOK_SECRET not configured" }, { status: 501 });
+    return NextResponse.json({ error: "Polar webhook secret not configured" }, { status: 501 });
   }
 
   const rawBody = await req.text();
@@ -114,7 +115,7 @@ export async function POST(req: Request) {
           });
           await trackPurchaseCompleted({
             userId,
-            plan: planIdFromPolarProductId(sub.product_id ?? null),
+            plan: await planIdFromPolarProductId(sub.product_id ?? null),
             provider: "polar",
             subscriptionId: sub.id ?? null,
             gaClientId: gaClientIdOf(metadataOf(data)),
@@ -131,7 +132,7 @@ export async function POST(req: Request) {
       // the subscription.* events manage.
       case "order.paid": {
         const order = data as unknown as PolarOrder;
-        const plan = planIdFromPolarProductId(order.product_id ?? null);
+        const plan = await planIdFromPolarProductId(order.product_id ?? null);
         if (!plan || !isOneTimePlan(plan)) break;
         const userId = await resolvePolarUserId(metadataOf(data), null);
         if (!userId) break;

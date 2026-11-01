@@ -16,7 +16,7 @@ const blank: TestimonialEditorData = {
 };
 
 export default async function NewTestimonialPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   return (

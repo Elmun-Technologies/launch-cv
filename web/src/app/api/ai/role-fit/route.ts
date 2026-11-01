@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
-import { chatJson } from "@/lib/openai-client";
+import { aiErrorResponse, chatJson } from "@/lib/openai-client";
 import { rubricForVertical } from "@/lib/rubrics";
 import { allowAiRoleFit } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
@@ -19,7 +19,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowAiRoleFit(session.sub)) {
+  if (!(await allowAiRoleFit(session.sub))) {
     return NextResponse.json({ error: "AI limit: exceeded hourly allowance." }, { status: 429 });
   }
   const usage = await assertAiUsageAllowed(session.sub, "role_fit");
@@ -52,7 +52,7 @@ ${JSON.stringify(content)}
 ${parsed.data.jdText ? `\nJD (optional alignment):\n${parsed.data.jdText}` : ""}`;
 
   try {
-    const raw = await chatJson<RoleFitResult>({ system, user: userPrompt });
+    const raw = await chatJson<RoleFitResult>({ system, user: userPrompt, tool: "role_fit", userId: session.sub, paid: usage.paid });
     const result = parseRoleFitResult(raw);
     if (!result) {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
@@ -61,7 +61,6 @@ ${parsed.data.jdText ? `\nJD (optional alignment):\n${parsed.data.jdText}` : ""}
     await trackEvent("role_fit", { userId: session.sub, meta: { resumeId: parsed.data.resumeId } });
     return NextResponse.json({ result });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Error";
-    return NextResponse.json({ error: msg }, { status: 502 });
+    return aiErrorResponse(e);
   }
 }

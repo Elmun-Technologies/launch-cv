@@ -12,49 +12,36 @@
  */
 
 import type { CheckoutPlan } from "@/lib/plan-config";
+import { getIntegrationValue } from "@/lib/integrations";
 
-/** Polar API base URL — production by default, sandbox for testing. */
-export function polarApiBase(): string {
-  const server = (process.env.POLAR_SERVER ?? "production").trim().toLowerCase();
+/** Polar API base URL — production by default, sandbox for testing (Admin → Integrations → Polar). */
+export async function polarApiBase(): Promise<string> {
+  const server = (await getIntegrationValue("polar", "server")).toLowerCase() || "production";
   return server === "sandbox" ? "https://sandbox-api.polar.sh" : "https://api.polar.sh";
 }
 
-function envProduct(...keys: (string | undefined)[]): string | undefined {
-  for (const k of keys) {
-    const v = k?.trim();
-    if (v) return v;
-  }
-  return undefined;
-}
+const PRODUCT_FIELD: Record<CheckoutPlan, string> = {
+  starter: "productStarter",
+  professional: "productProfessional",
+  elite: "productElite",
+  lifetime: "productLifetime",
+};
 
-/** Polar product id configured for a checkout plan (via env). */
-export function productIdForCheckoutPlan(plan: CheckoutPlan): string | undefined {
-  switch (plan) {
-    case "starter":
-      return envProduct(process.env.POLAR_PRODUCT_STARTER);
-    case "professional":
-      return envProduct(process.env.POLAR_PRODUCT_PROFESSIONAL);
-    case "elite":
-      return envProduct(process.env.POLAR_PRODUCT_ELITE);
-    case "lifetime":
-      return envProduct(process.env.POLAR_PRODUCT_LIFETIME);
-    default:
-      return undefined;
-  }
+/** Polar product id configured for a checkout plan. */
+export async function productIdForCheckoutPlan(plan: CheckoutPlan): Promise<string | undefined> {
+  const field = PRODUCT_FIELD[plan];
+  if (!field) return undefined;
+  return (await getIntegrationValue("polar", field)) || undefined;
 }
 
 /** Reverse map: Polar product id → internal plan tier. Returns null if unknown. */
-export function planIdFromPolarProductId(productId: string | null | undefined): CheckoutPlan | null {
+export async function planIdFromPolarProductId(productId: string | null | undefined): Promise<CheckoutPlan | null> {
   if (!productId) return null;
   const id = productId.trim();
-  const starter = envProduct(process.env.POLAR_PRODUCT_STARTER);
-  const professional = envProduct(process.env.POLAR_PRODUCT_PROFESSIONAL);
-  const elite = envProduct(process.env.POLAR_PRODUCT_ELITE);
-  const lifetime = envProduct(process.env.POLAR_PRODUCT_LIFETIME);
-  if (starter && id === starter) return "starter";
-  if (professional && id === professional) return "professional";
-  if (elite && id === elite) return "elite";
-  if (lifetime && id === lifetime) return "lifetime";
+  for (const plan of Object.keys(PRODUCT_FIELD) as CheckoutPlan[]) {
+    const pid = await getIntegrationValue("polar", PRODUCT_FIELD[plan]);
+    if (pid && pid === id) return plan;
+  }
   return null;
 }
 

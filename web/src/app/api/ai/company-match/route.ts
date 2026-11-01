@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
-import { chatJson } from "@/lib/openai-client";
+import { aiErrorResponse, chatJson } from "@/lib/openai-client";
 import { getCompanyById, type CompanyRequirement } from "@/lib/company-requirements";
 import { allowAiJd } from "@/lib/rate-limit-presets";
 import { assertAiUsageAllowed, incrementAiUsage } from "@/lib/usage-limits";
@@ -31,7 +31,7 @@ type CompanyMatchResult = {
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowAiJd(session.sub)) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
+  if (!(await allowAiJd(session.sub))) return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
   const usage = await assertAiUsageAllowed(session.sub, "role_fit");
   if (!usage.ok) return jsonUsageBlocked(usage);
 
@@ -75,14 +75,14 @@ Rules:
   const userPrompt = `COMPANY CONTEXT:\n${companyContext}\n\nRESUME:\n${JSON.stringify(content)}\n\nAnalyze this resume for this specific company. Provide match score, keyword gaps, culture fit assessment, format recommendations, bullet rewrites, and overall strategic advice.`;
 
   try {
-    const result = await chatJson<CompanyMatchResult>({ system, user: userPrompt });
+    const result = await chatJson<CompanyMatchResult>({ system, user: userPrompt, tool: "company_match", userId: session.sub, paid: usage.paid });
     if (!result || typeof result.matchScore !== "number") {
       return NextResponse.json({ error: "AI response invalid" }, { status: 502 });
     }
     await incrementAiUsage(session.sub, "role_fit");
     return NextResponse.json({ result });
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : "Error" }, { status: 502 });
+    return aiErrorResponse(e);
   }
 }
 

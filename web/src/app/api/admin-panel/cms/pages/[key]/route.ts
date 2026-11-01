@@ -5,7 +5,7 @@ import { recordAudit } from "@/lib/cms/audit";
 import { bustPageCopyCache } from "@/lib/cms/revalidate";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ key: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
   const { key } = await params;
   const row = await prisma.pageCopy.findUnique({ where: { key } });
@@ -13,7 +13,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ key
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ key: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
   const { key } = await params;
 

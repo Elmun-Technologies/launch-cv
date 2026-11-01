@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
-import { chatJson } from "@/lib/openai-client";
+import { aiErrorResponse, chatJson } from "@/lib/openai-client";
 import { rubricForVertical } from "@/lib/rubrics";
 import { allowAiPacket } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
@@ -20,7 +20,7 @@ const schema = z.object({
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowAiPacket(session.sub)) {
+  if (!(await allowAiPacket(session.sub))) {
     return NextResponse.json({ error: "AI limit: exceeded hourly allowance." }, { status: 429 });
   }
   const usage = await assertAiUsageAllowed(session.sub, "packet");
@@ -56,7 +56,7 @@ JD:
 ${parsed.data.jdText}`;
 
   try {
-    const raw = await chatJson<PacketResult>({ system, user: userPrompt });
+    const raw = await chatJson<PacketResult>({ system, user: userPrompt, tool: "packet", userId: session.sub, paid: usage.paid });
     const result = parsePacketResult(raw);
     if (!result) {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
@@ -65,7 +65,6 @@ ${parsed.data.jdText}`;
     await trackEvent("packet", { userId: session.sub, meta: { resumeId: parsed.data.resumeId } });
     return NextResponse.json({ result });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Error";
-    return NextResponse.json({ error: msg }, { status: 502 });
+    return aiErrorResponse(e);
   }
 }

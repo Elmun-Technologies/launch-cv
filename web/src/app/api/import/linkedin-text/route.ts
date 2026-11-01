@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSession } from "@/lib/session";
 import { allowImport } from "@/lib/rate-limit-presets";
-import { chatJson } from "@/lib/openai-client";
+import { getUserPlanId } from "@/lib/plans";
+import { aiErrorResponse, chatJson } from "@/lib/openai-client";
 import type { ResumeContent } from "@/types/resume";
 
 const schema = z.object({
@@ -12,9 +13,10 @@ const schema = z.object({
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowImport(session.sub)) {
+  if (!(await allowImport(session.sub))) {
     return NextResponse.json({ error: "Too many imports. Try again in an hour." }, { status: 429 });
   }
+  const paid = (await getUserPlanId(session.sub)) !== "none";
 
   let body: unknown;
   try { body = await req.json(); } catch { return NextResponse.json({ error: "JSON expected" }, { status: 400 }); }
@@ -42,13 +44,12 @@ Rules:
   const userPrompt = `Parse this LinkedIn profile text into structured resume JSON:\n\n${parsed.data.text.slice(0, 15000)}`;
 
   try {
-    const result = await chatJson<ResumeContent>({ system, user: userPrompt });
+    const result = await chatJson<ResumeContent>({ system, user: userPrompt, tool: "import", userId: session.sub, paid: paid });
     if (!result || typeof result !== "object" || !result.contact) {
       return NextResponse.json({ error: "AI could not parse the LinkedIn data" }, { status: 502 });
     }
     return NextResponse.json({ content: result });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Parse error";
-    return NextResponse.json({ error: msg }, { status: 502 });
+    return aiErrorResponse(e);
   }
 }

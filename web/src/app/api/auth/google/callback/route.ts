@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSettings } from "@/lib/app-settings";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
@@ -69,7 +70,7 @@ async function creditReferral(referralCode: string, userId: string, email: strin
 }
 
 export async function GET(req: Request) {
-  if (!isGoogleOAuthConfigured()) {
+  if (!(await isGoogleOAuthConfigured())) {
     return fail(req, "google_unavailable");
   }
 
@@ -129,6 +130,9 @@ export async function GET(req: Request) {
     }
 
     // 3. Brand-new user — create the account (no password) and seed a resume.
+    if (!user && !(await getSettings()).switches.signups) {
+      return fail(req, "signups_paused");
+    }
     if (!user) {
       user = await prisma.user.create({
         data: {

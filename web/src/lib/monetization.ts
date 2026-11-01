@@ -107,8 +107,12 @@ export function planPricingSummary(): string {
   ).join(", ");
 }
 
-export function planMarketingBullets(plan: CheckoutPlan): string[] {
-  const L = PLAN_MONTHLY_LIMITS[plan];
+/** `limits` comes from Admin → Limits & budgets (`getSettings().planLimits`); defaults otherwise. */
+export function planMarketingBullets(
+  plan: CheckoutPlan,
+  limits: Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }> = PLAN_MONTHLY_LIMITS,
+): string[] {
+  const L = limits[plan];
   const n = (v: number) => v.toLocaleString("en-US");
   const base = [
     `${n(L.jd)} job-description analyses / month`,

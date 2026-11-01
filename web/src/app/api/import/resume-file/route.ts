@@ -1,16 +1,18 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { allowImport } from "@/lib/rate-limit-presets";
-import { chatJson } from "@/lib/openai-client";
+import { getUserPlanId } from "@/lib/plans";
+import { aiErrorResponse, AiUnavailableError, chatJson } from "@/lib/openai-client";
 import { extractResumeText } from "@/lib/resume-parse";
 import type { ResumeContent } from "@/types/resume";
 
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowImport(session.sub)) {
+  if (!(await allowImport(session.sub))) {
     return NextResponse.json({ error: "Too many imports. Try again in an hour." }, { status: 429 });
   }
+  const paid = (await getUserPlanId(session.sub)) !== "none";
 
   const formData = await req.formData().catch(() => null);
   if (!formData) return NextResponse.json({ error: "Form data expected" }, { status: 400 });
@@ -49,6 +51,9 @@ Rules:
     const result = await chatJson<ResumeContent>({
       system,
       user: userPrompt,
+      tool: "import",
+      userId: session.sub,
+      paid,
       maxTokens: 4000,
     });
     if (!result || typeof result !== "object" || !result.contact) {
@@ -59,6 +64,7 @@ Rules:
     /** Don't echo the raw upstream message — it can leak model names,
      *  prompt fragments, or stack traces back to the browser. */
     console.error("[import/resume-file] AI parse error:", e);
+    if (e instanceof AiUnavailableError) return aiErrorResponse(e);
     return NextResponse.json({ error: "Could not parse the resume. Please try a different file." }, { status: 502 });
   }
 }

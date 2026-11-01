@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 
 export async function GET() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const subscriptions = await prisma.subscription.findMany({

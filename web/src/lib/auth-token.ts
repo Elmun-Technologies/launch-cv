@@ -86,3 +86,35 @@ export function sessionCookieBase(): SessionCookieBase {
 }
 
 export { COOKIE_NAME };
+
+/**
+ * Short-lived tokens for admin security cookies (2FA-verified admin access,
+ * recent re-authentication). Signed with AUTH_SECRET and bound to a purpose
+ * and user, so one can't stand in for another. Edge-safe (used in middleware).
+ */
+export type PurposeTokenPayload = { sub: string; purpose: string; ttl: number };
+
+export async function signPurposeToken(sub: string, purpose: string, ttlSeconds: number) {
+  return new SignJWT({ purpose, ttl: ttlSeconds })
+    .setProtectedHeader({ alg: "HS256" })
+    .setSubject(sub)
+    .setIssuedAt()
+    .setExpirationTime(`${ttlSeconds}s`)
+    .sign(getSecret());
+}
+
+export async function verifyPurposeToken(token: string, purpose: string): Promise<PurposeTokenPayload | null> {
+  try {
+    const { payload } = await jwtVerify(token, getSecret());
+    if (payload.purpose !== purpose || typeof payload.sub !== "string") return null;
+    return { sub: payload.sub, purpose, ttl: typeof payload.ttl === "number" ? payload.ttl : 0 };
+  } catch {
+    return null;
+  }
+}
+
+/** 2FA-verified admin access; refreshed on activity by middleware (idle timeout). */
+export const ADMIN_2FA_COOKIE = "lcv_admin_2fa";
+/** Recent password + code confirmation, required for keys, limits and roles. */
+export const ADMIN_REAUTH_COOKIE = "lcv_admin_reauth";
+export const REAUTH_TTL_SECONDS = 300;

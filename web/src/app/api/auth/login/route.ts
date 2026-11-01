@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid request data" }, { status: 400 });
   }
   const email = parsed.data.email;
-  if (!allowLoginAttempt(req, email)) {
+  if (!(await allowLoginAttempt(req, email))) {
     return NextResponse.json({ error: "Too many attempts. Please try again in 15 minutes." }, { status: 429 });
   }
   const user = await prisma.user.findUnique({ where: { email } });

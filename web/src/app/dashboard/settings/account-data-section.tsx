@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { usePortalUrl } from "@/lib/public-config";
 import { Loader2 } from "lucide-react";
 import { resetUser } from "@/lib/analytics-client";
 
-const PORTAL_URL = process.env.NEXT_PUBLIC_POLAR_PORTAL_URL || "https://polar.sh/purchases";
 
 /** Download a copy of the account's data, or delete the account. */
 export function AccountDataSection({
@@ -16,6 +16,7 @@ export function AccountDataSection({
   email: string;
   hasActiveSubscription: boolean;
 }) {
+  const portalUrl = usePortalUrl();
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
@@ -62,7 +63,7 @@ export function AccountDataSection({
           {hasActiveSubscription ? (
             <p className="text-[14px] text-[#111111]">
               <span className="font-medium">Cancel your subscription first</span> in the{" "}
-              <a href={PORTAL_URL} target="_blank" rel="noreferrer" className="text-[#1D4ED8] underline">
+              <a href={portalUrl} target="_blank" rel="noreferrer" className="text-[#1D4ED8] underline">
                 billing portal
               </a>{" "}
               — deleting the account doesn&apos;t stop payments.

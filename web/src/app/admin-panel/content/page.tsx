@@ -16,7 +16,7 @@ type Section = {
 };
 
 export default async function AdminContentPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const [

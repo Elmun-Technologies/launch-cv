@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { appBaseUrl } from "@/lib/email";
 import { polarApiBase, productIdForCheckoutPlan } from "@/lib/polar";
+import { getIntegrationValue } from "@/lib/integrations";
+import { getSettings } from "@/lib/app-settings";
 import type { CheckoutPlan } from "@/lib/plan-config";
 import { attributionFromCookieHeader, attributionToMetadata } from "@/lib/utm";
 
@@ -31,14 +33,16 @@ export async function POST(req: Request) {
   const plan = parsePlan(rawBody);
   const gaClientId = parseGaClientId(rawBody);
 
-  const accessToken = process.env.POLAR_ACCESS_TOKEN;
-  const productId = productIdForCheckoutPlan(plan);
+  if (!(await getSettings()).switches.checkout) {
+    return NextResponse.json({ error: "Checkout is paused for a few minutes. Please try again shortly." }, { status: 503 });
+  }
+
+  const accessToken = await getIntegrationValue("polar", "accessToken");
+  const productId = await productIdForCheckoutPlan(plan);
   if (!accessToken || !productId) {
-    console.error(`[polar/checkout] missing POLAR_ACCESS_TOKEN or product id for plan "${plan}"`);
+    console.error(`[polar/checkout] missing Polar access token or product id for plan "${plan}"`);
     return NextResponse.json(
-      {
-        error: `Configure POLAR_ACCESS_TOKEN and a product id for "${plan}" (e.g. POLAR_PRODUCT_${plan.toUpperCase()}).`,
-      },
+      { error: "Checkout isn't available right now. Please try again in a few minutes or contact support." },
       { status: 501 },
     );
   }
@@ -90,7 +94,7 @@ export async function POST(req: Request) {
     },
   };
 
-  const res = await fetch(`${polarApiBase()}/v1/checkouts/`, {
+  const res = await fetch(`${(await polarApiBase())}/v1/checkouts/`, {
     method: "POST",
     headers: {
       Accept: "application/json",

@@ -5,27 +5,35 @@ import { useRouter } from "next/navigation";
 import { Shield, Trash2, Loader2 } from "lucide-react";
 import { SectionCard } from "@/components/admin/section-card";
 import { AdminSelect, FormField } from "@/components/admin/form-field";
+import { useAdminFetch } from "@/components/admin/reauth";
 
 export function UserDetailActions({
   userId,
   currentRole,
+  canChangeRole,
 }: {
   userId: string;
   currentRole: string;
+  /** Only owners can change roles; others see it read-only. */
+  canChangeRole: boolean;
 }) {
   const router = useRouter();
+  const adminFetch = useAdminFetch();
+  const [error, setError] = useState<string | null>(null);
   const [role, setRole] = useState(currentRole);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
   async function handleSaveRole() {
     setSaving(true);
+    setError(null);
     try {
-      await fetch(`/api/admin-panel/users/${userId}`, {
+      const r = await adminFetch(`/api/admin-panel/users/${userId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role }),
       });
+      if (!r.ok) setError((await r.json().catch(() => ({}))).error ?? "Couldn't change the role.");
       router.refresh();
     } finally {
       setSaving(false);
@@ -35,12 +43,23 @@ export function UserDetailActions({
   async function handleDelete() {
     if (!confirm("Permanently delete this user and ALL their data? This cannot be undone.")) return;
     setDeleting(true);
-    await fetch(`/api/admin-panel/users/${userId}`, { method: "DELETE" });
-    router.push("/admin-panel/users");
+    setError(null);
+    const r = await adminFetch(`/api/admin-panel/users/${userId}`, { method: "DELETE" }).catch(() => null);
+    if (r?.ok) {
+      router.push("/admin-panel/users");
+      return;
+    }
+    setDeleting(false);
+    setError((r && (await r.json().catch(() => ({}))).error) || "Couldn't delete this user.");
   }
 
   return (
     <div className="space-y-5">
+      {error ? (
+        <p role="alert" className="rounded-lg bg-red-50 px-4 py-2.5 text-[13px] text-red-800">
+          {error}
+        </p>
+      ) : null}
       <SectionCard
         title="Role"
         description="Promote or demote this user"
@@ -48,20 +67,24 @@ export function UserDetailActions({
       >
         <div className="space-y-3">
           <FormField label="Account role">
-            <AdminSelect value={role} onChange={(e) => setRole(e.target.value)}>
-              <option value="user">user</option>
-              <option value="admin">admin</option>
+            <AdminSelect value={role} disabled={!canChangeRole} onChange={(e) => setRole(e.target.value)}>
+              {["user", "support", "editor", "admin", "owner"].map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
             </AdminSelect>
           </FormField>
           <button
             type="button"
             onClick={handleSaveRole}
-            disabled={saving || role === currentRole}
+            disabled={!canChangeRole || saving || role === currentRole}
             className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#111111] py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B] disabled:cursor-not-allowed disabled:opacity-40"
           >
             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
             {saving ? "Saving…" : "Save role"}
           </button>
+          {!canChangeRole ? <p className="text-[12px] text-[#6B6B6B]">Only an owner can change roles.</p> : null}
         </div>
       </SectionCard>
 

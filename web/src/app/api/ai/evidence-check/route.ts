@@ -31,7 +31,7 @@ function extractNumbers(text: string) {
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowAiEvidence(session.sub)) {
+  if (!(await allowAiEvidence(session.sub))) {
     return NextResponse.json({ error: "AI limit: exceeded hourly allowance." }, { status: 429 });
   }
   const usage = await assertAiUsageAllowed(session.sub, "jd");
@@ -71,7 +71,7 @@ Already found metric fragments:
 ${JSON.stringify(metricTexts)}`;
 
   try {
-    const ai = await chatJson<EvidenceResult>({ system, user: userPrompt });
+    const ai = await chatJson<EvidenceResult>({ system, user: userPrompt, tool: "evidence", userId: session.sub, paid: usage.paid });
     const merged: EvidenceResult = {
       metrics_found: [...metricTexts, ...(ai.metrics_found ?? [])].slice(0, 40),
       issues: [...heuristicIssues, ...(ai.issues ?? [])],

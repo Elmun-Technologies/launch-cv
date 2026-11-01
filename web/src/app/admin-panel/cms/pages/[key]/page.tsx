@@ -60,7 +60,7 @@ const PAGE_KEYS: Record<string, { label: string; description: string; defaults: 
 };
 
 export default async function EditPageCopy({ params }: { params: Promise<{ key: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const { key } = await params;
