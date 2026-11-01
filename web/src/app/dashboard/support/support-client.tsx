@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, ChevronDown, Mail, Search } from "lucide-react";
+import { ArrowRight, Mail, Minus, Plus, Search } from "lucide-react";
 import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PageHeader, btnSmWhite, cardCls, inlineLinkCls } from "@/components/app/account/ui";
 
 const FAQ = [
   {
@@ -57,52 +58,64 @@ export function SupportClient() {
   }, [query]);
 
   return (
-    <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
-      <div>
-        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
-          Help <span className="text-[#8A8A86]">— answers, guides and a person to email.</span>
-        </h1>
-        <p className="mt-1 text-[15px] text-[#6B6B6B]">Search the common questions, or write to us and we&apos;ll reply by email.</p>
-      </div>
+    <div className="mx-auto w-full max-w-[1160px] pb-12">
+      <PageHeader title="Help" lead="Search the common questions, or write to us and we'll reply by email." />
 
-      <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
-        <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
-          <h2 className="text-[17px] font-semibold text-[#111111]">Questions</h2>
-          <label className="relative mt-4 block">
+      <div className="mt-5 grid items-start gap-4 sm:mt-6 sm:gap-5 lg:grid-cols-[1.3fr_0.7fr]">
+        <section aria-labelledby="help-faq-title" className={`${cardCls} sm:rounded-[28px] sm:p-6`}>
+          <h2 id="help-faq-title" className="sr-only">
+            Questions
+          </h2>
+          <label className="relative block max-w-[560px]">
             <span className="sr-only">Search questions</span>
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" aria-hidden />
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-[#66647c]" aria-hidden />
             <input
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search, e.g. PDF, refund, cancel"
-              className="soha-input pl-9"
+              className="block h-12 w-full rounded-full border-[1.5px] border-[#e2e0ea] bg-[#f7f6fb] pl-11 pr-4 text-[16px] text-[#121226] outline-none transition-[border-color,box-shadow,background-color] placeholder:text-[#706e88] hover:border-[#c9c0ff] focus:border-[#5440e8] focus:bg-white focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none! focus-visible:rounded-full! sm:text-[15px] motion-reduce:transition-none"
             />
           </label>
           {shown.length === 0 ? (
-            <p className="mt-5 text-[14px] text-[#6B6B6B]">
+            <p role="status" className="mt-5 text-[14px] leading-[21px] text-[#4a4862]">
               Nothing matches that. Email{" "}
-              <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
+              <a href="mailto:support@launch-cv.com" className={inlineLinkCls}>
                 support@launch-cv.com
               </a>{" "}
               and we&apos;ll help.
             </p>
           ) : (
-            <ul className="mt-3 divide-y divide-[#EEEEEB]">
-              {shown.map((f) => {
+            <ul className="mt-3.5">
+              {shown.map((f, i) => {
                 const isOpen = open === f.q || query.trim().length > 0;
+                const id = `help-faq-${i}`;
                 return (
-                  <li key={f.q}>
-                    <button
-                      type="button"
-                      onClick={() => setOpen(open === f.q ? null : f.q)}
-                      aria-expanded={isOpen}
-                      className="flex w-full items-center justify-between gap-4 py-3.5 text-left text-[15px] font-medium text-[#111111]"
-                    >
-                      {f.q}
-                      <ChevronDown className={`h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform ${isOpen ? "rotate-180" : ""}`} aria-hidden />
-                    </button>
-                    {isOpen ? <p className="pb-4 text-[14px] leading-[1.6] text-[#3F3F3F]">{f.a}</p> : null}
+                  <li key={f.q} className="border-t border-[#e2e0ea]">
+                    <h3>
+                      <button
+                        type="button"
+                        onClick={() => setOpen(open === f.q ? null : f.q)}
+                        aria-expanded={isOpen}
+                        aria-controls={id}
+                        className="group flex min-h-11 w-full items-center justify-between gap-4 rounded-xl px-1 py-4 text-left text-[15px] font-bold text-[#121226] transition-colors hover:text-[#5440e8] focus-visible:rounded-xl! motion-reduce:transition-none"
+                      >
+                        {f.q}
+                        <span
+                          aria-hidden="true"
+                          className={`inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors motion-reduce:transition-none ${
+                            isOpen ? "bg-[#111118] text-white" : "bg-[#f1eff8] text-[#121226] group-hover:bg-[#e4dfff]"
+                          }`}
+                        >
+                          {isOpen ? <Minus className="h-3.5 w-3.5" strokeWidth={2.5} /> : <Plus className="h-3.5 w-3.5" strokeWidth={2.5} />}
+                        </span>
+                      </button>
+                    </h3>
+                    {isOpen ? (
+                      <p id={id} className="-mt-1 px-1 pb-4 pr-10 text-[14px] leading-[22px] text-[#4a4862]">
+                        {f.a}
+                      </p>
+                    ) : null}
                   </li>
                 );
               })}
@@ -110,28 +123,31 @@ export function SupportClient() {
           )}
         </section>
 
-        <div className="flex flex-col gap-5">
-          <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
-            <h2 className="text-[17px] font-semibold text-[#111111]">Email us</h2>
-            <p className="mt-1 text-[14px] leading-[1.55] text-[#6B6B6B]">
+        <div className="flex flex-col gap-4">
+          <section className="rounded-[24px] bg-[#5440e8] p-[22px] text-white sm:rounded-[28px] sm:p-6">
+            <h2 className="text-[20px] font-extrabold">Email us</h2>
+            <p className="mt-1.5 text-[14px] leading-[21px] text-[#e4dfff]">
               Billing, bugs or a question about your resume — write from the address on your account.
             </p>
-            <a href="mailto:support@launch-cv.com" className="soha-btn-primary mt-4 inline-flex w-full items-center justify-center gap-2">
-              <Mail className="h-4 w-4" aria-hidden /> support@launch-cv.com
+            <a href="mailto:support@launch-cv.com" className={`${btnSmWhite} mt-3.5 min-h-[52px] w-full text-[15px] sm:text-[16px]`}>
+              <Mail className="h-[18px] w-[18px]" aria-hidden /> support@launch-cv.com
             </a>
           </section>
 
-          <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
-            <h2 className="text-[17px] font-semibold text-[#111111]">Guides</h2>
+          <section className={`${cardCls} sm:rounded-[28px] sm:p-[22px]`}>
+            <h2 className="text-[18px] font-extrabold text-[#121226]">Guides</h2>
             <ul className="mt-2">
               {GUIDES.map((g) => (
-                <li key={g.href} className="border-t border-[#EEEEEB] first:border-t-0">
-                  <Link href={g.href} className="group flex items-start justify-between gap-3 py-3">
-                    <span>
-                      <span className="block text-[14px] font-medium text-[#111111] group-hover:underline">{g.t}</span>
-                      <span className="block text-[13px] text-[#6B6B6B]">{g.d}</span>
+                <li key={g.href} className="border-t border-[#e2e0ea]">
+                  <Link href={g.href} className="group flex min-h-11 items-start justify-between gap-3 rounded-xl py-3 focus-visible:rounded-xl!">
+                    <span className="min-w-0">
+                      <span className="block text-[14px] font-bold text-[#121226] transition-colors group-hover:text-[#5440e8]">{g.t}</span>
+                      <span className="block text-[13px] leading-[19px] text-[#66647c]">{g.d}</span>
                     </span>
-                    <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-[#6E6E6A]" aria-hidden />
+                    <ArrowRight
+                      className="mt-0.5 h-4 w-4 shrink-0 text-[#5440e8] transition-transform motion-safe:group-hover:translate-x-0.5"
+                      aria-hidden
+                    />
                   </Link>
                 </li>
               ))}

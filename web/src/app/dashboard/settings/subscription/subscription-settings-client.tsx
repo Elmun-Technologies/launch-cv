@@ -3,10 +3,24 @@
 import { useEffect, useRef, useState } from "react";
 import { usePortalUrl } from "@/lib/public-config";
 import Link from "next/link";
-import { Check, ExternalLink, Loader2 } from "lucide-react";
-import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
+import { ExternalLink, Loader2 } from "lucide-react";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { trackCheckoutStart, trackCtaClick, trackPlanSelected, getGaClientId } from "@/lib/analytics-client";
+import {
+  Badge,
+  PageHeader,
+  SettingsTabs,
+  UsageMeter,
+  btnSmDark,
+  btnSmPrimary,
+  btnSmSoft,
+  btnSmWhite,
+  cardCls,
+  cardTitleCls,
+  inlineLinkCls,
+} from "@/components/app/account/ui";
+import { CheckoutReturn } from "./checkout-return";
 
 type StatusPayload = {
   pro: boolean;
@@ -17,6 +31,9 @@ type StatusPayload = {
   cancelAtPeriodEnd: boolean;
 };
 
+type Counts = { jd: number; packet: number; roleFit: number };
+/** This month's usage from /api/usage (the same numbers the app shell shows). */
+type UsagePayload = { month: string | null; limits: Counts; used: Counts };
 
 function planLabel(p: string | null | undefined): string {
   if (!p || p === "none") return "No active plan";
@@ -39,13 +56,36 @@ async function fetchStatus(): Promise<StatusPayload | null> {
   };
 }
 
+async function fetchUsage(): Promise<UsagePayload | null> {
+  const r = await fetch("/api/usage", { cache: "no-store" }).catch(() => null);
+  if (!r?.ok) return null;
+  const j = (await r.json().catch(() => null)) as Partial<UsagePayload> | null;
+  if (!j?.limits || !j.used) return null;
+  return { month: typeof j.month === "string" ? j.month : null, limits: j.limits, used: j.used };
+}
+
+/** Usage counts reset on the 1st; "2026-11" → "Dec 1". */
+function resetDate(month: string | null): string | null {
+  const m = month?.match(/^(\d{4})-(\d{2})$/);
+  if (!m) return null;
+  return new Date(Number(m[1]), Number(m[2]), 1).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
 const isPaid = (s: StatusPayload | null) => s?.paid === true || s?.pro === true;
+const n = (v: number) => v.toLocaleString("en-US");
+
+const METERS = [
+  { k: "jd", l: "Job-post analyses" },
+  { k: "roleFit", l: "Role-fit checks" },
+  { k: "packet", l: "Application packets" },
+] as const;
 
 export function SubscriptionSettingsClient({ limits }: { limits: Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }> }) {
   const portalUrl = usePortalUrl();
   const [loadingPlan, setLoadingPlan] = useState<CheckoutPlan | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
   const [status, setStatus] = useState<StatusPayload | null>(null);
+  const [usage, setUsage] = useState<UsagePayload | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   /** "waiting" while the payment webhook catches up after a successful checkout. */
   const [returned, setReturned] = useState<"waiting" | "confirmed" | "slow" | null>(null);
@@ -81,6 +121,18 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
 
   const paid = isPaid(status);
   const currentPlan = (status?.plan as CheckoutPlan | "none" | undefined) ?? "none";
+
+  // Usage meters only mean something on a plan; load them once the plan is active.
+  useEffect(() => {
+    if (!paid) return;
+    let c = true;
+    void fetchUsage().then((u) => {
+      if (c) setUsage(u);
+    });
+    return () => {
+      c = false;
+    };
+  }, [paid, currentPlan]);
 
   // Pricing and paywall CTAs link here with ?plan=<plan>: open that checkout
   // straight away instead of making the visitor pick the plan a second time.
@@ -123,164 +175,195 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
   const renewDate = status?.currentPeriodEnd
     ? new Date(status.currentPeriodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : null;
+  const isLifetime = currentPlan === "lifetime";
+  const renewing = paid && !isLifetime && !!renewDate && !status?.cancelAtPeriodEnd;
+  const currentCfg = paid && currentPlan !== "none" ? PUBLIC_PLANS[currentPlan] : undefined;
+
+  const planLine = !paid
+    ? "The ATS check stays free. Pick a plan below to unlock the AI tools."
+    : isLifetime
+      ? "One-time purchase — no renewals."
+      : renewDate
+        ? `${status?.cancelAtPeriodEnd ? "Cancelled — access until" : "Renews on"} ${renewDate}.`
+        : "Active.";
+  const priceLine = currentCfg ? `${currentCfg.priceDisplay}${isLifetime ? " once" : currentCfg.periodLabel}` : null;
+
+  const returnRenewLine = isLifetime
+    ? "One payment — it never renews."
+    : renewing
+      ? `Your plan renews on ${renewDate}; cancel anytime in the billing portal.`
+      : null;
+
+  // Highest usage share, for the "running low" note under the meters.
+  const fullest = usage
+    ? METERS.map((m) => ({ ...m, pct: usage.limits[m.k] > 0 ? Math.round((usage.used[m.k] / usage.limits[m.k]) * 100) : 0 })).sort(
+        (a, b) => b.pct - a.pct,
+      )[0]
+    : null;
+  const resets = resetDate(usage?.month ?? null);
 
   return (
-    <div className="mx-auto flex max-w-[1080px] flex-col gap-6">
-      <div>
-        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
-          Plan &amp; billing <span className="text-[#8A8A86]">— every tool on every plan.</span>
-        </h1>
-        <p className="mt-1 text-[15px] text-[#6B6B6B]">Plans differ only in monthly limits. Cancel anytime from the billing portal.</p>
-      </div>
+    <div className="mx-auto w-full max-w-[1160px] pb-12">
+      <PageHeader title="Settings" lead="Your plan, usage and billing." />
+      <SettingsTabs current="/dashboard/settings/subscription" />
 
-      {returned ? (
-        <div
-          role="status"
-          className={`rounded-[14px] border px-5 py-4 ${
-            returned === "slow" ? "border-[#F4D9B0] bg-[#FDF6EC]" : "border-[#CDEBDB] bg-[#EFFAF4]"
-          }`}
-        >
-          <p className="text-[15px] font-medium text-[#111111]">
-            {returned === "confirmed"
-              ? "Payment received — you're all set."
-              : returned === "waiting"
-                ? "Payment received. Activating your plan…"
-                : "Payment received. Your plan is still activating."}
-          </p>
-          <p className="mt-1 text-[14px] text-[#3F3F3F]">
-            {returned === "confirmed" ? (
-              <>
-                Every AI tool is unlocked.{" "}
-                <Link href="/dashboard/resumes" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-                  Go to my resumes
-                </Link>
-              </>
-            ) : returned === "waiting" ? (
-              "This usually takes a few seconds."
-            ) : (
-              "Refresh this page in a minute. If it still shows no plan, contact support and we'll sort it out."
-            )}
-          </p>
+      <div className="mt-5 flex flex-col gap-4 sm:gap-5">
+        <div role="status" aria-live="polite" className={returned ? "" : "sr-only"}>
+          {returned ? <CheckoutReturn state={returned} planTitle={currentCfg?.title ?? null} renewLine={returnRenewLine} /> : null}
         </div>
-      ) : null}
 
-      {checkoutError ? (
-        <div role="alert" className="rounded-[14px] border border-[#F6D3CD] bg-[#FDF2F0] px-5 py-4">
-          <p className="text-[15px] font-medium text-[#B42318]">{checkoutError}</p>
-          <p className="mt-1 text-[14px] text-[#3F3F3F]">
-            <a href={portalUrl} target="_blank" rel="noreferrer" className="font-medium underline">
-              Open billing portal
-            </a>{" "}
-            ·{" "}
-            <Link href="/dashboard/support" className="font-medium underline">
+        {checkoutError ? (
+          <div role="alert" className="rounded-[24px] bg-[#fbe2e3] px-5 py-4 sm:px-6">
+            <p className="text-[15px] font-bold text-[#a3262b]">{checkoutError}</p>
+            <p className="mt-1 text-[14px] text-[#24223a]">
+              <a href={portalUrl} target="_blank" rel="noreferrer" className={inlineLinkCls}>
+                Open billing portal
+              </a>{" "}
+              ·{" "}
+              <Link href="/dashboard/support" className={inlineLinkCls}>
+                Contact support
+              </Link>
+            </p>
+          </div>
+        ) : null}
+
+        <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-2">
+          <section
+            aria-labelledby="current-plan-label"
+            className={`rounded-[24px] bg-[#5440e8] p-[22px] text-white sm:rounded-[28px] sm:p-7 ${paid && usage ? "" : "lg:col-span-2"}`}
+          >
+            <p id="current-plan-label" className="text-[12px] font-bold tracking-[0.08em] text-[#e4dfff] sm:text-[13px]">
+              CURRENT PLAN
+            </p>
+            {statusLoading ? (
+              <p className="mt-2 inline-flex items-center gap-2 text-[17px] text-[#e4dfff]">
+                <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading…
+              </p>
+            ) : (
+              <>
+                <p className="mt-1.5 text-[30px] font-extrabold leading-[36px] tracking-[-0.03em] sm:mt-2 sm:text-[36px] sm:leading-[42px]">
+                  {paid ? planLabel(status?.plan ?? null) : "No plan yet"}
+                </p>
+                <p className="mt-1 text-[14px] leading-[21px] text-[#e4dfff] sm:text-[15px]">
+                  {priceLine ? `${priceLine} · ` : ""}
+                  {planLine}
+                </p>
+              </>
+            )}
+            {paid ? (
+              <div className="mt-4 flex flex-wrap items-center gap-2 sm:mt-[18px]">
+                <a href={portalUrl} target="_blank" rel="noreferrer" className={btnSmWhite}>
+                  Billing portal <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                  <span className="sr-only">(opens in a new tab)</span>
+                </a>
+                {renewing ? (
+                  <a
+                    href={portalUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="lc-link inline-flex min-h-11 items-center px-3 text-[14px] font-semibold text-[#e4dfff] hover:text-white focus-visible:outline-white!"
+                  >
+                    Cancel plan<span className="sr-only"> in the billing portal (opens in a new tab)</span>
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
+          </section>
+
+          {paid && usage ? (
+            <section className={cardCls}>
+              <h2 className={cardTitleCls}>This month</h2>
+              {resets ? <p className="mt-0.5 text-[13px] text-[#66647c]">Resets {resets}</p> : null}
+              <div className="mt-4 flex flex-col gap-3.5">
+                {METERS.map((m) => (
+                  <UsageMeter key={m.k} label={m.l} used={usage.used[m.k]} limit={usage.limits[m.k]} />
+                ))}
+              </div>
+              {fullest && fullest.pct >= 80 ? (
+                <p className={`mt-3.5 text-[13px] font-semibold ${fullest.pct >= 100 ? "text-[#a3262b]" : "text-[#a15c00]"}`}>
+                  {fullest.pct >= 100
+                    ? `You've used all of this month's ${fullest.l.toLowerCase()}.`
+                    : `You've used ${fullest.pct}% of your ${fullest.l.toLowerCase()}.`}
+                </p>
+              ) : null}
+            </section>
+          ) : null}
+        </div>
+
+        <section aria-labelledby="plans-heading">
+          <h2 id="plans-heading" className="sr-only">
+            Plans
+          </h2>
+          <p className="mb-2.5 text-[14px] leading-[21px] text-[#4a4862]">
+            Every tool is on every plan. Plans differ only in monthly limits. Cancel anytime from the billing portal.
+          </p>
+          <div className="grid gap-2.5 md:grid-cols-3 md:gap-3">
+            {CHECKOUT_PLAN_ORDER.map((key) => {
+              const cfg = PUBLIC_PLANS[key];
+              const L = limits[key];
+              const isCurrent = paid && currentPlan === key;
+              const isPopular = !!cfg.popular && !paid;
+              const period = key === "lifetime" ? "once" : cfg.periodLabel;
+              const label =
+                loadingPlan === key
+                  ? "Opening checkout…"
+                  : key === "lifetime"
+                    ? "Buy Lifetime"
+                    : paid
+                      ? `Switch to ${cfg.title}`
+                      : `Choose ${cfg.title}`;
+              return (
+                <div
+                  key={key}
+                  className={`flex flex-col gap-3 rounded-[20px] p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 md:flex-col md:items-stretch md:justify-start md:gap-0 md:rounded-[22px] md:p-[22px] ${
+                    isCurrent ? "bg-[#111118] text-white" : isPopular ? "bg-white ring-2 ring-[#5440e8]" : "lc-card"
+                  }`}
+                >
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <h3 className="text-[16px] font-bold">{cfg.title}</h3>
+                      {isCurrent ? <Badge tone="primary">Current</Badge> : isPopular ? <Badge tone="lilac">Most picked</Badge> : null}
+                    </div>
+                    <p className="mt-0.5 text-[22px] font-extrabold tracking-[-0.03em] md:mt-2 md:text-[30px] md:leading-[36px]">
+                      {cfg.priceDisplay}
+                      <span className="text-[14px] font-medium tracking-normal"> {period}</span>
+                    </p>
+                    <p className={`mt-1 text-[13px] leading-[19px] ${isCurrent ? "text-[#c9c7d8]" : "text-[#66647c]"}`}>
+                      {n(L.jd)} analyses · {n(L.roleFit)} role-fit checks · {n(L.packet)} packets a month
+                    </p>
+                  </div>
+                  {isCurrent ? null : (
+                    <button
+                      type="button"
+                      onClick={() => void startCheckout(key)}
+                      disabled={!!loadingPlan || statusLoading}
+                      aria-label={loadingPlan === key ? undefined : `${label}, ${cfg.priceDisplay} ${period}`}
+                      className={`${isPopular ? btnSmPrimary : paid ? btnSmSoft : btnSmDark} shrink-0 self-start sm:self-auto md:mt-3.5 md:self-start`}
+                    >
+                      {loadingPlan === key ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                      {label}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <div className="flex flex-col gap-1 text-center text-[13px] leading-[20px] text-[#66647c]">
+          <p>
+            Secure checkout by Polar. 7-day money-back guarantee on monthly plans, 14 days on Lifetime.{" "}
+            <Link href="/legal/terms" className="lc-link font-semibold text-[#4a4862] hover:text-[#5440e8]">
+              Terms
+            </Link>
+          </p>
+          <p>
+            Questions about billing?{" "}
+            <Link href="/dashboard/support" className={inlineLinkCls}>
               Contact support
             </Link>
           </p>
         </div>
-      ) : null}
-
-      <section className="flex flex-col gap-4 rounded-[14px] border border-[#E5E5E2] bg-white p-6 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-[13px] text-[#6B6B6B]">Current plan</p>
-          {statusLoading ? (
-            <p className="mt-1 inline-flex items-center gap-2 text-[17px] text-[#6B6B6B]">
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Loading…
-            </p>
-          ) : (
-            <>
-              <p className="mt-0.5 text-[20px] font-semibold text-[#111111]">{paid ? planLabel(status?.plan ?? null) : "No plan yet"}</p>
-              <p className="mt-1 text-[14px] text-[#3F3F3F]">
-                {!paid
-                  ? "The ATS check stays free. Pick a plan below to unlock the AI tools."
-                  : currentPlan === "lifetime"
-                    ? "One-time purchase — no renewals."
-                    : renewDate
-                      ? `${status?.cancelAtPeriodEnd ? "Cancelled — access until" : "Renews on"} ${renewDate}.`
-                      : "Active."}
-              </p>
-            </>
-          )}
-        </div>
-        {paid ? (
-          <a
-            href={portalUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="soha-btn-secondary inline-flex shrink-0 items-center justify-center gap-1.5"
-          >
-            Manage billing &amp; invoices <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-          </a>
-        ) : null}
-      </section>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        {CHECKOUT_PLAN_ORDER.map((key) => {
-          const cfg = PUBLIC_PLANS[key];
-          const bullets = planMarketingBullets(key, limits);
-          const isCurrent = paid && currentPlan === key;
-          const isPopular = !!cfg.popular;
-          return (
-            <div
-              key={key}
-              className={`relative flex flex-col rounded-[14px] border bg-white p-6 ${
-                isCurrent ? "border-[#111111]" : isPopular ? "border-[#2563EB] ring-1 ring-[#2563EB]" : "border-[#E5E5E2]"
-              }`}
-            >
-              {isCurrent ? (
-                <span className="absolute -top-2.5 left-5 rounded-full bg-[#111111] px-2.5 py-0.5 text-[12px] font-medium text-white">
-                  Your plan
-                </span>
-              ) : isPopular ? (
-                <span className="absolute -top-2.5 left-5 rounded-full bg-[#2563EB] px-2.5 py-0.5 text-[12px] font-medium text-white">
-                  Most picked
-                </span>
-              ) : null}
-              <p className="text-[15px] font-semibold text-[#111111]">{cfg.title}</p>
-              <p className="mt-1 min-h-[40px] text-[13px] leading-snug text-[#6B6B6B]">{cfg.valueLine}</p>
-              <p className="mt-4 flex items-baseline gap-1">
-                <span className="text-[32px] font-semibold tracking-[-0.02em] text-[#111111]">{cfg.priceDisplay}</span>
-                <span className="text-[14px] text-[#6B6B6B]">{cfg.periodLabel}</span>
-              </p>
-              <p className="mt-1 text-[12px] leading-snug text-[#6E6E6A]">{cfg.billingExplainer}</p>
-              <ul className="mt-5 flex-1 space-y-2.5 border-t border-[#EEEEEB] pt-5">
-                {bullets.map((t) => (
-                  <li key={t} className="flex items-start gap-2 text-[13px] text-[#3F3F3F]">
-                    <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#12A15E]" aria-hidden />
-                    {t}
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                onClick={() => void startCheckout(key)}
-                disabled={!!loadingPlan || statusLoading || isCurrent}
-                className={`mt-6 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full text-[14px] font-medium transition disabled:opacity-50 ${
-                  isPopular && !isCurrent
-                    ? "bg-[#2563EB] text-white hover:bg-[#1D4ED8]"
-                    : "border border-[#D9D9D5] text-[#111111] hover:border-[#111111]"
-                }`}
-              >
-                {loadingPlan === key ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-                {isCurrent ? "Current plan" : loadingPlan === key ? "Opening checkout…" : `Choose ${cfg.title}`}
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      <div className="flex flex-col gap-1 text-center text-[13px] text-[#6B6B6B]">
-        <p>
-          Secure checkout by Polar. 7-day money-back guarantee on monthly plans, 14 days on Lifetime.{" "}
-          <Link href="/legal/terms" className="underline hover:text-[#111111]">
-            Terms
-          </Link>
-        </p>
-        <p>
-          Questions about billing?{" "}
-          <Link href="/dashboard/support" className="font-medium text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-            Contact support
-          </Link>
-        </p>
       </div>
     </div>
   );
