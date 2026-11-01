@@ -1,9 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, ArrowRight, Mail, Loader2 } from "lucide-react";
-import { AuthLayout } from "@/components/auth-layout";
+import { Loader2 } from "lucide-react";
+import {
+  AuthBackLink,
+  AuthLayout,
+  AuthNotice,
+  authH1SmCls,
+  authInputCls,
+  authLabelCls,
+  authLeadCls,
+  authSubmitCls,
+} from "@/components/auth-layout";
 
 export default function ResendVerifyPage() {
   const [email, setEmail] = useState("");
@@ -24,49 +32,39 @@ export default function ResendVerifyPage() {
   }
 
   return (
-    <AuthLayout mode="login">
-      <div className="mb-7">
-        <Link href="/login" className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#2563EB] hover:underline">
-          <ArrowLeft className="h-3.5 w-3.5" /> Back to sign in
-        </Link>
-        <h1 className="mt-4 text-[28px] font-semibold leading-[1.1] tracking-tight text-[#0F172A]">
-          Resend verification email
-        </h1>
-        <p className="mt-2 text-[14px] leading-[1.6] text-[#64748B]">
-          Didn&apos;t get the email? We&apos;ll send a fresh link to your inbox.
-        </p>
-      </div>
+    <AuthLayout mode="verify">
+      <AuthBackLink />
+      <h1 className={`mt-[22px] ${authH1SmCls}`}>Resend verification email.</h1>
+      <p className={authLeadCls}>Didn&apos;t get the email? We&apos;ll send a fresh link to your inbox.</p>
 
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div>
-          <label className="mb-1.5 block text-[12px] font-semibold uppercase tracking-wider text-[#475569]">Email</label>
-          <input
-            type="email"
-            required
-            className="soha-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@email.com"
-            autoComplete="email"
-          />
-        </div>
+      <form onSubmit={onSubmit} className="mt-6">
+        <label htmlFor="resend-email" className={authLabelCls}>
+          Email
+        </label>
+        <input
+          id="resend-email"
+          type="email"
+          required
+          className={authInputCls}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@email.com"
+          autoComplete="email"
+        />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#0F172A] py-3 text-[15px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-60"
-        >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+        <button type="submit" disabled={loading} className={`${authSubmitCls} mt-[22px]`}>
+          {loading ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" /> : null}
           {loading ? "Sending…" : "Resend verification email"}
         </button>
       </form>
 
-      {msg ? (
-        <div className="mt-5 flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
-          <Mail className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
-          <p className="text-[13px] leading-[1.5] text-emerald-800">{msg}</p>
-        </div>
-      ) : null}
+      <div aria-live="polite">
+        {msg ? (
+          <AuthNotice tone="success" announce={false} className="mt-5">
+            <p>{msg}</p>
+          </AuthNotice>
+        ) : null}
+      </div>
     </AuthLayout>
   );
 }

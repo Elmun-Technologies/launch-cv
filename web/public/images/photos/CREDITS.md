@@ -19,3 +19,4 @@ removed with rembg isnet-general-use):
 - woman-hoodie.webp — https://images.unsplash.com/photo-1517841905240-472988babdf9
 - man-white-tee.webp — https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d
 - woman-red-top.webp — https://images.unsplash.com/photo-1494790108377-be9c29b29330
+- man-blazer-glasses.webp — https://images.unsplash.com/photo-1560250097-0b93528c311a

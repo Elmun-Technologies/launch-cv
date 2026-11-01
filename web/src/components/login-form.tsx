@@ -3,8 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Loader2, Eye, EyeOff, ArrowRight } from "lucide-react";
-import { AuthLayout } from "@/components/auth-layout";
+import { Loader2, Eye, EyeOff } from "lucide-react";
+import {
+  AuthLayout,
+  AuthNotice,
+  authEyeBtnCls,
+  authH1Cls,
+  authInlineLinkCls,
+  authInputCls,
+  authLabelCls,
+  authLeadCls,
+  authSubmitCls,
+} from "@/components/auth-layout";
 import { GoogleSignInButton, AuthDivider } from "@/components/google-sign-in-button";
 import { identifyUser } from "@/lib/analytics-client";
 
@@ -80,14 +90,11 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
 
   return (
     <AuthLayout mode="login">
-      {/* Header */}
-      <div className="mb-5">
-        <h1 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] text-[#111111]">
-          Sign in to LaunchCV
-        </h1>
-        <p className="mt-2 text-[13px] leading-[1.55] text-[#64748B]">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-semibold text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
+      <div>
+        <h1 className={authH1Cls}>Welcome back.</h1>
+        <p className={authLeadCls}>
+          Sign in to LaunchCV. Don&apos;t have an account?{" "}
+          <Link href="/register" className={authInlineLinkCls}>
             Create one
           </Link>
         </p>
@@ -95,39 +102,37 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
 
       {/* Social sign-in */}
       {googleEnabled ? (
-        <div className="mb-5 space-y-4">
+        <div className="mt-[30px] space-y-5">
           <GoogleSignInButton mode="login" next={explicitNext} />
-          <AuthDivider label="or continue with email" />
+          <AuthDivider label="or with email" />
         </div>
       ) : null}
 
       {/* Form */}
-      <form onSubmit={onSubmit} className="space-y-4">
+      <form onSubmit={onSubmit} className={googleEnabled ? "mt-5" : "mt-[30px]"}>
         <div>
-          <label htmlFor="login-email" className="mb-1.5 block text-[13px] font-medium text-[#111111]">
+          <label htmlFor="login-email" className={authLabelCls}>
             Email
           </label>
           <input
-              id="login-email"
+            id="login-email"
             type="email"
             required
-            className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5"
+            className={authInputCls}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="you@email.com"
             autoComplete="email"
+            aria-describedby={error ? "login-error" : undefined}
           />
         </div>
 
-        <div>
-          <div className="mb-1.5 flex items-center justify-between">
-            <label htmlFor="login-password" className="text-[13px] font-medium text-[#111111]">
+        <div className="mt-4">
+          <div className="flex items-center justify-between gap-3">
+            <label htmlFor="login-password" className={authLabelCls}>
               Password
             </label>
-            <Link
-              href="/auth/forgot-password"
-              className="text-[12px] font-semibold text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]"
-            >
+            <Link href="/auth/forgot-password" className="lc-link text-[14px] font-semibold text-[#5440e8] transition-colors hover:text-[#3a2bb8]">
               Forgot password?
             </Link>
           </div>
@@ -137,50 +142,43 @@ export function LoginForm({ googleEnabled = false }: { googleEnabled?: boolean }
               type={showPw ? "text" : "password"}
               required
               minLength={8}
-              className="h-[46px] w-full rounded-[10px] border border-[#D9D9D5] bg-white px-3.5 text-[15px] text-[#111111] outline-none transition focus:border-[#111111] focus:ring-4 focus:ring-black/5 pr-10"
+              className={`${authInputCls} pr-14`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
+              placeholder="••••••••"
+                aria-describedby={error ? "login-error" : undefined}
             />
             <button
               type="button"
               tabIndex={-1}
               aria-label={showPw ? "Hide password" : "Show password"}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] transition hover:text-[#475569]"
+              className={`${authEyeBtnCls} mt-[3px]`}
               onClick={() => setShowPw((s) => !s)}
             >
-              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              {showPw ? <EyeOff className="h-[18px] w-[18px]" /> : <Eye className="h-[18px] w-[18px]" />}
             </button>
           </div>
         </div>
 
         {error ? (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3">
-            <p className="text-[13px] text-red-700">{error}</p>
-            {needVerify ? (
-              <Link
-                href="/auth/resend-verify"
-                className="mt-1 block text-[12px] font-semibold text-red-700 underline underline-offset-2"
-              >
-                Resend verification email →
-              </Link>
-            ) : null}
+          <div id="login-error" className="mt-4">
+            <AuthNotice tone="error">
+              <p>{error}</p>
+              {needVerify ? (
+                <Link href="/auth/resend-verify" className="mt-1 inline-block font-bold underline underline-offset-2 hover:no-underline">
+                  Resend verification email →
+                </Link>
+              ) : null}
+            </AuthNotice>
           </div>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#111111] py-3 text-[15px] font-semibold text-white transition hover:bg-black disabled:opacity-60"
-        >
-          {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
+        <button type="submit" disabled={loading} className={`${authSubmitCls} mt-6`}>
+          {loading ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" /> : null}
           {loading ? "Signing in…" : "Sign in"}
         </button>
       </form>
-
-      <p className="mt-6 text-[12px] text-[#6E6E6A]">
-        Sign-in is protected over HTTPS. We never sell your data.
-      </p>
     </AuthLayout>
   );
 }

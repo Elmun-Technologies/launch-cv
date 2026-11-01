@@ -14,8 +14,8 @@ export default async function RegisterPage({ searchParams }: { searchParams: Pro
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-[#0F172A]">
-          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        <div className="flex min-h-screen items-center justify-center bg-[#eeecf4]">
+          <Loader2 className="h-8 w-8 text-[#5440e8] motion-safe:animate-spin" aria-label="Loading" />
         </div>
       }
     >
