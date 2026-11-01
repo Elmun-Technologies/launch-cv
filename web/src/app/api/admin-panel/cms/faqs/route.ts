@@ -5,7 +5,7 @@ import { recordAudit } from "@/lib/cms/audit";
 import { bustFaqCache } from "@/lib/cms/revalidate";
 
 export async function GET(req: NextRequest) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   const url = new URL(req.url);
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;

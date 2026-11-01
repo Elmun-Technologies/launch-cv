@@ -1,7 +1,8 @@
 import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { chatJson } from "@/lib/openai-client";
+import { AiUnavailableError, chatJson } from "@/lib/openai-client";
+import { getSettings } from "@/lib/app-settings";
 import { extractResumeText } from "@/lib/resume-parse";
 import { analyzeAtsSignals } from "@/lib/ats-signals";
 import { hashClientIp } from "@/lib/request-ip";
@@ -70,8 +71,15 @@ function toPublicResult({ fixes, ...rest }: FreeAtsReport): FreeAtsResult {
 }
 
 export async function POST(req: Request) {
-  // 1. Cheap in-memory burst guard.
-  if (!allowFreeAtsBurst(req)) {
+  // 0. Admin kill switch (Admin → Limits & budgets).
+  if (!(await getSettings()).switches.freeAtsCheck) {
+    return NextResponse.json(
+      { error: "The free check is paused for a short while. Please try again later." },
+      { status: 503 },
+    );
+  }
+  // 1. Burst guard per IP.
+  if (!(await allowFreeAtsBurst(req))) {
     return NextResponse.json(
       { error: "Too many attempts. Please try again later." },
       { status: 429 },
@@ -191,11 +199,14 @@ ${resumeText.slice(0, 12000)}`;
 
   let report: FreeAtsReport;
   try {
-    const raw = await chatJson<RawScore>({ system, user });
+    const raw = await chatJson<RawScore>({ system, user, tool: "free_ats", paid: false });
     report = toReport(raw);
   } catch (e) {
     console.error("[free/ats-check] scoring error:", e);
     await releaseReservation();
+    if (e instanceof AiUnavailableError) {
+      return NextResponse.json({ error: e.message }, { status: 503 });
+    }
     return NextResponse.json(
       { error: "Could not score the resume right now. Please try again." },
       { status: 502 },

@@ -13,7 +13,7 @@ export async function GET() {
   const paid = plan !== "none";
   const pro = paid; // legacy field for clients
   const row = await getUsageRow(session.sub);
-  const limits = limitsForPlan(plan);
+  const limits = await limitsForPlan(plan);
   const user = await prisma.user.findUnique({
     where: { id: session.sub },
     select: { role: true, email: true, emailVerifiedAt: true },

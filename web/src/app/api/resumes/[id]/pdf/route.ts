@@ -14,7 +14,7 @@ type Ctx = { params: Promise<{ id: string }> };
 export async function GET(req: Request, ctx: Ctx) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowPdfUser(session.sub)) {
+  if (!(await allowPdfUser(session.sub))) {
     return NextResponse.json({ error: "PDF export rate limit reached." }, { status: 429 });
   }
   const { id } = await ctx.params;

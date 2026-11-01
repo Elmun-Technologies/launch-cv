@@ -1,0 +1,348 @@
+import { prisma } from "@/lib/prisma";
+import { lastFour, open, seal, secretBoxReady } from "@/lib/secret-box";
+
+/**
+ * External-service credentials, managed from Admin → Integrations.
+ *
+ * Values entered in the admin panel are stored encrypted in IntegrationSecret
+ * and take precedence. When a value has never been set there, the matching
+ * environment variable is used, so existing deployments keep working while
+ * keys are moved into the panel one by one.
+ */
+
+export type FieldDef = {
+  key: string;
+  label: string;
+  /** Secret fields are write-only in the UI and shown as ••••last4. */
+  secret: boolean;
+  env?: string;
+  placeholder?: string;
+  help?: string;
+  /** Allowed values for a choice field. */
+  options?: string[];
+};
+
+export type ProviderDef = {
+  id: string;
+  name: string;
+  group: "AI models" | "Payments" | "Email" | "Sign-in" | "Analytics";
+  purpose: string;
+  /** Fields that must be set for the provider to count as connected. */
+  required: string[];
+  fields: FieldDef[];
+  docsUrl?: string;
+};
+
+export const PROVIDERS: ProviderDef[] = [
+  {
+    id: "openai",
+    name: "OpenAI",
+    group: "AI models",
+    purpose: "Free ATS check, job match, rewrites, packets, role fit, imports",
+    required: ["apiKey"],
+    docsUrl: "https://platform.openai.com/api-keys",
+    fields: [{ key: "apiKey", label: "API key", secret: true, env: "OPENAI_API_KEY", placeholder: "sk-…" }],
+  },
+  {
+    id: "polar",
+    name: "Polar",
+    group: "Payments",
+    purpose: "Checkout, subscriptions, billing portal",
+    required: ["accessToken", "webhookSecret"],
+    docsUrl: "https://polar.sh/dashboard",
+    fields: [
+      { key: "accessToken", label: "Access token", secret: true, env: "POLAR_ACCESS_TOKEN", placeholder: "polar_oat_…" },
+      { key: "webhookSecret", label: "Webhook secret", secret: true, env: "POLAR_WEBHOOK_SECRET" },
+      { key: "server", label: "Environment", secret: false, env: "POLAR_SERVER", options: ["production", "sandbox"] },
+      { key: "productStarter", label: "Product ID — Starter", secret: false, env: "POLAR_PRODUCT_STARTER" },
+      { key: "productProfessional", label: "Product ID — Professional", secret: false, env: "POLAR_PRODUCT_PROFESSIONAL" },
+      { key: "productLifetime", label: "Product ID — Lifetime", secret: false, env: "POLAR_PRODUCT_LIFETIME" },
+      { key: "productElite", label: "Product ID — Elite (legacy)", secret: false, env: "POLAR_PRODUCT_ELITE" },
+      { key: "portalUrl", label: "Customer portal URL", secret: false, env: "NEXT_PUBLIC_POLAR_PORTAL_URL" },
+    ],
+  },
+  {
+    id: "resend",
+    name: "Resend",
+    group: "Email",
+    purpose: "Verification, password reset and receipts",
+    required: ["apiKey", "fromEmail"],
+    docsUrl: "https://resend.com/api-keys",
+    fields: [
+      { key: "apiKey", label: "API key", secret: true, env: "RESEND_API_KEY", placeholder: "re_…" },
+      { key: "fromEmail", label: "Sender", secret: false, env: "RESEND_FROM_EMAIL", placeholder: "LaunchCV <hello@launch-cv.com>" },
+    ],
+  },
+  {
+    id: "google",
+    name: "Google sign-in",
+    group: "Sign-in",
+    purpose: "“Continue with Google” on login and register",
+    required: ["clientId", "clientSecret"],
+    docsUrl: "https://console.cloud.google.com/apis/credentials",
+    fields: [
+      { key: "clientId", label: "Client ID", secret: false, env: "GOOGLE_CLIENT_ID" },
+      { key: "clientSecret", label: "Client secret", secret: true, env: "GOOGLE_CLIENT_SECRET" },
+      { key: "redirectUri", label: "Redirect URI override", secret: false, env: "GOOGLE_REDIRECT_URI", help: "Leave empty to use https://<your site>/api/auth/google/callback." },
+    ],
+  },
+  {
+    id: "ga4",
+    name: "Google Analytics 4",
+    group: "Analytics",
+    purpose: "Traffic and conversions",
+    required: ["measurementId"],
+    fields: [
+      { key: "measurementId", label: "Measurement ID", secret: false, env: "NEXT_PUBLIC_GA_MEASUREMENT_ID", placeholder: "G-…" },
+      { key: "apiSecret", label: "Measurement Protocol secret", secret: true, env: "GA_API_SECRET", help: "Only for server-side purchase events." },
+    ],
+  },
+  {
+    id: "posthog",
+    name: "PostHog",
+    group: "Analytics",
+    purpose: "Product analytics",
+    required: ["key"],
+    fields: [
+      { key: "key", label: "Project API key", secret: false, env: "NEXT_PUBLIC_POSTHOG_KEY", placeholder: "phc_…" },
+      { key: "host", label: "Host", secret: false, env: "NEXT_PUBLIC_POSTHOG_HOST", placeholder: "https://us.i.posthog.com" },
+    ],
+  },
+  {
+    id: "mixpanel",
+    name: "Mixpanel",
+    group: "Analytics",
+    purpose: "Product analytics",
+    required: ["token"],
+    fields: [
+      { key: "token", label: "Project token", secret: false, env: "NEXT_PUBLIC_MIXPANEL_TOKEN" },
+      { key: "host", label: "API host", secret: false, env: "NEXT_PUBLIC_MIXPANEL_HOST", placeholder: "https://api.mixpanel.com" },
+    ],
+  },
+];
+
+export function providerDef(id: string): ProviderDef | undefined {
+  return PROVIDERS.find((p) => p.id === id);
+}
+
+type Row = { provider: string; field: string; value: string | null; last4: string; updatedAt: Date; testedAt: Date | null; testOk: boolean | null; testError: string | null };
+
+const TTL_MS = 60_000;
+let cache: { at: number; rows: Map<string, Row> } | null = null;
+
+function k(provider: string, field: string) {
+  return `${provider}.${field}`;
+}
+
+async function loadRows(): Promise<Map<string, Row>> {
+  if (cache && Date.now() - cache.at < TTL_MS) return cache.rows;
+  const rows = new Map<string, Row>();
+  try {
+    const db = await prisma.integrationSecret.findMany();
+    for (const r of db) {
+      let value: string | null = null;
+      try {
+        value = open(r.ciphertext);
+      } catch {
+        value = null; // wrong/missing master key — treated as not set
+      }
+      rows.set(k(r.provider, r.field), {
+        provider: r.provider,
+        field: r.field,
+        value,
+        last4: r.last4,
+        updatedAt: r.updatedAt,
+        testedAt: r.testedAt,
+        testOk: r.testOk,
+        testError: r.testError,
+      });
+    }
+  } catch {
+    // Database unreachable (e.g. during build) — fall back to env only.
+  }
+  cache = { at: Date.now(), rows };
+  return rows;
+}
+
+export function invalidateIntegrationCache() {
+  cache = null;
+}
+
+/** The effective value of a field: admin panel first, then the env variable. Server-only. */
+export async function getIntegrationValue(provider: string, field: string): Promise<string> {
+  const rows = await loadRows();
+  const v = rows.get(k(provider, field))?.value;
+  if (v) return v;
+  const def = providerDef(provider)?.fields.find((f) => f.key === field);
+  return (def?.env ? process.env[def.env] : "")?.trim() ?? "";
+}
+
+export type FieldStatus = {
+  key: string;
+  label: string;
+  secret: boolean;
+  options?: string[];
+  placeholder?: string;
+  help?: string;
+  source: "panel" | "env" | "none";
+  /** Masked for secrets ("••••a91f"), full text for plain fields. */
+  display: string;
+  updatedAt: string | null;
+};
+
+export type ProviderStatus = {
+  id: string;
+  name: string;
+  group: ProviderDef["group"];
+  purpose: string;
+  docsUrl?: string;
+  state: "connected" | "missing" | "partial" | "error";
+  testedAt: string | null;
+  testError: string | null;
+  fields: FieldStatus[];
+};
+
+/** Status for the admin panel. Never includes secret plaintext. */
+export async function integrationStatuses(): Promise<ProviderStatus[]> {
+  const rows = await loadRows();
+  return PROVIDERS.map((p) => {
+    const fields: FieldStatus[] = p.fields.map((f) => {
+      const row = rows.get(k(p.id, f.key));
+      const envVal = f.env ? process.env[f.env]?.trim() ?? "" : "";
+      const source: FieldStatus["source"] = row?.value ? "panel" : envVal ? "env" : "none";
+      const value = row?.value ?? envVal;
+      const display = !value ? "" : f.secret ? `••••${row?.last4 ?? lastFour(value)}` : value;
+      return {
+        key: f.key,
+        label: f.label,
+        secret: f.secret,
+        options: f.options,
+        placeholder: f.placeholder,
+        help: f.help,
+        source,
+        display,
+        updatedAt: row?.updatedAt.toISOString() ?? null,
+      };
+    });
+    const set = (key: string) => fields.find((f) => f.key === key)?.source !== "none";
+    const requiredSet = p.required.filter(set).length;
+    const testRow = rows.get(k(p.id, p.required[0]));
+    const testFailed = testRow?.testOk === false;
+    const state: ProviderStatus["state"] = testFailed
+      ? "error"
+      : requiredSet === p.required.length
+        ? "connected"
+        : requiredSet === 0
+          ? "missing"
+          : "partial";
+    return {
+      id: p.id,
+      name: p.name,
+      group: p.group,
+      purpose: p.purpose,
+      docsUrl: p.docsUrl,
+      state,
+      testedAt: testRow?.testedAt?.toISOString() ?? null,
+      testError: testRow?.testError ?? null,
+      fields,
+    };
+  });
+}
+
+/** Save fields for a provider. Empty strings are ignored for secrets; `null` removes a field. */
+export async function saveIntegrationFields(
+  provider: string,
+  values: Record<string, string | null>,
+  actorId: string,
+): Promise<string[]> {
+  const def = providerDef(provider);
+  if (!def) throw new Error("Unknown provider");
+  if (!secretBoxReady()) throw new Error("KEY_ENCRYPTION_KEY is not set in hosting, so keys can't be stored safely.");
+  const changed: string[] = [];
+  for (const f of def.fields) {
+    if (!(f.key in values)) continue;
+    const raw = values[f.key];
+    if (raw === null) {
+      await prisma.integrationSecret.deleteMany({ where: { provider, field: f.key } });
+      changed.push(f.key);
+      continue;
+    }
+    const v = raw.trim();
+    if (!v) continue;
+    if (v.length > 4000) throw new Error(`${f.label} is too long`);
+    if (f.options && !f.options.includes(v)) throw new Error(`${f.label} must be one of ${f.options.join(", ")}`);
+    await prisma.integrationSecret.upsert({
+      where: { provider_field: { provider, field: f.key } },
+      create: { provider, field: f.key, ciphertext: seal(v), last4: f.secret ? lastFour(v) : "", updatedById: actorId },
+      update: { ciphertext: seal(v), last4: f.secret ? lastFour(v) : "", updatedById: actorId, testedAt: null, testOk: null, testError: null },
+    });
+    changed.push(f.key);
+  }
+  invalidateIntegrationCache();
+  return changed;
+}
+
+/** Live check against the provider with the given (or stored) values. Never logs secrets. */
+export async function testIntegration(
+  provider: string,
+  override: Record<string, string> = {},
+): Promise<{ ok: boolean; message: string; ms: number }> {
+  const get = async (field: string) => override[field]?.trim() || (await getIntegrationValue(provider, field));
+  const t0 = Date.now();
+  const done = (ok: boolean, message: string) => ({ ok, message, ms: Date.now() - t0 });
+  try {
+    const signal = AbortSignal.timeout(10_000);
+    switch (provider) {
+      case "openai": {
+        const key = await get("apiKey");
+        if (!key) return done(false, "No API key");
+        const r = await fetch("https://api.openai.com/v1/models", { headers: { Authorization: `Bearer ${key}` }, signal });
+        return r.ok ? done(true, "Key accepted") : done(false, r.status === 401 ? "Key rejected (401)" : `OpenAI returned ${r.status}`);
+      }
+      case "resend": {
+        const key = await get("apiKey");
+        if (!key) return done(false, "No API key");
+        const r = await fetch("https://api.resend.com/domains", { headers: { Authorization: `Bearer ${key}` }, signal });
+        return r.ok ? done(true, "Key accepted") : done(false, `Resend returned ${r.status}`);
+      }
+      case "polar": {
+        const token = await get("accessToken");
+        if (!token) return done(false, "No access token");
+        const base = (await get("server")) === "sandbox" ? "https://sandbox-api.polar.sh" : "https://api.polar.sh";
+        const r = await fetch(`${base}/v1/products/?limit=1`, { headers: { Authorization: `Bearer ${token}` }, signal });
+        if (!r.ok) return done(false, `Polar returned ${r.status}`);
+        if (!(await get("webhookSecret"))) return done(false, "Token works, but the webhook secret is missing — paid users won't get access");
+        return done(true, "Token accepted");
+      }
+      case "google": {
+        const id = await get("clientId");
+        const secret = await get("clientSecret");
+        if (!id || !secret) return done(false, "Client ID and secret are both required");
+        if (!id.endsWith(".apps.googleusercontent.com")) return done(false, "Client ID should end with .apps.googleusercontent.com");
+        return done(true, "Looks right — try “Continue with Google” to confirm");
+      }
+      case "ga4": {
+        const id = await get("measurementId");
+        return /^G-[A-Z0-9]+$/.test(id) ? done(true, "Measurement ID format OK") : done(false, "Measurement ID should look like G-XXXXXXX");
+      }
+      case "posthog":
+        return (await get("key")).startsWith("phc_") ? done(true, "Key format OK") : done(false, "Key should start with phc_");
+      case "mixpanel":
+        return (await get("token")).length >= 16 ? done(true, "Token set") : done(false, "Token looks too short");
+      default:
+        return done(false, "Unknown provider");
+    }
+  } catch (e) {
+    return done(false, e instanceof Error && e.name === "TimeoutError" ? "Timed out after 10 s" : "Couldn't reach the provider");
+  }
+}
+
+export async function recordTestResult(provider: string, ok: boolean, message: string) {
+  const def = providerDef(provider);
+  if (!def) return;
+  await prisma.integrationSecret.updateMany({
+    where: { provider, field: def.required[0] },
+    data: { testedAt: new Date(), testOk: ok, testError: ok ? null : message.slice(0, 300) },
+  });
+  invalidateIntegrationCache();
+}

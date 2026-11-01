@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/admin-guard";
+import { hasRecentReauth, requireAdmin } from "@/lib/admin-guard";
+import { recordAudit } from "@/lib/cms/audit";
+import { getClientIp } from "@/lib/request-ip";
 import { z } from "zod";
 
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
@@ -43,7 +45,7 @@ export async function GET(
 }
 
 const patchSchema = z.object({
-  role: z.enum(["admin", "user"]).optional(),
+  role: z.enum(["user", "owner", "admin", "editor", "support"]).optional(),
   name: z.string().min(1).optional(),
 });
 
@@ -51,11 +53,11 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const { id } = await params;
-  const body = await req.json();
+  const body = await req.json().catch(() => null);
   const parsed = patchSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -63,26 +65,44 @@ export async function PATCH(
   }
 
   const data: Record<string, string> = {};
-  if (parsed.data.role) data.role = parsed.data.role;
   if (parsed.data.name) data.name = parsed.data.name;
+  if (parsed.data.role) {
+    // Roles are the owner's call, and need a fresh password + code.
+    if (admin.role !== "owner") return NextResponse.json({ error: "Only an owner can change roles." }, { status: 403 });
+    if (!(await hasRecentReauth(admin.sub))) return NextResponse.json({ error: "Confirm it's you first.", code: "reauth_required" }, { status: 401 });
+    if (id === admin.sub && parsed.data.role !== "owner") {
+      const owners = await prisma.user.count({ where: { role: "owner" } });
+      if (owners <= 1) return NextResponse.json({ error: "You're the only owner. Make someone else an owner first." }, { status: 400 });
+    }
+    data.role = parsed.data.role;
+  }
 
   if (Object.keys(data).length === 0) {
     return NextResponse.json({ error: "No fields to update" }, { status: 400 });
   }
 
+  const before = await prisma.user.findUnique({ where: { id }, select: { role: true } });
+  if (!before) return NextResponse.json({ error: "User not found" }, { status: 404 });
   const user = await prisma.user.update({ where: { id }, data });
+  if (data.role && data.role !== before.role) {
+    await recordAudit({ actorId: admin.sub, action: "user.role.change", entity: "User", entityId: id, diff: { from: before.role, to: data.role }, ip: getClientIp(req) });
+  }
 
   return NextResponse.json({ id: user.id, email: user.email, role: user.role, name: user.name });
 }
 
 export async function DELETE(
-  _req: Request,
+  req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (!(await hasRecentReauth(admin.sub))) {
+    return NextResponse.json({ error: "Confirm it's you first.", code: "reauth_required" }, { status: 401 });
+  }
 
   const { id } = await params;
+  if (id === admin.sub) return NextResponse.json({ error: "You can't delete your own account here." }, { status: 400 });
 
   const user = await prisma.user.findUnique({ where: { id }, select: { id: true } });
   if (!user) {
@@ -90,6 +110,7 @@ export async function DELETE(
   }
 
   await prisma.user.delete({ where: { id } });
+  await recordAudit({ actorId: admin.sub, action: "user.delete", entity: "User", entityId: id, ip: getClientIp(req) });
 
   return NextResponse.json({ deleted: true });
 }

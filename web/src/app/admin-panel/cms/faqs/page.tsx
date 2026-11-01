@@ -17,7 +17,7 @@ type Row = {
 };
 
 export default async function AdminFaqsPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const rows = await prisma.faq.findMany({

@@ -12,7 +12,7 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  if (!allowForgotPasswordIp(req)) {
+  if (!(await allowForgotPasswordIp(req))) {
     return NextResponse.json({ ok: true });
   }
   let body: unknown;

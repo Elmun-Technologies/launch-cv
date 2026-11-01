@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getSettings } from "@/lib/app-settings";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/password";
@@ -22,7 +23,10 @@ const schema = z.object({
 });
 
 export async function POST(req: Request) {
-  if (!allowRegisterIp(req)) {
+  if (!(await getSettings()).switches.signups) {
+    return NextResponse.json({ error: "New sign-ups are paused for a short while. Please try again later." }, { status: 503 });
+  }
+  if (!(await allowRegisterIp(req))) {
     return NextResponse.json({ error: "Too many attempts. Please try again shortly." }, { status: 429 });
   }
   let body: unknown;

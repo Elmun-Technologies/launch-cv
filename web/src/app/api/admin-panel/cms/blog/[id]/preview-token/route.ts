@@ -5,7 +5,7 @@ import { signPreviewToken } from "@/lib/cms/preview-token";
 
 /** Returns a signed preview-token URL for a blog post by id. */
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   const { id } = await params;

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { parseResumeContent } from "@/lib/resume-json";
-import { chatJson } from "@/lib/openai-client";
+import { aiErrorResponse, chatJson } from "@/lib/openai-client";
 import { rubricForVertical } from "@/lib/rubrics";
 import { allowAiJd } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
@@ -28,7 +28,7 @@ export type ImpactRewriteResult = {
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  if (!allowAiJd(session.sub)) {
+  if (!(await allowAiJd(session.sub))) {
     return NextResponse.json({ error: "AI limit: exceeded hourly allowance." }, { status: 429 });
   }
   const usage = await assertAiUsageAllowed(session.sub, "jd");
@@ -69,7 +69,7 @@ ${JSON.stringify(content)}
 Rewrite ALL experience bullets to be impact-driven. For each bullet, provide the original text, the improved version, and a brief summary of what changed.`;
 
   try {
-    const raw = await chatJson<ImpactRewriteResult>({ system, user: userPrompt });
+    const raw = await chatJson<ImpactRewriteResult>({ system, user: userPrompt, tool: "impact_rewrite", userId: session.sub, paid: usage.paid });
     if (!raw || !Array.isArray(raw.rewrites)) {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
     }
@@ -77,7 +77,6 @@ Rewrite ALL experience bullets to be impact-driven. For each bullet, provide the
     await trackEvent("impact_rewrite", { userId: session.sub, meta: { resumeId: resume.id } });
     return NextResponse.json({ result: raw });
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Error";
-    return NextResponse.json({ error: msg }, { status: 502 });
+    return aiErrorResponse(e);
   }
 }

@@ -10,7 +10,7 @@ const schema = z.object({
 
 /** Resend verification email by address (security: always returns 200). */
 export async function POST(req: Request) {
-  if (!allowForgotPasswordIp(req)) {
+  if (!(await allowForgotPasswordIp(req))) {
     return NextResponse.json({ ok: true });
   }
   let body: unknown;

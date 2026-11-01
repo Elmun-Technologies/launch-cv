@@ -5,7 +5,7 @@ import { AdminShell } from "@/components/admin-shell";
 import { FaqEditor, type FaqEditorData } from "@/components/admin/faq-editor";
 
 export default async function EditFaqPage({ params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const { id } = await params;

@@ -20,8 +20,10 @@ import {
   Layers,
   Image as ImageIcon,
   ShieldCheck,
-  KeyRound,
   ChevronRight,
+  Plug,
+  Gauge,
+  Lock,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 
@@ -71,10 +73,17 @@ const groups: NavGroup[] = [
     ],
   },
   {
+    label: "Integrations",
+    items: [
+      { href: "/admin-panel/integrations", label: "Integrations", icon: Plug },
+      { href: "/admin-panel/limits", label: "Limits & budgets", icon: Gauge },
+      { href: "/admin-panel/security", label: "Security", icon: Lock },
+    ],
+  },
+  {
     label: "System",
     items: [
       { href: "/admin-panel/audit", label: "Audit log", icon: ShieldCheck },
-      { href: "/admin-panel/roles", label: "Roles", icon: KeyRound },
       { href: "/admin-panel/settings", label: "Settings", icon: Settings },
     ],
   },

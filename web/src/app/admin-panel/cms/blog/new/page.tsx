@@ -27,7 +27,7 @@ const blank: BlogEditorData = {
 };
 
 export default async function NewBlogPostPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
   return (

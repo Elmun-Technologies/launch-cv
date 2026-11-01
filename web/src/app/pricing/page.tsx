@@ -6,7 +6,8 @@ import { JsonLd } from "@/components/json-ld";
 import Image from "next/image";
 import { Check, ChevronDown } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel, planBillingDuration } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, type CheckoutPlan } from "@/lib/plan-config";
+import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
+import { getSettings } from "@/lib/app-settings";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 
@@ -132,7 +133,11 @@ const toolRows = [
   { l: "Company matcher and email drafts", free: false },
 ];
 
-export default function PricingPage() {
+/** Limits are edited in the admin panel; refresh the page at most once a minute. */
+export const revalidate = 60;
+
+export default async function PricingPage() {
+  const { planLimits: limits } = await getSettings();
   return (
     <div className="flex min-h-screen flex-col bg-white text-[#111111]">
       <JsonLd data={ld} />
@@ -195,7 +200,7 @@ export default function PricingPage() {
                     {planCtaLabel(key)}
                   </CtaLink>
                   <ul className="flex flex-col gap-2.5">
-                    {planMarketingBullets(key).map((b) => (
+                    {planMarketingBullets(key, limits).map((b) => (
                       <li key={b} className="flex gap-2.5 text-[15px] leading-[1.5] text-[#3F3F3F]">
                         <Check className="mt-[3px] h-4 w-4 shrink-0 text-[#111111]" aria-hidden />
                         {b}
@@ -260,7 +265,7 @@ export default function PricingPage() {
                     <td className="py-4 text-center text-[#6E6E6A]">—</td>
                     {CHECKOUT_PLAN_ORDER.map((key) => (
                       <td key={key} className="py-4 text-center">
-                        {PLAN_MONTHLY_LIMITS[key][r.k].toLocaleString("en-US")}
+                        {limits[key][r.k].toLocaleString("en-US")}
                       </td>
                     ))}
                   </tr>

@@ -44,8 +44,9 @@ function attributionParams(attribution?: Attribution | null): Record<string, str
 /** Same resolution rules as `components/google-analytics.tsx`. */
 const DEFAULT_MEASUREMENT_ID = "G-BQJVBJ207Q";
 
-function resolveMeasurementId(): string | null {
-  const raw = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+async function resolveMeasurementId(): Promise<string | null> {
+  const { getIntegrationValue } = await import("@/lib/integrations");
+  const raw = (await getIntegrationValue("ga4", "measurementId")) || process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const id =
     raw === undefined || raw === ""
       ? DEFAULT_MEASUREMENT_ID
@@ -62,8 +63,9 @@ async function sendToGa4(
   clientId: string,
   userId?: string | null,
 ) {
-  const measurementId = resolveMeasurementId();
-  const apiSecret = process.env.GA_API_SECRET?.trim();
+  const { getIntegrationValue } = await import("@/lib/integrations");
+  const measurementId = await resolveMeasurementId();
+  const apiSecret = await getIntegrationValue("ga4", "apiSecret");
   if (!measurementId || !apiSecret) return;
 
   const url = `https://www.google-analytics.com/mp/collect?measurement_id=${encodeURIComponent(
@@ -83,9 +85,10 @@ async function sendToGa4(
 
 /** PostHog capture endpoint. Silently skips when the project key is unset. */
 async function sendToPosthog(event: AnalyticsEventName, distinctId: string, properties: Record<string, unknown>) {
-  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY?.trim();
+  const { getIntegrationValue } = await import("@/lib/integrations");
+  const key = await getIntegrationValue("posthog", "key");
   if (!key) return;
-  const host = (process.env.NEXT_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com").replace(/\/$/, "");
+  const host = ((await getIntegrationValue("posthog", "host")) || "https://us.i.posthog.com").replace(/\/$/, "");
 
   await fetch(`${host}/capture/`, {
     method: "POST",
@@ -103,9 +106,10 @@ async function sendToPosthog(event: AnalyticsEventName, distinctId: string, prop
 
 /** Mixpanel /track ingestion endpoint. Silently skips when the project token is unset. */
 async function sendToMixpanel(event: AnalyticsEventName, distinctId: string, properties: Record<string, unknown>) {
-  const token = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN?.trim();
+  const { getIntegrationValue } = await import("@/lib/integrations");
+  const token = await getIntegrationValue("mixpanel", "token");
   if (!token) return;
-  const host = (process.env.NEXT_PUBLIC_MIXPANEL_HOST || "https://api.mixpanel.com").replace(/\/$/, "");
+  const host = ((await getIntegrationValue("mixpanel", "host")) || "https://api.mixpanel.com").replace(/\/$/, "");
 
   await fetch(`${host}/track`, {
     method: "POST",

@@ -19,7 +19,13 @@ model User {
   /// links or signs up with Google. Unique so one Google account maps to one user.
   googleId         String?          @unique
   name             String?
+  /// "user" or a staff role: "owner" | "admin" | "editor" | "support".
   role             String           @default("user")
+  /// Encrypted TOTP secret for staff two-factor sign-in (see lib/totp.ts).
+  totpSecret       String?
+  totpEnabledAt    DateTime?
+  /// Last accepted TOTP time-step, so a code can't be replayed.
+  totpLastStep     Int?
   emailVerifiedAt  DateTime?
   /// Billing provider customer id (Lemon Squeezy customer id as string).
   stripeCustomerId String?
@@ -380,4 +386,62 @@ model AuditLog {
   @@index([entity, createdAt])
   @@index([actorId, createdAt])
   @@index([action, createdAt])
+}
+
+/// An encrypted credential for an external service, managed from the admin panel.
+/// `ciphertext` is AES-256-GCM sealed with KEY_ENCRYPTION_KEY (lib/secret-box.ts);
+/// the plaintext never leaves the server and is never returned to the browser.
+model IntegrationSecret {
+  id          String    @id @default(cuid())
+  /// e.g. "openai"
+  provider    String
+  /// e.g. "apiKey"
+  field       String
+  ciphertext  String
+  /// Last 4 characters, shown masked in the admin panel.
+  last4       String
+  updatedById String?
+  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now())
+  testedAt    DateTime?
+  testOk      Boolean?
+  testError   String?
+
+  @@unique([provider, field])
+}
+
+/// Admin-editable runtime configuration (limits, budgets, switches, models).
+model AppSetting {
+  key         String   @id
+  value       Json
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+}
+
+/// One row per AI call: what it cost, for budgets and the AI usage page.
+model AiCall {
+  id           String   @id @default(cuid())
+  userId       String?
+  tool         String
+  provider     String
+  model        String
+  inputTokens  Int      @default(0)
+  outputTokens Int      @default(0)
+  /// Cost in micro-dollars (1e-6 USD) to avoid float drift.
+  costMicros   Int      @default(0)
+  ok           Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([userId, createdAt])
+  @@index([tool, createdAt])
+}
+
+/// Fixed-window rate limit counters, shared by every server instance.
+model RateLimitBucket {
+  key     String   @id
+  count   Int      @default(0)
+  resetAt DateTime
+
+  @@index([resetAt])
 }

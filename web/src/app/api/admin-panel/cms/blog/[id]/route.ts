@@ -6,7 +6,7 @@ import { slugify, uniqueSlug } from "@/lib/cms/slug";
 import { bustBlogCache } from "@/lib/cms/revalidate";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   const { id } = await params;
@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   const { id } = await params;
@@ -102,7 +102,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   const { id } = await params;

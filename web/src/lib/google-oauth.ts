@@ -1,4 +1,5 @@
 import { appBaseUrl } from "@/lib/email";
+import { getIntegrationValue } from "@/lib/integrations";
 
 /**
  * Lightweight Google OAuth 2.0 helper (Authorization Code flow).
@@ -18,33 +19,34 @@ const GOOGLE_USERINFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo";
 /** Cookie that carries the CSRF `state` + post-login intent across the redirect. */
 export const GOOGLE_STATE_COOKIE = "google_oauth_state";
 
-export function googleClientId(): string {
-  return process.env.GOOGLE_CLIENT_ID?.trim() ?? "";
+/** Client ID and secret come from Admin → Integrations → Google sign-in (env as fallback). */
+export async function googleClientId(): Promise<string> {
+  return getIntegrationValue("google", "clientId");
 }
 
-function googleClientSecret(): string {
-  return process.env.GOOGLE_CLIENT_SECRET?.trim() ?? "";
+async function googleClientSecret(): Promise<string> {
+  return getIntegrationValue("google", "clientSecret");
 }
 
 /** True when both the client id and secret are configured. Used to hide the
  *  "Continue with Google" button when the deployment hasn't set up OAuth. */
-export function isGoogleOAuthConfigured(): boolean {
-  return googleClientId().length > 0 && googleClientSecret().length > 0;
+export async function isGoogleOAuthConfigured(): Promise<boolean> {
+  return (await googleClientId()).length > 0 && (await googleClientSecret()).length > 0;
 }
 
 /** The redirect URI Google calls back to. Must match a URI registered in the
  *  Google Cloud console's OAuth client exactly. */
-export function googleRedirectUri(): string {
-  const override = process.env.GOOGLE_REDIRECT_URI?.trim();
+export async function googleRedirectUri(): Promise<string> {
+  const override = await getIntegrationValue("google", "redirectUri");
   if (override) return override;
   return `${appBaseUrl()}/api/auth/google/callback`;
 }
 
 /** Build the Google consent-screen URL for a given CSRF `state`. */
-export function buildGoogleAuthUrl(state: string): string {
+export async function buildGoogleAuthUrl(state: string): Promise<string> {
   const params = new URLSearchParams({
-    client_id: googleClientId(),
-    redirect_uri: googleRedirectUri(),
+    client_id: await googleClientId(),
+    redirect_uri: await googleRedirectUri(),
     response_type: "code",
     scope: "openid email profile",
     state,
@@ -66,9 +68,9 @@ type GoogleTokenResponse = {
 async function exchangeCode(code: string): Promise<string> {
   const body = new URLSearchParams({
     code,
-    client_id: googleClientId(),
-    client_secret: googleClientSecret(),
-    redirect_uri: googleRedirectUri(),
+    client_id: await googleClientId(),
+    client_secret: await googleClientSecret(),
+    redirect_uri: await googleRedirectUri(),
     grant_type: "authorization_code",
   });
   const res = await fetch(GOOGLE_TOKEN_URL, {

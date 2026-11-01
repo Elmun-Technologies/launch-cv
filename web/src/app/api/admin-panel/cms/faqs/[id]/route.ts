@@ -5,7 +5,7 @@ import { recordAudit } from "@/lib/cms/audit";
 import { bustFaqCache } from "@/lib/cms/revalidate";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
   const { id } = await params;
   const body = (await req.json().catch(() => ({}))) as Record<string, unknown>;
@@ -33,7 +33,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
   const { id } = await params;
   const before = await prisma.faq.findUnique({ where: { id } });

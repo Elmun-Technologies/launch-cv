@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { PostHog } from "posthog-js";
 import type { Mixpanel } from "mixpanel-browser";
 import { trackSignUpComplete } from "@/lib/analytics-client";
+import { usePublicConfig } from "@/lib/public-config";
 import {
   analyticsAllowed,
   isAppPath,
@@ -31,10 +32,12 @@ type PostHogProviderComp = ComponentType<{ client: PostHog; children: React.Reac
  * PostHog, gated by the same `analyticsAllowed` check.
  */
 export function AppProviders({ children }: { children: React.ReactNode }) {
-  const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
-  const host = process.env.NEXT_PUBLIC_POSTHOG_HOST ?? "https://us.i.posthog.com";
-  const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
-  const mixpanelHost = process.env.NEXT_PUBLIC_MIXPANEL_HOST;
+  // IDs from Admin → Integrations (build-time env as fallback); empty until loaded.
+  const cfg = usePublicConfig();
+  const key = cfg?.posthogKey || undefined;
+  const host = cfg?.posthogHost || "https://us.i.posthog.com";
+  const mixpanelToken = cfg?.mixpanelToken || undefined;
+  const mixpanelHost = cfg?.mixpanelHost || undefined;
   const pathname = usePathname();
   const inited = useRef(false);
   const mixpanelInited = useRef(false);

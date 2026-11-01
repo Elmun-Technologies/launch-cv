@@ -18,7 +18,7 @@ function safeNextPath(value: string | null): string | null {
 }
 
 export async function GET(req: Request) {
-  if (!isGoogleOAuthConfigured()) {
+  if (!(await isGoogleOAuthConfigured())) {
     return NextResponse.redirect(new URL("/login?error=google_unavailable", req.url));
   }
 
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
   const state = generateRawToken();
   const statePayload = JSON.stringify({ state, next, ref: referralCode });
 
-  const res = NextResponse.redirect(buildGoogleAuthUrl(state));
+  const res = NextResponse.redirect(await buildGoogleAuthUrl(state));
   res.cookies.set(GOOGLE_STATE_COOKIE, statePayload, {
     ...sessionCookieBase(),
     // Short-lived — the round-trip to Google's consent screen is quick.

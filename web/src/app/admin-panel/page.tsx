@@ -8,6 +8,8 @@ import { SectionCard } from "@/components/admin/section-card";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
 import { planIdFromVariantId } from "@/lib/plans";
 import { productIdForCheckoutPlan } from "@/lib/polar";
+import { integrationStatuses } from "@/lib/integrations";
+import { secretBoxReady } from "@/lib/secret-box";
 import { CHECKOUT_PLAN_ORDER, type PlanId } from "@/lib/plan-config";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 import { monthKey } from "@/lib/usage-limits";
@@ -24,14 +26,17 @@ const usd = (n: number) => `$${n.toLocaleString("en-US", { maximumFractionDigits
 const pct = (a: number, b: number) => (b > 0 ? `${Math.round((a / b) * 100)}%` : "—");
 
 /** Settings checkout and AI need to work; a missing one silently loses sales. */
-function configProblems(): string[] {
+async function configProblems(): Promise<string[]> {
   const out: string[] = [];
-  if (!process.env.POLAR_ACCESS_TOKEN) out.push("POLAR_ACCESS_TOKEN is not set — nobody can open checkout.");
-  if (!process.env.POLAR_WEBHOOK_SECRET) out.push("POLAR_WEBHOOK_SECRET is not set — paid users won't get access.");
+  const st = await integrationStatuses();
+  const field = (p: string, f: string) => st.find((x) => x.id === p)?.fields.find((x) => x.key === f)?.source !== "none";
+  if (!field("polar", "accessToken")) out.push("Polar access token is missing — nobody can open checkout.");
+  if (!field("polar", "webhookSecret")) out.push("Polar webhook secret is missing — paid users won't get access.");
   for (const p of CHECKOUT_PLAN_ORDER) {
-    if (!productIdForCheckoutPlan(p)) out.push(`No Polar product id for ${PUBLIC_PLANS[p].title} — its checkout fails.`);
+    if (!(await productIdForCheckoutPlan(p))) out.push(`No Polar product id for ${PUBLIC_PLANS[p].title} — its checkout fails.`);
   }
-  if (!process.env.OPENAI_API_KEY) out.push("OPENAI_API_KEY is not set — the free ATS check and AI tools fail.");
+  if (!field("openai", "apiKey")) out.push("OpenAI key is missing — the free ATS check and AI tools fail.");
+  if (!secretBoxReady()) out.push("KEY_ENCRYPTION_KEY is not set in hosting — keys can't be saved from Integrations.");
   if (!process.env.NEXT_PUBLIC_APP_URL) out.push("NEXT_PUBLIC_APP_URL is not set — checkout return links and sitemap use a fallback host.");
   return out;
 }
@@ -77,9 +82,12 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
   let mrr = 0;
   let payingUsers = 0;
   let lifetimeUsers = 0;
+  const priceIds = [...new Set([...subs.map((s) => s.stripePriceId), ...recentUsers.map((u) => u.subscription?.stripePriceId)].filter((x): x is string => !!x))];
+  const planByPrice = new Map<string, PlanId>(await Promise.all(priceIds.map(async (id) => [id, await planIdFromVariantId(id)] as const)));
+  const planOf = (id: string | null) => (id ? planByPrice.get(id) ?? "professional" : "none");
   for (const s of subs) {
     if (!subscriptionRowGrantsPaid({ status: s.status, currentPeriodEnd: s.currentPeriodEnd })) continue;
-    const plan = planIdFromVariantId(s.stripePriceId);
+    const plan = planOf(s.stripePriceId);
     planOfSub.set(s.userId, plan);
     payingUsers += 1;
     if (plan === "lifetime" || s.stripeSubscriptionId.startsWith("order:")) lifetimeUsers += 1;
@@ -99,7 +107,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
   const aiCalls = (usage._sum.jdCount ?? 0) + (usage._sum.roleFitCount ?? 0) + (usage._sum.packetCount ?? 0);
   const checkouts = checkoutRows.length;
   const paid = paidRows.length;
-  const problems = configProblems();
+  const problems = await configProblems();
 
   const kpis = [
     { l: "Revenue", v: usd(revenue), d: `${payEvents.length} purchases · list prices` },
@@ -214,7 +222,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
                     const s = u.subscription;
                     const plan =
                       s && subscriptionRowGrantsPaid({ status: s.status, currentPeriodEnd: s.currentPeriodEnd })
-                        ? planIdFromVariantId(s.stripePriceId)
+                        ? planOf(s.stripePriceId)
                         : "none";
                     return (
                       <tr key={u.id} className="border-t border-[#EEEEEB]">

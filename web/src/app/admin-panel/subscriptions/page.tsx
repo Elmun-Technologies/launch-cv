@@ -18,7 +18,7 @@ type SubscriptionRow = {
 };
 
 export default async function AdminSubscriptionsPage() {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("users");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const [activeSubs, totalSubs, cancelling, subscriptions] = await Promise.all([

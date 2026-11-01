@@ -35,3 +35,30 @@ export function consumeRateLimit(key: string, limit: number, windowMs: number): 
   b.count += 1;
   return true;
 }
+
+/**
+ * Fixed-window limit shared by every server instance (RateLimitBucket table),
+ * so it survives deploys and cold starts. One atomic upsert per call. Falls
+ * back to the in-memory limiter if the database is unreachable.
+ */
+export async function consumeRateLimitShared(key: string, limit: number, windowMs: number): Promise<boolean> {
+  const { prisma } = await import("@/lib/prisma");
+  const resetAt = new Date(Date.now() + windowMs);
+  try {
+    const rows = await prisma.$queryRaw<{ count: number }[]>`
+      INSERT INTO "RateLimitBucket" ("key", "count", "resetAt")
+      VALUES (${key}, 1, ${resetAt})
+      ON CONFLICT ("key") DO UPDATE SET
+        "count" = CASE WHEN "RateLimitBucket"."resetAt" < NOW() THEN 1 ELSE "RateLimitBucket"."count" + 1 END,
+        "resetAt" = CASE WHEN "RateLimitBucket"."resetAt" < NOW() THEN ${resetAt} ELSE "RateLimitBucket"."resetAt" END
+      RETURNING "count"`;
+    const count = Number(rows[0]?.count ?? 1);
+    // Occasionally clear long-expired buckets so the table stays small.
+    if (Math.random() < 0.01) {
+      await prisma.rateLimitBucket.deleteMany({ where: { resetAt: { lt: new Date(Date.now() - 86_400_000) } } }).catch(() => undefined);
+    }
+    return count <= limit;
+  } catch {
+    return consumeRateLimit(key, limit, windowMs);
+  }
+}

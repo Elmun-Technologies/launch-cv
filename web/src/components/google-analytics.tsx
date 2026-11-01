@@ -3,6 +3,7 @@
 import Script from "next/script";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { usePublicConfig } from "@/lib/public-config";
 import {
   analyticsAllowed,
   isExcludedPath,
@@ -13,8 +14,7 @@ import {
 
 const DEFAULT_MEASUREMENT_ID = "G-BQJVBJ207Q";
 
-function resolveMeasurementId(): string {
-  const raw = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+function resolveMeasurementId(raw: string | undefined): string {
   const id =
     raw === undefined || raw === ""
       ? DEFAULT_MEASUREMENT_ID
@@ -35,7 +35,8 @@ function resolveMeasurementId(): string {
  */
 export function GoogleAnalytics() {
   const pathname = usePathname();
-  const id = resolveMeasurementId();
+  const cfg = usePublicConfig();
+  const id = cfg ? resolveMeasurementId(cfg.gaId || undefined) : "";
 
   // Suppress hits on preview hosts and app surfaces even after a client-side
   // navigation (the script, once injected, otherwise keeps tracking). Toggled

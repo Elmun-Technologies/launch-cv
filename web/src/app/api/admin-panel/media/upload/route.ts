@@ -7,7 +7,7 @@ import { recordAudit } from "@/lib/cms/audit";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-  const admin = await requireAdmin();
+  const admin = await requireAdmin("content");
   if (!admin) return NextResponse.json({ error: "unauthorized" }, { status: 403 });
 
   let formData: FormData;

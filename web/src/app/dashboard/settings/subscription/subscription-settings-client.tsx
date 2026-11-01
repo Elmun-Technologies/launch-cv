@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePortalUrl } from "@/lib/public-config";
 import Link from "next/link";
 import { Check, ExternalLink, Loader2 } from "lucide-react";
 import { PUBLIC_PLANS, planMarketingBullets } from "@/lib/monetization";
@@ -16,8 +17,6 @@ type StatusPayload = {
   cancelAtPeriodEnd: boolean;
 };
 
-/** Polar customer portal — set NEXT_PUBLIC_POLAR_PORTAL_URL to your org portal URL. */
-const PORTAL_URL = process.env.NEXT_PUBLIC_POLAR_PORTAL_URL || "https://polar.sh/purchases";
 
 function planLabel(p: string | null | undefined): string {
   if (!p || p === "none") return "No active plan";
@@ -42,7 +41,8 @@ async function fetchStatus(): Promise<StatusPayload | null> {
 
 const isPaid = (s: StatusPayload | null) => s?.paid === true || s?.pro === true;
 
-export function SubscriptionSettingsClient() {
+export function SubscriptionSettingsClient({ limits }: { limits: Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }> }) {
+  const portalUrl = usePortalUrl();
   const [loadingPlan, setLoadingPlan] = useState<CheckoutPlan | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
   const [status, setStatus] = useState<StatusPayload | null>(null);
@@ -168,7 +168,7 @@ export function SubscriptionSettingsClient() {
         <div role="alert" className="rounded-[14px] border border-[#F6D3CD] bg-[#FDF2F0] px-5 py-4">
           <p className="text-[15px] font-medium text-[#B42318]">{checkoutError}</p>
           <p className="mt-1 text-[14px] text-[#3F3F3F]">
-            <a href={PORTAL_URL} target="_blank" rel="noreferrer" className="font-medium underline">
+            <a href={portalUrl} target="_blank" rel="noreferrer" className="font-medium underline">
               Open billing portal
             </a>{" "}
             ·{" "}
@@ -203,7 +203,7 @@ export function SubscriptionSettingsClient() {
         </div>
         {paid ? (
           <a
-            href={PORTAL_URL}
+            href={portalUrl}
             target="_blank"
             rel="noreferrer"
             className="soha-btn-secondary inline-flex shrink-0 items-center justify-center gap-1.5"
@@ -216,7 +216,7 @@ export function SubscriptionSettingsClient() {
       <div className="grid gap-4 md:grid-cols-3">
         {CHECKOUT_PLAN_ORDER.map((key) => {
           const cfg = PUBLIC_PLANS[key];
-          const bullets = planMarketingBullets(key);
+          const bullets = planMarketingBullets(key, limits);
           const isCurrent = paid && currentPlan === key;
           const isPopular = !!cfg.popular;
           return (

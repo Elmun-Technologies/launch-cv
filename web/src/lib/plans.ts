@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
 import { planIdFromPolarProductId } from "@/lib/polar";
 import type { CheckoutPlan, PlanId } from "@/lib/plan-config";
-import { NONE_LIMITS, PLAN_MONTHLY_LIMITS } from "@/lib/plan-config";
+import { planLimits } from "@/lib/app-settings";
 
 // Re-export pure config so other modules can import from here
 export type { CheckoutPlan, PlanId } from "@/lib/plan-config";
@@ -17,11 +17,11 @@ function envVariant(...keys: (string | undefined)[]): string | undefined {
 }
 
 /** Map a stored billing id (Lemon `variant_id` or Polar `product_id`) to internal plan. */
-export function planIdFromVariantId(variantId: string | null | undefined): PlanId {
+export async function planIdFromVariantId(variantId: string | null | undefined): Promise<PlanId> {
   if (!variantId) return "none";
   const v = variantId.trim();
   // Polar product ids are distinct from Lemon variant ids, so checking both is safe.
-  const polarPlan = planIdFromPolarProductId(v);
+  const polarPlan = await planIdFromPolarProductId(v);
   if (polarPlan) return polarPlan;
   const starter = envVariant(process.env.LEMON_VARIANT_STARTER);
   const professional = envVariant(process.env.LEMON_VARIANT_PROFESSIONAL, process.env.LEMON_SQUEEZY_VARIANT_ID);
@@ -62,7 +62,7 @@ export async function getUserPlanId(userId: string): Promise<PlanId> {
   return planIdFromVariantId(sub.stripePriceId);
 }
 
-export function limitsForPlan(plan: PlanId): { jd: number; packet: number; roleFit: number } {
-  if (plan === "none") return NONE_LIMITS;
-  return PLAN_MONTHLY_LIMITS[plan];
+/** Monthly AI limits for a plan, as set in Admin → Limits & budgets. */
+export async function limitsForPlan(plan: PlanId): Promise<{ jd: number; packet: number; roleFit: number }> {
+  return planLimits(plan);
 }

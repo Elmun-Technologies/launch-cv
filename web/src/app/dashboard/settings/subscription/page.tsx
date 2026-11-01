@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { SubscriptionSettingsClient } from "./subscription-settings-client";
+import { getSettings } from "@/lib/app-settings";
 
 export default async function SubscriptionPage() {
   const session = await getSession();
@@ -9,7 +10,7 @@ export default async function SubscriptionPage() {
 
   return (
     <DashboardShell email={session.email} pageTitle="Subscription">
-      <SubscriptionSettingsClient />
+      <SubscriptionSettingsClient limits={(await getSettings()).planLimits} />
     </DashboardShell>
   );
 }
