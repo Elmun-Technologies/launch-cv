@@ -495,11 +495,15 @@ table tbody tr:hover {
   background-color: #f9fafb;
 }
 
-/* ── Focus ring for accessibility ── */
-*:focus-visible {
-  outline: 2px solid #2563EB;
-  outline-offset: 2px;
-  border-radius: 0.25rem;
+/* ── Focus ring for accessibility ──
+   In the base layer so the v5 ring (.lc-site, components layer) and
+   per-element focus-visible: utilities can override it. */
+@layer base {
+  *:focus-visible {
+    outline: 2px solid #2563EB;
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
 }
 
 /* ── Global cursor pointer for all interactive elements ── */
@@ -1430,7 +1434,11 @@ button:hover, [role="button"]:hover, a:hover {
   -webkit-font-smoothing: antialiased;
 }
 .lc-site ::selection { background: #c9c0ff; color: #111118; }
-.lc-site :focus-visible { outline: 3px solid #5440e8; outline-offset: 3px; border-radius: 8px; }
+.lc-site :focus-visible { outline: 3px solid #5440e8; outline-offset: 3px; }
+/* Horizontal scrollers clip their content only for positioned children if they
+   are themselves positioned; without this, sr-only (absolute) text inside a
+   scroller escapes it and widens the whole page on phones. */
+.lc-site .overflow-x-auto:not(.absolute):not(.fixed):not(.sticky) { position: relative; }
 .lc-poster {
   font-family: var(--font-archivo), "Arial Black", sans-serif;
   font-stretch: 125%;

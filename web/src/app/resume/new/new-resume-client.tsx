@@ -395,7 +395,7 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
                   <span className="text-[18px] font-bold">
                     Drop a file or <span className="underline underline-offset-4">choose one</span>
                   </span>
-                  <span className="mt-1 text-[13px] text-[#e4dfff]">PDF, DOC, DOCX · max 4 MB</span>
+                  <span className="mt-1 text-[13px] text-white">PDF, DOC, DOCX · max 4 MB</span>
                 </button>
               </section>
 
