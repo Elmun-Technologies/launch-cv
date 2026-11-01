@@ -7,7 +7,7 @@ test("home page renders", async ({ page }) => {
 
 test("login page renders", async ({ page }) => {
   await page.goto("/login");
-  await expect(page.getByRole("heading", { name: /sign in to launchcv/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: /welcome back/i })).toBeVisible();
 });
 
 test("free ATS check page renders without an account", async ({ page }) => {

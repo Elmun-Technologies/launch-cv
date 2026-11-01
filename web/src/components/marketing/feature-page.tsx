@@ -1,9 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
+import { SiteShell } from "@/components/site/site-shell";
+import { Breadcrumbs, btn, btnPrimary, btnWhite, container, labelCls } from "@/components/site/ui";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { absoluteUrl } from "@/lib/site";
@@ -12,28 +10,38 @@ import { PUBLIC_PLANS } from "@/lib/monetization";
 export type FeaturePageData = {
   /** URL path, e.g. "/features/jd-alignment". */
   path: string;
-  /** Short name for breadcrumb and related links. */
+  /** Product name used in JSON-LD and analytics, e.g. "JD Alignment". */
   name: string;
+  /** Visible name (breadcrumb, FAQ heading). Defaults to `name`. */
+  label?: string;
   h1: string;
   h1Tail: string;
   lead: string;
   /** Three short facts under the hero CTAs. */
   facts: string[];
-  photo: { src: string; alt: string };
-  /** The "what it produces" panel: real output format, labelled as an example. */
+  /** Primary hero CTA. */
+  cta: { label: string; href: string };
+  /** Hero poster stage (use <Stage>). Rendered as plain HTML, above the fold. */
+  stage: ReactNode;
+  /** The "what it produces" panel: real output format, labeled as an example. */
   example: { title: string; caption: string; body: ReactNode };
+  /** Grey second half of the "N steps." heading. */
+  stepsTail?: string;
   steps: { t: string; d: string }[];
   gets: { t: string; d: string }[];
-  banner: { photo: { src: string; alt: string }; title: string; text: string };
+  /** Plan band. `note` overrides the default "included in every paid plan" line. */
+  banner: { title: string; text: string; note?: string };
   faqs: { q: string; a: string }[];
   related: { href: string; label: string; kind: string }[];
 };
 
-const h2 = "text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[40px]";
+const sectionPad = "pt-16 sm:pt-24 lg:pt-[130px]";
+const cardShadow = "shadow-[0_1px_2px_rgba(18,18,38,.04),0_10px_30px_-18px_rgba(18,18,38,.22)]";
 
-/** Shared layout for /features/* pages (V4 "feature" design). */
+/** Shared layout for /features/* pages (v5 design). */
 export function FeaturePage({ f }: { f: FeaturePageData }) {
   const url = absoluteUrl(f.path);
+  const label = f.label ?? f.name;
   const ld = {
     "@context": "https://schema.org",
     "@graph": [
@@ -69,182 +77,254 @@ export function FeaturePage({ f }: { f: FeaturePageData }) {
       },
     ],
   };
+  const note = f.banner.note ?? `Included in every paid plan, from ${PUBLIC_PLANS.starter.priceDisplay}/month.`;
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
+    <SiteShell>
       <JsonLd data={ld} />
-      <LandingNav />
 
-      <main className="flex-1">
-        {/* HERO */}
-        <section className="mx-auto flex max-w-[1200px] flex-col gap-10 px-5 pt-[112px] sm:px-8 lg:flex-row lg:items-center lg:gap-14 lg:pt-[128px]">
-          <div className="flex flex-1 flex-col gap-5">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[13px] text-[#6B6B6B]">
-              <Link href="/" className="hover:text-[#111111]">
-                Home
-              </Link>
-              <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-              <Link href="/features" className="hover:text-[#111111]">
-                Tools
-              </Link>
-              <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-              <span className="text-[#111111]">{f.name}</span>
-            </nav>
-            <h1 className="text-[38px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[54px]">
-              {f.h1} <span className="text-[#8A8A86]">{f.h1Tail}</span>
+      {/* HERO — static HTML; the headline and CTAs never wait for JavaScript. */}
+      <section className={`${container} pt-4 lg:pt-8`}>
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-stretch">
+          <div className="flex flex-col justify-center lg:pr-6">
+            <Breadcrumbs items={[{ href: "/", label: "Home" }, { href: "/features", label: "Tools" }, { label }]} />
+            <h1 className="mt-3.5 text-[36px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:text-[48px] lg:mt-[22px] lg:text-[58px] lg:leading-[61px]">
+              {f.h1} <span className="text-[#7c7a94]">{f.h1Tail}</span>
             </h1>
-            <p className="max-w-[560px] text-[17px] leading-[1.6] text-[#3F3F3F]">{f.lead}</p>
-            <div className="flex flex-wrap gap-2.5">
-              <CtaLink
-                cta="get_started"
-                location={`feature_${f.name}`}
-                href="/register"
-                className="inline-flex h-12 items-center rounded-full bg-[#2563EB] px-6 text-[15px] font-medium text-white hover:bg-[#1D4ED8]"
-              >
-                Try {f.name}
+            <p className="mt-3.5 text-[16px] leading-[25px] text-[#4a4862] sm:text-[18px] sm:leading-7 lg:mt-5">{f.lead}</p>
+            <div className="mt-[18px] flex flex-col gap-2.5 sm:flex-row lg:mt-7">
+              <CtaLink cta="get_started" location={`feature_${f.name}`} href={f.cta.href} className={btnPrimary}>
+                {f.cta.label}
               </CtaLink>
-              <CtaLink
-                cta="free_ats_check"
-                location={`feature_${f.name}`}
-                href="/free-ats-check"
-                className="inline-flex h-12 items-center rounded-full border border-[#D9D9D5] px-6 text-[15px] font-medium hover:border-[#111111]"
-              >
-                Free ATS check first
+              <CtaLink cta="choose_plan" location={`feature_${f.name}_hero`} href="/pricing" className={`${btnWhite} hidden sm:inline-flex`}>
+                See pricing
               </CtaLink>
             </div>
-            <p className="flex flex-wrap gap-x-5 gap-y-1 text-[14px] text-[#6B6B6B]">
+            <ul className="mt-3.5 flex flex-wrap gap-1.5 lg:mt-[22px] lg:gap-2">
               {f.facts.map((x) => (
-                <span key={x}>{x}</span>
-              ))}
-            </p>
-          </div>
-          <div className="relative h-[300px] overflow-hidden rounded-[20px] sm:h-[420px] lg:w-[46%] lg:shrink-0">
-            <Image src={f.photo.src} alt={f.photo.alt} fill priority sizes="(min-width: 1024px) 540px, 100vw" className="object-cover" />
-          </div>
-        </section>
-
-        {/* EXAMPLE OUTPUT */}
-        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
-          <h2 className={`${h2} max-w-[760px]`}>{f.example.title}</h2>
-          <figure className="mt-8 rounded-[20px] bg-[#F5F5F3] p-4 sm:p-8">
-            <div className="rounded-2xl bg-white p-5 shadow-[0_16px_40px_-24px_rgba(0,0,0,0.3)] sm:p-8">{f.example.body}</div>
-            <figcaption className="mt-3 text-[13px] text-[#6B6B6B]">{f.example.caption}</figcaption>
-          </figure>
-        </section>
-
-        {/* STEPS */}
-        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
-          <div className="flex flex-col gap-8 lg:flex-row lg:gap-12">
-            <h2 className={`${h2} lg:w-[38%]`}>How it works</h2>
-            <ol className="flex flex-1 flex-col">
-              {f.steps.map((s, i) => (
-                <li key={s.t} className="flex gap-5 border-t border-[#EEEEEB] py-5 last:border-b">
-                  <span className="w-6 shrink-0 text-[15px] text-[#6E6E6A] [font-feature-settings:'tnum']">{i + 1}</span>
-                  <div>
-                    <p className="text-[17px] font-semibold">{s.t}</p>
-                    <p className="mt-1 text-[16px] leading-[1.6] text-[#3F3F3F]">{s.d}</p>
-                  </div>
+                <li key={x} className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-[7px] text-[13px] font-semibold lg:px-3.5 lg:py-[9px] lg:text-[14px]">
+                  <span className="text-[#0b7a4f]" aria-hidden="true">
+                    ✓
+                  </span>
+                  {x}
                 </li>
               ))}
-            </ol>
+            </ul>
           </div>
-        </section>
+          {f.stage}
+        </div>
+      </section>
 
-        {/* WHAT YOU GET */}
-        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
-          <h2 className={h2}>What you get</h2>
-          <div className="mt-7 grid gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
-            {f.gets.map((g) => (
-              <div key={g.t} className="border-t border-[#EEEEEB] py-5">
-                <p className="text-[17px] font-semibold">{g.t}</p>
-                <p className="mt-1 text-[15px] leading-[1.55] text-[#3F3F3F]">{g.d}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* BANNER */}
-        <section className="mx-auto max-w-[1200px] px-5 pt-24 sm:px-8 sm:pt-28">
-          <div className="relative h-[400px] overflow-hidden rounded-[20px]">
-            <Image src={f.banner.photo.src} alt={f.banner.photo.alt} fill sizes="(min-width: 1200px) 1136px, 100vw" className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#111111]/85 via-[#111111]/55 to-transparent" />
-            <div className="absolute inset-y-0 left-0 flex max-w-[560px] flex-col justify-center gap-3.5 p-8 text-white sm:p-14">
-              <h2 className="text-[30px] font-semibold leading-[1.12] tracking-[-0.03em] sm:text-[40px]">{f.banner.title}</h2>
-              <p className="text-[17px] leading-[1.6] text-[#E5E5E2]">{f.banner.text}</p>
-              <div className="mt-2 flex flex-wrap gap-2.5">
-                <CtaLink
-                  cta="choose_plan"
-                  location={`feature_${f.name}_banner`}
-                  href="/pricing"
-                  className="inline-flex h-12 items-center rounded-full bg-white px-6 text-[15px] font-medium text-[#111111] hover:bg-[#F5F5F3]"
-                >
-                  See plans
-                </CtaLink>
-              </div>
-              <p className="text-[14px] text-[#B5B5B0]">
-                Included in every plan, from {PUBLIC_PLANS.starter.priceDisplay}/month.
-              </p>
+      {/* EXAMPLE OUTPUT (dark) */}
+      <section className={`${container} ${sectionPad}`}>
+        <figure className="lc-reveal m-0 rounded-[28px] bg-[#111118] px-[18px] pb-[18px] pt-[26px] text-white sm:p-10 lg:rounded-[36px] lg:p-16">
+          <div className="flex items-end justify-between gap-10">
+            <div className="max-w-[760px]">
+              <p className={`${labelCls} !text-[#c9c0ff]`}>/ Example</p>
+              <h2 className="lc-h2 mt-3.5 text-white lg:mt-5">{f.example.title}</h2>
             </div>
+            <span className="hidden shrink-0 rounded-full bg-[#2a2840] px-2.5 py-[5px] text-[12px] font-bold text-[#c9c0ff] sm:inline-block">Example</span>
           </div>
-        </section>
+          <div className="mt-[18px] lg:mt-10">{f.example.body}</div>
+          <figcaption className="mt-3.5 text-[13px] leading-[19px] text-[#9a97b3] lg:mt-5 lg:text-[14px] lg:leading-[21px]">{f.example.caption}</figcaption>
+        </figure>
+      </section>
 
-        {/* FAQ */}
-        <section className="mx-auto max-w-[860px] px-5 pt-24 sm:px-8 sm:pt-28">
-          <h2 className={`${h2} text-center`}>{f.name} FAQ</h2>
-          <div className="mt-6 border-b border-[#E5E5E2]">
-            {f.faqs.map((x, i) => (
-              <details key={x.q} open={i === 0} className="group border-t border-[#E5E5E2] py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
-                  {x.q}
-                  <ChevronDown className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180" aria-hidden />
-                </summary>
-                <p className="mt-2.5 text-[16px] leading-[1.65] text-[#3F3F3F]">{x.a}</p>
-              </details>
+      {/* HOW IT WORKS */}
+      <section className={`${container} ${sectionPad}`}>
+        <div className="lc-reveal max-w-[980px]">
+          <p className={labelCls}>/ How it works</p>
+          <h2 className="lc-h2 mt-3.5 lg:mt-5">
+            {f.steps.length} steps. {f.stepsTail ? <span>{f.stepsTail}</span> : null}
+          </h2>
+        </div>
+        <ol className="mt-[18px] grid sm:mt-10 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+          {f.steps.map((s, i) => (
+            <li
+              key={s.t}
+              className="lc-reveal flex gap-3.5 border-t-2 border-[#121226] py-3.5 lc-rise sm:block sm:rounded-3xl sm:border-0 sm:bg-white sm:p-6"
+            >
+              <span className="lc-mono pt-[3px] text-[12px] text-[#5440e8] sm:block sm:pt-0 sm:text-[13px]">{String(i + 1).padStart(2, "0")}</span>
+              <span className="block">
+                <span className="block text-[17px] font-bold sm:mt-9 sm:text-[21px] sm:font-extrabold sm:leading-[27px] sm:tracking-[-0.015em]">{s.t}</span>
+                <span className="mt-0.5 block text-[14px] leading-[21px] text-[#4a4862] sm:mt-2 sm:text-[15px] sm:leading-[23px]">{s.d}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* WHAT'S INCLUDED */}
+      <section className={`${container} ${sectionPad}`}>
+        <div className="grid gap-4 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+          <div className="lc-reveal">
+            <p className={labelCls}>/ What&apos;s included</p>
+            <h2 className="lc-h2 mt-3.5 hidden sm:block lg:mt-5">Everything in one place.</h2>
+          </div>
+          <div className="grid grid-cols-2 gap-2 lg:gap-x-8 lg:gap-y-0">
+            {f.gets.map((g) => (
+              <div
+                key={g.t}
+                className={`lc-reveal rounded-[20px] bg-white p-4 ${cardShadow} lg:rounded-none lg:border-t-2 lg:border-[#121226] lg:bg-transparent lg:px-0 lg:py-6 lg:shadow-none`}
+              >
+                <h3 className="text-[15px] font-extrabold sm:text-[17px] lg:text-[19px]">{g.t}</h3>
+                <p className="mt-1 text-[13px] leading-[19px] text-[#4a4862] sm:text-[15px] sm:leading-[23px] lg:mt-1.5">{g.d}</p>
+              </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* RELATED */}
-        <section className="mx-auto max-w-[1200px] px-5 py-24 sm:px-8 sm:py-[104px]">
-          <div className="grid gap-5 md:grid-cols-3">
-            {f.related.map((r) => (
-              <Link key={r.href} href={r.href} className="group border-t border-[#E5E5E2] pt-4">
-                <span className="text-[13px] text-[#6B6B6B]">{r.kind}</span>
-                <span className="mt-1.5 block text-[17px] font-semibold group-hover:text-[#1D4ED8]">{r.label}</span>
-              </Link>
-            ))}
+      {/* PLAN BAND */}
+      <section className={`${container} pt-14 sm:pt-20 lg:pt-[110px]`}>
+        <div className="lc-reveal flex flex-col gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:rounded-[36px] lg:bg-[#c9c0ff] lg:px-14 lg:py-12 lg:text-[#121226]">
+          <div>
+            <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] lg:text-[34px] lg:leading-10">{f.banner.title}</h2>
+            <p className="mt-2 text-[15px] leading-[23px] text-[#e4dfff] lg:text-[17px] lg:leading-[26px] lg:text-[#2b2752]">{f.banner.text}</p>
+            <p className="mt-2 text-[14px] text-[#e4dfff] lg:text-[#2b2752]">
+              {note}{" "}
+              <CtaLink cta="free_ats_check" location={`feature_${f.name}_banner`} href="/free-ats-check" className="lc-link font-semibold underline decoration-1 underline-offset-2 lg:no-underline">
+                Free ATS check first
+              </CtaLink>
+            </p>
           </div>
-        </section>
-      </main>
+          <CtaLink
+            cta="get_started"
+            location={`feature_${f.name}_banner`}
+            href={f.cta.href}
+            className={`${btn} flex-none bg-white text-[#121226] hover:bg-[#f1eff8] lg:bg-[#111118] lg:text-white lg:hover:bg-[#2a2940]`}
+          >
+            Get started
+          </CtaLink>
+        </div>
+      </section>
 
-      <LandingFooter />
+      {/* FAQ */}
+      <section className={`${container} ${sectionPad}`}>
+        <div className="grid items-start gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <div className="lc-reveal">
+            <p className={labelCls}>/ Questions</p>
+            <h2 className="lc-h2 mt-3.5 lg:mt-5">
+              {label}, <span>answered.</span>
+            </h2>
+            <p className="mt-5 hidden text-[16px] leading-[25px] text-[#4a4862] lg:block">
+              Something else?{" "}
+              <a href="mailto:support@launch-cv.com" className="font-semibold text-[#5440e8] hover:underline">
+                support@launch-cv.com
+              </a>
+            </p>
+          </div>
+          <FaqList items={f.faqs} />
+        </div>
+      </section>
+
+      {/* RELATED */}
+      <section className={`${container} pb-4 pt-14 sm:pt-20 lg:pt-[110px]`}>
+        <p className={`${labelCls} lc-reveal`}>/ Related</p>
+        <div className="mt-5 grid gap-3 md:grid-cols-3 md:gap-4">
+          {f.related.map((r) => (
+            <Link key={r.href} href={r.href} className="lc-card lc-rise lc-reveal group flex items-center justify-between gap-4 rounded-3xl px-[26px] py-6 text-[#121226]">
+              <span>
+                <span className="inline-block rounded-full bg-[#e4dfff] px-2.5 py-[5px] text-[12px] font-bold text-[#3a2bb8]">{r.kind}</span>
+                <span className="mt-3 block text-[18px] font-extrabold leading-[25px] group-hover:text-[#5440e8] sm:text-[19px]">{r.label}</span>
+              </span>
+              <span aria-hidden="true" className="inline-flex h-10 w-10 flex-none items-center justify-center rounded-full bg-[#111118] text-white transition-colors group-hover:bg-[#5440e8]">
+                →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+    </SiteShell>
+  );
+}
+
+/** Accordion list in the v5 style (first item open). Answers stay in the HTML for the FAQPage markup. */
+export function FaqList({ items }: { items: { q: string; a: string }[] }) {
+  return (
+    <div className="flex flex-col gap-2">
+      {items.map((x, i) => (
+        <details
+          key={x.q}
+          open={i === 0}
+          className="lc-faq group rounded-[22px] bg-white px-[18px] py-[18px] transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)] sm:rounded-3xl sm:px-6 sm:py-[22px]"
+        >
+          <summary className="flex min-h-[34px] items-center justify-between gap-4">
+            <span className="text-[16px] font-bold sm:text-[18px]">{x.q}</span>
+            <span
+              className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] text-[#121226] group-hover:bg-[#e4dfff] group-open:bg-[#111118] group-open:text-white"
+              aria-hidden="true"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+          </summary>
+          <p className="mt-3 text-[15px] leading-[25px] text-[#4a4862] sm:text-[16px] sm:leading-[26px]">{x.a}</p>
+        </details>
+      ))}
     </div>
   );
 }
 
-/* Small building blocks for the example panels. */
+/* ── Hero stage ─────────────────────────────────────────────────────────── */
 
-export function Chip({ tone, children }: { tone: "have" | "miss" | "part"; children: string }) {
-  const cls =
-    tone === "have"
-      ? "border-[#BFE5D0] bg-[#EEF8F2] text-[#0E7A48]"
-      : tone === "part"
-        ? "border-[#F4D9B0] bg-[#FDF6EC] text-[#9A5B06]"
-        : "border-[#F6D3CD] bg-[#FDF2F0] text-[#B42318]";
-  return <span className={`inline-flex rounded-full border px-3 py-1 text-[13px] ${cls}`}>{children}</span>;
+/**
+ * Colored poster panel for the hero. Children are absolutely positioned:
+ * mobile-first coordinates, `lg:` ones for the 640px desktop stage.
+ */
+export function Stage({ bg, poster, posterColor, children }: { bg: string; poster: string; posterColor: string; children: ReactNode }) {
+  return (
+    <div className="relative h-[420px] overflow-hidden rounded-[28px] sm:h-[480px] lg:h-[640px] lg:rounded-[36px]" style={{ background: bg }}>
+      <p
+        aria-hidden="true"
+        className="lc-poster absolute left-[18px] top-3.5 m-0 text-[64px] leading-[64px] sm:text-[96px] sm:leading-[96px] lg:left-8 lg:top-6 lg:text-[120px] lg:leading-[120px]"
+        style={{ color: posterColor }}
+      >
+        {poster}
+      </p>
+      {children}
+    </div>
+  );
 }
 
-export function BeforeAfter({ before, after }: { before: string; after: string }) {
+/** Small "Example" tag for illustrative widgets. */
+export function ExampleTag({ dark = false }: { dark?: boolean }) {
+  return <span className={`text-[11px] font-semibold ${dark ? "text-[#c9c0ff]" : "text-[#66647c]"}`}>Example</span>;
+}
+
+/* ── Example-panel building blocks (dark section) ──────────────────────── */
+
+/** Dark tile inside the example panel. */
+export function DarkTile({ label, children, className = "" }: { label?: string; children: ReactNode; className?: string }) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2">
-      <div className="rounded-xl border border-[#EEEEEB] p-4">
-        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[#6E6E6A]">Before</p>
-        <p className="mt-2 text-[15px] leading-[1.55] text-[#6B6B6B]">{before}</p>
-      </div>
-      <div className="rounded-xl border border-[#111111] p-4">
-        <p className="text-[12px] font-medium uppercase tracking-[0.06em] text-[#111111]">After</p>
-        <p className="mt-2 text-[15px] leading-[1.55]">{after}</p>
-      </div>
+    <div className={`rounded-[20px] bg-[#1d1c2e] p-5 sm:p-6 ${className}`}>
+      {label ? <p className="text-[12px] font-bold tracking-[0.08em] text-[#9a97b3]">{label}</p> : null}
+      {children}
+    </div>
+  );
+}
+
+/** Lilac "result" tile inside the example panel. */
+export function LilacTile({ label, children, className = "" }: { label?: string; children: ReactNode; className?: string }) {
+  return (
+    <div className={`rounded-[20px] bg-[#c9c0ff] p-5 text-[#111118] sm:p-6 ${className}`}>
+      {label ? <p className="text-[12px] font-bold tracking-[0.08em]">{label}</p> : null}
+      {children}
+    </div>
+  );
+}
+
+/** Before → after pair: struck-through original on dark, rewrite on lilac. */
+export function BeforeAfter({ before, after, beforeLabel = "BEFORE", afterLabel = "AFTER", strike = true }: { before: string; after: string; beforeLabel?: string; afterLabel?: string; strike?: boolean }) {
+  return (
+    <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+      <DarkTile label={beforeLabel}>
+        <p className={`mt-3 text-[16px] leading-[25px] text-[#b3b0c8] sm:text-[19px] sm:leading-7 ${strike ? "line-through decoration-[#ff7a33]" : "!text-[#e9e7f3]"}`}>{before}</p>
+      </DarkTile>
+      <LilacTile label={afterLabel}>
+        <p className="mt-3 text-[16px] font-semibold leading-[25px] sm:text-[19px] sm:leading-7">{after}</p>
+      </LilacTile>
     </div>
   );
 }

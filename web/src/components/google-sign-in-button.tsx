@@ -49,7 +49,7 @@ export function GoogleSignInButton({ next, referralCode, mode = "login" }: Googl
     <Link
       href={href}
       prefetch={false}
-      className="flex w-full items-center justify-center gap-3 rounded-full border border-[#E2E8F0] bg-white py-3 text-[14px] font-semibold text-[#1E293B] shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition hover:border-[#CBD5E1] hover:bg-[#F8FAFC] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]/30"
+      className="flex h-[52px] w-full items-center justify-center gap-2.5 rounded-full border-[1.5px] border-[#e2e0ea] bg-white px-5 text-[15px] font-semibold text-[#121226] transition-[border-color,background-color,transform] hover:border-[#c9c0ff] hover:bg-[#f7f6fb] focus:outline-none focus-visible:rounded-full! focus-visible:outline-[3px]! focus-visible:outline-offset-[3px]! focus-visible:outline-[#5440e8]! focus-visible:outline-solid! motion-safe:hover:-translate-y-px"
     >
       <GoogleGlyph className="h-[18px] w-[18px]" />
       {label}
@@ -61,9 +61,9 @@ export function GoogleSignInButton({ next, referralCode, mode = "login" }: Googl
 export function AuthDivider({ label = "or" }: { label?: string }) {
   return (
     <div className="flex items-center gap-3" role="separator" aria-label={label}>
-      <span className="h-px flex-1 bg-[#E2E8F0]" />
-      <span className="text-[11px] font-medium uppercase tracking-wider text-[#6E6E6A]">{label}</span>
-      <span className="h-px flex-1 bg-[#E2E8F0]" />
+      <span className="h-px flex-1 bg-[#d9d4f2]" />
+      <span className="text-[13px] text-[#66647c]">{label}</span>
+      <span className="h-px flex-1 bg-[#d9d4f2]" />
     </div>
   );
 }
