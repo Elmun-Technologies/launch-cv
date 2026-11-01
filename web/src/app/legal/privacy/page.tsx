@@ -32,7 +32,7 @@ const sections: LegalSection[] = [
   {
     h: "What we store",
     body: (
-      <ul className="list-disc space-y-2 pl-5">
+      <ul className="list-disc space-y-2 pl-5 marker:text-[#5440e8]">
         <li>Your email and, if you add it, your name.</li>
         <li>A password hash (bcrypt), never the password itself. Google sign-in stores your Google account ID.</li>
         <li>Your resumes, job applications, contacts, companies and email templates.</li>
@@ -44,21 +44,21 @@ const sections: LegalSection[] = [
   {
     h: "Who processes your data",
     body: (
-      <ul className="list-disc space-y-2 pl-5">
+      <ul className="list-disc space-y-2 pl-5 marker:text-[#5440e8]">
         <li>
-          <span className="font-medium text-[#111111]">OpenAI</span> — resume and job-description text you send to an
+          <span className="font-semibold text-[#121226]">OpenAI</span> — resume and job-description text you send to an
           AI tool, to generate rewrites, analyses, cover letters and interview questions.
         </li>
         <li>
-          <span className="font-medium text-[#111111]">Polar</span> — checkout and billing. We never see or store card
+          <span className="font-semibold text-[#121226]">Polar</span> — checkout and billing. We never see or store card
           details.
         </li>
         <li>
-          <span className="font-medium text-[#111111]">Google Analytics, PostHog, Mixpanel</span> — usage analytics, as
+          <span className="font-semibold text-[#121226]">Google Analytics, PostHog, Mixpanel</span> — usage analytics, as
           described above.
         </li>
         <li>
-          <span className="font-medium text-[#111111]">Google</span> — only if you choose &ldquo;Continue with
+          <span className="font-semibold text-[#121226]">Google</span> — only if you choose &ldquo;Continue with
           Google&rdquo;.
         </li>
       </ul>
@@ -76,7 +76,7 @@ const sections: LegalSection[] = [
   {
     h: "Your rights",
     body: (
-      <ul className="list-disc space-y-2 pl-5">
+      <ul className="list-disc space-y-2 pl-5 marker:text-[#5440e8]">
         <li>Download all your data as JSON from Settings → Your data.</li>
         <li>
           Delete your account and everything in it from Settings → Your data. Cancel an active subscription in the
@@ -84,7 +84,7 @@ const sections: LegalSection[] = [
         </li>
         <li>
           Ask us to correct, export or erase your data by emailing{" "}
-          <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline-offset-2 underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
+          <a href="mailto:support@launch-cv.com" className="text-[#5440e8] underline decoration-[#5440e8]/40 underline-offset-2 hover:decoration-[#5440e8]">
             support@launch-cv.com
           </a>
           .
@@ -97,7 +97,7 @@ const sections: LegalSection[] = [
     body: (
       <p>
         If we change this policy in a material way, we&apos;ll tell signed-in users by email. Last updated:{" "}
-        <span className="font-medium text-[#111111]">October 27, 2026</span>.
+        <span className="font-semibold text-[#121226]">October 27, 2026</span>.
       </p>
     ),
   },

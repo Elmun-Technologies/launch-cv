@@ -36,7 +36,7 @@ type StickyCtaProps = {
 export function StickyCta({
   primaryHref,
   primaryLabel,
-  primaryClassName = "bg-[#2563EB] hover:bg-[#1D4ED8]",
+  primaryClassName = "bg-[#5440e8] hover:bg-[#4430d6]",
   primaryCta = "get_started",
   secondaryHref = "/pricing",
   secondaryLabel = "See pricing",
@@ -85,13 +85,13 @@ export function StickyCta({
         visible ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-6 opacity-0"
       }`}
     >
-      <div className="flex w-full max-w-[560px] items-center gap-3 rounded-2xl border border-[#E2E8F0] bg-white/95 p-2.5 pl-4 shadow-[0_12px_40px_-12px_rgba(15,23,42,0.35)] backdrop-blur supports-[backdrop-filter]:bg-white/85">
-        <p className="hidden flex-1 text-[13px] font-medium leading-snug text-[#334155] sm:block">
+      <div className="flex w-full max-w-[560px] items-center gap-3 rounded-full bg-white/95 p-2 pl-5 shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] ring-1 ring-[#e2e0ea] backdrop-blur supports-[backdrop-filter]:bg-white/85">
+        <p className="hidden flex-1 text-[14px] font-medium leading-snug text-[#4a4862] sm:block">
           Ready when you are — it&apos;s free to start.
         </p>
         <Link
           href={secondaryHref}
-          className="hidden shrink-0 rounded-lg px-3 py-2.5 text-[13px] font-semibold text-[#475569] transition hover:text-[#0F172A] sm:inline-flex"
+          className="hidden shrink-0 rounded-full px-3 py-2.5 text-[14px] font-semibold text-[#4a4862] transition hover:text-[#121226] sm:inline-flex"
         >
           {secondaryLabel}
         </Link>
@@ -99,7 +99,7 @@ export function StickyCta({
           cta={primaryCta}
           location={`sticky:${location}`}
           href={primaryHref}
-          className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2.5 text-[14px] font-semibold text-white shadow-sm transition sm:flex-none ${primaryClassName}`}
+          className={`flex flex-1 items-center justify-center min-h-[44px] gap-1.5 rounded-full px-5 py-2.5 text-[15px] font-semibold text-white transition sm:flex-none ${primaryClassName}`}
         >
           {primaryLabel}
           <ArrowRight className="h-4 w-4" />
@@ -108,7 +108,7 @@ export function StickyCta({
           type="button"
           onClick={() => setDismissed(true)}
           aria-label="Dismiss"
-          className="shrink-0 rounded-lg p-1.5 text-[#6E6E6A] transition hover:bg-[#F1F5F9] hover:text-[#475569]"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#66647c] transition hover:bg-[#f1eff8] hover:text-[#121226]"
         >
           <X className="h-4 w-4" />
         </button>
