@@ -86,7 +86,7 @@ export default function CoverLetterExamplesPage() {
             >
               <span className="sr-only">Read the {featured.e.role.toLowerCase()} cover letter example: </span>
               <span className="block">Dear {featured.c.target.hiringManager},</span>
-              <span className="mt-1.5 line-clamp-3 sm:mt-2.5 sm:line-clamp-none">{featured.c.paragraphs[0]}</span>
+              <span className="mt-1.5 line-clamp-3 sm:mt-2.5 sm:line-clamp-6 lg:line-clamp-none">{featured.c.paragraphs[0]}</span>
             </Link>
             <div className="lc-float lc-drift absolute left-[540px] top-[170px] hidden w-[280px] rounded-[20px] bg-[#111118] p-[18px] text-white lg:block">
               <p className="text-[12px] font-bold tracking-[0.06em] text-[#c9c0ff]">WHY IT WORKS</p>
