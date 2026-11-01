@@ -47,7 +47,7 @@ const stage = (
       width={856}
       height={1080}
       priority
-      sizes="(min-width: 1024px) 373px, 236px"
+      sizes="(min-width: 1024px) 373px, 270px"
       className="absolute bottom-0 left-1/2 h-[298px] w-auto max-w-none -translate-x-1/2 sm:h-[340px] lg:h-[470px]"
     />
     <div className="lc-float lc-drift absolute right-4 top-[96px] w-[150px] rounded-[18px] bg-white p-3.5 lg:right-7 lg:top-[170px] lg:w-[220px] lg:rounded-[22px] lg:p-[18px]">

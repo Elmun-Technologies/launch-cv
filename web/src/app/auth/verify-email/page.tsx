@@ -3,8 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
-import { AuthLayout } from "@/components/auth-layout";
+import { ArrowRight, Loader2, Mail } from "lucide-react";
+import { AuthLayout, AuthNotice, authDarkBtnCls, authH1SmCls, authInlineLinkCls, authLeadCls } from "@/components/auth-layout";
 
 function VerifyInner() {
   const sp = useSearchParams();
@@ -34,44 +34,37 @@ function VerifyInner() {
 
   if (err) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-4">
-        <div className="flex items-start gap-3">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-700" />
-          <div>
-            <p className="text-[14px] font-semibold text-red-800">Verification failed</p>
-            <p className="mt-1 text-[13px] text-red-700">{err}</p>
-            <Link href="/auth/resend-verify" className="mt-2 inline-block text-[13px] font-semibold text-red-700 underline-offset-2 hover:underline">
-              Resend verification email →
-            </Link>
-          </div>
-        </div>
+      <div className="mt-6">
+        <AuthNotice tone="error" title="Verification failed">
+          <p className="mt-0.5">{err}</p>
+        </AuthNotice>
+        <p className="mt-[18px] text-[14px] text-[#4a4862]">
+          Need a new link?{" "}
+          <Link href="/auth/resend-verify" className={authInlineLinkCls}>
+            Resend verification email →
+          </Link>
+        </p>
       </div>
     );
   }
 
   if (msg) {
     return (
-      <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-4">
-        <div className="flex items-start gap-3">
-          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
-          <div>
-            <p className="text-[14px] font-semibold text-emerald-800">{msg}</p>
-            <Link
-              href="/login"
-              className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#0F172A] px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B]"
-            >
-              Continue to sign in
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-        </div>
+      <div className="mt-6">
+        <AuthNotice tone="success">
+          <p className="font-bold">{msg}</p>
+        </AuthNotice>
+        <Link href="/login" className={`${authDarkBtnCls} group mt-6`}>
+          Continue to sign in
+          <ArrowRight className="h-4 w-4 transition-transform motion-safe:group-hover:translate-x-0.5" aria-hidden="true" />
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center gap-3 text-[14px] text-[#475569]">
-      <Loader2 className="h-4 w-4 animate-spin text-[#2563EB]" />
+    <div role="status" className="mt-6 flex items-center gap-3 text-[16px] text-[#4a4862]">
+      <Loader2 className="h-5 w-5 text-[#5440e8] motion-safe:animate-spin" aria-hidden="true" />
       Verifying your email…
     </div>
   );
@@ -79,16 +72,16 @@ function VerifyInner() {
 
 export default function VerifyEmailPage() {
   return (
-    <AuthLayout mode="login">
-      <div className="mb-7">
-        <h1 className="text-[28px] font-semibold leading-[1.1] tracking-tight text-[#0F172A]">
-          Verify your email
-        </h1>
-        <p className="mt-2 text-[14px] leading-[1.6] text-[#64748B]">
-          One-time check — usually finishes in a second or two.
-        </p>
-      </div>
-      <Suspense fallback={<p className="text-[13px] text-[#6E6E6A]">Loading…</p>}>
+    <AuthLayout
+      mode="verify"
+      stageNote={<p className="text-[15px] font-semibold leading-[23px]">Once you&apos;re verified, sign in and pick up where you left off.</p>}
+    >
+      <span className="inline-flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#e4dfff]">
+        <Mail className="h-7 w-7 text-[#5440e8]" strokeWidth={1.8} aria-hidden="true" />
+      </span>
+      <h1 className={`mt-[22px] ${authH1SmCls}`}>Verify your email.</h1>
+      <p className={authLeadCls}>One-time check — usually finishes in a second or two.</p>
+      <Suspense fallback={<p className="mt-6 text-[14px] text-[#66647c]">Loading…</p>}>
         <VerifyInner />
       </Suspense>
     </AuthLayout>
