@@ -2,6 +2,7 @@ import { ResumeToolLayout } from "@/components/resume-tool-layout";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import { getSettings } from "@/lib/app-settings";
 import { PacketClient } from "./ui";
 
 type Props = { params: Promise<{ id: string }> };
@@ -15,6 +16,7 @@ export default async function PacketPage({ params }: Props) {
     where: { id, userId: session.sub },
   });
   if (!resume) notFound();
+  const { planLimits } = await getSettings();
 
   return (
     <ResumeToolLayout
@@ -24,7 +26,7 @@ export default async function PacketPage({ params }: Props) {
       title="Cover letter & interview"
       lead="Generate a cover letter, an elevator pitch and ten likely interview questions with answer outlines for one job."
     >
-      <PacketClient resumeId={id} />
+      <PacketClient resumeId={id} planLimits={planLimits} />
     </ResumeToolLayout>
   );
 }
