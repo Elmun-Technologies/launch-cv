@@ -2,7 +2,7 @@ import { FeaturePage, type FeaturePageData } from "@/components/marketing/featur
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Cover Letter Generator — From Your Resume and the Job Post",
+  title: "AI Cover Letter Generator From Your Resume",
   description:
     "Generate a cover letter written from your resume and the job description, in a formal or neutral tone. No invented experience. Edit and copy in one click.",
   pathname: "/features/cover-letter",

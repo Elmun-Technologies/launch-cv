@@ -35,11 +35,11 @@ const faqs: FaqItem[] = [
   },
   {
     q: "What should I look for in an ATS checker?",
-    a: "Parsing and formatting checks, a specific and prioritised fix list, keyword analysis for your role, clear data handling, and the option to try it before paying.",
+    a: "Parsing and formatting checks, a specific and prioritized fix list, keyword analysis for your role, clear data handling, and the option to try it before paying.",
   },
   {
     q: "How does LaunchCV compare?",
-    a: "LaunchCV's ATS check is free with no account and returns a 0–100 score with prioritised fixes. Matching against a specific job description, bullet rewrites, cover letters and interview prep are in the paid plans.",
+    a: "LaunchCV's ATS check is free with no account and returns a 0–100 score with prioritized fixes. Matching against a specific job description, bullet rewrites, cover letters and interview prep are in the paid plans.",
   },
 ];
 
@@ -92,7 +92,7 @@ const criteria = [
 
 const rows: { l: string; a: boolean | string; b: boolean | string }[] = [
   { l: "Checks layout and parsing problems", a: true, b: false },
-  { l: "Score with prioritised fixes", a: true, b: "Score only" },
+  { l: "Score with prioritized fixes", a: true, b: "Score only" },
   { l: "Free, no account", a: true, b: "Varies" },
   { l: "Compare against a specific job post", a: "Paid plans", b: "Keyword % only" },
   { l: "Rewrites for weak bullets", a: "Paid plans", b: false },

@@ -136,7 +136,7 @@ export default function ResumeTemplatesPage() {
         <section className="mx-auto max-w-[1200px] px-5 pt-14 sm:px-8">
           <ul className="grid gap-x-8 gap-y-14 md:grid-cols-2">
             {TEMPLATE_STYLES.map((t) => (
-              <li key={t} className="flex flex-col">
+              <li key={t} id={t} className="flex scroll-mt-24 flex-col">
                 <div className="relative h-[420px] overflow-hidden rounded-2xl bg-[#F5F5F3] px-6 pt-6 sm:h-[560px] sm:px-10 sm:pt-10">
                   {content ? <ResumePreview content={content} template={t} /> : null}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#F5F5F3] to-transparent" />

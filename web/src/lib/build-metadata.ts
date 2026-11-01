@@ -21,6 +21,21 @@ export const FREE_ATS_OG_IMAGE = absoluteUrl("/free-ats-check/opengraph-image");
  * `image` for a page-specific social card. When `image` is omitted, Next.js
  * falls back to the nearest file-based `opengraph-image`.
  */
+const BRAND_SUFFIX = " | LaunchCV";
+/** Search results cut titles at about 60 characters; longer ones lose their end. */
+export const TITLE_MAX = 60;
+
+/** Add the brand suffix (via the root layout template) only when the full title still fits. */
+export function pageTitle(title: string): Metadata["title"] {
+  if (title.includes("LaunchCV")) return { absolute: title };
+  return title.length + BRAND_SUFFIX.length <= TITLE_MAX ? title : { absolute: title };
+}
+
+/** First candidate that fits in TITLE_MAX characters (without the brand), else the shortest. */
+export function fitTitle(...candidates: string[]): string {
+  return candidates.find((c) => c.length <= TITLE_MAX) ?? [...candidates].sort((a, b) => a.length - b.length)[0];
+}
+
 export function buildMarketingMetadata(input: {
   title: string;
   description: string;
@@ -82,7 +97,7 @@ export function buildMarketingMetadata(input: {
         };
 
   return {
-    title: input.title,
+    title: pageTitle(input.title),
     description: input.description,
     keywords: input.keywords,
     alternates: { canonical },

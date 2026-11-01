@@ -11,3 +11,11 @@ Added October 2026 (Unsplash):
 - role-data-scientist.webp — https://images.unsplash.com/photo-1531482615713-2afd69097998
 - role-accountant.webp — https://images.unsplash.com/photo-1554224155-6726b3ff858f
 - role-business-analyst.webp — https://images.unsplash.com/photo-1460925895917-afdab827c52f
+
+Cut-out portraits in /images/people (added November 2026, Unsplash, background
+removed with rembg isnet-general-use):
+- woman-blazer-laptop.webp — https://images.unsplash.com/photo-1573496359142-b8d87734a5a2
+- nurse-arms-crossed.webp — https://images.unsplash.com/photo-1622253692010-333f2da6031d
+- woman-hoodie.webp — https://images.unsplash.com/photo-1517841905240-472988babdf9
+- man-white-tee.webp — https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d
+- woman-red-top.webp — https://images.unsplash.com/photo-1494790108377-be9c29b29330

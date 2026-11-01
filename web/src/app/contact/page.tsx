@@ -9,7 +9,7 @@ import { absoluteUrl } from "@/lib/site";
 const EMAIL = "support@launch-cv.com";
 
 export const metadata = buildMarketingMetadata({
-  title: "Contact LaunchCV — Support, Billing and Partnerships",
+  title: "Contact LaunchCV — Support, Billing, Partnerships",
   description: "Questions about your account, billing, refunds, partnerships or security? Email the LaunchCV team.",
   pathname: "/contact",
   image: DEFAULT_OG_IMAGE,
@@ -23,6 +23,7 @@ const ld = {
   url: absoluteUrl("/contact"),
   mainEntity: {
     "@type": "Organization",
+    "@id": absoluteUrl("/#organization"),
     name: "LaunchCV",
     legalName: "Elmun Technologies LLC",
     email: EMAIL,

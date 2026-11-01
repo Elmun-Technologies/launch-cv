@@ -80,10 +80,12 @@ const rootStructuredData = {
   "@graph": [
     {
       "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
       name: "LaunchCV",
+      legalName: "Elmun Technologies LLC",
       url: siteUrl,
       logo: `${siteUrl}/logo.png`,
-      description: "AI-powered resume and job search platform for modern job seekers.",
+      description: "Resume tools that show what applicant tracking systems read, then help fix and tailor the resume.",
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer support",
@@ -92,10 +94,12 @@ const rootStructuredData = {
     },
     {
       "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
       name: "LaunchCV",
       url: siteUrl,
-      description: "Tailored resumes, JD alignment, ATS scoring, cover letters, and interview prep.",
-      publisher: { "@type": "Organization", name: "LaunchCV" },
+      inLanguage: "en-US",
+      description: "Free ATS resume check, resume builder, job-match tailoring, cover letters and interview prep.",
+      publisher: { "@id": `${siteUrl}/#organization` },
     },
     {
       "@type": "SiteNavigationElement",
@@ -161,7 +165,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${geistMono.variable} ${sora.variable} h-full`}>
+    <html lang="en-US" className={`${inter.variable} ${geistMono.variable} ${sora.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
         <AttributionTracker />

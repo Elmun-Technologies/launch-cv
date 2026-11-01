@@ -11,7 +11,7 @@ import { JsonLd } from "@/components/json-ld";
 import { KeyFacts } from "@/components/key-facts";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { BLOG_HOWTO, blogKeyFacts, howToLd } from "@/lib/geo";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
@@ -205,13 +205,14 @@ export default async function BlogPostPage({
       jobTitle: SITE_AUTHOR.role,
       description: SITE_AUTHOR.bio,
     },
-    publisher: {
-      "@type": "Organization",
-      name: "LaunchCV",
-      url: absoluteUrl("/"),
-      logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png") },
-    },
+    publisher: orgRef,
+    isPartOf: { "@id": WEBSITE_ID },
+    inLanguage: "en-US",
     mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".speakable-description", ".lc-key-facts-lead"],
+    },
     keywords: post.tags.join(", "),
     articleSection: post.category,
     wordCount,
@@ -238,11 +239,6 @@ export default async function BlogPostPage({
         }
       : null;
 
-  const speakableLd = {
-    "@type": "SpeakableSpecification",
-    cssSelector: ["h1", ".speakable-description", ".lc-key-facts-lead"],
-  };
-
   // HowTo structured data for step-based guides. Steps mirror the visible
   // step sections in the post body, so the schema always matches on-page copy.
   const howtoDef = BLOG_HOWTO[post.slug];
@@ -261,7 +257,6 @@ export default async function BlogPostPage({
           "@graph": [
             articleLd,
             breadcrumbLd,
-            speakableLd,
             ...(howtoLdNode ? [howtoLdNode] : []),
             ...(faqLd ? [faqLd] : []),
           ],

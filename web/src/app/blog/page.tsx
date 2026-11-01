@@ -46,12 +46,7 @@ const blogLd = {
   name: "LaunchCV Career Blog",
   description: "Evidence-based guides on resume writing, ATS optimization, cover letters, and job search strategy.",
   url: absoluteUrl("/blog"),
-  publisher: {
-    "@type": "Organization",
-    name: "LaunchCV",
-    url: absoluteUrl("/"),
-    logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png") },
-  },
+  publisher: { "@id": absoluteUrl("/#organization") },
 };
 
 const fmtDate = (d: string) =>

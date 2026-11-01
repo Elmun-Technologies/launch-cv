@@ -7,7 +7,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { CopyButton } from "@/components/copy-button";
-import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { fitTitle, buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { getResumeExample } from "@/lib/resume-examples";
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!c || !e) return {};
   const role = roleLower(e.role);
   return buildMarketingMetadata({
-    title: `${e.role} Cover Letter Example (Annotated)`,
+    title: fitTitle(`${e.role} Cover Letter Example (Annotated)`, `${e.role} Cover Letter Example`),
     description: `A ${role} cover letter example, paragraph by paragraph: what each part does, tips for your own and how it pairs with a ${role} resume.`,
     pathname: `/cover-letter-examples/${slug}`,
     image: DEFAULT_OG_IMAGE,
@@ -66,7 +66,7 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
         url,
         dateModified: UPDATED,
         author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
-        publisher: { "@type": "Organization", name: "LaunchCV", url: absoluteUrl("/") },
+        publisher: { "@id": absoluteUrl("/#organization") },
       },
       {
         "@type": "BreadcrumbList",

@@ -8,7 +8,7 @@ import { LandingFooter } from "@/components/landing-footer";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { CopyButton } from "@/components/copy-button";
-import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { fitTitle, buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { RESUME_EXAMPLES, exampleResumeText, getResumeExample } from "@/lib/resume-examples";
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const e = getResumeExample(slug);
   if (!e) return {};
   return buildMarketingMetadata({
-    title: `${e.role} Resume Example & Keywords (2026)`,
+    title: fitTitle(`${e.role} Resume Example & Keywords (2026)`, `${e.role} Resume Example (2026)`, `${e.role} Resume Example`),
     description: `A ${roleLower(e.role)} resume example you can copy, with summary and bullet examples, the keywords recruiters search for and ATS tips.`,
     pathname: `/resume-examples/${e.slug}`,
     image: DEFAULT_OG_IMAGE,
@@ -72,7 +72,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
         image: absoluteUrl(e.photo.src),
         dateModified: UPDATED,
         author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
-        publisher: { "@type": "Organization", name: "LaunchCV", url: absoluteUrl("/") },
+        publisher: { "@id": absoluteUrl("/#organization") },
       },
       {
         "@type": "BreadcrumbList",

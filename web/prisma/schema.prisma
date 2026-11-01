@@ -332,7 +332,10 @@ model PageCopy {
 
 model MediaAsset {
   id           String   @id @default(cuid())
+  /// Public URL. New uploads: /media/<id>.<ext>, served from `data` below.
   url          String
+  /// Image bytes, so uploads survive serverless deploys (no writable disk).
+  data         Bytes?
   alt          String?
   width        Int?
   height       Int?
