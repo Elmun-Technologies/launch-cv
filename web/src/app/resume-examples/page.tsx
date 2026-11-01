@@ -109,7 +109,7 @@ export default function ResumeExamplesPage() {
       {/* STAGE */}
       <section className={`${container} pt-6 lg:pt-11`}>
         <div className="relative h-[330px] overflow-hidden rounded-[28px] bg-[#111118] sm:h-[440px] lg:h-[500px] lg:rounded-[36px]">
-          <p aria-hidden="true" className="lc-poster absolute inset-x-0 top-[18px] m-0 text-center text-[clamp(44px,14vw,56px)] leading-[56px] text-[#36335a] sm:top-6 sm:text-[96px] sm:leading-[96px] lg:top-[30px] lg:text-[150px] lg:leading-[140px]">
+          <p aria-hidden="true" className="lc-poster absolute inset-x-0 top-[18px] m-0 text-center text-[length:clamp(44px,14vw,56px)] leading-[56px] text-[#36335a] sm:top-6 sm:text-[96px] sm:leading-[96px] lg:top-[30px] lg:text-[150px] lg:leading-[140px]">
             {total} ROLES
           </p>
           <div aria-hidden="true" className="absolute bottom-[-150px] left-[16%] hidden h-[360px] w-[360px] rounded-full bg-[#5440e8] lg:block" />

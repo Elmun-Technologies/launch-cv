@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
-import { RESUME_EXAMPLES, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
+import { RESUME_EXAMPLES, type ResumeExample } from "@/lib/resume-examples";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 
 export const metadata = buildMarketingMetadata({

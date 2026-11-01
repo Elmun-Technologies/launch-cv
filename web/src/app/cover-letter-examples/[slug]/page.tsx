@@ -264,7 +264,9 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
       {related.length > 0 ? (
         <section className={`${container} pt-14 lg:pt-[110px]`}>
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <h2 className={labelCls}>/ Related cover letters</h2>
+            <h2 className={labelCls}>
+              <span aria-hidden="true">/ </span>Related cover letters
+            </h2>
             <Link href="/cover-letter-examples" className="lc-link text-[15px] font-semibold text-[#5440e8]">
               All {COVER_LETTER_EXAMPLES.length} cover letters →
             </Link>

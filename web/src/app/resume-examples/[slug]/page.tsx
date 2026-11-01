@@ -359,7 +359,9 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
       {related.length > 0 ? (
         <section className={`${container} pt-14 lg:pt-[120px]`}>
           <div className="flex flex-wrap items-end justify-between gap-3">
-            <h2 className={labelCls}>/ Related examples</h2>
+            <h2 className={labelCls}>
+              <span aria-hidden="true">/ </span>Related examples
+            </h2>
             <Link href="/resume-examples" className="lc-link text-[15px] font-semibold text-[#5440e8]">
               All {RESUME_EXAMPLES.length} examples →
             </Link>
