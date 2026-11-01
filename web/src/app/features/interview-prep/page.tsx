@@ -1,4 +1,5 @@
-import { FeaturePage, type FeaturePageData } from "@/components/marketing/feature-page";
+import Image from "next/image";
+import { FeaturePage, Stage, ExampleTag, DarkTile, LilacTile, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 
 export const metadata = buildMarketingMetadata({
@@ -16,6 +17,47 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const QUESTIONS = [
+  {
+    q: "Tell us about a time research changed your roadmap.",
+    a: "Use the 30+ interviews at Brightpath: what you heard, the two features it led to, and how you measured the result.",
+  },
+  {
+    q: "How do you get legal and sales to agree on a launch?",
+    a: "Walk through the HIPAA messaging launch: who needed what, the trade-off you proposed, and the date you shipped.",
+  },
+];
+
+const stage = (
+  <Stage bg="#e4dfff" poster="PREP" posterColor="#d3cbff">
+    <div className="absolute bottom-[19px] right-[19px] h-[180px] w-[180px] overflow-hidden rounded-full bg-[#c9c0ff] sm:h-[220px] sm:w-[220px] lg:bottom-8 lg:right-8 lg:h-[300px] lg:w-[300px]">
+      <Image
+        src="/images/people/nurse-arms-crossed.webp"
+        alt="Smiling nurse in blue scrubs with a stethoscope, arms crossed"
+        width={759}
+        height={1080}
+        priority
+        sizes="(min-width: 1024px) 282px, 205px"
+        className="absolute left-1/2 top-2.5 h-[240px] w-auto max-w-none -translate-x-1/2 sm:h-[290px] lg:top-[18px] lg:h-[400px]"
+      />
+    </div>
+    <div className="lc-float lc-drift absolute left-4 top-[88px] w-[200px] rounded-[18px] bg-[#111118] p-3.5 text-white sm:w-[260px] lg:left-8 lg:top-[150px] lg:w-[300px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="lc-mono flex justify-between text-[11px] text-[#c9c0ff]">
+        Q1 <ExampleTag dark />
+      </p>
+      <p className="mt-1.5 text-[14px] font-bold leading-[19px] lg:text-[16px] lg:leading-[22px]">“{QUESTIONS[0].q}”</p>
+    </div>
+    <div className="lc-float lc-drift-2 absolute left-12 top-[196px] w-[190px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[250px] lg:left-20 lg:top-[300px] lg:w-[280px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="lc-mono text-[11px] text-[#5440e8]">Q2</p>
+      <p className="mt-1.5 text-[14px] font-bold leading-[19px] lg:text-[16px] lg:leading-[22px]">“{QUESTIONS[1].q}”</p>
+    </div>
+    <div className="lc-float lc-drift-3 absolute left-4 top-[316px] w-[170px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[250px] lg:left-8 lg:top-[450px] lg:w-[280px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="text-[11px] font-bold tracking-[0.06em] text-[#66647c] lg:text-[12px]">FROM YOUR RESUME</p>
+      <p className="mt-1 text-[13px] leading-[18px] lg:text-[14px] lg:leading-5">Self-scheduling launch · no-shows −23%</p>
+    </div>
+  </Stage>
+);
+
 const f: FeaturePageData = {
   path: "/features/interview-prep",
   name: "Interview Prep",
@@ -24,40 +66,33 @@ const f: FeaturePageData = {
   lead:
     "From your resume and the job description, LaunchCV writes the ten questions you're most likely to face for that role, an outline for answering each one with your own examples, and a short elevator pitch.",
   facts: ["10 role-specific questions", "Answer outlines from your resume", "25–40 second pitch"],
-  photo: { src: "/images/photos/interview-panel.webp", alt: "Candidate in an interview with a hiring panel" },
+  cta: { label: "Try it now", href: "/register" },
+  stage,
   example: {
-    title: "What a question looks like",
+    title: "What a question looks like.",
     caption: "Example for a product manager interview. Your questions come from your resume and the job you paste.",
     body: (
-      <div className="flex flex-col gap-5">
-        {[
-          {
-            q: "Tell us about a time research changed your roadmap.",
-            a: "Use the 30+ interviews at Brightpath: what you heard, the two features it led to, and how you measured the result.",
-          },
-          {
-            q: "How do you get legal and sales to agree on a launch?",
-            a: "Walk through the HIPAA messaging launch: who needed what, the trade-off you proposed, and the date you shipped.",
-          },
-        ].map((x, i) => (
-          <div key={x.q} className="border-t border-[#EEEEEB] pt-4 first:border-t-0 first:pt-0">
-            <p className="text-[16px] font-semibold">
-              {i + 1}. {x.q}
-            </p>
-            <p className="mt-1.5 text-[15px] leading-[1.6] text-[#3F3F3F]">
-              <span className="text-[#6E6E6A]">Answer outline — </span>
-              {x.a}
-            </p>
+      <div className="flex flex-col gap-3 sm:gap-4">
+        {QUESTIONS.map((x, i) => (
+          <div key={x.q} className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+            <DarkTile>
+              <p className="lc-mono text-[12px] text-[#c9c0ff]">QUESTION {i + 1} OF 10</p>
+              <p className="mt-3 text-[18px] font-bold leading-[26px] sm:text-[21px] sm:leading-[29px]">{x.q}</p>
+            </DarkTile>
+            <LilacTile label="ANSWER OUTLINE FROM YOUR RESUME">
+              <p className="mt-3 text-[15px] leading-6 sm:text-[16px] sm:leading-[25px]">{x.a}</p>
+            </LilacTile>
           </div>
         ))}
       </div>
     ),
   },
+  stepsTail: "Ready the night before.",
   steps: [
     { t: "Choose the resume you sent", d: "Questions and outlines use the experience on that version." },
     { t: "Paste the job description", d: "Questions follow what this role and company are screening for." },
     { t: "Read the questions and outlines", d: "Each outline points to the example from your resume that answers it best." },
-    { t: "Practise out loud", d: "Use the elevator pitch for “tell me about yourself” and rehearse the rest." },
+    { t: "Practice out loud", d: "Use the elevator pitch for “tell me about yourself” and rehearse the rest." },
   ],
   gets: [
     { t: "10 likely questions", d: "A mix of role, experience and behavioral questions for this job." },
@@ -68,7 +103,6 @@ const f: FeaturePageData = {
     { t: "No invented stories", d: "Outlines only use what's in your resume." },
   ],
   banner: {
-    photo: { src: "/images/photos/interview-handshake.webp", alt: "Candidate shaking hands after an interview" },
     title: "Walk in with your examples ready.",
     text: "Most interview nerves come from not knowing which story to tell. Pick them the night before.",
   },
