@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import { LandingNav } from "@/components/landing-nav";
-import { LandingFooter } from "@/components/landing-footer";
+import { SiteShell } from "@/components/site/site-shell";
+import { container, btnPrimary, btnWhite, btnSoft, labelCls, Breadcrumbs, SectionHead } from "@/components/site/ui";
+import { FaqList } from "@/components/site/library/faq-list";
+import { CopyPill } from "@/components/site/library/copy-pill";
+import { ArrowCard } from "@/components/site/library/arrow-card";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
-import { CopyButton } from "@/components/copy-button";
 import { fitTitle, buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { getResumeExample } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES, getCoverLetterExample, type CoverLetterExample } from "@/lib/cover-letter-examples";
@@ -40,7 +41,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
 }
 
 const UPDATED = "2026-10-27";
-const h2 = "text-[26px] font-semibold leading-[1.15] tracking-[-0.025em] sm:text-[30px]";
+const UPDATED_LABEL = new Date(`${UPDATED}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+const sectionCls = `${container} pt-16 lg:pt-[130px]`;
+const inlineLink = "font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] transition-colors hover:decoration-[#5440e8]";
 
 function letterText(c: CoverLetterExample, name: string): string {
   return [`Dear ${c.target.hiringManager},`, "", ...c.paragraphs.flatMap((p) => [p, ""]), "Sincerely,", name].join("\n");
@@ -53,9 +56,15 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
   if (!c || !e) notFound();
 
   const r = e.resume;
+  const role = roleLower(e.role);
+  const firstName = r.name.split(" ")[0];
   const url = absoluteUrl(`/cover-letter-examples/${slug}`);
   const startHref = `/register?next=${encodeURIComponent(`/resume/new?example=${slug}`)}`;
-  const related = e.related.map((s) => ({ e: getResumeExample(s), c: getCoverLetterExample(s) })).filter((x) => x.e && x.c);
+  const related = e.related.flatMap((s) => {
+    const re = getResumeExample(s);
+    const rc = getCoverLetterExample(s);
+    return re && rc ? [{ e: re, c: rc }] : [];
+  });
 
   const ld = {
     "@context": "https://schema.org",
@@ -65,6 +74,8 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
         headline: `${e.role} cover letter example`,
         url,
         dateModified: UPDATED,
+        inLanguage: "en-US",
+        isPartOf: { "@id": WEBSITE_ID },
         author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
         publisher: { "@id": absoluteUrl("/#organization") },
       },
@@ -84,170 +95,189 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-white text-[#111111]">
+    <SiteShell>
       <JsonLd data={ld} />
-      <LandingNav />
 
-      <main className="flex-1 pt-[96px]">
-        <section className="mx-auto max-w-[1200px] px-5 pt-8 sm:px-8">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[14px] text-[#6B6B6B]">
-            <Link href="/" className="hover:text-[#111111]">
-              Home
+      {/* HERO — static HTML */}
+      <section className={`${container} pt-4 lg:pt-8`}>
+        <Breadcrumbs
+          items={[
+            { href: "/", label: "Home" },
+            { href: "/cover-letter-examples", label: "Cover letter examples" },
+            { label: e.role },
+          ]}
+        />
+        <div className="mt-3.5 flex flex-col justify-between gap-5 sm:mt-6 lg:flex-row lg:items-end lg:gap-12">
+          <div className="max-w-[860px]">
+            <h1 className="text-[34px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:text-[52px] sm:leading-[1.05] lg:text-[60px] lg:leading-[63px]">
+              {e.role} cover letter example. <span className="text-[#7c7a94]">Annotated, paragraph by paragraph.</span>
+            </h1>
+            <p className="mt-4 max-w-[680px] text-[16px] leading-[1.6] text-[#4a4862] sm:text-[18px] sm:leading-7">
+              {r.name} is applying for the {c.target.title} role at {c.target.company}. The letter goes with their{" "}
+              <Link href={`/resume-examples/${slug}`} className={inlineLink}>
+                {role} resume example
+              </Link>{" "}
+              — same person, same results — so you can see how the two work together.
+            </p>
+          </div>
+          <div className="flex flex-none flex-col gap-2.5 sm:flex-row lg:flex-col">
+            <CtaLink cta="cover_letter_feature" location="cover_letter_example" href="/features/cover-letter" className={btnPrimary}>
+              Write mine from my resume
+            </CtaLink>
+            <Link href={`/resume-examples/${slug}`} className={`${btnWhite} hidden sm:inline-flex`}>
+              See the matching resume
             </Link>
-            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-            <Link href="/cover-letter-examples" className="hover:text-[#111111]">
-              Cover letter examples
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-            <span className="text-[#111111]">{e.role}</span>
-          </nav>
-          <div className="mt-6 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-[760px]">
-              <h1 className="text-[40px] font-semibold leading-[1.04] tracking-[-0.04em] sm:text-[52px]">
-                {e.role} cover letter example. <span className="text-[#8A8A86]">Annotated, paragraph by paragraph.</span>
-              </h1>
-              <p className="mt-4 max-w-[640px] text-[17px] leading-[1.6] text-[#3F3F3F]">
-                {r.name} is applying for the {c.target.title} role at {c.target.company}. The letter goes with
-                their{" "}
-                <Link href={`/resume-examples/${slug}`} className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-                  {roleLower(e.role)} resume example
-                </Link>{" "}
-                — same person, same results — so you can see how the two work together.
+          </div>
+        </div>
+        <p className="mt-3 text-[12px] text-[#66647c] sm:mt-4 sm:text-[14px]">
+          By{" "}
+          <Link href="/about" className="lc-link hover:text-[#5440e8]">
+            {SITE_AUTHOR.name}
+          </Link>{" "}
+          · Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
+        </p>
+      </section>
+
+      {/* THE LETTER + ANNOTATIONS */}
+      <section className={`${container} pt-[22px] lg:pt-12`}>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3 lg:mb-4">
+          <h2 className="text-[20px] font-extrabold tracking-[-0.02em] sm:text-[24px]">{e.role} cover letter</h2>
+          <CopyPill text={letterText(c, r.name)} label="Copy text" />
+        </div>
+        <div className="grid items-start gap-2.5 lg:grid-cols-[1.3fr_0.7fr] lg:gap-6">
+          <div className="rounded-[24px] bg-[#e4dfff] p-3 sm:p-8 lg:rounded-[36px] lg:p-10">
+            <div className="rounded-lg bg-white py-[22px] pl-11 pr-[18px] text-[14px] leading-[22px] text-[#24223a] shadow-[0_30px_60px_-24px_rgba(36,24,120,.4)] sm:rounded-[10px] sm:py-12 sm:pl-[72px] sm:pr-12 sm:text-[16px] sm:leading-[27px] lg:py-[52px] lg:pl-[84px] lg:pr-14">
+              <p className="text-[17px] font-extrabold sm:text-[22px]">{r.name}</p>
+              <p className="mt-0.5 break-words text-[#66647c]">{r.contact}</p>
+              <p className="mt-[22px]">
+                {c.target.hiringManager}
+                <br />
+                {c.target.title}, {c.target.company}
+              </p>
+              <p className="mt-[22px]">Dear {c.target.hiringManager},</p>
+              {c.paragraphs.map((p, i) => (
+                <p key={i} className="relative mt-4">
+                  <span
+                    aria-hidden="true"
+                    className="absolute -left-[30px] top-px inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#5440e8] text-[12px] font-extrabold text-white sm:-left-[46px] sm:top-0.5 sm:h-[26px] sm:w-[26px] sm:text-[13px]"
+                  >
+                    {i + 1}
+                  </span>
+                  {p}
+                </p>
+              ))}
+              <p className="mt-[22px]">
+                Sincerely,
+                <br />
+                {r.name}
               </p>
             </div>
-            <div className="flex flex-col gap-3.5 lg:w-[340px]">
-              <p className="text-[14px] text-[#6B6B6B]">{SITE_AUTHOR.name} · Updated October 2026</p>
-              <div className="flex flex-wrap gap-2">
-                <CtaLink
-                  cta="use_example"
-                  location="cover_letter_example"
-                  href={startHref}
-                  className="inline-flex h-12 items-center rounded-full bg-[#2563EB] px-5 text-[15px] font-medium text-white hover:bg-[#1D4ED8]"
-                >
-                  Start from this resume
-                </CtaLink>
-                <CtaLink
-                  cta="free_ats_check"
-                  location="cover_letter_example"
-                  href="/free-ats-check"
-                  className="inline-flex h-12 items-center rounded-full border border-[#D9D9D5] px-5 text-[15px] font-medium hover:border-[#111111]"
-                >
-                  Check my resume
-                </CtaLink>
-              </div>
-            </div>
           </div>
-        </section>
-
-        <section className="mx-auto max-w-[1200px] px-5 pt-12 sm:px-8">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-            <h2 className={h2}>{e.role} cover letter</h2>
-            <CopyButton text={letterText(c, r.name)} label="Copy text" />
-          </div>
-          <div className="rounded-2xl bg-[#F5F5F3] p-3 sm:p-9">
-            <div className="mx-auto grid max-w-[1040px] gap-6 lg:grid-cols-[minmax(0,680px)_1fr] lg:gap-10">
-              <div className="rounded bg-white px-6 py-8 text-[15px] leading-[1.65] text-[#1c1c1c] shadow-[0_16px_40px_-20px_rgba(0,0,0,0.3)] sm:px-12 sm:py-11">
-                <p className="text-[20px] font-bold">{r.name}</p>
-                <p className="text-[13px] text-[#555]">{r.contact}</p>
-                <p className="mt-6 text-[14px] text-[#555]">
-                  {c.target.hiringManager}
-                  <br />
-                  {c.target.title}, {c.target.company}
-                </p>
-                <p className="mt-6">Dear {c.target.hiringManager},</p>
-                {c.paragraphs.map((p, i) => (
-                  <p key={i} className="mt-4">
-                    <span className="mr-2 select-none align-super text-[11px] font-semibold text-[#2563EB]" aria-hidden>
-                      {i + 1}
-                    </span>
-                    {p}
-                  </p>
-                ))}
-                <p className="mt-6">Sincerely,</p>
-                <p>{r.name}</p>
-              </div>
-              <ol className="flex flex-col gap-4 self-start text-[15px] leading-[1.55] text-[#3F3F3F] lg:pt-8">
+          <div className="flex flex-col gap-2.5 lg:sticky lg:top-6 lg:gap-4">
+            <div className="rounded-[24px] bg-[#111118] px-[18px] py-[22px] text-white sm:p-8 lg:rounded-[32px]">
+              <h3 className={`${labelCls} !text-[16px] !text-[#c9c0ff]`}>What each paragraph does</h3>
+              <ol className="mt-2.5 sm:mt-4">
                 {c.annotations.map((a, i) => (
-                  <li key={i} className="flex gap-3">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-[12px] font-semibold text-[#2563EB]">
+                  <li key={i} className="flex gap-3.5 border-t border-[#2f2d48] py-[18px]">
+                    <span
+                      aria-hidden="true"
+                      className="inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#5440e8] text-[13px] font-extrabold text-white"
+                    >
                       {i + 1}
                     </span>
-                    {a}
+                    <p className="text-[14px] leading-[21px] text-[#e9e7f3] sm:text-[15px] sm:leading-[23px]">
+                      <span className="sr-only">Paragraph {i + 1}: </span>
+                      {a}
+                    </p>
                   </li>
                 ))}
               </ol>
             </div>
-            <p className="mx-auto mt-4 max-w-[1040px] text-[13px] text-[#6B6B6B]">
-              Sample letter. Names, companies and figures are illustrative.
+            <div className="lc-card rounded-[24px] p-5 sm:p-6">
+              <h3 className="text-[18px] font-bold">Start from {firstName}&apos;s resume</h3>
+              <p className="mt-1.5 text-[15px] leading-[23px] text-[#4a4862]">
+                Opens the matching resume in the editor with every section filled in. Swap in your own details.
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <CtaLink cta="use_example" location="cover_letter_example" href={startHref} className={`${btnPrimary} w-full`}>
+                  Start from this resume
+                </CtaLink>
+                <CtaLink cta="free_ats_check" location="cover_letter_example" href="/free-ats-check" className={`${btnSoft} w-full`}>
+                  Check my resume
+                </CtaLink>
+              </div>
+            </div>
+            <p className="px-2 text-[13px] text-[#66647c]">Sample letter. Names, companies and figures are illustrative.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* TIPS */}
+      <section className={sectionCls}>
+        <div className="lc-reveal max-w-[980px]">
+          <p className={labelCls}>/ Tips</p>
+          <h2 className="lc-h2 mt-5">
+            Tips for your {role} <span>cover letter.</span>
+          </h2>
+        </div>
+        <ol className="mt-[18px] grid gap-2 sm:grid-cols-2 lg:mt-10 lg:grid-cols-3 lg:gap-3">
+          {c.tips.map((t, i) => (
+            <li key={t.t} className="lc-card lc-reveal rounded-3xl p-5 sm:p-[26px]">
+              <p className="lc-mono text-[13px] text-[#5440e8]">0{i + 1}</p>
+              <p className="mt-4 text-[18px] font-extrabold sm:mt-7 sm:text-[20px]">{t.t}</p>
+              <p className="mt-2 text-[15px] leading-[23px] text-[#4a4862]">{t.d}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* WRITE YOURS */}
+      <section className={`${container} pt-3 lg:pt-6`}>
+        <div className="lc-reveal flex flex-col items-start justify-between gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:flex-row sm:items-center sm:gap-10 sm:p-10 lg:rounded-[36px] lg:px-14 lg:py-11">
+          <div>
+            <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] sm:text-[30px] sm:leading-9">Write yours from your own resume</h2>
+            <p className="mt-2 max-w-[520px] text-[15px] leading-6 text-[#e4dfff] sm:text-[17px] sm:leading-[26px]">
+              LaunchCV drafts a cover letter from your resume and the job post, then you edit it. Included in every paid plan.
             </p>
           </div>
-        </section>
-
-        <div className="mx-auto flex max-w-[860px] flex-col gap-16 px-5 pb-24 pt-16 sm:px-8">
-          <section>
-            <h2 className={h2}>Tips for your {roleLower(e.role)} cover letter</h2>
-            <ol className="mt-6 flex flex-col gap-5">
-              {c.tips.map((t, i) => (
-                <li key={t.t} className="flex gap-4">
-                  <span className="pt-0.5 text-[15px] tabular-nums text-[#6E6E6A]">0{i + 1}</span>
-                  <div>
-                    <p className="text-[17px] font-semibold">{t.t}</p>
-                    <p className="mt-1 text-[16px] leading-[1.6] text-[#3F3F3F]">{t.d}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className="flex flex-col gap-6 rounded-[20px] bg-[#F5F5F3] p-8 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="text-[22px] font-semibold leading-tight tracking-[-0.02em]">Write yours from your own resume</p>
-              <p className="mt-2 max-w-[460px] text-[15px] leading-[1.6] text-[#3F3F3F]">
-                LaunchCV drafts a cover letter from your resume and the job post, then you edit it. Included in every
-                plan.
-              </p>
-            </div>
-            <Link href="/features/cover-letter" className="soha-btn-secondary shrink-0 text-center">
-              How it works
-            </Link>
-          </section>
-
-          <section>
-            <h2 className={`${h2} mb-3`}>FAQ</h2>
-            <div className="border-b border-[#E5E5E2]">
-              {c.faqs.map((f, i) => (
-                <details key={f.q} open={i === 0} className="group border-t border-[#E5E5E2] py-5">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-medium [&::-webkit-details-marker]:hidden">
-                    {f.q}
-                    <ChevronDown className="h-4 w-4 shrink-0 text-[#6E6E6A] transition-transform group-open:rotate-180" aria-hidden />
-                  </summary>
-                  <p className="mt-2.5 text-[16px] leading-[1.65] text-[#3F3F3F]">{f.a}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          {related.length > 0 ? (
-            <section>
-              <h2 className={h2}>Related cover letters</h2>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                {related.map((x) => (
-                  <Link
-                    key={x.e!.slug}
-                    href={`/cover-letter-examples/${x.e!.slug}`}
-                    className="flex items-center justify-between rounded-xl border border-[#E5E5E2] px-4 py-4 text-[15px] hover:border-[#111111]"
-                  >
-                    {x.e!.role}
-                    <ChevronRight className="h-4 w-4 text-[#6E6E6A]" aria-hidden />
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ) : null}
+          <CtaLink cta="cover_letter_feature" location="cover_letter_example_band" href="/features/cover-letter" className={`${btnWhite} flex-none`}>
+            How it works
+          </CtaLink>
         </div>
-      </main>
+      </section>
 
-      <LandingFooter />
-    </div>
+      {/* FAQ */}
+      <section className={`${sectionCls} grid items-start gap-5 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16`}>
+        <div className="lc-reveal">
+          <SectionHead label="Questions" title="Cover letter" muted="FAQ." />
+          <p className="mt-4 text-[15px] leading-6 text-[#4a4862] sm:mt-5 sm:text-[16px] sm:leading-[25px]">
+            Something else?{" "}
+            <a href="mailto:support@launch-cv.com" className={inlineLink}>
+              support@launch-cv.com
+            </a>
+          </p>
+        </div>
+        <FaqList faqs={c.faqs} />
+      </section>
+
+      {/* RELATED */}
+      {related.length > 0 ? (
+        <section className={`${container} pt-14 lg:pt-[110px]`}>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 className={labelCls}>
+              <span aria-hidden="true">/ </span>Related cover letters
+            </h2>
+            <Link href="/cover-letter-examples" className="inline-flex min-h-11 items-center text-[15px] font-semibold text-[#5440e8] hover:underline">
+              All {COVER_LETTER_EXAMPLES.length} cover letters →
+            </Link>
+          </div>
+          <div className="mt-3.5 grid gap-2 sm:grid-cols-3 sm:gap-4 lg:mt-5">
+            {related.map((x) => (
+              <ArrowCard key={x.e.slug} href={`/cover-letter-examples/${x.e.slug}`} title={`${x.e.role} cover letter`} sub={x.c.target.title} />
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </SiteShell>
   );
 }

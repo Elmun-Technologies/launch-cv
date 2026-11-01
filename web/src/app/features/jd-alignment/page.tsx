@@ -1,4 +1,6 @@
-import { FeaturePage, Chip, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
+import Image from "next/image";
+import { FeaturePage, Stage, ExampleTag, DarkTile, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
+import { Chip } from "@/components/site/ui";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 
 export const metadata = buildMarketingMetadata({
@@ -17,52 +19,100 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
+const KEYWORDS: { k: string; s: "have" | "part" | "miss" }[] = [
+  { k: "Product roadmap", s: "have" },
+  { k: "A/B testing", s: "have" },
+  { k: "User research", s: "have" },
+  { k: "Jira", s: "have" },
+  { k: "B2B SaaS", s: "have" },
+  { k: "Agile", s: "have" },
+  { k: "Stakeholder management", s: "part" },
+  { k: "Pricing", s: "part" },
+  { k: "SQL", s: "miss" },
+  { k: "OKRs", s: "miss" },
+  { k: "Go-to-market", s: "miss" },
+];
+const STATUS = {
+  have: { t: "Covered", c: "text-[#5fe0a8]" },
+  part: { t: "Weak", c: "text-[#f5c86b]" },
+  miss: { t: "Missing", c: "text-[#ff9a66]" },
+};
+
+const stage = (
+  <Stage bg="#e4dfff" poster="MATCH" posterColor="#d3cbff">
+    <div aria-hidden="true" className="absolute bottom-[-120px] left-1/2 h-[288px] w-[288px] -translate-x-1/2 rounded-full bg-[#c9c0ff] lg:bottom-[-200px] lg:h-[480px] lg:w-[480px]" />
+    <Image
+      src="/images/people/woman-hoodie.webp"
+      alt="Young woman in a denim jacket and hoodie, smiling"
+      width={856}
+      height={1080}
+      priority
+      sizes="(min-width: 1024px) 373px, 270px"
+      className="absolute bottom-0 left-1/2 h-[298px] w-auto max-w-none -translate-x-1/2 sm:h-[340px] lg:h-[470px]"
+    />
+    <div className="lc-float lc-drift absolute right-4 top-[96px] w-[150px] rounded-[18px] bg-white p-3.5 lg:right-7 lg:top-[170px] lg:w-[220px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="flex justify-between text-[12px] text-[#4a4862] lg:text-[13px]">
+        Match score <ExampleTag />
+      </p>
+      <p className="text-[24px] font-bold leading-[28px] tracking-[-0.04em] lg:text-[38px] lg:leading-[42px]">
+        72 <span className="text-[13px] text-[#7c7a94] lg:text-[16px]">→</span> <span className="text-[#0b7a4f]">86</span>
+      </p>
+      <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#efedf7] lg:mt-2.5">
+        <div className="h-full w-[86%] rounded-full bg-[#22b07d]" />
+      </div>
+    </div>
+    <div className="lc-float lc-drift-2 absolute left-4 top-[210px] w-[164px] rounded-[18px] bg-white p-3.5 lg:left-7 lg:top-[330px] lg:w-[230px] lg:rounded-[22px] lg:p-[18px]">
+      <p className="text-[12px] text-[#66647c] lg:text-[13px]">Missing from your resume</p>
+      <div className="mt-2 flex flex-wrap gap-1.5 lg:mt-2.5">
+        <Chip tone="red">+ Stakeholder mgmt</Chip>
+        <Chip tone="red">+ OKRs</Chip>
+      </div>
+    </div>
+  </Stage>
+);
+
 const f: FeaturePageData = {
   path: "/features/jd-alignment",
   name: "JD Alignment",
+  label: "Job description match",
   h1: "Match your resume to the job.",
   h1Tail: "See exactly what the posting wants that you haven't said.",
   lead:
     "Paste a job description next to your resume. You get a 0–100 match score, the keywords you already cover, the skills that are missing or weak, and rewrites for the bullets that should carry them.",
   facts: ["Score from 0 to 100", "Missing skills named", "No invented experience"],
-  photo: { src: "/images/photos/job-seeker-laptop.webp", alt: "Job seeker comparing a resume with a job posting on a laptop" },
+  cta: { label: "Try it now", href: "/register" },
+  stage,
   example: {
-    title: "What a match report shows you",
+    title: "What a match report shows you.",
     caption: "Example report for a product manager resume against a senior PM posting. Your report uses your resume and the job you paste.",
     body: (
-      <div className="flex flex-col gap-6">
-        <div className="flex items-baseline gap-3">
-          <span className="text-[44px] font-semibold leading-none tracking-[-0.04em] text-[#C2700A]">64</span>
-          <span className="text-[15px] text-[#6B6B6B]">match score · 6 of 11 key skills covered</span>
+      <div className="flex flex-col gap-3 sm:gap-4">
+        <div className="grid gap-3 sm:gap-4 lg:grid-cols-[0.8fr_1.2fr]">
+          <DarkTile>
+            <p className="text-[14px] text-[#9a97b3]">Match score</p>
+            <p className="mt-1 text-[40px] font-bold leading-[44px] tracking-[-0.04em] text-[#f5c86b] lg:text-[56px] lg:leading-[60px]">64</p>
+            <p className="mt-3.5 text-[14px] text-[#b3b0c8]">6 of 11 key skills covered</p>
+          </DarkTile>
+          <DarkTile>
+            <ul className="grid gap-x-8 gap-y-2.5 text-[15px] sm:grid-cols-2">
+              {KEYWORDS.map(({ k, s }) => (
+                <li key={k} className="flex justify-between gap-3">
+                  <span>{k}</span>
+                  <span className={`font-bold ${STATUS[s].c}`}>{STATUS[s].t}</span>
+                </li>
+              ))}
+            </ul>
+          </DarkTile>
         </div>
-        <div>
-          <p className="text-[14px] font-medium">Keywords you already have</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            {["Product roadmap", "A/B testing", "User research", "Jira", "B2B SaaS", "Agile"].map((k) => (
-              <Chip key={k} tone="have">{k}</Chip>
-            ))}
-          </div>
-        </div>
-        <div>
-          <p className="text-[14px] font-medium">Missing or weak</p>
-          <div className="mt-2 flex flex-wrap gap-2">
-            <Chip tone="miss">SQL</Chip>
-            <Chip tone="miss">OKRs</Chip>
-            <Chip tone="part">Stakeholder management</Chip>
-            <Chip tone="part">Pricing</Chip>
-            <Chip tone="miss">Go-to-market</Chip>
-          </div>
-        </div>
-        <div>
-          <p className="mb-2 text-[14px] font-medium">Suggested rewrite</p>
-          <BeforeAfter
-            before="Worked with sales and legal on the messaging feature."
-            after="Aligned sales, legal and clinical stakeholders to ship HIPAA-compliant messaging used by 41 clinics."
-          />
-        </div>
+        <BeforeAfter
+          beforeLabel="SUGGESTED REWRITE · BEFORE"
+          before="Worked with sales and legal on the messaging feature."
+          after="Aligned sales, legal and clinical stakeholders to ship HIPAA-compliant messaging used by 41 clinics."
+        />
       </div>
     ),
   },
+  stepsTail: "Run it for every job.",
   steps: [
     { t: "Open a resume and paste the job post", d: "Use the full description — requirements, responsibilities and the nice-to-haves." },
     { t: "Read the match report", d: "Score, covered keywords, and each key skill marked strong, partial or missing, with a recommendation." },
@@ -78,7 +128,6 @@ const f: FeaturePageData = {
     { t: "Versions per job", d: "Snapshots let you tailor for one job without losing your main resume." },
   ],
   banner: {
-    photo: { src: "/images/photos/recruiter-desk.webp", alt: "Recruiter reviewing applications at a desk" },
     title: "Tailoring takes minutes, not an evening.",
     text: "Run the match for every job you apply to, and send a resume that answers what that recruiter is screening for.",
   },
