@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, Copy, Loader2, Plus, Sparkles, Trash2, X } from "lucide-react";
-import { AccountToolNotice } from "@/components/app/account/tool-notice";
+import { ToolNotice } from "@/components/tool-notice";
 import {
   Badge,
   PageHeader,
@@ -220,7 +220,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
                   })}
                 </div>
               </fieldset>
-              {emailErr ? <AccountToolNotice message={emailErr} upgrade={emailUpgrade} location="email_paywall" /> : null}
+              {emailErr ? <ToolNotice message={emailErr} upgrade={emailUpgrade} location="email_paywall" /> : null}
             </div>
             <button type="button" disabled={emailLoading} onClick={() => void generateEmail()} className={`${btnLgPrimary} mt-[18px] w-full`}>
               {emailLoading ? <Loader2 className="h-[18px] w-[18px] animate-spin" aria-hidden /> : <Sparkles className="h-[18px] w-[18px]" aria-hidden />}
