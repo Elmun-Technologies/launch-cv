@@ -3,6 +3,7 @@ import { container, labelCls, Chip } from "@/components/site/ui";
 import type { ResumeExample } from "@/lib/resume-examples";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 import { roleShort } from "@/lib/seo/resume-keywords";
+import { withArticle } from "@/lib/article";
 
 type Page = "example" | "keywords" | "letter";
 type Card = { badge: string; title: string; href: string };
@@ -17,7 +18,7 @@ export function roleNextSteps(e: ResumeExample, page: Page): Card[] {
   cards.push(
     page === "example"
       ? { badge: "Free tool", title: `Turn rough notes into ${short} resume bullets`, href: "/tools/resume-bullet-point-generator" }
-      : { badge: "Tool", title: `Match your resume to a ${short} job post`, href: "/features/jd-alignment" },
+      : { badge: "Tool", title: `Match your resume to ${withArticle(short)} job post`, href: "/features/jd-alignment" },
   );
   return cards;
 }

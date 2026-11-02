@@ -14,6 +14,7 @@ import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { getResumeExample } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES, getCoverLetterExample, type CoverLetterExample } from "@/lib/cover-letter-examples";
+import { withArticle } from "@/lib/article";
 
 type Params = { slug: string };
 
@@ -35,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const role = roleLower(e.role);
   return buildMarketingMetadata({
     title: fitTitle(`${e.role} Cover Letter Example (Annotated)`, `${e.role} Cover Letter Example`),
-    description: `A ${role} cover letter example, paragraph by paragraph: what each part does, tips for your own and how it pairs with a ${role} resume.`,
+    description: `${withArticle(role, true)} cover letter example, paragraph by paragraph: what each part does, tips for your own and how it pairs with ${withArticle(role)} resume.`,
     pathname: `/cover-letter-examples/${slug}`,
     image: DEFAULT_OG_IMAGE,
     keywords: [`${role} cover letter`, `${role} cover letter example`, `cover letter for ${role}`, `${role} cover letter sample`],
