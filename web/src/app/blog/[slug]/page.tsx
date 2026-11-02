@@ -292,7 +292,7 @@ export default async function BlogPostPage({
       />
 
       {previewAllowed ? (
-        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10">
+        <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
           <p className="flex items-center gap-2 rounded-2xl bg-[#fdf0d5] px-4 py-2.5 text-[13px] font-semibold text-[#7a4600]">
             <span className="rounded-full bg-white px-2 py-0.5 text-[11px] uppercase tracking-wider">Preview</span>
             Viewing draft / scheduled post. Not visible to the public.
@@ -301,7 +301,7 @@ export default async function BlogPostPage({
       ) : null}
 
       {/* ARTICLE HEAD */}
-      <header className="mx-auto max-w-[1280px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
+      <header className="mx-auto max-w-[1360px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
         <nav aria-label="Breadcrumb" className="text-[12px] text-[#66647c] sm:text-[14px]">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li className="flex items-center gap-1.5">
@@ -350,12 +350,12 @@ export default async function BlogPostPage({
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10 lg:pt-10">
+      <div className="mx-auto max-w-[1360px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10 lg:pt-10">
         <BlogPoster post={post} size="hero" priority />
       </div>
 
       {/* BODY */}
-      <div className={`mx-auto grid max-w-[1280px] items-start gap-y-8 px-4 pt-5 sm:px-6 sm:pt-10 lg:px-10 lg:pt-16 ${gridCls}`}>
+      <div className={`mx-auto grid max-w-[1360px] items-start gap-y-8 px-4 pt-5 sm:px-6 sm:pt-10 lg:px-10 lg:pt-16 ${gridCls}`}>
         {showToc ? (
           <div className="hidden lg:sticky lg:top-6 lg:row-span-2 lg:block lg:self-start">
             <ContentToc entries={toc} />
@@ -505,7 +505,7 @@ export default async function BlogPostPage({
 
       {/* NEWER / OLDER */}
       {newerPost || olderPost ? (
-        <nav aria-label="More guides" className="mx-auto grid max-w-[1280px] gap-3 px-4 pt-12 sm:grid-cols-2 sm:px-6 lg:px-10 lg:pt-16">
+        <nav aria-label="More guides" className="mx-auto grid max-w-[1360px] gap-3 px-4 pt-12 sm:grid-cols-2 sm:px-6 lg:px-10 lg:pt-16">
           {newerPost ? (
             <Link href={`/blog/${newerPost.slug}`} className={`lc-card lc-rise group flex flex-col rounded-[24px] p-5 sm:p-6 ${olderPost ? "" : "sm:col-span-2"}`}>
               <span className="text-[13px] font-semibold text-[#66647c]">← Newer</span>
@@ -526,7 +526,7 @@ export default async function BlogPostPage({
 
       {/* RELATED */}
       {related.length > 0 ? (
-        <section aria-labelledby="read-next" className="mx-auto max-w-[1280px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[110px]">
+        <section aria-labelledby="read-next" className="mx-auto max-w-[1360px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[110px]">
           <div className="flex items-end justify-between gap-4">
             <h2 id="read-next" className={labelCls}>
               / Read next

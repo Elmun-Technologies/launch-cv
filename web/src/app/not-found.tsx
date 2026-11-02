@@ -17,7 +17,7 @@ const LINKS = [
 export default function NotFound() {
   return (
     <SiteShell>
-      <section className="mx-auto max-w-[1280px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
+      <section className="mx-auto max-w-[1360px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
         <div className="relative flex min-h-[580px] flex-col justify-end overflow-hidden rounded-[28px] bg-[#111118] text-white sm:min-h-[660px] lg:h-[620px] lg:min-h-0 lg:rounded-[36px]">
           <p aria-hidden="true" className="lc-poster absolute left-4 top-2 m-0 text-[120px] leading-[120px] text-[#2a2840] sm:left-8 sm:top-4 sm:text-[180px] sm:leading-[180px] lg:left-10 lg:top-6 lg:text-[220px] lg:leading-[220px]">
             404
@@ -52,7 +52,7 @@ export default function NotFound() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1280px] px-4 pt-10 sm:px-6 lg:px-10 lg:pt-14">
+      <section className="mx-auto max-w-[1360px] px-4 pt-10 sm:px-6 lg:px-10 lg:pt-14">
         <h2 className={labelCls}>/ Popular pages</h2>
         <ul className="mt-[18px] grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-5">
           {LINKS.map((l) => (

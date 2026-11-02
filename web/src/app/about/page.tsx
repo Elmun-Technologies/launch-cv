@@ -80,7 +80,7 @@ export default async function AboutPage() {
       <JsonLd data={aboutLd} />
 
       {/* HERO */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
+      <section className="mx-auto max-w-[1360px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
         <p className={labelCls}>/ About</p>
         <h1 className="mt-3.5 max-w-[1060px] text-[38px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:mt-5 sm:text-[56px] sm:leading-[1.04] lg:text-[68px] lg:leading-[70px]">
           {copy.title} {copy.titleAccent ? <span className="text-[#5440e8]">{copy.titleAccent}</span> : null}
@@ -88,7 +88,7 @@ export default async function AboutPage() {
       </section>
 
       {/* STORY + PRINCIPLES */}
-      <section className="mx-auto grid max-w-[1280px] items-stretch gap-2.5 px-4 pt-6 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:px-10 lg:pt-14">
+      <section className="mx-auto grid max-w-[1360px] items-stretch gap-2.5 px-4 pt-6 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:px-10 lg:pt-14">
         <div className="relative flex flex-col overflow-hidden rounded-[28px] bg-[#111118] px-[22px] pb-[22px] pt-7 text-[#e9e7f3] lg:min-h-[520px] lg:rounded-[36px] lg:p-12">
           <p aria-hidden="true" className="lc-poster absolute -right-1.5 bottom-1.5 m-0 text-right text-[56px] leading-[52px] text-[#2a2840] sm:text-[88px] sm:leading-[82px] lg:bottom-6 lg:right-9 lg:text-[120px] lg:leading-[110px]">
             SINCE
@@ -125,7 +125,7 @@ export default async function AboutPage() {
       </section>
 
       {/* WHO WE BUILD FOR */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[130px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[130px]">
         <div className="lc-reveal mx-auto max-w-[980px] sm:text-center">
           <p className={labelCls}>/ Who we build for</p>
           <h2 className="lc-h2 mt-5">Anyone applying through a form.</h2>
@@ -152,7 +152,7 @@ export default async function AboutPage() {
       </section>
 
       {/* CONTACT */}
-      <section className="mx-auto grid max-w-[1280px] gap-3 px-4 pt-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-4 lg:px-10 lg:pt-[130px]">
+      <section className="mx-auto grid max-w-[1360px] gap-3 px-4 pt-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-4 lg:px-10 lg:pt-[130px]">
         <div className="lc-reveal rounded-[28px] bg-[#111118] px-[22px] py-7 text-white sm:p-10 lg:rounded-[36px] lg:p-14">
           <p className={`${labelCls} !text-[#c9c0ff]`}>/ Get in touch</p>
           <h2 className="lc-h2 mt-5 text-white">

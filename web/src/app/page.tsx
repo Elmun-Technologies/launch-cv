@@ -121,7 +121,7 @@ export default async function Home() {
       <JsonLd data={ld} />
 
       {/* HERO — copy. Static HTML: the headline and CTAs never wait for JavaScript. */}
-      <section className="mx-auto grid max-w-[1280px] items-end gap-6 px-4 pt-4 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-10 lg:pt-10">
+      <section className="mx-auto grid max-w-[1360px] items-end gap-6 px-4 pt-4 sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:px-10 lg:pt-10">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-[#e4dfff] py-1.5 pl-1.5 pr-3.5 text-[13px] font-semibold text-[#3a2bb8] sm:text-[14px]">
             <span className="rounded-full bg-[#5440e8] px-2 py-0.5 text-[11px] text-white sm:text-[12px]">Free</span>
@@ -148,7 +148,7 @@ export default async function Home() {
       </section>
 
       {/* HERO — stage */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-7 sm:px-6 lg:px-10 lg:pt-12">
+      <section className="mx-auto max-w-[1360px] px-4 pt-7 sm:px-6 lg:px-10 lg:pt-12">
         <div className="relative h-[470px] overflow-hidden rounded-[28px] bg-[#5440e8] sm:h-[560px] lg:h-[600px] lg:rounded-[36px]">
           <p aria-hidden="true" className="lc-poster absolute inset-x-0 top-5 m-0 text-center text-[74px] leading-[68px] text-[#c9c0ff] sm:top-8 sm:text-[120px] sm:leading-[112px] lg:text-[168px] lg:leading-[160px]">
             GET <br className="sm:hidden" />
@@ -237,7 +237,7 @@ export default async function Home() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-14 sm:px-6 lg:px-10">
+      <section className="mx-auto max-w-[1360px] px-4 pt-14 sm:px-6 lg:px-10">
         <ol className="grid gap-8 sm:grid-cols-3 sm:gap-10">
           {[
             ["Upload or paste", "PDF, Word or plain text. No account needed for the check."],
@@ -254,7 +254,7 @@ export default async function Home() {
       </section>
 
       {/* ATS CHECK (dark) */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-20 sm:px-6 lg:px-10 lg:pt-[120px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-20 sm:px-6 lg:px-10 lg:pt-[120px]">
         <div className="lc-reveal rounded-[28px] bg-[#111118] px-5 pb-10 pt-12 text-white sm:px-10 lg:rounded-[36px] lg:px-16 lg:pb-16 lg:pt-[72px]">
           <div className="mx-auto max-w-[820px] text-center">
             <p className={`${label} !text-[#c9c0ff]`}>/ ATS check</p>
@@ -343,7 +343,7 @@ export default async function Home() {
       </section>
 
       {/* REPORT */}
-      <section className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 pt-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-[72px] lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto grid max-w-[1360px] items-center gap-12 px-4 pt-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-[72px] lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal">
           <p className={label}>/ Your report</p>
           <h2 className="lc-h2 mt-5">
@@ -407,7 +407,7 @@ export default async function Home() {
       </section>
 
       {/* JOB MATCH */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal flex flex-col justify-between gap-5 lg:flex-row lg:items-end lg:gap-12">
           <div className="max-w-[760px]">
             <p className={label}>/ Job match</p>
@@ -486,7 +486,7 @@ export default async function Home() {
       </section>
 
       {/* TEMPLATES */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal mx-auto max-w-[980px] text-center">
           <p className={label}>/ Templates</p>
           <h2 className="lc-h2 mt-5">
@@ -500,7 +500,7 @@ export default async function Home() {
       </section>
 
       {/* EXAMPLES */}
-      <section className="mx-auto grid max-w-[1280px] items-stretch gap-6 px-4 pt-24 sm:px-6 lg:grid-cols-2 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto grid max-w-[1360px] items-stretch gap-6 px-4 pt-24 sm:px-6 lg:grid-cols-2 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal relative min-h-[460px] overflow-hidden rounded-[28px] bg-[#e4dfff] lg:min-h-[580px] lg:rounded-[36px]">
           <div aria-hidden="true" className="absolute bottom-[-160px] left-1/2 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-[#c9c0ff]" />
           <Image
@@ -564,7 +564,7 @@ export default async function Home() {
       {testimonials.length ? <Testimonials items={testimonials} /> : null}
 
       {/* PRICING */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal mx-auto max-w-[980px] text-center">
           <p className={label}>/ Pricing</p>
           <h2 className="lc-h2 mt-5">
@@ -621,7 +621,7 @@ export default async function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto grid max-w-[1280px] items-start gap-10 px-4 pt-24 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto grid max-w-[1360px] items-start gap-10 px-4 pt-24 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal">
           <p className={label}>/ Questions</p>
           <h2 className="lc-h2 mt-5">
@@ -652,7 +652,7 @@ export default async function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal relative flex flex-col overflow-hidden rounded-[28px] bg-[#111118] text-white sm:block sm:h-[560px] lg:rounded-[36px]">
           <p aria-hidden="true" className="lc-poster px-6 pt-8 text-[56px] leading-[56px] text-[#c9c0ff] sm:absolute sm:left-[60px] sm:p-0 sm:top-14 sm:text-[84px] sm:leading-[84px] lg:text-[112px] lg:leading-[112px]">
             NEXT

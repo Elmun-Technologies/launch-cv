@@ -50,7 +50,7 @@ export default function ContactPage() {
       <JsonLd data={ld} />
 
       {/* HERO */}
-      <section className="mx-auto grid max-w-[1280px] items-stretch gap-6 px-4 pt-4 sm:px-6 lg:grid-cols-2 lg:px-10 lg:pt-8">
+      <section className="mx-auto grid max-w-[1360px] items-stretch gap-6 px-4 pt-4 sm:px-6 lg:grid-cols-2 lg:px-10 lg:pt-8">
         <div className="flex flex-col justify-center lg:pr-6">
           <p className={labelCls}>/ Contact</p>
           <h1 className="mt-3.5 text-[38px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:mt-5 sm:text-[56px] sm:leading-[1.04] lg:text-[64px] lg:leading-[66px]">
@@ -93,7 +93,7 @@ export default function ContactPage() {
       </section>
 
       {/* TOPICS */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-7 sm:px-6 sm:pt-20 lg:px-10 lg:pt-[110px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-7 sm:px-6 sm:pt-20 lg:px-10 lg:pt-[110px]">
         <div className="hidden max-w-[980px] sm:block">
           <p className={labelCls}>/ Topics</p>
           <h2 className="lc-h2 mt-5">
@@ -120,7 +120,7 @@ export default function ContactPage() {
       </section>
 
       {/* COMPANY */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-2 sm:px-6 sm:pt-6 lg:px-10">
+      <section className="mx-auto max-w-[1360px] px-4 pt-2 sm:px-6 sm:pt-6 lg:px-10">
         <div className="flex flex-col gap-5 rounded-[24px] bg-white p-6 sm:rounded-[28px] sm:px-11 sm:py-9 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-[13px] font-bold tracking-[0.08em] text-[#66647c]">COMPANY</p>

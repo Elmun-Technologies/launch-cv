@@ -32,7 +32,7 @@ export function LegalPage({
     <SiteShell>
       <JsonLd data={{ "@context": "https://schema.org", "@type": "WebPage", name: `${title} | LaunchCV`, url: absoluteUrl(pathname) }} />
 
-      <header className="mx-auto max-w-[1280px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-10">
+      <header className="mx-auto max-w-[1360px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-10">
         <p className={labelCls}>/ Legal</p>
         <h1 className="mt-3.5 text-[40px] font-extrabold leading-[42px] tracking-[-0.045em] sm:mt-5 sm:text-[56px] sm:leading-[60px] lg:text-[64px] lg:leading-[66px]">
           {title}
@@ -61,7 +61,7 @@ export function LegalPage({
         </nav>
       </header>
 
-      <div className="mx-auto grid max-w-[1280px] items-start gap-[18px] px-4 pt-[18px] sm:px-6 sm:pt-10 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-16 lg:px-10 lg:pt-12">
+      <div className="mx-auto grid max-w-[1360px] items-start gap-[18px] px-4 pt-[18px] sm:px-6 sm:pt-10 lg:grid-cols-[260px_minmax(0,1fr)] lg:gap-16 lg:px-10 lg:pt-12">
         <div className="hidden lg:sticky lg:top-6 lg:block">
           <ContentToc entries={toc} numbered />
         </div>

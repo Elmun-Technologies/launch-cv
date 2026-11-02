@@ -36,7 +36,7 @@ function clientFingerprint(): string {
   }
 }
 
-const container = "mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-10";
+const container = "mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10";
 const btn = "lc-btn-lift inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-[26px] py-[15px] text-[16px] font-semibold";
 
 /** Same thresholds as the FAQ: 80+ ready, 65–80 readable, below 65 at risk. */

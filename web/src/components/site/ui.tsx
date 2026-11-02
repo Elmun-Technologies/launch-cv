@@ -9,7 +9,7 @@ import Link from "next/link";
  * red #c42b30 / #fbe2e3, amber #a15c00 / #fdf0d5, hairline #e2e0ea.
  */
 
-export const container = "mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-10";
+export const container = "mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10";
 
 export const btn =
   "lc-btn-lift inline-flex items-center justify-center gap-2 rounded-full px-[26px] py-[17px] text-[16px] font-semibold";
