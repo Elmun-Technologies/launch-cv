@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  serverExternalPackages: ["@react-pdf/renderer"],
+  serverExternalPackages: ["@react-pdf/renderer", "pdf-parse"],
   // Fonts read from disk by the PDF renderer (see src/lib/pdf/resume-pdf.tsx).
   outputFileTracingIncludes: {
     "/api/resumes/*/pdf": ["./src/lib/pdf/fonts/**"],

@@ -39,28 +39,21 @@ export async function extractResumeText(file: File): Promise<ResumeParseResult> 
       text = result.value;
     } else {
       try {
-        const pdfMod = (await import("pdf-parse")) as Record<string, unknown>;
-        const pdfParse = (
-          typeof pdfMod.default === "function" ? pdfMod.default : pdfMod
-        ) as (buf: Buffer) => Promise<{ text: string }>;
-        const result = await pdfParse(buffer);
-        text = result.text;
-      } catch {
-        // Fallback: pull readable ASCII out of the raw PDF bytes.
-        const rawText = buffer.toString("utf-8");
-        const readable = rawText
-          .replace(/[^\x20-\x7E\n\r\t]/g, " ")
-          .replace(/\s{3,}/g, "\n")
-          .trim();
-        if (readable.length > 100) {
-          text = readable;
-        } else {
-          return {
-            ok: false,
-            error: "Could not parse PDF. Try uploading a DOCX file instead.",
-            status: 422,
-          };
+        // pdf-parse v2: class API. (The v1 default-export call threw on v2 and the
+        // old fallback fed raw PDF bytes to the checker as if they were text.)
+        const { PDFParse } = await import("pdf-parse");
+        const parser = new PDFParse({ data: new Uint8Array(buffer) });
+        try {
+          text = (await parser.getText()).text;
+        } finally {
+          await parser.destroy().catch(() => {});
         }
+      } catch {
+        return {
+          ok: false,
+          error: "Could not read this PDF. If it's a scan or an image, export it as a text PDF or upload a DOCX instead.",
+          status: 422,
+        };
       }
     }
   } catch {
