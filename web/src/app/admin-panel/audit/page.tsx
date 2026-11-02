@@ -3,9 +3,9 @@ import { ShieldCheck } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { ResourceListPage } from "@/components/admin/resource-list-page";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 import { StatusBadge } from "@/components/admin/status-badge";
+import { AdminPageHeader, cellMuted } from "@/components/admin/v5/ui";
 
 type Row = {
   id: string;
@@ -66,14 +66,12 @@ export default async function AdminAuditPage({
     {
       key: "when",
       header: "When",
-      render: (r) => <span className="text-[12px] text-[#6B6B6B]">{dateFmt.format(r.createdAt)}</span>,
+      render: (r) => <span className={`whitespace-nowrap ${cellMuted}`}>{dateFmt.format(r.createdAt)}</span>,
     },
     {
       key: "actor",
       header: "Actor",
-      render: (r) => (
-        <span className="text-[12px] text-[#111111]">{r.actor?.email ?? "—"}</span>
-      ),
+      render: (r) => <span className="text-[14px] font-semibold text-[#121226]">{r.actor?.email ?? "—"}</span>,
     },
     {
       key: "action",
@@ -83,42 +81,53 @@ export default async function AdminAuditPage({
     {
       key: "entity",
       header: "Entity",
-      render: (r) => <span className="font-mono text-[11px] text-[#3F3F3F]">{r.entity}</span>,
+      render: (r) => <span className="lc-mono text-[12px] text-[#121226]">{r.entity}</span>,
     },
     {
       key: "entityId",
       header: "Target",
       truncate: "max-w-[160px]",
-      render: (r) => (
-        <span className="font-mono text-[11px] text-[#6E6E6A]">{r.entityId ?? "—"}</span>
-      ),
+      render: (r) => <span className="lc-mono text-[12px] text-[#66647c]">{r.entityId ?? "—"}</span>,
     },
     {
       key: "ip",
       header: "IP",
-      render: (r) => <span className="font-mono text-[11px] text-[#6E6E6A]">{r.ip ?? "—"}</span>,
+      render: (r) => <span className="lc-mono text-[12px] text-[#66647c]">{r.ip ?? "—"}</span>,
     },
   ];
 
   return (
     <AdminShell email={admin.email} pageTitle="Audit log">
-      <ResourceListPage
-        title="Audit log"
-        description={`${total.toLocaleString()} action${total === 1 ? "" : "s"} recorded. Newest 100 shown. Every admin mutation (publish, delete, role change, …) is logged automatically.`}
-        intro={
-          entityCounts.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[#2563EB]" />
-              <span className="text-[12px] font-semibold uppercase tracking-wider text-[#6E6E6A]">By entity</span>
+      <div className="space-y-5">
+        <AdminPageHeader
+          title="Audit log"
+          description={`${total.toLocaleString()} action${total === 1 ? "" : "s"} recorded. Newest 100 shown. Every admin mutation (publish, delete, role change, …) is logged automatically.`}
+        />
+
+        {entityCounts.length > 0 ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="flex items-center gap-1.5 text-[13px] font-bold text-[#4a4862]">
+              <ShieldCheck className="h-4 w-4 text-[#5440e8]" aria-hidden="true" />
+              By entity
+            </span>
+            <ul className="flex flex-wrap gap-1.5">
               {entityCounts.map((e) => (
-                <span key={e.entity} className="rounded-full bg-[#F5F5F3] px-2.5 py-0.5 text-[12px] font-medium text-[#3F3F3F]">
-                  {e.entity} · {e._count.entity}
-                </span>
+                <li
+                  key={e.entity}
+                  className={`inline-flex items-center rounded-full px-3 py-1.5 text-[12px] font-semibold ${
+                    sp.entity === e.entity ? "bg-[#111118] text-white" : "bg-white text-[#121226]"
+                  }`}
+                >
+                  {e.entity}
+                  <span className={`ml-1.5 tabular-nums ${sp.entity === e.entity ? "text-[#e4dfff]" : "text-[#66647c]"}`}>
+                    {e._count.entity}
+                  </span>
+                </li>
               ))}
-            </div>
-          ) : null
-        }
-      >
+            </ul>
+          </div>
+        ) : null}
+
         <DataTable
           columns={columns}
           rows={rows}
@@ -126,7 +135,7 @@ export default async function AdminAuditPage({
           emptyTitle="No audit events yet"
           emptyDescription="Mutations to CMS content, users, and subscriptions will appear here as they happen."
         />
-      </ResourceListPage>
+      </div>
     </AdminShell>
   );
 }

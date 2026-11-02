@@ -1,18 +1,15 @@
 import { redirect } from "next/navigation";
-import { Mail, Building2, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { KpiCard } from "@/components/admin/kpi-card";
 import { SectionCard } from "@/components/admin/section-card";
 import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
+import { AdminPageHeader } from "@/components/admin/v5/ui";
 
 type Section = {
   title: string;
   count: number;
-  icon: typeof Mail;
-  headers: string[];
-  rows: Array<Array<string | { kind: "status"; value: string }>>;
+  items: Array<{ id: string; primary: string; meta: string; status?: string; owner: string; date: string }>;
 };
 
 export default async function AdminContentPage() {
@@ -70,113 +67,91 @@ export default async function AdminContentPage() {
 
   const sections: Section[] = [
     {
-      title: "Contacts",
-      count: contactCount,
-      icon: Mail,
-      headers: ["Name", "Email", "Company", "Owner", "Date"],
-      rows: recentContacts.map((c) => [
-        c.name,
-        c.email ?? "—",
-        c.company ?? "—",
-        c.user.email,
-        c.createdAt.toLocaleDateString(),
-      ]),
-    },
-    {
       title: "Companies",
       count: companyCount,
-      icon: Building2,
-      headers: ["Name", "Industry", "Location", "Owner", "Date"],
-      rows: recentCompanies.map((c) => [
-        c.name,
-        c.industry ?? "—",
-        c.location ?? "—",
-        c.user.email,
-        c.createdAt.toLocaleDateString(),
-      ]),
+      items: recentCompanies.map((c) => ({
+        id: c.id,
+        primary: c.name,
+        meta: [c.industry ?? "—", c.location ?? "—"].join(" · "),
+        owner: c.user.email,
+        date: c.createdAt.toLocaleDateString(),
+      })),
+    },
+    {
+      title: "Contacts",
+      count: contactCount,
+      items: recentContacts.map((c) => ({
+        id: c.id,
+        primary: c.name,
+        meta: [c.email ?? "—", c.company ?? "—"].join(" · "),
+        owner: c.user.email,
+        date: c.createdAt.toLocaleDateString(),
+      })),
     },
     {
       title: "Referrals",
       count: referralCount,
-      icon: Users,
-      headers: ["Code", "Referred email", "Status", "Owner", "Date"],
-      rows: recentReferrals.map((r) => [
-        r.code,
-        r.referredEmail ?? "—",
-        { kind: "status" as const, value: r.status },
-        r.user.email,
-        r.createdAt.toLocaleDateString(),
-      ]),
+      items: recentReferrals.map((r) => ({
+        id: r.id,
+        primary: r.code,
+        meta: r.referredEmail ?? "—",
+        status: r.status,
+        owner: r.user.email,
+        date: r.createdAt.toLocaleDateString(),
+      })),
     },
   ];
 
   return (
     <AdminShell email={admin.email} pageTitle="User CRM">
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">User CRM</h1>
-          <p className="mt-1 text-[13px] text-[#6B6B6B]">
-            Contacts, companies, and referrals collected inside user dashboards. Read-only snapshot.
-          </p>
-        </div>
+      <div className="space-y-5">
+        <AdminPageHeader
+          title="User CRM"
+          description="Contacts, companies, and referrals collected inside user dashboards. Read-only snapshot of the 5 most recent entries across all users."
+        />
 
-        <div className="grid gap-3 sm:grid-cols-3">
-          {sections.map((s) => (
-            <KpiCard key={s.title} label={s.title} value={s.count} icon={s.icon} />
+        <div className="grid gap-4 lg:grid-cols-3">
+          {sections.map((section) => (
+            <SectionCard
+              key={section.title}
+              title={section.title}
+              description="Most recent 5 entries"
+              action={
+                <span className="text-[18px] font-extrabold tabular-nums text-[#5440e8]">
+                  {section.count.toLocaleString()}
+                  <span className="sr-only"> total</span>
+                </span>
+              }
+              flush
+            >
+              {section.items.length === 0 ? (
+                <p className="px-6 py-8 text-center text-[14px] text-[#66647c]">
+                  No {section.title.toLowerCase()} yet.
+                </p>
+              ) : (
+                <ul>
+                  {section.items.map((item) => (
+                    <li key={item.id} className="border-t border-[#e2e0ea] px-6 py-2.5 text-[13px] first:border-t-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <p className="min-w-0 break-words font-bold text-[#121226]">{item.primary}</p>
+                        {item.status ? (
+                          <span className="shrink-0">
+                            <StatusBadge tone={statusToTone(item.status)}>{item.status}</StatusBadge>
+                          </span>
+                        ) : null}
+                      </div>
+                      <p className="break-words text-[#4a4862]">{item.meta}</p>
+                      <p className="mt-0.5 break-words text-[12px] text-[#66647c]">
+                        <span className="sr-only">Owner: </span>
+                        {item.owner} · {item.date}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </SectionCard>
           ))}
         </div>
-
-        {sections.map((section) => (
-          <SectionCard
-            key={section.title}
-            title={`Recent ${section.title.toLowerCase()}`}
-            description="Most recent 5 entries across all users"
-            flush
-          >
-            {section.rows.length === 0 ? (
-              <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">
-                No {section.title.toLowerCase()} yet.
-              </p>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-[12px]">
-                  <thead>
-                    <tr className="border-b border-[#E5E5E2] bg-[#FAFAF9]">
-                      {section.headers.map((h) => (
-                        <th
-                          key={h}
-                          className="px-5 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-[#3F3F3F]"
-                        >
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {section.rows.map((row, i) => (
-                      <tr key={i} className="border-b border-[#E5E5E2] last:border-b-0 hover:bg-[#FAFAF9]">
-                        {row.map((cell, j) => {
-                          if (typeof cell === "object" && cell !== null && "kind" in cell) {
-                            return (
-                              <td key={j} className="px-5 py-3">
-                                <StatusBadge tone={statusToTone(cell.value)}>{cell.value}</StatusBadge>
-                              </td>
-                            );
-                          }
-                          return (
-                            <td key={j} className="px-5 py-3 text-[#3F3F3F]">
-                              {cell}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </SectionCard>
-        ))}
       </div>
     </AdminShell>
   );
