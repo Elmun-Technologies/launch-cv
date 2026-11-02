@@ -3,33 +3,30 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { ResourceListPage } from "@/components/admin/resource-list-page";
-import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/status-badge";
-import { Pencil } from "lucide-react";
-
-type BlogRow = {
-  id: string;
-  slug: string;
-  title: string;
-  category: string;
-  status: string;
-  publishedAt: Date | null;
-  scheduledFor: Date | null;
-  updatedAt: Date;
-  authorName: string;
-};
+import {
+  CmsBadge,
+  CmsEmpty,
+  CmsFilterChips,
+  CmsPageHeader,
+  CmsSearch,
+  blogStatusBadge,
+  cmsBtnPrimary,
+  cmsDateFmt,
+  cmsTextLinkCls,
+} from "@/components/admin/cms-ui";
 
 const STATUS_OPTIONS = ["all", "draft", "scheduled", "published", "archived"] as const;
 type StatusFilter = (typeof STATUS_OPTIONS)[number];
 
-function statusTone(s: string) {
-  if (s === "published") return "green" as const;
-  if (s === "scheduled") return "blue" as const;
-  if (s === "draft") return "amber" as const;
-  if (s === "archived") return "default" as const;
-  return "default" as const;
-}
+const STATUS_LABEL: Record<StatusFilter, string> = {
+  all: "All",
+  draft: "Drafts",
+  scheduled: "Scheduled",
+  published: "Published",
+  archived: "Archived",
+};
+
+const ROW_GRID = "md:grid md:grid-cols-[minmax(0,2.4fr)_minmax(0,0.8fr)_minmax(0,0.9fr)_minmax(0,0.5fr)_auto] md:items-center md:gap-3.5";
 
 export default async function AdminBlogListPage({
   searchParams,
@@ -43,17 +40,18 @@ export default async function AdminBlogListPage({
   const q = sp.q?.trim() ?? "";
   const statusFilter = (sp.status ?? "all") as StatusFilter;
 
-  const where: Record<string, unknown> = {};
-  if (statusFilter !== "all") where.status = statusFilter;
+  const searchWhere: Record<string, unknown> = {};
   if (q) {
-    where.OR = [
+    searchWhere.OR = [
       { title: { contains: q, mode: "insensitive" } },
       { slug: { contains: q, mode: "insensitive" } },
       { category: { contains: q, mode: "insensitive" } },
     ];
   }
+  const where: Record<string, unknown> = { ...searchWhere };
+  if (statusFilter !== "all") where.status = statusFilter;
 
-  const [posts, total] = await Promise.all([
+  const [posts, total, byStatus] = await Promise.all([
     prisma.blogPost.findMany({
       where,
       orderBy: { updatedAt: "desc" },
@@ -64,121 +62,123 @@ export default async function AdminBlogListPage({
         title: true,
         category: true,
         status: true,
+        readingTime: true,
         publishedAt: true,
         scheduledFor: true,
         updatedAt: true,
-        authorName: true,
       },
     }),
     prisma.blogPost.count({ where }),
+    // Per-status counts for the filter chips (same search, any status).
+    prisma.blogPost.groupBy({ by: ["status"], where: searchWhere, _count: { _all: true } }),
   ]);
 
-  const dateFmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const counts = new Map<string, number>(byStatus.map((g) => [g.status, g._count._all]));
+  const allCount = byStatus.reduce((sum, g) => sum + g._count._all, 0);
 
-  const columns: DataTableColumn<BlogRow>[] = [
-    {
-      key: "title",
-      header: "Title",
-      truncate: "max-w-[320px]",
-      render: (p) => (
-        <div className="min-w-0">
-          <p className="truncate font-medium text-[#111111]">{p.title}</p>
-          <p className="truncate font-mono text-[11px] text-[#6E6E6A]">/{p.slug}</p>
-        </div>
-      ),
-    },
-    {
-      key: "category",
-      header: "Category",
-      render: (p) => <span className="text-[12px] text-[#3F3F3F]">{p.category}</span>,
-    },
-    {
-      key: "status",
-      header: "Status",
-      render: (p) => (
-        <div className="flex flex-col gap-1">
-          <StatusBadge tone={statusTone(p.status)} dot>
-            {p.status}
-          </StatusBadge>
-          {p.status === "scheduled" && p.scheduledFor ? (
-            <span className="text-[10px] text-[#6E6E6A]">{dateFmt.format(p.scheduledFor)}</span>
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      key: "published",
-      header: "Published",
-      render: (p) => (
-        <span className="text-[12px] text-[#6B6B6B]">
-          {p.publishedAt ? dateFmt.format(p.publishedAt) : "—"}
-        </span>
-      ),
-    },
-    {
-      key: "updated",
-      header: "Updated",
-      render: (p) => <span className="text-[12px] text-[#6B6B6B]">{dateFmt.format(p.updatedAt)}</span>,
-    },
-    {
-      key: "actions",
-      header: "",
-      align: "right",
-      render: (p) => (
-        <Link
-          href={`/admin-panel/cms/blog/${p.id}`}
-          className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
-        >
-          <Pencil className="h-3 w-3" />
-          Edit
-        </Link>
-      ),
-    },
-  ];
+  const chips = STATUS_OPTIONS.map((s) => {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (s !== "all") params.set("status", s);
+    const n = s === "all" ? allCount : (counts.get(s) ?? 0);
+    return {
+      href: `/admin-panel/cms/blog${params.size ? `?${params.toString()}` : ""}`,
+      label: `${STATUS_LABEL[s]} · ${n.toLocaleString()}`,
+      active: statusFilter === s,
+    };
+  });
 
   return (
     <AdminShell email={admin.email} pageTitle="Blog">
-      <ResourceListPage
-        title="Blog posts"
-        description={`${total.toLocaleString()} post${total === 1 ? "" : "s"}. Click Edit on a row to manage status, copy, and SEO.`}
-        searchValue={q}
-        searchPlaceholder="Search by title, slug, or category…"
-        primaryAction={{ href: "/admin-panel/cms/blog/new", label: "New post" }}
-        filters={
-          <div className="flex flex-wrap gap-1">
-            {STATUS_OPTIONS.map((s) => {
-              const params = new URLSearchParams();
-              if (q) params.set("q", q);
-              if (s !== "all") params.set("status", s);
-              const href = `/admin-panel/cms/blog${params.size ? `?${params.toString()}` : ""}`;
-              const isActive = statusFilter === s;
-              return (
-                <Link
-                  key={s}
-                  href={href}
-                  className={`rounded-full px-3 py-1 text-[12px] font-semibold capitalize transition ${
-                    isActive ? "bg-[#111111] text-white" : "bg-[#F5F5F3] text-[#3F3F3F] hover:bg-[#E5E5E2]"
-                  }`}
-                >
-                  {s}
+      <CmsPageHeader title="Blog posts" action={{ href: "/admin-panel/cms/blog/new", label: "New post" }} />
+
+      <div className="mt-[18px] flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <CmsFilterChips label="Filter by status" items={chips} />
+        <CmsSearch
+          value={q}
+          label="Search posts"
+          placeholder="Search by title, slug, or category…"
+          hidden={statusFilter !== "all" ? { status: statusFilter } : undefined}
+        />
+      </div>
+
+      <section aria-label="Posts" className="lc-card mt-4 rounded-[24px] px-4 pb-2 pt-1 sm:px-6">
+        {posts.length === 0 ? (
+          <CmsEmpty
+            title={q ? "No posts match this search" : statusFilter !== "all" ? `No ${STATUS_LABEL[statusFilter].toLowerCase()} posts` : "No blog posts yet"}
+            description={
+              q
+                ? "Try a broader query, change the status filter, or clear the search."
+                : statusFilter !== "all"
+                  ? "Pick another status filter to see the rest of your posts."
+                  : "Click New post to start your first article."
+            }
+            action={
+              !q && statusFilter === "all" ? (
+                <Link href="/admin-panel/cms/blog/new" className={cmsBtnPrimary}>
+                  New post
                 </Link>
+              ) : undefined
+            }
+          />
+        ) : (
+          <ul>
+            {posts.map((p, i) => {
+              const badge = blogStatusBadge(p.status);
+              return (
+                <li
+                  key={p.id}
+                  className={`flex flex-col gap-2 py-4 text-[14px] ${ROW_GRID} ${i > 0 ? "border-t border-[#e2e0ea]" : ""}`}
+                >
+                  <div className="min-w-0">
+                    <p className="text-[15px] font-bold leading-[21px] text-[#121226] [overflow-wrap:anywhere]">{p.title}</p>
+                    <p className="mt-0.5 truncate text-[12px] text-[#66647c]">
+                      <span className="lc-mono">/{p.slug}</span> · {p.category}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 md:contents">
+                    <div className="md:justify-self-start">
+                      <CmsBadge tone={badge.tone}>{badge.label}</CmsBadge>
+                    </div>
+                    <div className="text-[#66647c]">
+                      {p.status === "scheduled" && p.scheduledFor ? (
+                        <span>
+                          <span className="sr-only">Scheduled for </span>
+                          {cmsDateFmt.format(p.scheduledFor)}
+                        </span>
+                      ) : p.publishedAt ? (
+                        <span>
+                          <span className="sr-only">Published </span>
+                          {cmsDateFmt.format(p.publishedAt)}
+                        </span>
+                      ) : (
+                        <span>Not published</span>
+                      )}
+                      <span className="block text-[12px]">Updated {cmsDateFmt.format(p.updatedAt)}</span>
+                    </div>
+                    <span className="text-[#66647c]">
+                      {p.readingTime} min<span className="sr-only"> read</span>
+                    </span>
+                    <Link
+                      href={`/admin-panel/cms/blog/${p.id}`}
+                      className={`${cmsTextLinkCls} ml-auto md:ml-0 md:justify-self-end`}
+                      aria-label={`Edit “${p.title}”`}
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                </li>
               );
             })}
-          </div>
-        }
-      >
-        <DataTable
-          columns={columns}
-          rows={posts}
-          rowKey={(p) => p.id}
-          emptyTitle={q ? "No posts match this search" : "No blog posts yet"}
-          emptyDescription={
-            q
-              ? "Try a broader query, change the status filter, or clear the search."
-              : "Click New post to start your first article."
-          }
-        />
-      </ResourceListPage>
+          </ul>
+        )}
+      </section>
+
+      {total > posts.length ? (
+        <p className="mt-3 text-[13px] text-[#66647c]">
+          Showing the {posts.length} most recently updated of {total.toLocaleString()} posts. Search or filter to find older ones.
+        </p>
+      ) : null}
     </AdminShell>
   );
 }

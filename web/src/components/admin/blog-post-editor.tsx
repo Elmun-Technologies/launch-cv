@@ -2,11 +2,24 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { ArrowLeft, Eye, Save, Trash2, Loader2, CheckCircle2 } from "lucide-react";
-import { FormField, AdminInput, AdminTextarea, AdminSelect } from "@/components/admin/form-field";
-import { SectionCard } from "@/components/admin/section-card";
-import { StatusBadge } from "@/components/admin/status-badge";
+import { Eye, Trash2, Loader2, CheckCircle2 } from "lucide-react";
+import {
+  CmsBadge,
+  CmsCard,
+  CmsEditorHeader,
+  CmsField,
+  CmsNotice,
+  blogStatusBadge,
+  charCounterTone,
+  cmsBtnDanger,
+  cmsBtnDark,
+  cmsBtnPrimary,
+  cmsBtnSoft,
+  cmsBtnWhite,
+  cmsInputCls,
+  cmsSelectCls,
+  cmsTextareaCls,
+} from "@/components/admin/cms-ui";
 import { MarkdownEditor } from "@/components/admin/markdown-editor";
 import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { SeoChecklist } from "@/components/admin/seo-checklist";
@@ -169,161 +182,248 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
     }
   }
 
+  const badge = blogStatusBadge(data.status);
+  const seoTitleLen = data.seoTitle.length;
+  const seoDescLen = data.seoDescription.length;
+  const serpTitle = data.seoTitle || data.title || "Post title";
+  const serpDesc = data.seoDescription || data.description || "The meta description appears here.";
+  const showPublish = !isNew && data.status !== "published";
+
   return (
-    <div className="space-y-5 pb-24">
-      {/* Header */}
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex items-start gap-3">
-          <Link
-            href="/admin-panel/cms/blog"
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-[#E5E5E2] bg-white text-[#3F3F3F] transition hover:bg-[#FAFAF9] hover:text-[#111111]"
-            aria-label="Back to blog list"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Link>
-          <div>
-            <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">
-              {isNew ? "New blog post" : data.title || "Untitled"}
-            </h1>
-            <div className="mt-1 flex items-center gap-2 text-[12px] text-[#6B6B6B]">
-              <StatusBadge tone={data.status === "published" ? "green" : data.status === "scheduled" ? "blue" : data.status === "archived" ? "default" : "amber"} dot>
-                {data.status}
-              </StatusBadge>
-              <span className="font-mono">/{data.slug || "auto-generated"}</span>
+    <div className="pb-16">
+      <CmsEditorHeader
+        back={{ href: "/admin-panel/cms/blog", label: "Blog posts" }}
+        title={isNew ? "New post" : "Edit post"}
+        meta={
+          <>
+            <CmsBadge tone={badge.tone}>{badge.label}</CmsBadge>
+            <span role="status" className="inline-flex items-center gap-1 text-[13px] font-semibold text-[#0b7a4f]">
               {savedAt ? (
-                <span className="inline-flex items-center gap-1 text-emerald-700">
-                  <CheckCircle2 className="h-3 w-3" /> Saved
-                </span>
+                <>
+                  <CheckCircle2 className="h-3.5 w-3.5" aria-hidden="true" /> Saved
+                </>
               ) : null}
-            </div>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          {!isNew ? (
-            <button
-              type="button"
-              onClick={openPreview}
-              disabled={previewLoading}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E5E2] bg-white px-3 py-2 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
-            >
-              {previewLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Eye className="h-3.5 w-3.5" />}
-              Preview
+            </span>
+          </>
+        }
+        actions={
+          <>
+            {!isNew ? (
+              <button type="button" onClick={openPreview} disabled={previewLoading} className={cmsBtnWhite}>
+                {previewLoading ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Eye className="h-4 w-4" aria-hidden="true" />}
+                Preview
+                <span className="sr-only"> (opens in a new tab)</span>
+              </button>
+            ) : null}
+            <button type="button" onClick={save} disabled={saving} className={showPublish ? cmsBtnDark : cmsBtnPrimary}>
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+              {isNew ? "Create draft" : "Save"}
             </button>
-          ) : null}
-          <button
-            type="button"
-            onClick={save}
-            disabled={saving}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[#111111] px-3 py-2 text-[12px] font-semibold text-white transition hover:bg-[#1E293B] disabled:opacity-50"
-          >
-            {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
-            {isNew ? "Create" : "Save"}
-          </button>
-        </div>
-      </div>
+            {showPublish ? (
+              <button type="button" onClick={() => changeStatus("published")} disabled={saving} className={cmsBtnPrimary}>
+                Publish
+              </button>
+            ) : null}
+          </>
+        }
+      />
 
       {error ? (
-        <p className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-[13px] text-red-700">{error}</p>
+        <div className="mt-4">
+          <CmsNotice tone="error">{error}</CmsNotice>
+        </div>
       ) : null}
 
-      <div className="grid gap-5 lg:grid-cols-3">
+      <div className="mt-[18px] grid grid-cols-1 items-start gap-[18px] xl:grid-cols-[minmax(0,1fr)_minmax(300px,360px)]">
         {/* Main editor column */}
-        <div className="space-y-5 lg:col-span-2">
-          <SectionCard>
-            <div className="space-y-4">
-              <FormField label="Title" required>
-                <AdminInput value={data.title} onChange={(e) => update("title", e.target.value)} placeholder="The article headline" />
-              </FormField>
-              <FormField label="Slug" hint="Lowercase, hyphens. Leave blank to auto-generate from title.">
-                <AdminInput value={data.slug} onChange={(e) => update("slug", e.target.value)} placeholder="my-new-post" />
-              </FormField>
-              <FormField label="Short description" required hint={`${data.description.length}/180`}>
-                <AdminTextarea
-                  rows={2}
-                  value={data.description}
-                  onChange={(e) => update("description", e.target.value)}
-                  placeholder="One- or two-sentence summary, shown in /blog and meta description"
+        <CmsCard padding="p-4 sm:p-7">
+          <div className="flex flex-col gap-4">
+            <CmsField label="Title" required>
+              <input
+                value={data.title}
+                onChange={(e) => update("title", e.target.value)}
+                placeholder="The article headline"
+                className="block w-full rounded-[14px] border-[1.5px] border-transparent bg-white px-3 py-1.5 text-[26px] font-extrabold leading-[32px] tracking-[-0.02em] text-[#121226] outline-none transition-[border-color,box-shadow] placeholder:text-[#9a98b0] hover:border-[#e2e0ea] focus:border-[#5440e8] focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none! sm:text-[32px] sm:leading-[38px]"
+              />
+            </CmsField>
+            <CmsField
+              label="Short description"
+              required
+              counter={`${data.description.length}/180`}
+              counterTone={charCounterTone(data.description.length, { max: 180 })}
+              hint="Shown on /blog and used as the meta description unless you set one under SEO."
+            >
+              <textarea
+                rows={2}
+                value={data.description}
+                onChange={(e) => update("description", e.target.value)}
+                placeholder="One- or two-sentence summary"
+                className={cmsTextareaCls}
+              />
+            </CmsField>
+            <div>
+              <p className="text-[13px] font-bold text-[#4a4862]">Body</p>
+              <p className="mt-0.5 text-[12px] text-[#66647c]">Markdown supported (GFM extensions, images via the Image button).</p>
+              <div className="mt-2">
+                <MarkdownEditor value={data.bodyMd} onChange={(v) => update("bodyMd", v)} />
+              </div>
+            </div>
+          </div>
+        </CmsCard>
+
+        {/* Sidebar — stacks below the editor on smaller screens */}
+        <div className="flex min-w-0 flex-col gap-3.5">
+          <CmsCard title="SEO" description="Overrides the defaults taken from the title and description.">
+            <div className="flex flex-col gap-3">
+              <CmsField label="Focus keyword" hint="The primary term this post should rank for.">
+                <input
+                  value={data.focusKeyword}
+                  onChange={(e) => update("focusKeyword", e.target.value)}
+                  placeholder="e.g. ATS resume format"
+                  className={cmsInputCls}
                 />
-              </FormField>
+              </CmsField>
+              <CmsField
+                label="SEO title"
+                counter={`${seoTitleLen}/60`}
+                counterTone={charCounterTone(seoTitleLen, { max: 60 })}
+                hint="Recommended 60 characters or fewer."
+              >
+                <input
+                  value={data.seoTitle}
+                  onChange={(e) => update("seoTitle", e.target.value)}
+                  placeholder={data.title || "Defaults to the post title"}
+                  className={cmsInputCls}
+                />
+              </CmsField>
+              <CmsField
+                label="Meta description"
+                counter={`${seoDescLen}/160`}
+                counterTone={charCounterTone(seoDescLen, { min: 120, max: 160 })}
+                hint="Recommended 120–160 characters."
+              >
+                <textarea
+                  rows={3}
+                  value={data.seoDescription}
+                  onChange={(e) => update("seoDescription", e.target.value)}
+                  placeholder={data.description || "Defaults to the short description"}
+                  className={cmsTextareaCls}
+                />
+              </CmsField>
+              <CmsField label="Slug" hint="Lowercase, hyphens. Leave blank to auto-generate from the title.">
+                <span className="flex h-12 items-center overflow-hidden rounded-[14px] border-[1.5px] border-[#e2e0ea] bg-white transition-[border-color,box-shadow] focus-within:border-[#5440e8] focus-within:ring-4 focus-within:ring-[#5440e8]/15 hover:border-[#c9c0ff]">
+                  <span aria-hidden="true" className="lc-mono shrink-0 pl-4 text-[13px] text-[#66647c]">
+                    /blog/
+                  </span>
+                  <input
+                    value={data.slug}
+                    onChange={(e) => update("slug", e.target.value)}
+                    placeholder="my-new-post"
+                    className="lc-mono h-full min-w-0 flex-1 bg-transparent pr-4 text-[16px] text-[#121226] outline-none placeholder:text-[#706e88] focus-visible:outline-none! sm:text-[13px]"
+                  />
+                </span>
+              </CmsField>
+
+              <figure aria-label="Search result preview" className="m-0 rounded-[14px] bg-[#f7f6fb] p-3.5">
+                <p className="truncate text-[12px] text-[#0b7a4f]">launch-cv.com › blog › {data.slug || "auto-generated-slug"}</p>
+                <p className="mt-0.5 line-clamp-2 text-[16px] font-semibold leading-[21px] text-[#3a2bb8] [overflow-wrap:anywhere]">{serpTitle}</p>
+                <p className="mt-0.5 line-clamp-2 text-[12px] leading-[17px] text-[#4a4862] [overflow-wrap:anywhere]">{serpDesc}</p>
+              </figure>
+
+              <div className="rounded-[14px] border-[1.5px] border-[#efedf7] p-3.5">
+                <SeoChecklist
+                  focusKeyword={data.focusKeyword}
+                  title={data.seoTitle || data.title}
+                  metaDescription={data.seoDescription || data.description}
+                  slug={data.slug}
+                  bodyMd={data.bodyMd}
+                />
+              </div>
+
+              <CmsField label="Canonical URL" hint="Optional — defaults to this post's own URL.">
+                <input
+                  value={data.canonicalUrl}
+                  onChange={(e) => update("canonicalUrl", e.target.value)}
+                  placeholder="https://launch-cv.com/blog/…"
+                  className={cmsInputCls}
+                />
+              </CmsField>
+              <CmsField label="Open Graph image" hint="Shown when the post is shared on social or in search." group={{ id: "blog-og-image" }}>
+                <ImageUploadField value={data.ogImageUrl} onChange={(v) => update("ogImageUrl", v)} alt={data.title} />
+              </CmsField>
             </div>
-          </SectionCard>
+          </CmsCard>
 
-          <SectionCard title="Body" description="Markdown supported (GFM extensions, images via upload toolbar)">
-            <MarkdownEditor value={data.bodyMd} onChange={(v) => update("bodyMd", v)} />
-          </SectionCard>
-        </div>
+          <CmsCard title="Publishing">
+            {isNew ? (
+              <p className="rounded-[14px] bg-[#f7f6fb] px-3.5 py-3 text-[13px] leading-5 text-[#4a4862]">
+                Save to create the post as a draft. You can then publish or schedule it.
+              </p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => changeStatus("draft")}
+                    disabled={saving || data.status === "draft"}
+                    className={cmsBtnSoft}
+                  >
+                    Draft
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => changeStatus("published")}
+                    disabled={saving || data.status === "published"}
+                    className={cmsBtnPrimary}
+                  >
+                    Publish
+                  </button>
+                </div>
+                <div className="border-t border-[#e2e0ea] pt-3">
+                  <CmsField label="Schedule for" hint="Auto-publishes when the time passes.">
+                    <input
+                      type="datetime-local"
+                      value={data.scheduledFor}
+                      onChange={(e) => update("scheduledFor", e.target.value)}
+                      className={cmsInputCls}
+                    />
+                  </CmsField>
+                  <button
+                    type="button"
+                    onClick={() => changeStatus("scheduled")}
+                    disabled={saving || !data.scheduledFor || data.status === "scheduled"}
+                    className={`${cmsBtnSoft} mt-2 w-full`}
+                  >
+                    Schedule
+                  </button>
+                </div>
+                <div className="border-t border-[#e2e0ea] pt-3">
+                  <button
+                    type="button"
+                    onClick={() => changeStatus("archived")}
+                    disabled={saving || data.status === "archived"}
+                    className={`${cmsBtnSoft} w-full`}
+                  >
+                    Archive
+                  </button>
+                </div>
+              </div>
+            )}
+          </CmsCard>
 
-        {/* Sidebar */}
-        <div className="space-y-5">
-          <SectionCard title="Publishing">
-            <div className="space-y-3">
-              {isNew ? (
-                <p className="rounded-md bg-[#FAFAF9] px-3 py-2 text-[12px] text-[#6B6B6B]">
-                  Save to create the post as a draft. You can then publish or schedule it.
-                </p>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => changeStatus("draft")}
-                      disabled={saving || data.status === "draft"}
-                      className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
-                    >
-                      Draft
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => changeStatus("published")}
-                      disabled={saving || data.status === "published"}
-                      className="rounded-md bg-[#2563EB] px-3 py-1.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-50"
-                    >
-                      Publish
-                    </button>
-                  </div>
-                  <div className="border-t border-[#E5E5E2] pt-3">
-                    <FormField label="Schedule for" hint="Auto-publishes when the time passes">
-                      <AdminInput
-                        type="datetime-local"
-                        value={data.scheduledFor}
-                        onChange={(e) => update("scheduledFor", e.target.value)}
-                      />
-                    </FormField>
-                    <button
-                      type="button"
-                      onClick={() => changeStatus("scheduled")}
-                      disabled={saving || !data.scheduledFor || data.status === "scheduled"}
-                      className="mt-2 inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
-                    >
-                      Schedule
-                    </button>
-                  </div>
-                  <div className="border-t border-[#E5E5E2] pt-3">
-                    <button
-                      type="button"
-                      onClick={() => changeStatus("archived")}
-                      disabled={saving || data.status === "archived"}
-                      className="inline-flex w-full items-center justify-center gap-1.5 rounded-md border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9] disabled:opacity-50"
-                    >
-                      Archive
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-          </SectionCard>
-
-          <SectionCard title="Categorization">
-            <div className="space-y-3">
-              <FormField label="Category">
-                <AdminSelect value={data.category} onChange={(e) => update("category", e.target.value)}>
+          <CmsCard title="Details">
+            <div className="flex flex-col gap-3">
+              <CmsField label="Category">
+                <select value={data.category} onChange={(e) => update("category", e.target.value)} className={cmsSelectCls}>
                   {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
-                </AdminSelect>
-              </FormField>
-              <FormField label="Tags" hint="Comma-separated">
-                <AdminInput
+                </select>
+              </CmsField>
+              <CmsField label="Tags" hint="Comma-separated.">
+                <input
                   value={data.tags.join(", ")}
                   onChange={(e) =>
                     update(
@@ -335,108 +435,58 @@ export function BlogPostEditor({ initial }: { initial: BlogEditorData }) {
                     )
                   }
                   placeholder="resume, ATS, career"
+                  className={cmsInputCls}
                 />
-              </FormField>
-              <FormField label="Reading time" hint="Minutes">
-                <AdminInput
+              </CmsField>
+              <CmsField label="Reading time" hint="Minutes.">
+                <input
                   type="number"
                   min={1}
                   value={data.readingTime}
                   onChange={(e) => update("readingTime", Number(e.target.value) || 1)}
+                  className={cmsInputCls}
                 />
-              </FormField>
+              </CmsField>
             </div>
-          </SectionCard>
+          </CmsCard>
 
-          <SectionCard title="Author">
-            <div className="space-y-3">
-              <FormField label="Display name">
-                <AdminInput value={data.authorName} onChange={(e) => update("authorName", e.target.value)} />
-              </FormField>
-              <FormField label="Role / byline">
-                <AdminInput value={data.authorRole} onChange={(e) => update("authorRole", e.target.value)} placeholder="Career Research Team" />
-              </FormField>
-              <FormField label="Bio">
-                <AdminTextarea rows={3} value={data.authorBio} onChange={(e) => update("authorBio", e.target.value)} />
-              </FormField>
+          <CmsCard title="Author">
+            <div className="flex flex-col gap-3">
+              <CmsField label="Display name">
+                <input value={data.authorName} onChange={(e) => update("authorName", e.target.value)} className={cmsInputCls} />
+              </CmsField>
+              <CmsField label="Role / byline">
+                <input
+                  value={data.authorRole}
+                  onChange={(e) => update("authorRole", e.target.value)}
+                  placeholder="Career Research Team"
+                  className={cmsInputCls}
+                />
+              </CmsField>
+              <CmsField label="Bio">
+                <textarea rows={3} value={data.authorBio} onChange={(e) => update("authorBio", e.target.value)} className={cmsTextareaCls} />
+              </CmsField>
             </div>
-          </SectionCard>
+          </CmsCard>
 
-          <SectionCard title="Cover image">
-            <div className="space-y-3">
-              <FormField label="Cover image" hint="Optional — falls back to category gradient">
-                <ImageUploadField
-                  value={data.coverUrl}
-                  onChange={(v) => update("coverUrl", v)}
-                  alt={data.coverAlt || data.title}
-                />
-              </FormField>
-              <FormField label="Cover alt text">
-                <AdminInput value={data.coverAlt} onChange={(e) => update("coverAlt", e.target.value)} />
-              </FormField>
+          <CmsCard title="Cover image">
+            <div className="flex flex-col gap-3">
+              <CmsField label="Image" hint="Optional — falls back to the category gradient." group={{ id: "blog-cover-image" }}>
+                <ImageUploadField value={data.coverUrl} onChange={(v) => update("coverUrl", v)} alt={data.coverAlt || data.title} />
+              </CmsField>
+              <CmsField label="Cover alt text">
+                <input value={data.coverAlt} onChange={(e) => update("coverAlt", e.target.value)} className={cmsInputCls} />
+              </CmsField>
             </div>
-          </SectionCard>
-
-          <SectionCard title="SEO" description="Overrides defaults derived from title/description">
-            <div className="space-y-3">
-              <FormField label="Focus keyword" hint="The primary term this post should rank for">
-                <AdminInput
-                  value={data.focusKeyword}
-                  onChange={(e) => update("focusKeyword", e.target.value)}
-                  placeholder="e.g. ATS resume format"
-                />
-              </FormField>
-
-              <div className="rounded-lg border border-[#E5E5E2] bg-[#FAFAF9] p-3">
-                <SeoChecklist
-                  focusKeyword={data.focusKeyword}
-                  title={data.seoTitle || data.title}
-                  metaDescription={data.seoDescription || data.description}
-                  slug={data.slug}
-                  bodyMd={data.bodyMd}
-                />
-              </div>
-
-              <FormField label="SEO title" hint="Recommended ≤ 60 chars">
-                <AdminInput value={data.seoTitle} onChange={(e) => update("seoTitle", e.target.value)} />
-              </FormField>
-              <FormField label="Meta description" hint="Recommended ≤ 160 chars">
-                <AdminTextarea rows={2} value={data.seoDescription} onChange={(e) => update("seoDescription", e.target.value)} />
-              </FormField>
-              <FormField label="Canonical URL" hint="Optional — defaults to this post's own URL">
-                <AdminInput
-                  value={data.canonicalUrl}
-                  onChange={(e) => update("canonicalUrl", e.target.value)}
-                  placeholder="https://launch-cv.com/blog/…"
-                />
-              </FormField>
-              <FormField label="Open-graph image" hint="Shown when shared on social / search">
-                <ImageUploadField
-                  value={data.ogImageUrl}
-                  onChange={(v) => update("ogImageUrl", v)}
-                  alt={data.title}
-                />
-              </FormField>
-            </div>
-          </SectionCard>
+          </CmsCard>
 
           {!isNew ? (
-            <section className="overflow-hidden rounded-xl border border-red-200 bg-white">
-              <header className="border-b border-red-200 bg-red-50/40 px-5 py-3">
-                <h2 className="text-[13px] font-semibold text-red-800">Danger zone</h2>
-              </header>
-              <div className="p-5">
-                <button
-                  type="button"
-                  onClick={destroy}
-                  disabled={deleting}
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 py-2 text-[13px] font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
-                >
-                  {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                  {deleting ? "Deleting…" : "Delete post"}
-                </button>
-              </div>
-            </section>
+            <CmsCard title="Danger zone" description="Deleting a post can't be undone.">
+              <button type="button" onClick={destroy} disabled={deleting} className={`${cmsBtnDanger} w-full`}>
+                {deleting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : <Trash2 className="h-4 w-4" aria-hidden="true" />}
+                {deleting ? "Deleting…" : "Delete post"}
+              </button>
+            </CmsCard>
           ) : null}
         </div>
       </div>

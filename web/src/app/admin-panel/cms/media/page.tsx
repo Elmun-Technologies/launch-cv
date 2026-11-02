@@ -3,8 +3,8 @@ import { Image as ImageIcon } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { ResourceListPage } from "@/components/admin/resource-list-page";
-import { EmptyState } from "@/components/admin/empty-state";
+import { CmsEmpty, CmsPageHeader, CmsSearch, cmsDateFmt } from "@/components/admin/cms-ui";
+import { MediaUploadButton } from "@/components/admin/media-upload-button";
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
@@ -12,57 +12,94 @@ function formatBytes(bytes: number) {
   return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
 }
 
-export default async function AdminMediaPage() {
+function fileName(url: string) {
+  return url.split("?")[0].split("/").pop() || url;
+}
+
+export default async function AdminMediaPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const admin = await requireAdmin("content");
   if (!admin) redirect("/admin-panel/access-denied");
 
-  const assets = await prisma.mediaAsset.findMany({
-    orderBy: { createdAt: "desc" },
-    take: 60,
-    omit: { data: true },
-    include: { uploadedBy: { select: { email: true } } },
-  });
+  const q = (await searchParams).q?.trim() ?? "";
+  const where = q
+    ? {
+        OR: [
+          { alt: { contains: q, mode: "insensitive" as const } },
+          { url: { contains: q, mode: "insensitive" as const } },
+        ],
+      }
+    : {};
+
+  const [assets, total] = await Promise.all([
+    prisma.mediaAsset.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 60,
+      omit: { data: true },
+      include: { uploadedBy: { select: { email: true } } },
+    }),
+    prisma.mediaAsset.count({ where }),
+  ]);
 
   return (
     <AdminShell email={admin.email} pageTitle="Media library">
-      <ResourceListPage
+      <CmsPageHeader
         title="Media library"
-        description={`${assets.length.toLocaleString()} asset${assets.length === 1 ? "" : "s"}. Uploaded via the blog editor or admin tools.`}
-      >
-        {assets.length === 0 ? (
-          <EmptyState
-            icon={ImageIcon}
-            title="No media uploaded yet"
-            description="Images uploaded through the blog editor will appear here."
+        description="Images for blog posts and pages. Stored in the database and served from /media/."
+        actions={<MediaUploadButton />}
+      />
+
+      <div className="mt-[18px] flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <CmsSearch value={q} label="Search media" placeholder="Search by alt text or file name" />
+        <p className="text-[13px] text-[#66647c]">
+          {total > assets.length
+            ? `Showing the ${assets.length} newest of ${total.toLocaleString()} assets`
+            : `${total.toLocaleString()} asset${total === 1 ? "" : "s"}`}
+        </p>
+      </div>
+
+      {assets.length === 0 ? (
+        <section className="lc-card mt-4 rounded-[24px]">
+          <CmsEmpty
+            title={q ? "No media matches this search" : "No media uploaded yet"}
+            description={
+              q
+                ? "Try a broader query or clear the search."
+                : "Use Upload, or add images from the blog editor — they will appear here."
+            }
           />
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {assets.map((a) => (
-              <div key={a.id} className="overflow-hidden rounded-xl border border-[#E5E5E2] bg-white">
-                <div className="relative aspect-[4/3] bg-[#F5F5F3]">
+        </section>
+      ) : (
+        <ul className="mt-4 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {assets.map((a) => {
+            const name = a.alt?.trim() || fileName(a.url);
+            return (
+              <li key={a.id} className="lc-card min-w-0 rounded-[20px] p-2">
+                <div className="relative flex h-[150px] items-center justify-center overflow-hidden rounded-[14px] bg-[#eeecf4] text-[#66647c] sm:h-[130px]">
+                  <ImageIcon className="absolute h-6 w-6" aria-hidden="true" />
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={a.url}
-                    alt={a.alt ?? ""}
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
+                  <img src={a.url} alt={a.alt ?? ""} className="relative h-full w-full object-cover" loading="lazy" />
                 </div>
-                <div className="px-4 py-3">
-                  <p className="truncate font-mono text-[11px] text-[#111111]">{a.url}</p>
-                  <div className="mt-1.5 flex items-center justify-between text-[11px] text-[#6E6E6A]">
+                <div className="px-1.5 pb-1 pt-2.5">
+                  <p className="truncate text-[13px] font-bold text-[#121226]" title={name}>
+                    {name}
+                  </p>
+                  <p className="lc-mono mt-0.5 truncate text-[11px] text-[#66647c]" title={a.url}>
+                    {a.url}
+                  </p>
+                  <p className="mt-1 flex items-center justify-between gap-2 text-[12px] text-[#66647c]">
                     <span>{a.mimeType.split("/")[1]?.toUpperCase() ?? a.mimeType}</span>
                     <span>{formatBytes(a.sizeBytes)}</span>
-                  </div>
-                  <p className="mt-1 truncate text-[11px] text-[#6B6B6B]">
-                    {a.uploadedBy?.email ?? "—"} · {a.createdAt.toLocaleDateString()}
+                  </p>
+                  <p className="mt-0.5 truncate text-[12px] text-[#66647c]">
+                    {a.uploadedBy?.email ?? "—"} · {cmsDateFmt.format(a.createdAt)}
                   </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </ResourceListPage>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </AdminShell>
   );
 }
