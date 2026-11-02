@@ -87,6 +87,13 @@ model JobApplication {
   title          String?
   company        String?
   status         String   @default("draft")
+  /// When `status` last changed (the tracker card shows "Applied Oct 29"). Null on rows from before it was recorded.
+  stageChangedAt DateTime?
+  /// Link to the job posting, when the user added one.
+  jobUrl         String?
+  /// Next interview, when one is scheduled, and what kind it is ("Panel", "Phone screen").
+  interviewAt    DateTime?
+  interviewLabel String?
   checklist      Json?
   fitSnapshot    Json?
   packetSnapshot Json?

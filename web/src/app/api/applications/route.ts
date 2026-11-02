@@ -4,8 +4,17 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { defaultApplicationChecklist } from "@/lib/application-checklist";
 
+/** Only web links to a job post; anything else is rejected rather than stored. */
+const jobUrl = z
+  .string()
+  .trim()
+  .max(2000)
+  .url()
+  .refine((u) => /^https?:\/\//i.test(u), { message: "Use a web link (https://…)" });
+
 const postSchema = z
   .object({
+    jobUrl: jobUrl.optional(),
     resumeId: z.string().min(1),
     jdRunId: z.string().min(1).optional(),
     jdText: z.string().min(40).max(24000).optional(),
@@ -139,6 +148,8 @@ export async function POST(req: Request) {
       jdText,
       title: parsed.data.title ?? null,
       company: parsed.data.company ?? null,
+      jobUrl: parsed.data.jobUrl ?? null,
+      stageChangedAt: new Date(),
       checklist,
       ...(jdRunId ? { jdRunId } : {}),
     },

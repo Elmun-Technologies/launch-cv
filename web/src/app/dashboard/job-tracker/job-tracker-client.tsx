@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { BriefcaseBusiness, Check, ExternalLink, Loader2, Plus, Target, Trash2, UserCheck, FileText } from "lucide-react";
-import { normalizeChecklist, type ChecklistItem } from "@/lib/application-checklist";
+import { BriefcaseBusiness, CalendarClock, Check, ExternalLink, Link2, Loader2, Plus, Sparkles, Target, Trash2, UserCheck } from "lucide-react";
+import { checklistForStage, normalizeChecklist, setChecklistItem, type ChecklistItem } from "@/lib/application-checklist";
 import {
   CloseButton,
   EmptyState,
@@ -33,9 +33,15 @@ export type JobRow = {
   title: string | null;
   company: string | null;
   status: string;
+  /** When the job reached its current stage; null on rows from before this was recorded. */
+  stageChangedAt: string | null;
+  jobUrl: string | null;
+  interviewAt: string | null;
+  interviewLabel: string | null;
   jdExcerpt: string;
   createdAt: string;
   updatedAt: string;
+  /** Everything ticked so far, across stages (see lib/application-checklist). */
   checklist: ChecklistItem[];
   resume: { id: string; title: string };
 };
@@ -86,6 +92,44 @@ function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
+/** Word for "reached this stage on <date>" on a card. */
+const STAGE_WORD: Record<StageKey, string> = {
+  bookmarked: "Saved",
+  applying: "Applied",
+  interviewing: "Interviewing",
+  negotiating: "Offer",
+  accepted: "Accepted",
+  rejected: "Closed",
+};
+
+/** "Applied Oct 29"; rows saved before stage dates were recorded say when they were added. */
+function stageLine(r: JobRow): string {
+  return r.stageChangedAt ? `${STAGE_WORD[stageOf(r.status)]} ${fmtDate(r.stageChangedAt)}` : `Added ${fmtDate(r.createdAt)}`;
+}
+
+/** "Panel Thu, Nov 6 · 10:00 AM" in the viewer's time zone. */
+function interviewLine(r: JobRow): string | null {
+  if (!r.interviewAt) return null;
+  const d = new Date(r.interviewAt);
+  const day = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+  const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  return `${r.interviewLabel?.trim() || "Interview"} ${day} · ${time}`;
+}
+
+/** Interviews in the next seven days (for the page lead). */
+function interviewsThisWeek(rows: JobRow[]): number {
+  const now = Date.now();
+  return rows.filter((r) => r.interviewAt && new Date(r.interviewAt).getTime() >= now - 3600_000 && new Date(r.interviewAt).getTime() < now + 7 * 86400_000).length;
+}
+
+/** `<input type="datetime-local">` value for an ISO time, in the viewer's zone. */
+function toLocalInput(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export function JobTrackerClient({
   initial,
   resumes,
@@ -118,6 +162,7 @@ export function JobTrackerClient({
     phoneStage ?? (byStage.applying.length ? "applying" : (STAGES.find((s) => byStage[s.key].length)?.key ?? "applying"));
 
   const interviewingCount = rows.filter((r) => stageOf(r.status) === "interviewing").length;
+  const weekCount = interviewsThisWeek(rows);
 
   const selected = rows.find((r) => r.id === selectedId) ?? null;
 
@@ -128,13 +173,30 @@ export function JobTrackerClient({
 
   async function updateStage(id: string, status: StageKey) {
     const prev = rows;
-    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, status } : r)));
+    const now = new Date().toISOString();
+    setRows((rs) => rs.map((r) => (r.id === id && stageOf(r.status) !== status ? { ...r, status, stageChangedAt: now } : r)));
     const res = await fetch(`/api/applications/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     }).catch(() => null);
     if (!res?.ok) setRows(prev);
+  }
+
+  /** Saves job-post link and interview fields; resolves to an error message or null. */
+  async function updateDetails(
+    id: string,
+    patch: { jobUrl?: string | null; interviewAt?: string | null; interviewLabel?: string | null },
+  ): Promise<string | null> {
+    const res = await fetch(`/api/applications/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(patch),
+    }).catch(() => null);
+    const j = res ? await res.json().catch(() => ({})) : {};
+    if (!res?.ok) return typeof j.error === "string" ? j.error : "Couldn't save. Please try again.";
+    setRows((rs) => rs.map((r) => (r.id === id ? { ...r, ...patch } : r)));
+    return null;
   }
 
   async function updateChecklist(id: string, checklist: ChecklistItem[]) {
@@ -171,7 +233,11 @@ export function JobTrackerClient({
           rows.length === 0
             ? "Every job you apply to, with the resume you sent."
             : `${rows.length} ${rows.length === 1 ? "application" : "applications"}${
-                interviewingCount ? ` · ${interviewingCount} interviewing` : ""
+                weekCount
+                  ? ` · ${weekCount} ${weekCount === 1 ? "interview" : "interviews"} this week`
+                  : interviewingCount
+                    ? ` · ${interviewingCount} interviewing`
+                    : ""
               }`
         }
         actions={
@@ -182,10 +248,11 @@ export function JobTrackerClient({
                 onChange={setQuery}
                 label="Search applications"
                 placeholder="Search company or role"
-                className="min-w-0 flex-1 md:w-[280px] md:flex-none"
+                className="w-full min-w-0 md:w-[280px] md:flex-none"
               />
             ) : null}
-            {addJobBtn}
+            {/* Phones get a full-width button under the list instead. */}
+            <span className={rows.length > 0 ? "hidden md:contents" : "contents"}>{addJobBtn}</span>
           </>
         }
       />
@@ -223,7 +290,10 @@ export function JobTrackerClient({
               ) : (
                 byStage[activePhoneStage].map((r) => <JobCard key={r.id} row={r} onOpen={() => setSelectedId(r.id)} />)
               )}
-              <AddToStageButton label={STAGE_LABEL[activePhoneStage]} onClick={() => openCreate(activePhoneStage)} />
+              <button type="button" onClick={() => openCreate(activePhoneStage)} className={`${appBtnPrimary} mt-2 min-h-[52px] w-full text-[16px]`}>
+                <Plus className="h-[18px] w-[18px]" aria-hidden strokeWidth={2.2} /> Add a job
+                <span className="sr-only"> to {STAGE_LABEL[activePhoneStage]}</span>
+              </button>
             </div>
           </div>
 
@@ -264,6 +334,7 @@ export function JobTrackerClient({
           onClose={() => setSelectedId(null)}
           onStage={(s) => void updateStage(selected.id, s)}
           onChecklist={(next) => void updateChecklist(selected.id, next)}
+          onDetails={(patch) => updateDetails(selected.id, patch)}
           onDelete={() => void remove(selected.id)}
         />
       ) : null}
@@ -298,9 +369,11 @@ function AddToStageButton({ label, onClick }: { label: string; onClick: () => vo
 
 function JobCard({ row: r, onOpen }: { row: JobRow; onOpen: () => void }) {
   const hot = stageOf(r.status) === "interviewing";
-  const done = r.checklist.filter((i) => i.done).length;
-  const total = r.checklist.length;
+  const items = checklistForStage(r.status, r.checklist);
+  const done = items.filter((i) => i.done).length;
+  const total = items.length;
   const company = r.company || "Company not set";
+  const interview = interviewLine(r);
   return (
     <button
       type="button"
@@ -312,12 +385,18 @@ function JobCard({ row: r, onOpen }: { row: JobRow; onOpen: () => void }) {
       <span className="flex min-w-0 items-center gap-2.5">
         <InitialTile name={company} tone={hot ? "bg-white" : "bg-[#f1eff8]"} />
         <span className="min-w-0">
-          <span className="block truncate text-[15px] font-bold">{company}</span>
-          <span className={`block truncate text-[13px] ${hot ? "text-[#e4dfff]" : "text-[#4a4862]"}`}>{r.title || "Role not set"}</span>
+          <span className="line-clamp-2 break-words text-[15px] font-bold leading-[19px]">{company}</span>
+          <span className={`mt-0.5 line-clamp-2 break-words text-[13px] leading-[17px] ${hot ? "text-[#e4dfff]" : "text-[#4a4862]"}`}>
+            {r.title || "Role not set"}
+          </span>
         </span>
       </span>
-      <span className={`mt-3 block truncate text-[12px] ${hot ? "text-[#e4dfff]" : "text-[#66647c]"}`}>
-        {fmtDate(r.updatedAt)} · {r.resume.title}
+      <span suppressHydrationWarning className={`mt-3 line-clamp-2 text-[12px] leading-[17px] ${hot ? "text-[#e4dfff]" : "text-[#66647c]"}`}>
+        {interview ?? (
+          <>
+            {stageLine(r)} · {r.resume.title}
+          </>
+        )}
       </span>
       {total > 0 ? (
         <span className="mt-2.5 flex items-center gap-2 text-[12px] font-bold">
@@ -339,12 +418,14 @@ function ApplicationDrawer({
   onClose,
   onStage,
   onChecklist,
+  onDetails,
   onDelete,
 }: {
   app: JobRow;
   onClose: () => void;
   onStage: (s: StageKey) => void;
   onChecklist: (next: ChecklistItem[]) => void;
+  onDetails: (patch: { jobUrl?: string | null; interviewAt?: string | null; interviewLabel?: string | null }) => Promise<string | null>;
   onDelete: () => void;
 }) {
   const [notes, setNotes] = useState<NoteRow[] | null>(null);
@@ -387,12 +468,23 @@ function ApplicationDrawer({
   }
 
   const stage = stageOf(app.status);
-  const doneCount = app.checklist.filter((i) => i.done).length;
+  const items = checklistForStage(app.status, app.checklist);
+  const doneCount = items.filter((i) => i.done).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end" role="dialog" aria-modal="true" aria-label="Application details">
+    // Desktop: an inset panel over the board, leaving the sidebar (264px) undimmed, like the mockup.
+    <div
+      className="fixed inset-0 z-50 flex justify-end lg:left-[264px] lg:pb-6 lg:pl-10 lg:pr-10 lg:pt-[121px]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Application details"
+    >
       <div className={overlayCls} onClick={onClose} />
-      <aside ref={panelRef} tabIndex={-1} className={`${drawerPanelCls} overflow-y-auto outline-none`}>
+      <aside
+        ref={panelRef}
+        tabIndex={-1}
+        className={`${drawerPanelCls} overflow-y-auto outline-none lg:max-w-[420px] lg:rounded-[24px] lg:shadow-[0_24px_48px_-20px_rgba(36,24,120,0.35)]`}
+      >
         <div className="flex items-start justify-between gap-4 px-5 pb-1 pt-6 sm:px-7 sm:pt-7">
           <div className="min-w-0">
             <span className={`inline-block rounded-full px-2.5 py-[5px] text-[12px] font-bold ${STAGE_TONE[stage].badge}`}>{STAGE_LABEL[stage]}</span>
@@ -406,11 +498,16 @@ function ApplicationDrawer({
 
         <div className="flex flex-col gap-6 px-5 pb-8 pt-5 sm:px-7">
           <div>
-            <p className={`${sectionLabelCls} mb-2`}>Prepare</p>
+            <h3 className="sr-only">Prepare</h3>
             <div className="grid grid-cols-1 gap-2 min-[400px]:grid-cols-2">
-              <Link href={`/resume/${app.resumeId}/packet`} className={`${appBtnPrimary} min-[400px]:col-span-2`}>
-                <FileText className="h-4 w-4" aria-hidden /> Interview packet
+              <Link href={`/resume/${app.resumeId}/packet`} className={`${appBtnPrimary} ${app.jobUrl ? "" : "min-[400px]:col-span-2"}`}>
+                <Sparkles className="h-4 w-4" aria-hidden /> Prepare packet
               </Link>
+              {app.jobUrl ? (
+                <a href={app.jobUrl} target="_blank" rel="noopener noreferrer" className={appBtnSoft}>
+                  <Link2 className="h-4 w-4" aria-hidden /> Job post<span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : null}
               <Link href={`/resume/${app.resumeId}/jd`} className={`${appBtnSoft}`}>
                 <Target className="h-4 w-4" aria-hidden /> Match to this job
               </Link>
@@ -446,17 +543,17 @@ function ApplicationDrawer({
             <p className={`${sectionLabelCls} mb-2`}>
               Checklist{" "}
               <span className="font-semibold text-[#66647c]">
-                {doneCount}/{app.checklist.length}
+                {doneCount}/{items.length}
               </span>
             </p>
             <ul className="flex flex-col">
-              {app.checklist.map((item) => (
+              {items.map((item) => (
                 <li key={item.id} className="border-t border-[#e2e0ea]">
                   <button
                     type="button"
                     role="checkbox"
                     aria-checked={item.done}
-                    onClick={() => onChecklist(app.checklist.map((i) => (i.id === item.id ? { ...i, done: !i.done } : i)))}
+                    onClick={() => onChecklist(setChecklistItem(app.checklist, item.id, !item.done))}
                     className={`flex min-h-11 w-full items-center gap-2.5 rounded-lg py-2.5 text-left text-[14px] transition-colors hover:bg-[#f7f6fb] motion-reduce:transition-none ${focusCls}`}
                   >
                     <span
@@ -472,6 +569,8 @@ function ApplicationDrawer({
               ))}
             </ul>
           </div>
+
+          <DetailsForm key={app.id} app={app} onSave={onDetails} />
 
           <div>
             <p className={`${sectionLabelCls} mb-2`}>Resume sent</p>
@@ -552,7 +651,7 @@ function CreateDialog({
   onClose: () => void;
   onCreated: (row: JobRow) => void;
 }) {
-  const [form, setForm] = useState({ resumeId: resumes[0]?.id ?? "", company: "", title: "", jdText: "", status: initialStage });
+  const [form, setForm] = useState({ resumeId: resumes[0]?.id ?? "", company: "", title: "", jobUrl: "", jdText: "", status: initialStage });
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const formRef = useDialogFocus<HTMLFormElement>();
@@ -577,6 +676,7 @@ function CreateDialog({
         jdText: form.jdText.trim(),
         title: form.title.trim() || undefined,
         company: form.company.trim() || undefined,
+        jobUrl: normalizeUrl(form.jobUrl) ?? undefined,
       }),
     }).catch(() => null);
     const j = r ? await r.json().catch(() => ({})) : {};
@@ -598,6 +698,10 @@ function CreateDialog({
       company: form.company.trim() || null,
       title: form.title.trim() || null,
       status: form.status,
+      stageChangedAt: now,
+      jobUrl: normalizeUrl(form.jobUrl),
+      interviewAt: null,
+      interviewLabel: null,
       jdExcerpt: form.jdText.trim().slice(0, 1200),
       checklist: normalizeChecklist(j.application.checklist),
       createdAt: now,
@@ -628,6 +732,20 @@ function CreateDialog({
             <input className={fieldCls} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
           </label>
         </div>
+        <label>
+          <span className={labelCls}>
+            Link to the job post <span className="font-normal text-[#66647c]">(optional)</span>
+          </span>
+          <input
+            className={fieldCls}
+            type="text"
+            autoComplete="url"
+            inputMode="url"
+            value={form.jobUrl}
+            onChange={(e) => setForm({ ...form, jobUrl: e.target.value })}
+            placeholder="https://"
+          />
+        </label>
         <label>
           <span className={labelCls}>Job post</span>
           <textarea
@@ -673,5 +791,79 @@ function CreateDialog({
         </div>
       </form>
     </div>
+  );
+}
+
+/** "northwind.com/jobs/123" → "https://northwind.com/jobs/123"; empty → null. */
+function normalizeUrl(v: string): string | null {
+  const t = v.trim();
+  if (!t) return null;
+  return /^https?:\/\//i.test(t) ? t : `https://${t}`;
+}
+
+/** Job-post link and next interview, saved together from the drawer. */
+function DetailsForm({
+  app,
+  onSave,
+}: {
+  app: JobRow;
+  onSave: (patch: { jobUrl?: string | null; interviewAt?: string | null; interviewLabel?: string | null }) => Promise<string | null>;
+}) {
+  const [url, setUrl] = useState(app.jobUrl ?? "");
+  const [when, setWhen] = useState(() => toLocalInput(app.interviewAt));
+  const [kind, setKind] = useState(app.interviewLabel ?? "");
+  const [saving, setSaving] = useState(false);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const dirty = url !== (app.jobUrl ?? "") || when !== toLocalInput(app.interviewAt) || kind !== (app.interviewLabel ?? "");
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setMsg(null);
+    const at = when ? new Date(when) : null;
+    if (at && Number.isNaN(at.getTime())) {
+      setSaving(false);
+      return setMsg({ ok: false, text: "Pick a valid interview date and time." });
+    }
+    const err = await onSave({ jobUrl: normalizeUrl(url), interviewAt: at ? at.toISOString() : null, interviewLabel: kind.trim() || null });
+    setSaving(false);
+    setMsg(err ? { ok: false, text: err } : { ok: true, text: "Saved" });
+  }
+
+  return (
+    <form onSubmit={save} aria-labelledby={`details-${app.id}`} className="flex flex-col gap-3">
+      <h3 id={`details-${app.id}`} className={sectionLabelCls}>
+        <CalendarClock className="mr-1.5 inline h-4 w-4 align-[-3px]" aria-hidden />
+        Interview and link
+      </h3>
+      <div className="grid gap-3 min-[400px]:grid-cols-[0.8fr_1.2fr]">
+        <label>
+          <span className={labelCls}>Interview type</span>
+          <input className={fieldCls} value={kind} onChange={(e) => setKind(e.target.value)} maxLength={60} placeholder="Panel" />
+        </label>
+        <label>
+          <span className={labelCls}>Date and time</span>
+          <input className={fieldCls} type="datetime-local" value={when} onChange={(e) => setWhen(e.target.value)} />
+        </label>
+      </div>
+      <label>
+        <span className={labelCls}>Link to the job post</span>
+        <input className={fieldCls} type="text" inputMode="url" autoComplete="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://" />
+      </label>
+      <div className="flex flex-wrap items-center gap-3">
+        <button type="submit" disabled={saving || !dirty} className={appBtnSoft}>
+          {saving ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
+          Save details
+        </button>
+        {when ? (
+          <button type="button" onClick={() => setWhen("")} className={appBtnGhost}>
+            Clear interview
+          </button>
+        ) : null}
+        <p role={msg?.ok === false ? "alert" : "status"} className={`text-[14px] font-semibold ${msg?.ok ? "text-[#0b7a4f]" : "text-[#a3262b]"}`}>
+          {msg?.text}
+        </p>
+      </div>
+    </form>
   );
 }
