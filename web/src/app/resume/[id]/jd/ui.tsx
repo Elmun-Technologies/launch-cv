@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Check, Loader2, X } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
@@ -72,8 +72,16 @@ export function JdClient({
   const [appCompany, setAppCompany] = useState("");
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   async function run() {
     setLoading(true);
+    // On one-column layouts the report renders below the form; bring it into view.
+    if (window.matchMedia("(max-width: 1023px)").matches) {
+      requestAnimationFrame(() =>
+        resultsRef.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }),
+      );
+    }
     setError(null);
     setUpgrade(false);
     setSaveMsg(null);
@@ -186,7 +194,7 @@ export function JdClient({
         </section>
 
         {/* Results */}
-        <div className="flex min-w-0 flex-col gap-4" aria-busy={loading}>
+        <div ref={resultsRef} className="flex min-w-0 scroll-mt-4 flex-col gap-4" aria-busy={loading}>
           {error ? <ToolNotice message={error} upgrade={upgrade} location="jd_paywall" kind="jd" limits={planLimits} autoOpen /> : null}
 
           {loading ? <ToolSkeleton rows={4} className="h-24" /> : null}
