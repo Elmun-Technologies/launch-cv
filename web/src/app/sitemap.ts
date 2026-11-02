@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { RESUME_EXAMPLES } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES } from "@/lib/cover-letter-examples";
-import { contentUpdated } from "@/lib/content-dates";
+import { SAMPLES_DATE_KEY, contentUpdated } from "@/lib/content-dates";
 import { getSiteUrl } from "@/lib/site";
 import { ATS_VENDORS } from "@/lib/seo/ats-vendors";
 
@@ -56,7 +56,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/contact", "yearly", 0.5),
     page("/resume-templates", "monthly", 0.8),
     page("/resume-examples", "monthly", 0.8),
-    ...RESUME_EXAMPLES.map((e) => page(`/resume-examples/${e.slug}`, "monthly", 0.8, "/resume-examples/*")),
+    ...RESUME_EXAMPLES.map((e) => page(`/resume-examples/${e.slug}`, "monthly", 0.8, e.variants?.length ? SAMPLES_DATE_KEY : "/resume-examples/*")),
     page("/cover-letter-examples", "monthly", 0.8),
     ...COVER_LETTER_EXAMPLES.map((c) => page(`/cover-letter-examples/${c.slug}`, "monthly", 0.7, "/cover-letter-examples/*")),
     page("/resume-format", "monthly", 0.8),

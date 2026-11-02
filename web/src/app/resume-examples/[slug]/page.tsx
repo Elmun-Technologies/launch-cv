@@ -15,7 +15,8 @@ import { ResumePreview } from "@/components/resume-preview";
 import { fitTitle, buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
-import { RESUME_EXAMPLES, exampleResumeText, getResumeExample } from "@/lib/resume-examples";
+import { RESUME_EXAMPLES, exampleResumeText, exampleSampleCount, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
+import { CONTENT_UPDATED, SAMPLES_DATE_KEY } from "@/lib/content-dates";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 import { withArticle } from "@/lib/article";
@@ -33,9 +34,17 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const { slug } = await params;
   const e = getResumeExample(slug);
   if (!e) return {};
+  const n = exampleSampleCount(e);
   return buildMarketingMetadata({
-    title: fitTitle(`${e.role} Resume Example & Keywords (2026)`, `${e.role} Resume Example (2026)`, `${e.role} Resume Example`),
-    description: `${withArticle(roleLower(e.role), true)} resume example you can copy, with summary and bullet examples, the keywords recruiters search for and ATS tips.`,
+    // With extra samples the count leads, like "6 Registered Nurse Resume Examples (2026)"; n counts every sample on the page.
+    title:
+      n > 1
+        ? fitTitle(`${n} ${e.role} Resume Examples (2026)`, `${n} ${e.role} Resume Examples`, `${n} ${e.role} Resumes`)
+        : fitTitle(`${e.role} Resume Example & Keywords (2026)`, `${e.role} Resume Example (2026)`, `${e.role} Resume Example`),
+    description:
+      n > 1
+        ? `${n} ${roleLower(e.role)} resume examples you can copy — ${sampleList(e)} — with keywords and ATS tips.`
+        : `${withArticle(roleLower(e.role), true)} resume example you can copy, with summary and bullet examples, the keywords recruiters search for and ATS tips.`,
     pathname: `/resume-examples/${e.slug}`,
     image: DEFAULT_OG_IMAGE,
     keywords: [
@@ -43,12 +52,15 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       `${roleLower(e.role)} resume example`,
       `${roleLower(e.role)} resume keywords`,
       `${roleLower(e.role)} resume summary`,
+      ...(n > 1 ? [`${roleLower(e.role)} resume examples`, `${roleLower(e.role)} resume samples`] : []),
     ],
   });
 }
 
 const UPDATED = "2026-10-26";
-const UPDATED_LABEL = new Date(`${UPDATED}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+/** Pages with extra samples changed later than the rest. */
+const SAMPLES_UPDATED = CONTENT_UPDATED[SAMPLES_DATE_KEY];
+const dateLabel = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
 const sectionCls = `${container} scroll-mt-6 pt-16 lg:pt-[130px]`;
 const inlineLink = "font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] transition-colors hover:decoration-[#5440e8]";
 const NUM = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
@@ -73,17 +85,21 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
   const hasLetter = !!getCoverLetterExample(e.slug);
   const cutout = CUTOUTS[e.slug];
   const firstName = r.name.split(" ")[0];
+  const variants = e.variants ?? [];
+  const n = exampleSampleCount(e);
+  const updated = variants.length ? SAMPLES_UPDATED : UPDATED;
+  const variantHref = (id: string) => `/register?next=${encodeURIComponent(`/resume/new?example=${e.slug}&variant=${id}`)}`;
 
   const ld = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Article",
-        headline: `${e.role} resume example`,
+        headline: n > 1 ? `${n} ${role} resume examples` : `${e.role} resume example`,
         description: e.intro,
         url,
         ...(e.photo ? { image: absoluteUrl(e.photo.src) } : {}),
-        dateModified: UPDATED,
+        dateModified: updated,
         inLanguage: "en-US",
         isPartOf: { "@id": WEBSITE_ID },
         author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
@@ -105,6 +121,20 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
           acceptedAnswer: { "@type": "Answer", text: f.a },
         })),
       },
+      // The samples on the page, in order, each at its own anchor.
+      ...(variants.length
+        ? [
+            {
+              "@type": "ItemList",
+              name: `${e.role} resume samples`,
+              numberOfItems: n,
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: `${r.headline} resume`, url: `${url}#example` },
+                ...variants.map((v, i) => ({ "@type": "ListItem", position: i + 2, name: `${v.label} resume`, url: `${url}#sample-${v.id}` })),
+              ],
+            },
+          ]
+        : []),
     ],
   };
 
@@ -123,9 +153,27 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             ]}
           />
           <h1 className="mt-3.5 text-[36px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:mt-6 sm:text-[52px] sm:leading-[1.05] lg:text-[60px] lg:leading-[62px]">
-            {e.role} resume example. <span className="text-[#7c7a94]">Plus the keywords recruiters search for.</span>
+            {n > 1 ? `${n} ${e.role} resume examples.` : `${e.role} resume example.`}{" "}
+            <span className="text-[#7c7a94]">Plus the keywords recruiters search for.</span>
           </h1>
-          <p className="mt-4 text-[17px] leading-[1.6] text-[#4a4862] sm:mt-5 sm:text-[18px] sm:leading-7">{e.intro}</p>
+          <p className="mt-4 text-[17px] leading-[1.6] text-[#4a4862] sm:mt-5 sm:text-[18px] sm:leading-7">
+            {e.intro}
+            {variants.length ? (
+              <>
+                {" "}
+                {NUM[n] ?? n} full samples here: the one below, plus{" "}
+                {variants.map((v, i) => (
+                  <span key={v.id}>
+                    {i > 0 ? (i === variants.length - 1 ? " and " : ", ") : null}
+                    <a href={`#sample-${v.id}`} className="lc-link hover:text-[#5440e8]">
+                      {roleLower(v.label)}
+                    </a>
+                  </span>
+                ))}
+                .
+              </>
+            ) : null}
+          </p>
           <div className="mt-[18px] flex flex-col gap-2.5 sm:mt-7 sm:flex-row">
             <CtaLink cta="use_example" location="resume_example" href={startHref} className={btnPrimary}>
               Start from this example
@@ -139,7 +187,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             <Link href="/about" className="lc-link hover:text-[#5440e8]">
               {SITE_AUTHOR.name}
             </Link>
-            <span className="hidden sm:inline">, {SITE_AUTHOR.role}</span> · Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
+            <span className="hidden sm:inline">, {SITE_AUTHOR.role}</span> · Updated <time dateTime={updated}>{dateLabel(updated)}</time>
           </p>
         </div>
 
@@ -186,7 +234,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
       {/* THE EXAMPLE */}
       <section id="example" className={sectionCls}>
         <div className="lc-reveal flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <SectionHead label="The example" title={`${e.role} resume example.`} />
+          <SectionHead label="The example" title={`${e.role} resume example.`} muted={n > 1 ? `Sample 1 of ${n}.` : undefined} />
           <CopyPill text={exampleResumeText(e)} label="Copy text" className="self-start sm:self-auto" />
         </div>
         <div className="mt-[18px] grid items-start gap-2.5 lg:mt-10 lg:grid-cols-[1.35fr_0.65fr] lg:gap-6">
@@ -216,6 +264,78 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
           </div>
         </div>
       </section>
+
+      {/* MORE SAMPLES — stacked cards, all in the server HTML; off-screen cards skip rendering via content-visibility */}
+      {variants.length ? (
+        <section id="samples" aria-labelledby="samples-title" className={sectionCls}>
+          <div className="lc-reveal max-w-[820px]">
+            <p className={labelCls}>/ More samples</p>
+            <h2 id="samples-title" className="lc-h2 mt-5">
+              Sample {role} resumes. <span className="text-[#7c7a94]">{NUM[variants.length] ?? variants.length} more, by level and specialty.</span>
+            </h2>
+            <p className="mt-4 text-[16px] leading-[25px] text-[#4a4862] sm:mt-5 sm:text-[18px] sm:leading-7">
+              Each is a full resume you can open in the editor. Pick the one closest to where you are now.
+            </p>
+          </div>
+          <nav aria-label={`${e.role} resume samples`} className="mt-[18px] lg:mt-8">
+            <ul className="flex flex-wrap gap-2">
+              {variants.map((v) => (
+                <li key={v.id}>
+                  <a
+                    href={`#sample-${v.id}`}
+                    className="inline-flex min-h-11 items-center rounded-full bg-white px-4 text-[14px] font-semibold text-[#121226] transition-colors hover:bg-[#e4dfff] sm:text-[15px]"
+                  >
+                    {v.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <ol className="mt-4 flex flex-col gap-4 lg:mt-8 lg:gap-6">
+            {variants.map((v, i) => (
+              <li
+                key={v.id}
+                id={`sample-${v.id}`}
+                className="scroll-mt-6 [contain-intrinsic-size:auto_1200px] [content-visibility:auto] lg:[contain-intrinsic-size:auto_920px]"
+              >
+                <article aria-labelledby={`sample-${v.id}-title`} className="lc-card rounded-[24px] p-3.5 sm:p-6 lg:rounded-[36px] lg:p-8">
+                  <div className="flex flex-col justify-between gap-3 px-1 pb-3.5 pt-1 sm:flex-row sm:items-end sm:px-0 sm:pb-6 sm:pt-0">
+                    <div>
+                      <p className="flex flex-wrap items-center gap-2">
+                        <Chip tone="lilac">
+                          Sample {i + 2} of {n}
+                        </Chip>
+                        <span className="text-[13px] font-semibold text-[#66647c] sm:text-[14px]">{v.level}</span>
+                      </p>
+                      <h3 id={`sample-${v.id}-title`} className="mt-2.5 text-[24px] font-extrabold leading-[1.15] tracking-[-0.03em] sm:text-[30px]">
+                        {v.label} resume
+                      </h3>
+                    </div>
+                    <CopyPill text={exampleResumeText(e, v.id)} label="Copy text" tone="soft" className="self-start sm:self-auto" />
+                  </div>
+                  <div className="grid items-start gap-2.5 lg:grid-cols-[1.35fr_0.65fr] lg:gap-6">
+                    <div className="rounded-[20px] bg-[#e4dfff] p-2.5 sm:p-7 lg:rounded-[28px] lg:p-8">
+                      <div className="sm:shadow-[0_30px_60px_-24px_rgba(10,6,60,.45)]">
+                        <ExampleResumeSheet content={exampleToContent(e, undefined, v.id)} />
+                      </div>
+                    </div>
+                    <div className="flex flex-col gap-2.5 lg:gap-4">
+                      <div className="rounded-[20px] bg-[#111118] px-5 py-[22px] text-white sm:p-7 lg:rounded-[28px]">
+                        <h4 className={`${labelCls} !text-[14px] !text-[#c9c0ff] sm:!text-[16px]`}>Why it works</h4>
+                        <p className="mt-2.5 text-[15px] leading-6 text-[#e9e7f3] sm:mt-3.5 sm:text-[17px] sm:leading-[27px]">{v.whyItWorks}</p>
+                      </div>
+                      <CtaLink cta="use_example" location="resume_example_variant" href={variantHref(v.id)} className={`${btnPrimary} w-full`}>
+                        Start from this example<span className="sr-only"> ({v.label})</span>
+                      </CtaLink>
+                    </div>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 px-2 text-[13px] text-[#66647c]">Sample resumes. Names, companies and figures are illustrative.</p>
+        </section>
+      ) : null}
 
       {/* SUMMARIES */}
       <section id="summary" className={sectionCls}>
@@ -385,6 +505,12 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
       ) : null}
     </SiteShell>
   );
+}
+
+/** "new grad nurse, ICU nurse and travel nurse": the extra samples' labels as a phrase. */
+function sampleList(e: ResumeExample): string {
+  const labels = (e.variants ?? []).map((v) => roleLower(v.label));
+  return labels.length > 1 ? `${labels.slice(0, -1).join(", ")} and ${labels[labels.length - 1]}` : (labels[0] ?? "");
 }
 
 /** "HR Generalist" → "HR generalist": lowercases words but keeps acronyms. */

@@ -30,7 +30,8 @@ type ImportedContent = {
 type ReviewJob = { key: string; include: boolean; role: string; company: string; start: string; end: string; bullets: number; source: ImportedJob };
 /** From the import API: dates the parser normalized from text that could be read more than one way. */
 type DateReading = { index: number; raw: string; start: string; end: string };
-type Example = { slug: string; role: string; vertical: string };
+/** `variants`: the role's extra samples (id and label), when it has any. */
+type Example = { slug: string; role: string; vertical: string; variants?: { id: string; label: string }[] };
 
 const LINKEDIN_MIN = 50;
 
@@ -92,20 +93,29 @@ export function NewResumeClient({
   const [linkedinErr, setLinkedinErr] = useState<string | null>(null);
   /** Set when arriving from a resume example page (?example=<slug>) or the templates page (?template=<style>). */
   const [exampleSlug, setExampleSlug] = useState<string | null>(null);
+  /** One of the example's extra samples (?variant=<id>, from a "Start from this sample" link); null for the main one. */
+  const [variantId, setVariantId] = useState<string | null>(null);
   const [template, setTemplate] = useState<TemplateStyle | null>(null);
 
   useEffect(() => {
     const slug = readParam("example");
+    const variant = readParam("variant");
     const t = readParam("template");
     queueMicrotask(() => {
-      if (slug && /^[a-z0-9-]{2,80}$/.test(slug)) setExampleSlug(slug);
+      if (slug && /^[a-z0-9-]{2,80}$/.test(slug)) {
+        setExampleSlug(slug);
+        if (variant && /^[a-z0-9-]{1,40}$/.test(variant)) setVariantId(variant);
+      }
       if (t && TEMPLATE_STYLES.includes(t as TemplateStyle)) setTemplate(t as TemplateStyle);
     });
   }, []);
 
+  const exampleInfo = exampleSlug ? examples.find((e) => e.slug === exampleSlug) : undefined;
   const exampleRole = exampleSlug
-    ? (examples.find((e) => e.slug === exampleSlug)?.role ?? exampleSlug.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()))
+    ? (exampleInfo?.role ?? exampleSlug.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()))
     : "";
+  // Unknown variant ids fall back to the main sample, same as the API.
+  const variantLabel = (variantId && exampleInfo?.variants?.find((v) => v.id === variantId)?.label) || "";
 
   useEffect(() => {
     if (step !== "review" || !shouldOfferSatisfactionSurvey()) return undefined;
@@ -128,14 +138,14 @@ export function NewResumeClient({
     }
   }
 
-  async function handleCreate(example?: string) {
+  async function handleCreate(example?: string, variant?: string | null) {
     setCreating(true);
     setCreateErr(null);
     const vertical = (example && examples.find((e) => e.slug === example)?.vertical) || defaultVertical;
     const r = await fetch("/api/resumes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "New resume", vertical, regionMode: "us", ...(example ? { example } : {}) }),
+      body: JSON.stringify({ title: "New resume", vertical, regionMode: "us", ...(example ? { example } : {}), ...(example && variant ? { variant } : {}) }),
     }).catch(() => null);
     const j = r ? await r.json().catch(() => ({})) : {};
     if (r?.ok && j.id) {
@@ -293,6 +303,7 @@ export function NewResumeClient({
 
   function pickExample(slug: string) {
     setExampleSlug(slug);
+    setVariantId(null);
     setCreateErr(null);
     requestAnimationFrame(() => {
       exampleRef.current?.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
@@ -351,7 +362,7 @@ export function NewResumeClient({
               >
                 <div className="min-w-0">
                   <h2 id="example-start" ref={exampleRef} tabIndex={-1} className="text-[20px] font-extrabold leading-[26px] outline-none">
-                    Start from the {exampleRole} example
+                    {variantLabel ? `Start from the ${variantLabel} sample` : `Start from the ${exampleRole} example`}
                   </h2>
                   <p className="mt-1.5 max-w-[560px] text-[14px] leading-[21px] text-[#c9c7d8]">
                     We&apos;ll copy its summary, experience and skills into a new resume with your name and email. Replace the sample details
@@ -359,13 +370,16 @@ export function NewResumeClient({
                   </p>
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-                  <button type="button" onClick={() => void handleCreate(exampleSlug)} disabled={creating} className={appBtnWhite}>
+                  <button type="button" onClick={() => void handleCreate(exampleSlug, variantLabel ? variantId : null)} disabled={creating} className={appBtnWhite}>
                     {creating ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
                     Use this example
                   </button>
                   <button
                     type="button"
-                    onClick={() => setExampleSlug(null)}
+                    onClick={() => {
+                      setExampleSlug(null);
+                      setVariantId(null);
+                    }}
                     disabled={creating}
                     className="focus-visible:outline-[#5440e8]! focus-visible:rounded-full! inline-flex min-h-11 items-center justify-center rounded-full px-4 text-[14px] font-semibold text-[#c9c7d8] transition-colors hover:bg-white/10 hover:text-white disabled:opacity-60"
                   >
