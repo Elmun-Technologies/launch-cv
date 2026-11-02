@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Loader2, X } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
@@ -76,6 +76,21 @@ export function JdClient({
 
   const resultsRef = useRef<HTMLDivElement>(null);
   const jdRef = useRef<HTMLTextAreaElement>(null);
+
+  // Start from the job description pasted into the editor's "Target a job" panel, if any.
+  // Read after the first paint, so the server and browser render the same empty box.
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      let saved: string | null = null;
+      try {
+        saved = window.localStorage.getItem(`lcv_jd_${resumeId}`);
+      } catch {
+        // storage unavailable
+      }
+      if (saved) setJd((cur) => cur || saved);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [resumeId]);
 
   async function run() {
     setLoading(true);
