@@ -16,6 +16,9 @@ const schema = z.object({
   jdText: z.string().min(40).max(24000),
 });
 
+const NUM_RE = /\$?\d[\d,.]*(?:%|[kKmM]\b|\+)?/g;
+const normNum = (s: string) => s.replace(/[$,+]/g, "").replace(/\.$/, "").toLowerCase();
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -73,6 +76,14 @@ Task:
   try {
     const raw = await chatJson<JdAlignResult>({ system, user: userPrompt, tool: "jd_align", userId: session.sub, paid: usage.paid });
     const result = parseJdResult(raw);
+    // Rewrites may only use figures that are already in the resume; anything else
+    // becomes a "[number]" placeholder for the candidate to fill in.
+    if (result) {
+      const known = new Set((JSON.stringify(content).match(NUM_RE) ?? []).map(normNum));
+      result.rewritten_bullets = result.rewritten_bullets.map((r) =>
+        typeof r?.new_text === "string" ? { ...r, new_text: r.new_text.replace(NUM_RE, (m) => (known.has(normNum(m)) ? m : "[number]")) } : r,
+      );
+    }
     if (!result) {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
     }

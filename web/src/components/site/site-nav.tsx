@@ -15,6 +15,8 @@ const LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
+const GUIDE_ROUTES = ["/resume-format", "/how-to-write-a-resume", "/resume-length", "/cover-letter-template", "/resume-action-verbs", "/resume-keywords", "/ats"];
+
 export function SiteNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -33,7 +35,9 @@ export function SiteNav() {
     };
   }, [open]);
 
-  const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const under = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  // Guides live outside /blog but belong to it in the nav.
+  const active = (href: string) => under(href) || (href === "/blog" && GUIDE_ROUTES.some(under));
 
   return (
     <header className="relative z-40 mx-auto flex w-full max-w-[1360px] items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-10 lg:py-6">
