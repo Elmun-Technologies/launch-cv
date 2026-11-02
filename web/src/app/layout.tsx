@@ -18,6 +18,9 @@ const inter = localFont({
   weight: "100 900",
   variable: "--font-inter",
   display: "swap",
+  // The site and cabinet render in Figtree (lib/site-fonts); Inter is only a fallback
+  // for the few surfaces outside .lc-site, so don't spend the preload slot on it.
+  preload: false,
 });
 
 const geistMono = localFont({
