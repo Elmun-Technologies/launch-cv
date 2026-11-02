@@ -14,7 +14,8 @@ export type ImageUploadFieldProps = {
 /**
  * Upload-first image picker for the admin CMS. Replaces the old
  * paste-a-URL text input: admins pick a file, it's uploaded via
- * /api/admin-panel/media/upload, and the returned public URL is stored.
+ * /api/admin-panel/media/upload (stored in the database and served from
+ * /media/<id>.<ext>), and the returned public URL is stored.
  * A manual URL override remains available for advanced cases.
  */
 export function ImageUploadField({ value, onChange, alt }: ImageUploadFieldProps) {
@@ -50,13 +51,18 @@ export function ImageUploadField({ value, onChange, alt }: ImageUploadFieldProps
     [alt, onChange],
   );
 
+  const smallBtn =
+    "inline-flex min-h-11 items-center gap-1.5 rounded-full px-3.5 text-[13px] font-semibold transition-colors focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#5440e8] disabled:opacity-55 sm:min-h-9";
+
   return (
-    <div className="space-y-2">
+    <div className="flex flex-col gap-2">
       <input
         ref={inputRef}
         type="file"
         accept="image/*"
         className="hidden"
+        tabIndex={-1}
+        aria-hidden="true"
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) void handleFile(file);
@@ -65,31 +71,27 @@ export function ImageUploadField({ value, onChange, alt }: ImageUploadFieldProps
       />
 
       {value ? (
-        <div className="flex items-center gap-3 rounded-lg border border-[#E5E5E2] bg-[#FAFAF9] p-2">
+        <div className="flex items-center gap-3 rounded-2xl bg-[#f7f6fb] p-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={value}
-            alt={alt ?? ""}
-            className="h-14 w-14 shrink-0 rounded-md border border-[#E5E5E2] object-cover"
-          />
+          <img src={value} alt={alt ?? ""} className="h-16 w-16 shrink-0 rounded-xl bg-white object-cover" />
           <div className="min-w-0 flex-1">
-            <p className="truncate font-mono text-[11px] text-[#3F3F3F]">{value}</p>
-            <div className="mt-1.5 flex items-center gap-2">
+            <p className="lc-mono truncate text-[12px] text-[#4a4862]">{value}</p>
+            <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => inputRef.current?.click()}
                 disabled={uploading}
-                className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2 py-1 text-[11px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:opacity-50"
+                className={`${smallBtn} bg-white text-[#121226] hover:bg-[#e4dfff]`}
               >
-                {uploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
-                Replace
+                {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> : <Upload className="h-3.5 w-3.5" aria-hidden="true" />}
+                {uploading ? "Uploading…" : "Replace"}
               </button>
               <button
                 type="button"
                 onClick={() => onChange("")}
-                className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2 py-1 text-[11px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
+                className={`${smallBtn} text-[#4a4862] hover:bg-white hover:text-[#a3222a]`}
               >
-                <X className="h-3 w-3" /> Remove
+                <X className="h-3.5 w-3.5" aria-hidden="true" /> Remove
               </button>
             </div>
           </div>
@@ -99,34 +101,37 @@ export function ImageUploadField({ value, onChange, alt }: ImageUploadFieldProps
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={uploading}
-          className="flex w-full flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-[#D9D9D5] bg-[#FAFAF9] px-4 py-5 text-[#6B6B6B] transition hover:border-[#8A8A86] hover:bg-[#F5F5F3] disabled:opacity-50"
+          className="flex w-full flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-dashed border-[#c9c0ff] bg-[#f7f6fb] px-4 py-5 text-[#4a4862] transition-colors hover:border-[#5440e8] hover:bg-[#f1eff8] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#5440e8] disabled:opacity-55"
         >
           {uploading ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <Loader2 className="h-5 w-5 animate-spin text-[#5440e8]" aria-hidden="true" />
           ) : (
-            <ImageIcon className="h-5 w-5 text-[#8A8A86]" />
+            <ImageIcon className="h-5 w-5 text-[#5440e8]" aria-hidden="true" />
           )}
-          <span className="text-[12px] font-semibold">
-            {uploading ? "Uploading…" : "Upload image"}
-          </span>
-          <span className="text-[11px] text-[#8A8A86]">PNG, JPG, WebP, GIF or AVIF · max 5 MB</span>
+          <span className="text-[14px] font-bold text-[#121226]">{uploading ? "Uploading…" : "Upload image"}</span>
+          <span className="text-[12px] text-[#66647c]">PNG, JPG, WebP, GIF or AVIF · max 5 MB</span>
         </button>
       )}
 
-      {error ? <p className="text-[11px] text-red-600">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-[13px] font-semibold text-[#a3222a]">
+          {error}
+        </p>
+      ) : null}
 
       {manual ? (
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="/uploads/cms/… or https://…"
-          className="block w-full rounded-lg border border-[#E5E5E2] bg-white px-3 py-2 font-mono text-[12px] text-[#111111] outline-none transition focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/10"
+          placeholder="/media/… or https://…"
+          aria-label="Image URL"
+          className="lc-mono block h-11 w-full rounded-[14px] border-[1.5px] border-[#e2e0ea] bg-white px-3.5 text-[16px] text-[#121226] outline-none transition-[border-color,box-shadow] placeholder:text-[#706e88] hover:border-[#c9c0ff] focus:border-[#5440e8] focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none! sm:text-[13px]"
         />
       ) : (
         <button
           type="button"
           onClick={() => setManual(true)}
-          className="text-[11px] font-medium text-[#6B6B6B] underline-offset-2 hover:text-[#2563EB] hover:underline"
+          className="inline-flex min-h-11 items-center self-start rounded-lg text-[13px] font-semibold text-[#4a4862] underline-offset-2 hover:text-[#5440e8] hover:underline focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[#5440e8] sm:min-h-8"
         >
           or enter a URL manually
         </button>
