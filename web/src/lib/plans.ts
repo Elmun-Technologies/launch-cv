@@ -50,16 +50,37 @@ export function variantIdForCheckoutPlan(plan: CheckoutPlan): string | undefined
   }
 }
 
+const PLAN_RANK: Record<PlanId, number> = { none: 0, starter: 1, professional: 2, elite: 3, lifetime: 4 };
+const GRANTABLE = new Set<string>(["starter", "professional", "elite", "lifetime"]);
+
+/** A staff-granted plan (User.grantedPlan) while it applies, else "none". */
+export function activeGrantedPlan(
+  user: { grantedPlan: string | null; grantedPlanUntil: Date | null } | null | undefined,
+  now = Date.now(),
+): PlanId {
+  if (!user?.grantedPlan || !GRANTABLE.has(user.grantedPlan)) return "none";
+  if (user.grantedPlanUntil && user.grantedPlanUntil.getTime() <= now) return "none";
+  return user.grantedPlan as PlanId;
+}
+
+/** The higher of two plans (a grant never lowers what someone pays for). */
+export function higherPlan(a: PlanId, b: PlanId): PlanId {
+  return PLAN_RANK[a] >= PLAN_RANK[b] ? a : b;
+}
+
 export async function getUserPlanId(userId: string): Promise<PlanId> {
-  const sub = await prisma.subscription.findUnique({
-    where: { userId },
-    select: { status: true, currentPeriodEnd: true, stripePriceId: true },
-  });
-  if (!sub) return "none";
-  if (!subscriptionRowGrantsPaid({ status: sub.status, currentPeriodEnd: sub.currentPeriodEnd })) {
-    return "none";
+  const [sub, user] = await Promise.all([
+    prisma.subscription.findUnique({
+      where: { userId },
+      select: { status: true, currentPeriodEnd: true, stripePriceId: true },
+    }),
+    prisma.user.findUnique({ where: { id: userId }, select: { grantedPlan: true, grantedPlanUntil: true } }),
+  ]);
+  const granted = activeGrantedPlan(user);
+  if (!sub || !subscriptionRowGrantsPaid({ status: sub.status, currentPeriodEnd: sub.currentPeriodEnd })) {
+    return granted;
   }
-  return planIdFromVariantId(sub.stripePriceId);
+  return higherPlan(await planIdFromVariantId(sub.stripePriceId), granted);
 }
 
 /** Monthly AI limits for a plan, as set in Admin → Limits & budgets. */

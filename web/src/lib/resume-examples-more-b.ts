@@ -7,6 +7,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "electrician",
     role: "Electrician",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-electrician.webp", alt: "Electrician in a hard hat and gloves working on a wall-mounted electrical box" },
     level: "Mid-level · 7 years experience",
     intro:
       "An electrician resume that leads with your license and shows the systems you install, the code you work to and the inspections you pass — with the keywords contractors screen for.",
@@ -168,6 +169,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "maintenance-technician",
     role: "Maintenance Technician",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-maintenance-technician.webp", alt: "Maintenance technician in a hi-vis jacket working on a wall-mounted pipe manifold" },
     level: "Mid-level · 6 years experience",
     intro:
       "A maintenance technician resume that proves you keep equipment running — with downtime, preventive maintenance and the PLC, hydraulics and safety keywords plant managers search for.",
@@ -248,6 +250,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "warehouse-associate",
     role: "Warehouse Associate",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-warehouse-associate.webp", alt: "Warehouse worker on a rolling ladder in an aisle of stocked pallet racks" },
     level: "Experienced · 3 years",
     intro:
       "A warehouse associate resume that shows your pick rate, accuracy and safety record — plus the forklift, scanner and shipping keywords distribution centers screen for.",
@@ -328,6 +331,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "truck-driver",
     role: "Truck Driver",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-truck-driver.webp", alt: "Semi truck with a refrigerated trailer on a highway" },
     level: "Experienced · 8 years",
     intro:
       "A truck driver resume that leads with your CDL class and endorsements, then proves safety and on-time delivery — with the keywords carriers and recruiters filter on.",
@@ -408,6 +412,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "logistics-coordinator",
     role: "Logistics Coordinator",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-logistics-coordinator.webp", alt: "Aerial view of semi trailers parked in rows at a distribution center lot" },
     level: "Mid-level · 5 years experience",
     intro:
       "A logistics coordinator resume that shows shipments moved on time and freight costs controlled — with the TMS, carrier and documentation keywords supply chain teams screen for.",
@@ -490,6 +495,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "retail-sales-associate",
     role: "Retail Sales Associate",
     group: "Retail & hospitality",
+    photo: { src: "/images/photos/role-retail-sales-associate.webp", alt: "Clothing store wall with dresses and shirts on racks and folded jeans on shelves" },
     level: "Experienced · 3 years",
     intro:
       "A retail sales associate resume that shows you help customers, hit sales goals and keep the floor running — with the POS, merchandising and customer service keywords store managers screen for.",
@@ -648,6 +654,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "cashier",
     role: "Cashier",
     group: "Retail & hospitality",
+    photo: { src: "/images/photos/role-cashier.webp", alt: "Cashier ringing up a customer at a shop counter with a tablet point-of-sale system" },
     level: "Entry level · 2 years experience",
     intro:
       "A cashier resume that proves you're fast, accurate and friendly — with the cash handling, POS and customer service keywords employers look for.",
@@ -726,6 +733,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "server",
     role: "Server",
     group: "Retail & hospitality",
+    photo: { src: "/images/photos/role-server.webp", alt: "Restaurant server in a white shirt, bow tie and brown apron" },
     level: "Experienced · 5 years",
     intro:
       "A server resume that shows you keep guests happy, tables turning and checks growing — with the POS, menu and food safety keywords restaurant managers look for.",
@@ -806,6 +814,7 @@ export const MORE_EXAMPLES_B: ResumeExample[] = [
     slug: "line-cook",
     role: "Line Cook",
     group: "Retail & hospitality",
+    photo: { src: "/images/photos/role-line-cook.webp", alt: "Line cook flambeing a pan over a gas range in a restaurant kitchen" },
     level: "Experienced · 4 years",
     intro:
       "A line cook resume that shows the stations you work, your speed on the line and your food safety habits — with the kitchen keywords chefs and kitchen managers look for.",

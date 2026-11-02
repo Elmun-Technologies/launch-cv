@@ -17,7 +17,7 @@ export function freeTools(): FreeTool[] {
   return [
     { key: "ats", href: "/free-ats-check", name: "ATS resume checker", blurb: "A 0–100 score and a fix for each issue", kind: "AI" },
     { key: "bullets", href: "/tools/resume-bullet-point-generator", name: "Bullet point generator", blurb: "Duty in, result-first bullets out", kind: "AI" },
-    { key: "summary", href: "/tools/resume-summary-generator", name: "Summary generator", blurb: "Two summaries from your own facts", kind: "AI" },
+    { key: "summary", href: "/tools/resume-summary-generator", name: "Summary generator", blurb: "Three summaries from your own facts", kind: "AI" },
     { key: "words", href: "/tools/resume-word-counter", name: "Resume word counter", blurb: "Length, bullets and filler words", kind: "Instant" },
     { key: "verbs", href: "/resume-action-verbs", name: "Action verbs", blurb: `${countVerbs()} verbs by skill, with examples`, kind: "Guide" },
   ];

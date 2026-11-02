@@ -1,3 +1,5 @@
+import { FaqIcon } from "@/components/site/ui";
+
 /**
  * v5 "Key facts" / TL;DR answer box. The `lc-key-facts` and
  * `lc-key-facts-lead` classes are referenced by each page's
@@ -33,11 +35,7 @@ export function FaqList({ items }: { items: { q: string; a: string }[] }) {
         <details key={f.q} open={i === 0} className="lc-faq group rounded-[24px] bg-white px-5 transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)] sm:px-6">
           <summary className="flex min-h-[44px] items-center justify-between gap-4 py-[18px] sm:py-[22px]">
             <span className="text-[16px] font-bold leading-6 sm:text-[18px]">{f.q}</span>
-            <span className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] group-hover:bg-[#e4dfff]" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#121226" strokeWidth="2.2" strokeLinecap="round">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-            </span>
+            <FaqIcon />
           </summary>
           <p className="-mt-1 pb-[18px] text-[16px] leading-[26px] text-[#4a4862] sm:pb-[22px]">{f.a}</p>
         </details>

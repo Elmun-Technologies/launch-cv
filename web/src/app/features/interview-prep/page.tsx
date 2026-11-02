@@ -32,9 +32,9 @@ const stage = (
   <Stage bg="#e4dfff" poster="PREP" posterColor="#d3cbff">
     <div className="absolute bottom-[19px] right-[19px] h-[180px] w-[180px] overflow-hidden rounded-full bg-[#c9c0ff] sm:h-[220px] sm:w-[220px] lg:bottom-8 lg:right-8 lg:h-[300px] lg:w-[300px]">
       <Image
-        src="/images/people/nurse-arms-crossed.webp"
-        alt="Smiling nurse in blue scrubs with a stethoscope, arms crossed"
-        width={759}
+        src="/images/people/man-blazer-glasses.webp"
+        alt="Man in glasses and a dark blazer"
+        width={767}
         height={1080}
         priority
         sizes="(min-width: 1024px) 282px, 205px"

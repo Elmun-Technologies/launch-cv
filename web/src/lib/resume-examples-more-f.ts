@@ -7,6 +7,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "frontend-developer",
     role: "Frontend Developer",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-frontend-developer.webp", alt: "Developer smiling in front of a whiteboard with a sketched page layout" },
     level: "Mid-level · 5 years experience",
     intro:
       "A frontend developer resume that shows faster pages, accessible interfaces and components other teams reuse — with the React, TypeScript and testing keywords hiring managers search for.",
@@ -86,6 +87,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "graphic-designer",
     role: "Graphic Designer",
     group: "Creative",
+    photo: { src: "/images/photos/role-graphic-designer.webp", alt: "Color swatch cards and a tablet with hand-drawn color studies on a designer's desk" },
     level: "Mid-level · 6 years experience",
     intro:
       "A graphic designer resume that shows what you've designed, for whom and how it went to print or to screen — with the Adobe, brand and production keywords art directors look for.",
@@ -164,6 +166,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "content-writer",
     role: "Content Writer",
     group: "Creative",
+    photo: { src: "/images/photos/role-content-writer.webp", alt: "Hands typing on a laptop keyboard with a document open on screen" },
     level: "Mid-level · 5 years experience",
     intro:
       "A content writer resume that shows traffic, leads and the editorial standards behind your work — with the SEO, editing and CMS keywords content managers search for.",
@@ -323,6 +326,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "supply-chain-analyst",
     role: "Supply Chain Analyst",
     group: "Business",
+    photo: { src: "/images/photos/role-supply-chain-analyst.webp", alt: "Container ship being loaded by cranes at a port" },
     level: "Mid-level · 5 years experience",
     intro:
       "A supply chain analyst resume that shows forecast accuracy, inventory dollars and service levels — with the planning, ERP and analytics keywords supply chain managers search for.",
@@ -483,6 +487,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "construction-project-manager",
     role: "Construction Project Manager",
     group: "Business",
+    photo: { src: "/images/photos/role-construction-project-manager.webp", alt: "Construction crew in hard hats and safety vests on a concrete slab at a building site" },
     level: "Senior · 10 years experience",
     intro:
       "A construction project manager resume that shows project size, schedule and budget results and a clean safety record — with the scheduling, cost and software keywords general contractors screen for.",
@@ -563,6 +568,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "event-planner",
     role: "Event Planner",
     group: "Business",
+    photo: { src: "/images/photos/role-event-planner.webp", alt: "Long banquet table set with wine glasses, white napkins and flower arrangements" },
     level: "Experienced · 7 years",
     intro:
       "An event planner resume that shows the size and number of events you run, the budgets you manage and how they come in — with the logistics, vendor and software keywords event teams search for.",
@@ -723,6 +729,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "welder",
     role: "Welder",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-welder.webp", alt: "Welder in a welding helmet working with sparks flying" },
     level: "Experienced · 6 years",
     intro:
       "A welder resume that leads with your certifications and processes, then shows the codes you weld to and how your welds pass inspection — with the keywords fabrication shops screen for.",
@@ -802,6 +809,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "automotive-technician",
     role: "Automotive Technician",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-automotive-technician.webp", alt: "Automotive technician working under the open hood of a car in a repair shop" },
     level: "Experienced · 7 years",
     intro:
       "An automotive technician resume that leads with your ASE certifications and shows what you diagnose, how efficiently you work and how few repairs come back — with the keywords service managers search for.",
@@ -882,6 +890,7 @@ export const MORE_EXAMPLES_F: ResumeExample[] = [
     slug: "carpenter",
     role: "Carpenter",
     group: "Trades & logistics",
+    photo: { src: "/images/photos/role-carpenter.webp", alt: "Carpenter working at a bench in a wood shop" },
     level: "Journeyman · 9 years",
     intro:
       "A carpenter resume that shows your apprenticeship, the kind of carpentry you do and the size of the projects you build — with the framing, finish and safety keywords contractors search for.",

@@ -7,6 +7,7 @@ import { FaqList } from "@/components/site/library/faq-list";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
+import { PaperPeek } from "@/components/site/paper-peek";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { getResumeExample } from "@/lib/resume-examples";
@@ -158,7 +159,7 @@ export default function ResumeTemplatesPage() {
             <CtaLink cta="build_resume" location="resume_templates_hero" href={BUILD_HREF} className={btnPrimary}>
               Build my resume — free
             </CtaLink>
-            <CtaLink cta="import_resume" location="resume_templates_hero" href={BUILD_HREF} className={`${btnWhite} hidden sm:inline-flex`}>
+            <CtaLink cta="import_resume" location="resume_templates_hero" href={BUILD_HREF} className={`${btnWhite} max-sm:hidden`}>
               Import my resume
             </CtaLink>
           </div>
@@ -211,11 +212,26 @@ export default function ResumeTemplatesPage() {
           {TEMPLATE_STYLES.map((t) => (
             <li key={t} id={t} className="lc-card lc-rise flex scroll-mt-6 flex-col rounded-[26px] p-2 lg:rounded-[30px] lg:p-3">
               <div className={`relative h-[250px] overflow-hidden rounded-[20px] sm:h-[400px] lg:h-[470px] lg:rounded-[22px] ${ABOUT[t].stage}`}>
-                <div className="absolute left-1/2 top-6 w-[270px] -translate-x-1/2 shadow-[0_24px_48px_-20px_rgba(10,6,60,.45)] sm:w-[340px] lg:top-10 lg:w-[420px]">
+                <PaperPeek className="absolute bottom-0 left-1/2 top-6 w-[270px] -translate-x-1/2 rounded-t-[6px] shadow-[0_24px_48px_-20px_rgba(10,6,60,.45)] [--peek:0.42] sm:w-[340px] sm:[--peek:0.5] lg:top-10 lg:w-[420px] lg:[--peek:0.6]">
                   {content ? <ResumePreview content={content} template={t} /> : null}
-                </div>
+                </PaperPeek>
               </div>
-              <div className="flex flex-1 flex-col px-2.5 pb-2 pt-3.5 lg:px-4 lg:pb-2.5 lg:pt-5">
+              {/* Phone: compact footer, name and use-case beside a pill. */}
+              <div className="flex items-center justify-between gap-2.5 px-2.5 pb-2 pt-3.5 sm:hidden">
+                <div>
+                  <h3 className="text-[20px] font-extrabold tracking-[-0.02em]">{TEMPLATE_SPECS[t].label}</h3>
+                  <p className="text-[13px] text-[#66647c]">{ABOUT[t].bestFor}</p>
+                </div>
+                <CtaLink
+                  cta="use_template"
+                  location={`resume_templates:${t}`}
+                  href={startHref(t)}
+                  className={`${ABOUT[t].cta} flex-none !px-4 !py-[11px] !text-[14px]`}
+                >
+                  Use {TEMPLATE_SPECS[t].label}
+                </CtaLink>
+              </div>
+              <div className="hidden flex-1 flex-col px-2.5 pb-2 pt-3.5 sm:flex lg:px-4 lg:pb-2.5 lg:pt-5">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
                   <h3 className="text-[20px] font-extrabold tracking-[-0.02em] lg:text-[26px]">{TEMPLATE_SPECS[t].label}</h3>
                   <p className="text-[13px] text-[#66647c] lg:text-[14px]">Best for: {ABOUT[t].bestFor}</p>

@@ -175,6 +175,7 @@ export default function ResumeExamplesPage() {
           allLabel={`All ${total}`}
           groups={GROUPS.map((g) => ({ key: g, label: g, count: RESUME_EXAMPLES.filter((e) => e.group === g).length })).filter((g) => g.count > 0)}
           items={items}
+          mobileInitial={12}
           gridClassName="mt-3.5 grid grid-cols-2 gap-2 sm:gap-4 lg:mt-7 lg:grid-cols-4"
         />
         <p className="mt-3 text-[12px] text-[#66647c] sm:mt-5 sm:text-[13px]">Names, companies and numbers in the examples are illustrative.</p>
@@ -187,7 +188,7 @@ export default function ResumeExamplesPage() {
           className="lc-reveal lc-rise group relative block overflow-hidden rounded-[26px] bg-[#c9c0ff] px-5 py-6 text-[#111118] sm:p-10 lg:h-[300px] lg:rounded-[36px]"
         >
           <p className={`${labelCls} !text-[#3a2bb8]`}>/ Cover letters</p>
-          <p className="mt-2.5 max-w-[360px] text-[24px] font-extrabold leading-7 tracking-[-0.02em] sm:mt-4 sm:text-[34px] sm:leading-[38px] sm:tracking-[-0.03em]">
+          <p className="relative z-10 mt-2.5 max-w-[360px] text-[24px] font-extrabold leading-7 tracking-[-0.02em] sm:mt-4 sm:max-w-[min(360px,calc(100%-190px))] sm:text-[34px] sm:leading-[38px] sm:tracking-[-0.03em]">
             {letterCount === total ? `Annotated cover letters for the same ${total} roles.` : `Annotated cover letters for ${letterCount} of these roles.`}
           </p>
           <p className="mt-3.5 text-[14px] font-bold sm:mt-[22px] sm:text-[15px]">
@@ -198,7 +199,7 @@ export default function ResumeExamplesPage() {
               letter={sampleLetter}
               name={sampleLetterAuthor.resume.name}
               paragraphs={1}
-              className="absolute -bottom-10 -right-[30px] hidden h-[300px] w-[230px] -rotate-[8deg] p-5 text-[8px] leading-[13px] shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] transition-transform duration-300 group-hover:-rotate-[5deg] sm:block"
+              className="absolute -bottom-[150px] -right-[30px] hidden h-[300px] w-[230px] -rotate-[8deg] p-5 text-[8px] leading-[13px] shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] transition-transform duration-300 group-hover:-rotate-[5deg] sm:block"
             />
           ) : null}
         </Link>

@@ -15,6 +15,8 @@ const LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
+const GUIDE_ROUTES = ["/resume-format", "/how-to-write-a-resume", "/resume-length", "/cover-letter-template", "/resume-action-verbs", "/resume-keywords", "/ats"];
+
 export function SiteNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -33,10 +35,12 @@ export function SiteNav() {
     };
   }, [open]);
 
-  const active = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  const under = (href: string) => pathname === href || pathname.startsWith(href + "/");
+  // Guides live outside /blog but belong to it in the nav.
+  const active = (href: string) => under(href) || (href === "/blog" && GUIDE_ROUTES.some(under));
 
   return (
-    <header className="relative z-40 mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-10 lg:py-6">
+    <header className="relative z-40 mx-auto flex w-full max-w-[1360px] items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-10 lg:py-6">
       <SiteLogo />
       <nav aria-label="Main" className="lc-card hidden gap-0.5 rounded-full p-1.5 lg:flex">
         {LINKS.map((l) => (
@@ -60,19 +64,24 @@ export function SiteNav() {
           Create my resume
         </Link>
       </div>
-      <button
-        type="button"
-        className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#121226] shadow-sm lg:hidden"
-        aria-expanded={open}
-        aria-controls="site-menu"
-        aria-label={open ? "Close menu" : "Open menu"}
-        onClick={() => {
-          setOpenedAt(pathname);
-          setOpen((v) => !v);
-        }}
-      >
-        {open ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
-      </button>
+      <div className="flex items-center gap-1 lg:hidden">
+        <Link href="/login" className="inline-flex min-h-11 items-center rounded-full px-3 text-[15px] font-semibold text-[#121226] hover:bg-white/70">
+          Log in
+        </Link>
+        <button
+          type="button"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#111118] text-white"
+          aria-expanded={open}
+          aria-controls="site-menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          onClick={() => {
+            setOpenedAt(pathname);
+            setOpen((v) => !v);
+          }}
+        >
+          {open ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
+        </button>
+      </div>
       {open ? (
         <div id="site-menu" className="fixed inset-x-0 bottom-0 top-[76px] z-40 overflow-y-auto bg-[#eeecf4] px-4 pb-8 lg:hidden">
           <nav aria-label="Main" className="flex flex-col gap-1 pt-2">

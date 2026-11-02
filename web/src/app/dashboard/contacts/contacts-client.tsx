@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { CalendarClock, ChevronRight, ExternalLink, Loader2, Plus, Trash2, Users } from "lucide-react";
+import { CalendarClock, ChevronRight, Loader2, Plus, Trash2, Users } from "lucide-react";
 import {
   CloseButton,
   EmptyState,
@@ -101,8 +101,23 @@ function normalizeUrl(v: string) {
   return /^https?:\/\//i.test(t) ? t : `https://${t}`;
 }
 
-/** Desktop table columns: name, relationship, status, next step, open. */
-const GRID = "md:grid-cols-[1.6fr_1fr_1fr_1.2fr_56px]";
+/** Desktop table columns: name (role · company), how you know them, status, next step, email/LinkedIn. */
+const GRID = "md:grid-cols-[1.6fr_1fr_1fr_1.2fr_130px]";
+
+/** Recruiters filter: the role (or how you know them) says recruiter / talent. */
+const isRecruiter = (c: ContactRow) => /recruit|talent/i.test(`${c.role ?? ""} ${c.relationship ?? ""}`);
+
+/** Only open http(s) LinkedIn links stored on the contact. */
+function safeHref(url: string | null): string | null {
+  if (!url) return null;
+  const u = /^https?:\/\//i.test(url.trim()) ? url.trim() : `https://${url.trim()}`;
+  try {
+    const parsed = new URL(u);
+    return parsed.protocol === "https:" || parsed.protocol === "http:" ? parsed.toString() : null;
+  } catch {
+    return null;
+  }
+}
 
 function ContactDrawer({
   initial,
@@ -282,18 +297,19 @@ function ContactDrawer({
 export function ContactsClient({ initial }: { initial: ContactRow[] }) {
   const [rows, setRows] = useState<ContactRow[]>(initial);
   const [query, setQuery] = useState("");
-  const [dueOnly, setDueOnly] = useState(false);
+  const [view, setView] = useState<"all" | "due" | "recruiters">("all");
   const [drawer, setDrawer] = useState<{ form: Form; editing: ContactRow | null } | null>(null);
   const t = today();
 
   const dueCount = rows.filter((c) => isDue(c, t)).length;
+  const recruiterCount = rows.filter(isRecruiter).length;
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
     return rows
-      .filter((c) => !dueOnly || isDue(c, t))
+      .filter((c) => (view === "due" ? isDue(c, t) : view === "recruiters" ? isRecruiter(c) : true))
       .filter((c) => !q || [c.name, c.company, c.role, c.email].some((v) => v?.toLowerCase().includes(q)));
-  }, [rows, query, dueOnly, t]);
+  }, [rows, query, view, t]);
 
   function saved(c: ContactRow) {
     setRows((p) => [c, ...p.filter((x) => x.id !== c.id)]);
@@ -338,11 +354,14 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
               className="w-full sm:w-[340px]"
             />
             <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter contacts">
-              <FilterChip pressed={!dueOnly} onClick={() => setDueOnly(false)}>
+              <FilterChip pressed={view === "all"} onClick={() => setView("all")}>
                 All
               </FilterChip>
-              <FilterChip pressed={dueOnly} onClick={() => setDueOnly((d) => !d)}>
+              <FilterChip pressed={view === "due"} onClick={() => setView("due")}>
                 Follow-ups due{dueCount ? ` · ${dueCount}` : ""}
+              </FilterChip>
+              <FilterChip pressed={view === "recruiters"} onClick={() => setView("recruiters")}>
+                Recruiters{recruiterCount ? ` · ${recruiterCount}` : ""}
               </FilterChip>
             </div>
           </div>
@@ -353,7 +372,7 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
               <span>How you know them</span>
               <span>Status</span>
               <span>Next</span>
-              <span />
+              <span className="text-right">Reach out</span>
             </div>
             {shown.length === 0 ? (
               <p className="border-t border-[#e2e0ea] px-5 py-10 text-center text-[14px] text-[#66647c]">No contacts match.</p>
@@ -362,20 +381,23 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
                 {shown.map((c) => {
                   const due = isDue(c, t);
                   const status = c.status && c.status !== "active" ? c.status : null;
+                  const li = safeHref(c.linkedinUrl);
                   return (
-                    <li key={c.id} className="border-t border-[#e2e0ea] first:border-t-0 md:first:border-t">
-                      <button
-                        type="button"
-                        onClick={() => setDrawer({ form: toForm(c), editing: c })}
-                        className={`grid w-full grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1 px-4 py-4 text-left text-[14px] transition-colors hover:bg-[#f7f6fb] motion-reduce:transition-none sm:px-5 md:gap-4 ${GRID} ${focusCls} focus-visible:-outline-offset-[3px]!`}
-                      >
+                    <li
+                      key={c.id}
+                      className={`relative grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1 border-t border-[#e2e0ea] px-4 py-4 text-[14px] transition-colors first:border-t-0 hover:bg-[#f7f6fb] motion-reduce:transition-none sm:px-5 md:gap-4 md:first:border-t ${GRID}`}
+                    >
                         <span className="flex min-w-0 items-center gap-2.5">
                           <InitialTile name={c.name} size={32} />
                           <span className="min-w-0">
-                            <span className="flex items-center gap-1.5 truncate text-[15px] font-bold text-[#121226]">
+                            {/* The name opens the contact; its hit area covers the whole row (links sit above it). */}
+                            <button
+                              type="button"
+                              onClick={() => setDrawer({ form: toForm(c), editing: c })}
+                              className={`block max-w-full truncate text-left text-[15px] font-bold text-[#121226] before:absolute before:inset-0 before:content-[''] ${focusCls} focus-visible:rounded-md!`}
+                            >
                               {c.name}
-                              {c.linkedinUrl ? <ExternalLink className="h-3.5 w-3.5 shrink-0 text-[#66647c]" aria-label="Has LinkedIn" /> : null}
-                            </span>
+                            </button>
                             <span className="block truncate text-[13px] text-[#66647c]">
                               {[c.role, c.company].filter(Boolean).join(" · ") || c.email || "—"}
                             </span>
@@ -394,11 +416,20 @@ export function ContactsClient({ initial }: { initial: ContactRow[] }) {
                         <span className="hidden md:block">
                           <NextStep c={c} due={due} today={t} />
                         </span>
-                        <span className="inline-flex items-center justify-end font-bold text-[#5440e8]">
-                          <span className="hidden md:inline">Open</span>
-                          <ChevronRight className="h-5 w-5 md:hidden" aria-hidden />
+                        <span className="relative z-10 flex items-center justify-end gap-x-1 text-[14px] font-bold text-[#5440e8]">
+                          {c.email ? (
+                            <a href={`mailto:${c.email}`} className={`lc-link inline-flex min-h-11 items-center px-1 hover:text-[#3a2bb8] ${focusCls}`}>
+                              Email<span className="sr-only"> {c.name}</span>
+                            </a>
+                          ) : null}
+                          {c.email && li ? <span aria-hidden="true" className="text-[#66647c]">·</span> : null}
+                          {li ? (
+                            <a href={li} target="_blank" rel="noopener noreferrer" className={`lc-link inline-flex min-h-11 items-center px-1 hover:text-[#3a2bb8] ${focusCls}`}>
+                              LinkedIn<span className="sr-only"> profile of {c.name} (opens in a new tab)</span>
+                            </a>
+                          ) : null}
+                          {!c.email && !li ? <ChevronRight className="h-5 w-5 text-[#66647c]" aria-hidden /> : null}
                         </span>
-                      </button>
                     </li>
                   );
                 })}

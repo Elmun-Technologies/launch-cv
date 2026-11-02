@@ -38,6 +38,13 @@ export async function POST(req: Request) {
   if (!user || !ok) {
     return NextResponse.json({ error: "Invalid email or password" }, { status: 401 });
   }
+  // Checked after the password so a suspension doesn't reveal that an email is registered.
+  if (user.suspendedAt) {
+    return NextResponse.json(
+      { error: "This account is suspended. Contact support if you think this is a mistake.", code: "account_suspended" },
+      { status: 403 },
+    );
+  }
   if (process.env.REQUIRE_EMAIL_VERIFICATION === "true" && !user.emailVerifiedAt) {
     return NextResponse.json(
       { error: "Email not verified. Click the link in your inbox or resend it.", code: "email_not_verified" },

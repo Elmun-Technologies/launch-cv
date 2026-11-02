@@ -19,7 +19,7 @@ import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
-import { SITE_AUTHOR } from "@/lib/author";
+import { SITE_AUTHOR, SITE_AUTHOR_ID } from "@/lib/author";
 import { extractToc, createSlugger } from "@/lib/toc";
 
 type Params = { slug: string };
@@ -187,6 +187,10 @@ export default async function BlogPostPage({
   // slugger used when rendering the Markdown headings so anchors line up.
   const toc = extractToc(post.bodyMd);
   const showToc = toc.length >= 3;
+  // Phones get a short, numbered list of the main sections only.
+  const tocTop = toc.filter((e) => e.depth !== 3);
+  // Score posts get the score-band card in the sidebar.
+  const isAtsScorePost = /\bats[- ]score/i.test(`${post.slug} ${post.title} ${post.tags.join(" ")}`);
   const headingSlug = createSlugger();
 
   const publishedLabel = new Date(post.date).toLocaleDateString("en-US", {
@@ -211,6 +215,7 @@ export default async function BlogPostPage({
     image: post.ogImageUrl && !/\.svg(\?|$)/i.test(post.ogImageUrl) ? post.ogImageUrl : absoluteUrl(`/blog/${post.slug}/opengraph-image`),
     author: {
       "@type": "Person",
+      "@id": SITE_AUTHOR_ID,
       name: SITE_AUTHOR.name,
       url: SITE_AUTHOR.url,
       image: SITE_AUTHOR.avatar,
@@ -292,7 +297,7 @@ export default async function BlogPostPage({
       />
 
       {previewAllowed ? (
-        <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10">
+        <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
           <p className="flex items-center gap-2 rounded-2xl bg-[#fdf0d5] px-4 py-2.5 text-[13px] font-semibold text-[#7a4600]">
             <span className="rounded-full bg-white px-2 py-0.5 text-[11px] uppercase tracking-wider">Preview</span>
             Viewing draft / scheduled post. Not visible to the public.
@@ -301,7 +306,7 @@ export default async function BlogPostPage({
       ) : null}
 
       {/* ARTICLE HEAD */}
-      <header className="mx-auto max-w-[1280px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
+      <header className="mx-auto max-w-[1360px] px-4 pt-4 sm:px-6 lg:px-10 lg:pt-8">
         <nav aria-label="Breadcrumb" className="text-[12px] text-[#66647c] sm:text-[14px]">
           <ol className="flex flex-wrap items-center gap-1.5">
             <li className="flex items-center gap-1.5">
@@ -330,7 +335,7 @@ export default async function BlogPostPage({
             {initials(SITE_AUTHOR.name)}
           </span>
           <span>
-            <Link href="/about" rel="author" className="lc-link block w-fit font-bold text-[#121226] hover:text-[#5440e8]">
+            <Link href={SITE_AUTHOR.path} rel="author" className="lc-link block w-fit font-bold text-[#121226] hover:text-[#5440e8]">
               {SITE_AUTHOR.name}
             </Link>
             <span className="block text-[#66647c]">
@@ -350,12 +355,12 @@ export default async function BlogPostPage({
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10 lg:pt-10">
+      <div className="mx-auto max-w-[1360px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10 lg:pt-10">
         <BlogPoster post={post} size="hero" priority />
       </div>
 
       {/* BODY */}
-      <div className={`mx-auto grid max-w-[1280px] items-start gap-y-8 px-4 pt-5 sm:px-6 sm:pt-10 lg:px-10 lg:pt-16 ${gridCls}`}>
+      <div className={`mx-auto grid max-w-[1360px] items-start gap-y-8 px-4 pt-5 sm:px-6 sm:pt-10 lg:px-10 lg:pt-16 ${gridCls}`}>
         {showToc ? (
           <div className="hidden lg:sticky lg:top-6 lg:row-span-2 lg:block lg:self-start">
             <ContentToc entries={toc} />
@@ -365,7 +370,7 @@ export default async function BlogPostPage({
         <div className="min-w-0 max-w-[720px]">
           {showToc ? (
             <div className="mb-7 lg:hidden">
-              <ContentTocMobile entries={toc} />
+              <ContentTocMobile entries={tocTop} numbered />
             </div>
           ) : null}
 
@@ -450,7 +455,7 @@ export default async function BlogPostPage({
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">WRITTEN BY</p>
-              <Link href="/about" rel="author" className="lc-link mt-1 inline-block text-[18px] font-extrabold text-[#121226] hover:text-[#5440e8]">
+              <Link href={SITE_AUTHOR.path} rel="author" className="lc-link mt-1 inline-block text-[18px] font-extrabold text-[#121226] hover:text-[#5440e8]">
                 {SITE_AUTHOR.name}
               </Link>
               <p className="text-[14px] text-[#66647c]">{SITE_AUTHOR.role}</p>
@@ -500,12 +505,24 @@ export default async function BlogPostPage({
               ))}
             </ul>
           </div>
+          {isAtsScorePost ? (
+            // The same bands the free ATS check uses to color its score (80 / 65).
+            <div className="lc-card rounded-[24px] p-5">
+              <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">GOOD SCORE</p>
+              <ul className="mt-3 flex flex-col gap-1.5 text-[14px] font-semibold">
+                <li className="rounded-xl bg-[#dcf5ea] px-3 py-2 text-[#0b4f35]">80–100 · strong</li>
+                <li className="rounded-xl bg-[#fdf0d5] px-3 py-2 text-[#7a4600]">65–79 · decent</li>
+                <li className="rounded-xl bg-[#fbe2e3] px-3 py-2 text-[#8f1d22]">Below 65 · at risk</li>
+              </ul>
+              <p className="mt-2.5 text-[12px] leading-[18px] text-[#66647c]">The bands LaunchCV&apos;s free ATS check uses.</p>
+            </div>
+          ) : null}
         </aside>
       </div>
 
       {/* NEWER / OLDER */}
       {newerPost || olderPost ? (
-        <nav aria-label="More guides" className="mx-auto grid max-w-[1280px] gap-3 px-4 pt-12 sm:grid-cols-2 sm:px-6 lg:px-10 lg:pt-16">
+        <nav aria-label="More guides" className="mx-auto grid max-w-[1360px] gap-3 px-4 pt-12 sm:grid-cols-2 sm:px-6 lg:px-10 lg:pt-16">
           {newerPost ? (
             <Link href={`/blog/${newerPost.slug}`} className={`lc-card lc-rise group flex flex-col rounded-[24px] p-5 sm:p-6 ${olderPost ? "" : "sm:col-span-2"}`}>
               <span className="text-[13px] font-semibold text-[#66647c]">← Newer</span>
@@ -526,7 +543,7 @@ export default async function BlogPostPage({
 
       {/* RELATED */}
       {related.length > 0 ? (
-        <section aria-labelledby="read-next" className="mx-auto max-w-[1280px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[110px]">
+        <section aria-labelledby="read-next" className="mx-auto max-w-[1360px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[110px]">
           <div className="flex items-end justify-between gap-4">
             <h2 id="read-next" className={labelCls}>
               / Read next

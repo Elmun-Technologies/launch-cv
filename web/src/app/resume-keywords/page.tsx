@@ -134,7 +134,7 @@ export default function ResumeKeywordsIndexPage() {
             <a href="#roles" className={btnPrimary}>
               Find my job
             </a>
-            <CtaLink cta="free_ats_check" location="resume_keywords_index" href="/free-ats-check" className={`${btnWhite} hidden sm:inline-flex`}>
+            <CtaLink cta="free_ats_check" location="resume_keywords_index" href="/free-ats-check" className={`${btnWhite} max-sm:hidden`}>
               Check my resume — free
             </CtaLink>
           </div>

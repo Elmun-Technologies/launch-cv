@@ -39,6 +39,29 @@ export type FreeAtsFix = {
   title: string;
   /** One or two sentences on how to fix it. */
   fix: string;
+  /** Why it matters, in one sentence, when the checker gave a reason. Older reports don't have it. */
+  detail?: string;
+};
+
+/**
+ * What a parser could read from the resume text, found without AI (regexes plus
+ * the same section detection the free check uses). Shown as "What the software read".
+ */
+export type FreeAtsParsed = {
+  /** The first line of the text, which parsers take as the name. Null when the text is empty. */
+  name: string | null;
+  /** True when that line looks like a person's name (2–4 words, letters only). */
+  nameLooksRight: boolean;
+  email: boolean;
+  phone: boolean;
+  /** Dated roles in the experience part, and how many have a job-title line next to them. */
+  jobTitles: { found: number; total: number };
+  /** Date ranges (or single dates when there are no ranges) and how many use a standard format. */
+  dates: { readable: number; total: number };
+  /** Null when there is no skills heading; [] when the heading has nothing under it. */
+  skills: string[] | null;
+  /** First line under the education heading (degree line when there is one); null when not found. */
+  education: string | null;
 };
 
 export type FreeAtsResult = {
@@ -48,6 +71,10 @@ export type FreeAtsResult = {
   totalFixes: number;
   /** The highest-priority fixes, shown in full before sign-up. */
   preview: FreeAtsFix[];
+  /** Deterministic parse of the text. Reports from before it existed don't have it. */
+  parsed?: FreeAtsParsed;
+  /** Uploaded file name, when the resume came from a file. */
+  fileName?: string;
 };
 
 /** What we store and show once the report is claimed. */

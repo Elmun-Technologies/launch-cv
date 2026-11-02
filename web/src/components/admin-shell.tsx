@@ -204,8 +204,8 @@ export function AdminShell({
 
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-        {/* Top bar */}
-        <header className="flex h-[60px] shrink-0 items-center justify-between gap-3 border-b border-[#e2e0ea] bg-[#eeecf4] px-4 sm:px-6 lg:px-9">
+        {/* Top bar — phones and tablets only (it holds the menu button); from lg the sidebar is always there. */}
+        <header className="flex h-[60px] shrink-0 items-center justify-between gap-3 border-b border-[#e2e0ea] bg-[#eeecf4] px-4 sm:px-6 lg:hidden">
           <div className="flex min-w-0 items-center gap-2">
             <button
               type="button"

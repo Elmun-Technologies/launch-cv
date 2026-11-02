@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
 import { bustTestimonialCache } from "@/lib/cms/revalidate";
+import { readPermissionDate, readSource, testimonialPublishProblems } from "@/lib/cms/testimonials";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin("content");
@@ -32,6 +33,23 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }
   if (typeof body.order === "number") data.order = body.order;
   if (typeof body.published === "boolean") data.published = body.published;
+  if (body.permissionDate !== undefined) {
+    const d = readPermissionDate(body.permissionDate);
+    if (d === "invalid") {
+      return NextResponse.json({ error: "Permission date must be a valid date, not in the future." }, { status: 400 });
+    }
+    data.permissionDate = d;
+  }
+  if (body.source !== undefined) data.source = readSource(body.source);
+
+  // A published testimonial must keep its author, permission date and source on file.
+  const next = { ...before, ...data } as typeof before;
+  if (next.published) {
+    const missing = testimonialPublishProblems(next);
+    if (missing.length) {
+      return NextResponse.json({ error: `Can't publish without: ${missing.join(", ")}.` }, { status: 400 });
+    }
+  }
 
   const updated = await prisma.testimonial.update({ where: { id }, data });
   await recordAudit({
@@ -39,7 +57,18 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     action: "testimonial.update",
     entity: "Testimonial",
     entityId: id,
-    diff: { before: { published: before.published }, after: { published: updated.published } },
+    diff: {
+      before: {
+        published: before.published,
+        permissionDate: before.permissionDate?.toISOString() ?? null,
+        source: before.source,
+      },
+      after: {
+        published: updated.published,
+        permissionDate: updated.permissionDate?.toISOString() ?? null,
+        source: updated.source,
+      },
+    },
   });
   // Bust both old and new placements to handle reassignments.
   bustTestimonialCache([...new Set([...before.placement, ...updated.placement])]);

@@ -5,7 +5,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { btnPrimary, btnWhite, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
-import { SITE_AUTHOR } from "@/lib/author";
+import { SITE_AUTHOR, SITE_AUTHOR_ID } from "@/lib/author";
 import { getPageCopy } from "@/lib/cms/page-copy";
 
 export const metadata = buildMarketingMetadata({
@@ -30,7 +30,7 @@ const aboutLd = {
     legalName: "Elmun Technologies LLC",
     url: absoluteUrl("/"),
     email: "support@launch-cv.com",
-    founder: { "@type": "Person", name: SITE_AUTHOR.name, jobTitle: SITE_AUTHOR.role },
+    founder: { "@type": "Person", "@id": SITE_AUTHOR_ID, name: SITE_AUTHOR.name, jobTitle: SITE_AUTHOR.role, url: SITE_AUTHOR.url },
   },
 };
 
@@ -80,7 +80,7 @@ export default async function AboutPage() {
       <JsonLd data={aboutLd} />
 
       {/* HERO */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
+      <section className="mx-auto max-w-[1360px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
         <p className={labelCls}>/ About</p>
         <h1 className="mt-3.5 max-w-[1060px] text-[38px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:mt-5 sm:text-[56px] sm:leading-[1.04] lg:text-[68px] lg:leading-[70px]">
           {copy.title} {copy.titleAccent ? <span className="text-[#5440e8]">{copy.titleAccent}</span> : null}
@@ -88,7 +88,7 @@ export default async function AboutPage() {
       </section>
 
       {/* STORY + PRINCIPLES */}
-      <section className="mx-auto grid max-w-[1280px] items-stretch gap-2.5 px-4 pt-6 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:px-10 lg:pt-14">
+      <section className="mx-auto grid max-w-[1360px] items-stretch gap-2.5 px-4 pt-6 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:px-10 lg:pt-14">
         <div className="relative flex flex-col overflow-hidden rounded-[28px] bg-[#111118] px-[22px] pb-[22px] pt-7 text-[#e9e7f3] lg:min-h-[520px] lg:rounded-[36px] lg:p-12">
           <p aria-hidden="true" className="lc-poster absolute -right-1.5 bottom-1.5 m-0 text-right text-[56px] leading-[52px] text-[#2a2840] sm:text-[88px] sm:leading-[82px] lg:bottom-6 lg:right-9 lg:text-[120px] lg:leading-[110px]">
             SINCE
@@ -97,19 +97,26 @@ export default async function AboutPage() {
           </p>
           <div className="relative flex flex-col gap-3.5 text-[16px] leading-[26px] lg:gap-[18px] lg:text-[18px] lg:leading-[29px]">
             {copy.paragraphs.map((p, i) => (
-              <p key={i}>{p}</p>
+              // Phones keep the first two paragraphs, like the design.
+              <p key={i} className={i > 1 ? "hidden sm:block" : undefined}>
+                {p}
+              </p>
             ))}
           </div>
-          <div className="relative mt-auto pt-10">
-          <div className="flex w-fit items-center gap-2.5 rounded-full bg-white py-[7px] pl-[7px] pr-4 text-[#121226] lg:gap-3 lg:py-2.5 lg:pl-2.5 lg:pr-5">
-            <span aria-hidden="true" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#5440e8] text-[13px] font-extrabold text-white lg:h-11 lg:w-11 lg:text-[16px]">
-              {initials}
-            </span>
-            <span>
-              <span className="block text-[13px] font-bold lg:text-[15px]">{SITE_AUTHOR.name}</span>
-              <span className="block text-[12px] text-[#66647c] lg:text-[13px]">Founder</span>
-            </span>
-          </div>
+          {/* Top padding keeps the story clear of the SINCE 2024 watermark. */}
+          <div className="relative mt-auto pt-[72px] sm:pt-[110px] lg:pt-[150px]">
+            <div className="flex w-fit items-center gap-2.5 rounded-full bg-white py-[7px] pl-[7px] pr-4 text-[#121226] lg:gap-3 lg:py-2.5 lg:pl-2.5 lg:pr-5">
+              <span aria-hidden="true" className="inline-flex h-9 w-9 flex-none items-center justify-center rounded-full bg-[#5440e8] text-[13px] font-extrabold text-white lg:h-11 lg:w-11 lg:text-[16px]">
+                {initials}
+              </span>
+              <span className="text-[13px] font-bold sm:hidden">
+                {SITE_AUTHOR.name} · Founder
+              </span>
+              <span className="hidden sm:block">
+                <span className="block text-[13px] font-bold lg:text-[15px]">{SITE_AUTHOR.name}</span>
+                <span className="block text-[12px] text-[#66647c] lg:text-[13px]">Founder</span>
+              </span>
+            </div>
           </div>
         </div>
 
@@ -125,10 +132,12 @@ export default async function AboutPage() {
       </section>
 
       {/* WHO WE BUILD FOR */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[130px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-16 sm:px-6 lg:px-10 lg:pt-[130px]">
         <div className="lc-reveal mx-auto max-w-[980px] sm:text-center">
           <p className={labelCls}>/ Who we build for</p>
-          <h2 className="lc-h2 mt-5">Anyone applying through a form.</h2>
+          <h2 className="lc-h2 mt-3.5 sm:mt-5">
+            Anyone applying through a form. <span className="hidden sm:inline">Which is almost everyone.</span>
+          </h2>
         </div>
         <ul className="mt-6 grid grid-cols-2 gap-x-3.5 gap-y-[18px] sm:mt-12 sm:gap-8 lg:grid-cols-4">
           {roles.map((r) => (
@@ -152,25 +161,26 @@ export default async function AboutPage() {
       </section>
 
       {/* CONTACT */}
-      <section className="mx-auto grid max-w-[1280px] gap-3 px-4 pt-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-4 lg:px-10 lg:pt-[130px]">
+      <section className="mx-auto grid max-w-[1360px] gap-3 px-4 pt-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-4 lg:px-10 lg:pt-[130px]">
         <div className="lc-reveal rounded-[28px] bg-[#111118] px-[22px] py-7 text-white sm:p-10 lg:rounded-[36px] lg:p-14">
           <p className={`${labelCls} !text-[#c9c0ff]`}>/ Get in touch</p>
-          <h2 className="lc-h2 mt-5 text-white">
+          <h2 className="lc-h2 mt-3.5 text-white sm:mt-5">
             A person reads <span className="!text-[#9a97b3]">every email.</span>
           </h2>
-          <p className="mt-[18px] max-w-[460px] text-[16px] leading-[26px] text-[#c9c7d8] sm:text-[17px] sm:leading-[27px]">
+          <p className="mt-[18px] hidden max-w-[460px] text-[16px] leading-[26px] text-[#c9c7d8] sm:block sm:text-[17px] sm:leading-[27px]">
             Questions about billing, your account or the product — write to us and we&apos;ll get back to you.
           </p>
-          <div className="mt-6 flex flex-col gap-2.5 sm:mt-[30px] sm:flex-row">
-            <a href="mailto:support@launch-cv.com" className={btnPrimary}>
+          <div className="mt-5 flex flex-col gap-2.5 sm:mt-[30px] sm:flex-row">
+            <a href="mailto:support@launch-cv.com" className={`${btnPrimary} !py-4 sm:!py-[17px]`}>
               support@launch-cv.com
             </a>
-            <Link href="/contact" className={btnWhite}>
+            <Link href="/contact" className={`${btnWhite} max-sm:hidden`}>
               All contact options
             </Link>
           </div>
+          <p className="mt-4 text-[13px] text-[#9a97b3] sm:hidden">Elmun Technologies LLC</p>
         </div>
-        <div className="lc-card lc-reveal flex flex-col justify-between gap-8 rounded-[28px] p-7 sm:p-10 lg:rounded-[36px]">
+        <div className="lc-card lc-reveal hidden flex-col justify-between gap-8 rounded-[28px] p-7 sm:flex sm:p-10 lg:rounded-[36px]">
           <div>
             <p className="text-[13px] font-bold tracking-[0.08em] text-[#66647c]">COMPANY</p>
             <p className="mt-3 text-[22px] font-extrabold sm:text-[24px]">Elmun Technologies LLC</p>

@@ -1,68 +1,31 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireAdmin } from "@/lib/admin-guard";
 import { z } from "zod";
+import { adminApi } from "@/lib/admin-api";
+import { USER_FILTERS, loadUserPage } from "@/lib/admin-user-list";
 
 const querySchema = z.object({
-  q: z.string().optional(),
+  q: z.string().trim().max(200).optional(),
+  filter: z.enum(USER_FILTERS).default("all"),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
 });
 
 export async function GET(req: Request) {
-  const admin = await requireAdmin("users");
-  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const { error } = await adminApi("users");
+  if (error) return error;
 
   const url = new URL(req.url);
   const parsed = querySchema.safeParse({
-    q: url.searchParams.get("q") ?? undefined,
+    q: url.searchParams.get("q") || undefined,
+    filter: url.searchParams.get("filter") || undefined,
     page: url.searchParams.get("page") ?? undefined,
     pageSize: url.searchParams.get("pageSize") ?? undefined,
   });
-
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const { q, page, pageSize } = parsed.data;
-  const skip = (page - 1) * pageSize;
-
-  const where = q
-    ? {
-        OR: [
-          { email: { contains: q, mode: "insensitive" as const } },
-          { name: { contains: q, mode: "insensitive" as const } },
-        ],
-      }
-    : {};
-
-  const [total, users] = await Promise.all([
-    prisma.user.count({ where }),
-    prisma.user.findMany({
-      where,
-      skip,
-      take: pageSize,
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        _count: { select: { resumes: true, jobApplications: true } },
-      },
-    }),
-  ]);
-
-  const rows = users.map((u) => ({
-    id: u.id,
-    email: u.email,
-    name: u.name,
-    role: u.role,
-    createdAt: u.createdAt,
-    resumeCount: u._count.resumes,
-    appCount: u._count.jobApplications,
-  }));
-
+  const { q, filter, page, pageSize } = parsed.data;
+  const { total, rows } = await loadUserPage({ q, filter, page, pageSize });
   return NextResponse.json({ total, page, pageSize, rows });
 }

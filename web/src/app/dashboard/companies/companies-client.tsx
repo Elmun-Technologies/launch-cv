@@ -6,6 +6,7 @@ import {
   CloseButton,
   EmptyState,
   ErrorNote,
+  FilterChip,
   InitialTile,
   PageHeader,
   SearchField,
@@ -32,7 +33,27 @@ export type CompanyRow = {
   foundedYear?: string | null;
   description?: string | null;
   createdAt: string;
+  /** Furthest stage of the user's tracked jobs at this company (by name); null when none are tracked. */
+  status?: CompanyStatus | null;
 };
+
+export type CompanyStatus = "Saved" | "Applied" | "Interviewing" | "Offer" | "Closed";
+
+const STATUS_TONE: Record<CompanyStatus, string> = {
+  Saved: "bg-[#f1eff8] text-[#4a4862]",
+  Applied: "bg-[#f1eff8] text-[#121226]",
+  Interviewing: "bg-[#e4dfff] text-[#3a2bb8]",
+  Offer: "bg-[#dcf5ea] text-[#0b4f35]",
+  Closed: "bg-[#f1eff8] text-[#66647c]",
+};
+
+const FILTERS = ["All", "Applied", "Interviewing", "Saved"] as const;
+type Filter = (typeof FILTERS)[number];
+
+function StatusBadge({ status }: { status: CompanyStatus | null | undefined }) {
+  if (!status) return <span className="text-[#4a4862]">—</span>;
+  return <span className={`inline-block rounded-full px-2.5 py-[5px] text-[12px] font-bold ${STATUS_TONE[status]}`}>{status}</span>;
+}
 
 const INDUSTRIES = ["Technology", "Finance", "Healthcare", "Retail", "Education", "Design", "Consulting", "Other"];
 const SIZES = ["1-10", "11-50", "51-200", "201-500", "501-5,000", "5,000+"];
@@ -66,7 +87,7 @@ const hostOf = (url: string) => {
   }
 };
 
-/** Desktop table columns: company, industry, location, size, type, open. */
+/** Desktop table columns: company, industry, location, size, status, open. */
 const GRID = "md:grid-cols-[1.6fr_1.1fr_1.1fr_0.8fr_1fr_56px]";
 
 function CompanyDrawer({
@@ -125,6 +146,7 @@ function CompanyDrawer({
       ...body,
       foundedYear: editing?.foundedYear ?? null,
       createdAt: j.company?.createdAt ?? editing?.createdAt ?? new Date().toISOString(),
+      status: editing?.status ?? null,
     });
   }
 
@@ -222,12 +244,15 @@ function CompanyDrawer({
 export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
   const [rows, setRows] = useState<CompanyRow[]>(initial);
   const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<Filter>("All");
   const [drawer, setDrawer] = useState<{ form: Form; editing: CompanyRow | null } | null>(null);
 
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? rows.filter((c) => [c.name, c.industry, c.location].some((v) => v?.toLowerCase().includes(q))) : rows;
-  }, [rows, query]);
+    return rows
+      .filter((c) => filter === "All" || c.status === filter)
+      .filter((c) => !q || [c.name, c.industry, c.location].some((v) => v?.toLowerCase().includes(q)));
+  }, [rows, query, filter]);
 
   const openNew = () => setDrawer({ form: EMPTY, editing: null });
 
@@ -257,24 +282,35 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
         </EmptyState>
       ) : (
         <>
-          <SearchField
-            value={query}
-            onChange={setQuery}
-            label="Search companies"
-            placeholder="Search name, industry or location"
-            className="w-full sm:w-[340px]"
-          />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <SearchField
+              value={query}
+              onChange={setQuery}
+              label="Search companies"
+              placeholder="Search name, industry or location"
+              className="w-full sm:w-[340px]"
+            />
+            <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter by application status">
+              {FILTERS.map((f) => (
+                <FilterChip key={f} pressed={filter === f} onClick={() => setFilter(f)}>
+                  {f}
+                </FilterChip>
+              ))}
+            </div>
+          </div>
           <div className="lc-card overflow-hidden rounded-[24px]">
             <div className={`hidden gap-4 px-5 py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c] md:grid ${GRID}`} aria-hidden="true">
               <span>Company</span>
               <span>Industry</span>
               <span>Location</span>
               <span>Size</span>
-              <span>Type</span>
+              <span>Status</span>
               <span />
             </div>
             {shown.length === 0 ? (
-              <p className="border-t border-[#e2e0ea] px-5 py-10 text-center text-[14px] text-[#66647c]">No companies match.</p>
+              <p className="border-t border-[#e2e0ea] px-5 py-10 text-center text-[14px] text-[#66647c]">
+                {filter !== "All" && !query.trim() ? `No companies with a job at “${filter}” in your tracker.` : "No companies match."}
+              </p>
             ) : (
               <ul>
                 {shown.map((c) => (
@@ -297,17 +333,18 @@ export function CompaniesClient({ initial }: { initial: CompanyRow[] }) {
                           <span className="mt-0.5 block truncate text-[13px] text-[#4a4862] md:hidden">
                             {[c.industry, c.location, c.size ? `${c.size} people` : null, c.type].filter(Boolean).join(" · ") || "No details yet"}
                           </span>
+                          {c.status ? (
+                            <span className="mt-1.5 block md:hidden">
+                              <StatusBadge status={c.status} />
+                            </span>
+                          ) : null}
                         </span>
                       </span>
                       <span className="hidden text-[#24223a] md:block">{c.industry || "—"}</span>
                       <span className="hidden text-[#24223a] md:block">{c.location || "—"}</span>
                       <span className="hidden text-[#4a4862] md:block">{c.size ? `${c.size} people` : "—"}</span>
                       <span className="hidden md:block">
-                        {c.type ? (
-                          <span className="inline-block rounded-full bg-[#f1eff8] px-2.5 py-[5px] text-[12px] font-bold text-[#4a4862]">{c.type}</span>
-                        ) : (
-                          <span className="text-[#4a4862]">—</span>
-                        )}
+                        <StatusBadge status={c.status} />
                       </span>
                       <span className="inline-flex items-center justify-end font-bold text-[#5440e8]">
                         <span className="hidden md:inline">Open</span>

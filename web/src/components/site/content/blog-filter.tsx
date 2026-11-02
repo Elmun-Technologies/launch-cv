@@ -25,7 +25,7 @@ export function BlogFilter({
 
   return (
     <>
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-[1360px] px-4 sm:px-6 lg:px-10">
         <div
           role="group"
           aria-label="Filter guides by topic"
@@ -50,9 +50,9 @@ export function BlogFilter({
         </div>
       </div>
 
-      {cat ? null : <section className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10">{featured}</section>}
+      {cat ? null : <section className="mx-auto max-w-[1360px] px-4 pt-5 sm:px-6 sm:pt-8 lg:px-10">{featured}</section>}
 
-      <section className="mx-auto max-w-[1280px] px-4 pt-2.5 sm:px-6 sm:pt-6 lg:px-10">
+      <section className="mx-auto max-w-[1360px] px-4 pt-2.5 sm:px-6 sm:pt-6 lg:px-10">
         <h2 className="sr-only">{cat ? `${cat} guides` : "More guides"}</h2>
         <p role="status" className="sr-only">
           {cat ? `Showing ${shown.length} ${cat} guides` : ""}

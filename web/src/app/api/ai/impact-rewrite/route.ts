@@ -25,6 +25,9 @@ export type ImpactRewriteResult = {
   overall_tips: string[];
 };
 
+const NUM_RE = /\$?\d[\d,.]*(?:%|[kKmM]\b|\+)?/g;
+const normNum = (s: string) => s.replace(/[$,+]/g, "").replace(/\.$/, "").toLowerCase();
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -50,10 +53,10 @@ export async function POST(req: Request) {
 
   const system = `You are a senior resume writer specializing in impact-driven achievement bullets. Return JSON only.
 Rules:
-- Rewrite EVERY bullet to lead with a quantifiable outcome or measurable impact.
-- Extract and extrapolate metrics from context (e.g., team size, percentage improvements, time saved).
-- Do NOT fabricate specific numbers that cannot be reasonably inferred from the text.
-- If no metric can be inferred, use power verbs and outcome-focused language instead.
+- Rewrite EVERY bullet to lead with the outcome or impact.
+- Use ONLY facts and numbers that appear somewhere in the resume. Never invent, estimate or extrapolate a number, percentage, team size or timeframe.
+- Where a number would make the bullet stronger but the resume doesn't give one, write the placeholder "[number]" so the candidate fills in the real figure.
+- If no result is stated, use strong verbs and outcome-focused language instead.
 - Keep the same meaning and truthfulness as the original.
 - Format: "Achieved [result] by [action], resulting in [impact]" or similar impact patterns.
 JSON keys: rewrites, overall_tips.
@@ -73,6 +76,14 @@ Rewrite ALL experience bullets to be impact-driven. For each bullet, provide the
     if (!raw || !Array.isArray(raw.rewrites)) {
       return NextResponse.json({ error: "AI response format is invalid" }, { status: 502 });
     }
+    // Guard against invented figures: any number the model used that isn't in the
+    // resume becomes a "[number]" placeholder for the candidate to fill in.
+    const known = new Set((JSON.stringify(content).match(NUM_RE) ?? []).map(normNum));
+    raw.rewrites = raw.rewrites.map((r) =>
+      typeof r?.improved === "string"
+        ? { ...r, improved: r.improved.replace(NUM_RE, (m) => (known.has(normNum(m)) ? m : "[number]")) }
+        : r,
+    );
     await incrementAiUsage(session.sub, "jd");
     await trackEvent("impact_rewrite", { userId: session.sub, meta: { resumeId: resume.id } });
     return NextResponse.json({ result: raw });

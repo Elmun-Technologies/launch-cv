@@ -29,6 +29,21 @@ model User {
   emailVerifiedAt  DateTime?
   /// Billing provider customer id (Lemon Squeezy customer id as string).
   stripeCustomerId String?
+  /// Onboarding: the resume example role (slug from lib/resume-examples.ts) the user is aiming for.
+  targetRole       String?
+  /// Onboarding: "entry" | "mid" | "senior" | "career_change" (lib/target-role.ts).
+  experienceLevel  String?
+  /// When the user finished or skipped onboarding; null = not offered yet.
+  onboardedAt      DateTime?
+  /// Set when staff suspend the account (Admin → Users). A suspended user can't
+  /// sign in and every session check (lib/session.ts) treats them as signed out.
+  suspendedAt      DateTime?
+  /// Plan granted by staff without a payment (Admin → Users → Grant plan):
+  /// "starter" | "professional" | "elite" | "lifetime". Kept apart from the
+  /// billing-owned Subscription row so a Polar webhook never overwrites it.
+  grantedPlan      String?
+  /// When the granted plan stops applying. Null = no end date.
+  grantedPlanUntil DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   resumes          Resume[]
@@ -72,6 +87,13 @@ model JobApplication {
   title          String?
   company        String?
   status         String   @default("draft")
+  /// When `status` last changed (the tracker card shows "Applied Oct 29"). Null on rows from before it was recorded.
+  stageChangedAt DateTime?
+  /// Link to the job posting, when the user added one.
+  jobUrl         String?
+  /// Next interview, when one is scheduled, and what kind it is ("Panel", "Phone screen").
+  interviewAt    DateTime?
+  interviewLabel String?
   checklist      Json?
   fitSnapshot    Json?
   packetSnapshot Json?
@@ -290,7 +312,7 @@ model BlogPost {
 }
 
 model Testimonial {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   authorName      String
   authorRole      String?
   authorAvatarUrl String?
@@ -298,22 +320,30 @@ model Testimonial {
   rating          Int?
   /// Where this testimonial appears (e.g. ["home", "features/ats-score"]).
   placement       String[]
-  order           Int      @default(0)
-  published       Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  order           Int       @default(0)
+  /// New testimonials start hidden; publishing needs permissionDate and source.
+  published       Boolean   @default(false)
+  /// When the author gave written permission to publish their name and words.
+  permissionDate  DateTime?
+  /// Where they said it (e.g. "Support email, Oct 12" or a review URL).
+  source          String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Faq {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String
-  /// "pricing" | "blog" | "features/ats-score" | etc.
-  placement String
-  order     Int      @default(0)
-  published Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  question   String
+  answer     String
+  /// "pricing" | "blog" | "features/ats-score" | etc. Legacy single placement;
+  /// kept equal to placements[0] on save and read as a fallback.
+  placement  String
+  /// Every page this FAQ appears on. Empty on rows saved before multi-placement.
+  placements String[] @default([])
+  order      Int      @default(0)
+  published  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([placement, order])
 }
@@ -328,6 +358,19 @@ model PageCopy {
   updatedBy   User?    @relation("PageCopyEditor", fields: [updatedById], references: [id], onDelete: SetNull)
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
+}
+
+/// A published state of a PageCopy key, newest first. The last 20 per key are
+/// kept so an editor can restore an earlier version.
+model PageCopyVersion {
+  id           String   @id @default(cuid())
+  key          String
+  data         Json
+  savedById    String?
+  savedByEmail String?
+  createdAt    DateTime @default(now())
+
+  @@index([key, createdAt])
 }
 
 model MediaAsset {

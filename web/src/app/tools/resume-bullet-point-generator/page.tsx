@@ -70,6 +70,8 @@ export default async function BulletGeneratorPage() {
         title="Resume bullet point generator."
         muted="Duty in, result out."
         lead="Type what you did the way you’d say it. Get three results-first bullets that keep your facts — no invented numbers."
+        mobileLead="Type what you did. Get three results-first bullets — no invented numbers."
+        mobileLeft
       />
       <ToolStage>
         <BulletGenerator limit={limit} paused={paused} />

@@ -1494,9 +1494,13 @@ button:hover, [role="button"]:hover, a:hover {
   .lc-fan:hover .lc-paper[data-i="3"] { transform: rotate(11deg) translate(26px, 6px); }
   .lc-fan .lc-paper[data-active="true"] { transform: rotate(0deg) translateY(-18px) scale(1.04) !important; }
 
-  .lc-faq summary .lc-plus { transition: transform 0.25s ease, background-color 0.2s; }
-  .lc-faq[open] summary .lc-plus { transform: rotate(45deg); }
+  .lc-faq summary .lc-plus { transition: background-color 0.2s; }
+  .lc-faq summary .lc-plus-v { transition: transform 0.2s ease; }
 }
 .lc-faq summary { list-style: none; cursor: pointer; }
 .lc-faq summary::-webkit-details-marker { display: none; }
+/* An open item shows a minus: the plus's vertical bar collapses. This sits
+   outside the motion query so it holds with reduced motion too. */
+.lc-faq summary .lc-plus-v { transform-box: fill-box; transform-origin: center; }
+.lc-faq[open] > summary .lc-plus-v { transform: scaleY(0); }
 } /* end @layer components (v5) */

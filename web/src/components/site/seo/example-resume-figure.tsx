@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ResumePreview } from "@/components/resume-preview";
+import { ExampleResumeSheet } from "@/components/site/seo/example-resume-sheet";
 import { exampleToContent } from "@/lib/example-to-content";
 import type { ResumeExample } from "@/lib/resume-examples";
 import type { TemplateStyle } from "@/lib/resume-templates";
@@ -21,8 +21,8 @@ export function ExampleResumeFigure({
 }) {
   return (
     <figure className="mt-7 grid items-center gap-5 rounded-[24px] bg-[#e4dfff] p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:gap-8 sm:p-7">
-      <div className="mx-auto w-full max-w-[300px] shadow-[0_24px_48px_-20px_rgba(10,6,60,.45)]">
-        <ResumePreview content={exampleToContent(example)} template={template} />
+      <div className="mx-auto w-full shadow-[0_24px_48px_-20px_rgba(10,6,60,.45)] sm:max-w-[300px]">
+        <ExampleResumeSheet content={exampleToContent(example)} template={template} fit="page" />
       </div>
       <figcaption className="text-[15px] leading-6 text-[#3a2bb8]">
         <span className="block text-[12px] font-bold tracking-[0.08em]">{label}</span>

@@ -51,7 +51,7 @@ const blogLd = {
 
 function Hero() {
   return (
-    <section className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
+    <section className="mx-auto max-w-[1360px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
       <p className={labelCls}>/ Blog</p>
       <h1 className="mt-3.5 max-w-[980px] text-[40px] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-5 sm:text-[56px] lg:text-[64px] lg:leading-[66px]">
         Resume and job search guides. <span className="text-[#7c7a94]">Plain English, no fluff.</span>
@@ -73,7 +73,7 @@ export default async function BlogPage() {
       <SiteShell>
         <JsonLd data={blogLd} />
         <Hero />
-        <p className="mx-auto max-w-[1280px] px-4 pb-24 pt-8 text-[17px] text-[#4a4862] sm:px-6 lg:px-10">New guides are on the way.</p>
+        <p className="mx-auto max-w-[1360px] px-4 pb-24 pt-8 text-[17px] text-[#4a4862] sm:px-6 lg:px-10">New guides are on the way.</p>
       </SiteShell>
     );
   }
@@ -111,7 +111,7 @@ export default async function BlogPage() {
       />
 
       {/* CTA */}
-      <section className="mx-auto max-w-[1280px] px-4 pt-12 sm:px-6 lg:px-10 lg:pt-[110px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-12 sm:px-6 lg:px-10 lg:pt-[110px]">
         <div className="lc-reveal flex flex-col items-start justify-between gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:gap-8 sm:rounded-[36px] sm:p-12 lg:flex-row lg:items-center lg:px-16 lg:py-14">
           <div>
             <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] sm:text-[42px] sm:leading-[46px] sm:tracking-[-0.035em]">
@@ -121,7 +121,7 @@ export default async function BlogPage() {
               See what the software reads in your resume — free, no sign-up, about 10 seconds.
             </p>
           </div>
-          <CtaLink cta="free_ats_check" location="blog_index" href="/free-ats-check" className={`${btnWhite} shrink-0`}>
+          <CtaLink cta="free_ats_check" location="blog_index" href="/free-ats-check" className={`${btnWhite} w-full shrink-0 sm:w-auto`}>
             Check my resume — free
           </CtaLink>
         </div>

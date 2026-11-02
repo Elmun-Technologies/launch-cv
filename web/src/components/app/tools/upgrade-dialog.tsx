@@ -10,28 +10,46 @@ import { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, type CheckoutPlan } from "@/l
 export type AiToolKind = "jd" | "packet" | "roleFit";
 export type PlanLimitsMap = Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }>;
 
-const COPY: Record<AiToolKind | "any", { eyebrow: string; title: string; points: string[]; unit?: string }> = {
+type Copy = {
+  eyebrow: string;
+  title: string;
+  points: string[];
+  unit?: string;
+  /** Phone sheet: what the person was trying to do, and one line on what they get. */
+  action: string;
+  lead: string;
+};
+
+const COPY: Record<AiToolKind | "any", Copy> = {
   jd: {
     eyebrow: "JOB MATCH",
     title: "See what this job wants that your resume doesn’t say.",
+    action: "Match your resume to this job",
+    lead: "Missing skills, rewrites, cover letter and interview prep.",
     points: ["Match score and missing skills", "Rewrites for your bullets", "Cover letter and interview prep"],
     unit: "job matches",
   },
   roleFit: {
     eyebrow: "ROLE FIT",
     title: "See how a hiring manager would score your resume.",
+    action: "Score your resume like a hiring manager",
+    lead: "A score for each criterion and fixes in priority order.",
     points: ["A score for each hiring criterion", "Fixes in priority order", "Job match, cover letter and interview prep"],
     unit: "role-fit checks",
   },
   packet: {
     eyebrow: "COVER LETTER & INTERVIEW",
     title: "Walk into the interview with your letter and answers ready.",
+    action: "Get your cover letter and interview prep",
+    lead: "A letter for this job, a short pitch and ten likely questions.",
     points: ["A cover letter for this job", "A short elevator pitch", "Ten likely questions with answer outlines"],
     unit: "application packets",
   },
   any: {
     eyebrow: "AI TOOLS",
     title: "Every AI tool is included in every plan.",
+    action: "Unlock the AI tools",
+    lead: "Job match, role fit, cover letters and interview prep.",
     points: ["Job match and role fit", "Cover letters and interview prep", "Plans only differ in monthly limits"],
   },
 };
@@ -48,6 +66,7 @@ export function UpgradeDialog({
   kind,
   limits = PLAN_MONTHLY_LIMITS,
   location,
+  reason,
 }: {
   open: boolean;
   onClose: () => void;
@@ -55,6 +74,8 @@ export function UpgradeDialog({
   limits?: PlanLimitsMap;
   /** Analytics location for the choose_plan CTA event (no event when omitted). */
   location?: string;
+  /** Why it opened: no plan yet, or this month's limit is used up. Sets the phone eyebrow. */
+  reason?: "plan" | "limit";
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
@@ -104,11 +125,14 @@ export function UpgradeDialog({
           <span aria-hidden="true" className="mx-auto mb-4 block h-[5px] w-10 rounded-[9px] bg-[#d9d4f2] sm:hidden" />
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-[12px] font-bold tracking-[.08em] text-[#5440e8] sm:hidden">{copy.eyebrow}</p>
+              <p className="text-[12px] font-bold tracking-[.08em] text-[#5440e8] sm:hidden">
+                {reason === "limit" ? "YOU’VE USED THIS MONTH’S LIMIT" : copy.eyebrow}
+              </p>
               <h2 id={titleId} className="mt-1.5 text-[24px] font-extrabold leading-[28px] tracking-[-0.02em] sm:mt-0">
-                Pick a plan
+                <span className="sm:hidden">{copy.action}</span>
+                <span className="hidden sm:inline">Pick a plan</span>
               </h2>
-              <p className="mt-1.5 text-[14px] text-[#4a4862] sm:hidden">{copy.points.join(" · ")}</p>
+              <p className="mt-1.5 text-[14px] text-[#4a4862] sm:hidden">{copy.lead}</p>
             </div>
             <button
               type="button"
@@ -170,7 +194,7 @@ export function UpgradeDialog({
             <Link
               href="/dashboard/settings/subscription"
               onClick={() => (location ? trackCtaClick({ cta: "choose_plan", location }) : undefined)}
-              className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-2 hover:decoration-[#5440e8]"
+              className="whitespace-nowrap font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-2 hover:decoration-[#5440e8]"
             >
               Compare plans
             </Link>

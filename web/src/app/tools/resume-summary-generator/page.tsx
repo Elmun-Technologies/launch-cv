@@ -12,7 +12,7 @@ export const revalidate = 60;
 
 const PATH = "/tools/resume-summary-generator";
 const DESCRIPTION =
-  "Write a resume summary from your job title, years of experience and best results. Get two free versions, no account, built only from the facts you type.";
+  "Write a resume summary from your job title, years and best results. Three free versions (short, standard, detailed), no account, only from the facts you type.";
 
 export const metadata = buildMarketingMetadata({
   title: "Resume Summary Generator — Free, No Sign-Up",
@@ -36,7 +36,7 @@ function buildFaqs(limit: number): FaqItem[] {
     },
     {
       q: "Will it add things I didn't say?",
-      a: "No. It writes only from your job title, years, specialty and the strengths you list. Any version containing a number you didn't type is dropped before you see it. Read both versions once more before you use one.",
+      a: "No. It writes only from your job title, years, specialty and the strengths you list. Any version containing a number you didn't type is dropped before you see it. Read the version you pick once more before you use it.",
     },
     {
       q: "How long should a resume summary be?",
@@ -68,8 +68,8 @@ export default async function SummaryGeneratorPage() {
       <ToolHero
         crumb="Resume summary generator"
         title="Resume summary generator."
-        muted="Two versions, your facts."
-        lead="Tell us your role, years and two to four strengths or results. Get two summaries written only from what you typed."
+        muted="Three versions, your facts."
+        lead="Tell us your role, years and two to four strengths or results. Get three summaries — short, standard and detailed — written only from what you typed."
       />
       <ToolStage>
         <SummaryGenerator limit={limit} paused={paused} />

@@ -5,6 +5,7 @@ import { getUserPlanId } from "@/lib/plans";
 import { aiErrorResponse, AiUnavailableError, chatJson } from "@/lib/openai-client";
 import { extractResumeText } from "@/lib/resume-parse";
 import type { ResumeContent } from "@/types/resume";
+import { DATE_PROMPT, takeDateReadings } from "../date-reading";
 
 export async function POST(req: Request) {
   const session = await getSession();
@@ -33,7 +34,7 @@ Return a ResumeContent object with these exact keys:
 - contact: { fullName, email, phone, location, links[] }
 - headline: string (job title / professional title)
 - summary: string (professional summary paragraph)
-- experience: array of { id (generate unique), company, role, start, end, location, bullets: [{id, text, evidenceIds: []}] }
+- experience: array of { id (generate unique), company, role, start, end, dateText, location, bullets: [{id, text, evidenceIds: []}] }
 - education: array of { id (generate unique), school, degree, start, end }
 - skills: string[] (list of skills)
 - evidence: [] (empty array)
@@ -41,7 +42,7 @@ Return a ResumeContent object with these exact keys:
 Rules:
 - Extract ALL data faithfully from the text. Do not fabricate.
 - Generate unique IDs using format "imp-1", "imp-2", etc.
-- Parse dates as they appear (e.g., "Jan 2020", "2020-01").
+${DATE_PROMPT}
 - If a section is missing, use empty string/array.
 - Even if text quality is poor, extract what you can.`;
 
@@ -59,7 +60,9 @@ Rules:
     if (!result || typeof result !== "object" || !result.contact) {
       return NextResponse.json({ error: "AI could not parse the resume" }, { status: 502 });
     }
-    return NextResponse.json({ content: result });
+    // dateText isn't part of ResumeContent: it only feeds the "check these dates" note on the review screen.
+    const dateReadings = takeDateReadings(result.experience);
+    return NextResponse.json({ content: result, dateReadings });
   } catch (e) {
     /** Don't echo the raw upstream message — it can leak model names,
      *  prompt fragments, or stack traces back to the browser. */

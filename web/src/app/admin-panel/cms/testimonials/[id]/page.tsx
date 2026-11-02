@@ -22,6 +22,8 @@ export default async function EditTestimonialPage({ params }: { params: Promise<
     placement: row.placement,
     order: row.order,
     published: row.published,
+    permissionDate: row.permissionDate ? row.permissionDate.toISOString().slice(0, 10) : "",
+    source: row.source ?? "",
   };
 
   return (

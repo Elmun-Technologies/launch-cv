@@ -82,7 +82,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
   const related = e.related.map(getKeywordRole).filter((x) => !!x);
   const url = absoluteUrl(`/resume-keywords/${e.slug}`);
   const exampleHref = `/resume-examples/${e.slug}`;
-  const lead = `The ${total} skills, tools${groups.some((g) => g.id === "credentials") ? " and credentials" : ""} that come up in ${role} job posts, sorted by type, and how to put them in bullets a recruiter believes.`;
+  const lead = `The ${total} ${groups.some((g) => g.id === "credentials") ? "skills, tools and credentials" : "skills and tools"} that come up in ${role} job posts, sorted by type, and how to put them in bullets a recruiter believes.`;
 
   const ld = {
     "@context": "https://schema.org",
@@ -136,13 +136,13 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
             <CtaLink cta="free_ats_check" location="resume_keywords" href="/free-ats-check" className={btnPrimary}>
               Check my resume for these
             </CtaLink>
-            <Link href={exampleHref} className={`${btnWhite} hidden sm:inline-flex`}>
+            <Link href={exampleHref} className={`${btnWhite} max-sm:hidden`}>
               See the full example
             </Link>
           </div>
           <p className="mt-3 text-center text-[12px] text-[#66647c] sm:mt-4 sm:text-left sm:text-[14px]">
             By{" "}
-            <Link href="/about" className="lc-link hover:text-[#5440e8]">
+            <Link href={SITE_AUTHOR.path} rel="author" className="lc-link hover:text-[#5440e8]">
               {SITE_AUTHOR.name}
             </Link>
             <span className="hidden sm:inline">, {SITE_AUTHOR.role}</span> · Updated <time dateTime={KEYWORDS_UPDATED}>{UPDATED_LABEL}</time>

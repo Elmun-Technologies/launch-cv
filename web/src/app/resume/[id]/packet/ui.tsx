@@ -114,6 +114,8 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
   );
 
   const showResult = result && !loading;
+  /** First line of the pasted post, for the one-line context bar on phones. */
+  const jdLabel = jd.trim().split(/\n/)[0]?.trim().slice(0, 80) || "the job description you pasted";
   const tabCls = (t: Tab) => (tab === t ? "" : "max-lg:hidden");
 
   return (
@@ -135,21 +137,24 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
         </section>
       ) : (
         /* After a run: settings bar with tone + regenerate */
-        <section aria-label="Packet settings" className="rounded-[18px] bg-white px-4 py-3">
+        <section aria-label="Packet settings" className="rounded-[18px] bg-white px-4 py-1 lg:py-3">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2.5">
-            <p className="min-w-0 text-[14px] text-[#4a4862]">
-              Based on <b className="text-[#121226]">the job description you pasted</b>{" "}
+            {/* Phones: one compact line, then the Letter / Pitch / Questions tabs straight after. */}
+            <p className="flex min-w-0 max-w-full items-center gap-1 text-[14px] text-[#4a4862] max-lg:w-full">
+              <span className="shrink-0">Based on</span>
+              <b className="min-w-0 truncate text-[#121226] lg:hidden">{jdLabel}</b>
+              <b className="hidden text-[#121226] lg:inline">the job description you pasted</b>
               <button
                 type="button"
                 aria-expanded={editJd}
                 aria-controls="packet-jd-panel"
                 onClick={() => setEditJd((v) => !v)}
-                className="ml-1 inline-flex min-h-11 items-center font-bold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-2 hover:decoration-[#5440e8]"
+                className="ml-1 inline-flex min-h-11 shrink-0 items-center font-bold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-2 hover:decoration-[#5440e8]"
               >
                 {editJd ? "Hide" : "Change"}
               </button>
             </p>
-            <div className="flex flex-wrap items-center gap-2.5 sm:ml-auto">
+            <div className={`flex flex-wrap items-center gap-2.5 sm:ml-auto ${editJd ? "" : "max-lg:hidden"}`}>
               <ToneSwitch tone={tone} onChange={setTonee} />
               <button type="button" disabled={!canRun} onClick={() => void run()} className={pillSoft}>
                 {loading ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" /> : <SparkIcon className="h-4 w-4" />}

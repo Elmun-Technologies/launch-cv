@@ -12,7 +12,7 @@ import { CtaLink } from "@/components/cta-link";
 import { DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
-import { SITE_AUTHOR } from "@/lib/author";
+import { SITE_AUTHOR, SITE_AUTHOR_ID } from "@/lib/author";
 import { getPostBySlug } from "@/lib/blog-posts";
 
 /**
@@ -102,6 +102,7 @@ export function guideLd(input: {
         image: DEFAULT_OG_IMAGE,
         author: {
           "@type": "Person",
+          "@id": SITE_AUTHOR_ID,
           name: SITE_AUTHOR.name,
           url: SITE_AUTHOR.url,
           image: SITE_AUTHOR.avatar,
@@ -159,7 +160,7 @@ export function GuidePage({ ld, ...p }: Props & { ld: Record<string, unknown> })
               </span>
               <span>
                 By{" "}
-                <Link href="/about" rel="author" className="lc-link font-semibold text-[#121226] hover:text-[#5440e8]">
+                <Link href={SITE_AUTHOR.path} rel="author" className="lc-link font-semibold text-[#121226] hover:text-[#5440e8]">
                   {SITE_AUTHOR.name}
                 </Link>{" "}
                 · Updated <time dateTime={p.updated}>{guideDateLabel(p.updated)}</time> · {minutes} min read

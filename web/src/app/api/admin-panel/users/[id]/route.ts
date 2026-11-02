@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { hasRecentReauth, requireAdmin } from "@/lib/admin-guard";
+import { adminApi } from "@/lib/admin-api";
+import { hasRecentReauth } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
 import { getClientIp } from "@/lib/request-ip";
 import { z } from "zod";
@@ -9,8 +10,8 @@ export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const admin = await requireAdmin("users");
-  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const { error } = await adminApi("users");
+  if (error) return error;
 
   const { id } = await params;
 
@@ -53,8 +54,8 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const admin = await requireAdmin("users");
-  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const { staff: admin, error } = await adminApi("users");
+  if (error) return error;
 
   const { id } = await params;
   const body = await req.json().catch(() => null);
@@ -95,8 +96,8 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const admin = await requireAdmin("users");
-  if (!admin) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  const { staff: admin, error } = await adminApi("users");
+  if (error) return error;
   if (!(await hasRecentReauth(admin.sub))) {
     return NextResponse.json({ error: "Confirm it's you first.", code: "reauth_required" }, { status: 401 });
   }

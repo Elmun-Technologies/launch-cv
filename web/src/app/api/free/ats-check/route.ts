@@ -9,13 +9,14 @@ import { hashClientIp } from "@/lib/request-ip";
 import { allowFreeAtsBurst } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
 import type { FreeAtsFix, FreeAtsReport, FreeAtsResult } from "@/types/ai-results";
+import { parseResumeForReport } from "./parsed";
 
 /** One free trial per IP inside this window. */
 const TRIAL_WINDOW_MS = 30 * 24 * 60 * 60 * 1000;
 
 const DIMENSIONS = ["Formatting", "Keywords", "Structure", "Readability"] as const;
 
-type RawFix = { priority?: unknown; title?: unknown; fix?: unknown };
+type RawFix = { priority?: unknown; title?: unknown; fix?: unknown; detail?: unknown };
 
 /** How many fixes are shown in full before sign-up. */
 const PREVIEW_FIXES = 3;
@@ -33,7 +34,8 @@ function toFix(f: RawFix): FreeAtsFix | null {
   const title = typeof f?.title === "string" ? f.title.trim().slice(0, 200) : "";
   if (!priority || !title) return null;
   const fix = typeof f?.fix === "string" ? f.fix.trim().slice(0, 600) : "";
-  return { priority, title, fix };
+  const detail = typeof f?.detail === "string" ? f.detail.trim().slice(0, 300) : "";
+  return detail ? { priority, title, fix, detail } : { priority, title, fix };
 }
 
 /** Shape the model output into the full report we store for the visitor. */
@@ -107,6 +109,7 @@ export async function POST(req: Request) {
   if (!formData) return NextResponse.json({ error: "Form data expected" }, { status: 400 });
 
   let resumeText: string;
+  let fileName: string | undefined;
   const file = formData.get("file");
   const pasted = formData.get("text");
 
@@ -114,6 +117,9 @@ export async function POST(req: Request) {
     const parsed = await extractResumeText(file);
     if (!parsed.ok) return NextResponse.json({ error: parsed.error }, { status: parsed.status });
     resumeText = parsed.text;
+    // Shown as the report's subtitle; keep only a plain base name.
+    const base = file.name.split(/[\\/]/).pop()?.replace(/[\u0000-\u001f]/g, "").trim();
+    if (base) fileName = base.slice(0, 120);
   } else if (typeof pasted === "string" && pasted.trim().length >= 30) {
     resumeText = pasted;
   } else {
@@ -177,7 +183,7 @@ JSON shape:
     { "name": "Structure", "score": 0-100 },
     { "name": "Readability", "score": 0-100 }
   ],
-  "fixes": [ { "priority": "High" | "Medium" | "Low", "title": string, "fix": string } ]
+  "fixes": [ { "priority": "High" | "Medium" | "Low", "title": string, "detail": string, "fix": string } ]
 }
 Scoring guidance:
 - Formatting: penalize columnOrTableHint and allCapsHeavy. Structure: reward the four
@@ -188,7 +194,8 @@ Scoring guidance:
   them (e.g. never claim contact info is missing when hasEmail/hasPhone is true).
 Rules:
 - Provide 4-10 concrete fixes ranked by priority. Base every fix on the actual text and signals.
-- "title" names the problem in plain English (under 12 words). "fix" says exactly what to change, in 1-2 sentences.
+- "title" names the problem in plain English (under 12 words). "detail" says in one sentence why it hurts,
+  quoting the resume where it helps (e.g. which dates or which heading). "fix" says exactly what to change, in 1-2 sentences.
 - Do not fabricate metrics. Be honest and specific.`;
 
   const user = `SIGNALS (deterministic, treat as ground truth):
@@ -226,6 +233,10 @@ ${resumeText.slice(0, 12000)}`;
       { status: 502 },
     );
   }
+
+  // What a parser reads from the text — computed here, without AI, and stored with the report.
+  report.parsed = parseResumeForReport(resumeText, signals);
+  if (fileName) report.fileName = fileName;
 
   // 6. Finalize the reserved trial with the full report so the visitor can
   //    claim it after sign-up, and track the funnel event.

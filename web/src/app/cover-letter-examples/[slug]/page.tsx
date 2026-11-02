@@ -127,14 +127,14 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
             <CtaLink cta="cover_letter_feature" location="cover_letter_example" href="/features/cover-letter" className={btnPrimary}>
               Write mine from my resume
             </CtaLink>
-            <Link href={`/resume-examples/${slug}`} className={`${btnWhite} hidden sm:inline-flex`}>
+            <Link href={`/resume-examples/${slug}`} className={`${btnWhite} max-sm:hidden`}>
               See the matching resume
             </Link>
           </div>
         </div>
         <p className="mt-3 text-[12px] text-[#66647c] sm:mt-4 sm:text-[14px]">
           By{" "}
-          <Link href="/about" className="lc-link hover:text-[#5440e8]">
+          <Link href={SITE_AUTHOR.path} rel="author" className="lc-link hover:text-[#5440e8]">
             {SITE_AUTHOR.name}
           </Link>{" "}
           · Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>

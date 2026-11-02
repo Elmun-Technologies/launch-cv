@@ -17,7 +17,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     action: "resume.delete",
     entity: "Resume",
     entityId: id,
-    diff: { ownerId: resume.userId },
+    diff: { ownerId: resume.userId, deleted: { title: resume.title } },
     ip: getClientIp(req),
   });
   return NextResponse.json({ deleted: true });

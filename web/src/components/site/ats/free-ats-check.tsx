@@ -36,7 +36,7 @@ function clientFingerprint(): string {
   }
 }
 
-const container = "mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-10";
+const container = "mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10";
 const btn = "lc-btn-lift inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full px-[26px] py-[15px] text-[16px] font-semibold";
 
 /** Same thresholds as the FAQ: 80+ ready, 65–80 readable, below 65 at risk. */
@@ -58,7 +58,19 @@ function stepsFor(fileName: string | null): string[] {
   return [source, "Finding contact details and sections", "Reading dates and job titles", "Checking keywords for your role", "Ranking fixes by impact"];
 }
 
-export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactNode }) {
+export function FreeAtsCheck({
+  intro,
+  stage,
+  googleEnabled = false,
+  children,
+}: {
+  intro: ReactNode;
+  stage: ReactNode;
+  /** From `isGoogleOAuthConfigured()`, as on the login and register pages. */
+  googleEnabled?: boolean;
+  /** The page's marketing sections: kept in the HTML, hidden while a check runs. */
+  children?: ReactNode;
+}) {
   const [mode, setMode] = useState<Mode>("upload");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -184,6 +196,12 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
   }
 
   const headingStyle = { outline: "none" } as const;
+  const wrap = (checker: ReactNode) => (
+    <>
+      {checker}
+      <div hidden={status === "loading"}>{children}</div>
+    </>
+  );
 
   // ---- Result ----
   if (status === "done" && result) {
@@ -195,7 +213,7 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
     const ring = 2 * Math.PI * 45;
     const starter = PUBLIC_PLANS.starter;
 
-    return (
+    return wrap(
       <section id="ats-check" ref={sectionRef} className="scroll-mt-24">
         <p role="status" className="sr-only">
           Your ATS score is {result.overall} out of 100.
@@ -298,7 +316,7 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
                         <Link href={registerHref} className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
                           Save my report
                         </Link>
-                        <GoogleSignInButton mode="register" next={next} />
+                        {googleEnabled ? <GoogleSignInButton mode="register" next={next} /> : null}
                       </div>
                     </div>
                   </div>
@@ -367,7 +385,7 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
   // ---- Checking ----
   if (status === "loading") {
     const steps = stepsFor(fileName);
-    return (
+    return wrap(
       <section id="ats-check" ref={sectionRef} className={`${container} scroll-mt-24 pt-4 lg:pt-8`}>
         <style>{`@media (prefers-reduced-motion: no-preference){@keyframes lcv5-scan{from{top:4%}to{top:96%}}.lcv5-scan{animation:lcv5-scan 2.4s ease-in-out infinite alternate}}`}</style>
         <div className="grid items-stretch gap-6 lg:grid-cols-2">
@@ -432,7 +450,7 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
   }
 
   // ---- Input (idle / error) ----
-  return (
+  return wrap(
     <section id="ats-check" ref={sectionRef} className={`${container} scroll-mt-24 pt-4 lg:pt-8`}>
       <div className="grid items-stretch gap-7 lg:grid-cols-2 lg:gap-6">
         <div className="lg:pr-6 lg:pt-6">
@@ -534,12 +552,18 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
             ) : null}
           </div>
           <ul className="mt-3.5 flex flex-wrap justify-center gap-x-3.5 gap-y-1.5 text-[13px] font-medium text-[#4a4862] lg:mt-[18px] lg:justify-start lg:gap-x-5 lg:text-[14px]">
-            {["No account needed", "Your file isn't stored", "One free check a month"].map((t) => (
-              <li key={t}>
+            {/* Phones get the canvas's shorter wording. */}
+            {[
+              { short: "No account", long: "No account needed" },
+              { short: "File isn't stored", long: "Your file isn't stored" },
+              { short: "One free check a month", long: "One free check a month" },
+            ].map((t) => (
+              <li key={t.long}>
                 <span aria-hidden="true" className="font-bold text-[#0b7a4f]">
                   ✓
                 </span>{" "}
-                {t}
+                <span className="sm:hidden">{t.short}</span>
+                <span className="hidden sm:inline">{t.long}</span>
               </li>
             ))}
           </ul>

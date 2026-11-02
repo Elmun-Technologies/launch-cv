@@ -9,6 +9,7 @@ import { ResumeThumb } from "@/components/app/shell/resume-thumb";
 import { ago, appBtnPrimary, appBtnSmDark, appBtnSmSoft, appBtnWhite, appCard, appH1, appLead } from "@/components/app/shell/ui";
 import { parseResumeContent } from "@/lib/resume-json";
 import { ResumesToolbar } from "./resumes-toolbar";
+import { ResumeCardMenu, TemplateName } from "./resume-card-menu";
 
 type SortKey = "newest" | "oldest" | "az";
 
@@ -91,7 +92,7 @@ export default async function ResumesPage({
               const content = parseResumeContent(r.content);
               const edited = `Edited ${ago(r.updatedAt)}`;
               return (
-                <li key={r.id} className="min-w-0">
+                <li key={r.id} className="relative min-w-0 focus-within:z-20">
                   <article
                     aria-label={r.title}
                     className={`${appCard} lc-rise grid h-full grid-cols-[110px_1fr] gap-3 rounded-[20px]! p-2 motion-reduce:hover:transform-none sm:flex sm:flex-col sm:gap-0 sm:rounded-[24px]!`}
@@ -110,13 +111,19 @@ export default async function ResumesPage({
                       </span>
                     </Link>
                     <div className="flex min-w-0 flex-col px-1 py-1.5 sm:flex-1 sm:px-2.5 sm:pb-2 sm:pt-3.5">
-                      <h2 className="truncate text-[15px] font-extrabold leading-[19px] sm:text-[17px] sm:leading-6">{r.title}</h2>
-                      <p className="mt-[3px] text-[12px] text-[#66647c] sm:text-[13px]">{edited}</p>
-                      <div className="mt-auto flex gap-1.5 pt-2.5 sm:grid sm:grid-cols-2 sm:pt-3.5">
-                        <Link href={`/resume/${r.id}/edit`} className={`${appBtnSmDark} text-[13px]! max-sm:px-3.5`}>
+                      <div className="flex items-start justify-between gap-1">
+                        <h2 className="line-clamp-2 min-w-0 break-words text-[15px] font-extrabold leading-[19px] sm:text-[17px] sm:leading-6">{r.title}</h2>
+                        <ResumeCardMenu id={r.id} title={r.title} />
+                      </div>
+                      <p className="mt-[3px] text-[12px] text-[#66647c] sm:text-[13px]">
+                        <TemplateName id={r.id} />
+                        {edited}
+                      </p>
+                      <div className="mt-auto flex gap-1.5 pt-2.5 sm:pt-3.5">
+                        <Link href={`/resume/${r.id}/edit`} className={`${appBtnSmDark} text-[13px]! max-sm:px-3.5 sm:flex-1`}>
                           Edit<span className="sr-only"> {r.title}</span>
                         </Link>
-                        <Link href={`/resume/${r.id}/jd`} className={`${appBtnSmSoft} text-[13px]! max-sm:px-3.5`}>
+                        <Link href={`/resume/${r.id}/jd`} className={`${appBtnSmSoft} shrink-0 whitespace-nowrap text-[13px]! px-3.5!`}>
                           <span className="sm:hidden">Match</span>
                           <span className="hidden sm:inline">Match to a job</span>
                           <span className="sr-only"> for {r.title}</span>
@@ -154,7 +161,7 @@ export default async function ResumesPage({
             <Lightbulb className="h-5 w-5" strokeWidth={1.8} />
           </span>
           <p className="flex-1 text-[15px] text-[#4a4862]">
-            <b className="text-[#121226]">Tip:</b> keep one resume per kind of role, then use &ldquo;Match to a job&rdquo; to tailor it to each
+            <b className="text-[#121226]">Tip:</b>{" "}keep one resume per kind of role, then use &ldquo;Match to a job&rdquo; to tailor it to each
             posting.
           </p>
         </div>

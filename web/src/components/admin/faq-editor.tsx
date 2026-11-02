@@ -21,8 +21,7 @@ export type FaqEditorData = {
   id: string | null;
   question: string;
   answer: string;
-  placement: string;
-  order: number;
+  placements: string[];
   published: boolean;
 };
 
@@ -38,15 +37,31 @@ export function FaqEditor({ initial }: { initial: FaqEditorData }) {
     setData((p) => ({ ...p, [key]: value }));
   }
 
+  function togglePlacement(value: string) {
+    setData((p) => ({
+      ...p,
+      placements: p.placements.includes(value) ? p.placements.filter((x) => x !== value) : [...p.placements, value],
+    }));
+  }
+
   async function save() {
     setError(null);
+    if (!data.placements.length) {
+      setError("Pick at least one page for this FAQ.");
+      return;
+    }
     startSaving(async () => {
       const url = isNew ? "/api/admin-panel/cms/faqs" : `/api/admin-panel/cms/faqs/${data.id}`;
       const method = isNew ? "POST" : "PATCH";
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          question: data.question,
+          answer: data.answer,
+          placements: data.placements,
+          published: data.published,
+        }),
       });
       const j = (await res.json()) as { faq?: { id: string }; error?: string };
       if (!res.ok) {
@@ -111,37 +126,49 @@ export function FaqEditor({ initial }: { initial: FaqEditorData }) {
         </CmsCard>
 
         <div className="flex min-w-0 flex-col gap-3.5">
-          <CmsCard title="Placement">
-            <div className="flex flex-col gap-3">
-              <CmsField label="Page" required>
-                <select value={data.placement} onChange={(e) => update("placement", e.target.value)} className={cmsSelectCls}>
-                  <option value="">— select —</option>
-                  {PLACEMENTS.map((p) => (
-                    <option key={p.value} value={p.value}>
+          <CmsCard title="Placement" description="Pick every page this question should appear on.">
+            <fieldset>
+              <legend className="sr-only">Pages</legend>
+              <div className="flex flex-col gap-2">
+                {PLACEMENTS.map((p) => {
+                  const checked = data.placements.includes(p.value);
+                  return (
+                    <label
+                      key={p.value}
+                      className={`flex min-h-11 cursor-pointer items-center gap-2.5 rounded-[14px] border-[1.5px] px-3.5 py-2 text-[14px] font-semibold transition-colors focus-within:ring-4 focus-within:ring-[#5440e8]/15 ${
+                        checked
+                          ? "border-[#5440e8] bg-[#f1eff8] text-[#121226]"
+                          : "border-[#e2e0ea] bg-white text-[#4a4862] hover:border-[#c9c0ff]"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => togglePlacement(p.value)}
+                        className="h-4 w-4 shrink-0 accent-[#5440e8]"
+                      />
                       {p.label}
-                    </option>
-                  ))}
-                </select>
-              </CmsField>
-              <CmsField label="Order" hint="Lower numbers appear first.">
-                <input
-                  type="number"
-                  value={data.order}
-                  onChange={(e) => update("order", Number(e.target.value) || 0)}
-                  className={cmsInputCls}
-                />
-              </CmsField>
-              <CmsField label="Status">
-                <select
-                  value={data.published ? "published" : "hidden"}
-                  onChange={(e) => update("published", e.target.value === "published")}
-                  className={cmsSelectCls}
-                >
-                  <option value="published">Published</option>
-                  <option value="hidden">Hidden</option>
-                </select>
-              </CmsField>
-            </div>
+                    </label>
+                  );
+                })}
+              </div>
+            </fieldset>
+            <p className="mt-3 text-[12px] leading-[18px] text-[#66647c]">
+              To change the order, drag the question on the FAQs list.
+            </p>
+          </CmsCard>
+
+          <CmsCard title="Visibility">
+            <CmsField label="Status">
+              <select
+                value={data.published ? "published" : "hidden"}
+                onChange={(e) => update("published", e.target.value === "published")}
+                className={cmsSelectCls}
+              >
+                <option value="published">Published</option>
+                <option value="hidden">Hidden</option>
+              </select>
+            </CmsField>
           </CmsCard>
 
           {!isNew ? (

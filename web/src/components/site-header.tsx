@@ -8,18 +8,29 @@ import { resetUser } from "@/lib/analytics-client";
 const itemCls =
   "focus-visible:outline-[#5440e8]! flex min-h-11 w-full items-center gap-2.5 px-4 text-left text-[14px] font-medium text-[#121226] transition-colors hover:bg-[#f1eff8] focus-visible:rounded-none!";
 
+/** "Maria Lopez" → "ML"; falls back to the email's first letter. */
+function initialsOf(name: string | null, email: string): string {
+  const words = (name ?? "").trim().split(/\s+/).filter((w) => /\p{L}/u.test(w));
+  if (words.length >= 2) return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
+  if (words.length === 1) return words[0][0].toUpperCase();
+  return email[0]?.toUpperCase() ?? "U";
+}
+
 /**
- * Account button + menu for the app shell (design v5): avatar initial and
- * email, opening Account, Plan and billing, Admin panel (staff) and Sign out.
+ * Account button + menu for the app shell (design v5): avatar initials, the
+ * account name with the email underneath, opening Account, Plan and billing, Admin panel (staff) and Sign out.
  * `placement="up"` opens above the button (sidebar footer).
  */
 export function AccountMenu({
   email,
+  name,
   isAdmin = false,
   placement = "up",
   onNavigate,
 }: {
   email?: string | null;
+  /** Account name; when missing the email is shown on its own. */
+  name?: string | null;
   isAdmin?: boolean;
   placement?: "up" | "down";
   onNavigate?: () => void;
@@ -63,6 +74,7 @@ export function AccountMenu({
     onNavigate?.();
   };
   const Chevron = placement === "up" ? ChevronUp : ChevronDown;
+  const displayName = name?.trim() || null;
 
   return (
     <div className="relative" ref={ref}>
@@ -72,18 +84,18 @@ export function AccountMenu({
         onClick={() => setOpen((s) => !s)}
         aria-expanded={open}
         aria-haspopup="menu"
-        aria-label={`Account menu for ${email}`}
+        aria-label={`Account menu for ${displayName || email}`}
         className="focus-visible:outline-[#5440e8]! focus-visible:rounded-2xl! flex min-h-11 w-full items-center gap-2.5 rounded-2xl p-2 text-left transition-colors hover:bg-[#f1eff8]"
       >
         <span
           aria-hidden="true"
           className="inline-flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-[#c9c0ff] text-[13px] font-extrabold text-[#121226]"
         >
-          {email[0]?.toUpperCase() ?? "U"}
+          {initialsOf(displayName, email)}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-bold text-[#121226]">{email}</span>
-          <span className="block text-[12px] text-[#66647c]">Account and sign out</span>
+          <span className="block truncate text-[13px] font-bold text-[#121226]">{displayName || email}</span>
+          <span className="block truncate text-[12px] text-[#66647c]">{displayName ? email : "Account and sign out"}</span>
         </span>
         <Chevron className={`h-4 w-4 shrink-0 text-[#66647c] transition-transform ${open ? "rotate-180" : ""}`} aria-hidden />
       </button>

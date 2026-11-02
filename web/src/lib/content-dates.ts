@@ -15,7 +15,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/features/voice-input": "2026-10-27",
   "/pricing": "2026-11-01",
   "/compare/ats-resume-checkers": "2026-11-01",
-  "/about": "2026-10-27",
+  "/about": "2026-11-02",
   "/contact": "2026-10-27",
   "/resume-templates": "2026-11-02",
   "/resume-examples": "2026-10-27",
@@ -38,10 +38,19 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/resume-keywords/*": "2026-11-02",
   "/ats": "2026-11-02",
   "/ats/*": "2026-11-02",
+  "/editorial-process": "2026-11-02",
+  "/authors/nazir-elmurodov": "2026-11-02",
+  "/changelog": "2026-11-02",
+  "/ai-info": "2026-11-02",
   "/legal/privacy": "2026-10-27",
   "/legal/terms": "2026-10-27",
 };
 
 export function contentUpdated(path: string): Date {
   return new Date(`${CONTENT_UPDATED[path] ?? "2026-10-27"}T00:00:00Z`);
+}
+
+/** The same date as a page shows it, e.g. "November 2, 2026". */
+export function contentUpdatedLabel(path: string): string {
+  return contentUpdated(path).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
 }
