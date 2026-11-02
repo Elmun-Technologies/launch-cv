@@ -113,6 +113,7 @@ export const COVER_TEMPLATE_SECTIONS: GuideSection[] = [
     title: "Length, formatting and sending it",
     body: [
       "- **Length:** three or four short paragraphs, comfortably under one page.\n- **Font and margins:** the same font as your resume at 10–12 pt, with margins of about 0.5 to 1 inch, left-aligned, with a blank line between paragraphs.\n- **File:** a text-based PDF unless the posting asks for Word. Name it plainly, like `Firstname-Lastname-Cover-Letter.pdf`.\n- **By email:** paste the letter into the body (no recipient block), and use a subject line with the job title and your name. Attach your resume.\n- **In an application form:** paste the plain text into the box; formatting is usually stripped, so check the paragraph breaks.",
+      "Once you've accepted the offer, the same business-letter layout works for giving notice: see the free [resignation letter templates](/resignation-letter), including a [two weeks notice letter](/resignation-letter/two-weeks-notice).",
     ],
   },
   {

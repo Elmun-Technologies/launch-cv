@@ -17,7 +17,7 @@ import { getPostBySlug } from "@/lib/blog-posts";
 
 /**
  * Shared frame for the long-form pillar guides (/how-to-write-a-resume,
- * /resume-length, /cover-letter-template), built on the same layout as
+ * /resume-length, /cover-letter-template, /resignation-letter), built on the same layout as
  * /resume-format: hero with byline, optional overview band, sticky table of
  * contents, Markdown sections with page-supplied figures, sources, FAQ, a
  * sidebar CTA, "Keep going" links and a closing CTA band.
@@ -39,6 +39,8 @@ export type GuideCta = { cta: string; location: string; href: string; label: str
 type Props = {
   path: string;
   crumb: string;
+  /** Middle breadcrumb for a page under a hub (e.g. Resignation letter → Two weeks notice). */
+  parent?: { href: string; label: string };
   /** H1, first half (ink). */
   title: ReactNode;
   /** H1, second half (grey). */
@@ -87,8 +89,14 @@ export function guideLd(input: {
   section: string;
   faqs: FaqItem[];
   sources?: SourceItem[];
+  parent?: { href: string; label: string };
 }) {
   const url = absoluteUrl(input.path);
+  const crumbs = [
+    { name: "Home", item: absoluteUrl("/") },
+    ...(input.parent ? [{ name: input.parent.label, item: absoluteUrl(input.parent.href) }] : []),
+    { name: input.crumb, item: url },
+  ];
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -119,10 +127,7 @@ export function guideLd(input: {
       },
       {
         "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-          { "@type": "ListItem", position: 2, name: input.crumb, item: url },
-        ],
+        itemListElement: crumbs.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.name, item: c.item })),
       },
       faqPageLd(input.faqs),
     ],
@@ -146,7 +151,7 @@ export function GuidePage({ ld, ...p }: Props & { ld: Record<string, unknown> })
 
       {/* HERO */}
       <header className={`${container} pt-4 lg:pt-10`}>
-        <Breadcrumbs items={[{ href: "/", label: "Home" }, { label: p.crumb }]} />
+        <Breadcrumbs items={[{ href: "/", label: "Home" }, ...(p.parent ? [p.parent] : []), { label: p.crumb }]} />
         <div className="mt-3.5 grid gap-4 lg:mt-[22px] lg:grid-cols-[1.2fr_0.8fr] lg:items-end lg:gap-12">
           <h1 className="text-[36px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:text-[48px] lg:text-[64px] lg:leading-[66px]">
             {p.title} <span className="text-[#7c7a94]">{p.muted}</span>

@@ -16,7 +16,7 @@ const SWITCHES: { key: keyof Settings["switches"]; label: string; off: string }[
   { key: "freeAtsCheck", label: "Free ATS check", off: "The public free check is turned off." },
   { key: "signups", label: "New sign-ups", off: "Registration and new Google accounts are refused." },
   { key: "checkout", label: "Checkout", off: "Buy buttons show “checkout is paused”." },
-  { key: "freeTools", label: "Free writing tools", off: "The free bullet and summary generators answer “paused”." },
+  { key: "freeTools", label: "Free writing tools", off: "The free bullet, summary and resignation letter generators answer “paused”." },
 ];
 
 const RATE_LABELS: Record<keyof Settings["rateLimits"], string> = {
@@ -24,7 +24,7 @@ const RATE_LABELS: Record<keyof Settings["rateLimits"], string> = {
   importPerUserPerHour: "Imports / user / hour",
   pdfPerUserPerHour: "PDF exports / user / hour",
   freeAtsPerIpPerHour: "Free ATS checks / IP / hour",
-  freeToolsPerIpPerDay: "Free bullet + summary generations / IP / day",
+  freeToolsPerIpPerDay: "Free writing-tool generations / IP / day",
   registerPerIpPerHour: "Sign-ups / IP / hour",
   loginPer15Min: "Login attempts / 15 min",
   forgotPerIpPerHour: "Password resets / IP / hour",

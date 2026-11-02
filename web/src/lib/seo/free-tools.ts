@@ -8,7 +8,7 @@ import { absoluteUrl } from "@/lib/site";
  * comes from the verb list itself.
  */
 
-export type FreeToolKey = "ats" | "bullets" | "summary" | "words" | "verbs";
+export type FreeToolKey = "ats" | "bullets" | "summary" | "words" | "verbs" | "resignation";
 export type FreeTool = { key: FreeToolKey; href: string; name: string; blurb: string; kind: "AI" | "Instant" | "Guide" };
 
 export const TOOLS_INDEX_PATH = "/tools";
@@ -20,6 +20,7 @@ export function freeTools(): FreeTool[] {
     { key: "summary", href: "/tools/resume-summary-generator", name: "Summary generator", blurb: "Three summaries from your own facts", kind: "AI" },
     { key: "words", href: "/tools/resume-word-counter", name: "Resume word counter", blurb: "Length, bullets and filler words", kind: "Instant" },
     { key: "verbs", href: "/resume-action-verbs", name: "Action verbs", blurb: `${countVerbs()} verbs by skill, with examples`, kind: "Guide" },
+    { key: "resignation", href: "/tools/resignation-letter-generator", name: "Resignation letter generator", blurb: "Two letters from your details, copy or Word", kind: "AI" },
   ];
 }
 

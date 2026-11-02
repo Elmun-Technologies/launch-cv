@@ -33,11 +33,15 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/tools/resume-bullet-point-generator": "2026-11-02",
   "/tools/resume-summary-generator": "2026-11-02",
   "/tools/resume-word-counter": "2026-11-02",
+  "/tools/resignation-letter-generator": "2026-11-02",
   "/resume-action-verbs": "2026-11-02",
   "/resume-keywords": "2026-11-02",
   "/resume-keywords/*": "2026-11-02",
   "/ats": "2026-11-02",
   "/ats/*": "2026-11-02",
+  "/resignation-letter": "2026-11-02",
+  /** All /resignation-letter/[slug] pages (data in lib/seo/resignation-templates.ts). */
+  "/resignation-letter/*": "2026-11-02",
   "/legal/privacy": "2026-10-27",
   "/legal/terms": "2026-10-27",
 };
