@@ -6,8 +6,8 @@ import { getClientIp } from "@/lib/request-ip";
 import { consumeRateLimitShared } from "@/lib/rate-limit";
 
 /**
- * Shared plumbing for the public AI writing tools under /tools (bullet and
- * summary generators): admin kill switch, input validation, a per-IP daily
+ * Shared plumbing for the public AI writing tools under /tools (bullet, summary
+ * and resignation letter generators): admin kill switch, input validation, a per-IP daily
  * quota on the shared DB-backed limiter, and the post-generation guard that
  * drops any option containing a number the visitor didn't type.
  *
@@ -122,6 +122,20 @@ function numberWordsIn(s: string): string[] {
 export function onlyKnownNumbers(options: string[], input: string): string[] {
   const known = new Set([...numbersIn(input), ...numberWordsIn(input)]);
   return options.filter((o) => [...numbersIn(o), ...numberWordsIn(o)].every((n) => known.has(n)));
+}
+
+const DATE_WORDS =
+  /\b(january|february|march|april|may(?=\s+\d)|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|yesterday|weekend|week|weeks|month|months|year|years)\b/g;
+
+/**
+ * The same promise for dates: an option that names a month, weekday or span
+ * of time ("weeks", "years") the visitor didn't type is dropped, so a letter
+ * can't invent a notice period, a tenure or a second date. "May" counts as a
+ * month only when a day number follows it, so the verb is left alone.
+ */
+export function onlyKnownDates(options: string[], input: string): string[] {
+  const known = new Set(input.toLowerCase().match(DATE_WORDS) ?? []);
+  return options.filter((o) => (o.toLowerCase().match(DATE_WORDS) ?? []).every((w) => known.has(w)));
 }
 
 /** Shape a model string list: strings only, trimmed, de-duplicated, length-capped. */

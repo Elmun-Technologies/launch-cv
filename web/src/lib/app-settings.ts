@@ -20,7 +20,8 @@ export type AiTool =
   | "email"
   | "import"
   | "free_bullets"
-  | "free_summary";
+  | "free_summary"
+  | "free_resignation";
 
 export const AI_TOOL_LABELS: Record<AiTool, string> = {
   free_ats: "Free ATS check",
@@ -34,6 +35,7 @@ export const AI_TOOL_LABELS: Record<AiTool, string> = {
   import: "Resume import",
   free_bullets: "Free bullet generator",
   free_summary: "Free summary generator",
+  free_resignation: "Free resignation letter generator",
 };
 
 export const AI_MODELS = ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1"] as const;
@@ -58,7 +60,7 @@ export type Settings = {
     freeAtsPerIpPerHour: number;
     forgotPerIpPerHour: number;
     pdfPerUserPerHour: number;
-    /** Shared daily quota for the public AI writing tools (bullet + summary generators). */
+    /** Shared daily quota for the public AI writing tools (bullet, summary and resignation letter generators). */
     freeToolsPerIpPerDay: number;
   };
   switches: {
@@ -66,7 +68,7 @@ export type Settings = {
     freeAtsCheck: boolean;
     signups: boolean;
     checkout: boolean;
-    /** Public AI writing tools under /tools (bullet + summary generators). */
+    /** Public AI writing tools under /tools (bullet, summary and resignation letter generators). */
     freeTools: boolean;
   };
   models: Record<AiTool, string>;
@@ -107,6 +109,7 @@ export const DEFAULT_SETTINGS: Settings = {
     import: "gpt-4o-mini",
     free_bullets: "gpt-4o-mini",
     free_summary: "gpt-4o-mini",
+    free_resignation: "gpt-4o-mini",
   },
   security: { requireAdmin2fa: true, adminIdleMinutes: 30 },
 };

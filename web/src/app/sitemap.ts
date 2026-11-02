@@ -2,9 +2,10 @@ import type { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 import { RESUME_EXAMPLES } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES } from "@/lib/cover-letter-examples";
-import { contentUpdated } from "@/lib/content-dates";
+import { SAMPLES_DATE_KEY, contentUpdated } from "@/lib/content-dates";
 import { getSiteUrl } from "@/lib/site";
 import { ATS_VENDORS } from "@/lib/seo/ats-vendors";
+import { RESIGNATION_TEMPLATES } from "@/lib/seo/resignation-templates";
 
 /** Programmatic SEO pages added by later modules (keywords per role, ATS vendors). */
 const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = [
@@ -12,6 +13,8 @@ const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = 
   ...RESUME_EXAMPLES.map((e) => ({ path: `/resume-keywords/${e.slug}`, priority: 0.7, dateKey: "/resume-keywords/*" })),
   { path: "/ats", priority: 0.7, dateKey: "/ats" },
   ...ATS_VENDORS.map((v) => ({ path: `/ats/${v.slug}`, priority: 0.7, dateKey: "/ats/*" })),
+  { path: "/resignation-letter", priority: 0.8, dateKey: "/resignation-letter" },
+  ...RESIGNATION_TEMPLATES.map((t) => ({ path: `/resignation-letter/${t.slug}`, priority: 0.7, dateKey: "/resignation-letter/*" })),
 ];
 
 /** Rebuilt hourly so new blog posts appear without a redeploy. */
@@ -60,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/ai-info", "monthly", 0.5),
     page("/resume-templates", "monthly", 0.8),
     page("/resume-examples", "monthly", 0.8),
-    ...RESUME_EXAMPLES.map((e) => page(`/resume-examples/${e.slug}`, "monthly", 0.8, "/resume-examples/*")),
+    ...RESUME_EXAMPLES.map((e) => page(`/resume-examples/${e.slug}`, "monthly", 0.8, e.variants?.length ? SAMPLES_DATE_KEY : "/resume-examples/*")),
     page("/cover-letter-examples", "monthly", 0.8),
     ...COVER_LETTER_EXAMPLES.map((c) => page(`/cover-letter-examples/${c.slug}`, "monthly", 0.7, "/cover-letter-examples/*")),
     page("/resume-format", "monthly", 0.8),
@@ -73,6 +76,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/tools/resume-bullet-point-generator", "monthly", 0.8),
     page("/tools/resume-summary-generator", "monthly", 0.8),
     page("/tools/resume-word-counter", "monthly", 0.7),
+    page("/tools/resignation-letter-generator", "monthly", 0.8),
     ...SEO_EXTRA_ROUTES.map((r) => page(r.path, "monthly", r.priority, r.dateKey)),
     // login/register are utility pages (noindex) — intentionally kept out of the sitemap.
     page("/legal/privacy", "yearly", 0.3),

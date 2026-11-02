@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode, type TextareaHTMLAttributes } from "react";
 import Link from "next/link";
 import type { ResumeContent } from "@/types/resume";
 import { ResumePreview, type TemplateStyle } from "@/components/resume-preview";
@@ -9,7 +9,9 @@ import { VoiceInput } from "@/components/voice-input";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import { siteFontVars } from "@/lib/site-fonts";
-import { checkBullet, countDutyBullets } from "@/lib/bullet-quality";
+import { scoreResume, type BulletChip, type ScoreTarget } from "@/lib/resume-score";
+import { KeywordPanel, ScoreCard } from "@/components/resume-score-panel";
+import { ScoreRing } from "@/components/ats-report-parts";
 import {
   Award, Loader2, Check, MessageSquare, Plus, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download,
   Briefcase, GraduationCap, Wrench, ChevronRight, ChevronLeft, ChevronUp, ArrowLeft, GripVertical, MoreHorizontal,
@@ -52,41 +54,6 @@ function AutoGrowTextarea({ value, inputRef, ...rest }: TextareaHTMLAttributes<H
       ref={(node) => { el.current = node; inputRef?.(node); }}
     />
   );
-}
-
-function calculateLocalScore(c: ResumeContent): number {
-  let score = 0;
-  if (c.contact.fullName) score += 8;
-  if (c.contact.email) score += 8;
-  if (c.contact.phone) score += 5;
-  if (c.contact.location) score += 4;
-  if ((c.contact.links ?? []).length > 0) score += 5;
-  if (c.headline && c.headline.length > 5) score += 8;
-  if (c.summary && c.summary.length > 30) score += 10;
-  if (c.summary && c.summary.length > 100) score += 5;
-  score += Math.min(20, c.experience.length * 7);
-  const bulletCount = c.experience.reduce((s, e) => s + e.bullets.length, 0);
-  score += Math.min(12, bulletCount * 2);
-  const hasMetrics = c.experience.some((e) => e.bullets.some((b) => /\d/.test(b.text)));
-  if (hasMetrics) score += 8;
-  if (c.education.length > 0) score += 7;
-  score += Math.min(10, Math.floor(c.skills.length / 2));
-  return Math.min(100, score);
-}
-
-function generateLocalFixes(c: ResumeContent): string[] {
-  const fixes: string[] = [];
-  if (!c.summary || c.summary.length < 30) fixes.push("Add a professional summary (at least 2-3 sentences).");
-  if (c.skills.length < 8) fixes.push(`Add more skills — you have ${c.skills.length}, aim for 8-15.`);
-  if (c.experience.length === 0) fixes.push("Add your work experience with specific achievements.");
-  const bulletCount = c.experience.reduce((s, e) => s + e.bullets.length, 0);
-  if (bulletCount < 5) fixes.push("Add more achievement bullets to your experience entries.");
-  const hasMetrics = c.experience.some((e) => e.bullets.some((b) => /\d/.test(b.text)));
-  if (!hasMetrics) fixes.push("Include quantifiable metrics in your bullets (numbers, percentages, revenue).");
-  if (!c.contact.phone) fixes.push("Add a phone number to your contact information.");
-  if ((c.contact.links ?? []).length === 0) fixes.push("Add a LinkedIn profile or portfolio link.");
-  if (c.education.length === 0) fixes.push("Add your educational background.");
-  return fixes.slice(0, 6);
 }
 
 /** Editor sections, in the order of the side navigation and the Back / Next steps. */
@@ -141,26 +108,6 @@ function Field({ label, hint, help, className = "", children }: {
   );
 }
 
-function ScoreRing({ value, size, label }: { value: number; size: number; label: string }) {
-  const r = 44;
-  const circ = 2 * Math.PI * r;
-  const color = value >= 70 ? "#22b07d" : value >= 40 ? "#b87300" : "#c42b30";
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" role="img" aria-label={label} className="shrink-0">
-      <circle cx="50" cy="50" r={r} fill="none" stroke="#efedf7" strokeWidth="12" />
-      <circle
-        cx="50" cy="50" r={r} fill="none" stroke={color} strokeWidth="12" strokeLinecap="round"
-        strokeDasharray={`${(circ * Math.max(0, Math.min(100, value))) / 100} ${circ}`}
-        transform="rotate(-90 50 50)"
-        className="motion-safe:transition-[stroke-dasharray] motion-safe:duration-1000"
-      />
-      <text x="50" y="59" textAnchor="middle" fontSize="28" fontWeight="700" fill="#121226" fontFamily="var(--font-figtree), sans-serif">
-        {value}
-      </text>
-    </svg>
-  );
-}
-
 function CheckDot({ done }: { done: boolean }) {
   return done ? (
     <span className="inline-flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[#22b07d]">
@@ -173,6 +120,37 @@ function CheckDot({ done }: { done: boolean }) {
     </span>
   );
 }
+
+/** `value`, updated only after it has stopped changing for `ms` (the score runs on this, not on every key). */
+function useDebounced<T>(value: T, ms: number): T {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setV(value), ms);
+    return () => clearTimeout(t);
+  }, [value, ms]);
+  return v;
+}
+
+/** True from the three-column breakpoint (Tailwind xl, 1280px) up. False on the server. */
+function useIsXl(): boolean {
+  return useSyncExternalStore(
+    (cb) => {
+      const mq = window.matchMedia("(min-width: 1280px)");
+      mq.addEventListener("change", cb);
+      return () => mq.removeEventListener("change", cb);
+    },
+    () => window.matchMedia("(min-width: 1280px)").matches,
+    () => false,
+  );
+}
+
+const CHIP_TONE: Record<BulletChip["kind"], string> = {
+  duty: "bg-[#fdf0d5] text-[#7a4600]",
+  "no-result": "bg-[#fdf0d5] text-[#7a4600]",
+  filler: "bg-[#f1eff8] text-[#4a4862]",
+  "too-long": "bg-[#f1eff8] text-[#4a4862]",
+  "repeat-start": "bg-[#f1eff8] text-[#4a4862]",
+};
 
 export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialRegion, initialContent }: {
   resumeId: string; initialTitle: string; initialVertical: string; initialRegion: string; initialContent: ResumeContent;
@@ -206,13 +184,30 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
       // storage unavailable — the choice still applies for this session
     }
   }
-  const [previewFlipped, setPreviewFlipped] = useState(false);
+  // Target job description, remembered per resume in this browser (like the template).
+  const [jd, setJdState] = useState("");
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = window.localStorage.getItem(`lcv_jd_${resumeId}`);
+    } catch {
+      // storage unavailable
+    }
+    if (saved) setJdState(saved);
+  }, [resumeId]);
+  function setJd(v: string) {
+    setJdState(v);
+    try {
+      if (v.trim()) window.localStorage.setItem(`lcv_jd_${resumeId}`, v);
+      else window.localStorage.removeItem(`lcv_jd_${resumeId}`);
+    } catch {
+      // storage unavailable — the text still applies for this session
+    }
+  }
   /** Below the 3-column breakpoint the form and the preview share the screen via an Edit / Preview toggle. */
   const [mobileView, setMobileView] = useState<"edit" | "preview">("edit");
   /** Experience entry shown expanded; undefined = the first one, null = all collapsed. */
   const [openExpId, setOpenExpId] = useState<string | null | undefined>(undefined);
-  const [liveScore, setLiveScore] = useState<{ score: number; fixes: string[] } | null>(null);
-  const [scoringBusy, setScoringBusy] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
   const [enhanceError, setEnhanceError] = useState<{ message: string; upgrade: boolean } | null>(null);
   const [enhanceResult, setEnhanceResult] = useState<Array<{ experienceId: string; bulletId: string; original: string; improved: string; change_summary: string }> | null>(null);
@@ -240,6 +235,14 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const focusNext = useRef<{ id: string; part: "text" | "handle"; caret?: "end" } | null>(null);
   const drag = useRef<{ expId: string; bulletId: string; pointerId: number } | null>(null);
   const [draggingId, setDraggingId] = useState<string | null>(null);
+  /** The bullet being typed in: its "No result" chip waits until the person moves on. */
+  const [typingBullet, setTypingBullet] = useState<string | null>(null);
+  const isXl = useIsXl();
+
+  // LaunchCV Score: rule-based (lib/resume-score.ts), recomputed 300 ms after typing stops.
+  const scoredContent = useDebounced(content, 300);
+  const scoredJd = useDebounced(jd, 300);
+  const score = useMemo(() => scoreResume(scoredContent, { jobDescription: scoredJd }), [scoredContent, scoredJd]);
 
   const payload = useMemo(() => ({ title, vertical, regionMode, content }), [title, vertical, regionMode, content]);
 
@@ -272,6 +275,32 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     node.focus({ preventScroll: false });
     if (want.caret === "end" && node instanceof HTMLTextAreaElement) node.setSelectionRange(node.value.length, node.value.length);
   });
+
+  /** Opens the section a score item or keyword suggestion is about, then scrolls to and focuses its field. */
+  function jumpTo(t: ScoreTarget) {
+    setActiveTab(t.tab);
+    setMobileView("edit");
+    if (t.expId) setOpenExpId(t.expId);
+    let tries = 0;
+    const go = () => {
+      const node = document.querySelector<HTMLElement>(`[data-score-target="${CSS.escape(t.key)}"]`);
+      if (!node) {
+        // The section renders on the next frame or two.
+        if ((tries += 1) < 20) requestAnimationFrame(go);
+        else document.getElementById("lc-section-title")?.scrollIntoView({ block: "start" });
+        return;
+      }
+      const smooth = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      node.scrollIntoView({ block: "center", behavior: smooth ? "smooth" : "auto" });
+      node.focus({ preventScroll: true });
+    };
+    requestAnimationFrame(go);
+  }
+
+  function addSkillFromJob(term: string) {
+    setContent((c) => (c.skills.some((k) => k.trim().toLowerCase() === term.toLowerCase()) ? c : { ...c, skills: [...c.skills, term] }));
+    setLiveMsg(`Added ${term} to your skills.`);
+  }
 
   // The "More" menu on phones closes on Escape (focus back to its button) or a tap outside it.
   useEffect(() => {
@@ -460,49 +489,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   };
   const sectionsDoneCount = TABS.filter((t) => sectionDone[t.key]).length;
 
-  const checklist = [
-    { label: "Contact info", done: !!(content.contact.email && content.contact.phone) },
-    { label: "Professional summary", done: content.summary.length > 30 },
-    { label: "Work experience", done: content.experience.length > 0 },
-    { label: "Education", done: content.education.length > 0 },
-    { label: "Skills (8+)", done: content.skills.length >= 8 },
-    { label: "Quantified bullets", done: content.experience.some((e) => e.bullets.some((b) => /\d/.test(b.text))) },
-  ];
-  const completeness = Math.round((checklist.filter((i) => i.done).length / checklist.length) * 100);
-  /** Bullets that open with a duty phrase (rule-based, lib/bullet-quality.ts). */
-  const dutyCount = countDutyBullets(content.experience.flatMap((e) => e.bullets.map((b) => b.text)));
-
-  async function scoreResume() {
-    try {
-      const r = await fetch("/api/ai/role-fit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) });
-      const j = await r.json().catch(() => ({}));
-      if (r.ok && j.result) {
-        setLiveScore({ score: j.result.overall ?? 0, fixes: j.result.prioritized_fixes ?? [] });
-      } else {
-        setLiveScore({ score: calculateLocalScore(content), fixes: generateLocalFixes(content) });
-      }
-    } catch {
-      setLiveScore({ score: calculateLocalScore(content), fixes: generateLocalFixes(content) });
-    }
-  }
-
-  /** Flip the preview to the score side; scores the resume the first time. */
-  async function openScore() {
-    setPreviewFlipped(true);
-    setMobileView("preview");
-    if (!liveScore && !scoringBusy) {
-      setScoringBusy(true);
-      await scoreResume();
-      setScoringBusy(false);
-    }
-  }
-
-  async function rescore() {
-    setScoringBusy(true);
-    await scoreResume();
-    setScoringBusy(false);
-  }
-
   type Rewrite = NonNullable<typeof enhanceResult>[number];
 
   /** "Try another": asks the same rewrite API again (one more use, like the first call) and swaps in this bullet's new suggestion. */
@@ -603,7 +589,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     );
   }
 
-  function renderEmptyState(icon: React.ElementType, heading: string, desc: string, actionLabel: string, onAction: () => void) {
+  function renderEmptyState(icon: React.ElementType, heading: string, desc: string, actionLabel: string, onAction: () => void, scoreTarget?: string) {
     const Icon = icon;
     return (
       <div className="flex flex-col items-center rounded-[20px] border-2 border-dashed border-[#c9c0ff] bg-[#f7f6fb] px-6 py-10 text-center">
@@ -612,7 +598,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         </div>
         <h3 className="mt-4 text-[17px] font-extrabold tracking-[-0.01em] text-[#121226]">{heading}</h3>
         <p className="mt-1.5 max-w-sm text-[14px] leading-[21px] text-[#4a4862]">{desc}</p>
-        <button type="button" onClick={onAction} className={`${btnPrimarySm} mt-5`}>
+        <button type="button" data-score-target={scoreTarget} onClick={onAction} className={`${btnPrimarySm} mt-5`}>
           <Plus className="h-4 w-4" aria-hidden="true" /> {actionLabel}
         </button>
       </div>
@@ -648,16 +634,16 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     return (
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
         <Field label="Full name" className="sm:col-span-2">
-          <input className={inputCls} value={content.contact.fullName} onChange={(e) => setContact({ fullName: e.target.value })} placeholder="Maria Lopez" autoComplete="name" />
+          <input className={inputCls} value={content.contact.fullName} data-score-target="contact.fullName" onChange={(e) => setContact({ fullName: e.target.value })} placeholder="Maria Lopez" autoComplete="name" />
         </Field>
         <Field label="Email">
-          <input className={inputCls} type="email" value={content.contact.email} onChange={(e) => setContact({ email: e.target.value })} placeholder="maria.lopez@email.com" autoComplete="email" />
+          <input className={inputCls} type="email" value={content.contact.email} data-score-target="contact.email" onChange={(e) => setContact({ email: e.target.value })} placeholder="maria.lopez@email.com" autoComplete="email" />
         </Field>
         <Field label="Phone" hint="optional">
-          <input className={inputCls} type="tel" value={content.contact.phone ?? ""} onChange={(e) => setContact({ phone: e.target.value })} placeholder="(512) 555-0142" autoComplete="tel" />
+          <input className={inputCls} type="tel" value={content.contact.phone ?? ""} data-score-target="contact.phone" onChange={(e) => setContact({ phone: e.target.value })} placeholder="(512) 555-0142" autoComplete="tel" />
         </Field>
         <Field label="Location" hint="optional" help="City and state or country is enough. Leave out your street address." className="sm:col-span-2">
-          <input className={inputCls} value={content.contact.location ?? ""} onChange={(e) => setContact({ location: e.target.value })} placeholder="Austin, TX — or Remote" autoComplete="address-level2" />
+          <input className={inputCls} value={content.contact.location ?? ""} data-score-target="contact.location" onChange={(e) => setContact({ location: e.target.value })} placeholder="Austin, TX — or Remote" autoComplete="address-level2" />
         </Field>
         <Field label="LinkedIn" hint="optional">
           <input className={inputCls} value={links[0] ?? ""} onChange={(e) => setLink(0, e.target.value)} placeholder="linkedin.com/in/marialopez" />
@@ -673,11 +659,11 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     return (
       <div className="mt-5 space-y-4">
         <Field label="Headline">
-          <input className={inputCls} value={content.headline} onChange={(e) => setContent((c) => ({ ...c, headline: e.target.value }))} placeholder="Senior Software Engineer | Full-Stack Developer" />
+          <input className={inputCls} value={content.headline} data-score-target="headline" onChange={(e) => setContent((c) => ({ ...c, headline: e.target.value }))} placeholder="Senior Software Engineer | Full-Stack Developer" />
         </Field>
         <div>
           <Field label="Summary">
-            <textarea className={`${textareaCls} min-h-[160px]`} value={content.summary} onChange={(e) => setContent((c) => ({ ...c, summary: e.target.value }))} placeholder="Write a compelling professional summary highlighting your key achievements and career goals..." />
+            <textarea className={`${textareaCls} min-h-[160px]`} value={content.summary} data-score-target="summary" onChange={(e) => setContent((c) => ({ ...c, summary: e.target.value }))} placeholder="Write a compelling professional summary highlighting your key achievements and career goals..." />
           </Field>
           <p className="mt-2 text-[13px] text-[#66647c]">{content.summary.length}/500 characters recommended</p>
         </div>
@@ -695,6 +681,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             "Click the button below or use voice input to describe your work history. Our AI will help you write impactful bullet points.",
             "Add experience",
             addExp,
+            "experience.add",
           )}
         </div>
       );
@@ -759,16 +746,16 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               </div>
               <div className="mt-2 grid gap-3 sm:grid-cols-2">
                 <Field label="Job title">
-                  <input className={inputCls} value={ex.role} onChange={(e) => setExp(ex.id, { role: e.target.value })} placeholder="Product Manager" />
+                  <input className={inputCls} value={ex.role} data-score-target={`exp:${ex.id}:role`} onChange={(e) => setExp(ex.id, { role: e.target.value })} placeholder="Product Manager" />
                 </Field>
                 <Field label="Company">
-                  <input className={inputCls} value={ex.company} onChange={(e) => setExp(ex.id, { company: e.target.value })} placeholder="Company name" />
+                  <input className={inputCls} value={ex.company} data-score-target={`exp:${ex.id}:company`} onChange={(e) => setExp(ex.id, { company: e.target.value })} placeholder="Company name" />
                 </Field>
                 <Field label="Start">
-                  <input className={inputCls} value={ex.start} onChange={(e) => setExp(ex.id, { start: e.target.value })} placeholder="Jun 2022" />
+                  <input className={inputCls} value={ex.start} data-score-target={`exp:${ex.id}:start`} onChange={(e) => setExp(ex.id, { start: e.target.value })} placeholder="Jun 2022" />
                 </Field>
                 <Field label="End">
-                  <input className={inputCls} value={ex.end} onChange={(e) => setExp(ex.id, { end: e.target.value })} placeholder="Dec 2023 or Present" />
+                  <input className={inputCls} value={ex.end} data-score-target={`exp:${ex.id}:end`} onChange={(e) => setExp(ex.id, { end: e.target.value })} placeholder="Dec 2023 or Present" />
                 </Field>
                 <Field label="Location" hint="optional" className="sm:col-span-2">
                   <input className={inputCls} value={ex.location ?? ""} onChange={(e) => setExp(ex.id, { location: e.target.value })} placeholder="City, state — or Remote" />
@@ -783,7 +770,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 <ul aria-labelledby={`${ex.id}-bullets`} className="flex flex-col gap-1.5">
                   {ex.bullets.map((b, i) => {
                     const rw = rewrites.find((r) => r.bulletId === b.id);
-                    const flag = checkBullet(b.text);
+                    // "No result" waits while the bullet is being typed; the other chips are about what's already there.
+                    const chips = (score.bullets[b.id] ?? []).filter((ch) => !(ch.kind === "no-result" && typingBullet === b.id));
                     const n = ex.bullets.length;
                     const note = retryNote?.bulletId === b.id ? retryNote : null;
                     return (
@@ -813,7 +801,10 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                           </button>
                           <AutoGrowTextarea
                             aria-label={`Bullet ${i + 1}`}
-                            aria-describedby={flag ? `${b.id}-flag` : undefined}
+                            aria-describedby={chips.length ? `${b.id}-flag` : undefined}
+                            data-score-target={`bullet:${b.id}`}
+                            onFocus={() => setTypingBullet(b.id)}
+                            onBlur={() => setTypingBullet((cur) => (cur === b.id ? null : cur))}
                             inputRef={(node) => { if (node) bulletEls.current.set(b.id, node); else bulletEls.current.delete(b.id); }}
                             className="block min-h-11 min-w-0 flex-1 resize-none overflow-hidden bg-transparent px-1.5 py-[11px] text-[16px] leading-[22px] text-[#121226] outline-none placeholder:text-[#706e88] focus-visible:outline-none! sm:text-[14px] sm:leading-[21px] sm:py-3"
                             value={b.text}
@@ -837,16 +828,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                             }}
                             placeholder="Describe an achievement..."
                           />
-                          {flag ? (
-                            <span
-                              id={`${b.id}-flag`}
-                              title={flag.hint}
-                              className="mt-2.5 shrink-0 rounded-full bg-[#fdf0d5] px-2.5 py-[5px] text-[12px] font-bold leading-[14px] text-[#7a4600]"
-                            >
-                              {flag.label}
-                              <span className="sr-only">. {flag.hint}</span>
-                            </span>
-                          ) : null}
                           <button
                             type="button"
                             aria-label={`Remove bullet ${i + 1}`}
@@ -856,6 +837,16 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                             <X className="h-4 w-4" aria-hidden="true" />
                           </button>
                         </div>
+                        {chips.length ? (
+                          <p id={`${b.id}-flag`} className="-mt-0.5 flex flex-wrap gap-1 pl-9">
+                            {chips.map((ch) => (
+                              <span key={ch.kind} title={ch.hint} className={`rounded-full px-2 py-[3px] text-[12px] font-bold leading-[14px] ${CHIP_TONE[ch.kind]}`}>
+                                {ch.label}
+                                <span className="sr-only">: {ch.hint}</span>
+                              </span>
+                            ))}
+                          </p>
+                        ) : null}
                         {rw ? (
                           <div className="rounded-2xl bg-[#5440e8] px-4 py-3.5 text-white" aria-busy={retrying === b.id || undefined}>
                             <p className="inline-flex items-center gap-1.5 text-[12px] font-extrabold tracking-[0.06em] text-[#e4dfff]">
@@ -929,7 +920,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               )}
 
               <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <button type="button" onClick={() => addBullet(ex.id)} className={textBtn}>
+                <button type="button" data-score-target={`exp:${ex.id}:addBullet`} onClick={() => addBullet(ex.id)} className={textBtn}>
                   <Plus className="h-4 w-4" aria-hidden="true" /> Add bullet
                 </button>
               </div>
@@ -937,7 +928,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           );
         })}
 
-        <button type="button" onClick={addExp} className={dashedBtn}>
+        <button type="button" data-score-target="experience.add" onClick={addExp} className={dashedBtn}>
           <Plus className="h-4 w-4" aria-hidden="true" /> Add experience
         </button>
 
@@ -980,7 +971,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     if (content.education.length === 0) {
       return (
         <div className="mt-5">
-          {renderEmptyState(GraduationCap, "No education added yet", "Add degrees, universities or bootcamps.", "Add education", addEdu)}
+          {renderEmptyState(GraduationCap, "No education added yet", "Add degrees, universities or bootcamps.", "Add education", addEdu, "education.add")}
         </div>
       );
     }
@@ -993,7 +984,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             {renderEntry(ed.school || "New school", `Delete ${ed.school || "this education entry"}`, () => delEdu(ed.id), (
               <>
                 <Field label="School">
-                  <input className={inputCls} value={ed.school} onChange={(e) => setEdu(ed.id, { school: e.target.value })} placeholder="School name" />
+                  <input className={inputCls} value={ed.school} data-score-target={`edu:${ed.id}:school`} onChange={(e) => setEdu(ed.id, { school: e.target.value })} placeholder="School name" />
                 </Field>
                 <Field label="Degree">
                   <input className={inputCls} value={ed.degree} onChange={(e) => setEdu(ed.id, { degree: e.target.value })} placeholder="e.g. B.S. Computer Science" />
@@ -1011,7 +1002,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             ))}
           </div>,
         )}
-        <button type="button" onClick={addEdu} className={dashedBtn}>
+        <button type="button" data-score-target="education.add" onClick={addEdu} className={dashedBtn}>
           <Plus className="h-4 w-4" aria-hidden="true" /> Add education
         </button>
       </div>
@@ -1023,7 +1014,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     if (certs.length === 0) {
       return (
         <div className="mt-5">
-          {renderEmptyState(ShieldCheck, "No certifications yet", "Add AWS, Google, PMP and other certifications, courses or licenses.", "Add certification", addCert)}
+          {renderEmptyState(ShieldCheck, "No certifications yet", "Add AWS, Google, PMP and other certifications, courses or licenses.", "Add certification", addCert, "certifications.add")}
         </div>
       );
     }
@@ -1051,7 +1042,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             ))}
           </div>,
         )}
-        <button type="button" onClick={addCert} className={dashedBtn}>
+        <button type="button" data-score-target="certifications.add" onClick={addCert} className={dashedBtn}>
           <Plus className="h-4 w-4" aria-hidden="true" /> Add certification
         </button>
       </div>
@@ -1170,6 +1161,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           <input
             id="lc-new-skill"
             ref={skillInputRef}
+            data-score-target="skills.add"
             className={`${inputCls} mt-0! min-w-0 flex-1`}
             value={newSkill}
             onChange={(e) => setNewSkill(e.target.value)}
@@ -1283,32 +1275,20 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
   const saveLabel = saving ? "Saving…" : error ? "Not saved" : "Saved";
 
-  function renderScoreCard(className: string) {
+  /** LaunchCV Score card and the "Target a job" panel. Rendered once: in the side column from xl up, under the form below it. */
+  function renderScorePanels(className: string) {
     return (
-      <div className={`lc-card items-center gap-4 rounded-[22px] px-4 py-4 sm:px-5 ${className}`}>
-        {liveScore ? (
-          <ScoreRing value={liveScore.score} size={56} label={`Score ${liveScore.score} out of 100`} />
-        ) : (
-          <ScoreRing value={completeness} size={56} label={`Completeness ${completeness} percent`} />
-        )}
-        <div className="min-w-0 flex-1">
-          <p className="text-[15px] font-extrabold text-[#121226]">
-            {liveScore ? `Score ${liveScore.score} · Completeness ${completeness}%` : `Completeness ${completeness}%`}
-          </p>
-          <p className="mt-0.5 text-[13px] leading-[19px] text-[#66647c]">
-            {dutyCount > 0 ? `${dutyCount} ${dutyCount === 1 ? "bullet reads" : "bullets read"} like a duty. ` : ""}
-            {liveScore
-              ? liveScore.fixes[0] ?? "Nothing urgent to fix right now."
-              : "Score your resume to see what to fix first."}
-          </p>
-        </div>
-        <button
-          type="button"
-          onClick={() => (previewFlipped ? setPreviewFlipped(false) : void openScore())}
-          className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-[13px] font-bold text-[#5440e8] transition-colors hover:text-[#3a2bb8]"
-        >
-          {previewFlipped ? "Back to preview" : "View score"}
-        </button>
+      <div className={`flex flex-col gap-3 ${className}`}>
+        <ScoreCard score={score} onJump={jumpTo} />
+        <KeywordPanel
+          resumeId={resumeId}
+          jd={jd}
+          onJdChange={setJd}
+          score={score}
+          skills={content.skills}
+          onJump={jumpTo}
+          onAddSkill={addSkillFromJob}
+        />
       </div>
     );
   }
@@ -1316,8 +1296,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   function renderPreviewColumn() {
     return (
       <div
-        id="resume-preview"
-        className={`${mobileView === "edit" ? "hidden xl:flex" : "flex"} mx-auto w-full max-w-[560px] scroll-mt-4 flex-col gap-3 lg:col-start-2 xl:sticky xl:top-6 xl:col-start-auto xl:max-w-none`}
+        className={`${mobileView === "edit" ? "hidden xl:flex" : "flex"} mx-auto w-full max-w-[560px] flex-col gap-3 lg:col-start-2 xl:sticky xl:top-6 xl:col-start-auto xl:max-h-[calc(100vh-48px)] xl:max-w-none xl:overflow-y-auto xl:overscroll-contain xl:rounded-[22px] xl:p-1 xl:-m-1`}
       >
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div role="group" aria-label="Template" className="flex gap-1 rounded-full bg-white p-1">
@@ -1341,121 +1320,13 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           </span>
         </div>
 
-        <div className="rounded-[28px] bg-[#c9c0ff] p-4 sm:p-6" style={{ perspective: "1200px" }}>
-          <div
-            className="relative motion-safe:transition-transform motion-safe:duration-[600ms]"
-            style={{ transformStyle: "preserve-3d", transform: previewFlipped ? "rotateY(180deg)" : "rotateY(0)" }}
-          >
-            {/* Front: preview — hover overlay + click to flip */}
-            <div
-              aria-hidden={previewFlipped || undefined}
-              className="group relative cursor-pointer"
-              style={{ backfaceVisibility: "hidden" }}
-              onClick={() => void openScore()}
-            >
-              <div className="lc-float rounded-[6px]">
-                <ResumePreview content={content} regionMode={regionMode} title={title} template={template} />
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center rounded-[6px] bg-[#111118]/0 transition-colors duration-300 group-hover:bg-[#111118]/35">
-                <span className="rounded-full bg-white px-4 py-2 text-[13px] font-bold text-[#121226] opacity-0 shadow-lg transition-opacity duration-300 group-hover:opacity-100">
-                  <Sparkles className="mr-1.5 inline h-4 w-4 text-[#5440e8]" aria-hidden="true" />
-                  View score
-                </span>
-              </div>
-            </div>
+        {isXl ? renderScorePanels("") : null}
 
-            {/* Back: scoring — click to flip back */}
-            <div
-              inert={!previewFlipped}
-              className="absolute inset-0 cursor-pointer overflow-y-auto rounded-[20px] bg-white p-5"
-              style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
-              onClick={() => setPreviewFlipped(false)}
-            >
-              <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#e2e0ea] pb-3">
-                <p className="text-[12px] text-[#66647c]">Click anywhere to go back to preview</p>
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); setPreviewFlipped(false); }}
-                  className="inline-flex min-h-10 shrink-0 items-center gap-1 rounded-full bg-[#f1eff8] px-3 text-[13px] font-bold text-[#121226] transition-colors hover:bg-[#e4dfff]"
-                >
-                  <ChevronLeft className="h-4 w-4" aria-hidden="true" /> Preview
-                </button>
-              </div>
-              {liveScore ? (
-                <div className="space-y-5" aria-live="polite">
-                  <div className="flex flex-col items-center py-1 text-center">
-                    <ScoreRing value={liveScore.score} size={120} label={`Score ${liveScore.score} out of 100`} />
-                    <p className="mt-3 text-[16px] font-extrabold text-[#121226]">
-                      {liveScore.score >= 80 ? "Excellent!" : liveScore.score >= 60 ? "Good start!" : liveScore.score >= 40 ? "Needs improvement" : "Needs significant work"}
-                    </p>
-                    <p className="mt-1 text-[13px] text-[#66647c]">Based on AI analysis of your resume</p>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2">
-                    {[
-                      { n: content.experience.length, l: "Jobs" },
-                      { n: content.skills.length, l: "Skills" },
-                      { n: content.experience.reduce((s, e) => s + e.bullets.length, 0), l: "Bullets" },
-                    ].map((s) => (
-                      <div key={s.l} className="rounded-2xl bg-[#f7f6fb] p-3 text-center">
-                        <p className="lc-mono text-[18px] text-[#121226]">{s.n}</p>
-                        <p className="text-[12px] text-[#66647c]">{s.l}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  {liveScore.fixes.length > 0 ? (
-                    <div>
-                      <h3 className="text-[14px] font-bold text-[#121226]">Recommendations</h3>
-                      <ol className="mt-3 space-y-2">
-                        {liveScore.fixes.map((fix, i) => (
-                          <li key={i} className="flex items-start gap-2.5 rounded-2xl bg-[#fdf0d5] p-3">
-                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white text-[11px] font-bold text-[#a15c00]">{i + 1}</span>
-                            <p className="text-[13px] leading-5 text-[#4a4862]">{fix}</p>
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  ) : null}
-
-                  <div>
-                    <h3 className="text-[14px] font-bold text-[#121226]">Completeness</h3>
-                    <ul className="mt-3 space-y-2">
-                      {checklist.map((item) => (
-                        <li key={item.label} className="flex items-center gap-2.5">
-                          <span className={`flex h-5 w-5 items-center justify-center rounded-full ${item.done ? "bg-[#dcf5ea]" : "bg-[#f1eff8]"}`}>
-                            {item.done ? <Check className="h-3 w-3 text-[#0b7a4f]" aria-hidden="true" /> : <X className="h-3 w-3 text-[#66647c]" aria-hidden="true" />}
-                          </span>
-                          <span className={`text-[13px] ${item.done ? "text-[#121226]" : "text-[#66647c]"}`}>
-                            {item.label}
-                            <span className="sr-only">{item.done ? " — done" : " — missing"}</span>
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => { e.stopPropagation(); void rescore(); }}
-                    className={`${btnSoftSm} w-full`}
-                  >
-                    {scoringBusy ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" /> : null}
-                    Re-score resume
-                  </button>
-                </div>
-              ) : (
-                <div role="status" className="flex flex-col items-center justify-center py-16 text-center">
-                  <Loader2 className="h-8 w-8 text-[#5440e8] motion-safe:animate-spin" aria-hidden="true" />
-                  <p className="mt-4 text-[15px] font-bold text-[#121226]">Analyzing your resume...</p>
-                  <p className="mt-1 text-[13px] text-[#66647c]">AI is scoring your content</p>
-                </div>
-              )}
-            </div>
+        <div id="resume-preview" className="scroll-mt-4 rounded-[28px] bg-[#c9c0ff] p-4 sm:p-6">
+          <div className="lc-float rounded-[6px]">
+            <ResumePreview content={content} regionMode={regionMode} title={title} template={template} />
           </div>
         </div>
-
-        {renderScoreCard("hidden xl:flex")}
       </div>
     );
   }
@@ -1546,7 +1417,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
       <main className="mx-auto max-w-[1480px] px-4 pb-14 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
         {/* Edit / Preview toggle (below the three-column layout) */}
-        <div role="group" aria-label="View" className="mb-4 flex gap-1 rounded-full bg-white p-1 xl:hidden lg:max-w-[360px]">
+        <div className="mb-4 flex items-center gap-2 xl:hidden">
+        <div role="group" aria-label="View" className="flex flex-1 gap-1 rounded-full bg-white p-1 lg:max-w-[360px] lg:flex-initial lg:basis-[360px]">
           {(["edit", "preview"] as const).map((v) => (
             <button
               key={v}
@@ -1560,6 +1432,20 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
               {v === "edit" ? "Edit" : "Preview"}
             </button>
           ))}
+        </div>
+          <button
+            type="button"
+            onClick={() => {
+              const card = document.getElementById("lcv-score");
+              card?.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+            }}
+            className="inline-flex min-h-[52px] shrink-0 items-center gap-2 rounded-full bg-white pl-1.5 pr-4 text-[14px] font-bold text-[#121226] transition-colors hover:bg-[#e4dfff]"
+          >
+            <span aria-hidden="true">
+              <ScoreRing score={score.total} size={40} />
+            </span>
+            <span><span className="sr-only">LaunchCV Score {score.total}. </span>Score</span>
+          </button>
         </div>
 
         {/* Section chips (phones and tablets) */}
@@ -1645,8 +1531,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           {renderPreviewColumn()}
         </div>
 
-        {/* Score summary + actions below the three-column layout */}
-        {renderScoreCard(`mt-3 xl:hidden ${mobileView === "edit" ? "flex" : "flex lg:ml-[230px] lg:max-w-[560px]"}`)}
+        {/* Score and job keywords below the form, under the three-column breakpoint */}
+        {!isXl ? renderScorePanels("mt-3 lg:ml-[230px]") : null}
         {/* Phones: Voice | PDF, with Import, Word and the other tools under "More". */}
         <div className="mt-3 flex flex-wrap gap-2 sm:hidden">
           <VoiceInput

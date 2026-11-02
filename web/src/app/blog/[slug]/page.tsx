@@ -54,6 +54,7 @@ const RELATED_FEATURES: Record<string, FeatureLink[]> = {
   "Interview Prep": [
     { href: "/features/interview-prep", title: "AI Interview Prep", desc: "Drill role-specific questions with scored feedback and model answers." },
     { href: "/features/jd-alignment", title: "JD Alignment", desc: "Understand the role deeply before you walk into the interview." },
+    { href: "/resignation-letter", title: "Resignation Letter Templates", desc: "Got the offer? Give notice with a short, professional letter." },
   ],
 };
 

@@ -12,6 +12,7 @@ const COLUMNS = [
       { href: "/features/cover-letter", label: "Cover letter writer" },
       { href: "/features/interview-prep", label: "Interview prep" },
       { href: "/tools", label: "Free writing tools" },
+      { href: "/tools/resignation-letter-generator", label: "Resignation letter generator" },
     ],
   },
   {

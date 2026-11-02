@@ -15,7 +15,7 @@ const LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
-const GUIDE_ROUTES = ["/resume-format", "/how-to-write-a-resume", "/resume-length", "/cover-letter-template", "/resume-action-verbs", "/resume-keywords", "/ats"];
+const GUIDE_ROUTES = ["/resume-format", "/how-to-write-a-resume", "/resume-length", "/cover-letter-template", "/resume-action-verbs", "/resume-keywords", "/ats", "/resignation-letter"];
 
 export function SiteNav() {
   const pathname = usePathname();

@@ -21,6 +21,8 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/resume-examples": "2026-10-27",
   /** All /resume-examples/[slug] pages (data in lib/resume-examples.ts). */
   "/resume-examples/*": "2026-10-27",
+  /** The /resume-examples/[slug] pages that also show extra samples (lib/resume-example-variants.ts). */
+  "/resume-examples/*#samples": "2026-11-02",
   "/cover-letter-examples": "2026-10-27",
   /** All /cover-letter-examples/[slug] pages (data in lib/cover-letter-examples.ts). */
   "/cover-letter-examples/*": "2026-10-27",
@@ -33,6 +35,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/tools/resume-bullet-point-generator": "2026-11-02",
   "/tools/resume-summary-generator": "2026-11-02",
   "/tools/resume-word-counter": "2026-11-02",
+  "/tools/resignation-letter-generator": "2026-11-02",
   "/resume-action-verbs": "2026-11-02",
   "/resume-keywords": "2026-11-02",
   "/resume-keywords/*": "2026-11-02",
@@ -42,9 +45,15 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/authors/nazir-elmurodov": "2026-11-02",
   "/changelog": "2026-11-02",
   "/ai-info": "2026-11-02",
+  "/resignation-letter": "2026-11-02",
+  /** All /resignation-letter/[slug] pages (data in lib/seo/resignation-templates.ts). */
+  "/resignation-letter/*": "2026-11-02",
   "/legal/privacy": "2026-10-27",
   "/legal/terms": "2026-10-27",
 };
+
+/** Date key for resume example pages with extra samples. */
+export const SAMPLES_DATE_KEY = "/resume-examples/*#samples";
 
 export function contentUpdated(path: string): Date {
   return new Date(`${CONTENT_UPDATED[path] ?? "2026-10-27"}T00:00:00Z`);

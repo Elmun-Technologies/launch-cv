@@ -1,13 +1,15 @@
-import type { ResumeExample } from "@/lib/resume-examples";
+import { getExampleVariant, type ResumeExample } from "@/lib/resume-examples";
 import type { ResumeContent } from "@/types/resume";
 
 /**
  * Turns a written resume example into editor content. With `owner`, the sample
  * person's contact line is swapped for the account holder's, so a resume started
- * from an example never carries someone else's name or email.
+ * from an example never carries someone else's name or email. With `variantId`,
+ * one of the role's extra samples is used instead of the main one (an unknown id
+ * falls back to the main sample).
  */
-export function exampleToContent(e: ResumeExample, owner?: { name: string; email: string }): ResumeContent {
-  const r = e.resume;
+export function exampleToContent(e: ResumeExample, owner?: { name: string; email: string }, variantId?: string | null): ResumeContent {
+  const r = getExampleVariant(e, variantId)?.resume ?? e.resume;
   const [location, email, ...links] = r.contact.split(" · ");
   // "Degree, School, Year · Licence · Certification"
   const [main, ...extras] = r.education.split(" · ");
