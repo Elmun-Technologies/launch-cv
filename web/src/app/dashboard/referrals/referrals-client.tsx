@@ -13,11 +13,6 @@ export type ReferralRow = {
   createdAt: string;
 };
 
-function baseUrl() {
-  if (typeof window !== "undefined") return process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
-  return process.env.NEXT_PUBLIC_APP_URL || "";
-}
-
 /** Show enough of an address to recognise a friend without printing it in full. */
 function maskEmail(email: string) {
   const [user, domain] = email.split("@");
@@ -42,14 +37,15 @@ function useCopy() {
   return { copied, copy };
 }
 
-export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
+export function ReferralsClient({ initial, origin }: { initial: ReferralRow[]; origin: string }) {
   const [rows, setRows] = useState(initial);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { copied, copy } = useCopy();
 
   const pending = useMemo(() => rows.find((r) => r.status === "pending" && !r.referredEmail) ?? null, [rows]);
-  const link = pending ? `${baseUrl()}/register?ref=${pending.code}` : "";
+  // Short link (/r/<code>), which redirects to /register?ref=<code>.
+  const link = pending ? `${origin}/r/${pending.code}` : "";
   const joined = useMemo(() => rows.filter((r) => r.referredEmail), [rows]);
 
   const [message, setMessage] = useState("");

@@ -71,8 +71,11 @@ export function JdClient({
   const [appTitle, setAppTitle] = useState("");
   const [appCompany, setAppCompany] = useState("");
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
+  /** Phones: after a run the form folds into "Based on: … · Change" so the results come first. */
+  const [editing, setEditing] = useState(false);
 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const jdRef = useRef<HTMLTextAreaElement>(null);
 
   async function run() {
     setLoading(true);
@@ -98,6 +101,7 @@ export function JdClient({
       return;
     }
     setResult(j.result as JdAlignResult);
+    setEditing(false);
     setJdRunId(typeof j.jdRunId === "string" ? j.jdRunId : null);
     setApplied({});
   }
@@ -144,6 +148,11 @@ export function JdClient({
   };
 
   const max = usage?.limits.jd ?? 0;
+  const folded = !!result && !editing && !loading;
+  const basedOn =
+    [appTitle.trim(), appCompany.trim()].filter(Boolean).join(" · ") ||
+    jd.trim().split(/\n/)[0]?.slice(0, 80) ||
+    "the job post";
   const missing = result ? result.gap_map.filter((r) => r.status === "missing").length : 0;
 
   return (
@@ -151,8 +160,26 @@ export function JdClient({
       <AiUsageBanner usage={usage} kind="jd" limits={planLimits} />
 
       <div className="grid items-start gap-4 lg:grid-cols-[0.8fr_1.2fr] lg:gap-5">
+        {folded ? (
+          <div className="flex min-w-0 items-center justify-between gap-3 rounded-[20px] bg-white px-4 py-2 lg:hidden">
+            <p className="min-w-0 truncate text-[14px] text-[#4a4862]">
+              <span className="font-bold text-[#121226]">Based on:</span> {basedOn}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setEditing(true);
+                requestAnimationFrame(() => jdRef.current?.focus());
+              }}
+              className="focus-visible:outline-[#5440e8]! focus-visible:rounded-full! inline-flex min-h-11 shrink-0 items-center rounded-full px-2 text-[14px] font-bold text-[#5440e8] hover:text-[#3a2bb8]"
+            >
+              Change<span className="sr-only"> the job post</span>
+            </button>
+          </div>
+        ) : null}
+
         {/* Input */}
-        <section className={`${toolCard} lg:sticky lg:top-6`} aria-labelledby="jd-input-h">
+        <section className={`${toolCard} lg:sticky lg:top-6 ${folded ? "max-lg:hidden" : ""}`} aria-labelledby="jd-input-h">
           <h2 id="jd-input-h" className={toolLabel}>
             Job description
           </h2>
@@ -176,6 +203,7 @@ export function JdClient({
             Job description text
           </label>
           <textarea
+            ref={jdRef}
             id="jd-text"
             className={`${toolTextarea} mt-2 min-h-[220px] lg:min-h-[300px]`}
             placeholder="Paste the job description..."

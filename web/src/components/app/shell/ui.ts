@@ -47,10 +47,10 @@ export const badge = "inline-block shrink-0 rounded-full px-2.5 py-[5px] text-[1
 export const appInput =
   "block w-full rounded-2xl border-[1.5px] border-[#e2e0ea] bg-white px-4 text-[16px] text-[#121226] outline-none transition-[border-color,box-shadow] placeholder:text-[#706e88] hover:border-[#c9c0ff] focus:border-[#5440e8] focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none! disabled:opacity-60";
 
-/** v5 tones for 0–100 scores. */
+/** v5 tones for 0–100 ATS scores: same bands as the free check (80+ ready, 65–79 readable, below 65 at risk). */
 export function scoreTone(v: number): { ring: string; bg: string; fg: string } {
-  if (v >= 80) return { ring: "#0b7a4f", bg: "#dcf5ea", fg: "#0b4f35" };
-  if (v >= 60) return { ring: "#f2a91f", bg: "#fdf0d5", fg: "#7a4600" };
+  if (v >= 80) return { ring: "#22b07d", bg: "#dcf5ea", fg: "#0b4f35" };
+  if (v >= 65) return { ring: "#f2a91f", bg: "#fdf0d5", fg: "#7a4600" };
   return { ring: "#c42b30", bg: "#fbe2e3", fg: "#8f1d22" };
 }
 

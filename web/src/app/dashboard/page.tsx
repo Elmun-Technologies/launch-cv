@@ -27,7 +27,7 @@ import type { FreeAtsReport } from "@/types/ai-results";
 
 export const dynamic = "force-dynamic";
 
-type Stage = "saved" | "applied" | "interview" | "offer";
+type Stage = "saved" | "applied" | "interview" | "offer" | "closed";
 
 /** Same buckets the job tracker uses. */
 const STAGE: Record<string, Stage> = {
@@ -40,13 +40,16 @@ const STAGE: Record<string, Stage> = {
   negotiating: "offer",
   offer: "offer",
   accepted: "offer",
+  rejected: "closed",
+  closed: "closed",
 };
 
 const STAGE_BADGE: Record<Stage, { label: string; cls: string }> = {
   saved: { label: "Saved", cls: "bg-[#f1eff8] text-[#4a4862]" },
   applied: { label: "Applied", cls: "bg-[#f1eff8] text-[#4a4862]" },
-  interview: { label: "Interview", cls: "bg-[#e4dfff] text-[#3a2bb8]" },
+  interview: { label: "Interviewing", cls: "bg-[#e4dfff] text-[#3a2bb8]" },
   offer: { label: "Offer", cls: "bg-[#dcf5ea] text-[#0b4f35]" },
+  closed: { label: "Closed", cls: "bg-[#f1eff8] text-[#66647c]" },
 };
 
 function joinedToday(d: Date): boolean {
@@ -95,7 +98,7 @@ export default async function DashboardHomePage() {
   const counts = { applied: 0, interview: 0, offer: 0 };
   for (const a of apps) {
     const st = STAGE[a.status] ?? "saved";
-    if (st !== "saved") counts[st] += 1;
+    if (st !== "saved" && st !== "closed") counts[st] += 1;
   }
   const stats = [
     { label: "Applied", n: counts.applied, hl: false },
@@ -108,7 +111,7 @@ export default async function DashboardHomePage() {
 
   if (empty) {
     return (
-      <DashboardShell email={session.email} pageTitle="Home">
+      <DashboardShell email={session.email} name={user?.name ?? null} pageTitle="Home">
         <div className="mx-auto max-w-[1180px]">
           <h1 className={appH1}>{hello}</h1>
           <p className={appLead}>Let&apos;s get your resume past the software.</p>
@@ -122,7 +125,7 @@ export default async function DashboardHomePage() {
   const packetResumeId = interviewApp?.resumeId ?? resumes[0]?.id;
 
   return (
-    <DashboardShell email={session.email} pageTitle="Home">
+    <DashboardShell email={session.email} name={user?.name ?? null} pageTitle="Home">
       <div className="mx-auto max-w-[1180px]">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
           <div className="min-w-0">
@@ -160,14 +163,22 @@ export default async function DashboardHomePage() {
 
         <div className="mt-[22px] grid items-start gap-5 sm:mt-6 xl:grid-cols-[1.55fr_1fr]">
           {/* RESUMES */}
-          <section aria-labelledby="home-resumes" className={`${appCard} p-4 sm:p-6`}>
+          {/* Phones: the resume cards sit straight on the page (no wrapping card). */}
+          <section
+            aria-labelledby="home-resumes"
+            className="sm:rounded-[28px] sm:bg-white sm:p-6 sm:shadow-[0_1px_2px_rgba(18,18,38,0.04),0_10px_30px_-18px_rgba(18,18,38,0.22)]"
+          >
             <div className="flex items-center justify-between gap-3">
               <h2 id="home-resumes" className="text-[19px] font-extrabold sm:text-[20px]">
                 Your resumes
               </h2>
               {resumeCount > 0 ? (
                 <Link href="/dashboard/resumes" className={appLink}>
-                  See all {resumeCount} <span aria-hidden="true">&nbsp;→</span>
+                  See all<span className="hidden sm:inline">&nbsp;{resumeCount}</span>
+                  <span className="sr-only sm:hidden"> {resumeCount} resumes</span>
+                  <span aria-hidden="true" className="hidden sm:inline">
+                    &nbsp;→
+                  </span>
                 </Link>
               ) : null}
             </div>
@@ -258,7 +269,7 @@ export default async function DashboardHomePage() {
 
             <section
               aria-labelledby="home-packet"
-              className="relative min-h-[220px] overflow-hidden rounded-[24px] bg-[#111118] p-6 text-white sm:rounded-[28px]"
+              className="relative hidden min-h-[220px] overflow-hidden rounded-[24px] bg-[#111118] p-6 text-white sm:block sm:rounded-[28px]"
             >
               <div aria-hidden="true" className="absolute -bottom-10 -right-[30px] h-[170px] w-[170px] overflow-hidden rounded-full bg-[#ff7a33] sm:h-[200px] sm:w-[200px]">
                 <Image
@@ -339,7 +350,11 @@ function NextStep({
   editHref: string | null;
 }) {
   let title: string;
+  /** Shorter title for phones (falls back to `title`). */
+  let short: string | null = null;
   let sub: string | null = null;
+  /** Phones show the fix itself, without the "Top fix:" prefix. */
+  let subPhone: string | null = null;
   let ring: number | null = null;
   let actions: React.ReactNode;
   const white = `${appBtnWhite} hover:bg-[#f1eff8]!`;
@@ -349,7 +364,9 @@ function NextStep({
     const n = report.totalFixes;
     ring = report.overall;
     title = n > 0 ? `Your free check found ${n} ${n === 1 ? "issue" : "issues"}. Start with the top one.` : "Your free ATS check is ready.";
+    short = n > 0 ? `${n} ${n === 1 ? "issue" : "issues"} found. Start with the top one.` : null;
     sub = topFix ? `Top fix: ${topFix}` : null;
+    subPhone = topFix ?? null;
     actions = (
       <>
         {editHref ? (
@@ -361,7 +378,7 @@ function NextStep({
             Import and fix it
           </CtaLink>
         )}
-        <Link href={`/dashboard/ats-report/${token}`} className={dark}>
+        <Link href={`/dashboard/ats-report/${token}`} className={`${dark} hidden! sm:inline-flex!`}>
           Full report
         </Link>
       </>
@@ -411,12 +428,19 @@ function NextStep({
         <div className="min-w-0">
           <p className="hidden text-[13px] font-bold uppercase tracking-[0.08em] text-[#e4dfff] sm:block">Your next step</p>
           <h2 id="home-next" className="text-[18px] font-extrabold leading-[23px] tracking-[-0.02em] sm:mt-1.5 sm:text-[26px] sm:leading-[31px]">
-            {title}
+            {short ? (
+              <>
+                <span className="sm:hidden">{short}</span>
+                <span className="hidden sm:inline">{title}</span>
+              </>
+            ) : (
+              title
+            )}
           </h2>
           {sub ? <p className="mt-1.5 hidden text-[15px] text-[#e4dfff] sm:block">{sub}</p> : null}
         </div>
       </div>
-      {sub ? <p className="text-[14px] text-[#e4dfff] sm:hidden">{sub}</p> : null}
+      {(subPhone ?? sub) ? <p className="text-[14px] text-[#e4dfff] sm:hidden">{subPhone ?? sub}</p> : null}
       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap xl:shrink-0">{actions}</div>
     </section>
   );

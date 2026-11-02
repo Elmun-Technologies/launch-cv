@@ -65,7 +65,7 @@ export function CheckoutReturn({
         </Badge>
         <h2 className="mt-4 text-[32px] font-extrabold leading-[36px] tracking-[-0.04em] text-[#121226] sm:text-[44px] sm:leading-[48px]">
           {planTitle ? <>You&apos;re on {planTitle}.</> : <>Your plan is active.</>}{" "}
-          <span className="text-[#7c7a94]">Let&apos;s use it.</span>
+          <span className="whitespace-nowrap text-[#7c7a94]">Let&apos;s use it.</span>
         </h2>
         <p className="mt-3 text-[16px] leading-[25px] text-[#4a4862]">
           Every AI tool is unlocked.{renewLine ? ` ${renewLine}` : ""}

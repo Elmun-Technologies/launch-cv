@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { Search, ExternalLink, RotateCcw, Check, X, AlertTriangle, Plus, Building2, Target } from "lucide-react";
 import { CopyButton } from "@/components/copy-button";
 import { COMPANIES, searchCompanies, type CompanyRequirement } from "@/lib/company-requirements";
@@ -23,6 +23,25 @@ import {
 } from "@/components/app/jobs/ui";
 
 type Resume = { id: string; title: string; updatedAt: string };
+
+/** A company from the user's own list (/api/companies). */
+type SavedCompany = { id: string; name: string; industry: string | null };
+
+/** What's being matched: a catalog entry, or a company the user typed or saved (no catalog tier). */
+type Selected = CompanyRequirement & { custom?: boolean };
+
+/** "Startup · Startup" → "Startup": drop empty and repeated (case-insensitive) labels. */
+function uniqueLabels(labels: (string | null | undefined)[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const l of labels) {
+    const t = l?.trim();
+    if (!t || seen.has(t.toLowerCase())) continue;
+    seen.add(t.toLowerCase());
+    out.push(t);
+  }
+  return out;
+}
 
 type KeywordGap = {
   keyword: string;
@@ -170,7 +189,30 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
   const [selectedResumeId, setSelectedResumeId] = useState(resumes[0]?.id ?? "");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTier, setActiveTier] = useState("all");
-  const [selectedCompany, setSelectedCompany] = useState<CompanyRequirement | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<Selected | null>(null);
+  const [saved, setSaved] = useState<SavedCompany[]>([]);
+
+  // The user's own companies go above the catalog.
+  useEffect(() => {
+    let live = true;
+    (async () => {
+      const r = await fetch("/api/companies?pageSize=100").catch(() => null);
+      const j = r?.ok ? await r.json().catch(() => null) : null;
+      if (!live || !Array.isArray(j?.companies)) return;
+      setSaved(
+        (j.companies as { id: string; name: string; industry?: string | null }[]).map((c) => ({ id: c.id, name: c.name, industry: c.industry ?? null })),
+      );
+    })();
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const savedShown = useMemo(() => {
+    if (activeTier !== "all") return [];
+    const q = searchQuery.trim().toLowerCase();
+    return q ? saved.filter((c) => `${c.name} ${c.industry ?? ""}`.toLowerCase().includes(q)) : saved;
+  }, [saved, searchQuery, activeTier]);
   const [result, setResult] = useState<MatchResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
@@ -204,19 +246,30 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
     [selectedResumeId],
   );
 
-  const analyzeCustom = useCallback(async () => {
-    if (!selectedResumeId || !customName.trim()) return;
-    setSelectedCompany({ id: "custom", name: customName, logo: customName[0]?.toUpperCase() ?? "?", industry: customIndustry, tier: "startup", keywords: [], culture: [], formatTips: [], mustHave: [], avoid: [], exampleBullet: "" });
-    setResult(null);
-    setError(null);
-    setLoading(true);
-    const out = await requestMatch({ resumeId: selectedResumeId, customCompany: { name: customName, industry: customIndustry, jobDescription: customJD } });
-    setLoading(false);
-    if ("data" in out) {
-      setResult(out.data);
-      setBulletRewrites(out.data.bulletRewrites);
-    } else setError(out);
-  }, [selectedResumeId, customName, customIndustry, customJD]);
+  const analyzeOther = useCallback(
+    async (id: string, name: string, industry: string, jobDescription: string) => {
+      if (!selectedResumeId || !name.trim()) return;
+      setSelectedCompany({ id, custom: true, name, logo: name[0]?.toUpperCase() ?? "?", industry, tier: "startup", keywords: [], culture: [], formatTips: [], mustHave: [], avoid: [], exampleBullet: "" });
+      setResult(null);
+      setError(null);
+      setLoading(true);
+      const out = await requestMatch({
+        resumeId: selectedResumeId,
+        customCompany: { name, ...(industry ? { industry } : {}), ...(jobDescription ? { jobDescription } : {}) },
+      });
+      setLoading(false);
+      if ("data" in out) {
+        setResult(out.data);
+        setBulletRewrites(out.data.bulletRewrites);
+      } else setError(out);
+    },
+    [selectedResumeId],
+  );
+
+  const analyzeCustom = useCallback(
+    () => analyzeOther("custom", customName, customIndustry, customJD),
+    [analyzeOther, customName, customIndustry, customJD],
+  );
 
 
   const resetAnalysis = () => {
@@ -270,7 +323,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
         </ErrorNote>
       ) : null}
 
-      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
+      <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-5 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
         {/* COMPANY PICKER — on phones it steps aside while a result is open */}
         <section aria-label="Companies" className={`${cardCls} ${selectedCompany ? "hidden lg:block" : ""}`}>
           <SearchField
@@ -295,7 +348,43 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               <p className="mt-0.5 text-[13px] text-[#66647c]">Try adjusting your search or filters</p>
             </div>
           ) : (
-            <ul className="mt-3 flex flex-col gap-1.5 lg:max-h-[560px] lg:overflow-y-auto lg:pr-1">
+            // `relative` keeps the sr-only text inside the scroll box (otherwise it stretches the page).
+            <ul className="relative mt-3 flex flex-col gap-1.5 lg:max-h-[560px] lg:overflow-y-auto lg:pr-1">
+              {savedShown.length ? (
+                <li className="px-1 pb-0.5 pt-1 text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]" aria-hidden="true">
+                  Your companies
+                </li>
+              ) : null}
+              {savedShown.map((c) => {
+                const on = selectedCompany?.id === `saved-${c.id}`;
+                return (
+                  <li key={`saved-${c.id}`}>
+                    <button
+                      type="button"
+                      onClick={() => void analyzeOther(`saved-${c.id}`, c.name, c.industry ?? "", "")}
+                      disabled={!selectedResumeId || loading}
+                      aria-current={on ? "true" : undefined}
+                      className={`relative flex w-full items-center gap-3 rounded-[16px] p-3 text-left transition-colors motion-reduce:transition-none disabled:cursor-not-allowed focus-visible:rounded-[16px]! ${focusCls} ${
+                        on ? "bg-[#111118] text-white" : "bg-[#f7f6fb] text-[#121226] hover:bg-[#e4dfff] disabled:opacity-60"
+                      }`}
+                    >
+                      <InitialTile name={c.name} size={36} tone={on ? "bg-[#5440e8] text-white!" : "bg-[#e4dfff]"} />
+                      <span className="min-w-0 flex-1">
+                        <span className="sr-only">Check my match: </span>
+                        <b className="block truncate text-[15px] font-bold">{c.name}</b>
+                        <span className={`block truncate text-[12px] ${on ? "text-[#c9c7d8]" : "text-[#66647c]"}`}>
+                          {uniqueLabels(["Saved company", c.industry]).join(" · ")}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+              {savedShown.length && filtered.length ? (
+                <li className="px-1 pb-0.5 pt-2 text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]" aria-hidden="true">
+                  Company guides
+                </li>
+              ) : null}
               {filtered.map((company) => {
                 const on = selectedCompany?.id === company.id;
                 return (
@@ -305,7 +394,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                       onClick={() => analyzeCompany(company)}
                       disabled={!selectedResumeId || loading}
                       aria-current={on ? "true" : undefined}
-                      className={`flex w-full items-center gap-3 rounded-[16px] p-3 text-left transition-colors motion-reduce:transition-none disabled:cursor-not-allowed focus-visible:rounded-[16px]! ${focusCls} ${
+                      className={`relative flex w-full items-center gap-3 rounded-[16px] p-3 text-left transition-colors motion-reduce:transition-none disabled:cursor-not-allowed focus-visible:rounded-[16px]! ${focusCls} ${
                         on ? "bg-[#111118] text-white" : "bg-[#f7f6fb] text-[#121226] hover:bg-[#e4dfff] disabled:opacity-60"
                       }`}
                     >
@@ -314,7 +403,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                         <span className="sr-only">Check my match: </span>
                         <b className="block truncate text-[15px] font-bold">{company.name}</b>
                         <span className={`block truncate text-[12px] ${on ? "text-[#c9c7d8]" : "text-[#66647c]"}`}>
-                          {[TIER_LABEL[company.tier] ?? company.tier, company.industry, company.culture[0]].filter(Boolean).join(" · ")}
+                          {uniqueLabels([TIER_LABEL[company.tier] ?? company.tier, company.industry, company.culture[0]]).join(" · ")}
                         </span>
                       </span>
                     </button>
@@ -415,12 +504,11 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
                         : "Several gaps. Start with the recommendations below."}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="rounded-full bg-white/15 px-2.5 py-[5px] text-[12px] font-bold">
-                      {TIER_LABEL[selectedCompany.tier] ?? selectedCompany.tier}
-                    </span>
-                    {selectedCompany.industry ? (
-                      <span className="rounded-full bg-white/15 px-2.5 py-[5px] text-[12px] font-bold">{selectedCompany.industry}</span>
-                    ) : null}
+                    {uniqueLabels([selectedCompany.custom ? null : (TIER_LABEL[selectedCompany.tier] ?? selectedCompany.tier), selectedCompany.industry]).map((l) => (
+                      <span key={l} className="rounded-full bg-white/15 px-2.5 py-[5px] text-[12px] font-bold">
+                        {l}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </section>
@@ -575,10 +663,10 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-2">
                 <a href={`/resume/${selectedResumeId}/edit`} className={appBtnPrimary}>
-                  <ExternalLink className="h-4 w-4" aria-hidden /> Open in Editor
+                  <ExternalLink className="h-4 w-4" aria-hidden /> Open in editor
                 </a>
                 <button type="button" onClick={resetAnalysis} className={appBtnSoft}>
-                  <RotateCcw className="h-4 w-4" aria-hidden /> Try Another Company
+                  <RotateCcw className="h-4 w-4" aria-hidden /> Try another company
                 </button>
               </div>
             </>
@@ -586,7 +674,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
             /* The request failed (message above): offer the way back to the list on phones. */
             <div className="flex flex-wrap gap-2">
               <button type="button" onClick={resetAnalysis} className={appBtnSoft}>
-                <RotateCcw className="h-4 w-4" aria-hidden /> Try Another Company
+                <RotateCcw className="h-4 w-4" aria-hidden /> Try another company
               </button>
             </div>
           )}
