@@ -493,7 +493,7 @@ export default async function Home() {
             Four templates. <span>Every one readable by the software.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
-            Build with a live preview, switch templates any time, and download a PDF free.
+            Build with a live preview, switch templates any time, and download a PDF or Word file free.
           </p>
         </div>
         <TemplateFan items={templates} />

@@ -29,6 +29,7 @@ import {
   roleLower,
   roleShort,
 } from "@/lib/seo/resume-keywords";
+import { withArticle } from "@/lib/article";
 
 type Params = { role: string };
 
@@ -264,7 +265,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
               Keywords get you found. <span className="!text-[#b3b0c8]">Proof gets you hired.</span>
             </>
           }
-          lead={`Mirror the job post's wording for skills you really have. If a ${role} post asks for ${e.keywords[0]} and you've used it, say ${e.keywords[0]}, in the post's spelling, and show where.`}
+          lead={`Mirror the job post's wording for skills you really have. If ${withArticle(role)} post asks for ${e.keywords[0]} and you've used it, say ${e.keywords[0]}, in the post's spelling, and show where.`}
           footer={
             <div className="mt-5 flex flex-col items-start justify-between gap-4 rounded-[22px] bg-[#5440e8] p-5 sm:mt-6 sm:flex-row sm:items-center sm:p-7">
               <div>

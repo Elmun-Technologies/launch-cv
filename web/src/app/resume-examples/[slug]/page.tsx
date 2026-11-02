@@ -17,6 +17,7 @@ import { SITE_AUTHOR } from "@/lib/author";
 import { RESUME_EXAMPLES, exampleResumeText, getResumeExample } from "@/lib/resume-examples";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 import { exampleToContent } from "@/lib/example-to-content";
+import { withArticle } from "@/lib/article";
 
 type Params = { slug: string };
 
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!e) return {};
   return buildMarketingMetadata({
     title: fitTitle(`${e.role} Resume Example & Keywords (2026)`, `${e.role} Resume Example (2026)`, `${e.role} Resume Example`),
-    description: `A ${roleLower(e.role)} resume example you can copy, with summary and bullet examples, the keywords recruiters search for and ATS tips.`,
+    description: `${withArticle(roleLower(e.role), true)} resume example you can copy, with summary and bullet examples, the keywords recruiters search for and ATS tips.`,
     pathname: `/resume-examples/${e.slug}`,
     image: DEFAULT_OG_IMAGE,
     keywords: [
@@ -201,7 +202,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             <div className="lc-card rounded-[24px] p-5 sm:p-6">
               <h3 className="text-[18px] font-bold">Use this as your starting point</h3>
               <p className="mt-1.5 text-[15px] leading-[23px] text-[#4a4862]">
-                Opens in the editor with every section filled in. Swap in your own details and download a PDF free.
+                Opens in the editor with every section filled in. Swap in your own details and download a PDF or Word file free.
               </p>
               <CtaLink cta="use_example" location="resume_example_sample" href={startHref} className={`${btnPrimary} mt-4 w-full`}>
                 Start from this example

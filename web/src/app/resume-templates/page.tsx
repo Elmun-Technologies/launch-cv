@@ -18,7 +18,7 @@ import type { ResumeContent } from "@/types/resume";
 export const metadata = buildMarketingMetadata({
   title: "Free Resume Templates — ATS-Friendly, Download as PDF",
   description:
-    "Four ATS-friendly resume templates: Classic, Modern, Minimal and Executive. Single column, real text, standard headings. Build yours and download a PDF free.",
+    "Four ATS-friendly resume templates: Classic, Modern, Minimal and Executive. Single column, standard headings. Download as PDF or Word, free.",
   pathname: "/resume-templates",
   image: DEFAULT_OG_IMAGE,
   keywords: ["resume templates", "free resume templates", "ATS resume template", "ATS friendly resume template", "simple resume template"],
@@ -78,7 +78,7 @@ const faqs = [
   },
   {
     q: "Can I download in Word format?",
-    a: "Not at the moment — export is PDF only. PDF is what most employers and applicant tracking systems ask for.",
+    a: "Yes. The editor downloads your resume as a PDF or as a Word (.docx) file. The Word file keeps a plain one-column layout with standard headings, so it's safe to upload when a posting asks for .docx; send the PDF otherwise.",
   },
 ];
 
@@ -152,7 +152,7 @@ export default function ResumeTemplatesPage() {
           </h1>
           <p className="mt-4 text-[17px] leading-[1.6] text-[#4a4862] sm:mt-[22px] sm:text-[18px] sm:leading-7">
             One column, standard headings and real text, so applicant tracking systems can read it. Build yours with a live
-            preview and download a PDF free — the preview is exactly what you get.
+            preview and download a PDF or Word file free — the preview is exactly what you get.
           </p>
           <div className="mt-5 flex flex-col gap-2.5 sm:mt-[30px] sm:flex-row">
             <CtaLink cta="build_resume" location="resume_templates_hero" href={BUILD_HREF} className={btnPrimary}>

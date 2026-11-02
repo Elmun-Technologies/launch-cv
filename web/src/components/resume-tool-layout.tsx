@@ -76,6 +76,15 @@ export function ResumeToolLayout({
           </nav>
 
           <div className="hidden shrink-0 items-center gap-2 sm:flex">
+            <a
+              href={`/api/resumes/${resumeId}/docx`}
+              download
+              className="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-[#f1eff8] px-4 text-[14px] font-semibold text-[#121226] hover:bg-[#e4dfff] max-lg:hidden"
+            >
+              <span>
+                <span className="sr-only">Download resume as </span>Word
+              </span>
+            </a>
             <ToolPdfButton resumeId={resumeId} />
           </div>
         </div>

@@ -6,7 +6,9 @@ import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { UpgradeDialog } from "@/components/app/tools/upgrade-dialog";
 import { Badge, SparkIcon, ToolSkeleton, pillSoft, toolCard, toolH2, toolSubmit } from "@/components/app/tools/tool-ui";
 
-type Issue = { severity: "low" | "med" | "high"; bulletId?: string; message: string; suggestion: string };
+type Issue = { severity: "low" | "med" | "high"; category?: string; bulletId?: string; message: string; suggestion: string };
+
+const CATEGORY_LABEL: Record<string, string> = { dates: "Dates", format: "Format", claim: "Claim", metric: "Number", wording: "Wording" };
 type Result = { issues: Issue[]; metrics_found: { text: string; bulletId?: string }[] };
 
 const SEVERITY: Record<Issue["severity"], { label: string; tone: "red" | "amber" | "lilac" }> = {
@@ -46,6 +48,7 @@ export function EvidenceClient({ resumeId }: { resumeId: string }) {
 
   const order = { high: 0, med: 1, low: 2 } as const;
   const issues = [...(result?.issues ?? [])].sort((a, b) => order[a.severity] - order[b.severity]);
+  const hasCategories = issues.some((x) => x.category && CATEGORY_LABEL[x.category]);
 
   const runLabel = result ? "Run again" : "Run consistency check";
 
@@ -102,7 +105,13 @@ export function EvidenceClient({ resumeId }: { resumeId: string }) {
             {issues.length > 0 ? (
               <ul className="mt-3">
                 {issues.map((x, i) => (
-                  <li key={i} className="grid grid-cols-[1fr_auto] items-start gap-4 border-t border-[#e2e0ea] py-4 sm:items-center">
+                  <li
+                    key={i}
+                    className={`grid items-start gap-x-4 gap-y-1 border-t border-[#e2e0ea] py-4 sm:items-center ${hasCategories ? "grid-cols-[1fr_auto] sm:grid-cols-[96px_1fr_auto]" : "grid-cols-[1fr_auto]"}`}
+                  >
+                    {hasCategories ? (
+                      <p className="col-span-2 text-[13px] font-bold text-[#121226] sm:col-span-1 sm:text-[14px]">{(x.category && CATEGORY_LABEL[x.category]) || "Other"}</p>
+                    ) : null}
                     <div className="min-w-0 text-[14px] leading-[21px]">
                       <p className="text-[#24223a]">{x.message}</p>
                       {x.suggestion ? <p className="mt-1 text-[#4a4862]">{x.suggestion}</p> : null}

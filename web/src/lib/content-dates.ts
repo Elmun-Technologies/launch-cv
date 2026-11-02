@@ -9,7 +9,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/free-ats-check": "2026-10-27",
   "/features": "2026-10-27",
   "/features/jd-alignment": "2026-10-27",
-  "/features/resume-builder": "2026-11-01",
+  "/features/resume-builder": "2026-11-02",
   "/features/cover-letter": "2026-10-27",
   "/features/interview-prep": "2026-11-01",
   "/features/voice-input": "2026-10-27",
@@ -17,7 +17,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/compare/ats-resume-checkers": "2026-11-01",
   "/about": "2026-10-27",
   "/contact": "2026-10-27",
-  "/resume-templates": "2026-10-27",
+  "/resume-templates": "2026-11-02",
   "/resume-examples": "2026-10-27",
   /** All /resume-examples/[slug] pages (data in lib/resume-examples.ts). */
   "/resume-examples/*": "2026-10-27",

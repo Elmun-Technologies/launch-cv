@@ -1193,6 +1193,13 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             ))}
           </nav>
 
+          <a
+            href={`/api/resumes/${resumeId}/docx`}
+            download
+            className={`${pill} hidden shrink-0 bg-[#f1eff8] text-[14px] text-[#121226] hover:bg-[#e4dfff] sm:inline-flex`}
+          >
+            <span><span className="sr-only">Download as </span>Word</span>
+          </a>
           <button type="button" onClick={onPdfExportClick} className={`${btnDarkSm} hidden shrink-0 sm:inline-flex`}>
             <Download className="h-4 w-4" aria-hidden="true" /> <span><span className="sr-only">Download </span>PDF</span>
           </button>
@@ -1319,10 +1326,13 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
         {/* Score summary + actions below the three-column layout */}
         {renderScoreCard(`mt-3 xl:hidden ${mobileView === "edit" ? "flex" : "flex lg:ml-[230px] lg:max-w-[560px]"}`)}
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
+        <div className="mt-3 grid grid-cols-3 gap-2 sm:hidden">
           <button type="button" onClick={() => setShowOverwrite(true)} className={`${pill} min-h-12 bg-white text-[15px] text-[#121226] hover:bg-[#e4dfff]`}>
             <UploadCloud className="h-4 w-4" aria-hidden="true" /> Import
           </button>
+          <a href={`/api/resumes/${resumeId}/docx`} download className={`${pill} min-h-12 bg-white text-[15px] text-[#121226] hover:bg-[#e4dfff]`}>
+            <span><span className="sr-only">Download as </span>Word</span>
+          </a>
           <button type="button" onClick={onPdfExportClick} className={`${btnDarkSm} min-h-12 text-[15px]`}>
             <Download className="h-4 w-4" aria-hidden="true" /> <span><span className="sr-only">Download </span>PDF</span>
           </button>

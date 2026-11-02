@@ -9,6 +9,7 @@
  */
 import { RESUME_EXAMPLES, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
 import { fitTitle } from "@/lib/build-metadata";
+import { withArticle } from "@/lib/article";
 
 export const KEYWORDS_UPDATED = "2026-11-02";
 
@@ -214,12 +215,12 @@ export function keywordFaqs(e: ResumeExample): { q: string; a: string }[] {
   const creds = groups.find((g) => g.id === "credentials")?.items.map((i) => i.term) ?? [];
   const faqs: { q: string; a: string }[] = [
     {
-      q: `How many keywords should a ${role} resume have?`,
+      q: `How many keywords should ${withArticle(role)} resume have?`,
       a: `There's no magic number. Cover the skills and tools the job post asks for that you can honestly back up, and use each one where it fits: in your skills section and in the bullet that shows it. Repeating a keyword many times doesn't help.`,
     },
     {
       q: "Should I copy keywords exactly from the job post?",
-      a: `Use the post's wording for skills you really have. If a ${role} post says "${e.keywords[0]}", write "${e.keywords[0]}" rather than a synonym, so a recruiter searching for that term finds you. Don't add skills you don't have just because the post lists them.`,
+      a: `Use the post's wording for skills you really have. If ${withArticle(role)} post says "${e.keywords[0]}", write "${e.keywords[0]}" rather than a synonym, so a recruiter searching for that term finds you. Don't add skills you don't have just because the post lists them.`,
     },
     {
       q: "Where should keywords go on my resume?",
@@ -228,7 +229,7 @@ export function keywordFaqs(e: ResumeExample): { q: string; a: string }[] {
   ];
   if (tools.length > 0) {
     faqs.push({
-      q: `Which tools should I list on a ${role} resume?`,
+      q: `Which tools should I list on ${withArticle(role)} resume?`,
       a: `The ones you've used and the post mentions. Common ones in ${role} posts include ${listJoin(tools.slice(0, 5))}. Name the tool in the bullet where you used it, not only in the skills list.`,
     });
   }
