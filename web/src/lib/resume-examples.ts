@@ -11,8 +11,21 @@ import { MORE_EXAMPLES_C } from "@/lib/resume-examples-more-c";
 import { MORE_EXAMPLES_D } from "@/lib/resume-examples-more-d";
 import { MORE_EXAMPLES_E } from "@/lib/resume-examples-more-e";
 import { MORE_EXAMPLES_F } from "@/lib/resume-examples-more-f";
+import { RESUME_EXAMPLE_VARIANTS } from "@/lib/resume-example-variants";
 
 export type ExampleJob = { title: string; company: string; dates: string; bullets: string[] };
+
+/** Another sample resume for the same role, at a different level or specialty. */
+export type ResumeVariant = {
+  /** URL-safe and unique within the role; used in #sample-{id} and ?variant={id}. */
+  id: string;
+  /** "ICU nurse" — names the sample in tabs, cards and the editor. */
+  label: string;
+  /** Level and experience line, like `level` on the main sample. */
+  level: string;
+  resume: ResumeExample["resume"];
+  whyItWorks: string;
+};
 
 export type ResumeExample = {
   slug: string;
@@ -45,6 +58,8 @@ export type ResumeExample = {
    * `keywords` exactly; anything not listed is a hard skill.
    */
   keywordSort?: { tools?: string[]; credentials?: string[]; soft?: string[] };
+  /** More sample resumes for the role (lib/resume-example-variants.ts). */
+  variants?: ResumeVariant[];
 };
 
 /** Display order of the groups on the index pages. */
@@ -1166,15 +1181,33 @@ const CORE_EXAMPLES: ResumeExample[] = [
   },
 ];
 
-export const RESUME_EXAMPLES: ResumeExample[] = [...CORE_EXAMPLES, ...MORE_EXAMPLES_A, ...MORE_EXAMPLES_B, ...MORE_EXAMPLES_C, ...MORE_EXAMPLES_D, ...MORE_EXAMPLES_E, ...MORE_EXAMPLES_F];
+export const RESUME_EXAMPLES: ResumeExample[] = [
+  ...CORE_EXAMPLES,
+  ...MORE_EXAMPLES_A,
+  ...MORE_EXAMPLES_B,
+  ...MORE_EXAMPLES_C,
+  ...MORE_EXAMPLES_D,
+  ...MORE_EXAMPLES_E,
+  ...MORE_EXAMPLES_F,
+].map((e) => (RESUME_EXAMPLE_VARIANTS[e.slug] ? { ...e, variants: RESUME_EXAMPLE_VARIANTS[e.slug] } : e));
 
 export function getResumeExample(slug: string): ResumeExample | undefined {
   return RESUME_EXAMPLES.find((e) => e.slug === slug);
 }
 
-/** Plain-text version of the sample resume for the "Copy text" button. */
-export function exampleResumeText(e: ResumeExample): string {
-  const r = e.resume;
+/** A role's extra sample by id; undefined for the main sample or an unknown id. */
+export function getExampleVariant(e: ResumeExample, variantId?: string | null): ResumeVariant | undefined {
+  return variantId ? e.variants?.find((v) => v.id === variantId) : undefined;
+}
+
+/** How many samples the role's page shows: the main one plus its variants. */
+export function exampleSampleCount(e: ResumeExample): number {
+  return 1 + (e.variants?.length ?? 0);
+}
+
+/** Plain-text version of a sample resume (the main one, or a variant) for the "Copy text" button. */
+export function exampleResumeText(e: ResumeExample, variantId?: string): string {
+  const r = getExampleVariant(e, variantId)?.resume ?? e.resume;
   return [
     r.name,
     `${r.headline} · ${r.contact}`,

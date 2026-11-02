@@ -40,8 +40,13 @@ export default async function NewResumePage({ searchParams }: Props) {
     redirect(`/onboarding?next=${encodeURIComponent(next)}`);
   }
 
-  // Only slugs, role names and verticals reach the client, not the full example texts.
-  const examples = RESUME_EXAMPLES.map((e) => ({ slug: e.slug, role: e.role, vertical: verticalForRole(e.slug, e.group) }));
+  // Only slugs, role names, verticals and sample labels reach the client, not the full example texts.
+  const examples = RESUME_EXAMPLES.map((e) => ({
+    slug: e.slug,
+    role: e.role,
+    vertical: verticalForRole(e.slug, e.group),
+    ...(e.variants?.length ? { variants: e.variants.map((v) => ({ id: v.id, label: v.label })) } : {}),
+  }));
   const target = examples.find((e) => e.slug === user?.targetRole) ?? null;
 
   // The user's role first, then roles the example lists as related, then the defaults.
