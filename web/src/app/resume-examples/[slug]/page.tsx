@@ -7,6 +7,7 @@ import { container, btnPrimary, btnWhite, labelCls, Breadcrumbs, Chip, SectionHe
 import { FaqList } from "@/components/site/library/faq-list";
 import { CopyPill } from "@/components/site/library/copy-pill";
 import { ArrowCard } from "@/components/site/library/arrow-card";
+import { RoleNextSteps } from "@/components/site/seo/role-next-steps";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
@@ -359,6 +360,8 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
         </div>
         <FaqList faqs={e.faqs} />
       </section>
+
+      <RoleNextSteps e={e} page="example" />
 
       {/* RELATED */}
       {related.length > 0 ? (
