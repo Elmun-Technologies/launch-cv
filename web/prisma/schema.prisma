@@ -29,6 +29,15 @@ model User {
   emailVerifiedAt  DateTime?
   /// Billing provider customer id (Lemon Squeezy customer id as string).
   stripeCustomerId String?
+  /// Set when staff suspend the account (Admin → Users). A suspended user can't
+  /// sign in and every session check (lib/session.ts) treats them as signed out.
+  suspendedAt      DateTime?
+  /// Plan granted by staff without a payment (Admin → Users → Grant plan):
+  /// "starter" | "professional" | "elite" | "lifetime". Kept apart from the
+  /// billing-owned Subscription row so a Polar webhook never overwrites it.
+  grantedPlan      String?
+  /// When the granted plan stops applying. Null = no end date.
+  grantedPlanUntil DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   resumes          Resume[]
