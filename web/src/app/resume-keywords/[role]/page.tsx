@@ -136,7 +136,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
             <CtaLink cta="free_ats_check" location="resume_keywords" href="/free-ats-check" className={btnPrimary}>
               Check my resume for these
             </CtaLink>
-            <Link href={exampleHref} className={`${btnWhite} hidden sm:inline-flex`}>
+            <Link href={exampleHref} className={`${btnWhite} max-sm:hidden`}>
               See the full example
             </Link>
           </div>

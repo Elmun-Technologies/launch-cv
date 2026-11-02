@@ -127,7 +127,7 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
             <CtaLink cta="cover_letter_feature" location="cover_letter_example" href="/features/cover-letter" className={btnPrimary}>
               Write mine from my resume
             </CtaLink>
-            <Link href={`/resume-examples/${slug}`} className={`${btnWhite} hidden sm:inline-flex`}>
+            <Link href={`/resume-examples/${slug}`} className={`${btnWhite} max-sm:hidden`}>
               See the matching resume
             </Link>
           </div>

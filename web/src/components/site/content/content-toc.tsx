@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FaqIcon } from "@/components/site/ui";
 
 export type ContentTocEntry = { id: string; text: string; depth?: 2 | 3 };
 
@@ -67,11 +68,7 @@ export function ContentTocMobile({ entries, numbered = false }: { entries: Conte
     <details open className="lc-faq group rounded-[20px] bg-white px-[18px] py-1.5">
       <summary className="flex min-h-[48px] items-center justify-between gap-3 text-[14px] font-bold">
         On this page
-        <span className="lc-plus inline-flex h-7 w-7 flex-none items-center justify-center rounded-full bg-[#f1eff8]" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#121226" strokeWidth="2.2" strokeLinecap="round">
-            <path d="M12 5v14M5 12h14" />
-          </svg>
-        </span>
+        <FaqIcon size="sm" />
       </summary>
       <nav aria-label="On this page">
         <ol className={`mt-1 pb-2 text-[14px] text-[#4a4862] ${numbered ? "list-decimal pl-[18px]" : ""}`}>

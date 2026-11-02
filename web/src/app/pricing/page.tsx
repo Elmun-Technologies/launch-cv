@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { SiteShell } from "@/components/site/site-shell";
 import { CtaLink } from "@/components/cta-link";
 import { JsonLd } from "@/components/json-ld";
-import { container, labelCls } from "@/components/site/ui";
+import { container, FaqIcon, labelCls } from "@/components/site/ui";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { getSettings } from "@/lib/app-settings";
@@ -12,6 +12,7 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { getPageCopy } from "@/lib/cms/page-copy";
 import { getFaqsFor } from "@/lib/cms/faqs";
+import { MOBILE_PLAN_ORDER, planLimitsLine } from "@/components/site/plan-summary";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
 /** Carries the chosen plan through sign-up so checkout opens right after. */
@@ -157,13 +158,6 @@ const UNLOCKS = [
   { t: "Company matcher", d: "And email drafts." },
 ];
 
-/** Plan order on phones: the popular plan first, Free last (desktop keeps price order). */
-const MOBILE_ORDER: Record<CheckoutPlan, string> = {
-  professional: "order-1",
-  starter: "order-2",
-  elite: "order-3",
-  lifetime: "order-3",
-};
 
 const sectionPad = "pt-24 lg:pt-[130px]";
 const linkCls = "lc-link font-semibold text-[#5440e8]";
@@ -289,7 +283,7 @@ export default async function PricingPage() {
               return (
                 <div
                   key={key}
-                  className={`${MOBILE_ORDER[key]} lc-rise relative mt-3 flex flex-col gap-[18px] rounded-3xl bg-[#5440e8] px-[22px] pb-[22px] pt-[26px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:mt-0 md:p-7 md:pt-[46px] lg:-my-[18px]`}
+                  className={`${MOBILE_PLAN_ORDER[key]} lc-rise relative mt-3 flex flex-col gap-[18px] rounded-3xl bg-[#5440e8] px-[22px] pb-[22px] pt-[26px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:mt-0 md:p-7 md:pt-[46px] lg:-my-[18px]`}
                 >
                   <span className="lc-poster absolute -top-3 left-5 -rotate-[4deg] rounded-full bg-[#ff7a33] px-[11px] py-1.5 text-[11px] text-[#111118] md:-top-3.5 md:left-7 md:px-3.5 md:py-2 md:text-[12px]">
                     MOST PICKED
@@ -318,7 +312,7 @@ export default async function PricingPage() {
             return (
               <div
                 key={key}
-                className={`${MOBILE_ORDER[key]} lc-card lc-rise flex flex-col gap-3.5 rounded-3xl px-[22px] py-5 md:order-none md:gap-[18px] md:p-7`}
+                className={`${MOBILE_PLAN_ORDER[key]} lc-card lc-rise flex flex-col gap-3.5 rounded-3xl px-[22px] py-5 md:order-none md:gap-[18px] md:p-7`}
               >
                 <div>
                   <div className="flex items-baseline justify-between md:block">
@@ -329,8 +323,7 @@ export default async function PricingPage() {
                     </p>
                   </div>
                   <p className="mt-1.5 text-[14px] leading-[22px] text-[#4a4862] md:hidden">
-                    {n(L.jd)} analyses · {n(L.roleFit)} role-fit checks · {n(L.packet)} packets a month.
-                    {key === "lifetime" ? " Never renews." : ""}
+                    {planLimitsLine(key, L)}
                   </p>
                   <p className="mt-1.5 hidden text-[15px] text-[#4a4862] md:block">{cfg.valueLine}</p>
                 </div>
@@ -454,8 +447,8 @@ export default async function PricingPage() {
         </ul>
       </section>
 
-      {/* COMPARE */}
-      <section className={`${container} ${sectionPad}`}>
+      {/* COMPARE — the cards above already list each plan's limits, so phones skip the wide table. */}
+      <section className={`${container} ${sectionPad} hidden sm:block`}>
         <div className="lc-reveal">
           <p className={labelCls}>/ Compare</p>
           <h2 className="lc-h2 mt-5">
@@ -574,14 +567,7 @@ export default async function PricingPage() {
             >
               <summary className="flex min-h-[44px] items-center justify-between gap-4">
                 <span className="text-[16px] font-bold lg:text-[18px]">{f.q}</span>
-                <span
-                  className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] text-[#121226] group-hover:bg-[#e4dfff] group-open:bg-[#111118] group-open:text-white"
-                  aria-hidden="true"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </span>
+                <FaqIcon />
               </summary>
               <p className="mt-2.5 text-[15px] leading-6 text-[#4a4862] lg:mt-3 lg:text-[16px] lg:leading-[26px]">{f.a}</p>
             </details>

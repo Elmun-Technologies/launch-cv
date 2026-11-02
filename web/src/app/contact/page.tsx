@@ -63,7 +63,7 @@ export default function ContactPage() {
             </a>{" "}
             and put the topic in the subject so it reaches the right person.
           </p>
-          <a href={`mailto:${EMAIL}`} className={`${btnDark} mt-[18px] self-start sm:mt-7`}>
+          <a href={`mailto:${EMAIL}`} className={`${btnDark} mt-[18px] w-full sm:mt-7 sm:w-auto sm:self-start`}>
             Email us
           </a>
         </div>

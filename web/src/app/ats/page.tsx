@@ -73,7 +73,7 @@ export default function AtsIndexPage() {
             <a href="#systems" className={btnPrimary}>
               Pick a system
             </a>
-            <CtaLink cta="free_ats_check" location="ats_index" href="/free-ats-check" className={`${btnWhite} hidden sm:inline-flex`}>
+            <CtaLink cta="free_ats_check" location="ats_index" href="/free-ats-check" className={`${btnWhite} max-sm:hidden`}>
               Check my resume — free
             </CtaLink>
           </div>

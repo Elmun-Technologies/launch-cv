@@ -7,6 +7,8 @@ import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { absoluteUrl } from "@/lib/site";
+import { SITE_AUTHOR } from "@/lib/author";
+import { CONTENT_UPDATED } from "@/lib/content-dates";
 
 export const metadata = buildMarketingMetadata({
   title: "Best ATS Resume Checkers in 2026 — How to Choose",
@@ -42,6 +44,9 @@ const faqs: FaqItem[] = [
   },
 ];
 
+const UPDATED = CONTENT_UPDATED["/compare/ats-resume-checkers"];
+const UPDATED_LABEL = new Date(`${UPDATED}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+
 const ld = {
   "@context": "https://schema.org",
   "@graph": [
@@ -50,6 +55,8 @@ const ld = {
       name: "Best ATS Resume Checkers in 2026 — How to Choose",
       url: absoluteUrl("/compare/ats-resume-checkers"),
       description: "Six criteria for choosing an ATS resume checker.",
+      dateModified: UPDATED,
+      author: { "@type": "Person", name: SITE_AUTHOR.name, url: SITE_AUTHOR.url },
     },
     {
       "@type": "BreadcrumbList",
@@ -137,6 +144,13 @@ export default function CompareAtsCheckersPage() {
             </h1>
             <p className="mt-3.5 text-[16px] leading-[25px] text-[#4a4862] sm:text-[18px] sm:leading-7 lg:mt-5">
               Every resume tool says it beats the ATS. Many only count keywords. Here&apos;s what separates a useful check from a number.
+            </p>
+            <p className="mt-3 text-[13px] text-[#66647c] sm:text-[14px] lg:mt-[18px]">
+              By{" "}
+              <Link href="/about" className="lc-link hover:text-[#5440e8]">
+                {SITE_AUTHOR.name}
+              </Link>{" "}
+              · Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
             </p>
           </div>
 

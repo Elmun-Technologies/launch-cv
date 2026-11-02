@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { BlogPost } from "@/lib/cms/blog";
 import { BlogPoster } from "./blog-poster";
 
-export const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+export const fmtShortDate = (d: string) => new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 
 export function initials(name: string): string {
   return name
@@ -16,7 +16,8 @@ export function initials(name: string): string {
 /** Grid card: poster + date/reading time + title. */
 export function BlogCard({ post, variant = "card", headingLevel = "h3" }: { post: BlogPost; variant?: "card" | "related"; headingLevel?: "h2" | "h3" }) {
   const H = headingLevel;
-  const shown = post.dateModified || post.date;
+  // Publish date: the index is sorted by it, so the dates read in order.
+  const shown = post.date;
   return (
     <Link href={`/blog/${post.slug}`} className="lc-card lc-rise group block h-full rounded-[24px] p-1.5 text-[#121226] sm:rounded-[28px] sm:p-2">
       <BlogPoster post={post} size={variant} />
@@ -40,7 +41,8 @@ export function BlogCard({ post, variant = "card", headingLevel = "h3" }: { post
 
 /** Large "Latest" card at the top of the blog index. */
 export function FeaturedPost({ post }: { post: BlogPost }) {
-  const shown = post.dateModified || post.date;
+  // Publish date: the index is sorted by it, so the dates read in order.
+  const shown = post.date;
   return (
     <Link
       href={`/blog/${post.slug}`}

@@ -97,3 +97,25 @@ export function Chip({ children, tone = "soft" }: { children: ReactNode; tone?: 
   }[tone];
   return <span className={`inline-block rounded-full px-2.5 py-[5px] text-[12px] font-bold ${t}`}>{children}</span>;
 }
+
+/**
+ * Plus / minus badge for a `<details className="lc-faq group">` summary. Closed
+ * it shows "+" on a soft lilac disc; open it shows "−" on a dark disc with a
+ * white stroke. The vertical bar is hidden with plain CSS (globals.css), so it
+ * works in every motion mode and without JavaScript.
+ */
+export function FaqIcon({ size = "md" }: { size?: "sm" | "md" }) {
+  const box = size === "sm" ? "h-7 w-7" : "h-8 w-8 sm:h-[34px] sm:w-[34px]";
+  const icon = size === "sm" ? 14 : 16;
+  return (
+    <span
+      aria-hidden="true"
+      className={`lc-plus inline-flex ${box} flex-none items-center justify-center rounded-full bg-[#f1eff8] text-[#121226] group-hover:bg-[#e4dfff] group-open:bg-[#111118] group-open:text-white group-open:group-hover:bg-[#2a2940]`}
+    >
+      <svg width={icon} height={icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+        <path d="M5 12h14" />
+        <path className="lc-plus-v" d="M12 5v14" />
+      </svg>
+    </span>
+  );
+}

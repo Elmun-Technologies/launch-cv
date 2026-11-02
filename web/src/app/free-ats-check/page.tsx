@@ -4,7 +4,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { FreeAtsCheck } from "@/components/site/ats/free-ats-check";
-import { container, labelCls } from "@/components/site/ui";
+import { container, FaqIcon, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, FREE_ATS_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getFaqsFor } from "@/lib/cms/faqs";
@@ -360,14 +360,7 @@ export default async function FreeAtsCheckPage() {
             >
               <summary className="flex min-h-[44px] items-center justify-between gap-4">
                 <span className="text-[16px] font-bold lg:text-[18px]">{f.q}</span>
-                <span
-                  className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] text-[#121226] group-hover:bg-[#e4dfff] group-open:bg-[#111118] group-open:text-white"
-                  aria-hidden="true"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </span>
+                <FaqIcon />
               </summary>
               <p className="mt-2.5 text-[15px] leading-6 text-[#4a4862] lg:mt-3 lg:text-[16px] lg:leading-[26px]">{f.a}</p>
             </details>

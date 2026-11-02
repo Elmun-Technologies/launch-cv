@@ -65,7 +65,7 @@ const tools: Tool[] = [
     poster: "BUILD",
     posterColor: "#2a2840",
     widget: (
-      <span className="text-[13px] font-semibold lg:text-[14px]">
+      <span className="whitespace-nowrap text-[13px] font-semibold lg:text-[14px]">
         Classic · <b className="text-[#5440e8]">Modern</b> · Minimal · Executive
       </span>
     ),
@@ -174,7 +174,7 @@ export default function FeaturesPage() {
                     {t.poster}
                   </p>
                   <span className={`absolute right-3.5 top-3.5 rounded-full px-2.5 py-[5px] text-[12px] font-bold text-[#111118] ${t.free ? "bg-[#22b07d]" : "bg-white"}`}>{t.tag}</span>
-                  <div aria-hidden="true" className="lc-float absolute bottom-4 right-4 flex max-w-[78%] items-center gap-2.5 rounded-[18px] bg-white px-4 py-3 transition-transform duration-300 group-hover:-translate-y-1 lg:max-w-[70%]">
+                  <div aria-hidden="true" className="lc-float absolute bottom-4 right-4 flex max-w-[calc(100%-2rem)] items-center gap-2.5 rounded-[18px] bg-white px-4 py-3 transition-transform duration-300 group-hover:-translate-y-1">
                     {t.widget}
                   </div>
                 </div>
