@@ -219,7 +219,7 @@ export function AdminShell({
             </button>
             <SiteMark size={26} className="shrink-0 lg:hidden" />
             {pageTitle ? (
-              <h1 className="ml-1 truncate text-[15px] font-bold tracking-[-0.01em] text-[#4a4862] lg:ml-0">{pageTitle}</h1>
+              <p className="ml-1 truncate text-[15px] font-bold tracking-[-0.01em] text-[#4a4862] lg:ml-0">{pageTitle}</p>
             ) : null}
           </div>
           <div className="flex shrink-0 items-center gap-3">
@@ -235,7 +235,7 @@ export function AdminShell({
         </header>
 
         {/* Content */}
-        <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden px-4 pb-12 pt-6 sm:px-6 lg:px-9 lg:pt-8">{children}</main>
+        <main tabIndex={0} id="admin-main" aria-label={pageTitle ?? "Admin"} className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden focus:outline-none px-4 pb-12 pt-6 sm:px-6 lg:px-9 lg:pt-8">{children}</main>
       </div>
     </div>
   );

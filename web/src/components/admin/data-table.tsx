@@ -39,7 +39,7 @@ export function DataTable<T>({
   return (
     <div className="lc-card min-w-0 overflow-hidden rounded-[24px]">
       {/* Wide tables scroll inside the card, never the page. */}
-      <div className="relative overflow-x-auto">
+      <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label="Table">
         <table className="w-full border-collapse text-[14px]">
           <thead>
             <tr>

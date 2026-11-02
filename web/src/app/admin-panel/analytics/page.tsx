@@ -124,7 +124,7 @@ export default async function AdminAnalyticsPage() {
           {recentEvents.length === 0 ? (
             <p className="py-8 text-center text-[14px] text-[#66647c]">No events yet.</p>
           ) : (
-            <ul className="max-h-[420px] overflow-y-auto">
+            <ul className="max-h-[420px] overflow-y-auto" tabIndex={0} aria-label="Recent events">
               {recentEvents.map((e) => (
                 <li
                   key={e.id}

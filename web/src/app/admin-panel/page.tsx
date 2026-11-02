@@ -220,7 +220,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
           {recentUsers.length === 0 ? (
             <p className="px-6 py-10 text-center text-[14px] text-[#66647c]">No users yet.</p>
           ) : (
-            <div className="relative overflow-x-auto">
+            <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label="Recent sign-ups">
               <table className="w-full min-w-[520px] text-[14px]">
                 <thead>
                   <tr className="text-left text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">

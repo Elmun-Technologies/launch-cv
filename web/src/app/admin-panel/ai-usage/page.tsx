@@ -172,7 +172,7 @@ export default async function AdminAiUsagePage() {
             {byUser.length === 0 ? (
               <p className="py-6 text-center text-[14px] text-[#66647c]">No signed-in usage yet.</p>
             ) : (
-              <div className="relative overflow-x-auto">
+              <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label="Top users by cost">
                 <table className={tableCls}>
                   <thead>
                     <tr>

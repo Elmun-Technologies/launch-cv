@@ -98,7 +98,7 @@ export default async function SecurityPage() {
           canManage={can(admin.role, "roles")}
           permissions={
             <SectionCard title="What each role can do" flush>
-              <div className="relative overflow-x-auto">
+              <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label="Permissions by role">
                 <table className="w-full min-w-[560px] text-left text-[14px]">
                   <thead className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">
                     <tr>
