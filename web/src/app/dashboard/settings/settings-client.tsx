@@ -5,56 +5,64 @@ import { useState } from "react";
 import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
 import { PUBLIC_PLANS } from "@/lib/monetization";
+import {
+  Badge,
+  FormStatus,
+  PageHeader,
+  SettingsTabs,
+  btnSmDark,
+  btnSmSoft,
+  cardCls,
+  cardLeadCls,
+  cardTitleCls,
+  fieldLabelCls,
+  inlineLinkCls,
+  inputCls,
+} from "@/components/app/account/ui";
 import { AccountDataSection } from "./account-data-section";
 
 type Sub = { status: string; currentPeriodEnd: string | null; cancelAtPeriodEnd: boolean; lifetime: boolean } | null;
 type Msg = { ok: boolean; text: string } | null;
 
-function Card({ title, sub, children }: { title: string; sub?: string; children: React.ReactNode }) {
+function Card({ title, sub, children, className = "" }: { title: string; sub?: string; children: React.ReactNode; className?: string }) {
   return (
-    <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
-      <h2 className="text-[17px] font-semibold text-[#111111]">{title}</h2>
-      {sub ? <p className="mt-1 text-[14px] text-[#6B6B6B]">{sub}</p> : null}
-      <div className="mt-5">{children}</div>
+    <section className={`${cardCls} ${className}`}>
+      <h2 className={cardTitleCls}>{title}</h2>
+      {sub ? <p className={cardLeadCls}>{sub}</p> : null}
+      <div className="mt-4">{children}</div>
     </section>
   );
 }
 
-function Status({ msg }: { msg: Msg }) {
-  if (!msg) return null;
-  return (
-    <p role={msg.ok ? "status" : "alert"} className={`text-[14px] ${msg.ok ? "text-[#0E7A48]" : "text-[#B42318]"}`}>
-      {msg.text}
-    </p>
-  );
-}
-
 function PasswordInput({
+  id,
   value,
   onChange,
   autoComplete,
 }: {
+  id: string;
   value: string;
   onChange: (v: string) => void;
   autoComplete: string;
 }) {
   const [show, setShow] = useState(false);
   return (
-    <div className="relative">
+    <div className="relative mt-1.5">
       <input
+        id={id}
         type={show ? "text" : "password"}
         autoComplete={autoComplete}
-        className="soha-input pr-10"
+        className={`${inputCls} pr-12`}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
       <button
         type="button"
         aria-label={show ? "Hide password" : "Show password"}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6E6E6A] hover:text-[#111111]"
+        className="absolute right-0.5 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-xl text-[#66647c] transition-colors hover:text-[#121226] focus-visible:outline-offset-0!"
         onClick={() => setShow((s) => !s)}
       >
-        {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        {show ? <EyeOff className="h-[18px] w-[18px]" aria-hidden /> : <Eye className="h-[18px] w-[18px]" aria-hidden />}
       </button>
     </div>
   );
@@ -132,117 +140,132 @@ export function SettingsClient({
   }
 
   return (
-    <div className="mx-auto flex max-w-[720px] flex-col gap-5">
-      <div>
-        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">Settings</h1>
-        <p className="mt-1 text-[15px] text-[#6B6B6B]">Your profile, sign-in and data.</p>
-      </div>
+    <div className="mx-auto w-full max-w-[1160px] pb-12">
+      <PageHeader title="Settings" lead="Your profile, sign-in and data." />
+      <SettingsTabs current="/dashboard/settings" />
 
-      <Card title="Profile">
-        <form onSubmit={saveName} className="flex flex-col gap-4">
-          <label>
-            <span className="soha-label mb-1.5">Full name</span>
-            <input
-              className="soha-input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              maxLength={120}
-              autoComplete="name"
-            />
-          </label>
-          <div>
-            <span className="soha-label mb-1.5">Email</span>
-            <div className="flex h-[42px] items-center justify-between gap-3 rounded-[10px] border border-[#EEEEEB] bg-[#FAFAF9] px-3 text-[14px] text-[#3F3F3F]">
-              <span className="truncate">{userEmail}</span>
-              {emailVerified ? (
-                <span className="inline-flex shrink-0 items-center gap-1 text-[13px] text-[#0E7A48]">
-                  <Check className="h-3.5 w-3.5" aria-hidden /> Verified
-                </span>
-              ) : (
-                <span className="shrink-0 text-[13px] text-[#9C5200]">Not verified</span>
-              )}
+      <div className="mt-5 grid items-start gap-4 sm:gap-5 lg:grid-cols-2">
+        <Card title="Profile">
+          <form onSubmit={saveName} className="flex flex-col gap-3.5">
+            <div>
+              <label htmlFor="settings-name" className={fieldLabelCls}>
+                Full name
+              </label>
+              <input
+                id="settings-name"
+                className={`${inputCls} mt-1.5`}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                maxLength={120}
+                autoComplete="name"
+              />
             </div>
-            <p className="mt-1.5 text-[13px] text-[#6E6E6A]">
-              To change your email, write to{" "}
-              <a href="mailto:support@launch-cv.com" className="text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-                support@launch-cv.com
-              </a>
-              .
+            <div>
+              <p className={`${fieldLabelCls} flex items-center justify-between gap-3`}>
+                Email
+                {emailVerified ? (
+                  <Badge tone="green">
+                    <Check className="-mt-px mr-1 inline h-3 w-3" aria-hidden strokeWidth={3} />
+                    Verified
+                  </Badge>
+                ) : (
+                  <Badge tone="amber">Not verified</Badge>
+                )}
+              </p>
+              <p
+                className="mt-1.5 flex h-12 items-center truncate rounded-[14px] border-[1.5px] border-[#e2e0ea] bg-[#f7f6fb] px-4 text-[15px] text-[#121226]"
+              >
+                <span className="truncate">{userEmail}</span>
+              </p>
+              <p className="mt-1.5 text-[13px] leading-[19px] text-[#66647c]">
+                To change your email, write to{" "}
+                <a href="mailto:support@launch-cv.com" className={inlineLinkCls}>
+                  support@launch-cv.com
+                </a>
+                .
+              </p>
+            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <button type="submit" disabled={savingName} className={btnSmDark}>
+                {savingName ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                Save changes
+              </button>
+              <FormStatus msg={nameMsg} />
+            </div>
+          </form>
+        </Card>
+
+        <Card
+          title="Password"
+          sub={havePassword ? "Change the password you use with your email." : "Add a password so you can also sign in with your email."}
+        >
+          {googleLinked ? (
+            <p className="mb-4 flex items-center gap-2.5 rounded-2xl bg-[#f7f6fb] px-4 py-3 text-[14px] text-[#24223a]">
+              <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#dcf5ea] text-[#0b7a4f]">
+                <Check className="h-3.5 w-3.5" aria-hidden strokeWidth={3} />
+              </span>
+              Google sign-in is connected.
+            </p>
+          ) : null}
+          <form onSubmit={savePassword} className="flex flex-col gap-3.5">
+            {havePassword ? (
+              <div>
+                <label htmlFor="settings-pw-current" className={fieldLabelCls}>
+                  Current password
+                </label>
+                <PasswordInput id="settings-pw-current" value={currentPassword} onChange={setCurrentPassword} autoComplete="current-password" />
+              </div>
+            ) : null}
+            <div>
+              <label htmlFor="settings-pw-new" className={fieldLabelCls}>
+                {havePassword ? "New password" : "Password"}
+              </label>
+              <PasswordInput id="settings-pw-new" value={newPassword} onChange={setNewPassword} autoComplete="new-password" />
+            </div>
+            <div>
+              <label htmlFor="settings-pw-repeat" className={fieldLabelCls}>
+                Repeat it
+              </label>
+              <PasswordInput id="settings-pw-repeat" value={confirmPassword} onChange={setConfirmPassword} autoComplete="new-password" />
+            </div>
+            <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <button
+                type="submit"
+                disabled={savingPw || !newPassword || (havePassword && !currentPassword)}
+                className={btnSmDark}
+              >
+                {savingPw ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                {havePassword ? "Update password" : "Set password"}
+              </button>
+              <FormStatus msg={pwMsg} />
+            </div>
+          </form>
+        </Card>
+
+        <section className={`${cardCls} flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 lg:col-span-2`}>
+          <div className="min-w-0">
+            <h2 className={cardTitleCls}>Plan</h2>
+            <p className={cardLeadCls}>
+              {!paid ? (
+                <>No plan yet. Plans start at {PUBLIC_PLANS.starter.priceDisplay}/month.</>
+              ) : subscription?.lifetime ? (
+                <>Lifetime access.</>
+              ) : subscription?.currentPeriodEnd ? (
+                <>
+                  {renews ? "Renews" : "Active until"} {fmtDate(subscription.currentPeriodEnd)}.
+                </>
+              ) : (
+                <>Active.</>
+              )}
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <button type="submit" disabled={savingName} className="soha-btn-primary inline-flex items-center gap-2 disabled:opacity-60">
-              {savingName ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-              Save
-            </button>
-            <Status msg={nameMsg} />
-          </div>
-        </form>
-      </Card>
-
-      <Card
-        title="Sign-in"
-        sub={havePassword ? "Change the password you use with your email." : "Add a password so you can also sign in with your email."}
-      >
-        {googleLinked ? (
-          <p className="mb-5 flex items-center gap-2 rounded-[10px] border border-[#EEEEEB] bg-[#FAFAF9] px-3 py-2.5 text-[14px] text-[#3F3F3F]">
-            <Check className="h-4 w-4 shrink-0 text-[#0E7A48]" aria-hidden />
-            Google sign-in is connected.
-          </p>
-        ) : null}
-        <form onSubmit={savePassword} className="flex flex-col gap-4">
-          {havePassword ? (
-            <label>
-              <span className="soha-label mb-1.5">Current password</span>
-              <PasswordInput value={currentPassword} onChange={setCurrentPassword} autoComplete="current-password" />
-            </label>
-          ) : null}
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label>
-              <span className="soha-label mb-1.5">{havePassword ? "New password" : "Password"}</span>
-              <PasswordInput value={newPassword} onChange={setNewPassword} autoComplete="new-password" />
-            </label>
-            <label>
-              <span className="soha-label mb-1.5">Repeat it</span>
-              <PasswordInput value={confirmPassword} onChange={setConfirmPassword} autoComplete="new-password" />
-            </label>
-          </div>
-          <div className="flex items-center gap-4">
-            <button
-              type="submit"
-              disabled={savingPw || !newPassword || (havePassword && !currentPassword)}
-              className="soha-btn-primary inline-flex items-center gap-2 disabled:opacity-60"
-            >
-              {savingPw ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-              {havePassword ? "Update password" : "Set password"}
-            </button>
-            <Status msg={pwMsg} />
-          </div>
-        </form>
-      </Card>
-
-      <Card title="Plan">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-[14px] text-[#3F3F3F]">
-            {!paid ? (
-              <>No plan yet. Plans start at {PUBLIC_PLANS.starter.priceDisplay}/month.</>
-            ) : subscription?.lifetime ? (
-              <>Lifetime access.</>
-            ) : subscription?.currentPeriodEnd ? (
-              <>
-                {renews ? "Renews" : "Active until"} {fmtDate(subscription.currentPeriodEnd)}.
-              </>
-            ) : (
-              <>Active.</>
-            )}
-          </p>
-          <Link href="/dashboard/settings/subscription" className="soha-btn-secondary shrink-0 text-center">
+          <Link href="/dashboard/settings/subscription" className={`${btnSmSoft} shrink-0 self-start sm:self-auto`}>
             {paid ? "Manage plan" : "See plans"}
           </Link>
-        </div>
-      </Card>
+        </section>
 
-      <AccountDataSection hasPassword={havePassword} email={userEmail} hasActiveSubscription={!!renews} />
+        <AccountDataSection hasPassword={havePassword} email={userEmail} hasActiveSubscription={!!renews} />
+      </div>
     </div>
   );
 }

@@ -2,12 +2,25 @@
 
 import Link from "next/link";
 import { useState, useMemo, useCallback } from "react";
-import {
-  Search, ChevronDown, ExternalLink, RotateCcw,
-  Check, X, AlertTriangle, Plus, Building2,
-} from "lucide-react";
+import { Search, ExternalLink, RotateCcw, Check, X, AlertTriangle, Plus, Building2, Target } from "lucide-react";
 import { CopyButton } from "@/components/copy-button";
 import { COMPANIES, searchCompanies, type CompanyRequirement } from "@/lib/company-requirements";
+import {
+  ErrorNote,
+  FilterChip,
+  InitialTile,
+  PageHeader,
+  SearchField,
+  SelectField,
+  appBtnGhost,
+  appBtnPrimary,
+  appBtnSoft,
+  fieldCls,
+  focusCls,
+  labelCls,
+  sectionLabelCls,
+  textareaCls,
+} from "@/components/app/jobs/ui";
 
 type Resume = { id: string; title: string; updatedAt: string };
 
@@ -79,42 +92,37 @@ const TIERS = [
 
 const TIER_LABEL: Record<string, string> = Object.fromEntries(TIERS.map((t) => [t.key, t.label]));
 
-const TIER_COLORS: Record<string, string> = {
-  faang: "bg-[#F5F5F3] text-[#3F3F3F]",
-  tech: "bg-[#F5F5F3] text-[#3F3F3F]",
-  finance: "bg-[#F5F5F3] text-[#3F3F3F]",
-  consulting: "bg-[#F5F5F3] text-[#3F3F3F]",
-  startup: "bg-[#F5F5F3] text-[#3F3F3F]",
-};
+const cardCls = "lc-card rounded-[26px] p-5 sm:px-[26px] sm:py-[22px]";
+const h2Cls = "text-[18px] font-extrabold tracking-[-0.01em] text-[#121226]";
 
 function ScoreGauge({ score }: { score: number }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (score / 100) * circumference;
-  const color =
-    score >= 80 ? "#10B981" : score >= 60 ? "#F59E0B" : "#EF4444";
+  const color = score >= 80 ? "#0b7a4f" : score >= 60 ? "#a15c00" : "#c42b30";
 
   return (
-    <div className="relative flex h-36 w-36 items-center justify-center">
-      <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120">
+    <div className="relative flex h-[112px] w-[112px] shrink-0 items-center justify-center rounded-full bg-white p-[5px]" role="img" aria-label={`Match score ${score} out of 100`}>
+      <svg className="h-full w-full -rotate-90" viewBox="0 0 120 120" aria-hidden="true">
+        <circle cx="60" cy="60" r={radius} fill="none" stroke="#efedf7" strokeWidth="10" />
         <circle
-          cx="60" cy="60" r={radius}
-          fill="none" stroke="#F3F4F6" strokeWidth="10"
-        />
-        <circle
-          cx="60" cy="60" r={radius}
-          fill="none" stroke={color} strokeWidth="10"
+          cx="60"
+          cy="60"
+          r={radius}
+          fill="none"
+          stroke={color}
+          strokeWidth="10"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className="transition-[stroke-dashoffset] duration-1000 ease-out"
+          className="transition-[stroke-dashoffset] duration-1000 ease-out motion-reduce:transition-none"
         />
       </svg>
-      <div className="absolute flex flex-col items-center">
-        <span className="text-[32px] font-semibold tracking-tight" style={{ color }}>
+      <div className="absolute flex flex-col items-center" aria-hidden="true">
+        <span className="text-[30px] font-extrabold leading-none tracking-[-0.03em]" style={{ color }}>
           {score}
         </span>
-        <span className="text-[11px] font-medium text-[#6E6E6A]">/ 100</span>
+        <span className="mt-0.5 text-[11px] font-semibold text-[#66647c]">/ 100</span>
       </div>
     </div>
   );
@@ -122,36 +130,36 @@ function ScoreGauge({ score }: { score: number }) {
 
 function StatusBadge({ status }: { status: "found" | "missing" | "partial" }) {
   const map = {
-    found: "bg-emerald-50 text-emerald-600",
-    missing: "bg-red-50 text-red-500",
-    partial: "bg-amber-50 text-amber-600",
+    found: "bg-[#dcf5ea] text-[#0b4f35]",
+    missing: "bg-[#fbe2e3] text-[#a3222a]",
+    partial: "bg-[#fdf0d5] text-[#7a4600]",
   };
   const icons = {
-    found: <Check className="mr-1 h-3 w-3" />,
-    missing: <X className="mr-1 h-3 w-3" />,
-    partial: <AlertTriangle className="mr-1 h-3 w-3" />,
+    found: <Check className="mr-1 h-3 w-3" aria-hidden />,
+    missing: <X className="mr-1 h-3 w-3" aria-hidden />,
+    partial: <AlertTriangle className="mr-1 h-3 w-3" aria-hidden />,
   };
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize ${map[status]}`}>
-      {icons[status]}{status}
+    <span className={`inline-flex items-center rounded-full px-2.5 py-[5px] text-[12px] font-bold capitalize ${map[status]}`}>
+      {icons[status]}
+      {status}
     </span>
   );
 }
 
 function SkeletonBlock() {
   return (
-    <div className="animate-pulse space-y-6 rounded-2xl border border-[#EEEEEB] bg-white p-6">
-      <div className="flex items-center gap-6">
-        <div className="h-36 w-36 rounded-full bg-[#F5F5F3]" />
+    <div className="flex flex-col gap-4 motion-safe:animate-pulse" aria-hidden="true">
+      <div className="flex items-center gap-5 rounded-[26px] bg-[#c9c0ff] p-6">
+        <div className="h-[112px] w-[112px] rounded-full bg-white/60" />
         <div className="flex-1 space-y-3">
-          <div className="h-5 w-48 rounded bg-[#F5F5F3]" />
-          <div className="h-4 w-72 rounded bg-[#F5F5F3]" />
-          <div className="h-4 w-56 rounded bg-[#F5F5F3]" />
+          <div className="h-4 w-40 rounded-full bg-white/60" />
+          <div className="h-5 w-full max-w-[360px] rounded-full bg-white/60" />
         </div>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2.5 rounded-[26px] bg-white p-6">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-10 rounded-xl bg-[#FAFAF9]" />
+          <div key={i} className="h-10 rounded-[14px] bg-[#f1eff8]" />
         ))}
       </div>
     </div>
@@ -219,379 +227,371 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
     setBulletRewrites([]);
   };
 
-  return (
-    <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
-      {/* Header */}
-      <div>
-        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
-          Company matcher <span className="text-[#8A8A86]">— tailor your resume to one employer.</span>
-        </h1>
-        <p className="mt-1 text-[15px] text-[#6B6B6B]">
-          Pick a company to see which keywords and values your resume already covers, and what to add.
-        </p>
-      </div>
+  /** Honest roll-ups of what the analysis returned (no invented sub-scores). */
+  const summary = useMemo(() => {
+    if (!result) return null;
+    const found = result.keywordGaps.filter((k) => k.status === "found").length;
+    const fit = result.cultureFit.length
+      ? Math.round((result.cultureFit.reduce((a, c) => a + c.score, 0) / result.cultureFit.length) * 10) / 10
+      : null;
+    return { found, total: result.keywordGaps.length, fit, tips: result.formatRecommendations.length };
+  }, [result]);
 
-      {/* Resume Selector */}
-      <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
-        <label htmlFor="matcher-resume" className="soha-label mb-1.5">
-          Resume to compare
-        </label>
-        <div className="relative w-full max-w-sm">
-          <select
-            id="matcher-resume"
-            value={selectedResumeId}
-            onChange={(e) => setSelectedResumeId(e.target.value)}
-            className="h-11 w-full appearance-none rounded-xl border border-[#E5E5E2] bg-white pl-4 pr-10 text-[13px] font-medium text-[#111111] transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
-          >
-            {resumes.length === 0 && <option value="">No resumes available</option>}
-            {resumes.map((r) => (
-              <option key={r.id} value={r.id}>{r.title}</option>
-            ))}
-          </select>
-          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" />
-        </div>
-      </div>
+  return (
+    <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-5 text-[#121226] sm:gap-6">
+      <PageHeader
+        title="Company matcher"
+        lead="Pick a company to see which keywords and values your resume already covers, and what to add."
+        actions={
+          <div className="w-full md:w-[280px]">
+            <label htmlFor="matcher-resume" className={labelCls}>
+              Resume to compare
+            </label>
+            <SelectField id="matcher-resume" value={selectedResumeId} onChange={(e) => setSelectedResumeId(e.target.value)}>
+              {resumes.length === 0 && <option value="">No resumes available</option>}
+              {resumes.map((r) => (
+                <option key={r.id} value={r.id}>
+                  {r.title}
+                </option>
+              ))}
+            </SelectField>
+          </div>
+        }
+      />
 
       {error ? (
-        <p role="alert" className="rounded-xl border border-[#F6D3CD] bg-[#FDF2F0] px-4 py-3 text-[14px] text-[#B42318]">
+        <ErrorNote>
           {error.error}{" "}
           {error.upgrade ? (
-            <Link href="/dashboard/settings/subscription" className="font-medium underline">
+            <Link href="/dashboard/settings/subscription" className="font-bold underline underline-offset-2">
               See plans
             </Link>
           ) : null}
-        </p>
+        </ErrorNote>
       ) : null}
 
-      {/* Analysis Results Panel */}
-      {(loading || result) && selectedCompany && (
-        <div className="space-y-6">
-          {loading ? (
-            <SkeletonBlock />
-          ) : result ? (
-            <>
-              {/* Match Score */}
-              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <div className="flex flex-col items-center gap-6 sm:flex-row">
-                  <ScoreGauge score={result.score} />
-                  <div className="flex-1">
-                    <h2 className="text-[20px] font-semibold text-[#111111]">
-                      {selectedCompany.name} Match
-                    </h2>
-                    <p className="mt-1 text-[13px] text-[#6B6B6B]">
-                      {result.score >= 80
-                        ? "Strong match. Your resume already covers most of what this company looks for."
-                        : result.score >= 60
-                          ? "A good base. The gaps below would make it a stronger match."
-                          : "Several gaps. Start with the recommendations below."}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <span className={`rounded-full px-3 py-1 text-[11px] font-semibold ${TIER_COLORS[selectedCompany.tier]}`}>
-                        {TIER_LABEL[selectedCompany.tier] ?? selectedCompany.tier}
-                      </span>
-                      <span className="rounded-full bg-[#FAFAF9] px-3 py-1 text-[11px] font-semibold text-[#6B6B6B]">
-                        {selectedCompany.industry}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
+        {/* COMPANY PICKER — on phones it steps aside while a result is open */}
+        <section aria-label="Companies" className={`${cardCls} ${selectedCompany ? "hidden lg:block" : ""}`}>
+          <SearchField
+            value={searchQuery}
+            onChange={setSearchQuery}
+            label="Search companies"
+            placeholder="Search companies, industries…"
+            soft
+          />
+          <div className="mt-3 flex flex-wrap gap-1.5" role="group" aria-label="Company type">
+            {TIERS.map((tier) => (
+              <FilterChip key={tier.key} soft pressed={activeTier === tier.key} onClick={() => setActiveTier(tier.key)}>
+                {tier.label}
+              </FilterChip>
+            ))}
+          </div>
 
-              {/* Keyword Gaps */}
-              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Keywords</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr className="border-b border-[#EEEEEB] text-[11px] uppercase tracking-wider text-[#6E6E6A]">
-                        <th className="pb-3 pr-4 font-semibold">Keyword</th>
-                        <th className="pb-3 pr-4 font-semibold">Status</th>
-                        <th className="pb-3 font-semibold">Suggestion</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#EEEEEB]">
-                      {result.keywordGaps.map((gap, i) => (
-                        <tr key={i} className="text-[13px]">
-                          <td className="py-3 pr-4 font-medium text-[#111111]">{gap.keyword}</td>
-                          <td className="py-3 pr-4"><StatusBadge status={gap.status} /></td>
-                          <td className="py-3 text-[#6B6B6B]">{gap.suggestion}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-
-              {/* Culture Fit */}
-              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Culture fit</h3>
-                <div className="space-y-4">
-                  {result.cultureFit.map((item, i) => (
-                    <div key={i}>
-                      <div className="mb-1.5 flex items-center justify-between text-[13px]">
-                        <span className="font-medium text-[#3F3F3F]">{item.aspect}</span>
-                        <span className="font-semibold text-[#111111]">{item.score}/10</span>
-                      </div>
-                      <div className="h-2.5 overflow-hidden rounded-full bg-[#F5F5F3]">
-                        <div
-                          className="h-full rounded-full transition-all duration-700 ease-out"
-                          style={{
-                            width: `${item.score * 10}%`,
-                            background: `linear-gradient(90deg, #2563EB ${Math.max(0, 100 - item.score * 12)}%, ${item.score >= 7 ? "#10B981" : item.score >= 5 ? "#F59E0B" : "#EF4444"})`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Format Recommendations */}
-              <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Format</h3>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {result.formatRecommendations.map((rec, i) => (
-                    <div
-                      key={i}
-                      className={`flex items-center gap-3 rounded-xl border p-4 text-[13px] ${
-                        rec.done
-                          ? "border-emerald-100 bg-emerald-50/50"
-                          : "border-[#EEEEEB] bg-[#FAFAF9]/50"
+          {filtered.length === 0 ? (
+            <div className="mt-3 rounded-[16px] bg-[#f7f6fb] px-4 py-8 text-center">
+              <Search className="mx-auto h-6 w-6 text-[#66647c]" aria-hidden />
+              <p className="mt-2 text-[14px] font-bold">No companies found</p>
+              <p className="mt-0.5 text-[13px] text-[#66647c]">Try adjusting your search or filters</p>
+            </div>
+          ) : (
+            <ul className="mt-3 flex flex-col gap-1.5 lg:max-h-[560px] lg:overflow-y-auto lg:pr-1">
+              {filtered.map((company) => {
+                const on = selectedCompany?.id === company.id;
+                return (
+                  <li key={company.id}>
+                    <button
+                      type="button"
+                      onClick={() => analyzeCompany(company)}
+                      disabled={!selectedResumeId || loading}
+                      aria-current={on ? "true" : undefined}
+                      className={`flex w-full items-center gap-3 rounded-[16px] p-3 text-left transition-colors motion-reduce:transition-none disabled:cursor-not-allowed focus-visible:rounded-[16px]! ${focusCls} ${
+                        on ? "bg-[#111118] text-white" : "bg-[#f7f6fb] text-[#121226] hover:bg-[#e4dfff] disabled:opacity-60"
                       }`}
                     >
-                      <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${rec.done ? "bg-emerald-500 text-white" : "bg-[#EEEEEB] text-[#6E6E6A]"}`}>
-                        {rec.done ? <Check className="h-3.5 w-3.5" /> : <span className="text-[10px] font-semibold">{i + 1}</span>}
-                      </div>
-                      <span className={rec.done ? "text-emerald-700" : "text-[#3F3F3F]"}>{rec.label}</span>
-                    </div>
-                  ))}
+                      <InitialTile name={company.logo} size={36} tone={on ? "bg-[#5440e8] text-white!" : "bg-white"} />
+                      <span className="min-w-0 flex-1">
+                        <span className="sr-only">Check my match: </span>
+                        <b className="block truncate text-[15px] font-bold">{company.name}</b>
+                        <span className={`block truncate text-[12px] ${on ? "text-[#c9c7d8]" : "text-[#66647c]"}`}>
+                          {[TIER_LABEL[company.tier] ?? company.tier, company.industry, company.culture[0]].filter(Boolean).join(" · ")}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          <div className="mt-4 border-t border-[#e2e0ea] pt-4">
+            {!showCustom ? (
+              <button
+                type="button"
+                onClick={() => setShowCustom(true)}
+                className={`flex min-h-12 w-full items-center gap-3 rounded-[16px] border-[1.5px] border-dashed border-[#c9c0ff] px-3 py-2.5 text-left text-[#3a2bb8] transition-colors hover:border-[#5440e8] hover:bg-[#f7f6fb] motion-reduce:transition-none focus-visible:rounded-[16px]! ${focusCls}`}
+              >
+                <Plus className="h-5 w-5 shrink-0" aria-hidden />
+                <span>
+                  <span className="block text-[14px] font-bold">Another company</span>
+                  <span className="block text-[12px] text-[#4a4862]">Paste a job description</span>
+                </span>
+              </button>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <p className={`${sectionLabelCls} flex items-center gap-2`}>
+                  <Building2 className="h-4 w-4 text-[#5440e8]" aria-hidden /> Another company
+                </p>
+                <label>
+                  <span className={labelCls}>Company name</span>
+                  <input type="text" value={customName} onChange={(e) => setCustomName(e.target.value)} className={fieldCls} />
+                </label>
+                <label>
+                  <span className={labelCls}>Industry</span>
+                  <input type="text" value={customIndustry} onChange={(e) => setCustomIndustry(e.target.value)} className={fieldCls} />
+                </label>
+                <label>
+                  <span className={labelCls}>
+                    Job post <span className="font-normal text-[#66647c]">(optional)</span>
+                  </span>
+                  <textarea value={customJD} onChange={(e) => setCustomJD(e.target.value)} rows={4} className={`${textareaCls} resize-none`} />
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={analyzeCustom}
+                    disabled={!selectedResumeId || !customName.trim() || loading}
+                    className={`${appBtnPrimary} flex-1`}
+                  >
+                    Check my match
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCustom(false);
+                      setCustomName("");
+                      setCustomIndustry("");
+                      setCustomJD("");
+                    }}
+                    className={appBtnGhost}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
+            )}
+          </div>
+        </section>
+
+        {/* RESULTS */}
+        <div className={`flex flex-col gap-4 ${selectedCompany ? "" : "hidden lg:flex"}`}>
+          {!selectedCompany ? (
+            <div className="flex flex-col items-center rounded-[26px] border-2 border-dashed border-[#c9c0ff] px-6 py-16 text-center">
+              <span aria-hidden="true" className="inline-flex h-16 w-16 items-center justify-center rounded-[20px] bg-[#5440e8] text-white">
+                <Target className="h-8 w-8" strokeWidth={1.8} />
+              </span>
+              <h2 className="mt-5 text-[22px] font-extrabold tracking-[-0.02em]">Pick a company</h2>
+              <p className="mt-2 max-w-[400px] text-[15px] leading-[1.6] text-[#4a4862]">
+                Choose one on the left, or add another company with its job post. Your match shows up here.
+              </p>
+            </div>
+          ) : loading ? (
+            <>
+              <p role="status" className="sr-only">Checking your match with {selectedCompany.name}…</p>
+              <SkeletonBlock />
+            </>
+          ) : result && summary ? (
+            <>
+              {/* Verdict */}
+              <section className="flex flex-col items-start gap-5 rounded-[26px] bg-[#5440e8] p-6 text-white sm:flex-row sm:items-center sm:gap-[22px]">
+                <ScoreGauge score={result.score} />
+                <div className="min-w-0">
+                  <h2 className="break-words text-[13px] font-bold uppercase tracking-[0.08em] text-[#e4dfff]">{selectedCompany.name} match</h2>
+                  <p className="mt-1.5 text-[20px] font-extrabold leading-[1.3] tracking-[-0.01em] sm:text-[22px] sm:leading-[27px]">
+                    {result.score >= 80
+                      ? "Strong match. Your resume already covers most of what this company looks for."
+                      : result.score >= 60
+                        ? "A good base. The gaps below would make it a stronger match."
+                        : "Several gaps. Start with the recommendations below."}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="rounded-full bg-white/15 px-2.5 py-[5px] text-[12px] font-bold">
+                      {TIER_LABEL[selectedCompany.tier] ?? selectedCompany.tier}
+                    </span>
+                    {selectedCompany.industry ? (
+                      <span className="rounded-full bg-white/15 px-2.5 py-[5px] text-[12px] font-bold">{selectedCompany.industry}</span>
+                    ) : null}
+                  </div>
+                </div>
+              </section>
+
+              {/* Summary + advice */}
+              <section className={cardCls} aria-label="Summary">
+                <dl className="grid grid-cols-1 gap-2.5 min-[420px]:grid-cols-3">
+                  <div className="rounded-[18px] bg-[#f7f6fb] p-4">
+                    <dt className="text-[13px] text-[#4a4862]">Keywords found</dt>
+                    <dd className="mt-0.5 text-[26px] font-extrabold tabular-nums tracking-[-0.02em]">
+                      {summary.total ? `${summary.found}/${summary.total}` : "—"}
+                    </dd>
+                  </div>
+                  <div className="rounded-[18px] bg-[#f7f6fb] p-4">
+                    <dt className="text-[13px] text-[#4a4862]">Culture fit</dt>
+                    <dd className="mt-0.5 text-[26px] font-extrabold tabular-nums tracking-[-0.02em]">
+                      {summary.fit !== null ? (
+                        <>
+                          {summary.fit}
+                          <span className="text-[15px] font-bold text-[#66647c]">/10</span>
+                        </>
+                      ) : (
+                        "—"
+                      )}
+                    </dd>
+                  </div>
+                  <div className="rounded-[18px] bg-[#f7f6fb] p-4">
+                    <dt className="text-[13px] text-[#4a4862]">Format tips</dt>
+                    <dd className="mt-0.5 text-[26px] font-extrabold tabular-nums tracking-[-0.02em]">{summary.tips}</dd>
+                  </div>
+                </dl>
+                {result.advice.length > 0 && (
+                  <>
+                    <h3 className={`${sectionLabelCls} mb-2 mt-5`}>Overall advice</h3>
+                    <ol className="flex flex-col gap-2.5">
+                      {result.advice.map((tip, i) => (
+                        <li key={i} className="flex gap-3 text-[15px] leading-[1.55] text-[#24223a]">
+                          <span aria-hidden="true" className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#e4dfff] text-[12px] font-extrabold text-[#3a2bb8]">
+                            {i + 1}
+                          </span>
+                          <span>{tip}</span>
+                        </li>
+                      ))}
+                    </ol>
+                  </>
+                )}
+              </section>
+
+              {/* Keyword Gaps */}
+              {result.keywordGaps.length > 0 && (
+                <section className={cardCls}>
+                  <h2 className={h2Cls}>Keywords</h2>
+                  <div className="relative mt-3 overflow-x-auto">
+                    <table className="w-full min-w-[440px] text-left">
+                      <thead>
+                        <tr className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">
+                          <th scope="col" className="pb-2.5 pr-4 font-bold">Keyword</th>
+                          <th scope="col" className="pb-2.5 pr-4 font-bold">Status</th>
+                          <th scope="col" className="pb-2.5 font-bold">Suggestion</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.keywordGaps.map((gap, i) => (
+                          <tr key={i} className="border-t border-[#e2e0ea] align-top text-[14px]">
+                            <td className="py-3 pr-4 font-bold">{gap.keyword}</td>
+                            <td className="py-3 pr-4">
+                              <StatusBadge status={gap.status} />
+                            </td>
+                            <td className="py-3 leading-[1.5] text-[#4a4862]">{gap.suggestion}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              )}
+
+              {/* Culture Fit */}
+              {result.cultureFit.length > 0 && (
+                <section className={cardCls}>
+                  <h2 className={h2Cls}>Culture fit</h2>
+                  <ul className="mt-4 flex flex-col gap-4">
+                    {result.cultureFit.map((item, i) => (
+                      <li key={i}>
+                        <div className="mb-1.5 flex items-center justify-between gap-3 text-[14px]">
+                          <span className="font-semibold text-[#24223a]">{item.aspect}</span>
+                          <span className="shrink-0 font-extrabold tabular-nums">{item.score}/10</span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-[#efedf7]" aria-hidden="true">
+                          <div
+                            className={`h-full rounded-full transition-[width] duration-700 ease-out motion-reduce:transition-none ${
+                              item.score >= 7 ? "bg-[#5440e8]" : item.score >= 5 ? "bg-[#f2a91f]" : "bg-[#c42b30]"
+                            }`}
+                            style={{ width: `${Math.max(0, Math.min(10, item.score)) * 10}%` }}
+                          />
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {/* Format Recommendations */}
+              {result.formatRecommendations.length > 0 && (
+                <section className={cardCls}>
+                  <h2 className={h2Cls}>Format</h2>
+                  <ul className="mt-3 grid gap-2.5 sm:grid-cols-2">
+                    {result.formatRecommendations.map((rec, i) => (
+                      <li
+                        key={i}
+                        className={`flex items-center gap-3 rounded-[16px] p-4 text-[14px] leading-[1.5] ${rec.done ? "bg-[#dcf5ea] text-[#0b4f35]" : "bg-[#f7f6fb] text-[#24223a]"}`}
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${rec.done ? "bg-[#0b7a4f] text-white" : "bg-white text-[#4a4862]"}`}
+                        >
+                          {rec.done ? <Check className="h-3.5 w-3.5" /> : <span className="text-[11px] font-extrabold">{i + 1}</span>}
+                        </span>
+                        <span>{rec.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
 
               {/* Bullet Rewrites */}
               {bulletRewrites.length > 0 && (
-                <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Bullet rewrites</h3>
-                  <div className="space-y-4">
+                <section className={cardCls}>
+                  <h2 className={h2Cls}>Bullet rewrites</h2>
+                  <ul className="mt-3 flex flex-col gap-4">
                     {bulletRewrites.map((bullet, i) => (
-                      <div key={i} className="rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
-                        <div className="grid gap-4 sm:grid-cols-2">
-                          <div>
-                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Original</span>
-                            <p className="text-[13px] leading-relaxed text-[#6E6E6A] line-through decoration-red-300">
-                              {bullet.original}
-                            </p>
+                      <li key={i}>
+                        <div className="grid gap-2.5 sm:grid-cols-2">
+                          <div className="rounded-[16px] bg-[#f7f6fb] p-4">
+                            <p className="text-[12px] font-bold uppercase tracking-[0.04em] text-[#66647c]">Original</p>
+                            <p className="mt-1.5 text-[14px] leading-[1.5] text-[#4a4862]">{bullet.original}</p>
                           </div>
-                          <div>
-                            <span className="mb-1.5 block text-[11px] font-semibold uppercase tracking-wider text-[#0E7A48]">Improved</span>
-                            <p className="text-[13px] font-medium leading-relaxed text-[#111111]">
-                              {bullet.improved}
-                            </p>
+                          <div className="rounded-[16px] bg-[#e4dfff] p-4">
+                            <p className="text-[12px] font-bold uppercase tracking-[0.04em] text-[#3a2bb8]">Improved</p>
+                            <p className="mt-1.5 text-[14px] font-semibold leading-[1.5] text-[#121226]">{bullet.improved}</p>
                           </div>
                         </div>
-                        <div className="mt-3 flex justify-end">
-<CopyButton text={bullet.improved} label="Copy rewrite" />
+                        <div className="mt-2 flex justify-end">
+                          <CopyButton text={bullet.improved} label="Copy rewrite" />
                         </div>
-                      </div>
+                      </li>
                     ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Overall Advice */}
-              {result.advice.length > 0 && (
-                <div className="rounded-2xl border border-[#EEEEEB] bg-white p-6">
-                  <h3 className="mb-4 text-[15px] font-semibold text-[#111111]">Overall advice</h3>
-                  <div className="space-y-3">
-                    {result.advice.map((tip, i) => (
-                      <div key={i} className="flex gap-3 rounded-xl border border-[#EEEEEB] bg-[#FAFAF9]/50 p-4">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-[12px] font-semibold text-white">
-                          {i + 1}
-                        </div>
-                        <p className="text-[13px] leading-relaxed text-[#3F3F3F]">{tip}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                  </ul>
+                </section>
               )}
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href={`/resume/${selectedResumeId}/edit`}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#2563EB] px-6 py-3 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
-                >
-                  <ExternalLink className="h-4 w-4" /> Open in Editor
+              <div className="flex flex-wrap gap-2">
+                <a href={`/resume/${selectedResumeId}/edit`} className={appBtnPrimary}>
+                  <ExternalLink className="h-4 w-4" aria-hidden /> Open in Editor
                 </a>
-                <button
-                  type="button"
-                  onClick={resetAnalysis}
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#E5E5E2] bg-white px-6 py-3 text-[13px] font-semibold text-[#3F3F3F] transition hover:border-[#D9D9D5] hover:bg-[#FAFAF9]"
-                >
-                  <RotateCcw className="h-4 w-4" /> Try Another Company
+                <button type="button" onClick={resetAnalysis} className={appBtnSoft}>
+                  <RotateCcw className="h-4 w-4" aria-hidden /> Try Another Company
                 </button>
               </div>
             </>
-          ) : null}
-        </div>
-      )}
-
-      {/* Company Grid (hidden when results showing) */}
-      {!selectedCompany && (
-        <>
-          {/* Search + Filters */}
-          <div className="rounded-2xl border border-[#EEEEEB] bg-white p-5">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="relative w-full max-w-sm">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E6A]" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search companies, industries, or keywords..."
-                  className="h-11 w-full rounded-xl border border-[#E5E5E2] bg-white pl-10 pr-4 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
-                />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {TIERS.map((tier) => (
-                  <button
-                    key={tier.key}
-                    type="button"
-                    onClick={() => setActiveTier(tier.key)}
-                    className={`rounded-full px-4 py-2 text-[12px] font-semibold transition ${
-                      activeTier === tier.key
-                        ? "bg-[#111111] text-white"
-                        : "bg-[#FAFAF9] text-[#6B6B6B] hover:bg-[#F5F5F3] hover:text-[#3F3F3F]"
-                    }`}
-                  >
-                    {tier.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Grid */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((company) => (
-              <div
-                key={company.id}
-                className="group rounded-2xl border border-[#EEEEEB] bg-white p-5 transition hover:border-[#D9D9D5]"
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#F5F5F3] text-[14px] font-semibold text-[#111111]"
-                  >
-                    {company.logo}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h2 className="truncate text-[14px] font-semibold text-[#111111]">
-                      {company.name}
-                    </h2>
-                    <p className="text-[12px] text-[#6E6E6A]">{company.industry}</p>
-                  </div>
-                  <span className={`shrink-0 rounded-full px-2.5 py-0.5 text-[12px] font-medium ${TIER_COLORS[company.tier]}`}>
-                    {TIER_LABEL[company.tier] ?? company.tier}
-                  </span>
-                </div>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {company.keywords.slice(0, 4).map((kw) => (
-                    <span
-                      key={kw}
-                      className="rounded-md bg-[#FAFAF9] px-2 py-0.5 text-[11px] font-medium text-[#6B6B6B]"
-                    >
-                      {kw}
-                    </span>
-                  ))}
-                  {company.keywords.length > 4 && (
-                    <span className="rounded-md bg-[#FAFAF9] px-2 py-0.5 text-[11px] font-medium text-[#6E6E6A]">
-                      +{company.keywords.length - 4}
-                    </span>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => analyzeCompany(company)}
-                  disabled={!selectedResumeId}
-                  className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-full border border-[#D9D9D5] text-[13px] font-medium text-[#111111] transition hover:border-[#111111] disabled:opacity-40"
-                >
-                  Check my match
-                </button>
-              </div>
-            ))}
-
-            {/* Custom Company Card */}
-            <div className="rounded-2xl border border-dashed border-[#E5E5E2] bg-white p-5">
-              {!showCustom ? (
-                <button
-                  type="button"
-                  onClick={() => setShowCustom(true)}
-                  className="flex h-full w-full flex-col items-center justify-center gap-3 py-8 text-[#6E6E6A] transition hover:text-[#2563EB]"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-current">
-                    <Plus className="h-5 w-5" />
-                  </div>
-                  <span className="text-[13px] font-semibold">Another company</span>
-                  <span className="text-[12px]">Paste a job description</span>
-                </button>
-              ) : (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Building2 className="h-4 w-4 text-[#2563EB]" />
-                    <span className="text-[13px] font-semibold text-[#111111]">Another company</span>
-                  </div>
-                  <input
-                    type="text"
-                    value={customName}
-                    onChange={(e) => setCustomName(e.target.value)}
-                    placeholder="Company name"
-                    className="h-10 w-full rounded-xl border border-[#E5E5E2] bg-white px-3 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
-                  />
-                  <input
-                    type="text"
-                    value={customIndustry}
-                    onChange={(e) => setCustomIndustry(e.target.value)}
-                    placeholder="Industry"
-                    className="h-10 w-full rounded-xl border border-[#E5E5E2] bg-white px-3 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
-                  />
-                  <textarea
-                    value={customJD}
-                    onChange={(e) => setCustomJD(e.target.value)}
-                    placeholder="Paste the job post (optional)"
-                    rows={4}
-                    className="w-full resize-none rounded-xl border border-[#E5E5E2] bg-white px-3 py-2.5 text-[13px] text-[#111111] placeholder-gray-400 transition focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#DCE6FF]"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={analyzeCustom}
-                      disabled={!selectedResumeId || !customName.trim()}
-                      className="flex-1 rounded-full bg-[#2563EB] py-2.5 text-[12px] font-semibold text-white transition hover:bg-[#1D4ED8] disabled:opacity-40"
-                    >
-                      Check my match
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => { setShowCustom(false); setCustomName(""); setCustomIndustry(""); setCustomJD(""); }}
-                      className="rounded-xl border border-[#E5E5E2] px-4 py-2.5 text-[12px] font-semibold text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {filtered.length === 0 && (
-            <div className="rounded-2xl border border-[#EEEEEB] bg-white py-16 text-center">
-              <Search className="mx-auto h-8 w-8 text-[#8A8A86]" />
-              <p className="mt-3 text-[14px] font-medium text-[#6B6B6B]">No companies found</p>
-              <p className="mt-1 text-[13px] text-[#6E6E6A]">Try adjusting your search or filters</p>
+          ) : (
+            /* The request failed (message above): offer the way back to the list on phones. */
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={resetAnalysis} className={appBtnSoft}>
+                <RotateCcw className="h-4 w-4" aria-hidden /> Try Another Company
+              </button>
             </div>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

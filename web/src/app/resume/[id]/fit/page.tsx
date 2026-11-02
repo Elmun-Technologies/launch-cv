@@ -2,6 +2,7 @@ import { ResumeToolLayout } from "@/components/resume-tool-layout";
 import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
+import { getSettings } from "@/lib/app-settings";
 import { FitClient } from "./ui";
 
 type Props = { params: Promise<{ id: string }> };
@@ -15,6 +16,7 @@ export default async function FitPage({ params }: Props) {
     where: { id, userId: session.sub },
   });
   if (!resume) notFound();
+  const { planLimits } = await getSettings();
 
   return (
     <ResumeToolLayout
@@ -24,7 +26,7 @@ export default async function FitPage({ params }: Props) {
       title="Role fit"
       lead="See how a hiring manager for this role would score your resume, criterion by criterion."
     >
-      <FitClient resumeId={id} />
+      <FitClient resumeId={id} planLimits={planLimits} />
     </ResumeToolLayout>
   );
 }

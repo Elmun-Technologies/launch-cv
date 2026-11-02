@@ -4,7 +4,9 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { DashboardShell } from "@/components/dashboard-shell";
-import { DimensionBars, FixItem, scoreVerdict } from "@/components/ats-report-parts";
+import { DimensionTiles, ScoreRing, scoreLabel, scoreVerdict } from "@/components/ats-report-parts";
+import { AtsFixList } from "@/components/app/account/ats-fix-list";
+import { PageHeader, btnSmPrimary, btnSmWhite } from "@/components/app/account/ui";
 import type { FreeAtsReport } from "@/types/ai-results";
 
 export const dynamic = "force-dynamic";
@@ -21,7 +23,7 @@ export default async function AtsReportPage({ params }: { params: Promise<{ toke
 
   const trial = await prisma.freeAtsTrial.findUnique({
     where: { claimToken: token },
-    select: { id: true, userId: true, report: true },
+    select: { id: true, userId: true, report: true, createdAt: true },
   });
   if (!trial || !isReport(trial.report)) notFound();
 
@@ -37,72 +39,77 @@ export default async function AtsReportPage({ params }: { params: Promise<{ toke
   }
 
   const report = trial.report;
+  const checked = trial.createdAt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  const high = report.issueCounts.high;
 
   return (
     <DashboardShell email={session.email} pageTitle="ATS report">
-      <div className="mx-auto max-w-[1000px] pb-16">
-        <div className="flex flex-col gap-8 border-b border-[#EEEEEB] pb-10 lg:flex-row lg:items-end lg:gap-16">
-          <div className="flex-1">
-            <p className="text-[14px] text-[#6B6B6B]">Your ATS score · saved to your account</p>
-            <p className="mt-1.5 flex items-baseline gap-3">
-              <span className="text-[80px] font-semibold leading-[0.9] tracking-[-0.05em] text-[#111111]">
-                {report.overall}
-              </span>
-              <span className="text-[22px] text-[#6E6E6A]">/ 100</span>
-            </p>
-            <h1 className="mt-5 max-w-[560px] text-[28px] font-semibold leading-[1.15] tracking-[-0.03em] text-[#111111]">
-              {scoreVerdict(report.overall)}{" "}
-              <span className="text-[#8A8A86]">Here is every issue we found.</span>
-            </h1>
-          </div>
-          <div className="w-full lg:max-w-[380px]">
-            <DimensionBars dimensions={report.dimensions} />
-          </div>
-        </div>
+      <div className="mx-auto w-full max-w-[1160px] pb-12">
+        <PageHeader
+          title="ATS report"
+          lead={<>Saved to your account · checked {checked}</>}
+          actions={
+            <Link href="/resume/new" className={`${btnSmPrimary} px-5 text-[15px]`}>
+              Fix in the editor
+            </Link>
+          }
+        />
 
-        <div className="mt-8 flex flex-col gap-10 lg:flex-row">
-          <section className="min-w-0 flex-1">
-            <div className="flex items-baseline justify-between gap-4">
-              <h2 className="text-[22px] font-semibold tracking-[-0.02em] text-[#111111]">
-                All {report.totalFixes} fixes
+        <div className="mt-5 grid items-start gap-4 sm:mt-6 sm:gap-5 lg:grid-cols-[1.4fr_0.6fr]">
+          <div className="flex min-w-0 flex-col gap-4 sm:gap-5">
+            <section
+              aria-labelledby="ats-score-title"
+              className="lc-card grid gap-5 rounded-[24px] p-[18px] sm:grid-cols-[auto_1fr] sm:items-center sm:gap-7 sm:rounded-[28px] sm:p-7"
+            >
+              <div className="flex items-center gap-4 sm:block sm:text-center">
+                <ScoreRing score={report.overall} className="h-24 w-24 shrink-0 sm:mx-auto sm:h-[150px] sm:w-[150px]" />
+                <div className="min-w-0 sm:mt-1.5">
+                  <h2 id="ats-score-title" className="text-[20px] font-extrabold text-[#121226] sm:text-[15px]">
+                    {scoreLabel(report.overall)}
+                  </h2>
+                  <p className="mt-0.5 max-w-[220px] text-[13px] leading-[19px] text-[#4a4862] sm:mx-auto sm:max-w-[170px] sm:text-[#66647c]">
+                    {scoreVerdict(report.overall)}
+                  </p>
+                  <p className="mt-1 text-[13px] text-[#4a4862] sm:hidden">
+                    {report.totalFixes} fixes · {high} high priority
+                  </p>
+                </div>
+              </div>
+              <DimensionTiles dimensions={report.dimensions} />
+            </section>
+
+            <AtsFixList fixes={report.fixes} totalFixes={report.totalFixes} />
+          </div>
+
+          <aside className="flex flex-col gap-4 sm:gap-5 lg:sticky lg:top-6">
+            <section className="rounded-[24px] bg-[#5440e8] p-[22px] text-white sm:rounded-[28px] sm:p-6">
+              <h2 className="text-[20px] font-extrabold leading-[25px]">
+                {high > 0 ? `Start with the ${high} high-priority ${high === 1 ? "fix" : "fixes"}.` : "Fix them in the editor"}
               </h2>
-              <span className="text-[14px] text-[#6B6B6B]">
-                {report.issueCounts.high} high · {report.issueCounts.medium} medium · {report.issueCounts.low} low
-              </span>
-            </div>
-            <ol className="mt-3">
-              {report.fixes.map((f, i) => (
-                <FixItem key={`${i}-${f.title}`} fix={f} n={i + 1} />
-              ))}
-            </ol>
-          </section>
-
-          <aside className="flex w-full flex-col gap-4 lg:w-[320px]">
-            <div className="rounded-[18px] bg-[#111111] p-6 text-white">
-              <p className="text-[18px] font-semibold tracking-[-0.01em]">Fix them in the editor</p>
-              <p className="mt-2 text-[14px] leading-[1.55] text-[#B5B5B0]">
+              <p className="mt-2 text-[14px] leading-[21px] text-[#e4dfff]">
                 Import your resume, apply the fixes with AI rewrites and download a clean PDF.
               </p>
-              <Link
-                href="/resume/new"
-                className="mt-4 inline-flex h-11 items-center rounded-full bg-white px-5 text-[14px] font-medium text-[#111111]"
-              >
+              <Link href="/resume/new" className={`${btnSmWhite} mt-4 min-h-12 w-full text-[15px]`}>
                 Import my resume
               </Link>
-            </div>
+            </section>
             <Link
               href="/dashboard/settings/subscription"
-              className="flex items-center gap-4 overflow-hidden rounded-[18px] border border-[#E5E5E2]"
+              className="lc-rise group flex items-center gap-4 overflow-hidden rounded-[24px] bg-[#111118] text-white focus-visible:rounded-[24px]! motion-reduce:transition-none motion-reduce:hover:transform-none sm:rounded-[28px]"
             >
               <Image
                 src="/images/photos/interview-panel.webp"
                 alt="Candidate in an interview with a hiring panel"
                 width={1200}
                 height={900}
-                className="h-[110px] w-[120px] object-cover"
+                sizes="120px"
+                className="h-[110px] w-[120px] shrink-0 object-cover"
               />
-              <span className="pr-4 text-[15px] font-medium leading-snug text-[#111111]">
+              <span className="pr-4 text-[15px] font-bold leading-[21px]">
                 Tailor it to each job and prep for the interview
+                <span aria-hidden="true" className="ml-1 inline-block text-[#c9c0ff] transition-transform motion-safe:group-hover:translate-x-0.5">
+                  →
+                </span>
               </span>
             </Link>
           </aside>

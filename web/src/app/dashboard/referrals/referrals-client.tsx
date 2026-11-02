@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Check, Copy, Loader2, Mail } from "lucide-react";
+import { ErrorNote, PageHeader, appBtnPrimary, focusCls } from "@/components/app/jobs/ui";
 
 export type ReferralRow = {
   id: string;
@@ -90,108 +91,114 @@ export function ReferralsClient({ initial }: { initial: ReferralRow[] }) {
     : [];
 
   return (
-    <div className="mx-auto flex max-w-[1080px] flex-col gap-5">
-      <div>
-        <h1 className="text-[28px] font-semibold tracking-[-0.02em] text-[#111111]">
-          Referrals <span className="text-[#8A8A86]">— share LaunchCV with a friend.</span>
-        </h1>
-        <p className="mt-1 text-[15px] text-[#6B6B6B]">
-          Anyone who signs up through your link shows up below. Their ATS check is free, like yours.
-        </p>
-      </div>
+    <div className="mx-auto flex w-full max-w-[1180px] flex-col gap-5 text-[#121226] sm:gap-6">
+      <PageHeader
+        title="Referrals"
+        lead="Share LaunchCV with friends who are job hunting. Anyone who signs up through your link shows up here. Their ATS check is free, like yours."
+      />
 
-      <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
-        <h2 className="text-[17px] font-semibold text-[#111111]">Your link</h2>
-        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-          <label className="min-w-0 flex-1">
-            <span className="sr-only">Your referral link</span>
-            <input
-              readOnly
-              value={link}
-              placeholder={generating ? "Creating your link…" : ""}
-              onFocus={(e) => e.currentTarget.select()}
-              className="soha-input bg-[#FAFAF9] text-[#3F3F3F]"
-            />
-          </label>
-          <button
-            type="button"
-            onClick={() => void copy("link", link)}
-            disabled={!link}
-            className="soha-btn-primary inline-flex shrink-0 items-center justify-center gap-2 disabled:opacity-60"
-          >
-            {generating ? (
-              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-            ) : copied === "link" ? (
-              <Check className="h-4 w-4" aria-hidden />
-            ) : (
-              <Copy className="h-4 w-4" aria-hidden />
-            )}
-            {copied === "link" ? "Copied" : "Copy link"}
-          </button>
-        </div>
-        {error ? (
-          <p role="alert" className="mt-3 text-[14px] text-[#B42318]">
-            {error}
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)]">
+        <section aria-labelledby="ref-link-h" className="relative overflow-hidden rounded-[28px] bg-[#111118] p-5 text-white sm:p-8">
+          <p aria-hidden="true" className="lc-poster pointer-events-none absolute -bottom-3.5 right-6 m-0 select-none text-[72px] leading-[72px] text-[#24223a] sm:text-[110px] sm:leading-[110px]">
+            SHARE
           </p>
-        ) : null}
+          <div className="relative">
+            <h2 id="ref-link-h" className="text-[13px] font-bold uppercase tracking-[0.08em] text-[#c9c0ff]">
+              Your referral link
+            </h2>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+              <label className="min-w-0 flex-1">
+                <span className="sr-only">Your referral link</span>
+                <input
+                  readOnly
+                  value={link}
+                  placeholder={generating ? "Creating your link…" : ""}
+                  onFocus={(e) => e.currentTarget.select()}
+                  className="lc-mono block h-[52px] w-full rounded-[16px] border border-[#2f2d48] bg-[#1d1c2e] px-[18px] text-[16px] text-white outline-none placeholder:text-[#a9a7bd] focus:border-[#c9c0ff] focus:ring-4 focus:ring-[#c9c0ff]/20 focus-visible:outline-none! sm:text-[14px]"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => void copy("link", link)}
+                disabled={!link}
+                className={`${appBtnPrimary} h-[52px] focus-visible:outline-[#c9c0ff]!`}
+              >
+                {generating ? (
+                  <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden />
+                ) : copied === "link" ? (
+                  <Check className="h-4 w-4" aria-hidden />
+                ) : (
+                  <Copy className="h-4 w-4" aria-hidden />
+                )}
+                {copied === "link" ? "Copied" : "Copy link"}
+              </button>
+            </div>
+            {error ? <ErrorNote className="mt-3">{error}</ErrorNote> : null}
 
-        <div className="mt-6 border-t border-[#EEEEEB] pt-5">
-          <label htmlFor="ref-message" className="soha-label mb-1.5">
-            Message
-          </label>
-          <textarea
-            id="ref-message"
-            className="soha-textarea min-h-[96px]"
-            value={shownMessage}
-            onChange={(e) => {
-              setEdited(true);
-              setMessage(e.target.value);
-            }}
-          />
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {shareLinks.length > 0 ? (
+              <div className="mt-3.5 flex flex-wrap gap-2">
+                {shareLinks.map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target={s.label === "Email" ? undefined : "_blank"}
+                    rel="noreferrer"
+                    className={`inline-flex min-h-11 items-center gap-2 rounded-full bg-[#2a2840] px-4 text-[14px] font-bold text-white transition-colors hover:bg-[#3a3858] motion-reduce:transition-none focus-visible:rounded-full! ${focusCls} focus-visible:outline-[#c9c0ff]!`}
+                  >
+                    {s.label === "Email" ? <Mail className="h-4 w-4" aria-hidden /> : null}
+                    {s.label === "Email" ? "Email" : `Share on ${s.label}`}
+                  </a>
+                ))}
+              </div>
+            ) : null}
+
+            <label htmlFor="ref-message" className="mt-6 block text-[13px] font-bold uppercase tracking-[0.08em] text-[#c9c0ff]">
+              Message
+            </label>
+            <textarea
+              id="ref-message"
+              value={shownMessage}
+              onChange={(e) => {
+                setEdited(true);
+                setMessage(e.target.value);
+              }}
+              className="mt-2 block min-h-[110px] w-full rounded-[16px] border border-transparent bg-[#1d1c2e] px-4 py-3.5 text-[16px] leading-[1.5] text-[#e9e7f3] outline-none hover:border-[#2f2d48] focus:border-[#c9c0ff] focus:ring-4 focus:ring-[#c9c0ff]/20 focus-visible:outline-none! sm:text-[14px]"
+            />
             <button
               type="button"
               onClick={() => void copy("msg", shownMessage)}
               disabled={!shownMessage}
-              className="soha-btn-secondary inline-flex items-center gap-2 disabled:opacity-60"
+              className={`mt-2.5 inline-flex min-h-11 items-center gap-2 rounded-full px-1 text-[14px] font-bold text-[#c9c0ff] transition-colors hover:text-white disabled:opacity-50 motion-reduce:transition-none mb-14 sm:mb-12 ${focusCls} focus-visible:outline-[#c9c0ff]!`}
             >
               {copied === "msg" ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
               {copied === "msg" ? "Copied" : "Copy message"}
             </button>
-            {shareLinks.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target={s.label === "Email" ? undefined : "_blank"}
-                rel="noreferrer"
-                className="inline-flex h-10 items-center gap-2 rounded-full border border-[#D9D9D5] px-4 text-[14px] font-medium text-[#111111] hover:border-[#111111]"
-              >
-                {s.label === "Email" ? <Mail className="h-4 w-4" aria-hidden /> : null}
-                {s.label === "Email" ? "Email" : `Share on ${s.label}`}
-              </a>
-            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="rounded-[14px] border border-[#E5E5E2] bg-white p-6">
-        <div className="flex items-baseline justify-between gap-3">
-          <h2 className="text-[17px] font-semibold text-[#111111]">Signed up through your link</h2>
-          <span className="text-[14px] tabular-nums text-[#6B6B6B]">{joined.length}</span>
-        </div>
-        {joined.length === 0 ? (
-          <p className="mt-2 text-[14px] text-[#6B6B6B]">No one yet. When a friend creates an account from your link, they&apos;ll appear here.</p>
-        ) : (
-          <ul className="mt-4 divide-y divide-[#EEEEEB] border-t border-[#EEEEEB]">
-            {joined.map((r) => (
-              <li key={r.id} className="flex items-center justify-between gap-3 py-3 text-[14px]">
-                <span className="truncate text-[#111111]">{maskEmail(r.referredEmail ?? "")}</span>
-                <span className="shrink-0 text-[#0E7A48]">Signed up</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+        <section aria-labelledby="ref-joined-h" className="lc-card rounded-[28px] p-5 sm:p-6">
+          <h2 id="ref-joined-h" className="text-[18px] font-extrabold tracking-[-0.01em]">
+            Signed up through your link
+          </h2>
+          <p className="mt-0.5 text-[13px] text-[#66647c]">
+            {joined.length} {joined.length === 1 ? "friend" : "friends"}
+          </p>
+          {joined.length === 0 ? (
+            <p className="mt-4 rounded-[16px] bg-[#f7f6fb] px-4 py-4 text-[14px] leading-[1.55] text-[#4a4862]">
+              No one yet. When a friend creates an account from your link, they&apos;ll appear here.
+            </p>
+          ) : (
+            <ul className="mt-3">
+              {joined.map((r) => (
+                <li key={r.id} className="flex items-center justify-between gap-3 border-t border-[#e2e0ea] py-3.5 text-[14px]">
+                  <span className="truncate">{maskEmail(r.referredEmail ?? "")}</span>
+                  <span className="shrink-0 rounded-full bg-[#dcf5ea] px-2.5 py-[5px] text-[12px] font-bold text-[#0b4f35]">Signed up</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

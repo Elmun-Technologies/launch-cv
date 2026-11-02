@@ -156,58 +156,59 @@ export function VoiceInput({
 
   if (!supported) return null;
 
+  const softBtn =
+    "inline-flex min-h-11 items-center gap-1.5 rounded-full bg-[#f1eff8] px-4 text-[13px] font-semibold text-[#121226] transition-colors hover:bg-[#e4dfff] sm:min-h-10";
+
   if (mode === "idle") {
     return (
       <button
         type="button"
         onClick={startRecording}
-        className={`group flex items-center gap-2.5 rounded-xl border border-dashed border-[#E5E5E2] px-4 py-3 transition hover:border-[#2563EB]/30 hover:bg-[#EEF3FF]/30 ${className}`}
+        className={`group inline-flex min-h-11 items-center gap-2 rounded-full bg-[#f1eff8] py-1 pl-1 pr-4 text-[14px] font-semibold text-[#121226] transition-colors hover:bg-[#e4dfff] sm:min-h-10 ${className}`}
       >
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5F5F3] transition group-hover:bg-[#2563EB] group-hover:text-white">
-          <Mic className="h-4 w-4" />
-        </div>
-        <div className="text-left">
-          <p className="text-[13px] font-medium text-[#3F3F3F]">{placeholder}</p>
-          <p className="text-[11px] text-[#6E6E6A]">Click to start — speak freely, confirm when done</p>
-        </div>
+        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#5440e8] transition-colors group-hover:bg-[#5440e8] group-hover:text-white">
+          <Mic className="h-4 w-4" aria-hidden="true" />
+        </span>
+        {placeholder}
+        <span className="sr-only"> — start speaking, then confirm when done</span>
       </button>
     );
   }
 
   if (mode === "recording") {
     return (
-      <div className={`rounded-2xl border-2 border-red-200 bg-red-50/30 p-5 ${className}`}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 animate-pulse items-center justify-center rounded-full bg-red-500 shadow-lg shadow-red-500/30">
-              <Mic className="h-5 w-5 text-white" />
+      <div className={`w-full rounded-[20px] border-[1.5px] border-[#f3c4c6] bg-[#fdf3f3] p-4 sm:p-5 ${className}`}>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#c42b30] motion-safe:animate-pulse">
+              <Mic className="h-5 w-5 text-white" aria-hidden="true" />
             </div>
-            <div>
-              <p className="text-[14px] font-semibold text-red-600">Recording... {formatTime(duration)}</p>
-              <p className="text-[12px] text-[#6B6B6B]">Speak your experience freely. Click stop when finished.</p>
+            <div className="min-w-0">
+              <p role="status" className="text-[14px] font-bold text-[#a3222a]">Recording... {formatTime(duration)}</p>
+              <p className="text-[13px] text-[#4a4862]">Speak your experience freely. Click stop when finished.</p>
             </div>
           </div>
           <button
             type="button"
             onClick={stopRecording}
             aria-label="Stop recording"
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-red-500 text-white transition hover:bg-red-600"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#c42b30] text-white transition-colors hover:bg-[#a3222a] focus-visible:rounded-full!"
           >
-            <MicOff className="h-5 w-5" />
+            <MicOff className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 
         {(rawText || interim) ? (
-          <div className="mt-4 rounded-xl bg-white p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">Live transcript</p>
-            <p className="mt-2 text-[13px] leading-relaxed text-[#3F3F3F]">
+          <div className="mt-4 rounded-2xl bg-white p-4">
+            <p className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">Live transcript</p>
+            <p className="mt-2 text-[14px] leading-[21px] text-[#121226]">
               {rawText}
-              {interim ? <span className="text-[#6E6E6A] italic"> {interim}</span> : null}
+              {interim ? <span className="italic text-[#66647c]"> {interim}</span> : null}
             </p>
           </div>
         ) : (
-          <div className="mt-4 rounded-xl bg-white/50 p-4 text-center">
-            <p className="text-[13px] text-[#6E6E6A]">Start speaking... your words will appear here</p>
+          <div className="mt-4 rounded-2xl bg-white/70 p-4 text-center">
+            <p className="text-[14px] text-[#66647c]">Start speaking... your words will appear here</p>
           </div>
         )}
       </div>
@@ -216,33 +217,35 @@ export function VoiceInput({
 
   if (mode === "enhancing") {
     return (
-      <div className={`rounded-2xl border border-[#2563EB]/20 bg-[#EEF3FF]/30 p-5 text-center ${className}`}>
-        <Loader2 className="mx-auto h-8 w-8 animate-spin text-[#2563EB]" />
-        <p className="mt-3 text-[14px] font-semibold text-[#111111]">AI is enhancing your text...</p>
-        <p className="mt-1 text-[12px] text-[#6B6B6B]">Making it impact-driven with quantifiable results</p>
+      <div role="status" className={`w-full rounded-[20px] bg-[#f1eff8] p-5 text-center ${className}`}>
+        <Loader2 className="mx-auto h-8 w-8 text-[#5440e8] motion-safe:animate-spin" aria-hidden="true" />
+        <p className="mt-3 text-[15px] font-bold text-[#121226]">AI is enhancing your text...</p>
+        <p className="mt-1 text-[13px] text-[#66647c]">Making it impact-driven with quantifiable results</p>
       </div>
     );
   }
 
   // Review mode
   return (
-    <div className={`rounded-2xl border border-[#E5E5E2] bg-white p-5 ${className}`}>
-      <div className="flex items-center justify-between">
-        <p className="text-[14px] font-semibold text-[#111111]">Review your input</p>
-        <button type="button" onClick={reset} className="text-[12px] font-medium text-[#6E6E6A] transition hover:text-[#6B6B6B]">
-          <RotateCcw className="mr-1 inline h-3 w-3" />Start over
+    <div className={`w-full rounded-[20px] border-[1.5px] border-[#e2e0ea] bg-white p-4 sm:p-5 ${className}`}>
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-[15px] font-bold text-[#121226]">Review your input</p>
+        <button type="button" onClick={reset} className="inline-flex min-h-10 items-center gap-1 rounded-full px-2 text-[13px] font-semibold text-[#66647c] transition-colors hover:text-[#121226]">
+          <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />Start over
         </button>
       </div>
 
-      <div className="mt-4 rounded-xl bg-[#FAFAF9] p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-[#6E6E6A]">What you said</p>
-        <p className="mt-2 text-[13px] leading-relaxed text-[#3F3F3F]">{rawText}</p>
+      <div className="mt-3 rounded-2xl bg-[#f7f6fb] p-4">
+        <p className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">What you said</p>
+        <p className="mt-2 text-[14px] leading-[21px] text-[#121226]">{rawText}</p>
       </div>
 
       {enhanced ? (
-        <div className="mt-3 rounded-xl border border-[#2563EB]/20 bg-[#EEF3FF]/30 p-4">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-[#2563EB]">AI-Enhanced version</p>
-          <p className="mt-2 text-[13px] font-medium leading-relaxed text-[#111111]">{enhanced}</p>
+        <div className="mt-3 rounded-2xl bg-[#5440e8] p-4 text-white">
+          <p className="inline-flex items-center gap-1.5 text-[12px] font-extrabold uppercase tracking-[0.06em] text-[#e4dfff]">
+            <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> AI-enhanced version
+          </p>
+          <p className="mt-2 text-[15px] font-semibold leading-[22px]">{enhanced}</p>
         </div>
       ) : null}
 
@@ -250,46 +253,34 @@ export function VoiceInput({
         <button
           type="button"
           onClick={() => confirmAndAdd(enhanced ?? rawText)}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[#2563EB] px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-[#1D4ED8]"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-[#5440e8] px-4 text-[13px] font-semibold text-white transition-colors hover:bg-[#4430d6] sm:min-h-10"
         >
-          <Check className="h-4 w-4" />
-          {enhanced ? "Use Enhanced Version" : "Add to Resume"}
+          <Check className="h-4 w-4" aria-hidden="true" />
+          {enhanced ? "Use enhanced version" : "Add to resume"}
         </button>
 
         {!enhanced ? (
-          <button
-            type="button"
-            onClick={() => void enhanceWithAI()}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#2563EB]/20 px-4 py-2.5 text-[13px] font-semibold text-[#2563EB] transition hover:bg-[#EEF3FF]"
-          >
-            <Sparkles className="h-4 w-4" />
+          <button type="button" onClick={() => void enhanceWithAI()} className={softBtn}>
+            <Sparkles className="h-4 w-4 text-[#5440e8]" aria-hidden="true" />
             Enhance with AI
           </button>
         ) : (
-          <button
-            type="button"
-            onClick={() => confirmAndAdd(rawText)}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-[#E5E5E2] px-4 py-2.5 text-[13px] font-medium text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
-          >
-            Use Original Instead
+          <button type="button" onClick={() => confirmAndAdd(rawText)} className={softBtn}>
+            Use original instead
           </button>
         )}
 
-        <button
-          type="button"
-          onClick={startRecording}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-[#E5E5E2] px-4 py-2.5 text-[13px] font-medium text-[#6B6B6B] transition hover:bg-[#FAFAF9]"
-        >
-          <Mic className="h-3.5 w-3.5" />
-          Record Again
+        <button type="button" onClick={startRecording} className={softBtn}>
+          <Mic className="h-3.5 w-3.5" aria-hidden="true" />
+          Record again
         </button>
 
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center gap-1.5 px-3 py-2.5 text-[13px] text-[#6E6E6A] transition hover:text-[#6B6B6B]"
+          className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-[13px] font-semibold text-[#66647c] transition-colors hover:text-[#121226] sm:min-h-10"
         >
-          <X className="h-3.5 w-3.5" />
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
           Cancel
         </button>
       </div>

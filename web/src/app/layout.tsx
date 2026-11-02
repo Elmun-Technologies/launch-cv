@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Inter, Sora } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { CookieBanner } from "@/components/cookie-banner";
 import { ToastProvider } from "@/components/toast";
@@ -11,24 +11,30 @@ import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 
-const inter = Inter({
+// Fonts are self-hosted (src/fonts, OFL-1.1) so builds never depend on downloading
+// from Google Fonts — a failed download there broke a production build.
+const inter = localFont({
+  src: "../fonts/inter-latin-wght-normal.woff2",
+  weight: "100 900",
   variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
+const geistMono = localFont({
+  src: "../fonts/geist-mono-latin-wght-normal.woff2",
+  weight: "100 900",
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
+  preload: false,
 });
 
 // Sora — geometric display face for the logo wordmark and headings (brand guidelines).
-const sora = Sora({
+const sora = localFont({
+  src: "../fonts/sora-latin-wght-normal.woff2",
+  weight: "100 800",
   variable: "--font-sora",
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
   display: "swap",
+  preload: false,
 });
 
 const siteUrl = getSiteUrl();
