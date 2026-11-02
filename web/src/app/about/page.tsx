@@ -5,7 +5,7 @@ import { SiteShell } from "@/components/site/site-shell";
 import { btnPrimary, btnWhite, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
-import { SITE_AUTHOR } from "@/lib/author";
+import { SITE_AUTHOR, SITE_AUTHOR_ID } from "@/lib/author";
 import { getPageCopy } from "@/lib/cms/page-copy";
 
 export const metadata = buildMarketingMetadata({
@@ -30,7 +30,7 @@ const aboutLd = {
     legalName: "Elmun Technologies LLC",
     url: absoluteUrl("/"),
     email: "support@launch-cv.com",
-    founder: { "@type": "Person", name: SITE_AUTHOR.name, jobTitle: SITE_AUTHOR.role },
+    founder: { "@type": "Person", "@id": SITE_AUTHOR_ID, name: SITE_AUTHOR.name, jobTitle: SITE_AUTHOR.role, url: SITE_AUTHOR.url },
   },
 };
 

@@ -19,7 +19,7 @@ import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { prisma } from "@/lib/prisma";
 import { getPostBySlug, getPublishedPosts, getPublishedSlugs, rowToBlogPost } from "@/lib/cms/blog";
 import { verifyPreviewToken } from "@/lib/cms/preview-token";
-import { SITE_AUTHOR } from "@/lib/author";
+import { SITE_AUTHOR, SITE_AUTHOR_ID } from "@/lib/author";
 import { extractToc, createSlugger } from "@/lib/toc";
 
 type Params = { slug: string };
@@ -215,6 +215,7 @@ export default async function BlogPostPage({
     image: post.ogImageUrl && !/\.svg(\?|$)/i.test(post.ogImageUrl) ? post.ogImageUrl : absoluteUrl(`/blog/${post.slug}/opengraph-image`),
     author: {
       "@type": "Person",
+      "@id": SITE_AUTHOR_ID,
       name: SITE_AUTHOR.name,
       url: SITE_AUTHOR.url,
       image: SITE_AUTHOR.avatar,
@@ -334,7 +335,7 @@ export default async function BlogPostPage({
             {initials(SITE_AUTHOR.name)}
           </span>
           <span>
-            <Link href="/about" rel="author" className="lc-link block w-fit font-bold text-[#121226] hover:text-[#5440e8]">
+            <Link href={SITE_AUTHOR.path} rel="author" className="lc-link block w-fit font-bold text-[#121226] hover:text-[#5440e8]">
               {SITE_AUTHOR.name}
             </Link>
             <span className="block text-[#66647c]">
@@ -454,7 +455,7 @@ export default async function BlogPostPage({
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">WRITTEN BY</p>
-              <Link href="/about" rel="author" className="lc-link mt-1 inline-block text-[18px] font-extrabold text-[#121226] hover:text-[#5440e8]">
+              <Link href={SITE_AUTHOR.path} rel="author" className="lc-link mt-1 inline-block text-[18px] font-extrabold text-[#121226] hover:text-[#5440e8]">
                 {SITE_AUTHOR.name}
               </Link>
               <p className="text-[14px] text-[#66647c]">{SITE_AUTHOR.role}</p>
