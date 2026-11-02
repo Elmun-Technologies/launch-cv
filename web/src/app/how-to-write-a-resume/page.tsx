@@ -178,7 +178,7 @@ export default function HowToWriteAResumePage() {
       lead="Eight steps from a blank page to a resume you can send: what goes in each section, how to turn duties into results, and how to tailor it for each job in the US."
       updated={HOW_TO_UPDATED}
       words={words}
-      intro={{ heading: "The eight steps at a glance", node: <NumberedCards items={HOW_TO_STEPS} reveal={false} /> }}
+      intro={{ heading: "The eight steps at a glance", node: <NumberedCards items={HOW_TO_STEPS} reveal={false} compact /> }}
       sections={HOW_TO_SECTIONS}
       figures={{
         contact: <ContactFigure />,

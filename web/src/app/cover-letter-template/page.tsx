@@ -138,7 +138,7 @@ export default function CoverLetterTemplatePage() {
       lead="A free US cover letter template you can copy in one click, with what to write in each paragraph, a filled-in example and the formatting rules."
       updated={COVER_TEMPLATE_UPDATED}
       words={words}
-      intro={{ heading: "The four paragraphs at a glance", node: <NumberedCards items={TEMPLATE_PARAGRAPH_ROLES} reveal={false} /> }}
+      intro={{ heading: "The four paragraphs at a glance", node: <NumberedCards items={TEMPLATE_PARAGRAPH_ROLES} reveal={false} compact /> }}
       sections={COVER_TEMPLATE_SECTIONS}
       figures={{ template: <TemplateFigure />, example: <ExampleFigure /> }}
       keyFacts={{ afterSection: "header-greeting", title: "Quick rules", lead: "Four short paragraphs, one strong example, under one page.", facts: COVER_TEMPLATE_QUICK }}
