@@ -7,6 +7,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "it-support-specialist",
     role: "IT Support Specialist",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-it-support-specialist.webp", alt: "Network patch panel with blue and gray Ethernet cables" },
     level: "Mid-level · 5 years experience",
     intro:
       "An IT support specialist resume that shows how many users you keep working, the systems you manage and the tickets you close — with the CompTIA, Microsoft 365 and ticketing keywords IT managers screen for.",
@@ -88,6 +89,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "help-desk-technician",
     role: "Help Desk Technician",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-help-desk-technician.webp", alt: "Help desk technician talking on the phone at a desk behind computer monitors" },
     level: "Entry level · 2 years experience",
     intro:
       "A help desk technician resume for Tier 1 roles that shows your ticket volume, first-contact resolution and how you treat users — with the keywords service desk managers search for.",
@@ -168,6 +170,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "cybersecurity-analyst",
     role: "Cybersecurity Analyst",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-cybersecurity-analyst.webp", alt: "Red padlock resting on a backlit laptop keyboard" },
     level: "Mid-level · 5 years experience",
     intro:
       "A cybersecurity analyst resume that shows the alerts you triage, the incidents you contain and the risk you reduce — with the SIEM, EDR and framework keywords security hiring managers filter on.",
@@ -248,6 +251,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "devops-engineer",
     role: "DevOps Engineer",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-devops-engineer.webp", alt: "Engineer holding a laptop in a server room corridor" },
     level: "Mid-level · 6 years experience",
     intro:
       "A DevOps engineer resume that shows faster deploys, steadier systems and infrastructure as code — with the AWS, Kubernetes and CI/CD keywords platform teams search for.",
@@ -329,6 +333,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "qa-engineer",
     role: "QA Engineer",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-qa-engineer.webp", alt: "Laptop showing code in an editor on a white desk" },
     level: "Mid-level · 5 years experience",
     intro:
       "A QA engineer resume that shows the tests you automate, the time you save and the bugs that never reach customers — with the automation, API testing and ISTQB keywords engineering teams search for.",
@@ -408,6 +413,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "data-engineer",
     role: "Data Engineer",
     group: "Tech & product",
+    photo: { src: "/images/photos/role-data-engineer.webp", alt: "Server racks with bundled network cables and status lights in a data center" },
     level: "Mid-level · 5 years experience",
     intro:
       "A data engineer resume that shows reliable data pipelines, lower run times and data people trust — with the SQL, Airflow, dbt and cloud keywords data teams filter on.",
@@ -488,6 +494,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "operations-manager",
     role: "Operations Manager",
     group: "Business",
+    photo: { src: "/images/photos/role-operations-manager.webp", alt: "Team meeting around a long conference table with laptops" },
     level: "Senior · 9 years experience",
     intro:
       "An operations manager resume that shows the site, team and budget you run and the safety, quality, delivery and cost results you deliver — with the Lean, Six Sigma and KPI keywords recruiters search for.",
@@ -569,6 +576,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "recruiter",
     role: "Recruiter",
     group: "People & service",
+    photo: { src: "/images/photos/role-recruiter.webp", alt: "Two women talking across a small table by an office window during an interview" },
     level: "Mid-level · 6 years experience",
     intro:
       "A recruiter resume that shows the roles you fill, how fast and how well — with the sourcing, ATS and full-cycle recruiting keywords talent acquisition leaders search for.",
@@ -648,6 +656,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "account-manager",
     role: "Account Manager",
     group: "Business",
+    photo: { src: "/images/photos/role-account-manager.webp", alt: "Three colleagues reviewing charts and documents at a meeting table" },
     level: "Mid-level · 6 years experience",
     intro:
       "An account manager resume that shows the book you manage, the revenue you keep and the growth you add — with the retention, upselling and CRM keywords sales leaders search for.",
@@ -727,6 +736,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "customer-success-manager",
     role: "Customer Success Manager",
     group: "Business",
+    photo: { src: "/images/photos/role-customer-success-manager.webp", alt: "Two women talking with notebooks open at a table in a bright office" },
     level: "Mid-level · 5 years experience",
     intro:
       "A customer success manager resume that shows the ARR you protect and grow, how quickly customers see value and how you spot churn early — with the SaaS and Gainsight keywords CS leaders search for.",
@@ -806,6 +816,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "real-estate-agent",
     role: "Real Estate Agent",
     group: "Business",
+    photo: { src: "/images/photos/role-real-estate-agent.webp", alt: "House keys on a ring next to a small model house on a wooden table" },
     level: "Mid-level · 5 years experience",
     intro:
       "A real estate agent resume that leads with your state license and shows closed transactions, sales volume and where your business comes from — with the MLS, CMA and negotiation keywords brokers look for.",
@@ -887,6 +898,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
     slug: "marketing-coordinator",
     role: "Marketing Coordinator",
     group: "Business",
+    photo: { src: "/images/photos/role-marketing-coordinator.webp", alt: "Marketing team planning with sticky notes on a wall and laptops on a table" },
     level: "Early career · 3 years experience",
     intro:
       "A marketing coordinator resume that shows the campaigns you run day to day and how they perform — with the social, email, content and analytics keywords marketing managers look for.",

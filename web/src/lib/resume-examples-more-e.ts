@@ -7,6 +7,7 @@ export const MORE_EXAMPLES_E: ResumeExample[] = [
     slug: "pharmacist",
     role: "Pharmacist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-pharmacist.webp", alt: "Pharmacist in a white coat taking a medication box from a pharmacy shelf" },
     level: "Experienced · 6 years",
     intro:
       "A pharmacist resume that shows safe verification at volume, clinical checks and patient care — immunizations, MTM and counseling — with the license, exam and controlled-substance keywords pharmacy managers screen for.",
@@ -92,6 +93,7 @@ export const MORE_EXAMPLES_E: ResumeExample[] = [
     slug: "dental-assistant",
     role: "Dental Assistant",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-dental-assistant.webp", alt: "Dental assistant in gloves and gown assisting a dentist with a patient in the chair" },
     level: "Mid-level · 4 years experience",
     intro:
       "A dental assistant resume that shows smooth chairside assisting, safe radiographs and strict infection control — with the DANB and state credential keywords dental offices look for.",
@@ -345,6 +347,7 @@ export const MORE_EXAMPLES_E: ResumeExample[] = [
     slug: "surgical-technologist",
     role: "Surgical Technologist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-surgical-technologist.webp", alt: "Surgical team in caps, masks and gowns working under an operating light" },
     level: "Experienced · 5 years",
     intro:
       "A surgical technologist resume that shows a clean sterile field, accurate counts and a scrub who anticipates the surgeon — with the CST credential and specialty keywords OR managers look for.",
@@ -511,6 +514,7 @@ export const MORE_EXAMPLES_E: ResumeExample[] = [
     slug: "medical-laboratory-scientist",
     role: "Medical Laboratory Scientist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-medical-laboratory-scientist.webp", alt: "Laboratory scientist in a white coat working among analyzers in a clinical lab" },
     level: "Experienced · 6 years",
     intro:
       "A medical laboratory scientist resume that shows accurate results on time, solid quality control and blood bank skill — with the ASCP credential and lab keywords hospital laboratories screen for.",
@@ -681,6 +685,7 @@ export const MORE_EXAMPLES_E: ResumeExample[] = [
     slug: "police-officer",
     role: "Police Officer",
     group: "People & service",
+    photo: { src: "/images/photos/role-police-officer.webp", alt: "Police patrol car with its light bar on at a city intersection" },
     level: "Experienced · 4 years on patrol",
     intro:
       "A police officer resume that shows safe, well-documented patrol work, de-escalation and community ties — with the state license, training and patrol keywords departments look for.",
