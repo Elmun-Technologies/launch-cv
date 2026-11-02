@@ -36,7 +36,8 @@ export function ResumeToolLayout({
   return (
     <div className={`lc-site ${siteFontVars} min-h-screen overflow-x-clip bg-[#eeecf4] text-[#121226]`}>
       <header className="border-b border-[#e2e0ea] bg-white">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-0 px-4 py-3 lg:px-7 xl:flex-nowrap xl:py-3.5">
+        {/* From xl up: three columns, so the tabs are centred whatever the title and buttons beside them hold. */}
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-0 px-4 py-3 lg:px-7 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] xl:py-3.5">
           <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
             <Link
               href="/dashboard/resumes"
@@ -75,7 +76,7 @@ export function ResumeToolLayout({
             </ul>
           </nav>
 
-          <div className="hidden shrink-0 items-center gap-2 sm:flex">
+          <div className="hidden shrink-0 items-center gap-2 sm:flex xl:justify-self-end">
             <a
               href={`/api/resumes/${resumeId}/docx`}
               download
@@ -89,7 +90,8 @@ export function ResumeToolLayout({
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-[1240px] px-4 pb-14 pt-4 sm:px-6 sm:pt-8 lg:px-10">
+      {/* 1240px of content, as on the canvas (its max-width doesn't include the padding). */}
+      <main className="mx-auto max-w-[1320px] px-4 pb-14 pt-4 sm:px-6 sm:pt-8 lg:px-10">
         <h1 className="text-[28px] font-extrabold leading-[32px] tracking-[-0.03em] sm:text-[34px] sm:leading-[38px]">{title}</h1>
         <p className="mt-1.5 max-w-[760px] text-[15px] leading-[22px] text-[#4a4862] sm:text-[16px] sm:leading-6">{lead}</p>
         <div className="mt-4 sm:mt-6">{children}</div>

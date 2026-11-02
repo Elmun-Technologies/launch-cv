@@ -2,106 +2,91 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { AlertTriangle, ArrowLeft, ArrowRight, Check, FileText, ClipboardPaste, Loader2, Upload, UploadCloud } from "lucide-react";
+import { ArrowLeft, Check, Clock, FileText, ClipboardPaste, Loader2, Upload, UploadCloud } from "lucide-react";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { SiteMark } from "@/components/site/brand";
-import { appBtnPrimary, appBtnSmDark, appBtnSoft, appBtnWhite, appInput, appLink, badge, scoreTone } from "@/components/app/shell/ui";
+import { appBtnPrimary, appBtnSmDark, appBtnSoft, appBtnWhite, appInput, appLink } from "@/components/app/shell/ui";
 import { siteFontVars } from "@/lib/site-fonts";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import { TEMPLATE_SPECS, TEMPLATE_STYLES, type TemplateStyle } from "@/lib/resume-templates";
 
-type Severity = "high" | "medium" | "low";
-type Issue = { area: string; message: string; fix: string; severity: Severity };
+type ImportedJob = {
+  id?: string;
+  role?: string;
+  company?: string;
+  start?: string;
+  end?: string;
+  location?: string;
+  bullets?: unknown[];
+};
 type ImportedContent = {
   summary?: string;
   skills?: string[];
-  experience?: { role?: string; company?: string; start?: string; end?: string; bullets?: unknown[] }[];
+  experience?: ImportedJob[];
   education?: unknown[];
   contact?: { fullName?: string; email?: string; phone?: string };
 };
-type FoundJob = { role: string; company: string; dates: string; bullets: number };
-type Found = { jobs: FoundJob[]; contact: boolean; education: number; skills: number };
-type Example = { slug: string; role: string };
-
-const SEVERITY: Record<Severity, { label: string; cls: string }> = {
-  high: { label: "High", cls: "bg-[#fbe2e3] text-[#8f1d22]" },
-  medium: { label: "Medium", cls: "bg-[#fdf0d5] text-[#7a4600]" },
-  low: { label: "Low", cls: "bg-[#f1eff8] text-[#4a4862]" },
-};
+/** A job on the review screen: what the parser found, whether it's ticked, and the user's fixes. */
+type ReviewJob = { key: string; include: boolean; role: string; company: string; start: string; end: string; bullets: number; source: ImportedJob };
+/** From the import API: dates the parser normalized from text that could be read more than one way. */
+type DateReading = { index: number; raw: string; start: string; end: string };
+type Example = { slug: string; role: string; vertical: string };
 
 const LINKEDIN_MIN = 50;
 
-/** Checks we can run on the imported content without AI, so every account gets them. */
-function checkContent(c: ImportedContent): Issue[] {
-  const issues: Issue[] = [];
-  const skills = c.skills ?? [];
-  const bullets = (c.experience ?? []).reduce((n, e) => n + (e.bullets?.length ?? 0), 0);
-  if (!c.contact?.email)
-    issues.push({ area: "Contact", severity: "high", message: "No email address found", fix: "Add the email you want recruiters to use, at the top of the page." });
-  if (bullets < 4)
-    issues.push({
-      area: "Experience",
-      severity: "high",
-      message: bullets === 0 ? "No bullet points found under your jobs" : `Only ${bullets} bullet ${bullets === 1 ? "point" : "points"} across your jobs`,
-      fix: "Give each recent job 3–5 bullets that start with a verb and end with a result, ideally a number.",
-    });
-  if (!c.summary || c.summary.trim().length < 30)
-    issues.push({ area: "Summary", severity: "medium", message: "The summary is missing or very short", fix: "Write two or three lines: your level, your field and one result you're proud of." });
-  if (skills.length < 5)
-    issues.push({
-      area: "Skills",
-      severity: "medium",
-      message: skills.length === 0 ? "No skills listed" : `Only ${skills.length} ${skills.length === 1 ? "skill" : "skills"} listed`,
-      fix: "List 8–15 tools and skills, using the same words the job posts you want use.",
-    });
-  if (!c.contact?.phone) issues.push({ area: "Contact", severity: "low", message: "No phone number found", fix: "Optional, but many recruiters call before they email." });
-  if ((c.education ?? []).length === 0)
-    issues.push({ area: "Education", severity: "low", message: "No education found", fix: "Add your highest degree, the school and the year — or a relevant certificate." });
-  return issues;
-}
-
-/** What the import pulled out, for the review screen. */
-function summarize(c: ImportedContent): Found {
-  const jobs = (c.experience ?? []).map((e) => ({
-    role: (e.role ?? "").trim(),
-    company: (e.company ?? "").trim(),
-    dates: [e.start, e.end].filter((d) => typeof d === "string" && d.trim()).join(" – "),
-    bullets: e.bullets?.length ?? 0,
-  }));
-  return { jobs, contact: !!(c.contact?.email || c.contact?.phone), education: (c.education ?? []).length, skills: (c.skills ?? []).length };
-}
-
 /** "contact details, 1 education entry and 14 skills were also found" (lowercase, no period), or "". */
-function foundLine(f: Found): string {
+function foundLine(c: ImportedContent): string {
+  const contact = !!(c.contact?.email || c.contact?.phone);
+  const education = (c.education ?? []).length;
+  const skills = (c.skills ?? []).length;
   const parts: string[] = [];
-  if (f.contact) parts.push("contact details");
-  if (f.education > 0) parts.push(`${f.education} education ${f.education === 1 ? "entry" : "entries"}`);
-  if (f.skills > 0) parts.push(`${f.skills} ${f.skills === 1 ? "skill" : "skills"}`);
+  if (contact) parts.push("contact details");
+  if (education > 0) parts.push(`${education} education ${education === 1 ? "entry" : "entries"}`);
+  if (skills > 0) parts.push(`${skills} ${skills === 1 ? "skill" : "skills"}`);
   if (parts.length === 0) return "";
   const list = parts.length === 1 ? parts[0] : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
-  const singular = parts.length === 1 && !f.contact && (f.education === 1 || f.skills === 1);
+  const singular = parts.length === 1 && !contact && (education === 1 || skills === 1);
   return `${list} ${singular ? "was" : "were"} also found`;
+}
+
+function str(v: unknown): string {
+  return typeof v === "string" ? v.trim() : "";
 }
 
 function readParam(name: string) {
   return new URLSearchParams(window.location.search).get(name);
 }
 
-export function NewResumeClient({ examples, quick }: { examples: Example[]; quick: Example[] }) {
+export function NewResumeClient({
+  examples,
+  quick,
+  target,
+  defaultVertical,
+}: {
+  examples: Example[];
+  quick: Example[];
+  /** The role picked during onboarding, if any. */
+  target: Example | null;
+  /** Vertical for blank and imported resumes (from the onboarding role; "software" otherwise). */
+  defaultVertical: string;
+}) {
   const fileRef = useRef<HTMLInputElement>(null);
   const exampleRef = useRef<HTMLHeadingElement>(null);
+  const reviewHeadingRef = useRef<HTMLHeadingElement>(null);
   const [creating, setCreating] = useState(false);
   const [createErr, setCreateErr] = useState<string | null>(null);
-  const [step, setStep] = useState<"idle" | "parsing" | "checking" | "done" | "error">("idle");
+  const [step, setStep] = useState<"idle" | "parsing" | "review" | "error">("idle");
   const [uploadErr, setUploadErr] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
   const [source, setSource] = useState<"file" | "linkedin">("file");
   const [dragging, setDragging] = useState(false);
-  const [resumeId, setResumeId] = useState<string | null>(null);
-  const [issues, setIssues] = useState<Issue[]>([]);
-  const [skills, setSkills] = useState<string[]>([]);
-  const [found, setFound] = useState<Found | null>(null);
-  const [fit, setFit] = useState<{ score: number; fixes: string[] } | null>(null);
+  /** Parsed but not saved: nothing reaches the database until the user confirms the review. */
+  const [imported, setImported] = useState<{ content: ImportedContent; title: string } | null>(null);
+  const [reviewJobs, setReviewJobs] = useState<ReviewJob[]>([]);
+  const [dateReadings, setDateReadings] = useState<DateReading[]>([]);
+  const [editingJob, setEditingJob] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveErr, setSaveErr] = useState<string | null>(null);
   const [surveyOpen, setSurveyOpen] = useState(false);
   const [linkedinText, setLinkedinText] = useState("");
   const [linkedinErr, setLinkedinErr] = useState<string | null>(null);
@@ -123,10 +108,15 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
     : "";
 
   useEffect(() => {
-    if (step !== "done" || !resumeId || !shouldOfferSatisfactionSurvey()) return undefined;
+    if (step !== "review" || !shouldOfferSatisfactionSurvey()) return undefined;
     const t = setTimeout(() => setSurveyOpen(true), 12000);
     return () => clearTimeout(t);
-  }, [step, resumeId]);
+  }, [step]);
+
+  // Move focus to the review heading so screen readers start from "We found N jobs".
+  useEffect(() => {
+    if (step === "review") reviewHeadingRef.current?.focus();
+  }, [step]);
 
   /** Carry the template picked on the templates page into the editor. */
   function rememberTemplate(id: string) {
@@ -141,10 +131,11 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
   async function handleCreate(example?: string) {
     setCreating(true);
     setCreateErr(null);
+    const vertical = (example && examples.find((e) => e.slug === example)?.vertical) || defaultVertical;
     const r = await fetch("/api/resumes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: "New resume", vertical: "software", regionMode: "us", ...(example ? { example } : {}) }),
+      body: JSON.stringify({ title: "New resume", vertical, regionMode: "us", ...(example ? { example } : {}) }),
     }).catch(() => null);
     const j = r ? await r.json().catch(() => ({})) : {};
     if (r?.ok && j.id) {
@@ -156,7 +147,7 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
     setCreateErr(typeof j.error === "string" ? j.error : "Couldn't create the resume. Please try again.");
   }
 
-  /** Shared pipeline for both sources: parse → create → save content → checks → optional role-fit. */
+  /** Shared pipeline for both sources: parse, then show the review. Saving waits for the user's confirmation. */
   async function runImport(opts: {
     label: string;
     parse: () => Promise<Response>;
@@ -166,52 +157,77 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
     setFileName(opts.label);
     setStep("parsing");
     setUploadErr(null);
-    setFit(null);
+    setSaveErr(null);
 
     const parseRes = await opts.parse().catch(() => null);
     const parseJ = parseRes ? await parseRes.json().catch(() => ({})) : {};
-    if (!parseRes?.ok || !parseJ.content) {
+    if (!parseRes?.ok || !parseJ.content || typeof parseJ.content !== "object") {
       setStep("error");
       setUploadErr(typeof parseJ.error === "string" ? parseJ.error : opts.readErr);
       return;
     }
 
     const content = parseJ.content as ImportedContent;
-    setStep("checking");
+    const jobs = Array.isArray(content.experience) ? content.experience : [];
+    setImported({ content, title: opts.title(content) });
+    setReviewJobs(
+      jobs.map((j, i) => ({
+        key: `${i}-${str(j.id)}`,
+        include: true,
+        role: str(j.role),
+        company: str(j.company),
+        start: str(j.start),
+        end: str(j.end),
+        bullets: Array.isArray(j.bullets) ? j.bullets.length : 0,
+        source: j,
+      })),
+    );
+    setDateReadings(
+      Array.isArray(parseJ.dateReadings)
+        ? (parseJ.dateReadings as DateReading[]).filter((d) => d && typeof d.index === "number" && typeof d.raw === "string" && d.index < jobs.length)
+        : [],
+    );
+    setEditingJob(null);
+    setStep("review");
+  }
+
+  /** Creates the resume with only the ticked jobs, then opens it. */
+  async function confirmImport() {
+    if (!imported || saving) return;
+    setSaving(true);
+    setSaveErr(null);
+    const content = {
+      ...imported.content,
+      experience: reviewJobs
+        .filter((j) => j.include)
+        .map((j) => ({ ...j.source, role: j.role, company: j.company, start: j.start, end: j.end })),
+    };
+    const failed = `We read your ${source === "linkedin" ? "profile" : "file"} but couldn't save the resume. Please try again.`;
     const createRes = await fetch("/api/resumes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: opts.title(content), vertical: "software", regionMode: "us" }),
+      body: JSON.stringify({ title: imported.title.slice(0, 200) || "Imported resume", vertical: defaultVertical, regionMode: "us" }),
     }).catch(() => null);
     const createJ = createRes ? await createRes.json().catch(() => ({})) : {};
     if (!createRes?.ok || !createJ.id) {
-      setStep("error");
-      setUploadErr(`We read your ${opts.label === "LinkedIn profile text" ? "profile" : "file"} but couldn't save the resume. Please try again.`);
+      setSaving(false);
+      setSaveErr(failed);
       return;
     }
-    await fetch(`/api/resumes/${createJ.id}`, {
+    const patchRes = await fetch(`/api/resumes/${createJ.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: parseJ.content }),
+      body: JSON.stringify({ content }),
     }).catch(() => null);
-    setResumeId(createJ.id);
-    rememberTemplate(createJ.id);
-
-    setIssues(checkContent(content));
-    setSkills((content.skills ?? []).slice(0, 15));
-    setFound(summarize(content));
-
-    // The role-fit score is an AI tool; on accounts without a plan it simply isn't shown.
-    const fitRes = await fetch("/api/ai/role-fit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ resumeId: createJ.id }),
-    }).catch(() => null);
-    const fitJ = fitRes?.ok ? await fitRes.json().catch(() => ({})) : {};
-    if (fitJ.result && typeof fitJ.result.overall === "number") {
-      setFit({ score: fitJ.result.overall, fixes: (fitJ.result.prioritized_fixes ?? []).slice(0, 5) });
+    if (!patchRes?.ok) {
+      // Don't leave an empty resume behind.
+      await fetch(`/api/resumes/${createJ.id}`, { method: "DELETE" }).catch(() => null);
+      setSaving(false);
+      setSaveErr(failed);
+      return;
     }
-    setStep("done");
+    rememberTemplate(createJ.id);
+    window.location.href = `/resume/${createJ.id}/edit`;
   }
 
   async function importFile(file: File) {
@@ -258,13 +274,22 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
     if (f) void importFile(f);
   }
 
+  /** Back to the start. Nothing was saved yet, so there is nothing to clean up. */
   const reset = () => {
     setStep("idle");
     setUploadErr(null);
+    setSaveErr(null);
     setFileName("");
-    setFound(null);
+    setImported(null);
+    setReviewJobs([]);
+    setDateReadings([]);
+    setEditingJob(null);
     if (fileRef.current) fileRef.current.value = "";
   };
+
+  function setJob(key: string, patch: Partial<ReviewJob>) {
+    setReviewJobs((js) => js.map((j) => (j.key === key ? { ...j, ...patch } : j)));
+  }
 
   function pickExample(slug: string) {
     setExampleSlug(slug);
@@ -275,10 +300,15 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
     });
   }
 
-  const busy = step === "parsing" || step === "checking";
+  const busy = step === "parsing";
   const card = "rounded-[24px] bg-white p-6 sm:rounded-[28px] sm:p-7";
   const iconTile = "inline-flex h-12 w-12 items-center justify-center rounded-2xl";
-  const jobs = found?.jobs ?? [];
+  const included = reviewJobs.filter((j) => j.include).length;
+  const datesToCheck = dateReadings.filter((d) => {
+    const j = reviewJobs[d.index];
+    // Once the user has changed the dates themselves, the note has done its job.
+    return j && j.start === d.start && j.end === d.end;
+  });
 
   return (
     <div className={`lc-site ${siteFontVars} flex min-h-screen flex-col`}>
@@ -293,13 +323,7 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
           href="/dashboard"
           className="focus-visible:outline-[#5440e8]! focus-visible:rounded-full! inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-[14px] font-bold text-[#4a4862] transition-colors hover:bg-[#f1eff8] hover:text-[#121226]"
         >
-          {step === "done" ? (
-            <>
-              <ArrowLeft className="h-4 w-4" aria-hidden /> Back to dashboard
-            </>
-          ) : (
-            "Cancel"
-          )}
+          Cancel
         </Link>
       </header>
 
@@ -336,7 +360,7 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
                 </div>
                 <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
                   <button type="button" onClick={() => void handleCreate(exampleSlug)} disabled={creating} className={appBtnWhite}>
-                    {creating ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                    {creating ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
                     Use this example
                   </button>
                   <button
@@ -463,7 +487,7 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
                     Fill in each section with a live preview of the PDF. You can switch templates any time.
                   </p>
                   <button type="button" onClick={() => void handleCreate()} disabled={creating} className={`${appBtnSmDark} mt-4`}>
-                    {creating && !exampleSlug ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                    {creating && !exampleSlug ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
                     Start blank
                   </button>
                 </section>
@@ -483,7 +507,11 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
                   <h2 id="from-example" className="text-[22px] font-extrabold">
                     Or start from an example
                   </h2>
-                  <p className="mt-1 text-[15px] text-[#4a4862]">A full resume for your role — swap in your details.</p>
+                  <p className="mt-1 text-[15px] text-[#4a4862]">
+                    {target
+                      ? `A full resume for ${target.role} and related roles — swap in your details.`
+                      : "A full resume for your role — swap in your details."}
+                  </p>
                 </div>
                 <Link href="/resume-examples" className={appLink}>
                   All {examples.length} <span aria-hidden="true">&nbsp;→</span>
@@ -519,20 +547,19 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
             <ol className="mt-6 flex flex-col gap-3.5 text-[15px]">
               {[
                 { k: "parsing", l: source === "linkedin" ? "Reading the text and finding each section" : "Reading the file and finding each section" },
-                { k: "checking", l: "Saving it and checking for gaps" },
+                { k: "review", l: "You check what we found before it's added" },
               ].map((s, i) => {
-                const done = step === "checking" && i === 0;
                 const active = step === s.k;
                 return (
                   <li key={s.k} className="flex items-center gap-3">
                     <span
                       className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[12px] font-bold ${
-                        done ? "bg-[#5440e8] text-white" : active ? "bg-[#e4dfff] text-[#3a2bb8]" : "bg-[#f1eff8] text-[#66647c]"
+                        active ? "bg-[#e4dfff] text-[#3a2bb8]" : "bg-[#f1eff8] text-[#66647c]"
                       }`}
                     >
-                      {done ? <Check className="h-3.5 w-3.5" aria-hidden /> : active ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : i + 1}
+                      {active ? <Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" aria-hidden /> : i + 1}
                     </span>
-                    <span className={active || done ? "font-semibold text-[#121226]" : "text-[#66647c]"}>{s.l}</span>
+                    <span className={active ? "font-semibold text-[#121226]" : "text-[#66647c]"}>{s.l}</span>
                   </li>
                 );
               })}
@@ -572,7 +599,7 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
                 </button>
               )}
               <button type="button" onClick={() => void handleCreate()} disabled={creating} className={appBtnSoft}>
-                {creating ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
+                {creating ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
                 Start from a blank page
               </button>
             </div>
@@ -584,133 +611,142 @@ export function NewResumeClient({ examples, quick }: { examples: Example[]; quic
           </div>
         ) : null}
 
-        {step === "done" && resumeId ? (
-          <div className="mx-auto max-w-[980px]">
-            <p className="flex items-center gap-2 text-[18px] font-semibold tracking-[-0.01em] text-[#5440e8] sm:text-[20px]">
-              <Check className="h-5 w-5" aria-hidden /> Imported
-            </p>
-            <h1 className="mt-3 text-[32px] font-extrabold leading-[1.08] tracking-[-0.04em] sm:text-[44px] sm:leading-[48px]">
-              {jobs.length > 0 ? `We found ${jobs.length} ${jobs.length === 1 ? "job" : "jobs"}.` : "We read your resume."}{" "}
-              <span className="text-[#7c7a94]">Check {jobs.length === 1 ? "it" : jobs.length > 1 ? "them" : "each section"} in the editor.</span>
+        {step === "review" && imported ? (
+          <div className="mx-auto max-w-[980px] lg:pt-2">
+            <p className="text-[18px] font-semibold tracking-[-0.01em] text-[#5440e8] sm:text-[20px]">/ Import · step 2 of 2</p>
+            <h1 ref={reviewHeadingRef} tabIndex={-1} className="mt-3 text-[32px] font-extrabold leading-[1.08] tracking-[-0.04em] outline-none sm:text-[44px] sm:leading-[48px]">
+              {reviewJobs.length > 0 ? `We found ${reviewJobs.length} ${reviewJobs.length === 1 ? "job" : "jobs"}.` : "We read your resume."}{" "}
+              <span className="text-[#7c7a94]">
+                {reviewJobs.length > 0 ? `Check ${reviewJobs.length === 1 ? "it" : "them"} before they’re added.` : "Check it in the editor."}
+              </span>
             </h1>
             <p className="mt-2.5 text-[16px] leading-6 text-[#4a4862]">
               From {source === "linkedin" ? "your LinkedIn profile text" : <span className="break-all">{fileName}</span>}
-              {found && foundLine(found) ? ` · ${foundLine(found)}.` : "."}
+              {foundLine(imported.content) ? ` · ${foundLine(imported.content)}.` : "."}
             </p>
 
-            {jobs.length > 0 ? (
-              <ul className="mt-6 flex flex-col gap-2.5">
-                {jobs.map((j, i) => (
-                  <li key={i} className="lc-card grid grid-cols-[auto_1fr_auto] items-center gap-3.5 rounded-[22px] px-4 py-4 sm:gap-[18px] sm:px-[22px] sm:py-5">
-                    <span aria-hidden="true" className="inline-flex h-6 w-6 items-center justify-center rounded-[7px] bg-[#5440e8] text-white">
-                      <Check className="h-4 w-4" strokeWidth={2.6} />
-                    </span>
-                    <span className="min-w-0">
-                      <b className="text-[16px] sm:text-[17px]">{j.role || "Untitled role"}</b>
-                      {j.company ? <span className="text-[#4a4862]"> · {j.company}</span> : null}
-                      <span className="mt-[3px] block text-[13px] text-[#66647c]">
-                        {[j.dates, `${j.bullets} ${j.bullets === 1 ? "bullet" : "bullets"}`].filter(Boolean).join(" · ")}
+            {reviewJobs.length > 0 ? (
+              <fieldset className="mt-6">
+                <legend className="sr-only">Jobs to add to your resume</legend>
+                <ul className="flex flex-col gap-2.5">
+                  {reviewJobs.map((j) => {
+                    const id = `job-${j.key}`;
+                    const name = j.role || j.company || "Untitled role";
+                    const editing = editingJob === j.key;
+                    const dates = [j.start, j.end].filter(Boolean).join(" – ");
+                    return (
+                      <li
+                        key={j.key}
+                        className={`rounded-[22px] px-4 py-4 transition-colors sm:px-[22px] sm:py-5 ${j.include ? "lc-card" : "bg-[#f7f6fb]"}`}
+                      >
+                        <div className="grid grid-cols-[auto_1fr_auto] items-center gap-3.5 sm:gap-[18px]">
+                          <span className="relative inline-flex h-6 w-6">
+                            <input
+                              id={id}
+                              type="checkbox"
+                              checked={j.include}
+                              onChange={(e) => setJob(j.key, { include: e.target.checked })}
+                              className="peer absolute inset-0 m-0 h-6 w-6 cursor-pointer opacity-0"
+                            />
+                            <span
+                              aria-hidden="true"
+                              className={`pointer-events-none inline-flex h-6 w-6 items-center justify-center rounded-[7px] peer-focus-visible:outline-3 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#5440e8] ${
+                                j.include ? "bg-[#5440e8] text-white" : "border-2 border-[#c9c7d8] bg-white"
+                              }`}
+                            >
+                              {j.include ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : null}
+                            </span>
+                          </span>
+                          <label htmlFor={id} className="min-w-0 cursor-pointer">
+                            <b className={`text-[16px] sm:text-[17px] ${j.include ? "" : "text-[#4a4862]"}`}>{j.role || "Untitled role"}</b>
+                            {j.company ? <span className="text-[#4a4862]"> · {j.company}</span> : null}
+                            <span className="mt-[3px] block text-[13px] text-[#66647c]">
+                              {[dates, `${j.bullets} ${j.bullets === 1 ? "bullet" : "bullets"}`].filter(Boolean).join(" · ")}
+                              {j.include ? null : <span className="sr-only"> — won’t be added</span>}
+                            </span>
+                          </label>
+                          <button
+                            type="button"
+                            aria-expanded={editing}
+                            aria-controls={`${id}-edit`}
+                            onClick={() => setEditingJob(editing ? null : j.key)}
+                            className={`${appLink} rounded-full px-1`}
+                          >
+                            {editing ? "Done" : "Edit"}
+                            <span className="sr-only"> {name}</span>
+                          </button>
+                        </div>
+                        {editing ? (
+                          <div id={`${id}-edit`} className="mt-4 grid gap-3 sm:grid-cols-2">
+                            {(
+                              [
+                                ["role", "Job title"],
+                                ["company", "Company"],
+                                ["start", "Start"],
+                                ["end", "End"],
+                              ] as const
+                            ).map(([k, label]) => (
+                              <label key={k} className="block text-[13px] font-bold text-[#4a4862]">
+                                {label}
+                                <input
+                                  value={j[k]}
+                                  onChange={(e) => setJob(j.key, { [k]: e.target.value })}
+                                  placeholder={k === "start" ? "May 2022" : k === "end" ? "Present" : undefined}
+                                  className={`${appInput} mt-1.5 h-12 font-normal`}
+                                />
+                              </label>
+                            ))}
+                          </div>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </fieldset>
+            ) : null}
+
+            {datesToCheck.length > 0 ? (
+              <ul className="mt-3.5 flex flex-col gap-2 rounded-[18px] bg-[#fdf0d5] px-[18px] py-3.5 text-[14px] text-[#7a4600]">
+                {datesToCheck.map((d) => {
+                  const j = reviewJobs[d.index];
+                  return (
+                    <li key={d.index} className="flex items-start gap-3">
+                      <Clock className="mt-px h-[18px] w-[18px] shrink-0" strokeWidth={1.8} aria-hidden />
+                      <span>
+                        {datesToCheck.length > 1 ? <b>{j.role || j.company || "A job"}: </b> : null}“{d.raw}” was read as{" "}
+                        <b>{[d.start, d.end].filter(Boolean).join(" – ")}</b>. Check the dates look right.
                       </span>
-                    </span>
-                    <Link href={`/resume/${resumeId}/edit`} className={appLink}>
-                      Edit<span className="sr-only"> {j.role || "this job"}</span>
-                    </Link>
-                  </li>
-                ))}
+                    </li>
+                  );
+                })}
               </ul>
             ) : null}
 
-            {issues.length > 0 ? (
-              <section aria-labelledby="fix-first" className="mt-5 rounded-[22px] bg-white">
-                <h2 id="fix-first" className="flex items-center gap-2.5 border-b border-[#e2e0ea] px-5 py-4 text-[17px] font-extrabold sm:px-6">
-                  <AlertTriangle className="h-[18px] w-[18px] text-[#a15c00]" aria-hidden /> What to fix first
-                  <span className="text-[14px] font-semibold text-[#66647c]">· {issues.length}</span>
-                </h2>
-                <ul className="divide-y divide-[#e2e0ea]">
-                  {issues.map((i) => (
-                    <li key={i.message} className="flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:px-6">
-                      <div className="min-w-0">
-                        <p className="text-[15px] font-semibold">
-                          <span className="text-[#66647c]">{i.area} · </span>
-                          {i.message}
-                        </p>
-                        <p className="mt-1 text-[14px] leading-[1.55] text-[#4a4862]">{i.fix}</p>
-                      </div>
-                      <span className={`${badge} self-start ${SEVERITY[i.severity].cls}`}>
-                        <span className="sr-only">Priority: </span>
-                        {SEVERITY[i.severity].label}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ) : (
-              <p className="mt-5 rounded-[18px] bg-[#dcf5ea] px-[18px] py-3.5 text-[14px] font-medium text-[#0b4f35]">
-                Nothing obvious is missing. Check each section in the editor.
+            {saveErr ? (
+              <p role="alert" className="mt-4 rounded-2xl bg-[#fbe2e3] px-4 py-3 text-[14px] font-medium text-[#8f1d22]">
+                {saveErr}
               </p>
-            )}
-
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              <section aria-labelledby="skills-found" className="rounded-[22px] bg-white p-6">
-                <h2 id="skills-found" className="text-[17px] font-extrabold">
-                  Skills we found
-                </h2>
-                {skills.length > 0 ? (
-                  <ul className="mt-3 flex flex-wrap gap-2">
-                    {skills.map((s) => (
-                      <li key={s} className="rounded-full bg-[#f1eff8] px-3 py-1.5 text-[13px] font-semibold text-[#121226]">
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="mt-2 text-[14px] text-[#4a4862]">None yet — add them in the editor&apos;s Skills step.</p>
-                )}
-              </section>
-
-              {fit ? (
-                <section aria-labelledby="fit-score" className="rounded-[22px] bg-white p-6">
-                  <h2 id="fit-score" className="flex items-center justify-between gap-3 text-[17px] font-extrabold">
-                    Role-fit score
-                    <span className={`${badge} text-[14px]!`} style={{ background: scoreTone(fit.score).bg, color: scoreTone(fit.score).fg }}>
-                      {fit.score}
-                    </span>
-                  </h2>
-                  {fit.fixes.length > 0 ? (
-                    <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[14px] leading-[1.55] text-[#4a4862]">
-                      {fit.fixes.map((f) => (
-                        <li key={f}>{f}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </section>
-              ) : (
-                <section aria-labelledby="aim-job" className="rounded-[22px] bg-white p-6">
-                  <h2 id="aim-job" className="text-[17px] font-extrabold">
-                    Next, aim it at a job
-                  </h2>
-                  <p className="mt-1 text-[14px] leading-[1.55] text-[#4a4862]">
-                    Paste a job post to see which of its keywords your resume already covers.
-                  </p>
-                  <Link href={`/resume/${resumeId}/jd`} className={`${appLink} mt-2 gap-1.5`}>
-                    Match to a job <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                  </Link>
-                </section>
-              )}
-            </div>
+            ) : null}
 
             <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
               <button
                 type="button"
                 onClick={reset}
-                className="focus-visible:outline-[#5440e8]! focus-visible:rounded-full! inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-3 text-[15px] font-bold text-[#4a4862] transition-colors hover:bg-white hover:text-[#121226] sm:justify-start"
+                disabled={saving}
+                className="focus-visible:outline-[#5440e8]! focus-visible:rounded-full! inline-flex min-h-11 items-center justify-center gap-1.5 rounded-full px-3 text-[15px] font-bold text-[#4a4862] transition-colors hover:bg-white hover:text-[#121226] disabled:opacity-60 sm:-ml-3 sm:justify-start"
               >
                 <ArrowLeft className="h-4 w-4" aria-hidden /> {source === "linkedin" ? "Import something else" : "Import a different file"}
               </button>
-              <Link href={`/resume/${resumeId}/edit`} className={appBtnPrimary}>
-                Open in editor <ArrowRight className="h-4 w-4" aria-hidden />
-              </Link>
+              <button type="button" onClick={() => void confirmImport()} disabled={saving} className={appBtnPrimary}>
+                {saving ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden /> : null}
+                {reviewJobs.length === 0 || included === 0
+                  ? "Open the editor"
+                  : `Add ${included} ${included === 1 ? "job" : "jobs"} and open the editor`}
+              </button>
             </div>
+            <p className="sr-only" aria-live="polite">
+              {saving ? "Saving your resume…" : `${included} of ${reviewJobs.length} jobs selected.`}
+            </p>
           </div>
         ) : null}
       </main>

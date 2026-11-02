@@ -29,6 +29,12 @@ model User {
   emailVerifiedAt  DateTime?
   /// Billing provider customer id (Lemon Squeezy customer id as string).
   stripeCustomerId String?
+  /// Onboarding: the resume example role (slug from lib/resume-examples.ts) the user is aiming for.
+  targetRole       String?
+  /// Onboarding: "entry" | "mid" | "senior" | "career_change" (lib/target-role.ts).
+  experienceLevel  String?
+  /// When the user finished or skipped onboarding; null = not offered yet.
+  onboardedAt      DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   resumes          Resume[]
