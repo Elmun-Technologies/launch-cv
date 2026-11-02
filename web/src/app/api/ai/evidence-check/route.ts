@@ -13,9 +13,14 @@ const schema = z.object({
   resumeId: z.string().min(1),
 });
 
+const CATEGORIES = ["dates", "format", "claim", "metric", "wording"] as const;
+type IssueCategory = (typeof CATEGORIES)[number];
+
 type EvidenceResult = {
   issues: {
     severity: "low" | "med" | "high";
+    /** What kind of problem it is; shown as the row label on the Consistency page. */
+    category?: IssueCategory;
     bulletId?: string;
     message: string;
     suggestion: string;
@@ -61,8 +66,10 @@ export async function POST(req: Request) {
     }
   }
 
-  const system = `You are an editor and consistency checker. Return JSON only: issues[], metrics_found[].
-issues must reference existing bulletIds. Do not add fake metrics — only flag contradictions/suspicions from the text.`;
+  const system = `You are an editor and consistency checker. Return JSON only:
+{"issues":[{"severity":"low|med|high","category":"dates|format|claim|metric|wording","bulletId":"optional existing bullet id","message":"what is inconsistent","suggestion":"how to fix it"}],"metrics_found":[{"text":"...","bulletId":"..."}]}
+Categories: dates = date ranges or formats that conflict or overlap; format = the same kind of detail written different ways (phone, dates, titles, punctuation); claim = two parts of the resume disagree (team size, years, titles); metric = a number with no baseline or that looks inflated; wording = repeated verbs or vague phrasing.
+bulletId must be an existing bullet id when you give one. Do not add fake metrics — only flag contradictions/suspicions from the text.`;
 
   const userPrompt = `RESUME JSON:
 ${JSON.stringify(content)}
@@ -74,7 +81,10 @@ ${JSON.stringify(metricTexts)}`;
     const ai = await chatJson<EvidenceResult>({ system, user: userPrompt, tool: "evidence", userId: session.sub, paid: usage.paid });
     const merged: EvidenceResult = {
       metrics_found: [...metricTexts, ...(ai.metrics_found ?? [])].slice(0, 40),
-      issues: [...heuristicIssues, ...(ai.issues ?? [])],
+      issues: [
+        ...heuristicIssues,
+        ...(ai.issues ?? []).map((i) => ({ ...i, category: CATEGORIES.includes(i.category as IssueCategory) ? i.category : undefined })),
+      ],
     };
     await trackEvent("evidence_check", { userId: session.sub, meta: { resumeId: parsed.data.resumeId } });
     return NextResponse.json({ result: merged });
