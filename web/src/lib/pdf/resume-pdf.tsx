@@ -1,7 +1,7 @@
 import path from "node:path";
 import { Document, Font, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type { ResumeContent } from "@/types/resume";
-import { TEMPLATE_SPECS, sectionTitles, type TemplateStyle } from "@/lib/resume-templates";
+import { TEMPLATE_SPECS, pageSizeFor, sectionTitles, type TemplateStyle } from "@/lib/resume-templates";
 
 // The built-in PDF fonts only cover WinAnsi, so names in Cyrillic, Turkish or
 // Uzbek Latin and characters like − or → came out blank or garbled. Liberation
@@ -77,7 +77,7 @@ export function ResumePdfDocument({
 
   return (
     <Document title={title}>
-      <Page size="A4" style={s.page}>
+      <Page size={pageSizeFor(regionMode).name} style={s.page}>
         <View style={s.head}>
           <Text style={s.name}>{c.contact.fullName || "Name"}</Text>
           {c.headline ? <Text style={s.headline}>{c.headline}</Text> : null}

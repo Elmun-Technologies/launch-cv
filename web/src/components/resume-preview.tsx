@@ -1,12 +1,12 @@
 import type { ResumeContent } from "@/types/resume";
-import { TEMPLATE_SPECS, sectionTitles, type TemplateStyle } from "@/lib/resume-templates";
+import { TEMPLATE_SPECS, pageSizeFor, sectionTitles, type TemplateStyle } from "@/lib/resume-templates";
 
 export type { TemplateStyle } from "@/lib/resume-templates";
 
 /**
  * On-screen twin of the exported PDF (lib/pdf/resume-pdf.tsx): same sections,
  * same order, only the user's own content. Sizes are in em against a base that
- * scales with the container, so the page keeps A4 proportions at any width.
+ * scales with the container, so the page keeps the paper proportions (US Letter, or A4 for EU) at any width.
  */
 export function ResumePreview({
   content,
@@ -19,6 +19,7 @@ export function ResumePreview({
   template?: TemplateStyle;
 }) {
   const t = TEMPLATE_SPECS[template];
+  const paper = pageSizeFor(regionMode);
   const titles = sectionTitles(regionMode);
   const c = content;
   const contactLine = [c.contact.email, c.contact.phone, c.contact.location].filter(Boolean).join(" · ");
@@ -45,9 +46,10 @@ export function ResumePreview({
   return (
     <div className="w-full [container-type:inline-size]">
       <div
-        className="aspect-[210/297] w-full overflow-hidden rounded-[3px] bg-white text-[#1c1c1c] shadow-[0_10px_30px_-14px_rgba(0,0,0,0.25)]"
+        className="w-full overflow-hidden rounded-[3px] bg-white text-[#1c1c1c] shadow-[0_10px_30px_-14px_rgba(0,0,0,0.25)]"
         style={{
-          fontSize: "calc(100cqw * 10 / 595)",
+          aspectRatio: `${paper.width} / ${paper.height}`,
+          fontSize: `calc(100cqw * 10 / ${paper.width})`,
           lineHeight: 1.35,
           padding: "3.6em",
           fontFamily: t.serif ? "Georgia, 'Times New Roman', serif" : "Helvetica, Arial, sans-serif",

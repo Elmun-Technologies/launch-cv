@@ -4,7 +4,7 @@ import type { ResumeContent } from "@/types/resume";
 const BASE = 600;
 
 /**
- * v5 resume thumbnail: a white A4 sheet with the resume's own first lines
+ * v5 resume thumbnail: a white Letter-size sheet with the resume's own first lines
  * (name, headline, summary, two jobs, education, skills), scaled to `width`.
  * Decorative — the card around it carries the accessible name.
  */
