@@ -17,7 +17,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/compare/ats-resume-checkers": "2026-11-01",
   "/about": "2026-10-27",
   "/contact": "2026-10-27",
-  "/resume-templates": "2026-10-27",
+  "/resume-templates": "2026-11-02",
   "/resume-examples": "2026-10-27",
   /** All /resume-examples/[slug] pages (data in lib/resume-examples.ts). */
   "/resume-examples/*": "2026-10-27",

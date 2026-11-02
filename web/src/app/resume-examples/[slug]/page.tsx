@@ -201,7 +201,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             <div className="lc-card rounded-[24px] p-5 sm:p-6">
               <h3 className="text-[18px] font-bold">Use this as your starting point</h3>
               <p className="mt-1.5 text-[15px] leading-[23px] text-[#4a4862]">
-                Opens in the editor with every section filled in. Swap in your own details and download a PDF free.
+                Opens in the editor with every section filled in. Swap in your own details and download a PDF or Word file free.
               </p>
               <CtaLink cta="use_example" location="resume_example_sample" href={startHref} className={`${btnPrimary} mt-4 w-full`}>
                 Start from this example
