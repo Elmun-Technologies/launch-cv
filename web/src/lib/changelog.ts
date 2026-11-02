@@ -16,9 +16,9 @@ export const CHANGELOG: ChangelogMonth[] = [
         detail: "Every public page, the dashboard, the resume editor, the import review and onboarding moved to one new design.",
       },
       {
-        title: "Try the real ATS check on the home page",
-        detail: "The home page now runs the actual free check in its first section, with interactive demos of the other tools.",
-        href: "/",
+        title: "A clearer free ATS check",
+        detail: "The free check shows what the software read from your resume, field by field, next to the issues and how to fix them.",
+        href: "/free-ats-check",
       },
       {
         title: "Download your resume as a Word file",
