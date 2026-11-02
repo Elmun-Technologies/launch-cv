@@ -864,6 +864,9 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                             </p>
                             <p className="mt-2 text-[15px] font-semibold leading-[22px]">{rw.improved}</p>
                             {rw.change_summary ? <p className="mt-1 text-[13px] leading-5 text-[#e4dfff]">{rw.change_summary}</p> : null}
+                            <p className="mt-1.5 text-[12px] leading-[18px] text-[#e4dfff]">
+                              Uses only your facts{rw.improved.includes("[number]") ? " — replace [number] with your real figure." : "."}
+                            </p>
                             <div className="mt-3 flex flex-wrap items-center gap-1.5">
                               {b.text === rw.improved ? (
                                 <>
