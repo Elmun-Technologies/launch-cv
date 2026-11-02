@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { ChevronDown, Download, Loader2 } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
@@ -205,12 +205,18 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
                 <h2 id="packet-letter-h" className={toolH2}>
                   Cover letter
                 </h2>
-                <CopyButton text={result.cover_letter} className={`${pillDark} max-sm:hidden`} />
+                <span className="flex gap-2 max-sm:hidden">
+                  <WordButton resumeId={resumeId} text={result.cover_letter} className={pillSoft} />
+                  <CopyButton text={result.cover_letter} className={pillDark} />
+                </span>
               </div>
               <div className="mt-3 whitespace-pre-wrap break-words rounded-[14px] text-[14px] leading-[23px] text-[#24223a] sm:mt-4 sm:border-[1.5px] sm:border-[#e2e0ea] sm:p-7 sm:text-[15px] sm:leading-[25px]">
                 {result.cover_letter}
               </div>
-              <CopyButton text={result.cover_letter} className={`${pillDark} mt-3 w-full sm:hidden`} />
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:hidden">
+                <WordButton resumeId={resumeId} text={result.cover_letter} className={`${pillSoft} w-full`} />
+                <CopyButton text={result.cover_letter} className={`${pillDark} w-full`} />
+              </div>
             </section>
 
             <div className="flex min-w-0 flex-col gap-4">
@@ -255,5 +261,43 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
 
       <AiDisclaimer />
     </div>
+  );
+}
+
+/** Downloads the letter as a .docx headed with this resume's contact details. */
+function WordButton({ resumeId, text, className }: { resumeId: string; text: string; className: string }) {
+  const [busy, setBusy] = useState(false);
+  const [failed, setFailed] = useState(false);
+  async function download() {
+    setBusy(true);
+    setFailed(false);
+    const res = await fetch(`/api/resumes/${resumeId}/cover-letter-docx`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    }).catch(() => null);
+    setBusy(false);
+    if (!res?.ok) {
+      setFailed(true);
+      return;
+    }
+    const url = URL.createObjectURL(await res.blob());
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = /filename="([^"]+)"/.exec(res.headers.get("Content-Disposition") ?? "")?.[1] ?? "cover_letter.docx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+  return (
+    <button type="button" onClick={() => void download()} disabled={busy} className={className}>
+      {busy ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" /> : <Download className="h-4 w-4" aria-hidden="true" />}
+      {failed ? "Try again" : (
+        <span>
+          <span className="sr-only">Download cover letter as </span>Word
+        </span>
+      )}
+    </button>
   );
 }

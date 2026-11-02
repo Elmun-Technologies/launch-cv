@@ -119,3 +119,51 @@ export async function resumeDocxBuffer(c: ResumeContent, opts: { title: string; 
   });
   return Packer.toBuffer(doc);
 }
+
+/**
+ * Word file for a cover letter: the resume's contact header (so the pair looks
+ * like a set), today's date, then the letter as written, one paragraph per block.
+ */
+export async function coverLetterDocxBuffer(
+  c: ResumeContent,
+  letter: string,
+  opts: { regionMode?: string; date?: Date },
+): Promise<Buffer> {
+  const page = pageSizeFor(opts.regionMode);
+  const body: Paragraph[] = [];
+  body.push(new Paragraph({ spacing: { after: 40 }, children: [text(c.contact.fullName || "Name", { bold: true, size: 32 })] }));
+  const contact = join([c.contact.email, c.contact.phone, c.contact.location], " · ");
+  if (contact) body.push(line([text(contact)]));
+  const links = join(c.contact.links ?? [], " · ");
+  if (links) body.push(line([text(links)]));
+  const date = (opts.date ?? new Date()).toLocaleDateString(opts.regionMode === "eu" ? "en-GB" : "en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  body.push(new Paragraph({ spacing: { before: 280, after: 240 }, children: [text(date)] }));
+  for (const block of letter.replace(/\r\n/g, "\n").split(/\n\s*\n/)) {
+    const lines = block.split("\n").map((l) => l.trimEnd()).filter((l) => l.trim());
+    if (!lines.length) continue;
+    const runs: TextRun[] = [];
+    lines.forEach((l, i) => runs.push(new TextRun({ text: l, font: FONT, size: 22, break: i > 0 ? 1 : undefined })));
+    body.push(new Paragraph({ spacing: { after: 200, line: 300 }, children: runs }));
+  }
+  const doc = new Document({
+    creator: c.contact.fullName || undefined,
+    title: "Cover letter",
+    styles: { default: { document: { run: { font: FONT, size: 22 } } } },
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { width: page.width * TWIP_PER_PT, height: page.height * TWIP_PER_PT },
+            margin: { top: MARGIN * 1.3, bottom: MARGIN, left: MARGIN * 1.3, right: MARGIN * 1.3 },
+          },
+        },
+        children: body,
+      },
+    ],
+  });
+  return Packer.toBuffer(doc);
+}
