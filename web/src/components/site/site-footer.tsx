@@ -22,6 +22,8 @@ const COLUMNS = [
       { href: "/cover-letter-examples", label: "Cover letter examples" },
       { href: "/resume-format", label: "Resume format guide" },
       { href: "/resume-action-verbs", label: "Resume action verbs" },
+      { href: "/resume-keywords", label: "Resume keywords by role" },
+      { href: "/ats", label: "ATS guides (Workday, Greenhouse…)" },
       { href: "/compare/ats-resume-checkers", label: "ATS checkers compared" },
       { href: "/alternatives/jobscan", label: "Jobscan alternative" },
       { href: "/blog", label: "Blog" },

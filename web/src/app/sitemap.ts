@@ -4,9 +4,15 @@ import { RESUME_EXAMPLES } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES } from "@/lib/cover-letter-examples";
 import { contentUpdated } from "@/lib/content-dates";
 import { getSiteUrl } from "@/lib/site";
+import { ATS_VENDORS } from "@/lib/seo/ats-vendors";
 
 /** Programmatic SEO pages added by later modules (keywords per role, ATS vendors). */
-const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = [];
+const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = [
+  { path: "/resume-keywords", priority: 0.8, dateKey: "/resume-keywords" },
+  ...RESUME_EXAMPLES.map((e) => ({ path: `/resume-keywords/${e.slug}`, priority: 0.7, dateKey: "/resume-keywords/*" })),
+  { path: "/ats", priority: 0.7, dateKey: "/ats" },
+  ...ATS_VENDORS.map((v) => ({ path: `/ats/${v.slug}`, priority: 0.7, dateKey: "/ats/*" })),
+];
 
 /** Rebuilt hourly so new blog posts appear without a redeploy. */
 export const revalidate = 3600;

@@ -82,7 +82,7 @@ export default function AtsIndexPage() {
           </p>
         </div>
         <div aria-hidden="true" className="relative hidden h-[420px] overflow-hidden rounded-[36px] bg-[#111118] sm:block lg:h-[480px]">
-          <p className="lc-poster absolute left-[30px] top-6 m-0 text-[92px] leading-[92px] text-[#2a2840]">ATS</p>
+          <p aria-hidden="true" className="lc-poster absolute left-[30px] top-6 m-0 text-[92px] leading-[92px] text-[#2a2840]">ATS</p>
           <ul className="absolute inset-x-8 bottom-9 grid grid-cols-2 gap-2.5 lg:bottom-12">
             {ATS_VENDORS.map((v, i) => (
               <li

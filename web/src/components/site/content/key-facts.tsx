@@ -6,7 +6,7 @@
 export function KeyFactsCard({ title = "Key facts", lead, facts }: { title?: string; lead?: string; facts?: string[] }) {
   if (!lead && (!facts || facts.length === 0)) return null;
   return (
-    <aside aria-label={title} className="lc-key-facts lc-card rounded-[24px] p-5 sm:p-7">
+    <section aria-label={title} className="lc-key-facts lc-card rounded-[24px] p-5 sm:p-7">
       <p className="text-[12px] font-bold tracking-[0.08em] text-[#5440e8]">{title.toUpperCase()}</p>
       {lead ? <p className="lc-key-facts-lead mt-2.5 text-[17px] font-semibold leading-7 text-[#121226]">{lead}</p> : null}
       {facts && facts.length > 0 ? (
@@ -21,7 +21,7 @@ export function KeyFactsCard({ title = "Key facts", lead, facts }: { title?: str
           ))}
         </ul>
       ) : null}
-    </aside>
+    </section>
   );
 }
 

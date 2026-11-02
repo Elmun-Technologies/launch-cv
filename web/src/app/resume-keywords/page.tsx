@@ -134,7 +134,7 @@ export default function ResumeKeywordsIndexPage() {
           </div>
         </div>
         <div aria-hidden="true" className="relative hidden h-[420px] overflow-hidden rounded-[36px] bg-[#5440e8] sm:block lg:h-[480px]">
-          <p className="lc-poster absolute left-[30px] top-6 m-0 text-[88px] leading-[86px] text-[#6a58ee] lg:text-[100px] lg:leading-[96px]">
+          <p aria-hidden="true" className="lc-poster absolute left-[30px] top-6 m-0 text-[88px] leading-[86px] text-[#6a58ee] lg:text-[100px] lg:leading-[96px]">
             KEY
             <br />
             WORDS
