@@ -4,6 +4,8 @@
  * Names, companies and numbers are illustrative.
  */
 
+import { MORE_COVER_LETTERS } from "@/lib/cover-letter-examples-more";
+
 export type CoverLetterExample = {
   /** Same slug as the matching resume example. */
   slug: string;
@@ -17,7 +19,7 @@ export type CoverLetterExample = {
   faqs: { q: string; a: string }[];
 };
 
-export const COVER_LETTER_EXAMPLES: CoverLetterExample[] = [
+const CORE_COVER_LETTERS: CoverLetterExample[] = [
   {
     slug: "software-engineer",
     target: { title: "Staff Software Engineer, Payments", company: "Relecloud", hiringManager: "Elena Park" },
@@ -419,6 +421,8 @@ export const COVER_LETTER_EXAMPLES: CoverLetterExample[] = [
     ],
   },
 ];
+
+export const COVER_LETTER_EXAMPLES: CoverLetterExample[] = [...CORE_COVER_LETTERS, ...MORE_COVER_LETTERS];
 
 export function getCoverLetterExample(slug: string): CoverLetterExample | undefined {
   return COVER_LETTER_EXAMPLES.find((c) => c.slug === slug);
