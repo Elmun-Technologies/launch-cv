@@ -1,11 +1,20 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Briefcase } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
-import { ResourceListPage } from "@/components/admin/resource-list-page";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
+import {
+  AdminPageHeader,
+  ChipButton,
+  ChipGroup,
+  LoadingCard,
+  Pager,
+  cellMain,
+  cellMuted,
+  cellSub,
+  cellText,
+} from "@/components/admin/v5/ui";
 
 interface AppRow {
   id: string;
@@ -49,23 +58,23 @@ export function AdminApplicationsPage() {
 
   const columns: DataTableColumn<AppRow>[] = [
     {
+      key: "company",
+      header: "Company",
+      render: (a) => <span className={cellMain}>{a.company || "—"}</span>,
+    },
+    {
       key: "title",
       header: "Role",
       truncate: "max-w-[240px]",
-      render: (a) => <span className="font-medium text-[#111111]">{a.title || "Untitled"}</span>,
-    },
-    {
-      key: "company",
-      header: "Company",
-      render: (a) => <span className="text-[12px] text-[#3F3F3F]">{a.company || "—"}</span>,
+      render: (a) => <span className={cellText}>{a.title || "Untitled"}</span>,
     },
     {
       key: "user",
       header: "User",
       render: (a) => (
         <div className="min-w-0">
-          <p className="truncate text-[12px] text-[#111111]">{a.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#6E6E6A]">{a.user.email}</p>
+          <p className={`truncate ${cellText}`}>{a.user.name || "—"}</p>
+          <p className={`truncate ${cellSub}`}>{a.user.email}</p>
         </div>
       ),
     },
@@ -77,9 +86,7 @@ export function AdminApplicationsPage() {
     {
       key: "created",
       header: "Created",
-      render: (a) => (
-        <span className="text-[12px] text-[#6B6B6B]">{new Date(a.createdAt).toLocaleDateString()}</span>
-      ),
+      render: (a) => <span className={`whitespace-nowrap ${cellMuted}`}>{new Date(a.createdAt).toLocaleDateString()}</span>,
     },
   ];
 
@@ -87,37 +94,31 @@ export function AdminApplicationsPage() {
 
   return (
     <AdminShell pageTitle="Applications">
-      <ResourceListPage
-        title="Applications"
-        description={`${total.toLocaleString()} application${total === 1 ? "" : "s"} tracked across all users.`}
-        filters={
-          <div className="flex flex-wrap gap-1">
-            {STATUS_OPTIONS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => {
-                  setStatusFilter(s);
-                  setPage(1);
-                }}
-                className={`rounded-full px-3 py-1 text-[12px] font-semibold capitalize transition ${
-                  statusFilter === s
-                    ? "bg-[#111111] text-white"
-                    : "bg-[#F5F5F3] text-[#3F3F3F] hover:bg-[#E5E5E2]"
-                }`}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        }
-      >
+      <div className="space-y-5">
+        <AdminPageHeader
+          title="Applications"
+          description={`${total.toLocaleString()} application${total === 1 ? "" : "s"} tracked across all users.`}
+        />
+
+        <ChipGroup label="Filter by status">
+          {STATUS_OPTIONS.map((s) => (
+            <ChipButton
+              key={s}
+              active={statusFilter === s}
+              onClick={() => {
+                setStatusFilter(s);
+                setPage(1);
+              }}
+            >
+              <span className="capitalize">{s}</span>
+            </ChipButton>
+          ))}
+        </ChipGroup>
+
         {loading ? (
-          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#6E6E6A]">
-            Loading…
-          </div>
+          <LoadingCard />
         ) : (
-          <>
+          <div>
             <DataTable
               columns={columns}
               rows={apps}
@@ -125,34 +126,16 @@ export function AdminApplicationsPage() {
               emptyTitle="No applications for this filter"
               emptyDescription="Switch to a different status filter or All."
             />
-            <div className="mt-4 flex items-center justify-between text-[12px] text-[#6B6B6B]">
-              <p>
-                <Briefcase className="mr-1 inline h-3 w-3 align-text-bottom" />
-                {total.toLocaleString()} total
-              </p>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Previous
-                </button>
-                <span className="px-2">Page {page} of {totalPages}</span>
-                <button
-                  type="button"
-                  onClick={() => setPage((p) => p + 1)}
-                  disabled={page >= totalPages}
-                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </>
+            <Pager
+              page={page}
+              totalPages={totalPages}
+              onPrev={() => setPage((p) => Math.max(1, p - 1))}
+              onNext={() => setPage((p) => p + 1)}
+              summary={`${total.toLocaleString()} total`}
+            />
+          </div>
         )}
-      </ResourceListPage>
+      </div>
     </AdminShell>
   );
 }

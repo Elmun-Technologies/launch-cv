@@ -1,11 +1,10 @@
 import { redirect } from "next/navigation";
-import { CreditCard, CheckCircle2, Users } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { KpiCard } from "@/components/admin/kpi-card";
 import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
+import { AdminPageHeader, StatTile, cellMain, cellMuted, cellSub, cellText } from "@/components/admin/v5/ui";
 
 type SubscriptionRow = {
   id: string;
@@ -36,68 +35,67 @@ export default async function AdminSubscriptionsPage() {
   const columns: DataTableColumn<SubscriptionRow>[] = [
     {
       key: "user",
-      header: "User",
+      header: "Customer",
       render: (s) => (
         <div className="min-w-0">
-          <p className="truncate text-[13px] font-medium text-[#111111]">{s.user.name || "—"}</p>
-          <p className="truncate text-[11px] text-[#6E6E6A]">{s.user.email}</p>
-        </div>
-      ),
-    },
-    {
-      key: "status",
-      header: "Status",
-      render: (s) => (
-        <div className="flex flex-col gap-1">
-          <StatusBadge tone={statusToTone(s.status)} dot>{s.status}</StatusBadge>
-          {s.cancelAtPeriodEnd ? (
-            <span className="text-[10px] font-medium uppercase tracking-wider text-amber-700">
-              Cancels at period end
-            </span>
-          ) : null}
+          <p className={`truncate ${cellMain}`}>{s.user.name || "—"}</p>
+          <p className={`truncate ${cellSub}`}>{s.user.email}</p>
         </div>
       ),
     },
     {
       key: "plan",
       header: "Plan / variant",
+      render: (s) => <span className="lc-mono text-[13px] text-[#121226]">{s.stripePriceId}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
       render: (s) => (
-        <span className="font-mono text-[12px] text-[#3F3F3F]">{s.stripePriceId}</span>
+        <StatusBadge tone={statusToTone(s.status)} dot>
+          {s.status}
+        </StatusBadge>
       ),
     },
     {
       key: "period_end",
       header: "Period end",
       render: (s) => (
-        <span className="text-[12px] text-[#6B6B6B]">
+        <span className={`whitespace-nowrap ${cellMuted}`}>
           {s.currentPeriodEnd ? s.currentPeriodEnd.toLocaleDateString() : "—"}
         </span>
       ),
     },
     {
+      key: "cancel_at_end",
+      header: "Cancel at end",
+      render: (s) =>
+        s.cancelAtPeriodEnd ? (
+          <span className="text-[14px] font-bold text-[#a15c00]">Yes</span>
+        ) : (
+          <span className={cellText}>No</span>
+        ),
+    },
+    {
       key: "id",
       header: "Subscription ID",
       truncate: "max-w-[180px]",
-      render: (s) => (
-        <span className="font-mono text-[11px] text-[#6E6E6A]">{s.stripeSubscriptionId}</span>
-      ),
+      render: (s) => <span className="lc-mono text-[12px] text-[#66647c]">{s.stripeSubscriptionId}</span>,
     },
   ];
 
   return (
     <AdminShell email={admin.email} pageTitle="Subscriptions">
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Subscriptions</h1>
-          <p className="mt-1 text-[13px] text-[#6B6B6B]">
-            Polar subscription records, including pending cancellations.
-          </p>
-        </div>
+      <div className="space-y-5">
+        <AdminPageHeader
+          title="Subscriptions"
+          description="Polar subscription records, including pending cancellations."
+        />
 
         <div className="grid gap-3 sm:grid-cols-3">
-          <KpiCard label="Active" value={activeSubs} icon={CheckCircle2} hint="Not pending cancellation" />
-          <KpiCard label="Pending cancellation" value={cancelling} icon={CreditCard} hint="Cancel at period end" />
-          <KpiCard label="Total records" value={totalSubs} icon={Users} hint="All lifetime subscriptions" />
+          <StatTile featured label="Active" value={activeSubs} hint="Not pending cancellation" />
+          <StatTile label="Pending cancellation" value={cancelling} hint="Cancel at period end" />
+          <StatTile label="Total records" value={totalSubs} hint="All lifetime subscriptions" />
         </div>
 
         <DataTable
