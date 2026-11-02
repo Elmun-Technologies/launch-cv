@@ -25,7 +25,7 @@ export default async function SnapshotsPage({ params }: Props) {
       title="Versions"
       lead="Save a version before big changes or for each application. Restoring a version replaces the current resume."
     >
-      <SnapshotsClient resumeId={id} initial={resume.snapshots.map((s) => ({ id: s.id, label: s.label, createdAt: s.createdAt.toISOString() }))} />
+      <SnapshotsClient resumeId={id} regionMode={resume.regionMode} initial={resume.snapshots.map((s) => ({ id: s.id, label: s.label, createdAt: s.createdAt.toISOString() }))} />
     </ResumeToolLayout>
   );
 }
