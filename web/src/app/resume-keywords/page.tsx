@@ -90,13 +90,9 @@ function RoleCard({ e }: { e: ResumeExample }) {
             className="object-cover object-[center_30%] transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
           />
         ) : (
-          <ul aria-hidden="true" className="absolute inset-0 flex flex-wrap content-center justify-center gap-1.5 p-3">
-            {e.keywords.slice(0, 5).map((k) => (
-              <li key={k} className="rounded-full bg-white px-2.5 py-1 text-[12px] font-bold text-[#3a2bb8] transition-transform duration-300 group-hover:-translate-y-0.5 motion-reduce:transition-none">
-                {k}
-              </li>
-            ))}
-          </ul>
+          <p aria-hidden="true" className="lc-poster absolute bottom-[-10px] left-3 m-0 text-[88px] leading-[88px] text-[#c9c0ff] transition-transform duration-500 group-hover:-translate-y-1 motion-reduce:transition-none sm:text-[112px] sm:leading-[112px]">
+            {monogram(e.role)}
+          </p>
         )}
       </div>
       <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-3 sm:px-3 sm:pb-3 sm:pt-4">
@@ -231,4 +227,13 @@ export default function ResumeKeywordsIndexPage() {
       <SeoCtaBand title="See which keywords your resume already has." sub="Free ATS check — no sign-up, about 10 seconds." location="resume_keywords_index_bottom" />
     </SiteShell>
   );
+}
+
+/** "Truck Driver" → "TD", "HVAC Technician" → "HVACT". */
+function monogram(role: string): string {
+  return role
+    .split(/\s+/)
+    .map((w) => (/^[A-Z]{2,}$/.test(w) ? w : w.charAt(0)))
+    .join("")
+    .toUpperCase();
 }
