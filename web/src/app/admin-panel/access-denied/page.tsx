@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SignOutButton } from "@/components/admin/sign-out-button";
 import { redirect } from "next/navigation";
 import { ShieldOff, ArrowLeft } from "lucide-react";
 import { getSession } from "@/lib/session";
@@ -77,9 +78,7 @@ export default async function AccessDeniedPage() {
         <Link href="/dashboard" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
           Back to my dashboard
         </Link>
-        <Link href="/api/auth/logout" className={`${btn} bg-white text-[#121226]`}>
-          Sign out
-        </Link>
+        <SignOutButton className={`${btn} bg-white text-[#121226]`} />
       </div>
     </DeniedShell>
   );
