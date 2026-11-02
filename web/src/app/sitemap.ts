@@ -5,6 +5,9 @@ import { COVER_LETTER_EXAMPLES } from "@/lib/cover-letter-examples";
 import { contentUpdated } from "@/lib/content-dates";
 import { getSiteUrl } from "@/lib/site";
 
+/** Programmatic SEO pages added by later modules (keywords per role, ATS vendors). */
+const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = [];
+
 /** Rebuilt hourly so new blog posts appear without a redeploy. */
 export const revalidate = 3600;
 
@@ -50,6 +53,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...RESUME_EXAMPLES.map((e) => page(`/resume-examples/${e.slug}`, "monthly", 0.8, "/resume-examples/*")),
     page("/cover-letter-examples", "monthly", 0.8),
     ...COVER_LETTER_EXAMPLES.map((c) => page(`/cover-letter-examples/${c.slug}`, "monthly", 0.7, "/cover-letter-examples/*")),
+    page("/resume-format", "monthly", 0.8),
+    page("/resume-action-verbs", "monthly", 0.7),
+    page("/alternatives/jobscan", "monthly", 0.7),
+    page("/tools", "monthly", 0.7),
+    page("/tools/resume-bullet-point-generator", "monthly", 0.8),
+    page("/tools/resume-summary-generator", "monthly", 0.8),
+    page("/tools/resume-word-counter", "monthly", 0.7),
+    ...SEO_EXTRA_ROUTES.map((r) => page(r.path, "monthly", r.priority, r.dateKey)),
     // login/register are utility pages (noindex) — intentionally kept out of the sitemap.
     page("/legal/privacy", "yearly", 0.3),
     page("/legal/terms", "yearly", 0.3),

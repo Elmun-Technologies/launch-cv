@@ -11,6 +11,7 @@ const COLUMNS = [
       { href: "/features/jd-alignment", label: "Job description match" },
       { href: "/features/cover-letter", label: "Cover letter writer" },
       { href: "/features/interview-prep", label: "Interview prep" },
+      { href: "/tools", label: "Free writing tools" },
     ],
   },
   {
@@ -19,7 +20,10 @@ const COLUMNS = [
       { href: "/resume-templates", label: "Resume templates" },
       { href: "/resume-examples", label: "Resume examples" },
       { href: "/cover-letter-examples", label: "Cover letter examples" },
+      { href: "/resume-format", label: "Resume format guide" },
+      { href: "/resume-action-verbs", label: "Resume action verbs" },
       { href: "/compare/ats-resume-checkers", label: "ATS checkers compared" },
+      { href: "/alternatives/jobscan", label: "Jobscan alternative" },
       { href: "/blog", label: "Blog" },
     ],
   },
