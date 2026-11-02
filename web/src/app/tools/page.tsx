@@ -13,21 +13,21 @@ import { absoluteUrl } from "@/lib/site";
 export const revalidate = 60;
 
 const DESCRIPTION =
-  "Free resume tools from LaunchCV: an ATS checker, bullet point and summary generators, a resume word counter and action verbs. No account needed to start.";
+  "Free resume tools from LaunchCV: an ATS checker, bullet point, summary and resignation letter generators, a word counter and action verbs. No account needed.";
 
 export const metadata = buildMarketingMetadata({
   title: "Free Resume Tools — ATS Check, Bullets & Summaries",
   description: DESCRIPTION,
   pathname: TOOLS_INDEX_PATH,
   image: DEFAULT_OG_IMAGE,
-  keywords: ["free resume tools", "resume bullet point generator", "resume summary generator", "resume word counter", "free ATS checker"],
+  keywords: ["free resume tools", "resume bullet point generator", "resume summary generator", "resume word counter", "free ATS checker", "resignation letter generator"],
 });
 
 function buildFaqs(limit: number): FaqItem[] {
   return [
     {
       q: "Are these resume tools really free?",
-      a: `Yes. The ATS check runs once a month per network. The bullet point and summary generators share ${limit} free generations a day. The word counter and the action verbs list have no limit.`,
+      a: `Yes. The ATS check runs once a month per network. The bullet point, summary and resignation letter generators share ${limit} free generations a day. The word counter and the action verbs list have no limit.`,
     },
     {
       q: "Do I need an account?",
@@ -39,14 +39,14 @@ function buildFaqs(limit: number): FaqItem[] {
     },
     {
       q: "Is my text stored?",
-      a: "The word counter runs in your browser and sends nothing. The bullet and summary generators send your text to our AI provider and don't store it. The ATS check keeps your score and fixes, not your file.",
+      a: "The word counter runs in your browser and sends nothing. The bullet, summary and resignation letter generators send your text to our AI provider and don't store it. The ATS check keeps your score and fixes, not your file.",
     },
   ];
 }
 
 function note(key: FreeToolKey, limit: number) {
   if (key === "ats") return "Free · once a month · no account";
-  if (key === "bullets" || key === "summary") return `Free · ${limit} a day · no account`;
+  if (key === "bullets" || key === "summary" || key === "resignation") return `Free · ${limit} a day · no account`;
   if (key === "words") return "Free · runs in your browser";
   return "Free · copy any verb";
 }
@@ -94,7 +94,17 @@ export default async function ToolsIndexPage() {
       <section className={`${container} pt-8 lg:pt-12`}>
         <ul className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
           {tools.map((t, i) => (
-            <li key={t.key} className={i === 0 ? "sm:col-span-2 lg:col-span-1 lg:row-span-2" : ""}>
+            <li
+              key={t.key}
+              className={
+                i === 0
+                  ? "sm:col-span-2 lg:col-span-1 lg:row-span-2"
+                  : // An odd tool out after the 2×2 block takes the full row instead of leaving a gap.
+                    i === tools.length - 1 && (tools.length - 1) % 2 === 1
+                    ? "sm:col-span-2 lg:col-span-3"
+                    : ""
+              }
+            >
               <Link
                 href={t.href}
                 className={`lc-rise motion-reduce:hover:transform-none group flex h-full flex-col rounded-[28px] p-6 lg:p-8 ${i === 0 ? "bg-[#5440e8] text-white lc-float" : "lc-card"}`}

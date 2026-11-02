@@ -142,13 +142,7 @@ export async function coverLetterDocxBuffer(
     year: "numeric",
   });
   body.push(new Paragraph({ spacing: { before: 280, after: 240 }, children: [text(date)] }));
-  for (const block of letter.replace(/\r\n/g, "\n").split(/\n\s*\n/)) {
-    const lines = block.split("\n").map((l) => l.trimEnd()).filter((l) => l.trim());
-    if (!lines.length) continue;
-    const runs: TextRun[] = [];
-    lines.forEach((l, i) => runs.push(new TextRun({ text: l, font: FONT, size: 22, break: i > 0 ? 1 : undefined })));
-    body.push(new Paragraph({ spacing: { after: 200, line: 300 }, children: runs }));
-  }
+  body.push(...letterBlocks(letter));
   const doc = new Document({
     creator: c.contact.fullName || undefined,
     title: "Cover letter",
@@ -162,6 +156,49 @@ export async function coverLetterDocxBuffer(
           },
         },
         children: body,
+      },
+    ],
+  });
+  return Packer.toBuffer(doc);
+}
+
+/** Text blocks split on blank lines, one Word paragraph each, line breaks kept. */
+function letterBlocks(letter: string, opts: { boldFirstLine?: boolean } = {}): Paragraph[] {
+  const out: Paragraph[] = [];
+  for (const block of letter.replace(/\r\n?/g, "\n").split(/\n\s*\n/)) {
+    const lines = block.split("\n").map((l) => l.trimEnd()).filter((l) => l.trim());
+    if (!lines.length) continue;
+    const runs: TextRun[] = [];
+    lines.forEach((l, i) => {
+      const head = opts.boldFirstLine && out.length === 0 && i === 0;
+      runs.push(new TextRun({ text: l, font: FONT, size: head ? 30 : 22, bold: head || undefined, break: i > 0 ? 1 : undefined }));
+    });
+    out.push(new Paragraph({ spacing: { after: 200, line: 300 }, children: runs }));
+  }
+  return out;
+}
+
+/**
+ * Word file for a plain-text letter with no account behind it (the free
+ * resignation letter templates and generator). The text is laid out as
+ * written; when it opens with a sender block (not "Subject:" or a greeting),
+ * the first line — the sender's name — is set bold.
+ */
+export async function plainLetterDocxBuffer(letter: string, opts: { title: string }): Promise<Buffer> {
+  const boldFirstLine = !/^(subject:|dear\b|hi\b|hello\b)/i.test(letter.trimStart());
+  const page = pageSizeFor("us");
+  const doc = new Document({
+    title: opts.title,
+    styles: { default: { document: { run: { font: FONT, size: 22 } } } },
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { width: page.width * TWIP_PER_PT, height: page.height * TWIP_PER_PT },
+            margin: { top: MARGIN * 1.3, bottom: MARGIN, left: MARGIN * 1.3, right: MARGIN * 1.3 },
+          },
+        },
+        children: letterBlocks(letter, { boldFirstLine }),
       },
     ],
   });

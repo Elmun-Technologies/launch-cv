@@ -26,6 +26,13 @@ export function SeoMarkdown({ children, sourceIds = [] }: { children: string; so
             const id = href.slice("#source-".length);
             return <SourceRef id={id} n={sourceIds.indexOf(id) + 1} />;
           }
+          if (href.startsWith("#")) {
+            return (
+              <a href={href} className={linkCls}>
+                {children}
+              </a>
+            );
+          }
           if (href.startsWith("/")) {
             return (
               <Link href={href} className={linkCls}>
