@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { AdminResumesPage } from "./list-client";
 
 export default async function Page() {
-  if (!(await requireAdmin("users"))) redirect("/admin-panel/access-denied");
-  return <AdminResumesPage />;
+  const admin = await requireAdmin("users");
+  if (!admin) redirect("/admin-panel/access-denied");
+  return <AdminResumesPage email={admin.email} />;
 }

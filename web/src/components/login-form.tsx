@@ -27,6 +27,7 @@ const GOOGLE_ERRORS: Record<string, string> = {
   google_unverified_email: "Your Google email isn't verified. Verify it with Google, then retry.",
   google_server: "Something went wrong finishing Google sign-in. Please try again.",
   signups_paused: "New sign-ups are paused for a short while. Existing accounts can still sign in.",
+  account_suspended: "This account is suspended. Contact support if you think this is a mistake.",
 };
 
 /** Mirror of middleware's safeNextPath — blocks `//evil.com`, schemes, and

@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
 import { trackEvent } from "@/lib/analytics";
+import { attributionFromCookieHeader } from "@/lib/utm";
 import { SIGNUP_FLAG_COOKIE } from "@/lib/analytics-enabled";
 import { isAdminUser } from "@/lib/admin-guard";
 import { INTERNAL_TRAFFIC_KEY } from "@/lib/analytics-enabled";
@@ -148,8 +149,14 @@ export async function GET(req: Request) {
       if (stateCookie.ref) {
         await creditReferral(stateCookie.ref, user.id, user.email).catch(() => undefined);
       }
-      await trackEvent("signup", { userId: user.id, meta: { provider: "google" } });
+      const attribution = attributionFromCookieHeader(req.headers.get("cookie"));
+      await trackEvent("signup", {
+        userId: user.id,
+        meta: { provider: "google", ...(Object.keys(attribution).length ? { attribution } : {}) },
+      });
     }
+
+    if (user.suspendedAt) return fail(req, "account_suspended");
 
     userId = user.id;
     userEmail = user.email;

@@ -1,20 +1,23 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { AdminShell } from "@/components/admin-shell";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
-import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
+import { StatusBadge } from "@/components/admin/status-badge";
 import {
   AdminPageHeader,
   ChipButton,
   ChipGroup,
   LoadingCard,
   Pager,
+  StatTile,
   cellMain,
   cellMuted,
-  cellSub,
   cellText,
 } from "@/components/admin/v5/ui";
+import { APP_STAGES, appStatusBadge } from "@/lib/admin-labels";
+import { fmtDate, fmtDateTime } from "@/lib/admin-dates";
 
 interface AppRow {
   id: string;
@@ -22,98 +25,117 @@ interface AppRow {
   company: string | null;
   status: string;
   createdAt: string;
-  user: { name: string | null; email: string };
+  user: { id: string; name: string | null; email: string };
 }
 
-// Values the job tracker actually stores.
-const STATUS_OPTIONS = ["all", "bookmarked", "applying", "interviewing", "negotiating", "accepted", "rejected"];
 const PER_PAGE = 20;
+const CHIPS = [{ key: "all", label: "All" }, ...APP_STAGES.map((s) => ({ key: s.key as string, label: s.label })), { key: "draft", label: "Draft" }];
 
-export function AdminApplicationsPage() {
+export function AdminApplicationsPage({ email }: { email: string }) {
   const [apps, setApps] = useState<AppRow[]>([]);
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [stage, setStage] = useState("all");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [stageCounts, setStageCounts] = useState<Record<string, number> | null>(null);
+  const [drafts, setDrafts] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const fetchApps = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page: String(page), pageSize: String(PER_PAGE) });
-      if (statusFilter !== "all") params.set("status", statusFilter);
+      const params = new URLSearchParams({ page: String(page), pageSize: String(PER_PAGE), stage });
       const res = await fetch(`/api/admin-panel/applications?${params}`);
       const data = await res.json();
       setApps(data.rows ?? []);
       setTotal(data.total ?? 0);
+      setStageCounts(data.stageCounts ?? null);
+      setDrafts(data.drafts ?? 0);
     } catch {
       // ignore
     } finally {
       setLoading(false);
     }
-  }, [page, statusFilter]);
+  }, [page, stage]);
 
   useEffect(() => {
     fetchApps();
   }, [fetchApps]);
 
   const columns: DataTableColumn<AppRow>[] = [
-    {
-      key: "company",
-      header: "Company",
-      render: (a) => <span className={cellMain}>{a.company || "—"}</span>,
-    },
-    {
-      key: "title",
-      header: "Role",
-      truncate: "max-w-[240px]",
-      render: (a) => <span className={cellText}>{a.title || "Untitled"}</span>,
-    },
+    { key: "company", header: "Company", render: (a) => <span className={cellMain}>{a.company || "—"}</span> },
+    { key: "title", header: "Role", truncate: "max-w-[240px]", render: (a) => <span className={cellText}>{a.title || "Untitled"}</span> },
     {
       key: "user",
       header: "User",
+      truncate: "max-w-[240px]",
       render: (a) => (
-        <div className="min-w-0">
-          <p className={`truncate ${cellText}`}>{a.user.name || "—"}</p>
-          <p className={`truncate ${cellSub}`}>{a.user.email}</p>
-        </div>
+        <Link href={`/admin-panel/users/${a.user.id}`} className={`${cellText} hover:text-[#5440e8]`}>
+          {a.user.email}
+        </Link>
       ),
     },
     {
       key: "status",
       header: "Status",
-      render: (a) => <StatusBadge tone={statusToTone(a.status)}>{a.status}</StatusBadge>,
+      render: (a) => {
+        const b = appStatusBadge(a.status);
+        return <StatusBadge tone={b.tone}>{b.label}</StatusBadge>;
+      },
     },
     {
       key: "created",
       header: "Created",
-      render: (a) => <span className={`whitespace-nowrap ${cellMuted}`}>{new Date(a.createdAt).toLocaleDateString()}</span>,
+      render: (a) => (
+        <time dateTime={a.createdAt} title={`${fmtDateTime(a.createdAt)} UTC`} className={`whitespace-nowrap ${cellMuted}`}>
+          {fmtDate(a.createdAt)}
+        </time>
+      ),
     },
   ];
 
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+  const allCount = stageCounts ? Object.values(stageCounts).reduce((a, n) => a + n, 0) : null;
 
   return (
-    <AdminShell pageTitle="Applications">
+    <AdminShell email={email} pageTitle="Applications">
       <div className="space-y-5">
         <AdminPageHeader
           title="Applications"
-          description={`${total.toLocaleString()} application${total === 1 ? "" : "s"} tracked across all users.`}
+          description={
+            allCount === null
+              ? "Jobs tracked across all users, in the same stages as the job tracker."
+              : `${allCount.toLocaleString("en-US")} application${allCount === 1 ? "" : "s"} tracked across all users, in the same stages as the job tracker.`
+          }
         />
 
-        <ChipGroup label="Filter by status">
-          {STATUS_OPTIONS.map((s) => (
+        <ChipGroup label="Filter by stage">
+          {CHIPS.map((c) => (
             <ChipButton
-              key={s}
-              active={statusFilter === s}
+              key={c.key}
+              active={stage === c.key}
               onClick={() => {
-                setStatusFilter(s);
+                setStage(c.key);
                 setPage(1);
               }}
             >
-              <span className="capitalize">{s}</span>
+              {c.label}
             </ChipButton>
           ))}
         </ChipGroup>
+
+        {stageCounts ? (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {APP_STAGES.map((s) => (
+              <StatTile
+                key={s.key}
+                compact
+                label={s.label}
+                value={stageCounts[s.key] ?? 0}
+                hint={s.key === "bookmarked" && drafts > 0 ? `incl. ${drafts} draft${drafts === 1 ? "" : "s"}` : undefined}
+              />
+            ))}
+          </div>
+        ) : null}
 
         {loading ? (
           <LoadingCard />
@@ -123,15 +145,15 @@ export function AdminApplicationsPage() {
               columns={columns}
               rows={apps}
               rowKey={(a) => a.id}
-              emptyTitle="No applications for this filter"
-              emptyDescription="Switch to a different status filter or All."
+              emptyTitle="No applications in this stage"
+              emptyDescription="Pick another stage or All."
             />
             <Pager
               page={page}
               totalPages={totalPages}
               onPrev={() => setPage((p) => Math.max(1, p - 1))}
               onNext={() => setPage((p) => p + 1)}
-              summary={`${total.toLocaleString()} total`}
+              summary={`${total.toLocaleString("en-US")} ${stage === "all" ? "total" : "in this stage"}`}
             />
           </div>
         )}

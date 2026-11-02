@@ -25,6 +25,13 @@ export type AuditAction =
   // Operations
   | "user.role.change"
   | "user.delete"
+  | "user.plan.grant"
+  | "user.plan.revoke"
+  | "user.usage.reset"
+  | "user.suspend"
+  | "user.unsuspend"
+  | "user.export"
+  | "audit.export"
   | "resume.delete"
   | "subscription.cancel"
   | "subscription.refund"

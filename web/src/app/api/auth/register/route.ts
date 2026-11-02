@@ -7,6 +7,7 @@ import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-tok
 import { allowRegisterIp } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
 import { sendEmailVerification } from "@/lib/send-verification";
+import { attributionFromCookieHeader } from "@/lib/utm";
 
 const schema = z.object({
   email: z
@@ -87,7 +88,10 @@ export async function POST(req: Request) {
       }
     }
 
-    await trackEvent("signup", { userId: user.id });
+    // First-touch campaign tags (UTM / click ids, never PII) so Admin → Analytics
+    // can show which channels bring people who later pay.
+    const attribution = attributionFromCookieHeader(req.headers.get("cookie"));
+    await trackEvent("signup", { userId: user.id, meta: Object.keys(attribution).length ? { attribution } : undefined });
     await sendEmailVerification(user.id, user.email).catch(() => undefined);
     return res;
   } catch (err) {
