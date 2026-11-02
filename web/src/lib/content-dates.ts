@@ -24,6 +24,17 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/cover-letter-examples": "2026-10-27",
   /** All /cover-letter-examples/[slug] pages (data in lib/cover-letter-examples.ts). */
   "/cover-letter-examples/*": "2026-10-27",
+  "/alternatives/jobscan": "2026-11-02",
+  "/resume-format": "2026-11-02",
+  "/tools": "2026-11-02",
+  "/tools/resume-bullet-point-generator": "2026-11-02",
+  "/tools/resume-summary-generator": "2026-11-02",
+  "/tools/resume-word-counter": "2026-11-02",
+  "/resume-action-verbs": "2026-11-02",
+  "/resume-keywords": "2026-11-02",
+  "/resume-keywords/*": "2026-11-02",
+  "/ats": "2026-11-02",
+  "/ats/*": "2026-11-02",
   "/legal/privacy": "2026-10-27",
   "/legal/terms": "2026-10-27",
 };
