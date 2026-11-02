@@ -18,7 +18,9 @@ export type AiTool =
   | "company_match"
   | "evidence"
   | "email"
-  | "import";
+  | "import"
+  | "free_bullets"
+  | "free_summary";
 
 export const AI_TOOL_LABELS: Record<AiTool, string> = {
   free_ats: "Free ATS check",
@@ -30,6 +32,8 @@ export const AI_TOOL_LABELS: Record<AiTool, string> = {
   evidence: "Consistency check",
   email: "Email drafts",
   import: "Resume import",
+  free_bullets: "Free bullet generator",
+  free_summary: "Free summary generator",
 };
 
 export const AI_MODELS = ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1"] as const;
@@ -54,12 +58,16 @@ export type Settings = {
     freeAtsPerIpPerHour: number;
     forgotPerIpPerHour: number;
     pdfPerUserPerHour: number;
+    /** Shared daily quota for the public AI writing tools (bullet + summary generators). */
+    freeToolsPerIpPerDay: number;
   };
   switches: {
     aiTools: boolean;
     freeAtsCheck: boolean;
     signups: boolean;
     checkout: boolean;
+    /** Public AI writing tools under /tools (bullet + summary generators). */
+    freeTools: boolean;
   };
   models: Record<AiTool, string>;
   security: {
@@ -84,8 +92,9 @@ export const DEFAULT_SETTINGS: Settings = {
     freeAtsPerIpPerHour: 5,
     forgotPerIpPerHour: 6,
     pdfPerUserPerHour: 60,
+    freeToolsPerIpPerDay: 10,
   },
-  switches: { aiTools: true, freeAtsCheck: true, signups: true, checkout: true },
+  switches: { aiTools: true, freeAtsCheck: true, signups: true, checkout: true, freeTools: true },
   models: {
     free_ats: "gpt-4o-mini",
     jd_align: "gpt-4o-mini",
@@ -96,6 +105,8 @@ export const DEFAULT_SETTINGS: Settings = {
     evidence: "gpt-4o-mini",
     email: "gpt-4o-mini",
     import: "gpt-4o-mini",
+    free_bullets: "gpt-4o-mini",
+    free_summary: "gpt-4o-mini",
   },
   security: { requireAdmin2fa: true, adminIdleMinutes: 30 },
 };
@@ -173,6 +184,7 @@ function sanitize<G extends SettingsGroup>(group: G, v: Settings[G]): Settings[G
   } else if (group === "rateLimits") {
     const r = v as Record<string, number>;
     for (const key of Object.keys(r)) r[key] = clampInt(r[key], 1, 10_000);
+    r.freeToolsPerIpPerDay = clampInt(r.freeToolsPerIpPerDay, 1, 1_000);
   } else if (group === "models") {
     const m = v as Record<string, string>;
     for (const key of Object.keys(m)) if (!(AI_MODELS as readonly string[]).includes(m[key])) m[key] = "gpt-4o-mini";
