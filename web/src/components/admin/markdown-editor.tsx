@@ -10,17 +10,21 @@ export type MarkdownEditorProps = {
   onChange: (next: string) => void;
   placeholder?: string;
   minHeight?: number;
+  /** Which view opens first. "split" shows the Markdown and the rendered page side by side. */
+  defaultView?: EditorView;
 };
+
+type EditorView = "write" | "split" | "preview";
 
 type ToolbarAction =
   | { kind: "wrap"; before: string; after: string }
   | { kind: "linePrefix"; prefix: string }
   | { kind: "snippet"; snippet: string };
 
-export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }: MarkdownEditorProps) {
+export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480, defaultView = "split" }: MarkdownEditorProps) {
   const uid = useId();
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const [activeTab, setActiveTab] = useState<"write" | "preview">("write");
+  const [activeTab, setActiveTab] = useState<EditorView>(defaultView);
   const [uploading, setUploading] = useState(false);
 
   const apply = useCallback(
@@ -117,12 +121,12 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
 
   return (
     <div className="min-w-0">
-      <div className="flex flex-col gap-1 rounded-xl bg-[#f7f6fb] p-1.5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col-reverse gap-1.5 rounded-xl bg-[#f7f6fb] p-1.5 2xl:flex-row 2xl:items-start 2xl:justify-between">
         <div
           role="toolbar"
           aria-label="Formatting"
           aria-controls={`${uid}-body`}
-          className="flex min-w-0 items-center gap-1 overflow-x-auto"
+          className="flex min-w-0 flex-wrap items-center gap-1"
         >
           {toolbarButtons.map((b, idx) => {
             if (b.kind === "spacer") {
@@ -135,7 +139,7 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
                 title={b.title}
                 aria-label={b.text === b.title ? undefined : `${b.text} (${b.title})`}
                 onClick={() => apply(b.action)}
-                disabled={activeTab !== "write"}
+                disabled={activeTab === "preview"}
                 className={`${toolCls} ${b.cls ?? ""}`}
               >
                 {b.text}
@@ -147,87 +151,121 @@ export function MarkdownEditor({ value, onChange, placeholder, minHeight = 480 }
             type="button"
             title="Insert image"
             onClick={handleImageUpload}
-            disabled={uploading || activeTab !== "write"}
+            disabled={uploading || activeTab === "preview"}
             className={toolCls}
           >
             {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" /> : null}
             {uploading ? "Uploading…" : "Image"}
           </button>
         </div>
-        <div role="group" aria-label="Editor view" className="flex shrink-0 gap-0.5 self-start rounded-[10px] bg-[#efedf7] p-0.5 sm:self-auto">
-          <button type="button" onClick={() => setActiveTab("write")} aria-pressed={activeTab === "write"} className={tabCls(activeTab === "write")}>
-            Write
-          </button>
-          <button type="button" onClick={() => setActiveTab("preview")} aria-pressed={activeTab === "preview"} className={tabCls(activeTab === "preview")}>
-            Preview
-          </button>
+        <div role="group" aria-label="Editor view" className="flex shrink-0 gap-0.5 self-end rounded-[10px] bg-[#efedf7] p-0.5 2xl:self-auto">
+          {(
+            [
+              ["write", "Write"],
+              ["split", "Split"],
+              ["preview", "Preview"],
+            ] as const
+          ).map(([v, label]) => (
+            <button key={v} type="button" onClick={() => setActiveTab(v)} aria-pressed={activeTab === v} className={tabCls(activeTab === v)}>
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
-      {activeTab === "write" ? (
-        <textarea
-          id={`${uid}-body`}
-          ref={textareaRef}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder ?? "Start writing… Markdown works: ## for headings, **bold**, - for lists."}
-          aria-label="Post body (Markdown)"
-          spellCheck
-          style={{ minHeight }}
-          className="mt-3 block w-full resize-y rounded-2xl border-[1.5px] border-transparent bg-white px-3 py-2 text-[16px] leading-[27px] text-[#24223a] outline-none transition-[border-color,box-shadow] placeholder:text-[#706e88] hover:border-[#e2e0ea] focus:border-[#5440e8] focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none!"
-        />
-      ) : (
-        <div id={`${uid}-body`} style={{ minHeight }} className="mt-3 overflow-auto rounded-2xl bg-[#eeecf4] p-4 sm:p-7">
-          {value.trim().length === 0 ? (
-            <p className="text-[15px] text-[#66647c]">Nothing to preview yet.</p>
-          ) : (
-            <article className="mx-auto max-w-[720px] text-[17px] leading-[28px] text-[#24223a] [overflow-wrap:anywhere] sm:text-[18px] sm:leading-[30px] [&>h2:first-child]:mt-0 [&>p:first-child]:mt-0 [&_em]:italic [&_li>p]:mt-0">
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  h1: (p) => <h2 className={previewH2} {...p} />,
-                  h2: (p) => <h2 className={previewH2} {...p} />,
-                  h3: (p) => <h3 className="mt-7 text-[20px] font-extrabold leading-snug tracking-[-0.01em] text-[#121226] sm:text-[21px]" {...p} />,
-                  p: (p) => <p className="mt-4" {...p} />,
-                  ul: (p) => <ul className="mt-4 flex list-disc flex-col gap-2 pl-[22px] marker:text-[#5440e8]" {...p} />,
-                  ol: (p) => <ol className="mt-4 flex list-decimal flex-col gap-2 pl-[22px] marker:font-bold marker:text-[#5440e8]" {...p} />,
-                  strong: (p) => <strong className="font-bold text-[#121226]" {...p} />,
-                  a: (p) => (
-                    <a
-                      className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/40 underline-offset-[3px] hover:text-[#4430d6]"
-                      {...p}
-                    />
-                  ),
-                  code: (p) => <code className="lc-mono rounded-md bg-[#f1eff8] px-1.5 py-0.5 text-[0.85em] text-[#121226]" {...p} />,
-                  blockquote: (p) => (
-                    <blockquote
-                      className="mt-6 rounded-r-2xl border-l-4 border-[#5440e8] bg-white px-5 py-4 text-[#4a4862] [&>p:first-child]:mt-0"
-                      {...p}
-                    />
-                  ),
-                  hr: () => <hr className="my-10 border-[#e2e0ea]" />,
-                  table: (p) => (
-                    <div className="mt-6 overflow-x-auto rounded-2xl bg-white p-1 [overflow-wrap:normal]">
-                      <table className="w-full border-collapse text-[15px] leading-6" {...p} />
-                    </div>
-                  ),
-                  th: (p) => <th className="border-b border-[#e2e0ea] px-4 py-3 text-left font-bold text-[#121226]" {...p} />,
-                  td: (p) => <td className="border-b border-[#efedf7] px-4 py-3 align-top" {...p} />,
-                  img: (p) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img {...p} alt={p.alt ?? ""} className="mt-6 h-auto w-full rounded-[20px]" />
-                  ),
-                }}
-              >
-                {value}
-              </ReactMarkdown>
-            </article>
-          )}
-        </div>
-      )}
+      <div className={activeTab === "split" ? "mt-3 grid grid-cols-1 gap-3 lg:grid-cols-2" : "mt-3"}>
+        {activeTab !== "preview" ? (
+          <textarea
+            id={`${uid}-body`}
+            ref={textareaRef}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder ?? "Start writing… Markdown works: ## for headings, **bold**, - for lists."}
+            aria-label="Post body (Markdown)"
+            spellCheck
+            style={{ minHeight }}
+            className={`block w-full resize-y rounded-2xl border-[1.5px] bg-white px-3 py-2 text-[16px] leading-[27px] text-[#24223a] outline-none transition-[border-color,box-shadow] placeholder:text-[#706e88] hover:border-[#e2e0ea] focus:border-[#5440e8] focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none! ${
+              activeTab === "split" ? "border-[#efedf7] text-[15px]! leading-[25px]!" : "border-transparent"
+            }`}
+          />
+        ) : null}
+        {activeTab !== "write" ? (
+          <section
+            id={activeTab === "preview" ? `${uid}-body` : undefined}
+            aria-label="Rendered preview"
+            tabIndex={0}
+            aria-live="off"
+            style={{ minHeight }}
+            className={`overflow-auto rounded-2xl bg-[#eeecf4] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-[#5440e8] ${activeTab === "split" ? "p-4 sm:p-5 lg:max-h-[min(80vh,900px)]" : "p-4 sm:p-7"}`}
+          >
+            {value.trim().length === 0 ? (
+              <p className="text-[15px] text-[#66647c]">Nothing to preview yet.</p>
+            ) : (
+              <MarkdownPreview value={value} compact={activeTab === "split"} />
+            )}
+          </section>
+        ) : null}
+      </div>
     </div>
   );
 }
+
+/** The post body rendered with the public article styles (smaller type in split view). */
+function MarkdownPreview({ value, compact }: { value: string; compact: boolean }) {
+  const h2 = compact ? previewH2Compact : previewH2;
+  const h3 = compact
+    ? "mt-5 text-[17px] font-extrabold leading-snug text-[#121226]"
+    : "mt-7 text-[20px] font-extrabold leading-snug tracking-[-0.01em] text-[#121226] sm:text-[21px]";
+  return (
+    <article
+      className={`mx-auto max-w-[720px] text-[#24223a] [overflow-wrap:anywhere] [&>h2:first-child]:mt-0 [&>p:first-child]:mt-0 [&_em]:italic [&_li>p]:mt-0 ${
+        compact ? "text-[15px] leading-[24px]" : "text-[17px] leading-[28px] sm:text-[18px] sm:leading-[30px]"
+      }`}
+    >
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          h1: (p) => <h2 className={h2} {...p} />,
+          h2: (p) => <h2 className={h2} {...p} />,
+          h3: (p) => <h3 className={h3} {...p} />,
+          p: (p) => <p className={compact ? "mt-3" : "mt-4"} {...p} />,
+          ul: (p) => <ul className="mt-4 flex list-disc flex-col gap-2 pl-[22px] marker:text-[#5440e8]" {...p} />,
+          ol: (p) => <ol className="mt-4 flex list-decimal flex-col gap-2 pl-[22px] marker:font-bold marker:text-[#5440e8]" {...p} />,
+          strong: (p) => <strong className="font-bold text-[#121226]" {...p} />,
+          a: (p) => (
+            <a
+              className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/40 underline-offset-[3px] hover:text-[#4430d6]"
+              {...p}
+            />
+          ),
+          code: (p) => <code className="lc-mono rounded-md bg-[#f1eff8] px-1.5 py-0.5 text-[0.85em] text-[#121226]" {...p} />,
+          blockquote: (p) => (
+            <blockquote
+              className="mt-6 rounded-r-2xl border-l-4 border-[#5440e8] bg-white px-5 py-4 text-[#4a4862] [&>p:first-child]:mt-0"
+              {...p}
+            />
+          ),
+          hr: () => <hr className="my-10 border-[#e2e0ea]" />,
+          table: (p) => (
+            <div className="mt-6 overflow-x-auto rounded-2xl bg-white p-1 [overflow-wrap:normal]">
+              <table className="w-full border-collapse text-[15px] leading-6" {...p} />
+            </div>
+          ),
+          th: (p) => <th className="border-b border-[#e2e0ea] px-4 py-3 text-left font-bold text-[#121226]" {...p} />,
+          td: (p) => <td className="border-b border-[#efedf7] px-4 py-3 align-top" {...p} />,
+          img: (p) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img {...p} alt={p.alt ?? ""} className="mt-6 h-auto w-full rounded-[20px]" />
+          ),
+        }}
+      >
+        {value}
+      </ReactMarkdown>
+    </article>
+  );
+}
+
+const previewH2Compact = "mt-7 text-[21px] font-extrabold leading-[27px] tracking-[-0.02em] text-[#121226]";
 
 const previewH2 =
   "mt-10 text-[26px] font-extrabold leading-[31px] tracking-[-0.02em] text-[#121226] sm:mt-[52px] sm:text-[32px] sm:leading-[38px] sm:tracking-[-0.025em]";

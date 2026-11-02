@@ -19,9 +19,10 @@ export function bustTestimonialCache(placements: string[]) {
   }
 }
 
-/** Revalidates the page that renders FAQs at the given placement. */
-export function bustFaqCache(placement: string) {
-  revalidatePath(placementPath(placement));
+/** Revalidates every page that renders FAQs at the given placement(s). */
+export function bustFaqCache(placements: string | string[]) {
+  const list = Array.isArray(placements) ? placements : [placements];
+  for (const path of new Set(list.map(placementPath))) revalidatePath(path);
 }
 
 /** Public path for a FAQ/testimonial placement value. */

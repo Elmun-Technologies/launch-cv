@@ -12,7 +12,10 @@ const blank: TestimonialEditorData = {
   rating: 5,
   placement: ["home"],
   order: 0,
-  published: true,
+  // New testimonials start hidden until permission is on file.
+  published: false,
+  permissionDate: "",
+  source: "",
 };
 
 export default async function NewTestimonialPage() {

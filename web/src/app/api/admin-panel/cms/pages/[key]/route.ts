@@ -1,9 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
-import { recordAudit } from "@/lib/cms/audit";
-import { bustPageCopyCache } from "@/lib/cms/revalidate";
 import { PAGE_COPY, cleanPageCopy, isPageCopyKey } from "@/lib/cms/page-copy";
+import { publishPageCopy } from "@/lib/cms/page-copy-history";
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ key: string }> }) {
   const admin = await requireAdmin("content");
@@ -42,21 +41,12 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ key:
     );
   }
 
-  const before = await prisma.pageCopy.findUnique({ where: { key } });
-  const updated = await prisma.pageCopy.upsert({
-    where: { key },
-    create: { key, data: clean as object, updatedById: admin.sub },
-    update: { data: clean as object, updatedById: admin.sub },
-  });
-
-  await recordAudit({
-    actorId: admin.sub,
+  // Upserts the row, adds a version to the history, writes the audit log and refreshes the pages.
+  const updated = await publishPageCopy({
+    key,
+    clean: clean as Record<string, unknown>,
+    actor: { sub: admin.sub, email: admin.email },
     action: "page-copy.update",
-    entity: "PageCopy",
-    entityId: updated.id,
-    diff: { key, before: before?.data ?? null, after: clean as object },
   });
-
-  bustPageCopyCache(key);
   return NextResponse.json({ pageCopy: updated });
 }
