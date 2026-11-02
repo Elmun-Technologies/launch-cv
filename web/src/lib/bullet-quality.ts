@@ -20,7 +20,7 @@ export type BulletFlag = {
 };
 
 /** Phrases that describe a duty instead of a result, matched at the start of the bullet. */
-const DUTY_START =
+export const DUTY_START =
   /^(?:was\s+|i\s+was\s+)?(?:responsible\s+for|duties\s+(?:included|include|were)|worked\s+on|helped(?:\s+with|\s+to)?|tasked\s+with|in\s+charge\s+of|assisted\s+(?:with|in)|involved\s+in|participated\s+in)\b/i;
 
 /** Number words that count as a figure ("doubled", "a dozen", "three"). */
@@ -43,7 +43,7 @@ const DUTY: BulletFlag = {
 
 const NO_RESULT: BulletFlag = {
   kind: "no-result",
-  label: "Add a result",
+  label: "No result",
   hint: "This bullet has no number or outcome. Add what changed because of your work.",
 };
 
