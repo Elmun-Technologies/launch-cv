@@ -11,7 +11,7 @@ export const FAQ_PLACEMENTS = [
   { value: "features/resume-builder", label: "Features · Resume Builder" },
   { value: "features/cover-letter", label: "Features · Cover Letter" },
   { value: "features/interview-prep", label: "Features · Interview Prep" },
-  { value: "features/ats-score", label: "Features · ATS Score" },
+  { value: "features/ats-score", label: "Free ATS check page" },
   { value: "features/voice-input", label: "Features · Voice Input" },
 ];
 
@@ -21,7 +21,7 @@ export const TESTIMONIAL_PLACEMENTS = [
   { value: "features/resume-builder", label: "Features · Resume Builder" },
   { value: "features/cover-letter", label: "Features · Cover Letter" },
   { value: "features/interview-prep", label: "Features · Interview Prep" },
-  { value: "features/ats-score", label: "Features · ATS Score" },
+  { value: "features/ats-score", label: "Free ATS check page" },
   { value: "features/voice-input", label: "Features · Voice Input" },
 ];
 

@@ -1,14 +1,9 @@
 import Link from "next/link";
 import { cmsDateFmt } from "@/components/admin/cms-ui";
+import { PAGE_COPY } from "@/lib/cms/page-copy";
 
-/** The set of editable page-copy "keys" registered with the CMS. */
-export const PAGE_COPY_SECTIONS = [
-  { key: "home.hero", label: "Home · hero", description: "Headline, subhead, CTAs on launch-cv.com" },
-  { key: "home.cta", label: "Home · final CTA", description: "Bottom CTA banner on home" },
-  { key: "pricing.hero", label: "Pricing · hero", description: "Headline and subhead above plan cards" },
-  { key: "about.mission", label: "About · mission", description: "The long-form mission statement" },
-  { key: "footer.tagline", label: "Footer · tagline", description: "Brand description in the footer" },
-];
+/** The editable page-copy keys (registry and defaults live in lib/cms/page-copy.ts). */
+export const PAGE_COPY_SECTIONS = Object.entries(PAGE_COPY).map(([key, d]) => ({ key, label: d.label, description: d.description }));
 
 /**
  * Master list of page-copy sections (left column of the Page copy screen).

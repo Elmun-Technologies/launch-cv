@@ -7,6 +7,7 @@ import { FreeAtsCheck } from "@/components/site/ats/free-ats-check";
 import { container, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, FREE_ATS_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
+import { getFaqsFor } from "@/lib/cms/faqs";
 
 export const metadata = buildMarketingMetadata({
   title: "Free ATS Resume Checker — Score in 10 Seconds",
@@ -25,7 +26,7 @@ export const metadata = buildMarketingMetadata({
   ],
 });
 
-const faqs = [
+const FAQS = [
   {
     q: "Is this ATS checker really free?",
     a: "Yes. You get your score, the four category scores and your top fixes without an account. Create a free account to save the report and see every fix. The free check runs once a month per network.",
@@ -52,7 +53,10 @@ const faqs = [
   },
 ];
 
-const ld = {
+export const revalidate = 300;
+
+function buildLd(faqs: { q: string; a: string }[]) {
+  return {
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -73,7 +77,8 @@ const ld = {
       })),
     },
   ],
-};
+  };
+}
 
 const dimensions = [
   { t: "Formatting", d: "Columns, tables, text boxes, headers and icons that the parser can scramble or drop.", m: "Columns, tables, headers, icons." },
@@ -198,10 +203,13 @@ function Stage() {
   );
 }
 
-export default function FreeAtsCheckPage() {
+export default async function FreeAtsCheckPage() {
+  // Admin → Content → FAQs, placement "features/ats-score" (the old feature page now lives here).
+  const cmsFaqs = await getFaqsFor("features/ats-score");
+  const faqs = cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : FAQS;
   return (
     <SiteShell>
-      <JsonLd data={ld} />
+      <JsonLd data={buildLd(faqs)} />
 
       <FreeAtsCheck intro={<Intro />} stage={<Stage />} />
 
