@@ -2,6 +2,7 @@ import { redirect, notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
+import { faqPlacements } from "@/lib/cms/faqs";
 import { FaqEditor, type FaqEditorData } from "@/components/admin/faq-editor";
 
 export default async function EditFaqPage({ params }: { params: Promise<{ id: string }> }) {
@@ -16,8 +17,7 @@ export default async function EditFaqPage({ params }: { params: Promise<{ id: st
     id: row.id,
     question: row.question,
     answer: row.answer,
-    placement: row.placement,
-    order: row.order,
+    placements: faqPlacements(row),
     published: row.published,
   };
 

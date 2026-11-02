@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { recordAudit } from "@/lib/cms/audit";
 import { bustTestimonialCache } from "@/lib/cms/revalidate";
+import { readPermissionDate, readSource, testimonialPublishProblems } from "@/lib/cms/testimonials";
 
 export async function GET(req: NextRequest) {
   const admin = await requireAdmin("content");
@@ -31,6 +32,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "quote required" }, { status: 400 });
   }
 
+  const permissionDate = readPermissionDate(body.permissionDate);
+  if (permissionDate === "invalid") {
+    return NextResponse.json({ error: "Permission date must be a valid date, not in the future." }, { status: 400 });
+  }
+  const source = readSource(body.source);
+  // New testimonials stay hidden unless publishing is asked for explicitly, and
+  // publishing needs the author's name, a permission date and a source on file.
+  const published = body.published === true;
+  if (published) {
+    const missing = testimonialPublishProblems({ authorName: body.authorName, quote: body.quote, permissionDate, source });
+    if (missing.length) {
+      return NextResponse.json({ error: `Can't publish without: ${missing.join(", ")}.` }, { status: 400 });
+    }
+  }
+
   const created = await prisma.testimonial.create({
     data: {
       authorName: body.authorName.trim(),
@@ -42,7 +58,9 @@ export async function POST(req: NextRequest) {
         ? (body.placement as unknown[]).filter((p): p is string => typeof p === "string")
         : [],
       order: typeof body.order === "number" ? body.order : 0,
-      published: body.published === false ? false : true,
+      permissionDate,
+      source,
+      published,
     },
   });
 
@@ -51,7 +69,14 @@ export async function POST(req: NextRequest) {
     action: "testimonial.create",
     entity: "Testimonial",
     entityId: created.id,
-    diff: { created: { authorName: created.authorName } },
+    diff: {
+      created: {
+        authorName: created.authorName,
+        published: created.published,
+        permissionDate: created.permissionDate?.toISOString() ?? null,
+        source: created.source,
+      },
+    },
   });
 
   bustTestimonialCache(created.placement);

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { AlertCircle, ArrowLeft, CheckCircle2, Plus } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, ChevronDown, Plus } from "lucide-react";
 
 /**
  * v5 building blocks for the admin CMS screens (blog, testimonials, FAQs,
@@ -134,6 +134,41 @@ export function CmsCard({
       ) : null}
       {children}
     </section>
+  );
+}
+
+/**
+ * Collapsible sidebar card (native <details>, so it works without JS and the
+ * summary is a real disclosure button for keyboards and screen readers).
+ * `meta` is a short state shown next to the title while closed or open.
+ */
+export function CmsDisclosure({
+  title,
+  meta,
+  defaultOpen = false,
+  children,
+}: {
+  title: string;
+  meta?: ReactNode;
+  defaultOpen?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <details open={defaultOpen} className="lc-card group min-w-0 rounded-[24px]">
+      <summary
+        className={`flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 rounded-[24px] px-5 py-3 sm:px-[22px] [&::-webkit-details-marker]:hidden ${focusRing} focus-visible:outline-offset-[-3px]`}
+      >
+        <h2 className="text-[16px] font-extrabold tracking-[-0.01em] text-[#121226]">{title}</h2>
+        <span className="flex min-w-0 items-center gap-2">
+          {meta ? <span className="truncate text-[12px] font-semibold text-[#66647c]">{meta}</span> : null}
+          <ChevronDown
+            className="h-4 w-4 shrink-0 text-[#66647c] transition-transform group-open:rotate-180 motion-reduce:transition-none"
+            aria-hidden="true"
+          />
+        </span>
+      </summary>
+      <div className="px-5 pb-5 sm:px-[22px] sm:pb-[22px]">{children}</div>
+    </details>
   );
 }
 

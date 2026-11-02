@@ -7,8 +7,7 @@ const blank: FaqEditorData = {
   id: null,
   question: "",
   answer: "",
-  placement: "pricing",
-  order: 0,
+  placements: ["pricing"],
   published: true,
 };
 

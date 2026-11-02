@@ -290,7 +290,7 @@ model BlogPost {
 }
 
 model Testimonial {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   authorName      String
   authorRole      String?
   authorAvatarUrl String?
@@ -298,22 +298,30 @@ model Testimonial {
   rating          Int?
   /// Where this testimonial appears (e.g. ["home", "features/ats-score"]).
   placement       String[]
-  order           Int      @default(0)
-  published       Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  order           Int       @default(0)
+  /// New testimonials start hidden; publishing needs permissionDate and source.
+  published       Boolean   @default(false)
+  /// When the author gave written permission to publish their name and words.
+  permissionDate  DateTime?
+  /// Where they said it (e.g. "Support email, Oct 12" or a review URL).
+  source          String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Faq {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String
-  /// "pricing" | "blog" | "features/ats-score" | etc.
-  placement String
-  order     Int      @default(0)
-  published Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String   @id @default(cuid())
+  question   String
+  answer     String
+  /// "pricing" | "blog" | "features/ats-score" | etc. Legacy single placement;
+  /// kept equal to placements[0] on save and read as a fallback.
+  placement  String
+  /// Every page this FAQ appears on. Empty on rows saved before multi-placement.
+  placements String[] @default([])
+  order      Int      @default(0)
+  published  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([placement, order])
 }
@@ -328,6 +336,19 @@ model PageCopy {
   updatedBy   User?    @relation("PageCopyEditor", fields: [updatedById], references: [id], onDelete: SetNull)
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
+}
+
+/// A published state of a PageCopy key, newest first. The last 20 per key are
+/// kept so an editor can restore an earlier version.
+model PageCopyVersion {
+  id           String   @id @default(cuid())
+  key          String
+  data         Json
+  savedById    String?
+  savedByEmail String?
+  createdAt    DateTime @default(now())
+
+  @@index([key, createdAt])
 }
 
 model MediaAsset {

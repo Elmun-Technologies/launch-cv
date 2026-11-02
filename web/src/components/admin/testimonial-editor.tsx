@@ -27,7 +27,20 @@ export type TestimonialEditorData = {
   placement: string[];
   order: number;
   published: boolean;
+  /** YYYY-MM-DD, or "" when no permission is on file. */
+  permissionDate: string;
+  source: string;
 };
+
+/** Mirrors testimonialPublishProblems() in lib/cms/testimonials.ts (the API enforces it). */
+function missingForPublish(d: TestimonialEditorData): string[] {
+  const out: string[] = [];
+  if (!d.authorName.trim()) out.push("author name");
+  if (!d.quote.trim()) out.push("quote");
+  if (!d.permissionDate) out.push("permission date");
+  if (!d.source.trim()) out.push("source");
+  return out;
+}
 
 export function TestimonialEditor({ initial }: { initial: TestimonialEditorData }) {
   const router = useRouter();
@@ -37,6 +50,7 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
   const [error, setError] = useState<string | null>(null);
 
   const isNew = data.id === null;
+  const today = new Date().toISOString().slice(0, 10);
   function update<K extends keyof TestimonialEditorData>(key: K, value: TestimonialEditorData[K]) {
     setData((p) => ({ ...p, [key]: value }));
   }
@@ -55,11 +69,19 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
       placement: data.placement,
       order: data.order,
       published: data.published,
+      permissionDate: data.permissionDate || null,
+      source: data.source.trim() || null,
     };
   }
 
+  const missing = missingForPublish(data);
+
   async function save() {
     setError(null);
+    if (data.published && missing.length) {
+      setError(`Can't publish without: ${missing.join(", ")}. Add them, or set the status to Hidden.`);
+      return;
+    }
     startSaving(async () => {
       try {
         if (isNew) {
@@ -169,6 +191,31 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
             </div>
           </CmsCard>
 
+          <CmsCard
+            title="Permission"
+            description="Required before publishing. Keep the written permission itself (email, form, review) where you can find it."
+          >
+            <div className="grid gap-4 sm:grid-cols-2">
+              <CmsField label="Permission date" hint="The day the author agreed in writing.">
+                <input
+                  type="date"
+                  value={data.permissionDate}
+                  max={today}
+                  onChange={(e) => update("permissionDate", e.target.value)}
+                  className={cmsInputCls}
+                />
+              </CmsField>
+              <CmsField label="Source (where they said it)" hint="For example a support email thread, a survey reply or a review link.">
+                <input
+                  value={data.source}
+                  maxLength={300}
+                  onChange={(e) => update("source", e.target.value)}
+                  className={cmsInputCls}
+                />
+              </CmsField>
+            </div>
+          </CmsCard>
+
           <CmsCard title="Placement" description="Where this testimonial should appear.">
             <fieldset>
               <legend className="sr-only">Placement</legend>
@@ -202,13 +249,22 @@ export function TestimonialEditor({ initial }: { initial: TestimonialEditorData 
         <div className="flex min-w-0 flex-col gap-3.5">
           <CmsCard title="Visibility">
             <div className="flex flex-col gap-3">
-              <CmsField label="Status">
+              <CmsField
+                label="Status"
+                hint={
+                  missing.length
+                    ? `To publish, add: ${missing.join(", ")}.`
+                    : "Only published testimonials with permission on file appear on the site."
+                }
+              >
                 <select
                   value={data.published ? "published" : "hidden"}
                   onChange={(e) => update("published", e.target.value === "published")}
                   className={cmsSelectCls}
                 >
-                  <option value="published">Published (visible)</option>
+                  <option value="published" disabled={missing.length > 0 && !data.published}>
+                    Published (visible)
+                  </option>
                   <option value="hidden">Hidden</option>
                 </select>
               </CmsField>

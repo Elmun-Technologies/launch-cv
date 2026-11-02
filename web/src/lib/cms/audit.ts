@@ -5,6 +5,7 @@ export type AuditAction =
   // CMS content
   | "blog.create"
   | "blog.update"
+  | "blog.autosave"
   | "blog.publish"
   | "blog.unpublish"
   | "blog.schedule"
@@ -16,7 +17,9 @@ export type AuditAction =
   | "faq.create"
   | "faq.update"
   | "faq.delete"
+  | "faq.reorder"
   | "page-copy.update"
+  | "page-copy.restore"
   | "media.upload"
   | "media.delete"
   // Operations

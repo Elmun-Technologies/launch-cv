@@ -57,6 +57,28 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     });
   }
 
+  // Autosave only ever writes the content of a draft: it is refused for any
+  // other status and can't change status, so it can never publish.
+  const autosave = body.autosave === true;
+  if (autosave) {
+    if (before.status !== "draft") {
+      return NextResponse.json({ error: "Autosave only applies to drafts.", code: "not_draft" }, { status: 409 });
+    }
+    const changed = Object.keys(data).filter(
+      (k) => JSON.stringify(data[k]) !== JSON.stringify((before as Record<string, unknown>)[k]),
+    );
+    if (!changed.length) return NextResponse.json({ post: before });
+    // Conditional on status so a publish landing in between can't be overwritten.
+    const res = await prisma.blogPost.updateMany({ where: { id, status: "draft" }, data });
+    if (res.count === 0) {
+      return NextResponse.json({ error: "Autosave only applies to drafts.", code: "not_draft" }, { status: 409 });
+    }
+    const updated = await prisma.blogPost.findUnique({ where: { id } });
+    await recordAutosaveAudit(admin.sub, id, changed);
+    // Drafts aren't public, so no page cache to refresh.
+    return NextResponse.json({ post: updated });
+  }
+
   // Status transitions
   let action: AuditAction = "blog.update";
   if (typeof body.status === "string") {
@@ -99,6 +121,47 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   bustBlogCache(updated.slug, before.slug);
   return NextResponse.json({ post: updated });
+}
+
+/**
+ * Autosaves are audit-logged as "blog.autosave". A typing session saves every
+ * few seconds, so saves by the same person on the same post within 10 minutes
+ * share one entry: its diff lists every field changed, the save count and the
+ * time of the last save.
+ */
+async function recordAutosaveAudit(actorId: string, postId: string, fields: string[]) {
+  const since = new Date(Date.now() - 10 * 60_000);
+  try {
+    const recent = await prisma.auditLog.findFirst({
+      where: { actorId, entity: "BlogPost", entityId: postId, createdAt: { gte: since } },
+      orderBy: { createdAt: "desc" },
+      select: { id: true, action: true, diff: true },
+    });
+    const now = new Date().toISOString();
+    if (recent?.action === "blog.autosave") {
+      const prev = (recent.diff ?? {}) as { fields?: string[]; saves?: number };
+      await prisma.auditLog.update({
+        where: { id: recent.id },
+        data: {
+          diff: {
+            fields: [...new Set([...(prev.fields ?? []), ...fields])],
+            saves: (prev.saves ?? 1) + 1,
+            lastSavedAt: now,
+          },
+        },
+      });
+      return;
+    }
+  } catch (err) {
+    console.error("[audit] autosave coalesce failed", err);
+  }
+  await recordAudit({
+    actorId,
+    action: "blog.autosave",
+    entity: "BlogPost",
+    entityId: postId,
+    diff: { fields, saves: 1, lastSavedAt: new Date().toISOString() },
+  });
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {

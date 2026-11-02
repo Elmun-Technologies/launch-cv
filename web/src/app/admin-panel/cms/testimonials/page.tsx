@@ -3,7 +3,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { CmsEmpty, CmsPageHeader, VisibilityBadge, cmsBtnPrimary, cmsTextLinkCls } from "@/components/admin/cms-ui";
+import { CmsBadge, CmsEmpty, CmsPageHeader, VisibilityBadge, cmsBtnPrimary, cmsTextLinkCls } from "@/components/admin/cms-ui";
+import { testimonialPublishProblems } from "@/lib/cms/testimonials";
 import { TESTIMONIAL_PLACEMENTS, placementLabel } from "@/components/admin/cms-placements";
 
 const ROW_GRID = "md:grid md:grid-cols-[minmax(0,2.6fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,0.7fr)_auto] md:items-center md:gap-3.5";
@@ -20,7 +21,7 @@ export default async function AdminTestimonialsPage() {
     <AdminShell email={admin.email} pageTitle="Testimonials">
       <CmsPageHeader
         title="Testimonials"
-        description={`${rows.length.toLocaleString()} testimonial${rows.length === 1 ? "" : "s"}. Used on home and feature pages; hidden ones never appear on the site.`}
+        description={`${rows.length.toLocaleString()} testimonial${rows.length === 1 ? "" : "s"}. Only real quotes with written permission. Hidden until approved.`}
         action={{ href: "/admin-panel/cms/testimonials/new", label: "New testimonial" }}
       />
 
@@ -67,7 +68,11 @@ export default async function AdminTestimonialsPage() {
                       <span className="block text-[12px] text-[#66647c]">Order {r.order}</span>
                     </span>
                     <span>
-                      <VisibilityBadge published={r.published} />
+                      {r.published && testimonialPublishProblems(r).length ? (
+                        <CmsBadge tone="amber">Needs permission</CmsBadge>
+                      ) : (
+                        <VisibilityBadge published={r.published} />
+                      )}
                     </span>
                     <Link
                       href={`/admin-panel/cms/testimonials/${r.id}`}
@@ -85,8 +90,9 @@ export default async function AdminTestimonialsPage() {
       </section>
 
       <div className="mt-3.5 rounded-[18px] bg-[#fdf0d5] px-5 py-4 text-[14px] leading-[21px] text-[#7a4600]">
-        <b>Rule:</b> publish only real quotes, with the author&apos;s written permission to use their name and words. Keep a
-        testimonial hidden until that permission is on file.
+        <b>Rule:</b>{" "}
+        a testimonial can be published only with the author&apos;s name, permission date and source attached. Publish only
+        real quotes. Pages hide the section when none are published.
       </div>
     </AdminShell>
   );
