@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SiteLogo } from "./brand";
+import { getPageCopy } from "@/lib/cms/page-copy";
 
 const COLUMNS = [
   {
@@ -36,13 +37,14 @@ const COLUMNS = [
 
 const YEAR = new Date().getFullYear();
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const { tagline } = await getPageCopy("footer.tagline");
   return (
     <footer className="mx-auto flex max-w-[1280px] flex-col justify-between gap-10 px-4 pb-14 pt-16 sm:px-6 md:flex-row lg:px-10 lg:pt-20">
       <div className="max-w-[300px]">
         <SiteLogo size={32} />
         <p className="mt-3.5 text-[15px] leading-6 text-[#4a4862]">
-          Resume tools that get you past the software and in front of the people who hire.
+          {tagline}
         </p>
         <p className="mt-5 text-[13px] text-[#66647c]">© {YEAR} Elmun Technologies LLC</p>
       </div>

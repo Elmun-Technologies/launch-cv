@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { AI_MODELS, AI_TOOL_LABELS, getSettings, type AiTool } from "@/lib/app-settings";
 import { currentSpend } from "@/lib/ai-budget";
 import { AdminShell } from "@/components/admin-shell";
+import { adminH1, adminLead } from "@/components/admin/admin-ui";
 import { LimitsForm } from "./limits-form";
 
 export const dynamic = "force-dynamic";
@@ -30,10 +31,10 @@ export default async function LimitsPage() {
 
   return (
     <AdminShell email={admin.email} pageTitle="Limits & budgets">
-      <div className="space-y-6">
+      <div className="mx-auto max-w-[1280px] space-y-5">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Limits &amp; budgets</h1>
-          <p className="mt-1 max-w-[720px] text-[13px] leading-[1.6] text-[#6B6B6B]">
+          <h1 className={adminH1}>Limits &amp; budgets</h1>
+          <p className={adminLead}>
             Spend caps, plan quotas, rate limits, models and emergency switches. Changes apply within 30 seconds and are
             written to the audit log.
           </p>

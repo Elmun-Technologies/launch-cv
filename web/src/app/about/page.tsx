@@ -6,6 +6,7 @@ import { btnPrimary, btnWhite, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
+import { getPageCopy } from "@/lib/cms/page-copy";
 
 export const metadata = buildMarketingMetadata({
   title: "About LaunchCV — Who We Are and Why We Built It",
@@ -65,7 +66,10 @@ const roles = [
   { label: "Data analysts", src: "/images/people/woman-blazer-laptop.webp", w: 620, alt: "Woman in a grey blazer", bg: "bg-[#e4dfff]" },
 ];
 
-export default function AboutPage() {
+export const revalidate = 300;
+
+export default async function AboutPage() {
+  const copy = await getPageCopy("about.mission");
   const initials = SITE_AUTHOR.name
     .split(" ")
     .map((w) => w[0])
@@ -79,7 +83,7 @@ export default function AboutPage() {
       <section className="mx-auto max-w-[1280px] px-4 pt-5 sm:px-6 lg:px-10 lg:pt-10">
         <p className={labelCls}>/ About</p>
         <h1 className="mt-3.5 max-w-[1060px] text-[38px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:mt-5 sm:text-[56px] sm:leading-[1.04] lg:text-[68px] lg:leading-[70px]">
-          We build tools for the part of job hunting nobody sees. <span className="text-[#5440e8]">The software.</span>
+          {copy.title} {copy.titleAccent ? <span className="text-[#5440e8]">{copy.titleAccent}</span> : null}
         </h1>
       </section>
 
@@ -92,17 +96,9 @@ export default function AboutPage() {
             2024
           </p>
           <div className="relative flex flex-col gap-3.5 text-[16px] leading-[26px] lg:gap-[18px] lg:text-[18px] lg:leading-[29px]">
-            <p>
-              LaunchCV started in 2024 after watching qualified friends apply to dozens of jobs and hear nothing back.
-              Their experience was fine. Their resumes just weren&apos;t being read — tables the software skipped,
-              headings it didn&apos;t recognize, keywords it couldn&apos;t find.
-            </p>
-            <p>
-              So we built a checker that shows you exactly what that software sees, and tools that help you fix it
-              without inventing anything. Every suggestion uses facts from your own resume, and you approve every
-              change.
-            </p>
-            <p>We&apos;re a small team at Elmun Technologies, and we read every support email.</p>
+            {copy.paragraphs.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
           </div>
           <div className="relative mt-auto pt-10">
           <div className="flex w-fit items-center gap-2.5 rounded-full bg-white py-[7px] pl-[7px] pr-4 text-[#121226] lg:gap-3 lg:py-2.5 lg:pl-2.5 lg:pr-5">

@@ -13,6 +13,10 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 import { getSettings } from "@/lib/app-settings";
+import { getPageCopy } from "@/lib/cms/page-copy";
+import { getFaqsFor } from "@/lib/cms/faqs";
+import { getTestimonialsFor } from "@/lib/cms/testimonials";
+import { Testimonials } from "@/components/site/testimonials";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "LaunchCV — Get Your Resume Past the ATS",
@@ -74,7 +78,14 @@ function Check() {
 }
 
 export default async function Home() {
-  const { planLimits } = await getSettings();
+  const [{ planLimits }, hero, cta, cmsFaqs, testimonials] = await Promise.all([
+    getSettings(),
+    getPageCopy("home.hero"),
+    getPageCopy("home.cta"),
+    getFaqsFor("home"),
+    getTestimonialsFor("home", 6),
+  ]);
+  const faqs = cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : FAQS;
   const roles = FEATURED_ROLES.map((slug) => getResumeExample(slug)).filter((e) => !!e);
   const templates = TEMPLATE_EXAMPLES.flatMap((t) => {
     const e = getResumeExample(t.example);
@@ -100,7 +111,7 @@ export default async function Home() {
       },
       {
         "@type": "FAQPage",
-        mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+        mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
       },
     ],
   };
@@ -114,26 +125,25 @@ export default async function Home() {
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-[#e4dfff] py-1.5 pl-1.5 pr-3.5 text-[13px] font-semibold text-[#3a2bb8] sm:text-[14px]">
             <span className="rounded-full bg-[#5440e8] px-2 py-0.5 text-[11px] text-white sm:text-[12px]">Free</span>
-            ATS resume check · no sign-up
+            {hero.badge}
           </p>
           <h1 className="mt-4 text-[42px] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-6 sm:text-[60px] lg:text-[72px] lg:leading-[1.03]">
-            See your resume the way hiring software <span className="text-[#5440e8]">reads it.</span>
+            {hero.title} {hero.titleAccent ? <span className="text-[#5440e8]">{hero.titleAccent}</span> : null}
           </h1>
         </div>
         <div className="lg:pb-1.5">
           <p className="text-[17px] leading-[1.55] sm:text-[19px]">
-            Upload your resume. In about ten seconds you&apos;ll see what an applicant tracking system pulls out of it — and
-            a plain-English fix for every issue.
+            {hero.lead}
           </p>
           <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
             <CtaLink cta="check_resume" location="home_hero" href="/free-ats-check" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
-              Check my resume — free
+              {hero.primaryCta}
             </CtaLink>
             <CtaLink cta="build_resume" location="home_hero" href={BUILD_HREF} className={`${btn} bg-white text-[#121226]`}>
-              Build a resume
+              {hero.secondaryCta}
             </CtaLink>
           </div>
-          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">PDF or Word · your file isn&apos;t stored</p>
+          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">{hero.note}</p>
         </div>
       </section>
 
@@ -551,6 +561,8 @@ export default async function Home() {
         </div>
       </section>
 
+      {testimonials.length ? <Testimonials items={testimonials} /> : null}
+
       {/* PRICING */}
       <section className="mx-auto max-w-[1280px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal mx-auto max-w-[980px] text-center">
@@ -623,7 +635,7 @@ export default async function Home() {
           </p>
         </div>
         <div className="flex flex-col gap-2">
-          {FAQS.map((f, i) => (
+          {faqs.map((f, i) => (
             <details key={f.q} className="lc-faq group rounded-3xl bg-white px-6 py-[22px] transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)]" open={i === 0}>
               <summary className="flex items-center justify-between gap-4">
                 <span className="text-[17px] font-bold sm:text-[18px]">{f.q}</span>
@@ -656,14 +668,14 @@ export default async function Home() {
             className="relative order-last ml-auto mt-2 h-[300px] w-auto sm:absolute sm:bottom-0 sm:right-0 sm:mt-0 sm:h-[400px] lg:h-[470px]"
           />
           <div className="relative z-10 px-6 pt-6 sm:absolute sm:bottom-16 sm:left-16 sm:max-w-[500px] sm:p-0">
-            <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em] sm:text-[40px]">Ten seconds to see what the software sees.</h2>
-            <p className="mt-3.5 text-[17px] leading-[26px] text-[#c9c7d8]">Free, no account, and your file isn&apos;t kept.</p>
+            <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em] sm:text-[40px]">{cta.title}</h2>
+            <p className="mt-3.5 text-[17px] leading-[26px] text-[#c9c7d8]">{cta.lead}</p>
             <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
               <CtaLink cta="check_resume" location="home_final" href="/free-ats-check" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
-                Check my resume — free
+                {cta.primaryCta}
               </CtaLink>
               <CtaLink cta="build_resume" location="home_final" href={BUILD_HREF} className={`${btn} bg-white text-[#111118]`}>
-                Build a resume
+                {cta.secondaryCta}
               </CtaLink>
             </div>
           </div>

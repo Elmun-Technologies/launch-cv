@@ -6,6 +6,7 @@ import { Shield, Trash2, Loader2 } from "lucide-react";
 import { SectionCard } from "@/components/admin/section-card";
 import { AdminSelect, FormField } from "@/components/admin/form-field";
 import { useAdminFetch } from "@/components/admin/reauth";
+import { focusRing } from "@/components/admin/v5/ui";
 
 export function UserDetailActions({
   userId,
@@ -54,16 +55,16 @@ export function UserDetailActions({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="min-w-0 space-y-5">
       {error ? (
-        <p role="alert" className="rounded-lg bg-red-50 px-4 py-2.5 text-[13px] text-red-800">
+        <p role="alert" className="rounded-2xl bg-[#fbe2e3] px-4 py-3 text-[14px] font-semibold text-[#a3222a]">
           {error}
         </p>
       ) : null}
       <SectionCard
         title="Role"
         description="Promote or demote this user"
-        action={<Shield className="h-4 w-4 text-[#2563EB]" />}
+        action={<Shield className="h-4 w-4 text-[#5440e8]" aria-hidden="true" />}
       >
         <div className="space-y-3">
           <FormField label="Account role">
@@ -79,36 +80,32 @@ export function UserDetailActions({
             type="button"
             onClick={handleSaveRole}
             disabled={!canChangeRole || saving || role === currentRole}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#111111] py-2 text-[13px] font-semibold text-white transition hover:bg-[#1E293B] disabled:cursor-not-allowed disabled:opacity-40"
+            className={`lc-btn-lift inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#111118] px-5 text-[14px] font-semibold text-white hover:bg-[#2a2940] disabled:pointer-events-none disabled:opacity-45 ${focusRing} focus-visible:rounded-full!`}
           >
-            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
             {saving ? "Saving…" : "Save role"}
           </button>
-          {!canChangeRole ? <p className="text-[12px] text-[#6B6B6B]">Only an owner can change roles.</p> : null}
+          {!canChangeRole ? <p className="text-[13px] text-[#66647c]">Only an owner can change roles.</p> : null}
         </div>
       </SectionCard>
 
-      <section className="overflow-hidden rounded-xl border border-red-200 bg-white">
-        <header className="border-b border-red-200 bg-red-50/40 px-5 py-4">
-          <h2 className="flex items-center gap-2 text-[14px] font-semibold tracking-tight text-red-800">
-            <Trash2 className="h-4 w-4" />
-            Danger zone
-          </h2>
-          <p className="mt-0.5 text-[12px] text-red-700">
-            Deletion is irreversible and cascades to all user-owned data.
-          </p>
-        </header>
-        <div className="p-5">
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={deleting}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-red-200 bg-red-50 py-2 text-[13px] font-semibold text-red-700 transition hover:bg-red-100 disabled:opacity-50"
-          >
-            {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-            {deleting ? "Deleting…" : "Delete user"}
-          </button>
-        </div>
+      <section aria-labelledby="danger-zone-title" className="rounded-[24px] bg-[#fbe2e3] p-6">
+        <h2 id="danger-zone-title" className="flex items-center gap-2 text-[18px] font-extrabold text-[#a3222a]">
+          <Trash2 className="h-4 w-4" aria-hidden="true" />
+          Danger zone
+        </h2>
+        <p className="mt-1 text-[14px] leading-[1.5] text-[#8f1d22]">
+          Deletion is irreversible and cascades to all user-owned data.
+        </p>
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={deleting}
+          className={`lc-btn-lift mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[#c42b30] px-5 text-[14px] font-semibold text-white hover:bg-[#a3222a] disabled:pointer-events-none disabled:opacity-50 ${focusRing} focus-visible:rounded-full!`}
+        >
+          {deleting ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+          {deleting ? "Deleting…" : "Delete user"}
+        </button>
       </section>
     </div>
   );

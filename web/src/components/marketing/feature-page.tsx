@@ -6,6 +6,9 @@ import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { absoluteUrl } from "@/lib/site";
 import { PUBLIC_PLANS } from "@/lib/monetization";
+import { getFaqsFor } from "@/lib/cms/faqs";
+import { getTestimonialsFor } from "@/lib/cms/testimonials";
+import { Testimonials } from "@/components/site/testimonials";
 
 export type FeaturePageData = {
   /** URL path, e.g. "/features/jd-alignment". */
@@ -39,7 +42,11 @@ const sectionPad = "pt-16 sm:pt-24 lg:pt-[130px]";
 const cardShadow = "shadow-[0_1px_2px_rgba(18,18,38,.04),0_10px_30px_-18px_rgba(18,18,38,.22)]";
 
 /** Shared layout for /features/* pages (v5 design). */
-export function FeaturePage({ f }: { f: FeaturePageData }) {
+export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
+  // FAQs and testimonials can be managed in Admin → Content (placement = the path without the slash).
+  const placement = base.path.replace(/^\//, "");
+  const [cmsFaqs, testimonials] = await Promise.all([getFaqsFor(placement), getTestimonialsFor(placement, 3)]);
+  const f: FeaturePageData = cmsFaqs.length ? { ...base, faqs: cmsFaqs.map((x) => ({ q: x.question, a: x.answer })) } : base;
   const url = absoluteUrl(f.path);
   const label = f.label ?? f.name;
   const ld = {
@@ -217,6 +224,8 @@ export function FeaturePage({ f }: { f: FeaturePageData }) {
           <FaqList items={f.faqs} />
         </div>
       </section>
+
+      {testimonials.length ? <Testimonials items={testimonials} /> : null}
 
       {/* RELATED */}
       <section className={`${container} pb-4 pt-14 sm:pt-20 lg:pt-[110px]`}>

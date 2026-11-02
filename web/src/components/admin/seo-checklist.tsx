@@ -100,33 +100,45 @@ const ICON: Record<CheckState, typeof CheckCircle2> = {
 };
 
 const TONE: Record<CheckState, string> = {
-  pass: "text-emerald-600",
-  fail: "text-amber-600",
-  neutral: "text-[#8A8A86]",
+  pass: "text-[#0b7a4f]",
+  fail: "text-[#a15c00]",
+  neutral: "text-[#7c7a94]",
+};
+
+const STATE_LABEL: Record<CheckState, string> = {
+  pass: "Passed",
+  fail: "Needs work",
+  neutral: "Not checked",
 };
 
 export function SeoChecklist(input: SeoChecklistInput) {
   const checks = useMemo(() => computeSeoChecks(input), [input]);
   const passed = checks.filter((c) => c.state === "pass").length;
   const scorable = checks.filter((c) => c.state !== "neutral").length;
+  const allPassed = scorable > 0 && passed === scorable;
 
   return (
-    <div className="space-y-2.5">
-      <div className="flex items-center justify-between">
-        <span className="text-[12px] font-semibold text-[#111111]">SEO checklist</span>
-        <span className="text-[11px] font-semibold text-[#6B6B6B]">
+    <div>
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-[13px] font-bold text-[#121226]">SEO checklist</span>
+        <span
+          className={`rounded-full px-2.5 py-[5px] text-[12px] font-bold leading-none ${
+            allPassed ? "bg-[#dcf5ea] text-[#0b4f35]" : "bg-[#fdf0d5] text-[#7a4600]"
+          }`}
+        >
           {passed}/{scorable} passed
         </span>
       </div>
-      <ul className="space-y-1.5">
+      <ul className="mt-2.5 flex flex-col gap-2">
         {checks.map((check, i) => {
           const Icon = ICON[check.state];
           return (
-            <li key={i} className="flex items-start gap-2 text-[12px] leading-snug text-[#3F3F3F]">
-              <Icon className={`mt-0.5 h-3.5 w-3.5 shrink-0 ${TONE[check.state]}`} />
+            <li key={i} className="flex items-start gap-2 text-[13px] leading-[19px] text-[#4a4862]">
+              <Icon className={`mt-px h-4 w-4 shrink-0 ${TONE[check.state]}`} aria-hidden="true" />
               <span>
+                <span className="sr-only">{STATE_LABEL[check.state]}: </span>
                 {check.label}
-                {check.detail ? <span className="ml-1 text-[#8A8A86]">· {check.detail}</span> : null}
+                {check.detail ? <span className="ml-1 text-[#66647c]">· {check.detail}</span> : null}
               </span>
             </li>
           );

@@ -5,6 +5,8 @@ import { requireAdmin } from "@/lib/admin-guard";
 import { secretBoxReady } from "@/lib/secret-box";
 import { AdminShell } from "@/components/admin-shell";
 import { SectionCard } from "@/components/admin/section-card";
+import { StatusBadge } from "@/components/admin/status-badge";
+import { adminH1, adminLead } from "@/components/admin/admin-ui";
 
 export const dynamic = "force-dynamic";
 
@@ -28,46 +30,57 @@ export default async function AdminSettingsPage() {
 
   return (
     <AdminShell email={admin.email} pageTitle="Settings">
-      <div className="space-y-6">
+      <div className="mx-auto max-w-[1280px] space-y-5">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Settings</h1>
-          <p className="mt-1 text-[13px] text-[#6B6B6B]">Everything is managed here, except four values that live in the hosting environment.</p>
+          <h1 className={adminH1}>Settings</h1>
+          <p className={adminLead}>Everything is managed here, except four values that live in the hosting environment.</p>
         </div>
 
-        <div className="grid gap-3 md:grid-cols-3">
-          {links.map((l) => (
-            <Link key={l.href} href={l.href} className="group rounded-xl border border-[#E5E5E2] bg-white p-5 transition hover:border-[#D9D9D5] hover:shadow-sm">
-              <div className="flex items-center justify-between">
-                <l.icon className="h-5 w-5 text-[#2563EB]" aria-hidden />
-                <ArrowUpRight className="h-4 w-4 text-[#8A8A86] transition group-hover:text-[#2563EB]" aria-hidden />
-              </div>
-              <p className="mt-3 text-[14px] font-semibold text-[#111111]">{l.title}</p>
-              <p className="mt-1 text-[12px] leading-[1.5] text-[#6B6B6B]">{l.text}</p>
-            </Link>
-          ))}
-        </div>
+        <div className="grid items-start gap-[18px] lg:grid-cols-2">
+          <SectionCard title="Hosting environment" description="Set once in your hosting provider. Values are never shown here." flush>
+            <ul>
+              {bootstrap.map((e) => (
+                <li key={e.key} className="flex items-center justify-between gap-4 border-t border-[#e2e0ea] px-5 py-3 first:border-t-0 sm:px-6">
+                  <div className="min-w-0">
+                    <p className="lc-mono truncate text-[13px] text-[#121226]">{e.key}</p>
+                    <p className="text-[12px] leading-[1.45] text-[#66647c]">{e.what}</p>
+                  </div>
+                  {e.ok ? (
+                    <StatusBadge tone="green">
+                      <CheckCircle2 className="h-3 w-3" aria-hidden /> Set
+                    </StatusBadge>
+                  ) : (
+                    <StatusBadge tone="red">
+                      <XCircle className="h-3 w-3" aria-hidden /> Missing
+                    </StatusBadge>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
 
-        <SectionCard title="Hosting environment" description="Set once in your hosting provider. Values are never shown here." flush>
-          <ul className="divide-y divide-[#E5E5E2]">
-            {bootstrap.map((e) => (
-              <li key={e.key} className="flex items-center justify-between gap-4 px-5 py-3">
-                <div className="min-w-0">
-                  <p className="truncate font-mono text-[12px] text-[#111111]">{e.key}</p>
-                  <p className="truncate text-[12px] text-[#6B6B6B]">{e.what}</p>
-                </div>
-                {e.ok ? (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
-                    <CheckCircle2 className="h-3 w-3" aria-hidden /> Set
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-700 ring-1 ring-red-200">
-                    <XCircle className="h-3 w-3" aria-hidden /> Missing
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </SectionCard>
+          <SectionCard title="Managed in the panel" description="Keys, limits and access live on their own pages." flush>
+            <ul>
+              {links.map((l) => (
+                <li key={l.href} className="border-t border-[#e2e0ea] first:border-t-0">
+                  <Link
+                    href={l.href}
+                    className="group flex items-center gap-3.5 px-5 py-4 transition-colors hover:bg-[#f7f6fb] focus-visible:rounded-none! focus-visible:outline-offset-[-3px]! sm:px-6"
+                  >
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e4dfff] text-[#3a2bb8]">
+                      <l.icon className="h-[18px] w-[18px]" aria-hidden />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <b className="block text-[15px] text-[#121226]">{l.title}</b>
+                      <span className="block text-[13px] leading-[1.45] text-[#66647c]">{l.text}</span>
+                    </span>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-[#66647c] transition-colors group-hover:text-[#5440e8]" aria-hidden />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
+        </div>
       </div>
     </AdminShell>
   );

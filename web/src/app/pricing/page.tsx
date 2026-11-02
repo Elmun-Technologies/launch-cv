@@ -10,6 +10,8 @@ import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
 import { getSettings } from "@/lib/app-settings";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
+import { getPageCopy } from "@/lib/cms/page-copy";
+import { getFaqsFor } from "@/lib/cms/faqs";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
 /** Carries the chosen plan through sign-up so checkout opens right after. */
@@ -202,7 +204,8 @@ function Badge({ children }: { children: ReactNode }) {
 
 export default async function PricingPage() {
   const { planLimits: limits } = await getSettings();
-  const faqs = buildFaqs(limits);
+  const [copy, cmsFaqs] = await Promise.all([getPageCopy("pricing.hero"), getFaqsFor("pricing")]);
+  const faqs = cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : buildFaqs(limits);
   const ld = buildLd(faqs);
 
   return (
@@ -214,11 +217,11 @@ export default async function PricingPage() {
         <div className="max-w-[820px]">
           <p className={labelCls}>/ Pricing</p>
           <h1 className="mt-3.5 text-[40px] font-extrabold leading-[1.05] tracking-[-0.045em] sm:mt-5 sm:text-[56px] lg:text-[68px] lg:leading-[70px]">
-            Pay monthly or once. <span className="text-[#7c7a94]">Checking your resume is always free.</span>
+            {copy.title} {copy.titleMuted ? <span className="text-[#7c7a94]">{copy.titleMuted}</span> : null}
           </h1>
         </div>
         <p className="max-w-[340px] text-[16px] leading-[25px] text-[#4a4862] sm:text-[18px] sm:leading-7 lg:mb-2">
-          Every AI tool is on every paid plan. Plans only differ in how much you can use them each month.
+          {copy.lead}
         </p>
       </section>
 

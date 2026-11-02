@@ -2,23 +2,24 @@ import type { ReactNode } from "react";
 
 type Tone = "default" | "blue" | "green" | "amber" | "red" | "violet" | "slate";
 
+/** v5 pill chips (see Chip in components/site/ui.tsx). All pairs pass WCAG AA. */
 const toneClass: Record<Tone, string> = {
-  default: "bg-[#F5F5F3] text-[#3F3F3F] ring-1 ring-inset ring-[#E5E5E2]",
-  blue: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200",
-  green: "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200",
-  amber: "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200",
-  red: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
-  violet: "bg-blue-50 text-blue-700 ring-1 ring-inset ring-blue-200",
-  slate: "bg-[#111111] text-white",
+  default: "bg-[#f1eff8] text-[#4a4862]",
+  blue: "bg-[#e4dfff] text-[#3a2bb8]",
+  green: "bg-[#dcf5ea] text-[#0b4f35]",
+  amber: "bg-[#fdf0d5] text-[#7a4600]",
+  red: "bg-[#fbe2e3] text-[#a3262b]",
+  violet: "bg-[#e4dfff] text-[#3a2bb8]",
+  slate: "bg-[#111118] text-white",
 };
 
 const dotClass: Record<Tone, string> = {
-  default: "bg-[#6B6B6B]",
-  blue: "bg-blue-500",
-  green: "bg-emerald-500",
-  amber: "bg-amber-500",
-  red: "bg-red-500",
-  violet: "bg-blue-500",
+  default: "bg-[#7c7a94]",
+  blue: "bg-[#5440e8]",
+  green: "bg-[#0b7a4f]",
+  amber: "bg-[#c77700]",
+  red: "bg-[#c42b30]",
+  violet: "bg-[#5440e8]",
   slate: "bg-white",
 };
 
@@ -31,9 +32,9 @@ export type StatusBadgeProps = {
 export function StatusBadge({ tone = "default", dot = false, children }: StatusBadgeProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[11px] font-semibold ${toneClass[tone]}`}
+      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-[5px] text-[12px] font-bold leading-none ${toneClass[tone]}`}
     >
-      {dot ? <span className={`h-1.5 w-1.5 rounded-full ${dotClass[tone]}`} /> : null}
+      {dot ? <span className={`h-1.5 w-1.5 rounded-full ${dotClass[tone]}`} aria-hidden /> : null}
       {children}
     </span>
   );
