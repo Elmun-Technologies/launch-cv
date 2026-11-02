@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type TextareaHTMLAttributes } from "react";
 import Link from "next/link";
 import type { ResumeContent } from "@/types/resume";
 import { ResumePreview, type TemplateStyle } from "@/components/resume-preview";
@@ -9,12 +9,50 @@ import { VoiceInput } from "@/components/voice-input";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
 import { shouldOfferSatisfactionSurvey } from "@/lib/satisfaction-survey";
 import { siteFontVars } from "@/lib/site-fonts";
+import { checkBullet, countDutyBullets } from "@/lib/bullet-quality";
 import {
   Award, Loader2, Check, MessageSquare, Plus, ShieldCheck, Sparkles, Trash2, UploadCloud, X, Download,
-  Briefcase, GraduationCap, Wrench, ChevronRight, ChevronLeft, ChevronUp, ArrowLeft,
+  Briefcase, GraduationCap, Wrench, ChevronRight, ChevronLeft, ChevronUp, ArrowLeft, GripVertical, MoreHorizontal,
 } from "lucide-react";
 
 function uid() { return crypto.randomUUID(); }
+
+/** Bullets are one line of text: pasted line breaks become spaces. */
+function oneLine(s: string) { return s.replace(/\s*[\r\n]+\s*/g, " "); }
+
+/** A one-row textarea that grows with its text, so long bullets wrap instead of scrolling out of view. */
+function AutoGrowTextarea({ value, inputRef, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  value: string;
+  inputRef?: (el: HTMLTextAreaElement | null) => void;
+}) {
+  const el = useRef<HTMLTextAreaElement | null>(null);
+  const fit = useCallback(() => {
+    const t = el.current;
+    if (!t) return;
+    t.style.height = "auto";
+    t.style.height = `${t.scrollHeight}px`;
+  }, []);
+  useLayoutEffect(fit, [value, fit]);
+  // Re-measure when the width changes (rotation, window resize, the preview column toggling).
+  useEffect(() => {
+    const t = el.current;
+    if (!t || typeof ResizeObserver === "undefined") return undefined;
+    let width = t.clientWidth;
+    const ro = new ResizeObserver(() => {
+      if (t.clientWidth !== width) { width = t.clientWidth; fit(); }
+    });
+    ro.observe(t);
+    return () => ro.disconnect();
+  }, [fit]);
+  return (
+    <textarea
+      {...rest}
+      rows={1}
+      value={value}
+      ref={(node) => { el.current = node; inputRef?.(node); }}
+    />
+  );
+}
 
 function calculateLocalScore(c: ResumeContent): number {
   let score = 0;
@@ -144,7 +182,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [regionMode] = useState(initialRegion);
   const [content, setContent] = useState<ResumeContent>(initialContent);
   const [saving, setSaving] = useState(false);
-  const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>("details");
   const [newSkill, setNewSkill] = useState("");
@@ -185,10 +222,24 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [linkedinText, setLinkedinText] = useState("");
   const [linkedinImporting, setLinkedinImporting] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const surveyDelayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [surveyOpen, setSurveyOpen] = useState(false);
   const [surveyContext, setSurveyContext] = useState("pdf_export");
+  /** Suggestions the user closed with "Keep mine" (bullet ids). */
+  const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
+  /** Bullet whose suggestion is being re-requested ("Try another"). */
+  const [retrying, setRetrying] = useState<string | null>(null);
+  const [retryNote, setRetryNote] = useState<{ bulletId: string; message: string; upgrade: boolean } | null>(null);
+  /** Polite announcements: bullet moves, voice additions. */
+  const [liveMsg, setLiveMsg] = useState("");
+  const [moreOpen, setMoreOpen] = useState(false);
+  const moreRef = useRef<HTMLDivElement | null>(null);
+  /** Bullet fields and drag handles by bullet id, so focus can follow a bullet when it moves or is added. */
+  const bulletEls = useRef(new Map<string, HTMLTextAreaElement>());
+  const handleEls = useRef(new Map<string, HTMLButtonElement>());
+  const focusNext = useRef<{ id: string; part: "text" | "handle"; caret?: "end" } | null>(null);
+  const drag = useRef<{ expId: string; bulletId: string; pointerId: number } | null>(null);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
 
   const payload = useMemo(() => ({ title, vertical, regionMode, content }), [title, vertical, regionMode, content]);
 
@@ -197,9 +248,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     try {
       const res = await fetch(`/api/resumes/${resumeId}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       if (!res.ok) { const j = await res.json().catch(() => ({})); throw new Error(j.error ?? "Save error"); }
-      setJustSaved(true);
-      if (savedTimer.current) clearTimeout(savedTimer.current);
-      savedTimer.current = setTimeout(() => setJustSaved(false), 2000);
     } catch (e) { setError(e instanceof Error ? e.message : "Error"); }
     finally { setSaving(false); }
   }, [payload, resumeId]);
@@ -213,6 +261,31 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   useEffect(() => () => {
     if (surveyDelayRef.current) clearTimeout(surveyDelayRef.current);
   }, []);
+
+  // After a bullet is added or moved, put focus back on it (moving a node in the DOM drops focus).
+  useEffect(() => {
+    const want = focusNext.current;
+    if (!want) return;
+    focusNext.current = null;
+    const node = want.part === "handle" ? handleEls.current.get(want.id) : bulletEls.current.get(want.id);
+    if (!node) return;
+    node.focus({ preventScroll: false });
+    if (want.caret === "end" && node instanceof HTMLTextAreaElement) node.setSelectionRange(node.value.length, node.value.length);
+  });
+
+  // The "More" menu on phones closes on Escape (focus back to its button) or a tap outside it.
+  useEffect(() => {
+    if (!moreOpen) return undefined;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMoreOpen(false);
+      moreRef.current?.querySelector<HTMLButtonElement>("button[aria-controls]")?.focus();
+    };
+    const onDown = (e: PointerEvent) => { if (!moreRef.current?.contains(e.target as Node)) setMoreOpen(false); };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onDown);
+    return () => { window.removeEventListener("keydown", onKey); window.removeEventListener("pointerdown", onDown); };
+  }, [moreOpen]);
 
   // Escape closes the import dialog.
   useEffect(() => {
@@ -238,7 +311,105 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     setContent((c) => ({ ...c, experience: [...c.experience, { id, company: "", role: "", start: "", end: "", location: "", bullets: [] }] }));
     setOpenExpId(id);
   };
-  const addBullet = (expId: string) => setContent((c) => ({ ...c, experience: c.experience.map((ex) => ex.id === expId ? { ...ex, bullets: [...ex.bullets, { id: uid(), text: "", evidenceIds: [] }] } : ex) }));
+  /** Adds an empty bullet after `afterId` (or at the end) and focuses it. */
+  const addBullet = (expId: string, afterId?: string) => {
+    const id = uid();
+    setContent((c) => ({
+      ...c,
+      experience: c.experience.map((ex) => {
+        if (ex.id !== expId) return ex;
+        const at = afterId ? ex.bullets.findIndex((b) => b.id === afterId) + 1 : ex.bullets.length;
+        const bullets = [...ex.bullets];
+        bullets.splice(at > 0 ? at : bullets.length, 0, { id, text: "", evidenceIds: [] });
+        return { ...ex, bullets };
+      }),
+    }));
+    focusNext.current = { id, part: "text" };
+  };
+  const setBulletText = (expId: string, bulletId: string, text: string) =>
+    setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === expId ? { ...x, bullets: x.bullets.map((bb) => bb.id === bulletId ? { ...bb, text } : bb) } : x) }));
+  const removeBullet = (expId: string, bulletId: string) =>
+    setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === expId ? { ...x, bullets: x.bullets.filter((bb) => bb.id !== bulletId) } : x) }));
+  /** Moves a bullet to position `to` (0-based) within its job; returns false when it can't move. */
+  function moveBullet(expId: string, bulletId: string, to: number, focusPart?: "text" | "handle"): boolean {
+    const ex = content.experience.find((x) => x.id === expId);
+    if (!ex) return false;
+    const from = ex.bullets.findIndex((b) => b.id === bulletId);
+    if (from < 0 || to < 0 || to >= ex.bullets.length || to === from) return false;
+    setContent((c) => ({
+      ...c,
+      experience: c.experience.map((x) => {
+        if (x.id !== expId) return x;
+        const bullets = [...x.bullets];
+        const [moved] = bullets.splice(from, 1);
+        bullets.splice(to, 0, moved);
+        return { ...x, bullets };
+      }),
+    }));
+    if (focusPart) focusNext.current = { id: bulletId, part: focusPart };
+    return true;
+  }
+  function announceMove(expId: string, to: number) {
+    const n = content.experience.find((x) => x.id === expId)?.bullets.length ?? 0;
+    setLiveMsg(`Bullet moved to position ${to + 1} of ${n}.`);
+  }
+
+  /**
+   * Pointer drag on a bullet's handle (mouse, pen or touch): the bullet swaps places as the pointer
+   * passes another bullet's middle. Listens on window, because React may move the dragged row's
+   * DOM node while it reorders, which would drop pointer capture.
+   */
+  function onHandlePointerDown(e: React.PointerEvent<HTMLButtonElement>, expId: string, bulletId: string) {
+    if (e.button !== 0 || drag.current) return;
+    const list = e.currentTarget.closest("ul");
+    if (!list) return;
+    e.preventDefault(); // no text selection while dragging
+    const pointerId = e.pointerId;
+    drag.current = { expId, bulletId, pointerId };
+    setDraggingId(bulletId);
+    const rows = () => [...list.querySelectorAll<HTMLElement>(":scope > li[data-bullet-id]")];
+
+    const onMove = (ev: PointerEvent) => {
+      if (ev.pointerId !== pointerId) return;
+      const all = rows();
+      const from = all.findIndex((r) => r.dataset.bulletId === bulletId);
+      if (from < 0) return;
+      let to = from;
+      all.forEach((r, i) => {
+        const box = r.getBoundingClientRect();
+        const mid = box.top + box.height / 2;
+        if (i < from && ev.clientY < mid) to = Math.min(to, i);
+        if (i > from && ev.clientY > mid) to = Math.max(to, i);
+      });
+      if (to === from) return;
+      setContent((c) => ({
+        ...c,
+        experience: c.experience.map((x) => {
+          if (x.id !== expId) return x;
+          const bullets = [...x.bullets];
+          const at = bullets.findIndex((b) => b.id === bulletId);
+          if (at < 0) return x;
+          const [moved] = bullets.splice(at, 1);
+          bullets.splice(to, 0, moved);
+          return { ...x, bullets };
+        }),
+      }));
+    };
+    const onEnd = (ev: PointerEvent) => {
+      if (ev.pointerId !== pointerId) return;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onEnd);
+      window.removeEventListener("pointercancel", onEnd);
+      drag.current = null;
+      setDraggingId(null);
+      const all = rows();
+      const at = all.findIndex((r) => r.dataset.bulletId === bulletId);
+      if (at >= 0) setLiveMsg(`Bullet moved to position ${at + 1} of ${all.length}.`);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onEnd);
+    window.addEventListener("pointercancel", onEnd);
+  }
   const delExp = (id: string) => setContent((c) => ({ ...c, experience: c.experience.filter((x) => x.id !== id) }));
   const addEdu = () => setContent((c) => ({ ...c, education: [...c.education, { id: uid(), school: "", degree: "", start: "", end: "", gpa: "", achievements: [] }] }));
   const delEdu = (id: string) => setContent((c) => ({ ...c, education: c.education.filter((x) => x.id !== id) }));
@@ -298,6 +469,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     { label: "Quantified bullets", done: content.experience.some((e) => e.bullets.some((b) => /\d/.test(b.text))) },
   ];
   const completeness = Math.round((checklist.filter((i) => i.done).length / checklist.length) * 100);
+  /** Bullets that open with a duty phrase (rule-based, lib/bullet-quality.ts). */
+  const dutyCount = countDutyBullets(content.experience.flatMap((e) => e.bullets.map((b) => b.text)));
 
   async function scoreResume() {
     try {
@@ -330,8 +503,69 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     setScoringBusy(false);
   }
 
+  type Rewrite = NonNullable<typeof enhanceResult>[number];
+
+  /** "Try another": asks the same rewrite API again (one more use, like the first call) and swaps in this bullet's new suggestion. */
+  async function retryRewrite(rw: Rewrite) {
+    if (retrying) return;
+    setRetrying(rw.bulletId);
+    setRetryNote(null);
+    // The API rewrites what's saved, so save the latest edits first.
+    if (timer.current) clearTimeout(timer.current);
+    await doSave();
+    const r = await fetch("/api/ai/impact-rewrite", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) }).catch(() => null);
+    const j = r ? await r.json().catch(() => ({})) : {};
+    setRetrying(null);
+    if (!r?.ok || !Array.isArray(j.result?.rewrites)) {
+      setRetryNote({ bulletId: rw.bulletId, message: j.error ?? "Couldn't get another suggestion. Please try again.", upgrade: Boolean(j.upgrade) });
+      return;
+    }
+    const fresh = (j.result.rewrites as Rewrite[]).find((x) => x.bulletId === rw.bulletId);
+    if (!fresh?.improved?.trim() || fresh.improved.trim() === rw.improved.trim()) {
+      setRetryNote({ bulletId: rw.bulletId, message: "No different suggestion this time. You can edit the bullet yourself, or try again.", upgrade: false });
+      return;
+    }
+    setEnhanceResult((list) => (list ?? []).map((x) => (x.bulletId === rw.bulletId ? { ...fresh, experienceId: rw.experienceId, bulletId: rw.bulletId } : x)));
+    setLiveMsg("New suggestion ready.");
+  }
+
+  /** Where dictation goes: the summary, the skills list, or (anywhere else) a new bullet on the open job. */
+  const voiceTarget: "summary" | "skills" | "bullet" = activeTab === "shortbio" ? "summary" : activeTab === "skills" ? "skills" : "bullet";
+  function openJobId(): string | null {
+    if (openExpId === null) return content.experience[0]?.id ?? null;
+    return content.experience.some((e) => e.id === openExpId) ? (openExpId as string) : (content.experience[0]?.id ?? null);
+  }
+  function onVoice(raw: string) {
+    const text = oneLine(raw).trim();
+    if (!text) return;
+    if (voiceTarget === "summary") {
+      setContent((c) => ({ ...c, summary: c.summary + (c.summary ? " " : "") + text }));
+      setLiveMsg("Added to your summary.");
+      return;
+    }
+    if (voiceTarget === "skills") {
+      const said = text.split(/\s*(?:,|;|\band\b)\s*/i).map((s) => s.trim().replace(/\.$/, "")).filter(Boolean);
+      setContent((c) => ({ ...c, skills: [...c.skills, ...said.filter((s) => !c.skills.some((k) => k.toLowerCase() === s.toLowerCase()))] }));
+      setLiveMsg(`Added ${said.length} ${said.length === 1 ? "skill" : "skills"}.`);
+      return;
+    }
+    const bullet = { id: uid(), text, evidenceIds: [] as string[] };
+    const jobId = openJobId();
+    if (jobId) {
+      setContent((c) => ({ ...c, experience: c.experience.map((x) => (x.id === jobId ? { ...x, bullets: [...x.bullets, bullet] } : x)) }));
+      setOpenExpId(jobId);
+    } else {
+      const id = uid();
+      setContent((c) => ({ ...c, experience: [...c.experience, { id, company: "", role: "", start: "", end: "", location: "", bullets: [bullet] }] }));
+      setOpenExpId(id);
+    }
+    setActiveTab("experience");
+    setMobileView("edit");
+    setLiveMsg("Added a bullet to your experience.");
+  }
+
   async function enhanceAll() {
-    setEnhancing(true); setEnhanceResult(null); setEnhanceError(null);
+    setEnhancing(true); setEnhanceResult(null); setEnhanceError(null); setDismissed(new Set()); setRetryNote(null);
     const r = await fetch("/api/ai/impact-rewrite", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ resumeId }) }).catch(() => null);
     const j = r ? await r.json().catch(() => ({})) : {};
     setEnhancing(false);
@@ -445,13 +679,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           <Field label="Summary">
             <textarea className={`${textareaCls} min-h-[160px]`} value={content.summary} onChange={(e) => setContent((c) => ({ ...c, summary: e.target.value }))} placeholder="Write a compelling professional summary highlighting your key achievements and career goals..." />
           </Field>
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-[13px] text-[#66647c]">{content.summary.length}/500 characters recommended</p>
-            <VoiceInput
-              placeholder="Speak your summary"
-              onTranscript={(text) => setContent((c) => ({ ...c, summary: c.summary + (c.summary ? " " : "") + text.trim() }))}
-            />
-          </div>
+          <p className="mt-2 text-[13px] text-[#66647c]">{content.summary.length}/500 characters recommended</p>
         </div>
       </div>
     );
@@ -482,7 +710,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
       <div className="mt-5 space-y-2.5">
         {content.experience.map((ex) => {
           const name = `${ex.role || ex.company || "New job"}${ex.company && ex.role ? ` at ${ex.company}` : ""}`;
-          const rewrites = (enhanceResult ?? []).filter((rw) => rw.experienceId === ex.id);
+          const rewrites = (enhanceResult ?? []).filter((rw) => rw.experienceId === ex.id && !dismissed.has(rw.bulletId));
           const pending = rewrites.filter((rw) => ex.bullets.some((b) => b.id === rw.bulletId && b.text !== rw.improved)).length;
           const dates = [ex.start, ex.end].filter(Boolean).join(" – ");
 
@@ -514,7 +742,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           }
 
           return (
-            <div key={ex.id} className="rounded-[20px] border-[1.5px] border-[#c9c0ff] p-4 sm:p-5">
+            // Phones: no inner frame, so long bullets get the card's full width (canvas App-Editor-mobile).
+            <div key={ex.id} className="rounded-[20px] pb-2 sm:border-[1.5px] sm:border-[#c9c0ff] sm:p-5">
               <div className="flex items-center justify-between gap-2">
                 <h3 className="min-w-0 truncate text-[15px] font-bold text-[#121226]">{name}</h3>
                 <div className="-mr-2 flex shrink-0 items-center">
@@ -546,55 +775,146 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 </Field>
               </div>
 
-              <p className="mb-2 mt-[18px] text-[13px] font-bold text-[#4a4862]">Bullets</p>
+              <p id={`${ex.id}-bullets`} className="mb-2 mt-[18px] text-[13px] font-bold text-[#4a4862]">Bullets</p>
+              <p id={`${ex.id}-bullets-help`} className="sr-only">
+                Enter adds the next bullet. Alt plus the up or down arrow moves a bullet; so do the arrow keys on its drag handle.
+              </p>
               {ex.bullets.length > 0 ? (
-                <ul className="flex flex-col gap-1.5">
+                <ul aria-labelledby={`${ex.id}-bullets`} className="flex flex-col gap-1.5">
                   {ex.bullets.map((b, i) => {
                     const rw = rewrites.find((r) => r.bulletId === b.id);
+                    const flag = checkBullet(b.text);
+                    const n = ex.bullets.length;
+                    const note = retryNote?.bulletId === b.id ? retryNote : null;
                     return (
-                      <li key={b.id} className="flex flex-col gap-1.5">
-                        <div className="flex items-center gap-1 rounded-[14px] bg-[#f7f6fb] pl-3.5 transition-shadow focus-within:ring-2 focus-within:ring-[#5440e8]">
-                          <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#b3b0c8]" />
-                          <input
+                      <li key={b.id} data-bullet-id={b.id} className="flex flex-col gap-1.5">
+                        <div
+                          className={`flex items-start gap-0.5 rounded-[14px] bg-[#f7f6fb] pl-1 transition-shadow focus-within:ring-2 focus-within:ring-[#5440e8] ${
+                            draggingId === b.id ? "relative z-10 shadow-[0_14px_28px_-14px_rgba(36,24,120,0.55)] ring-2 ring-[#c9c0ff]" : ""
+                          }`}
+                        >
+                          <button
+                            type="button"
+                            ref={(node) => { if (node) handleEls.current.set(b.id, node); else handleEls.current.delete(b.id); }}
+                            aria-label={`Move bullet ${i + 1} of ${n}`}
+                            aria-describedby={`${ex.id}-bullets-help`}
+                            onPointerDown={(e) => onHandlePointerDown(e, ex.id, b.id)}
+                            onKeyDown={(e) => {
+                              const to = e.key === "ArrowUp" ? i - 1 : e.key === "ArrowDown" ? i + 1 : e.key === "Home" ? 0 : e.key === "End" ? n - 1 : null;
+                              if (to === null) return;
+                              e.preventDefault();
+                              if (moveBullet(ex.id, b.id, to, "handle")) announceMove(ex.id, to);
+                            }}
+                            className={`inline-flex h-11 w-8 shrink-0 touch-none select-none items-center justify-center rounded-[10px] text-[#9a97b0] transition-colors hover:text-[#4a4862] focus-visible:rounded-[10px]! ${
+                              draggingId === b.id ? "cursor-grabbing" : "cursor-grab"
+                            }`}
+                          >
+                            <GripVertical className="h-4 w-4" aria-hidden="true" />
+                          </button>
+                          <AutoGrowTextarea
                             aria-label={`Bullet ${i + 1}`}
-                            className="min-h-12 min-w-0 flex-1 bg-transparent px-2 text-[16px] leading-[21px] text-[#121226] outline-none placeholder:text-[#706e88] focus-visible:outline-none! sm:text-[14px]"
+                            aria-describedby={flag ? `${b.id}-flag` : undefined}
+                            inputRef={(node) => { if (node) bulletEls.current.set(b.id, node); else bulletEls.current.delete(b.id); }}
+                            className="block min-h-11 min-w-0 flex-1 resize-none overflow-hidden bg-transparent px-1.5 py-[11px] text-[16px] leading-[22px] text-[#121226] outline-none placeholder:text-[#706e88] focus-visible:outline-none! sm:text-[14px] sm:leading-[21px] sm:py-3"
                             value={b.text}
-                            onChange={(e) => setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, bullets: x.bullets.map((bb) => bb.id === b.id ? { ...bb, text: e.target.value } : bb) } : x) }))}
+                            onChange={(e) => setBulletText(ex.id, b.id, oneLine(e.target.value))}
+                            onKeyDown={(e) => {
+                              if (e.nativeEvent.isComposing) return;
+                              if (e.key === "Enter") {
+                                e.preventDefault();
+                                addBullet(ex.id, b.id);
+                              } else if (e.altKey && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+                                e.preventDefault();
+                                const to = e.key === "ArrowUp" ? i - 1 : i + 1;
+                                if (moveBullet(ex.id, b.id, to, "text")) announceMove(ex.id, to);
+                              } else if (e.key === "Backspace" && b.text === "" && n > 1) {
+                                // An empty bullet goes away on Backspace, like a list in a text editor.
+                                e.preventDefault();
+                                const prev = ex.bullets[i - 1] ?? ex.bullets[i + 1];
+                                removeBullet(ex.id, b.id);
+                                if (prev) focusNext.current = { id: prev.id, part: "text", caret: "end" };
+                              }
+                            }}
                             placeholder="Describe an achievement..."
                           />
+                          {flag ? (
+                            <span
+                              id={`${b.id}-flag`}
+                              title={flag.hint}
+                              className="mt-2.5 shrink-0 rounded-full bg-[#fdf0d5] px-2.5 py-[5px] text-[12px] font-bold leading-[14px] text-[#7a4600]"
+                            >
+                              {flag.label}
+                              <span className="sr-only">. {flag.hint}</span>
+                            </span>
+                          ) : null}
                           <button
                             type="button"
                             aria-label={`Remove bullet ${i + 1}`}
-                            onClick={() => setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, bullets: x.bullets.filter((bb) => bb.id !== b.id) } : x) }))}
+                            onClick={() => removeBullet(ex.id, b.id)}
                             className={iconBtn}
                           >
                             <X className="h-4 w-4" aria-hidden="true" />
                           </button>
                         </div>
                         {rw ? (
-                          <div className="rounded-2xl bg-[#5440e8] px-4 py-3.5 text-white">
+                          <div className="rounded-2xl bg-[#5440e8] px-4 py-3.5 text-white" aria-busy={retrying === b.id || undefined}>
                             <p className="inline-flex items-center gap-1.5 text-[12px] font-extrabold tracking-[0.06em] text-[#e4dfff]">
                               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" /> SUGGESTED REWRITE
+                              <span className="sr-only"> for bullet {i + 1}</span>
                             </p>
                             <p className="mt-2 text-[15px] font-semibold leading-[22px]">{rw.improved}</p>
                             {rw.change_summary ? <p className="mt-1 text-[13px] leading-5 text-[#e4dfff]">{rw.change_summary}</p> : null}
-                            <div className="mt-3">
+                            <div className="mt-3 flex flex-wrap items-center gap-1.5">
                               {b.text === rw.improved ? (
-                                <span className="inline-flex min-h-10 items-center gap-1.5 text-[13px] font-bold text-white">
-                                  <Check className="h-4 w-4" aria-hidden="true" /> Applied
-                                </span>
+                                <>
+                                  <span className="inline-flex min-h-10 items-center gap-1.5 pr-2 text-[13px] font-bold text-white">
+                                    <Check className="h-4 w-4" aria-hidden="true" /> Applied
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={() => setDismissed((s) => new Set(s).add(b.id))}
+                                    className="inline-flex min-h-10 items-center rounded-full px-3.5 text-[13px] font-bold text-[#e4dfff] transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-white!"
+                                  >
+                                    Close<span className="sr-only"> suggestion for bullet {i + 1}</span>
+                                  </button>
+                                </>
                               ) : (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === rw.experienceId ? { ...x, bullets: x.bullets.map((bb) => bb.id === rw.bulletId ? { ...bb, text: rw.improved } : bb) } : x) }));
-                                  }}
-                                  className="inline-flex min-h-10 items-center rounded-full bg-white px-4 text-[13px] font-bold text-[#121226] transition-colors hover:bg-[#e4dfff] focus-visible:outline-white!"
-                                >
-                                  Use this<span className="sr-only"> rewrite for bullet {i + 1}</span>
-                                </button>
+                                <>
+                                  <button
+                                    type="button"
+                                    onClick={() => setBulletText(ex.id, b.id, rw.improved)}
+                                    className="inline-flex min-h-10 items-center rounded-full bg-white px-3.5 text-[13px] font-bold text-[#121226] transition-colors hover:bg-[#e4dfff] focus-visible:outline-white!"
+                                  >
+                                    Use this<span className="sr-only"> rewrite for bullet {i + 1}</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled={retrying !== null}
+                                    onClick={() => void retryRewrite(rw)}
+                                    className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-white/[0.14] px-3.5 text-[13px] font-bold text-white transition-colors hover:bg-white/25 focus-visible:outline-white! disabled:opacity-70"
+                                  >
+                                    {retrying === b.id ? <Loader2 className="h-3.5 w-3.5 motion-safe:animate-spin" aria-hidden="true" /> : null}
+                                    {retrying === b.id ? "Trying another…" : "Try another"}
+                                    <span className="sr-only"> rewrite for bullet {i + 1}</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => { setDismissed((s) => new Set(s).add(b.id)); focusNext.current = { id: b.id, part: "text" }; }}
+                                    className="inline-flex min-h-10 items-center rounded-full px-3.5 text-[13px] font-bold text-[#e4dfff] transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-white!"
+                                  >
+                                    Keep mine<span className="sr-only"> for bullet {i + 1}</span>
+                                  </button>
+                                </>
                               )}
                             </div>
+                            {note ? (
+                              <p role="status" className="mt-2.5 text-[13px] leading-5 text-white">
+                                {note.message}{" "}
+                                {note.upgrade ? (
+                                  <Link href="/dashboard/settings/subscription" className="font-bold underline underline-offset-2">See plans</Link>
+                                ) : null}
+                              </p>
+                            ) : null}
                           </div>
                         ) : null}
                       </li>
@@ -609,13 +929,6 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                 <button type="button" onClick={() => addBullet(ex.id)} className={textBtn}>
                   <Plus className="h-4 w-4" aria-hidden="true" /> Add bullet
                 </button>
-                <VoiceInput
-                  placeholder="Speak to add bullet"
-                  onTranscript={(text) => {
-                    const newBullet = { id: uid(), text: text.trim(), evidenceIds: [] as string[] };
-                    setContent((c) => ({ ...c, experience: c.experience.map((x) => x.id === ex.id ? { ...x, bullets: [...x.bullets, newBullet] } : x) }));
-                  }}
-                />
               </div>
             </div>
           );
@@ -965,7 +1278,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
   /* ── Preview column ───────────────────────────────────────────── */
 
-  const saveLabel = saving ? "Saving…" : justSaved ? "Saved" : null;
+  const saveLabel = saving ? "Saving…" : error ? "Not saved" : "Saved";
 
   function renderScoreCard(className: string) {
     return (
@@ -980,6 +1293,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             {liveScore ? `Score ${liveScore.score} · Completeness ${completeness}%` : `Completeness ${completeness}%`}
           </p>
           <p className="mt-0.5 text-[13px] leading-[19px] text-[#66647c]">
+            {dutyCount > 0 ? `${dutyCount} ${dutyCount === 1 ? "bullet reads" : "bullets read"} like a duty. ` : ""}
             {liveScore
               ? liveScore.fixes[0] ?? "Nothing urgent to fix right now."
               : "Score your resume to see what to fix first."}
@@ -1020,7 +1334,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           </div>
           <span aria-hidden="true" className="hidden items-center gap-1.5 text-[13px] font-bold text-[#0b7a4f] xl:inline-flex">
             {saving ? <Loader2 className="h-3.5 w-3.5 text-[#5440e8] motion-safe:animate-spin" /> : <Check className="h-3.5 w-3.5" strokeWidth={2.6} />}
-            <span className={saving ? "text-[#3a2bb8]" : ""}>{saveLabel ?? "Autosave on"}</span>
+            <span className={saving ? "text-[#3a2bb8]" : error ? "text-[#a3222a]" : ""}>{saveLabel}</span>
           </span>
         </div>
 
@@ -1153,17 +1467,18 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     { href: `/resume/${resumeId}/snapshots`, label: "Versions" },
   ];
 
-  const badge = saving
-    ? { cls: "bg-[#e4dfff] text-[#3a2bb8]", text: "Saving…" }
-    : justSaved
-      ? { cls: "bg-[#dcf5ea] text-[#0b4f35]", text: "Saved" }
-      : null;
+  const badge = error
+    ? { cls: "bg-[#fbe2e3] text-[#8f1d22]", text: "Not saved" }
+    : saving
+      ? { cls: "bg-[#e4dfff] text-[#3a2bb8]", text: "Saving…" }
+      : { cls: "bg-[#dcf5ea] text-[#0b4f35]", text: "Saved" };
 
   return (
     <div className={`lc-site ${siteFontVars} min-h-screen`}>
       <header className="border-b border-[#e2e0ea] bg-white">
-        <div className="flex items-center justify-between gap-3 px-4 py-3 sm:gap-5 sm:px-7 sm:py-3.5">
-          <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+        {/* Three columns from xl up, so the tool tabs sit in the middle whatever the side columns hold. */}
+        <div className="flex items-center gap-3 px-4 py-3 sm:gap-5 sm:px-7 sm:py-3.5 xl:grid xl:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+          <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
             <Link
               href="/dashboard/resumes"
               aria-label="Back to resumes"
@@ -1171,14 +1486,9 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             >
               <ArrowLeft className="h-[18px] w-[18px]" aria-hidden="true" />
             </Link>
-            <h1 className="min-w-0 truncate text-[15px] font-bold text-[#121226] sm:text-[16px]">{title}</h1>
-            <span role="status" className={`shrink-0 rounded-full px-2.5 py-[5px] text-[12px] font-bold ${badge ? badge.cls : "bg-[#f1eff8] text-[#4a4862]"}`}>
-              {badge ? badge.text : (
-                <>
-                  <span className="sm:hidden">Autosave</span>
-                  <span className="hidden sm:inline">Changes save automatically</span>
-                </>
-              )}
+            <h1 className="min-w-0 flex-1 truncate text-[15px] font-bold text-[#121226] sm:flex-initial sm:text-[16px]">{title}</h1>
+            <span role="status" className={`shrink-0 rounded-full px-2.5 py-[5px] text-[12px] font-bold ${badge.cls}`}>
+              {badge.text}
             </span>
           </div>
 
@@ -1193,19 +1503,23 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             ))}
           </nav>
 
-          <a
-            href={`/api/resumes/${resumeId}/docx`}
-            download
-            className={`${pill} hidden shrink-0 bg-[#f1eff8] text-[14px] text-[#121226] hover:bg-[#e4dfff] sm:inline-flex`}
-          >
-            <span><span className="sr-only">Download as </span>Word</span>
-          </a>
-          <button type="button" onClick={onPdfExportClick} className={`${btnDarkSm} hidden shrink-0 sm:inline-flex`}>
-            <Download className="h-4 w-4" aria-hidden="true" /> <span><span className="sr-only">Download </span>PDF</span>
-          </button>
+          {/* Phones get Word and PDF in the bar at the bottom of the page instead. */}
+          <div className="flex shrink-0 items-center gap-2 max-sm:hidden xl:justify-self-end">
+            <a
+              href={`/api/resumes/${resumeId}/docx`}
+              download
+              className={`${pill} shrink-0 bg-[#f1eff8] text-[14px] text-[#121226] hover:bg-[#e4dfff]`}
+            >
+              <span><span className="sr-only">Download as </span>Word</span>
+            </a>
+            <button type="button" onClick={onPdfExportClick} className={`${btnDarkSm} shrink-0`}>
+              <Download className="h-4 w-4" aria-hidden="true" /> <span><span className="sr-only">Download </span>PDF</span>
+            </button>
+          </div>
         </div>
 
-        <nav aria-label="Resume tools" className="overflow-x-auto border-t border-[#e2e0ea] xl:hidden">
+        {/* Tablets: the tools on a row of their own. Phones reach them from "More" in the bottom bar. */}
+        <nav aria-label="Resume tools" className="hidden overflow-x-auto border-t border-[#e2e0ea] sm:block xl:hidden">
           <ul className="flex w-max gap-1.5 px-4 py-2 sm:px-7">
             {tools.map((l) => (
               <li key={l.href}>
@@ -1227,7 +1541,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
         </div>
       ) : null}
 
-      <main className="mx-auto max-w-[1400px] px-4 pb-14 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
+      <main className="mx-auto max-w-[1480px] px-4 pb-14 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
         {/* Edit / Preview toggle (below the three-column layout) */}
         <div role="group" aria-label="View" className="mb-4 flex gap-1 rounded-full bg-white p-1 xl:hidden lg:max-w-[360px]">
           {(["edit", "preview"] as const).map((v) => (
@@ -1299,14 +1613,18 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
             aria-labelledby="lc-section-title"
             className={`${mobileView === "preview" ? "hidden xl:block" : ""} min-w-0 rounded-[22px] bg-white p-[18px] sm:rounded-[28px] sm:p-[26px]`}
           >
-            <div className="flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
+            <div className="flex flex-wrap items-start gap-x-2 gap-y-3">
+              <div className="mr-auto min-w-0 flex-1 basis-[240px] pr-1">
                 <h2 id="lc-section-title" className="text-[20px] font-extrabold tracking-[-0.01em] text-[#121226] sm:text-[24px]">{activeMeta.title}</h2>
                 <p className="mt-1 text-[14px] text-[#66647c]">{activeMeta.subtitle}</p>
               </div>
-              <button type="button" onClick={() => setShowOverwrite(true)} className={`${btnSoftSm} hidden shrink-0 sm:inline-flex`}>
+              {/* Phones: Import is under "More" and Voice in the bottom bar. */}
+              <button type="button" onClick={() => setShowOverwrite(true)} className={`${btnSoftSm} shrink-0 max-sm:hidden`}>
                 <UploadCloud className="h-4 w-4" aria-hidden="true" /> Import
               </button>
+              {activeTab === "shortbio" || activeTab === "experience" || activeTab === "skills" ? (
+                <VoiceInput placeholder="Voice" className="max-sm:hidden" onTranscript={onVoice} />
+              ) : null}
             </div>
 
             {activeTab === "details" ? renderDetailsTab() : null}
@@ -1326,17 +1644,62 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
 
         {/* Score summary + actions below the three-column layout */}
         {renderScoreCard(`mt-3 xl:hidden ${mobileView === "edit" ? "flex" : "flex lg:ml-[230px] lg:max-w-[560px]"}`)}
-        <div className="mt-3 grid grid-cols-3 gap-2 sm:hidden">
-          <button type="button" onClick={() => setShowOverwrite(true)} className={`${pill} min-h-12 bg-white text-[15px] text-[#121226] hover:bg-[#e4dfff]`}>
-            <UploadCloud className="h-4 w-4" aria-hidden="true" /> Import
-          </button>
-          <a href={`/api/resumes/${resumeId}/docx`} download className={`${pill} min-h-12 bg-white text-[15px] text-[#121226] hover:bg-[#e4dfff]`}>
-            <span><span className="sr-only">Download as </span>Word</span>
-          </a>
-          <button type="button" onClick={onPdfExportClick} className={`${btnDarkSm} min-h-12 text-[15px]`}>
+        {/* Phones: Voice | PDF, with Import, Word and the other tools under "More". */}
+        <div className="mt-3 flex flex-wrap gap-2 sm:hidden">
+          <VoiceInput
+            placeholder="Voice"
+            className="min-h-12! flex-1 justify-center bg-white! text-[15px]! hover:bg-[#e4dfff]!"
+            onTranscript={onVoice}
+          />
+          <button type="button" onClick={onPdfExportClick} className={`${btnDarkSm} min-h-12 flex-1 text-[15px]`}>
             <Download className="h-4 w-4" aria-hidden="true" /> <span><span className="sr-only">Download </span>PDF</span>
           </button>
+          <div ref={moreRef} className="relative">
+            <button
+              type="button"
+              aria-expanded={moreOpen}
+              aria-controls="lc-editor-more"
+              aria-label="More: import, Word and resume tools"
+              onClick={() => setMoreOpen((v) => !v)}
+              className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#121226] transition-colors hover:bg-[#e4dfff] focus-visible:rounded-full!"
+            >
+              <MoreHorizontal className="h-5 w-5" aria-hidden="true" />
+            </button>
+            <div
+              id="lc-editor-more"
+              hidden={!moreOpen}
+              className="lc-float absolute bottom-[calc(100%+8px)] right-0 z-30 w-[min(280px,calc(100vw-32px))] rounded-[20px] bg-white p-1.5"
+            >
+              <button
+                type="button"
+                onClick={() => { setMoreOpen(false); setShowOverwrite(true); }}
+                className="flex min-h-11 w-full items-center gap-2.5 rounded-[14px] px-3.5 text-left text-[15px] font-semibold text-[#121226] hover:bg-[#f1eff8] focus-visible:rounded-[14px]!"
+              >
+                <UploadCloud className="h-4 w-4 text-[#5440e8]" aria-hidden="true" /> Import a resume
+              </button>
+              <a
+                href={`/api/resumes/${resumeId}/docx`}
+                download
+                onClick={() => setMoreOpen(false)}
+                className="flex min-h-11 w-full items-center gap-2.5 rounded-[14px] px-3.5 text-[15px] font-semibold text-[#121226] hover:bg-[#f1eff8] focus-visible:rounded-[14px]!"
+              >
+                <Download className="h-4 w-4 text-[#5440e8]" aria-hidden="true" /> Download Word
+              </a>
+              <nav aria-label="Resume tools" className="mt-1 border-t border-[#e2e0ea] pt-1">
+                <ul>
+                  {tools.map((l) => (
+                    <li key={l.href}>
+                      <Link href={l.href} className="flex min-h-11 items-center rounded-[14px] px-3.5 text-[15px] font-semibold text-[#4a4862] hover:bg-[#f1eff8] hover:text-[#121226] focus-visible:rounded-[14px]!">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
+          </div>
         </div>
+        <p className="sr-only" aria-live="polite">{liveMsg}</p>
       </main>
 
       {renderOverwriteModal()}
