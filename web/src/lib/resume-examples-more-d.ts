@@ -568,7 +568,7 @@ export const MORE_EXAMPLES_D: ResumeExample[] = [
   {
     slug: "recruiter",
     role: "Recruiter",
-    group: "Business",
+    group: "People & service",
     level: "Mid-level · 6 years experience",
     intro:
       "A recruiter resume that shows the roles you fill, how fast and how well — with the sourcing, ATS and full-cycle recruiting keywords talent acquisition leaders search for.",
