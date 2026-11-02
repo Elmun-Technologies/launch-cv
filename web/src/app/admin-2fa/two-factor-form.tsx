@@ -51,14 +51,14 @@ export function TwoFactorForm({ mode, email }: { mode: "setup" | "verify"; email
   }
 
   return (
-    <div className="w-full max-w-[460px] rounded-[28px] bg-white p-8 shadow-[0_24px_48px_-20px_rgba(36,24,120,.35)]">
-      <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e4dfff] text-[#3a2bb8]">
+    <div className="lc-float w-full max-w-[480px] rounded-[28px] bg-white p-6 sm:p-8">
+      <span className="inline-flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-[#e4dfff] text-[#3a2bb8]">
         <ShieldCheck className="h-6 w-6" aria-hidden />
       </span>
-      <h1 className="mt-4 text-[26px] font-extrabold tracking-[-0.02em]">
+      <h1 className="mt-4 text-[28px] font-extrabold leading-[1.15] tracking-[-0.03em] sm:text-[32px]">
         {mode === "setup" ? "Set up two-factor sign-in" : "Enter your 6-digit code"}
       </h1>
-      <p className="mt-2 text-[15px] leading-[1.55] text-[#4a4862]">
+      <p className="mt-2 text-[15px] leading-[23px] text-[#4a4862]">
         {mode === "setup"
           ? "The admin panel needs a code from an authenticator app (Google Authenticator, 1Password, Authy…). Scan the code, then enter the 6 digits it shows."
           : `Open your authenticator app and enter the code for LaunchCV Admin (${email}).`}
@@ -76,8 +76,8 @@ export function TwoFactorForm({ mode, email }: { mode: "setup" | "verify"; email
               />
               <div className="min-w-0 text-[13px] leading-[1.5] text-[#4a4862]">
                 <p className="font-semibold text-[#121226]">Can&apos;t scan? Enter this key:</p>
-                <p className="mt-1 break-all font-mono text-[14px] text-[#121226]">{setup.secret}</p>
-                <a href={setup.uri} className="mt-2 inline-block font-semibold text-[#5440e8] underline">
+                <p className="lc-mono mt-1 break-all text-[14px] text-[#121226]">{setup.secret}</p>
+                <a href={setup.uri} className="mt-2 inline-flex min-h-[44px] items-center font-bold text-[#5440e8] underline underline-offset-2 hover:text-[#3a2bb8] sm:min-h-0">
                   Open in authenticator app
                 </a>
               </div>
@@ -89,7 +89,7 @@ export function TwoFactorForm({ mode, email }: { mode: "setup" | "verify"; email
       ) : null}
 
       <form onSubmit={submit} className="mt-5">
-        <label htmlFor="totp" className="block text-[13px] font-semibold text-[#4a4862]">
+        <label htmlFor="totp" className="block text-[13px] font-bold text-[#4a4862]">
           6-digit code
         </label>
         <input
@@ -100,19 +100,19 @@ export function TwoFactorForm({ mode, email }: { mode: "setup" | "verify"; email
           maxLength={7}
           value={code}
           onChange={(e) => setCode(e.target.value)}
-          className="mt-1.5 h-[52px] w-full rounded-[14px] border-[1.5px] border-[#e2e0ea] px-4 font-mono text-[20px] tracking-[0.3em] outline-none focus:border-[#5440e8]"
+          className="lc-mono mt-1.5 h-[52px] w-full rounded-[14px] border-[1.5px] border-[#e2e0ea] bg-white px-4 text-[20px] tracking-[0.3em] text-[#121226] outline-none transition-[border-color,box-shadow] hover:border-[#c9c0ff] focus:border-[#5440e8] focus:ring-4 focus:ring-[#5440e8]/15 focus-visible:outline-none!"
           required
           autoFocus
         />
         {error ? (
-          <p role="alert" className="mt-2 text-[14px] text-[#c42b30]">
+          <p role="alert" className="mt-3 rounded-2xl bg-[#fbe2e3] px-4 py-3 text-[14px] font-medium text-[#a3222a]">
             {error}
           </p>
         ) : null}
         <button
           type="submit"
           disabled={busy || code.replace(/\D/g, "").length !== 6 || (mode === "setup" && !setup)}
-          className="mt-4 h-[52px] w-full rounded-full bg-[#5440e8] text-[15px] font-semibold text-white transition hover:bg-[#4430d6] disabled:opacity-50"
+          className="lc-btn-lift mt-4 h-[54px] w-full rounded-full bg-[#5440e8] text-[16px] font-semibold text-white hover:bg-[#4430d6] focus-visible:rounded-full! disabled:pointer-events-none disabled:opacity-50"
         >
           {busy ? "Checking…" : mode === "setup" ? "Turn on and continue" : "Continue"}
         </button>

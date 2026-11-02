@@ -1,22 +1,12 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Pencil } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
-import { ResourceListPage } from "@/components/admin/resource-list-page";
-import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/status-badge";
+import { CmsEmpty, CmsPageHeader, VisibilityBadge, cmsBtnPrimary, cmsTextLinkCls } from "@/components/admin/cms-ui";
+import { TESTIMONIAL_PLACEMENTS, placementLabel } from "@/components/admin/cms-placements";
 
-type Row = {
-  id: string;
-  authorName: string;
-  authorRole: string | null;
-  quote: string;
-  placement: string[];
-  order: number;
-  published: boolean;
-};
+const ROW_GRID = "md:grid md:grid-cols-[minmax(0,2.6fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,0.7fr)_auto] md:items-center md:gap-3.5";
 
 export default async function AdminTestimonialsPage() {
   const admin = await requireAdmin("content");
@@ -26,88 +16,78 @@ export default async function AdminTestimonialsPage() {
     orderBy: [{ order: "asc" }, { createdAt: "desc" }],
   });
 
-  const columns: DataTableColumn<Row>[] = [
-    {
-      key: "author",
-      header: "Author",
-      truncate: "max-w-[200px]",
-      render: (r) => (
-        <div className="min-w-0">
-          <p className="truncate text-[13px] font-medium text-[#111111]">{r.authorName}</p>
-          <p className="truncate text-[12px] text-[#6B6B6B]">{r.authorRole || "—"}</p>
-        </div>
-      ),
-    },
-    {
-      key: "quote",
-      header: "Quote",
-      truncate: "max-w-[360px]",
-      render: (r) => <span className="text-[13px] text-[#3F3F3F]">&ldquo;{r.quote}&rdquo;</span>,
-    },
-    {
-      key: "placement",
-      header: "Placement",
-      render: (r) => (
-        <div className="flex flex-wrap gap-1">
-          {r.placement.length === 0 ? (
-            <span className="text-[12px] text-[#6E6E6A]">None</span>
-          ) : (
-            r.placement.map((p) => (
-              <span key={p} className="rounded bg-[#F5F5F3] px-1.5 py-0.5 font-mono text-[11px] text-[#3F3F3F]">
-                {p}
-              </span>
-            ))
-          )}
-        </div>
-      ),
-    },
-    {
-      key: "order",
-      header: "Order",
-      align: "right",
-      render: (r) => <span className="font-mono text-[12px] text-[#3F3F3F]">{r.order}</span>,
-    },
-    {
-      key: "status",
-      header: "Status",
-      render: (r) =>
-        r.published ? (
-          <StatusBadge tone="green" dot>Published</StatusBadge>
-        ) : (
-          <StatusBadge tone="default">Hidden</StatusBadge>
-        ),
-    },
-    {
-      key: "actions",
-      header: "",
-      align: "right",
-      render: (r) => (
-        <Link
-          href={`/admin-panel/cms/testimonials/${r.id}`}
-          className="inline-flex items-center gap-1 rounded-md border border-[#E5E5E2] bg-white px-2.5 py-1 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
-        >
-          <Pencil className="h-3 w-3" />
-          Edit
-        </Link>
-      ),
-    },
-  ];
-
   return (
     <AdminShell email={admin.email} pageTitle="Testimonials">
-      <ResourceListPage
+      <CmsPageHeader
         title="Testimonials"
-        description={`${rows.length.toLocaleString()} testimonial${rows.length === 1 ? "" : "s"}. Used on home and feature pages.`}
-        primaryAction={{ href: "/admin-panel/cms/testimonials/new", label: "New testimonial" }}
-      >
-        <DataTable
-          columns={columns}
-          rows={rows}
-          rowKey={(r) => r.id}
-          emptyTitle="No testimonials yet"
-          emptyDescription="Click New testimonial to add the first one."
-        />
-      </ResourceListPage>
+        description={`${rows.length.toLocaleString()} testimonial${rows.length === 1 ? "" : "s"}. Used on home and feature pages; hidden ones never appear on the site.`}
+        action={{ href: "/admin-panel/cms/testimonials/new", label: "New testimonial" }}
+      />
+
+      <section aria-label="Testimonials" className="lc-card mt-4 rounded-[24px] px-4 pb-2 pt-1 sm:px-6">
+        {rows.length === 0 ? (
+          <CmsEmpty
+            title="No testimonials yet"
+            description="Click New testimonial to add the first one."
+            action={
+              <Link href="/admin-panel/cms/testimonials/new" className={cmsBtnPrimary}>
+                New testimonial
+              </Link>
+            }
+          />
+        ) : (
+          <>
+            <div
+              aria-hidden="true"
+              className={`hidden py-3.5 text-[12px] font-bold tracking-[0.06em] text-[#66647c] ${ROW_GRID}`}
+            >
+              <span>QUOTE</span>
+              <span>AUTHOR</span>
+              <span>PLACEMENT</span>
+              <span>STATUS</span>
+              <span className="w-10" />
+            </div>
+            <ul>
+              {rows.map((r) => (
+                <li key={r.id} className={`flex flex-col gap-2 border-t border-[#e2e0ea] py-3.5 text-[14px] first:border-t-0 md:first:border-t ${ROW_GRID}`}>
+                  <p className="min-w-0 leading-[21px] text-[#24223a] [overflow-wrap:anywhere]">
+                    <span className="line-clamp-3">&ldquo;{r.quote}&rdquo;</span>
+                  </p>
+                  <div className="min-w-0">
+                    <p className="truncate font-bold text-[#121226]">
+                      <span className="sr-only">Author: </span>
+                      {r.authorName}
+                    </p>
+                    <p className="truncate text-[12px] text-[#66647c]">{r.authorRole || "No role"}</p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 md:contents">
+                    <span className="min-w-0 text-[#4a4862]">
+                      <span className="sr-only">Placement: </span>
+                      {r.placement.length === 0 ? "None" : r.placement.map((p) => placementLabel(TESTIMONIAL_PLACEMENTS, p)).join(", ")}
+                      <span className="block text-[12px] text-[#66647c]">Order {r.order}</span>
+                    </span>
+                    <span>
+                      <VisibilityBadge published={r.published} />
+                    </span>
+                    <Link
+                      href={`/admin-panel/cms/testimonials/${r.id}`}
+                      className={`${cmsTextLinkCls} ml-auto md:ml-0`}
+                      aria-label={`Edit testimonial from ${r.authorName}`}
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </section>
+
+      <div className="mt-3.5 rounded-[18px] bg-[#fdf0d5] px-5 py-4 text-[14px] leading-[21px] text-[#7a4600]">
+        <b>Rule:</b> publish only real quotes, with the author&apos;s written permission to use their name and words. Keep a
+        testimonial hidden until that permission is on file.
+      </div>
     </AdminShell>
   );
 }

@@ -22,6 +22,7 @@ export type AuditAction =
   // Operations
   | "user.role.change"
   | "user.delete"
+  | "resume.delete"
   | "subscription.cancel"
   | "subscription.refund"
   | "ai-usage.limit.override"

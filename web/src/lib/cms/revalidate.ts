@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { PAGE_COPY, isPageCopyKey } from "@/lib/cms/page-copy";
 
 /** Invalidates the cached versions of /blog and /blog/[slug] for a post. */
 export function bustBlogCache(slug: string, prevSlug?: string) {
@@ -14,28 +15,28 @@ export function bustTestimonialCache(placements: string[]) {
   revalidatePath("/");
   for (const p of placements) {
     if (p === "home" || !p) continue;
-    revalidatePath(`/${p}`);
+    revalidatePath(placementPath(p));
   }
 }
 
 /** Revalidates the page that renders FAQs at the given placement. */
 export function bustFaqCache(placement: string) {
-  if (placement === "home") {
-    revalidatePath("/");
-    return;
-  }
-  revalidatePath(`/${placement}`);
+  revalidatePath(placementPath(placement));
 }
 
-/** Revalidates the public page tied to a PageCopy key. */
+/** Public path for a FAQ/testimonial placement value. */
+function placementPath(placement: string): string {
+  if (!placement || placement === "home") return "/";
+  // The ATS-score feature page was merged into the free checker.
+  if (placement === "features/ats-score") return "/free-ats-check";
+  return `/${placement}`;
+}
+
+/** Revalidates the public pages that show a PageCopy key. */
 export function bustPageCopyCache(key: string) {
-  // key looks like "home.hero" → invalidate "/"; "features.ats-score" → "/features/ats-score"
-  const [page, ...rest] = key.split(".");
-  if (!page) return;
-  if (page === "home" || page === "index") {
-    revalidatePath("/");
-    return;
+  const def = isPageCopyKey(key) ? PAGE_COPY[key] : null;
+  for (const path of def?.paths ?? ["/"]) {
+    if (path.startsWith("layout:")) revalidatePath(path.slice("layout:".length), "layout");
+    else revalidatePath(path);
   }
-  const path = rest.length > 0 ? `/${page}/${rest.join("/")}` : `/${page}`;
-  revalidatePath(path);
 }

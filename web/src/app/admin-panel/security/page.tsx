@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { can, PERMISSION_LABELS, requireAdmin, staffRoleOf, STAFF_ROLES, type Permission } from "@/lib/admin-guard";
 import { getSettings } from "@/lib/app-settings";
 import { AdminShell } from "@/components/admin-shell";
 import { SectionCard } from "@/components/admin/section-card";
+import { adminH1, adminLead, adminLink } from "@/components/admin/admin-ui";
 import { SecurityClient } from "./security-client";
 
 export const dynamic = "force-dynamic";
@@ -55,73 +57,123 @@ export default async function SecurityPage() {
     .filter((u) => u.role !== null);
 
   const perms = Object.keys(PERMISSION_LABELS) as Permission[];
+  const members = team.map((t) => ({ ...t, role: t.role! }));
 
   return (
     <AdminShell email={admin.email} pageTitle="Security">
-      <div className="space-y-6">
+      <div className="mx-auto max-w-[1280px] space-y-5">
         <div>
-          <h1 className="text-[22px] font-semibold tracking-tight text-[#111111]">Security</h1>
-          <p className="mt-1 max-w-[720px] text-[13px] leading-[1.6] text-[#6B6B6B]">
+          <h1 className={adminH1}>Security</h1>
+          <p className={adminLead}>
             Who can open the admin panel and what each role can do. Every admin signs in with a password plus an authenticator
             code; keys, limits and roles need a fresh confirmation.
           </p>
         </div>
 
+        {/* Role summary — counts come from the team list below. */}
+        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {STAFF_ROLES.map((r) => {
+            const count = members.filter((m) => m.role === r).length;
+            const allowed = perms.filter((p) => can(r, p)).length;
+            const dark = r === "owner";
+            return (
+              <li key={r} className={`min-w-0 rounded-[22px] p-5 ${dark ? "bg-[#111118] text-white" : "bg-white"}`}>
+                <p className="text-[16px] font-extrabold capitalize sm:text-[18px]">{r}</p>
+                <p className={`mt-1 text-[13px] leading-[1.45] ${dark ? "text-[#c9c7d8]" : "text-[#4a4862]"}`}>
+                  {allowed} of {perms.length} permissions
+                </p>
+                <p className="mt-2.5 text-[24px] font-extrabold tabular-nums">
+                  {count}
+                  <span className={`ml-1.5 text-[13px] font-semibold ${dark ? "text-[#c9c7d8]" : "text-[#66647c]"}`}>{count === 1 ? "person" : "people"}</span>
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+
         <SecurityClient
           me={{ id: admin.sub, role: admin.role }}
-          team={team.map((t) => ({ ...t, role: t.role! }))}
+          team={members}
           security={settings.security}
           canManage={can(admin.role, "roles")}
-        />
-
-        <SectionCard title="What each role can do" flush>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px] text-left text-[13px]">
-              <thead className="bg-[#FAFAF9] text-[11px] uppercase tracking-wider text-[#6E6E6A]">
-                <tr>
-                  <th className="px-5 py-2.5 font-semibold">Permission</th>
-                  {STAFF_ROLES.map((r) => (
-                    <th key={r} className="px-3 py-2.5 text-center font-semibold capitalize">
-                      {r}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#E5E5E2]">
-                {perms.map((p) => (
-                  <tr key={p}>
-                    <td className="px-5 py-2.5 text-[#111111]">{PERMISSION_LABELS[p]}</td>
-                    {STAFF_ROLES.map((r) => (
-                      <td key={r} className="px-3 py-2.5 text-center">
-                        {can(r, p) ? <span className="text-emerald-600">✓</span> : <span className="text-[#C4C4BF]">—</span>}
-                      </td>
+          permissions={
+            <SectionCard title="What each role can do" flush>
+              <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label="Permissions by role">
+                <table className="w-full min-w-[560px] text-left text-[14px]">
+                  <thead className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">
+                    <tr>
+                      <th scope="col" className="py-3 pl-5 pr-3 font-bold sm:pl-6">
+                        Permission
+                      </th>
+                      {STAFF_ROLES.map((r) => (
+                        <th key={r} scope="col" className="px-3 py-3 text-center font-bold last:pr-5 sm:last:pr-6">
+                          {r}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {perms.map((p) => (
+                      <tr key={p} className="border-t border-[#e2e0ea]">
+                        <th scope="row" className="py-2.5 pl-5 pr-3 font-medium text-[#121226] sm:pl-6">
+                          {PERMISSION_LABELS[p]}
+                        </th>
+                        {STAFF_ROLES.map((r) => (
+                          <td key={r} className="px-3 py-2.5 text-center last:pr-5 sm:last:pr-6">
+                            {can(r, p) ? (
+                              <span className="font-extrabold text-[#0b7a4f]">
+                                <span aria-hidden>✓</span>
+                                <span className="sr-only">Allowed</span>
+                              </span>
+                            ) : (
+                              <span className="font-extrabold text-[#9d9bb3]">
+                                <span aria-hidden>—</span>
+                                <span className="sr-only">Not allowed</span>
+                              </span>
+                            )}
+                          </td>
+                        ))}
+                      </tr>
                     ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </SectionCard>
-
-        <SectionCard title="Recent sensitive activity" description="Key, limit, role and sign-in events. Full history is in the audit log." flush>
-          {events.length === 0 ? (
-            <p className="px-5 py-6 text-center text-[13px] text-[#6E6E6A]">Nothing yet.</p>
-          ) : (
-            <ul className="divide-y divide-[#E5E5E2]">
-              {events.map((e) => (
-                <li key={e.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-2.5 text-[12px]">
-                  <span className={`font-mono ${e.action.endsWith("failed") ? "text-red-700" : "text-[#111111]"}`}>{e.action}</span>
-                  <span className="text-[#6B6B6B]">{e.entityId ?? e.entity}</span>
-                  <span className="text-[#6B6B6B]">{e.actor?.email ?? "—"}</span>
-                  <span className="ml-auto text-[#8A8A86]">
-                    {e.ip ? `${e.ip} · ` : ""}
-                    {e.createdAt.toISOString().replace("T", " ").slice(0, 16)} UTC
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
-        </SectionCard>
+                  </tbody>
+                </table>
+              </div>
+            </SectionCard>
+          }
+          activity={
+            <SectionCard
+              title="Recent sensitive activity"
+              description="Key, limit, role and sign-in events."
+              flush
+              action={
+                <Link href="/admin-panel/audit" className={`${adminLink} text-[13px]`}>
+                  Audit log →
+                </Link>
+              }
+            >
+              {events.length === 0 ? (
+                <p className="px-6 py-8 text-center text-[14px] text-[#66647c]">Nothing yet.</p>
+              ) : (
+                <ul>
+                  {events.map((e) => (
+                    <li key={e.id} className="border-t border-[#e2e0ea] px-5 py-3 text-[13px] first:border-t-0 sm:px-6">
+                      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-0.5">
+                        <span className={`lc-mono break-all text-[12px] ${e.action.endsWith("failed") ? "text-[#c42b30]" : "text-[#121226]"}`}>
+                          {e.action}
+                        </span>
+                        <span className="text-[12px] text-[#66647c]">{e.createdAt.toISOString().replace("T", " ").slice(0, 16)} UTC</span>
+                      </div>
+                      <p className="mt-0.5 break-all text-[12px] text-[#4a4862]">
+                        <b className="font-semibold text-[#121226]">{e.entityId ?? e.entity}</b> · {e.actor?.email ?? "—"}
+                        {e.ip ? <span className="text-[#66647c]"> · {e.ip}</span> : null}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </SectionCard>
+          }
+        />
       </div>
     </AdminShell>
   );

@@ -2,11 +2,24 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Pencil, Trash2, Users as UsersIcon } from "lucide-react";
 import { AdminShell } from "@/components/admin-shell";
-import { ResourceListPage } from "@/components/admin/resource-list-page";
+import { useAdminFetch } from "@/components/admin/reauth";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
+import {
+  AdminPageHeader,
+  Avatar,
+  LoadingCard,
+  Pager,
+  SearchField,
+  cellMain,
+  cellMuted,
+  cellSub,
+  cellText,
+  pillBtn,
+  rowDanger,
+  rowLink,
+} from "@/components/admin/v5/ui";
 
 interface UserRow {
   id: string;
@@ -21,6 +34,7 @@ interface UserRow {
 const PER_PAGE = 20;
 
 export function AdminUsersPage() {
+  const adminFetch = useAdminFetch();
   const [users, setUsers] = useState<UserRow[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -49,7 +63,12 @@ export function AdminUsersPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this user permanently?")) return;
-    await fetch(`/api/admin-panel/users/${id}`, { method: "DELETE" });
+    const r = await adminFetch(`/api/admin-panel/users/${id}`, { method: "DELETE" }).catch(() => null);
+    if (!r?.ok) {
+      const j = r ? await r.json().catch(() => ({})) : {};
+      alert((j as { error?: string }).error ?? "Couldn't delete this user.");
+      return;
+    }
     fetchUsers();
   }
 
@@ -58,13 +77,11 @@ export function AdminUsersPage() {
       key: "user",
       header: "User",
       render: (u) => (
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#111111] text-[11px] font-semibold text-white">
-            {(u.name || u.email)[0].toUpperCase()}
-          </div>
+        <div className="flex items-center gap-2.5">
+          <Avatar name={u.name} email={u.email} />
           <div className="min-w-0">
-            <p className="truncate text-[13px] font-medium text-[#111111]">{u.name || "—"}</p>
-            <p className="truncate text-[12px] text-[#6B6B6B]">{u.email}</p>
+            <p className={`truncate ${cellMain}`}>{u.name || "—"}</p>
+            <p className={`truncate ${cellSub}`}>{u.email}</p>
           </div>
         </div>
       ),
@@ -78,77 +95,67 @@ export function AdminUsersPage() {
       key: "resumes",
       header: "Resumes",
       align: "right",
-      render: (u) => <span className="font-mono text-[12px] text-[#3F3F3F]">{u.resumeCount}</span>,
+      render: (u) => <span className={`${cellText} tabular-nums`}>{u.resumeCount}</span>,
     },
     {
       key: "apps",
       header: "Apps",
       align: "right",
-      render: (u) => (
-        <span className="font-mono text-[12px] text-[#3F3F3F]">{u.appCount}</span>
-      ),
+      render: (u) => <span className={`${cellText} tabular-nums`}>{u.appCount}</span>,
     },
     {
       key: "created",
-      header: "Created",
-      render: (u) => (
-        <span className="text-[12px] text-[#6B6B6B]">
-          {new Date(u.createdAt).toLocaleDateString()}
-        </span>
-      ),
+      header: "Joined",
+      render: (u) => <span className={`whitespace-nowrap ${cellMuted}`}>{new Date(u.createdAt).toLocaleDateString()}</span>,
     },
     {
       key: "actions",
-      header: "",
+      header: "Actions",
       align: "right",
       render: (u) => (
         <div className="flex items-center justify-end gap-1">
-          <Link
-            href={`/admin-panel/users/${u.id}`}
-            className="rounded-md p-1.5 text-[#6E6E6A] transition hover:bg-[#F5F5F3] hover:text-[#2563EB]"
-            aria-label="Edit user"
-          >
-            <Pencil className="h-4 w-4" />
+          <Link href={`/admin-panel/users/${u.id}`} className={rowLink} aria-label={`View ${u.name || u.email}`}>
+            View
           </Link>
           <button
             type="button"
             onClick={() => handleDelete(u.id)}
-            className="rounded-md p-1.5 text-[#6E6E6A] transition hover:bg-red-50 hover:text-red-600"
-            aria-label="Delete user"
+            className={rowDanger}
+            aria-label={`Delete ${u.name || u.email}`}
           >
-            <Trash2 className="h-4 w-4" />
+            Delete
           </button>
         </div>
       ),
     },
   ];
 
+  const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+
   // Client-side search input — re-bound to setSearch + reset to page 1
   return (
     <AdminShell pageTitle="Users">
-      <ResourceListPage
-        title="Users"
-        description={`${total.toLocaleString()} account${total === 1 ? "" : "s"} total. Click a row to view details.`}
-      >
-        <div className="relative max-w-[360px]">
-          <input
-            type="search"
-            placeholder="Search by name or email…"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            className="block w-full rounded-lg border border-[#E5E5E2] bg-white px-3 py-2 text-[13px] text-[#111111] outline-none transition placeholder:text-[#8A8A86] hover:border-[#D9D9D5] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/15"
-          />
-        </div>
+      <div className="space-y-5">
+        <AdminPageHeader
+          title="Users"
+          description={`${total.toLocaleString()} account${total === 1 ? "" : "s"} total. Open a user to see details.`}
+        />
+
+        <SearchField
+          id="admin-users-search"
+          label="Search users by name or email"
+          placeholder="Search name or email"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+        />
 
         {loading ? (
-          <div className="rounded-xl border border-[#E5E5E2] bg-white px-5 py-12 text-center text-[13px] text-[#6E6E6A]">
-            Loading…
-          </div>
+          <LoadingCard />
         ) : (
-          <>
+          <div>
             <DataTable
               columns={columns}
               rows={users}
@@ -156,45 +163,21 @@ export function AdminUsersPage() {
               emptyTitle="No users match this search"
               emptyDescription="Try a broader query or clear the search to see everyone."
               emptyAction={
-                <button
-                  type="button"
-                  onClick={() => setSearch("")}
-                  className="inline-flex items-center gap-1 rounded-lg border border-[#E5E5E2] bg-white px-3 py-1.5 text-[12px] font-semibold text-[#111111] transition hover:bg-[#FAFAF9]"
-                >
+                <button type="button" onClick={() => setSearch("")} className={pillBtn}>
                   Clear search
                 </button>
               }
             />
-            <div className="mt-4 flex items-center justify-between text-[12px] text-[#6B6B6B]">
-              <p>
-                <UsersIcon className="mr-1 inline h-3 w-3 align-text-bottom" />
-                {total.toLocaleString()} total
-              </p>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Previous
-                </button>
-                <span className="px-2">
-                  Page {page} of {Math.max(1, Math.ceil(total / PER_PAGE))}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setPage((p) => p + 1)}
-                  disabled={page >= Math.ceil(total / PER_PAGE)}
-                  className="rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold text-[#111111] transition hover:bg-[#FAFAF9] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </>
+            <Pager
+              page={page}
+              totalPages={totalPages}
+              onPrev={() => setPage((p) => Math.max(1, p - 1))}
+              onNext={() => setPage((p) => p + 1)}
+              summary={`${total.toLocaleString()} total`}
+            />
+          </div>
         )}
-      </ResourceListPage>
+      </div>
     </AdminShell>
   );
 }
