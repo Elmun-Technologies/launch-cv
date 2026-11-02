@@ -9,7 +9,8 @@ import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
-import { RESUME_EXAMPLES, RESUME_GROUPS, getResumeExample } from "@/lib/resume-examples";
+import { RESUME_EXAMPLES, RESUME_GROUPS, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
+import type { ResumeContent } from "@/types/resume";
 import { COVER_LETTER_EXAMPLES, getCoverLetterExample } from "@/lib/cover-letter-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 
@@ -58,6 +59,22 @@ function RoleTag({ slug, className }: { slug: string; className: string }) {
   );
 }
 
+/**
+ * The card thumbnail shows only the top of the page, so render just that part:
+ * the full resume ×88 roles made the HTML (and the client payload) several times larger.
+ */
+function thumbContent(e: ResumeExample): ResumeContent {
+  const c = exampleToContent(e);
+  return {
+    ...c,
+    experience: c.experience.slice(0, 2).map((x) => ({ ...x, bullets: x.bullets.slice(0, 3) })),
+    education: [],
+    certifications: [],
+    achievements: [],
+    skills: [],
+  };
+}
+
 export default function ResumeExamplesPage() {
   const total = RESUME_EXAMPLES.length;
   const items = ordered.map((e, i) => ({
@@ -70,7 +87,7 @@ export default function ResumeExamplesPage() {
       >
         <div className={`relative h-[120px] overflow-hidden rounded-[15px] sm:h-[200px] sm:rounded-[20px] lg:h-[230px] ${TILE[i % TILE.length]}`}>
           <div aria-hidden="true" className="absolute left-1/2 top-3.5 w-[120px] -translate-x-1/2 shadow-[0_18px_36px_-18px_rgba(10,6,60,.45)] transition-transform duration-300 group-hover:-translate-y-1 sm:top-[26px] sm:w-[180px] lg:w-[210px]">
-            <ResumePreview content={exampleToContent(e)} template="classic" />
+            <ResumePreview content={thumbContent(e)} template="classic" />
           </div>
           <span className="absolute left-2.5 top-2.5 hidden rounded-full bg-white px-2.5 py-[5px] text-[11px] font-bold text-[#4a4862] sm:inline-block">{e.group}</span>
         </div>

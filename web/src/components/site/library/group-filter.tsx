@@ -45,7 +45,7 @@ export function GroupFilter({
       </p>
       <ul className={gridClassName}>
         {shown.map((i) => (
-          <li key={i.key} className="flex">
+          <li key={i.key} className="flex [contain-intrinsic-size:auto_300px] [content-visibility:auto]">
             {i.node}
           </li>
         ))}
