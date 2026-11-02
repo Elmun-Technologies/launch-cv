@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
-import { container, btnPrimary, btnWhite, labelCls } from "@/components/site/ui";
+import { container, btnWhite, labelCls } from "@/components/site/ui";
 import { LetterMini } from "@/components/site/library/letter-mini";
+import { ShowAllList } from "@/components/site/library/show-all-list";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
@@ -102,9 +103,14 @@ export default function CoverLetterExamplesPage() {
       {/* GRID */}
       <section className={`${container} pt-[22px] lg:pt-12`}>
         <h2 className="sr-only">Cover letter examples by role</h2>
-        <ul className="grid gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
-          {items.map(({ e, c }, i) => (
-            <li key={e.slug} className="flex">
+        <ShowAllList
+          noun="letters"
+          initial={12}
+          className="grid gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4"
+          itemClassName="flex"
+          items={items.map(({ e, c }, i) => ({
+            key: e.slug,
+            node: (
               <Link
                 href={`/cover-letter-examples/${e.slug}`}
                 className="lc-card lc-rise group flex w-full items-center justify-between gap-3 rounded-[22px] px-[18px] py-4 text-[#121226] sm:block sm:rounded-[26px] sm:p-2"
@@ -123,7 +129,8 @@ export default function CoverLetterExamplesPage() {
                     <span className="sr-only"> cover letter example</span>
                   </p>
                   <p className="mt-0.5 text-[12px] text-[#66647c] sm:mt-[3px] sm:text-[13px]">
-                    For: {c.target.title}, {c.target.company}
+                    For: {c.target.title}
+                    <span className="hidden sm:inline">, {c.target.company}</span>
                   </p>
                   <p aria-hidden="true" className="mt-3 hidden text-[14px] font-semibold text-[#5440e8] sm:block">
                     Read the letter →
@@ -133,30 +140,25 @@ export default function CoverLetterExamplesPage() {
                   →
                 </span>
               </Link>
-            </li>
-          ))}
-        </ul>
+            ),
+          }))}
+        />
         <p className="mt-3 text-[12px] text-[#66647c] sm:mt-5 sm:text-[13px]">Sample letters. Names, companies and figures are illustrative.</p>
       </section>
 
-      {/* CTA BANDS */}
-      <section className={`${container} grid gap-2.5 pt-14 lg:grid-cols-2 lg:gap-4 lg:pt-[100px]`}>
-        <div className="lc-reveal rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:rounded-[36px]">
-          <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] sm:text-[34px] sm:leading-[38px]">Write yours from your own resume.</h2>
-          <p className="mt-2 max-w-[460px] text-[15px] leading-6 text-[#e4dfff] sm:text-[16px]">
-            LaunchCV drafts a cover letter from your resume and the job post, then you edit it.
-          </p>
-          <CtaLink cta="cover_letter_feature" location="cover_letter_examples_index" href="/features/cover-letter" className={`${btnWhite} mt-4 sm:mt-6`}>
-            How it works
-          </CtaLink>
-        </div>
-        <div className="lc-reveal rounded-[26px] bg-[#111118] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:rounded-[36px]">
-          <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] sm:text-[34px] sm:leading-[38px]">
-            The resume comes first. <span className="text-[#9a97b3]">Check yours free.</span>
-          </h2>
-          <p className="mt-2 text-[15px] leading-6 text-[#c9c7d8] sm:text-[16px]">See how an ATS reads it in about 10 seconds — no sign-up.</p>
-          <CtaLink cta="free_ats_check" location="cover_letter_examples_index" href="/free-ats-check" className={`${btnPrimary} mt-4 sm:mt-6`}>
-            Check my resume — free
+      {/* CTA BAND */}
+      <section className={`${container} pt-14 lg:pt-[110px]`}>
+        <div className="lc-reveal flex flex-col gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:rounded-[36px] lg:px-16 lg:py-14">
+          <div>
+            <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] sm:text-[34px] sm:leading-[38px] lg:text-[42px] lg:leading-[46px] lg:tracking-[-0.035em]">
+              Write yours from your own resume.
+            </h2>
+            <p className="mt-2 text-[15px] leading-6 text-[#e4dfff] sm:text-[16px] lg:mt-3 lg:text-[18px]">
+              From your resume and the job post — formal or neutral tone.
+            </p>
+          </div>
+          <CtaLink cta="cover_letter_feature" location="cover_letter_examples_index" href="/features/cover-letter" className={`${btnWhite} flex-none`}>
+            Generate my cover letter
           </CtaLink>
         </div>
       </section>

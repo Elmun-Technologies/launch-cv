@@ -4,7 +4,9 @@ import type { Metadata } from "next";
 // value and would otherwise be indexed with the root's default title. Keep
 // them out of the index while still crawlable/followable.
 export const metadata: Metadata = {
-  title: "Account",
+  // A plain string here would drop the root "%s | LaunchCV" template for the
+  // pages below, which each set their own title.
+  title: { default: "Account | LaunchCV", template: "%s | LaunchCV" },
   robots: { index: false, follow: true },
 };
 

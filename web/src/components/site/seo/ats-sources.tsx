@@ -25,10 +25,22 @@ function SourceRefs({ slug, src, sources }: { slug: string; src: number[]; sourc
 
 /** Grid of vendor facts, each citing its source. */
 export function AtsFactGrid({ slug, facts, sources }: { slug: string; facts: AtsFact[]; sources: AtsSource[] }) {
+  /*
+   * Three across on a 6-column track; the last row's cards widen to fill it
+   * (one card → full width, two → halves), so no row ends in an empty slot.
+   * Same idea for two across below `lg`.
+   */
+  const n = facts.length;
+  const lgRest = n % 3;
+  const span = (i: number) => {
+    const lg = lgRest === 1 && i === n - 1 ? "lg:col-span-6" : lgRest === 2 && i >= n - 2 ? "lg:col-span-3" : "lg:col-span-2";
+    const sm = n % 2 === 1 && i === n - 1 ? "sm:col-span-2" : "";
+    return `${sm} ${lg}`;
+  };
   return (
-    <ul className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
-      {facts.map((f) => (
-        <li key={f.label} className="lc-card lc-reveal flex flex-col rounded-[22px] p-[18px] sm:rounded-3xl sm:p-6">
+    <ul className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-6">
+      {facts.map((f, i) => (
+        <li key={f.label} className={`lc-card lc-reveal flex flex-col rounded-[22px] p-[18px] sm:rounded-3xl sm:p-6 ${span(i)}`}>
           <h3 className="text-[17px] font-extrabold leading-6 sm:text-[19px]">{f.label}</h3>
           <p className="mt-2 text-[15px] leading-[23px] text-[#4a4862]">
             {f.text}

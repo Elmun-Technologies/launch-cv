@@ -2,7 +2,7 @@
 
 import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import {
   AuthBackLink,
@@ -18,8 +18,10 @@ import {
 
 function Form() {
   const sp = useSearchParams();
+  const router = useRouter();
   const token = sp.get("token") ?? "";
   const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [showPw, setShowPw] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [ok, setOk] = useState(false);
@@ -28,6 +30,10 @@ function Form() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErr(null);
+    if (password !== confirm) {
+      setErr("The two passwords don't match.");
+      return;
+    }
     setLoading(true);
     const res = await fetch("/api/auth/reset-password", {
       method: "POST",
@@ -35,11 +41,18 @@ function Form() {
       body: JSON.stringify({ token, password }),
     });
     const j = await res.json().catch(() => ({}));
-    setLoading(false);
     if (!res.ok) {
+      setLoading(false);
       setErr(j.error ?? "Couldn't reset password. The link may be expired.");
       return;
     }
+    if (j.signedIn) {
+      // Keep the button in its busy state while the dashboard loads.
+      router.replace("/dashboard");
+      router.refresh();
+      return;
+    }
+    setLoading(false);
     setOk(true);
   }
 
@@ -92,6 +105,23 @@ function Form() {
         </button>
       </div>
 
+      <label htmlFor="reset-confirm" className={`${authLabelCls} mt-4`}>
+        Confirm password
+      </label>
+      <input
+        id="reset-confirm"
+        type={showPw ? "text" : "password"}
+        required
+        minLength={8}
+        className={authInputCls}
+        value={confirm}
+        onChange={(e) => setConfirm(e.target.value)}
+        autoComplete="new-password"
+        placeholder="••••••••"
+        aria-invalid={err && password !== confirm ? true : undefined}
+        aria-describedby={err ? "reset-error" : undefined}
+      />
+
       {err ? (
         <div id="reset-error" className="mt-4">
           <AuthNotice tone="error">
@@ -102,7 +132,7 @@ function Form() {
 
       <button type="submit" disabled={loading} className={`${authSubmitCls} mt-[22px]`}>
         {loading ? <Loader2 className="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" /> : null}
-        {loading ? "Saving…" : "Save new password"}
+        {loading ? "Saving…" : "Save and sign in"}
       </button>
     </form>
   );
@@ -110,7 +140,10 @@ function Form() {
 
 export default function ResetPasswordPage() {
   return (
-    <AuthLayout mode="recover">
+    <AuthLayout
+      mode="recover"
+      stageNote={<p className="text-[15px] font-semibold leading-[23px]">Devices you&apos;re already signed in on stay signed in.</p>}
+    >
       <AuthBackLink />
       <h1 className={`mt-[22px] ${authH1SmCls}`}>Choose a new password.</h1>
       <p id="reset-hint" className={authLeadCls}>

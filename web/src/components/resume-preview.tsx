@@ -12,11 +12,14 @@ export function ResumePreview({
   content,
   regionMode,
   template = "classic",
+  fit = "page",
 }: {
   content: ResumeContent;
   regionMode?: string;
   title?: string;
   template?: TemplateStyle;
+  /** "content" crops the sheet to the text instead of a full paper page (marketing previews). */
+  fit?: "page" | "content";
 }) {
   const t = TEMPLATE_SPECS[template];
   const paper = pageSizeFor(regionMode);
@@ -48,7 +51,7 @@ export function ResumePreview({
       <div
         className="w-full overflow-hidden rounded-[3px] bg-white text-[#1c1c1c] shadow-[0_10px_30px_-14px_rgba(0,0,0,0.25)]"
         style={{
-          aspectRatio: `${paper.width} / ${paper.height}`,
+          aspectRatio: fit === "page" ? `${paper.width} / ${paper.height}` : undefined,
           fontSize: `calc(100cqw * 10 / ${paper.width})`,
           lineHeight: 1.35,
           padding: "3.6em",
