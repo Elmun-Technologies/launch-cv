@@ -10,18 +10,10 @@ import { AttributionTracker } from "@/components/attribution-tracker";
 import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
+import { siteFontVars } from "@/lib/site-fonts";
 
 // Fonts are self-hosted (src/fonts, OFL-1.1) so builds never depend on downloading
 // from Google Fonts — a failed download there broke a production build.
-const inter = localFont({
-  src: "../fonts/inter-latin-wght-normal.woff2",
-  weight: "100 900",
-  variable: "--font-inter",
-  display: "swap",
-  // The site and cabinet render in Figtree (lib/site-fonts); Inter is only a fallback
-  // for the few surfaces outside .lc-site, so don't spend the preload slot on it.
-  preload: false,
-});
 
 const geistMono = localFont({
   src: "../fonts/geist-mono-latin-wght-normal.woff2",
@@ -174,7 +166,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-US" className={`${inter.variable} ${geistMono.variable} ${sora.variable} h-full`}>
+    <html lang="en-US" className={`${siteFontVars} ${geistMono.variable} ${sora.variable} h-full`}>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
         <AttributionTracker />

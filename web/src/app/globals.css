@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-figtree);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-sora);
-  --font-body: var(--font-inter);
+  --font-body: var(--font-figtree);
 
   /* ── Landing design tokens ── */
   --lc-primary: #2563EB;
@@ -610,11 +610,11 @@ button:hover, [role="button"]:hover, a:hover {
 
 /* ── Font helpers ── */
 .font-display {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   letter-spacing: -0.02em;
 }
 .font-body {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ── Mesh blob animation (hero background) ── */
@@ -825,7 +825,7 @@ button:hover, [role="button"]:hover, a:hover {
   color: #2563EB;
 }
 .lc-h1 {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(36px, 5.2vw, 60px);
   font-weight: 700;
   line-height: 1.05;
@@ -1058,21 +1058,21 @@ button:hover, [role="button"]:hover, a:hover {
 
 /* ── Headline scale (polished SaaS) ── */
 .lc-hero-headline {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(36px, 5.5vw, 64px);
   line-height: 1.05;
   letter-spacing: -0.025em;
   font-weight: 700;
 }
 .lc-section-headline {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   font-size: clamp(28px, 3.6vw, 44px);
   line-height: 1.1;
   letter-spacing: -0.02em;
   font-weight: 700;
 }
 .lc-overline {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -1219,7 +1219,7 @@ button:hover, [role="button"]:hover, a:hover {
   color: #854D0E;
   border: 1px solid #FDE68A;
   border-radius: 999px;
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   font-size: 12px;
 }
