@@ -6,6 +6,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "medical-assistant",
     role: "Medical Assistant",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-medical-assistant.webp", alt: "Medical assistant in a mask putting a bandage on a patient's arm after a shot" },
     level: "Mid-level · 4 years experience",
     intro:
       "A medical assistant resume that shows smooth patient flow, accurate charting and hands-on clinical skills — with the certification, EHR and procedure keywords clinics screen for.",
@@ -89,6 +90,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "licensed-practical-nurse",
     role: "Licensed Practical Nurse",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-licensed-practical-nurse.webp", alt: "Nurse in blue gloves giving a patient an injection in the upper arm" },
     level: "Experienced · 5 years",
     intro:
       "A licensed practical nurse resume that shows safe medication passes, sharp observation and steady resident care — with the license, long-term care and charting keywords employers screen for.",
@@ -173,6 +175,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "pharmacy-technician",
     role: "Pharmacy Technician",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-pharmacy-technician.webp", alt: "Blister packs of tablets and capsules spread on a table" },
     level: "Mid-level · 5 years experience",
     intro:
       "A pharmacy technician resume that shows accuracy at volume, clean inventory and insurance know-how — with the certification, compounding and dispensing keywords pharmacies screen for.",
@@ -256,6 +259,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "dental-hygienist",
     role: "Dental Hygienist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-dental-hygienist.webp", alt: "Dental hygienist in a mask and safety glasses working on a patient" },
     level: "Experienced · 6 years",
     intro:
       "A dental hygienist resume that shows a full hygiene schedule, strong periodontal care and patients who come back — with the license, clinical and software keywords dental offices look for.",
@@ -338,6 +342,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "certified-nursing-assistant",
     role: "Certified Nursing Assistant",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-certified-nursing-assistant.webp", alt: "Nursing assistant in scrubs taking an older man's blood pressure" },
     level: "Early career · 3 years",
     intro:
       "A certified nursing assistant resume that shows safe, kind daily care and a sharp eye for changes — with the certification, patient care and safety keywords nursing homes and hospitals look for.",
@@ -421,6 +426,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "medical-billing-specialist",
     role: "Medical Billing Specialist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-medical-billing-specialist.webp", alt: "Hands typing on a laptop next to a stethoscope on a desk" },
     level: "Mid-level · 6 years experience",
     intro:
       "A medical billing specialist resume that shows clean claims, fast denial work and lower A/R — with the coding, payer and certification keywords revenue cycle managers search for.",
@@ -671,6 +677,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "bookkeeper",
     role: "Bookkeeper",
     group: "Finance",
+    photo: { src: "/images/photos/role-bookkeeper.webp", alt: "Bookkeeper working on a laptop with a calculator and paperwork on a white desk" },
     level: "Experienced · 7 years",
     intro:
       "A bookkeeper resume that shows reconciled accounts, on-time closes and clean books at tax time — with the software, accounting and certification keywords small businesses and firms look for.",
@@ -922,6 +929,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
     slug: "payroll-specialist",
     role: "Payroll Specialist",
     group: "Finance",
+    photo: { src: "/images/photos/role-payroll-specialist.webp", alt: "Tax forms, a folder and a phone calculator on a desk" },
     level: "Mid-level · 6 years experience",
     intro:
       "A payroll specialist resume that shows accurate, on-time pay across states and clean tax filings — with the certification, systems and compliance keywords payroll managers search for.",

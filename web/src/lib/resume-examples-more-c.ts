@@ -7,6 +7,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "phlebotomist",
     role: "Phlebotomist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-phlebotomist.webp", alt: "Phlebotomist in gloves drawing blood from a donor's arm" },
     level: "Mid-level · 3 years experience",
     intro:
       "A phlebotomist resume that shows safe, accurate draws at volume — correct patient ID, clean labels and the right order of draw — with the certification and specimen keywords labs and hospitals screen for.",
@@ -174,6 +175,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "radiologic-technologist",
     role: "Radiologic Technologist",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-radiologic-technologist.webp", alt: "Chest and shoulder X-ray image" },
     level: "Experienced · 5 years",
     intro:
       "A radiologic technologist resume that shows clean images, safe radiation practice and steady patient care across the ED, OR and outpatient imaging — with the ARRT credential and modality keywords imaging managers search for.",
@@ -258,6 +260,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "physical-therapist-assistant",
     role: "Physical Therapist Assistant",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-physical-therapist-assistant.webp", alt: "Physical therapy assistant in scrubs with a clipboard beside a patient at parallel bars" },
     level: "Mid-level · 4 years experience",
     intro:
       "A physical therapist assistant resume that shows safe, progressing treatment under the PT's plan of care — with the license, setting and treatment keywords outpatient clinics and rehab facilities screen for.",
@@ -341,6 +344,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "home-health-aide",
     role: "Home Health Aide",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-home-health-aide.webp", alt: "Home health aide in blue scrubs smiling with an older woman" },
     level: "Mid-level · 3 years experience",
     intro:
       "A home health aide resume that shows safe, reliable personal care in clients' homes — with the training, care plan and reporting keywords home health agencies screen for.",
@@ -425,6 +429,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "caregiver",
     role: "Caregiver",
     group: "Healthcare",
+    photo: { src: "/images/photos/role-caregiver.webp", alt: "Caregiver holding hands with a smiling older woman in a care home lounge" },
     level: "Experienced · 5 years",
     intro:
       "A caregiver resume that shows kind, dependable in-home care — personal care, meals, safety and companionship — with the keywords home care agencies and families look for.",
@@ -509,6 +514,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "substitute-teacher",
     role: "Substitute Teacher",
     group: "Education",
+    photo: { src: "/images/photos/role-substitute-teacher.webp", alt: "Teacher standing at the front of a classroom while students sit at desks" },
     level: "Mid-level · 3 years substitute teaching",
     intro:
       "A substitute teacher resume that shows you can walk into any classroom, follow the plan and leave it in good shape — with the authorization, grade-level and classroom management keywords districts screen for.",
@@ -764,6 +770,7 @@ export const MORE_EXAMPLES_C: ResumeExample[] = [
     slug: "receptionist",
     role: "Receptionist",
     group: "People & service",
+    photo: { src: "/images/photos/role-receptionist.webp", alt: "Front desk receptionist checking in a client at a salon counter with a tablet" },
     level: "Mid-level · 4 years experience",
     intro:
       "A receptionist resume that shows a calm, organized front desk — phones, visitors, scheduling and the small fixes that keep an office running — with the keywords office managers search for.",
