@@ -52,7 +52,8 @@ export default function NotFound() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1360px] px-4 pt-10 sm:px-6 lg:px-10 lg:pt-14">
+      {/* Phones skip the link cards (the design keeps the 404 to one screen); the menu and footer still link out. */}
+      <section className="mx-auto hidden max-w-[1360px] px-4 pt-10 sm:block sm:px-6 lg:px-10 lg:pt-14">
         <h2 className={labelCls}>/ Popular pages</h2>
         <ul className="mt-[18px] grid gap-2.5 sm:grid-cols-2 sm:gap-3 lg:grid-cols-5">
           {LINKS.map((l) => (

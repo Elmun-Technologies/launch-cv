@@ -46,19 +46,19 @@ const sections: LegalSection[] = [
     body: (
       <ul className="list-disc space-y-2 pl-5 marker:text-[#5440e8]">
         <li>
-          <span className="font-semibold text-[#121226]">OpenAI</span> — resume and job-description text you send to an
+          <span className="font-semibold text-[#121226]">OpenAI</span>{" "}— resume and job-description text you send to an
           AI tool, to generate rewrites, analyses, cover letters and interview questions.
         </li>
         <li>
-          <span className="font-semibold text-[#121226]">Polar</span> — checkout and billing. We never see or store card
+          <span className="font-semibold text-[#121226]">Polar</span>{" "}— checkout and billing. We never see or store card
           details.
         </li>
         <li>
-          <span className="font-semibold text-[#121226]">Google Analytics, PostHog, Mixpanel</span> — usage analytics, as
+          <span className="font-semibold text-[#121226]">Google Analytics, PostHog, Mixpanel</span>{" "}— usage analytics, as
           described above.
         </li>
         <li>
-          <span className="font-semibold text-[#121226]">Google</span> — only if you choose &ldquo;Continue with
+          <span className="font-semibold text-[#121226]">Google</span>{" "}— only if you choose &ldquo;Continue with
           Google&rdquo;.
         </li>
       </ul>

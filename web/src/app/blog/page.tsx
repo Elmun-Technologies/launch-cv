@@ -121,7 +121,7 @@ export default async function BlogPage() {
               See what the software reads in your resume — free, no sign-up, about 10 seconds.
             </p>
           </div>
-          <CtaLink cta="free_ats_check" location="blog_index" href="/free-ats-check" className={`${btnWhite} shrink-0`}>
+          <CtaLink cta="free_ats_check" location="blog_index" href="/free-ats-check" className={`${btnWhite} w-full shrink-0 sm:w-auto`}>
             Check my resume — free
           </CtaLink>
         </div>

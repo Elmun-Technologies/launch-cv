@@ -187,6 +187,10 @@ export default async function BlogPostPage({
   // slugger used when rendering the Markdown headings so anchors line up.
   const toc = extractToc(post.bodyMd);
   const showToc = toc.length >= 3;
+  // Phones get a short, numbered list of the main sections only.
+  const tocTop = toc.filter((e) => e.depth !== 3);
+  // Score posts get the score-band card in the sidebar.
+  const isAtsScorePost = /\bats[- ]score/i.test(`${post.slug} ${post.title} ${post.tags.join(" ")}`);
   const headingSlug = createSlugger();
 
   const publishedLabel = new Date(post.date).toLocaleDateString("en-US", {
@@ -365,7 +369,7 @@ export default async function BlogPostPage({
         <div className="min-w-0 max-w-[720px]">
           {showToc ? (
             <div className="mb-7 lg:hidden">
-              <ContentTocMobile entries={toc} />
+              <ContentTocMobile entries={tocTop} numbered />
             </div>
           ) : null}
 
@@ -500,6 +504,18 @@ export default async function BlogPostPage({
               ))}
             </ul>
           </div>
+          {isAtsScorePost ? (
+            // The same bands the free ATS check uses to color its score (80 / 65).
+            <div className="lc-card rounded-[24px] p-5">
+              <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">GOOD SCORE</p>
+              <ul className="mt-3 flex flex-col gap-1.5 text-[14px] font-semibold">
+                <li className="rounded-xl bg-[#dcf5ea] px-3 py-2 text-[#0b4f35]">80–100 · strong</li>
+                <li className="rounded-xl bg-[#fdf0d5] px-3 py-2 text-[#7a4600]">65–79 · decent</li>
+                <li className="rounded-xl bg-[#fbe2e3] px-3 py-2 text-[#8f1d22]">Below 65 · at risk</li>
+              </ul>
+              <p className="mt-2.5 text-[12px] leading-[18px] text-[#66647c]">The bands LaunchCV&apos;s free ATS check uses.</p>
+            </div>
+          ) : null}
         </aside>
       </div>
 

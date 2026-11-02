@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteShell } from "@/components/site/site-shell";
-import { Breadcrumbs, btn, btnPrimary, btnWhite, container, labelCls } from "@/components/site/ui";
+import { Breadcrumbs, btn, btnPrimary, btnWhite, container, FaqIcon, labelCls } from "@/components/site/ui";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { absoluteUrl } from "@/lib/site";
@@ -85,6 +85,29 @@ export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
     ],
   };
   const note = f.banner.note ?? `Included in every paid plan, from ${PUBLIC_PLANS.starter.priceDisplay}/month.`;
+  // Rendered once per layout so the reading order matches what's on screen.
+  const band = (
+    <div className="lc-reveal flex flex-col gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:rounded-[36px] lg:bg-[#c9c0ff] lg:px-14 lg:py-12 lg:text-[#121226]">
+      <div>
+        <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] lg:text-[34px] lg:leading-10">{f.banner.title}</h2>
+        <p className="mt-2 text-[15px] leading-[23px] text-[#e4dfff] lg:text-[17px] lg:leading-[26px] lg:text-[#2b2752]">{f.banner.text}</p>
+        <p className="mt-2 text-[14px] text-[#e4dfff] lg:text-[#2b2752]">
+          {note}{" "}
+          <CtaLink cta="free_ats_check" location={`feature_${f.name}_banner`} href="/free-ats-check" className="lc-link font-semibold underline decoration-1 underline-offset-2 lg:no-underline">
+            Free ATS check first
+          </CtaLink>
+        </p>
+      </div>
+      <CtaLink
+        cta="get_started"
+        location={`feature_${f.name}_banner`}
+        href={f.cta.href}
+        className={`${btn} flex-none bg-white text-[#121226] hover:bg-[#f1eff8] lg:bg-[#111118] lg:text-white lg:hover:bg-[#2a2940]`}
+      >
+        Get started
+      </CtaLink>
+    </div>
+  );
 
   return (
     <SiteShell>
@@ -103,7 +126,7 @@ export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
               <CtaLink cta="get_started" location={`feature_${f.name}`} href={f.cta.href} className={btnPrimary}>
                 {f.cta.label}
               </CtaLink>
-              <CtaLink cta="choose_plan" location={`feature_${f.name}_hero`} href="/pricing" className={`${btnWhite} hidden sm:inline-flex`}>
+              <CtaLink cta="choose_plan" location={`feature_${f.name}_hero`} href="/pricing" className={`${btnWhite} max-sm:hidden`}>
                 See pricing
               </CtaLink>
             </div>
@@ -182,29 +205,8 @@ export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
         </div>
       </section>
 
-      {/* PLAN BAND */}
-      <section className={`${container} pt-14 sm:pt-20 lg:pt-[110px]`}>
-        <div className="lc-reveal flex flex-col gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:rounded-[36px] lg:bg-[#c9c0ff] lg:px-14 lg:py-12 lg:text-[#121226]">
-          <div>
-            <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] lg:text-[34px] lg:leading-10">{f.banner.title}</h2>
-            <p className="mt-2 text-[15px] leading-[23px] text-[#e4dfff] lg:text-[17px] lg:leading-[26px] lg:text-[#2b2752]">{f.banner.text}</p>
-            <p className="mt-2 text-[14px] text-[#e4dfff] lg:text-[#2b2752]">
-              {note}{" "}
-              <CtaLink cta="free_ats_check" location={`feature_${f.name}_banner`} href="/free-ats-check" className="lc-link font-semibold underline decoration-1 underline-offset-2 lg:no-underline">
-                Free ATS check first
-              </CtaLink>
-            </p>
-          </div>
-          <CtaLink
-            cta="get_started"
-            location={`feature_${f.name}_banner`}
-            href={f.cta.href}
-            className={`${btn} flex-none bg-white text-[#121226] hover:bg-[#f1eff8] lg:bg-[#111118] lg:text-white lg:hover:bg-[#2a2940]`}
-          >
-            Get started
-          </CtaLink>
-        </div>
-      </section>
+      {/* PLAN BAND (tablet and desktop: before the FAQ) */}
+      <section className={`${container} pt-14 max-sm:hidden sm:pt-20 lg:pt-[110px]`}>{band}</section>
 
       {/* FAQ */}
       <section className={`${container} ${sectionPad}`}>
@@ -224,6 +226,9 @@ export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
           <FaqList items={f.faqs} />
         </div>
       </section>
+
+      {/* PLAN BAND (phones: after the FAQ, like the design) */}
+      <section className={`${container} pt-14 sm:hidden`}>{band}</section>
 
       {testimonials.length ? <Testimonials items={testimonials} /> : null}
 
@@ -260,14 +265,7 @@ export function FaqList({ items }: { items: { q: string; a: string }[] }) {
         >
           <summary className="flex min-h-[34px] items-center justify-between gap-4">
             <span className="text-[16px] font-bold sm:text-[18px]">{x.q}</span>
-            <span
-              className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] text-[#121226] group-hover:bg-[#e4dfff] group-open:bg-[#111118] group-open:text-white"
-              aria-hidden="true"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-            </span>
+            <FaqIcon />
           </summary>
           <p className="mt-3 text-[15px] leading-[25px] text-[#4a4862] sm:text-[16px] sm:leading-[26px]">{x.a}</p>
         </details>

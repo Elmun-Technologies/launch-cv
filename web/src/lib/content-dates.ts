@@ -15,7 +15,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/features/voice-input": "2026-10-27",
   "/pricing": "2026-11-01",
   "/compare/ats-resume-checkers": "2026-11-01",
-  "/about": "2026-10-27",
+  "/about": "2026-11-02",
   "/contact": "2026-10-27",
   "/resume-templates": "2026-11-02",
   "/resume-examples": "2026-10-27",

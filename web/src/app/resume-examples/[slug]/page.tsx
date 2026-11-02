@@ -129,7 +129,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             <CtaLink cta="use_example" location="resume_example" href={startHref} className={btnPrimary}>
               Start from this example
             </CtaLink>
-            <CtaLink cta="free_ats_check" location="resume_example" href="/free-ats-check" className={`${btnWhite} hidden sm:inline-flex`}>
+            <CtaLink cta="free_ats_check" location="resume_example" href="/free-ats-check" className={`${btnWhite} max-sm:hidden`}>
               Check my resume — free
             </CtaLink>
           </div>

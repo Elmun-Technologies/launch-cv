@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, type ReactNode } from "react";
+import { PaperPeek } from "@/components/site/paper-peek";
 
 type Item = { key: string; label: string; node: ReactNode };
 
@@ -26,7 +27,8 @@ export function TemplateFan({ items }: { items: Item[] }) {
             onFocus={() => setActive(t.key)}
             className={`lc-paper block w-[240px] shrink-0 snap-center rounded-lg shadow-[0_24px_48px_-20px_rgba(36,24,120,.35)] lg:absolute lg:w-[22%] lg:max-w-[290px] ${POS[i] ?? ""} ${t.key === active ? "lg:z-20" : "lg:z-10"}`}
           >
-            {t.node}
+            {/* Scaled up and clipped so the text is readable, like a page close-up. */}
+            <PaperPeek className="relative aspect-[612/792] w-full rounded-lg [--peek:0.45] lg:[--peek:0.6]">{t.node}</PaperPeek>
           </Link>
         ))}
       </div>

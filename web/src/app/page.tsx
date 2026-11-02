@@ -17,6 +17,8 @@ import { getPageCopy } from "@/lib/cms/page-copy";
 import { getFaqsFor } from "@/lib/cms/faqs";
 import { getTestimonialsFor } from "@/lib/cms/testimonials";
 import { Testimonials } from "@/components/site/testimonials";
+import { FaqIcon } from "@/components/site/ui";
+import { MOBILE_PLAN_ORDER, planLimitsLine } from "@/components/site/plan-summary";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "LaunchCV — Get Your Resume Past the ATS",
@@ -237,37 +239,39 @@ export default async function Home() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="mx-auto max-w-[1360px] px-4 pt-14 sm:px-6 lg:px-10">
-        <ol className="grid gap-8 sm:grid-cols-3 sm:gap-10">
+      <section className="mx-auto max-w-[1360px] px-4 pt-10 sm:px-6 sm:pt-14 lg:px-10">
+        <ol className="grid gap-5 sm:grid-cols-3 sm:gap-10">
           {[
             ["Upload or paste", "PDF, Word or plain text. No account needed for the check."],
             ["See what the software reads", "Fields it found, missed or mixed up — and why, in plain English."],
             ["Fix it and download", "Edit in the builder and export a clean, readable PDF for free."],
           ].map(([t, d], i) => (
-            <li key={t} className="border-t-2 border-[#121226] pt-5">
-              <p className="lc-mono text-[13px] text-[#5440e8]">0{i + 1}</p>
-              <p className="mt-2.5 text-[22px] font-bold tracking-[-0.02em]">{t}</p>
-              <p className="mt-1.5 text-[16px] leading-[25px] text-[#4a4862]">{d}</p>
+            <li key={t} className="flex gap-3.5 border-t-2 border-[#121226] pt-3.5 sm:block sm:pt-5">
+              <span className="lc-mono block pt-[3px] text-[13px] text-[#5440e8] sm:pt-0">0{i + 1}</span>
+              <span className="block">
+                <span className="block text-[18px] font-bold sm:mt-2.5 sm:text-[22px] sm:tracking-[-0.02em]">{t}</span>
+                <span className="mt-0.5 block text-[15px] leading-[23px] text-[#4a4862] sm:mt-1.5 sm:text-[16px] sm:leading-[25px]">{d}</span>
+              </span>
             </li>
           ))}
         </ol>
       </section>
 
       {/* ATS CHECK (dark) */}
-      <section className="mx-auto max-w-[1360px] px-4 pt-20 sm:px-6 lg:px-10 lg:pt-[120px]">
-        <div className="lc-reveal rounded-[28px] bg-[#111118] px-5 pb-10 pt-12 text-white sm:px-10 lg:rounded-[36px] lg:px-16 lg:pb-16 lg:pt-[72px]">
-          <div className="mx-auto max-w-[820px] text-center">
+      <section className="mx-auto max-w-[1360px] px-4 pt-[72px] sm:px-6 sm:pt-20 lg:px-10 lg:pt-[120px]">
+        <div className="lc-reveal rounded-[28px] bg-[#111118] px-[18px] pb-[22px] pt-9 text-white sm:px-10 lg:rounded-[36px] lg:px-16 lg:pb-16 lg:pt-[72px]">
+          <div className="mx-auto max-w-[820px] sm:text-center">
             <p className={`${label} !text-[#c9c0ff]`}>/ ATS check</p>
-            <h2 className="lc-h2 mt-5 text-white">
+            <h2 className="lc-h2 mt-3.5 text-white sm:mt-5">
               It looks fine to you. <span className="!text-[#9a97b3]">The software reads something else.</span>
             </h2>
-            <p className="mx-auto mt-5 max-w-[640px] text-[17px] leading-7 text-[#c9c7d8] sm:text-[18px]">
+            <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[25px] text-[#c9c7d8] sm:mt-5 sm:text-[18px] sm:leading-7">
               Columns, text boxes and page headers are the usual culprits. Many parsers read a page line by line, so your
               email, dates and skills land in the wrong field — or nowhere.
             </p>
           </div>
-          <div className="mt-12 grid items-center gap-6 lg:mt-14 lg:grid-cols-[1fr_120px_1fr] lg:gap-0">
-            <div>
+          <div className="mt-6 grid items-center gap-6 sm:mt-12 lg:mt-14 lg:grid-cols-[1fr_120px_1fr] lg:gap-0">
+            <div className="hidden sm:block">
               <span className="inline-block rounded-full bg-white px-3.5 py-[7px] text-[14px] font-semibold text-[#121226]">What a recruiter sees</span>
               <div className="mt-3.5 flex h-[300px] overflow-hidden rounded-xl bg-white text-[12px] leading-[18px] text-[#1c1c28]" aria-label="Example two-column resume">
                 <div className="w-[38%] bg-[#24324a] px-[18px] py-6 text-white">
@@ -302,7 +306,7 @@ export default async function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-center gap-2.5 lg:flex-col lg:pt-10">
+            <div className="hidden items-center justify-center gap-2.5 sm:flex lg:flex-col lg:pt-10">
               <span className="inline-flex h-14 w-14 rotate-90 items-center justify-center rounded-full bg-[#5440e8] lg:rotate-0">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M5 12h14" />
@@ -312,8 +316,8 @@ export default async function Home() {
               <span className="text-[13px] font-semibold text-[#c9c7d8]">ATS parser</span>
             </div>
             <div>
-              <span className="inline-block rounded-full bg-[#ff7a33] px-3.5 py-[7px] text-[14px] font-semibold text-[#111118]">What the software reads</span>
-              <div className="lc-mono mt-3.5 h-[300px] overflow-x-auto rounded-xl border border-[#2f2d48] bg-[#1d1c2e] p-6 text-[13px] leading-[30px] text-[#e9e7f3]">
+              <span className="inline-block rounded-full bg-[#ff7a33] px-3 py-1.5 text-[13px] font-semibold text-[#111118] sm:px-3.5 sm:py-[7px] sm:text-[14px]">What the software reads</span>
+              <div className="lc-mono mt-2.5 overflow-x-auto rounded-[14px] border border-[#2f2d48] bg-[#1d1c2e] px-4 py-[18px] text-[12px] leading-[27px] text-[#e9e7f3] sm:mt-3.5 sm:h-[300px] sm:rounded-xl sm:p-6 sm:text-[13px] sm:leading-[30px]">
                 <p className="text-[#9a97b3]">{"// fields extracted"}</p>
                 {[
                   ["name", <>Maria Lopez Product Manager</>],
@@ -330,12 +334,12 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <span className="inline-flex items-center gap-2.5 rounded-full bg-white py-2.5 pl-2.5 pr-[18px] text-[15px] font-semibold text-[#121226]">
-              <span className="inline-flex h-[30px] w-[30px] items-center justify-center rounded-full bg-[#fbe2e3] font-extrabold text-[#c42b30]">!</span>
+          <div className="mt-2.5 flex flex-col gap-3.5 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
+            <span className="inline-flex items-center gap-2.5 rounded-[18px] bg-white py-2.5 pl-2.5 pr-3.5 text-[14px] font-semibold text-[#121226] sm:rounded-full sm:pr-[18px] sm:text-[15px]">
+              <span className="inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full bg-[#fbe2e3] font-extrabold text-[#c42b30]">!</span>
               Two-column layout hides your contact details
             </span>
-            <CtaLink cta="check_resume" location="home_xray" href="/free-ats-check" className={`${btn} bg-[#5440e8] !px-[22px] !py-3.5 !text-[15px] text-white hover:bg-[#4430d6]`}>
+            <CtaLink cta="check_resume" location="home_xray" href="/free-ats-check" className={`${btn} w-full bg-[#5440e8] !py-4 text-white hover:bg-[#4430d6] sm:w-auto sm:!px-[22px] sm:!py-3.5 sm:!text-[15px]`}>
               Check mine — free
             </CtaLink>
           </div>
@@ -343,30 +347,21 @@ export default async function Home() {
       </section>
 
       {/* REPORT */}
-      <section className="mx-auto grid max-w-[1360px] items-center gap-12 px-4 pt-24 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-[72px] lg:px-10 lg:pt-[140px]">
-        <div className="lc-reveal">
+      <section className="mx-auto grid max-w-[1360px] gap-x-[72px] px-4 pt-[72px] sm:px-6 sm:pt-24 lg:grid-cols-[0.85fr_1.15fr] lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal lg:self-end">
           <p className={label}>/ Your report</p>
-          <h2 className="lc-h2 mt-5">
+          <h2 className="lc-h2 mt-3.5 sm:mt-5">
             Every issue comes with the fix. <span>Most take a minute.</span>
           </h2>
-          <p className="mt-5 text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+          <p className="mt-3.5 text-[16px] leading-[25px] text-[#4a4862] sm:mt-5 sm:text-[18px] sm:leading-7">
             Your score, the issues behind it ranked by impact, and exactly what to change. The free check shows your top
             fixes; a free account saves the full report.
           </p>
-          <div className="lc-rise mt-8 rounded-3xl bg-[#c9c0ff] px-6 py-[22px] text-[#111118]">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[12px] font-bold tracking-[0.08em]">BULLET REWRITE</p>
-              <span className="rounded-full bg-[#111118] px-2.5 py-[5px] text-[12px] font-semibold text-white">Paid plans</span>
-            </div>
-            <p className="mt-3 text-[15px] text-[#3d3a5c] line-through">Responsible for the onboarding project</p>
-            <p className="mt-1.5 text-[19px] font-semibold leading-[27px]">Redesigned onboarding; week-1 activation rose from 38% to 57%.</p>
-            <p className="mt-2.5 text-[13px] text-[#3d3a5c]">Uses only facts already in your resume. You approve every change.</p>
-          </div>
         </div>
-        <div className="lc-reveal relative pt-14">
-          <div className="lc-card rounded-3xl p-5 sm:p-8 lg:mr-24">
-            <div className="flex items-center gap-5">
-              <svg width="108" height="108" viewBox="0 0 112 112" role="img" aria-label="Example score 54 out of 100" className="shrink-0">
+        <div className="lc-reveal relative mt-7 pt-10 sm:pt-14 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-center">
+          <div className="lc-card rounded-[22px] p-5 sm:rounded-3xl sm:p-8 lg:mr-24">
+            <div className="flex items-center gap-3.5 pr-[90px] sm:gap-5 sm:pr-[120px] lg:pr-0">
+              <svg width="108" height="108" viewBox="0 0 112 112" role="img" aria-label="Example score 54 out of 100" className="h-[72px] w-[72px] shrink-0 sm:h-[108px] sm:w-[108px]">
                 <circle cx="56" cy="56" r="46" fill="none" stroke="#f1eff8" strokeWidth="12" />
                 <circle cx="56" cy="56" r="46" fill="none" stroke="#f2a91f" strokeWidth="12" strokeLinecap="round" strokeDasharray="156 289" transform="rotate(-90 56 56)" />
                 <text x="56" y="66" textAnchor="middle" fontSize="30" fontWeight="700" fill="#121226">
@@ -374,9 +369,9 @@ export default async function Home() {
                 </text>
               </svg>
               <div>
-                <p className="text-[14px] text-[#66647c]">Example ATS score</p>
-                <p className="mt-0.5 text-[26px] font-bold tracking-[-0.02em]">Needs work</p>
-                <p className="mt-0.5 text-[14px] text-[#4a4862]">11 issues · 4 high priority</p>
+                <p className="text-[12px] text-[#66647c] sm:text-[14px]">Example ATS score</p>
+                <p className="mt-0.5 text-[20px] font-bold tracking-[-0.02em] sm:text-[26px]">Needs work</p>
+                <p className="mt-0.5 text-[13px] text-[#4a4862] sm:text-[14px]">11 issues · 4 high priority</p>
               </div>
             </div>
             <div className="mt-6 flex flex-col gap-2">
@@ -390,39 +385,57 @@ export default async function Home() {
               <span className="text-[26px] font-bold tracking-[-0.03em]">91</span>
             </div>
           </div>
-          <div className="absolute right-0 top-0 hidden h-[220px] w-[220px] overflow-hidden rounded-full border-[6px] border-[#eeecf4] bg-[#c9c0ff] lg:block">
+          <div className="absolute right-2.5 top-0 h-[110px] w-[110px] overflow-hidden rounded-full border-[5px] border-[#eeecf4] bg-[#c9c0ff] sm:h-[150px] sm:w-[150px] lg:right-0 lg:h-[220px] lg:w-[220px] lg:border-[6px]">
             <Image
               src="/images/people/man-white-tee.webp"
               alt="Smiling man in a white t-shirt"
               width={739}
               height={1080}
-              sizes="206px"
-              className="absolute left-1/2 top-3.5 h-[300px] w-auto max-w-none -translate-x-1/2"
+              sizes="(min-width: 1024px) 206px, 103px"
+              className="absolute left-1/2 top-2 h-[150px] w-auto max-w-none -translate-x-1/2 sm:h-[205px] lg:top-3.5 lg:h-[300px]"
             />
           </div>
           <span className="lc-float lc-drift absolute right-[170px] top-1.5 hidden max-w-[200px] rounded-[22px_22px_6px_22px] bg-[#111118] px-4 py-[11px] text-[15px] font-medium text-white lg:block">
             Which fix matters most?
           </span>
         </div>
+        <div className="lc-reveal mt-2.5 lg:col-start-1 lg:row-start-2 lg:mt-8 lg:self-start">
+          <div className="lc-rise rounded-[22px] bg-[#c9c0ff] p-5 text-[#111118] sm:rounded-3xl sm:px-6 sm:py-[22px]">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[12px] font-bold tracking-[0.08em]">BULLET REWRITE</p>
+              <span className="rounded-full bg-[#111118] px-2.5 py-[5px] text-[12px] font-semibold text-white">Paid plans</span>
+            </div>
+            <p className="mt-3 text-[15px] text-[#3d3a5c] line-through">Responsible for the onboarding project</p>
+            <p className="mt-1.5 text-[17px] font-semibold leading-6 sm:text-[19px] sm:leading-[27px]">Redesigned onboarding; week-1 activation rose from 38% to 57%.</p>
+            <p className="mt-2.5 text-[13px] text-[#3d3a5c]">Uses only facts already in your resume. You approve every change.</p>
+          </div>
+        </div>
       </section>
 
       {/* JOB MATCH */}
-      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
-        <div className="lc-reveal flex flex-col justify-between gap-5 lg:flex-row lg:items-end lg:gap-12">
+      <section className="mx-auto max-w-[1360px] px-4 pt-[72px] sm:px-6 sm:pt-24 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal flex flex-col justify-between gap-3.5 sm:gap-5 lg:flex-row lg:items-end lg:gap-12">
           <div className="max-w-[760px]">
             <p className={label}>/ Job match</p>
-            <h2 className="lc-h2 mt-5">
+            <h2 className="lc-h2 mt-3.5 sm:mt-5">
               Paste the job post. <span>See what it&apos;s looking for.</span>
             </h2>
           </div>
-          <p className="max-w-[380px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
+          <p className="max-w-[380px] text-[16px] leading-[25px] text-[#4a4862] sm:text-[18px] sm:leading-7">
             Skills the employer asks for, which ones your resume already says, and rewrites for the bullets that should —
             using only what you did.
           </p>
         </div>
-        <div className="lc-reveal relative mt-10 overflow-hidden rounded-[28px] bg-[#e4dfff] p-4 pb-0 sm:p-6 sm:pb-0 lg:mt-12 lg:h-[600px] lg:rounded-[36px] lg:p-0">
-          <div aria-hidden="true" className="absolute bottom-[-200px] left-1/2 hidden h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#c9c0ff] lg:block" />
-          <div className="relative z-10 grid gap-3 sm:grid-cols-2 lg:contents">
+        <div className="lc-reveal relative mt-6 h-[380px] overflow-hidden rounded-[28px] bg-[#e4dfff] sm:mt-10 sm:h-auto sm:p-6 sm:pb-0 lg:mt-12 lg:h-[600px] lg:rounded-[36px] lg:p-0">
+          <div aria-hidden="true" className="absolute bottom-[-130px] left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-[#c9c0ff] sm:hidden lg:block lg:bottom-[-200px] lg:h-[520px] lg:w-[520px]" />
+          {/* Phone: a small score badge on the photo; the full cards start at sm. */}
+          <div className="lc-float absolute right-3 top-3.5 z-10 rounded-[18px] bg-white px-3.5 py-3 sm:hidden">
+            <p className="text-[12px] text-[#4a4862]">Match score</p>
+            <p className="text-[26px] font-bold leading-[30px] tracking-[-0.03em]">
+              72 <span className="text-[14px] text-[#7c7a94]">→</span> <span className="text-[#0b7a4f]">86</span>
+            </p>
+          </div>
+          <div className="relative z-10 hidden gap-3 sm:grid sm:grid-cols-2 lg:contents">
             <div className="lc-float rounded-3xl bg-white p-6 lg:absolute lg:left-12 lg:top-12 lg:w-[380px]">
               <p className="text-[13px] text-[#66647c]">Job post · Senior Product Manager (example)</p>
               <p className="mt-3 text-[16px] leading-[29px]">
@@ -461,7 +474,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <div className="relative mx-auto mt-4 h-[360px] lg:absolute lg:inset-x-0 lg:bottom-0 lg:mt-0 lg:h-[540px]">
+          <div className="absolute inset-x-0 bottom-0 mx-auto h-[330px] sm:relative sm:mt-4 sm:h-[360px] lg:absolute lg:mt-0 lg:h-[540px]">
             <Image
               src="/images/people/woman-hoodie.webp"
               alt="Young woman in a denim jacket and hoodie, smiling"
@@ -475,7 +488,7 @@ export default async function Home() {
             cta="job_match"
             location="home_job_match"
             href="/features/jd-alignment"
-            className={`${btn} lc-float absolute bottom-4 right-4 z-10 bg-[#111118] !px-5 !py-3.5 !text-[15px] text-white hover:bg-[#2a2940] lg:bottom-12 lg:right-12 lg:!px-[26px] lg:!py-[17px] lg:!text-[16px]`}
+            className={`${btn} lc-float absolute bottom-4 right-4 z-10 bg-[#111118] !px-5 !py-3.5 !text-[15px] text-white hover:bg-[#2a2940] max-sm:hidden lg:bottom-12 lg:right-12 lg:!px-[26px] lg:!py-[17px] lg:!text-[16px]`}
           >
             Match my resume to a job
           </CtaLink>
@@ -483,13 +496,30 @@ export default async function Home() {
             Starter plan and up
           </span>
         </div>
+        <div className="sm:hidden">
+          <ul className="mt-2.5 flex flex-wrap gap-1.5" aria-label="Skills from the example job post">
+            {["Roadmap", "SQL", "A/B testing"].map((k) => (
+              <li key={k} className="rounded-full bg-[#dcf5ea] px-[11px] py-[7px] text-[13px] font-bold text-[#0b7a4f]">
+                ✓ {k}
+              </li>
+            ))}
+            {["Stakeholder management", "OKRs"].map((k) => (
+              <li key={k} className="rounded-full bg-[#fbe2e3] px-[11px] py-[7px] text-[13px] font-bold text-[#c42b30]">
+                + {k}
+              </li>
+            ))}
+          </ul>
+          <CtaLink cta="job_match" location="home_job_match" href="/features/jd-alignment" className={`${btn} mt-3.5 w-full bg-[#111118] !py-4 text-white hover:bg-[#2a2940]`}>
+            Match my resume to a job
+          </CtaLink>
+        </div>
       </section>
 
       {/* TEMPLATES */}
-      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
-        <div className="lc-reveal mx-auto max-w-[980px] text-center">
+      <section className="mx-auto max-w-[1360px] px-4 pt-[72px] sm:px-6 sm:pt-24 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal mx-auto max-w-[980px] sm:text-center">
           <p className={label}>/ Templates</p>
-          <h2 className="lc-h2 mt-5">
+          <h2 className="lc-h2 mt-3.5 sm:mt-5">
             Four templates. <span>Every one readable by the software.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-[600px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
@@ -500,8 +530,31 @@ export default async function Home() {
       </section>
 
       {/* EXAMPLES */}
-      <section className="mx-auto grid max-w-[1360px] items-stretch gap-6 px-4 pt-24 sm:px-6 lg:grid-cols-2 lg:px-10 lg:pt-[140px]">
-        <div className="lc-reveal relative min-h-[460px] overflow-hidden rounded-[28px] bg-[#e4dfff] lg:min-h-[580px] lg:rounded-[36px]">
+      <section className="mx-auto grid max-w-[1360px] items-stretch gap-6 px-4 pt-[72px] sm:px-6 sm:pt-24 lg:grid-cols-2 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal flex flex-col justify-center lg:pl-10">
+          <p className={label}>/ Examples</p>
+          <h2 className="lc-h2 mt-3.5 sm:mt-5">
+            Real examples. <span>Not a blank page.</span>
+          </h2>
+          <p className="mt-3.5 text-[16px] leading-[25px] text-[#4a4862] sm:mt-5 sm:text-[18px] sm:leading-7">
+            {RESUME_EXAMPLES.length} roles, from nurses and electricians to engineers, each with a full resume and the keywords for that job.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-1.5 sm:mt-8 sm:gap-2">
+            {roles.map((r, i) => (
+              <Link
+                key={r.slug}
+                href={`/resume-examples/${r.slug}`}
+                className={`lc-btn-lift rounded-full px-[17px] py-[11px] text-[15px] font-semibold ${i === 0 ? "bg-[#111118] text-white" : "bg-white text-[#121226] hover:bg-[#121226] hover:text-white"}`}
+              >
+                {r.role}
+              </Link>
+            ))}
+            <Link href="/resume-examples" className="rounded-full px-[17px] py-[11px] text-[15px] font-semibold text-[#5440e8] hover:underline">
+              All {RESUME_EXAMPLES.length} roles →
+            </Link>
+          </div>
+        </div>
+        <div className="lc-reveal relative min-h-[400px] overflow-hidden rounded-[28px] bg-[#e4dfff] sm:min-h-[460px] lg:order-first lg:min-h-[580px] lg:rounded-[36px]">
           <div aria-hidden="true" className="absolute bottom-[-160px] left-1/2 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-[#c9c0ff]" />
           <Image
             src="/images/people/nurse-arms-crossed.webp"
@@ -536,38 +589,15 @@ export default async function Home() {
             <span className="text-[14px] font-semibold">Start from this example</span>
           </CtaLink>
         </div>
-        <div className="lc-reveal flex flex-col justify-center lg:pl-10">
-          <p className={label}>/ Examples</p>
-          <h2 className="lc-h2 mt-5">
-            Real examples. <span>Not a blank page.</span>
-          </h2>
-          <p className="mt-5 text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
-            {RESUME_EXAMPLES.length} roles, from nurses and electricians to engineers, each with a full resume and the keywords for that job.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-2">
-            {roles.map((r, i) => (
-              <Link
-                key={r.slug}
-                href={`/resume-examples/${r.slug}`}
-                className={`lc-btn-lift rounded-full px-[17px] py-[11px] text-[15px] font-semibold ${i === 0 ? "bg-[#111118] text-white" : "bg-white text-[#121226] hover:bg-[#121226] hover:text-white"}`}
-              >
-                {r.role}
-              </Link>
-            ))}
-            <Link href="/resume-examples" className="rounded-full px-[17px] py-[11px] text-[15px] font-semibold text-[#5440e8] hover:underline">
-              All {RESUME_EXAMPLES.length} roles →
-            </Link>
-          </div>
-        </div>
       </section>
 
       {testimonials.length ? <Testimonials items={testimonials} /> : null}
 
       {/* PRICING */}
-      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
-        <div className="lc-reveal mx-auto max-w-[980px] text-center">
+      <section className="mx-auto max-w-[1360px] px-4 pt-[72px] sm:px-6 sm:pt-24 lg:px-10 lg:pt-[140px]">
+        <div className="lc-reveal mx-auto max-w-[980px] sm:text-center">
           <p className={label}>/ Pricing</p>
-          <h2 className="lc-h2 mt-5">
+          <h2 className="lc-h2 mt-3.5 sm:mt-5">
             The check is free. <span>AI tools from {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-[620px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
@@ -575,56 +605,84 @@ export default async function Home() {
             and differ only in monthly limits.
           </p>
         </div>
-        <div className="mt-10 grid items-stretch gap-4 md:grid-cols-3 lg:mt-12">
+        <div className="mt-[22px] grid items-stretch gap-2.5 md:mt-10 md:grid-cols-3 md:gap-4 lg:mt-12">
           {plans.map(({ id, cta }) => {
             const p = PUBLIC_PLANS[id];
             const l = planLimits[id];
             const hot = !!p.popular;
             const n = (x: number) => x.toLocaleString("en-US");
+            const button = (
+              <CtaLink
+                cta="choose_plan"
+                plan={id}
+                selectsPlan
+                location="home_pricing"
+                href={`/register?next=${encodeURIComponent(`/dashboard/settings/subscription?plan=${id}`)}`}
+                className={`lc-btn-lift mt-auto rounded-full text-center text-[15px] font-semibold ${hot ? "bg-white p-4 text-[#121226]" : "bg-[#f1eff8] p-[13px] text-[#121226] hover:bg-[#e4dfff] md:p-4"}`}
+              >
+                {cta}
+              </CtaLink>
+            );
+            // Phones: the popular plan is the one full card; the others are compact rows (same as /pricing).
+            if (!hot) {
+              return (
+                <div key={id} className={`${MOBILE_PLAN_ORDER[id]} lc-reveal lc-rise lc-card flex flex-col gap-3.5 rounded-[22px] px-[22px] py-5 md:order-none md:gap-5 md:rounded-3xl md:p-[30px]`}>
+                  <div>
+                    <div className="flex items-baseline justify-between md:block">
+                      <p className="text-[15px] font-semibold text-[#4a4862] md:text-[16px]">{p.title}</p>
+                      <p className="text-[30px] font-bold tracking-[-0.03em] md:mt-2 md:text-[54px] md:leading-[58px] md:tracking-[-0.04em]">
+                        {p.priceDisplay}
+                        <span className="text-[13px] font-medium tracking-normal text-[#66647c] md:text-[16px]"> {p.periodLabel}</span>
+                      </p>
+                    </div>
+                    <p className="mt-1.5 text-[14px] leading-[22px] text-[#4a4862] md:hidden">{planLimitsLine(id, l)}</p>
+                    <p className="mt-1.5 hidden text-[14px] text-[#66647c] md:block">{p.valueLine}</p>
+                  </div>
+                  <ul className="hidden flex-col gap-2.5 border-t border-[#e2e0ea] pt-5 text-[15px] md:flex">
+                    <li>✓ {n(l.jd)} job matches a month</li>
+                    <li>✓ {n(l.roleFit)} role-fit checks a month</li>
+                    <li>✓ {n(l.packet)} cover letter &amp; interview packets{id === "lifetime" ? " a month" : ""}</li>
+                    <li>✓ {id === "lifetime" ? "No renewals" : "Cancel anytime"}</li>
+                  </ul>
+                  {button}
+                </div>
+              );
+            }
             return (
               <div
                 key={id}
-                className={`lc-reveal lc-rise relative flex flex-col gap-5 rounded-3xl p-[30px] ${hot ? "bg-[#5440e8] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)]" : "lc-card"}`}
+                className={`${MOBILE_PLAN_ORDER[id]} lc-reveal lc-rise relative flex flex-col gap-4 rounded-[22px] bg-[#5440e8] p-[22px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:gap-5 md:rounded-3xl md:p-[30px]`}
               >
-                {hot ? <span className="absolute right-6 top-[26px] rounded-full bg-[#ff7a33] px-3 py-[7px] text-[12px] font-bold text-[#111118]">Most picked</span> : null}
+                <span className="absolute right-[18px] top-5 rounded-full bg-[#ff7a33] px-2.5 py-1.5 text-[11px] font-bold text-[#111118] md:right-6 md:top-[26px] md:px-3 md:py-[7px] md:text-[12px]">Most picked</span>
                 <div>
-                  <p className={`text-[16px] font-semibold ${hot ? "text-[#e4dfff]" : "text-[#4a4862]"}`}>{p.title}</p>
-                  <p className="mt-2 text-[54px] font-bold leading-[58px] tracking-[-0.04em]">
+                  <p className="text-[15px] font-semibold text-[#e4dfff] md:text-[16px]">{p.title}</p>
+                  <p className="mt-1 text-[44px] font-bold leading-[48px] tracking-[-0.04em] md:mt-2 md:text-[54px] md:leading-[58px]">
                     {p.priceDisplay}
-                    <span className={`text-[16px] font-medium tracking-normal ${hot ? "text-[#e4dfff]" : "text-[#66647c]"}`}> {p.periodLabel}</span>
+                    <span className="text-[14px] font-medium tracking-normal text-[#e4dfff] md:text-[16px]"> {p.periodLabel}</span>
                   </p>
-                  <p className={`mt-1.5 text-[14px] ${hot ? "text-[#e4dfff]" : "text-[#66647c]"}`}>{p.valueLine}</p>
+                  <p className="mt-1.5 text-[14px] text-[#e4dfff]">{p.valueLine}</p>
                 </div>
-                <ul className={`flex flex-col gap-2.5 border-t pt-5 text-[15px] ${hot ? "border-white/25" : "border-[#e2e0ea]"}`}>
+                <ul className="flex flex-col gap-2 border-t border-white/25 pt-4 text-[14px] md:gap-2.5 md:pt-5 md:text-[15px]">
                   <li>✓ {n(l.jd)} job matches a month</li>
                   <li>✓ {n(l.roleFit)} role-fit checks a month</li>
-                  <li>✓ {n(l.packet)} cover letter &amp; interview packets{id === "lifetime" ? " a month" : ""}</li>
-                  <li>✓ {id === "lifetime" ? "No renewals" : "Cancel anytime"}</li>
+                  <li>✓ {n(l.packet)} cover letter &amp; interview packets</li>
+                  <li>✓ Cancel anytime</li>
                 </ul>
-                <CtaLink
-                  cta="choose_plan"
-                  plan={id}
-                  selectsPlan
-                  location="home_pricing"
-                  href={`/register?next=${encodeURIComponent(`/dashboard/settings/subscription?plan=${id}`)}`}
-                  className={`lc-btn-lift mt-auto rounded-full p-4 text-center text-[15px] font-semibold ${hot ? "bg-white text-[#121226]" : "bg-[#f1eff8] text-[#121226] hover:bg-[#e4dfff]"}`}
-                >
-                  {cta}
-                </CtaLink>
+                {button}
               </div>
             );
           })}
         </div>
-        <p className="mt-5 text-center text-[14px] text-[#66647c]">
+        <p className="mt-3.5 text-center text-[12px] leading-[18px] text-[#66647c] sm:mt-5 sm:text-[14px]">
           Secure checkout by Polar · 7-day refund on monthly plans, 14 days on Lifetime · Prices in USD
         </p>
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto grid max-w-[1360px] items-start gap-10 px-4 pt-24 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto grid max-w-[1360px] items-start gap-[22px] px-4 pt-[72px] sm:px-6 sm:pt-24 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal">
           <p className={label}>/ Questions</p>
-          <h2 className="lc-h2 mt-5">
+          <h2 className="lc-h2 mt-3.5 sm:mt-5">
             Asked a lot. <span>Answered plainly.</span>
           </h2>
           <p className="mt-5 text-[16px] leading-[25px] text-[#4a4862]">
@@ -634,27 +692,23 @@ export default async function Home() {
             </a>
           </p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5 sm:gap-2">
           {faqs.map((f, i) => (
-            <details key={f.q} className="lc-faq group rounded-3xl bg-white px-6 py-[22px] transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)]" open={i === 0}>
-              <summary className="flex items-center justify-between gap-4">
-                <span className="text-[17px] font-bold sm:text-[18px]">{f.q}</span>
-                <span className="lc-plus inline-flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full bg-[#f1eff8] group-hover:bg-[#e4dfff]" aria-hidden="true">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#121226" strokeWidth="2.2" strokeLinecap="round">
-                    <path d="M12 5v14M5 12h14" />
-                  </svg>
-                </span>
+            <details key={f.q} className="lc-faq group rounded-[22px] bg-white p-[18px] transition-shadow hover:shadow-[0_10px_30px_-18px_rgba(18,18,38,.3)] sm:rounded-3xl sm:px-6 sm:py-[22px]" open={i === 0}>
+              <summary className="flex min-h-[34px] items-center justify-between gap-3 sm:gap-4">
+                <span className="text-[16px] font-bold sm:text-[18px]">{f.q}</span>
+                <FaqIcon />
               </summary>
-              <p className="mt-3 text-[16px] leading-[26px] text-[#4a4862]">{f.a}</p>
+              <p className="mt-2.5 text-[15px] leading-6 text-[#4a4862] sm:mt-3 sm:text-[16px] sm:leading-[26px]">{f.a}</p>
             </details>
           ))}
         </div>
       </section>
 
       {/* FINAL CTA */}
-      <section className="mx-auto max-w-[1360px] px-4 pt-24 sm:px-6 lg:px-10 lg:pt-[140px]">
+      <section className="mx-auto max-w-[1360px] px-4 pt-[72px] sm:px-6 sm:pt-24 lg:px-10 lg:pt-[140px]">
         <div className="lc-reveal relative flex flex-col overflow-hidden rounded-[28px] bg-[#111118] text-white sm:block sm:h-[560px] lg:rounded-[36px]">
-          <p aria-hidden="true" className="lc-poster px-6 pt-8 text-[56px] leading-[56px] text-[#c9c0ff] sm:absolute sm:left-[60px] sm:p-0 sm:top-14 sm:text-[84px] sm:leading-[84px] lg:text-[112px] lg:leading-[112px]">
+          <p aria-hidden="true" className="lc-poster px-[22px] pt-7 text-[58px] leading-[56px] text-[#c9c0ff] sm:absolute sm:left-[60px] sm:p-0 sm:top-14 sm:text-[84px] sm:leading-[84px] lg:text-[112px] lg:leading-[112px]">
             NEXT
             <br className="sm:hidden" /> JOB
           </p>
@@ -665,21 +719,21 @@ export default async function Home() {
             width={620}
             height={1080}
             sizes="(min-width: 1024px) 270px, 200px"
-            className="relative order-last ml-auto mt-2 h-[300px] w-auto sm:absolute sm:bottom-0 sm:right-0 sm:mt-0 sm:h-[400px] lg:h-[470px]"
+            className="relative order-last ml-auto mt-4 h-[280px] w-auto sm:absolute sm:bottom-0 sm:right-0 sm:mt-0 sm:h-[400px] lg:h-[470px]"
           />
-          <div className="relative z-10 px-6 pt-6 sm:absolute sm:bottom-16 sm:left-16 sm:max-w-[500px] sm:p-0">
-            <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em] sm:text-[40px]">{cta.title}</h2>
-            <p className="mt-3.5 text-[17px] leading-[26px] text-[#c9c7d8]">{cta.lead}</p>
-            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
-              <CtaLink cta="check_resume" location="home_final" href="/free-ats-check" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
+          <div className="relative z-10 px-[22px] pt-8 sm:absolute sm:bottom-16 sm:left-16 sm:max-w-[500px] sm:p-0">
+            <h2 className="text-[28px] font-extrabold leading-[33px] tracking-[-0.03em] sm:text-[40px] sm:leading-[1.15]">{cta.title}</h2>
+            <p className="mt-2.5 text-[15px] leading-[23px] text-[#c9c7d8] sm:mt-3.5 sm:text-[17px] sm:leading-[26px]">{cta.lead}</p>
+            <div className="mt-[18px] flex flex-col gap-2.5 sm:mt-6 sm:flex-row">
+              <CtaLink cta="check_resume" location="home_final" href="/free-ats-check" className={`${btn} w-full bg-[#5440e8] !py-4 text-white hover:bg-[#4430d6] sm:w-auto sm:!py-[17px]`}>
                 {cta.primaryCta}
               </CtaLink>
-              <CtaLink cta="build_resume" location="home_final" href={BUILD_HREF} className={`${btn} bg-white text-[#111118]`}>
+              <CtaLink cta="build_resume" location="home_final" href={BUILD_HREF} className={`${btn} bg-white text-[#111118] max-sm:hidden`}>
                 {cta.secondaryCta}
               </CtaLink>
             </div>
           </div>
-          <span aria-hidden="true" className="lc-poster absolute right-6 top-[120px] hidden -rotate-[8deg] rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[14px] text-[#111118] sm:block lg:left-[600px] lg:right-auto lg:top-[210px]">
+          <span aria-hidden="true" className="lc-poster absolute bottom-10 left-[22px] z-10 -rotate-6 rounded-full bg-[#ff7a33] px-3 py-[7px] text-[12px] text-[#111118] sm:bottom-auto sm:left-auto sm:right-6 sm:top-[120px] sm:-rotate-[8deg] sm:px-[15px] sm:py-[9px] sm:text-[14px] lg:left-[600px] lg:right-auto lg:top-[210px]">
             NO SIGN-UP
           </span>
         </div>
