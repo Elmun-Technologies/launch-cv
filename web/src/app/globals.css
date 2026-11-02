@@ -1462,6 +1462,9 @@ button:hover, [role="button"]:hover, a:hover {
 
 /* Hover: buttons lift, cards rise. */
 .lc-btn-lift { transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .lc-btn-lift:hover, .lc-rise:hover { transform: none !important; }
+}
 .lc-btn-lift:hover { transform: translateY(-2px); box-shadow: 0 14px 28px -14px rgba(36, 24, 120, 0.55); }
 .lc-btn-lift:active { transform: translateY(0); }
 .lc-rise { transition: transform 0.3s cubic-bezier(.2,.8,.2,1), box-shadow 0.3s ease; }

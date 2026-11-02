@@ -42,3 +42,11 @@ export function sectionTitles(regionMode: string | undefined) {
     skills: "Skills",
   };
 }
+
+/**
+ * Paper size per region: US Letter for the US (the default — US recruiters and
+ * printers expect 8.5×11 in), A4 for "eu". Sizes in PDF points.
+ */
+export function pageSizeFor(regionMode: string | undefined): { name: "LETTER" | "A4"; width: number; height: number } {
+  return regionMode === "eu" ? { name: "A4", width: 595, height: 842 } : { name: "LETTER", width: 612, height: 792 };
+}
