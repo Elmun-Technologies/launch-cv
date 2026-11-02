@@ -1,9 +1,12 @@
-/** Row of white cards with a mono "01" counter, a title and a line (v5 "what trips it up"). */
-export function NumberedCards({ items, className = "" }: { items: { t: string; d: string }[]; className?: string }) {
+/**
+ * Row of white cards with a mono "01" counter, a title and a line (v5 "what trips it up").
+ * Pass `reveal={false}` when the row sits above the fold, so it isn't faded in on load.
+ */
+export function NumberedCards({ items, className = "", reveal = true }: { items: { t: string; d: string }[]; className?: string; reveal?: boolean }) {
   return (
     <ol className={`grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4 ${className}`}>
       {items.map((it, i) => (
-        <li key={it.t} className="lc-card lc-reveal rounded-[22px] p-[18px] sm:rounded-3xl sm:p-6">
+        <li key={it.t} className={`lc-card ${reveal ? "lc-reveal" : ""} rounded-[22px] p-[18px] sm:rounded-3xl sm:p-6`}>
           <p className="lc-mono text-[13px] text-[#5440e8]" aria-hidden="true">
             {String(i + 1).padStart(2, "0")}
           </p>
