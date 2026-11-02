@@ -16,7 +16,8 @@ import { COVER_LETTER_EXAMPLES, getCoverLetterExample, type CoverLetterExample }
 
 type Params = { slug: string };
 
-export const dynamicParams = false;
+// Unknown slugs 404 via notFound(). (dynamicParams = false made every page 404
+// after an on-demand revalidation in Next 16, e.g. when the footer copy changed.)
 
 export function generateStaticParams(): Params[] {
   return COVER_LETTER_EXAMPLES.map((c) => ({ slug: c.slug }));
