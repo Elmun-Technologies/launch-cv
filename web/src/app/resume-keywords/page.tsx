@@ -10,7 +10,7 @@ import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { faqPageLd } from "@/lib/faq-ld";
-import type { ResumeExample } from "@/lib/resume-examples";
+import { RESUME_GROUPS, type ResumeExample } from "@/lib/resume-examples";
 import { KEYWORD_ROLES, KEYWORDS_UPDATED, keywordStats } from "@/lib/seo/resume-keywords";
 
 const TOTAL_ROLES = KEYWORD_ROLES.length;
@@ -24,7 +24,7 @@ export const metadata = buildMarketingMetadata({
   keywords: ["resume keywords", "resume keywords by job", "ATS keywords", "skills for resume", "resume skills list"],
 });
 
-const GROUPS: ResumeExample["group"][] = ["Tech & product", "Business", "Creative", "People & service"];
+const GROUPS = RESUME_GROUPS;
 
 const FAQS = [
   {
@@ -81,13 +81,19 @@ function RoleCard({ e }: { e: ResumeExample }) {
   return (
     <Link href={`/resume-keywords/${e.slug}`} className="lc-card lc-rise group flex h-full flex-col rounded-[22px] p-1.5 text-[#121226] sm:rounded-[26px] sm:p-2">
       <div className="relative h-[110px] overflow-hidden rounded-[17px] bg-[#e4dfff] sm:h-[140px] sm:rounded-[20px]">
-        <Image
-          src={e.photo.src}
-          alt=""
-          fill
-          sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 100vw"
-          className="object-cover object-[center_30%] transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-        />
+        {e.photo ? (
+          <Image
+            src={e.photo.src}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 300px, (min-width: 640px) 45vw, 100vw"
+            className="object-cover object-[center_30%] transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          />
+        ) : (
+          <p aria-hidden="true" className="lc-poster absolute bottom-[-10px] left-3 m-0 text-[88px] leading-[88px] text-[#c9c0ff] transition-transform duration-500 group-hover:-translate-y-1 motion-reduce:transition-none sm:text-[112px] sm:leading-[112px]">
+            {monogram(e.role)}
+          </p>
+        )}
       </div>
       <div className="flex flex-1 flex-col px-2.5 pb-2.5 pt-3 sm:px-3 sm:pb-3 sm:pt-4">
         <h4 className="text-[17px] font-extrabold leading-[22px] tracking-[-0.01em] group-hover:text-[#5440e8] sm:text-[19px] sm:leading-6">
@@ -221,4 +227,13 @@ export default function ResumeKeywordsIndexPage() {
       <SeoCtaBand title="See which keywords your resume already has." sub="Free ATS check — no sign-up, about 10 seconds." location="resume_keywords_index_bottom" />
     </SiteShell>
   );
+}
+
+/** "Truck Driver" → "TD", "HVAC Technician" → "HVACT". */
+function monogram(role: string): string {
+  return role
+    .split(/\s+/)
+    .map((w) => (/^[A-Z]{2,}$/.test(w) ? w : w.charAt(0)))
+    .join("")
+    .toUpperCase();
 }

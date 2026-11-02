@@ -9,20 +9,20 @@ import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
-import { RESUME_EXAMPLES, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
+import { RESUME_EXAMPLES, RESUME_GROUPS, getResumeExample } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES, getCoverLetterExample } from "@/lib/cover-letter-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 
 export const metadata = buildMarketingMetadata({
   title: "Resume Examples by Job — With Keywords & Bullet Points",
   description:
-    "Resume examples for 16 jobs — engineers, nurses, teachers, accountants and more — each with summary and bullet examples, keywords and ATS tips.",
+    `Resume examples for ${RESUME_EXAMPLES.length} jobs — nurses, electricians, teachers, drivers, accountants and more — with bullet examples, keywords and ATS tips.`,
   pathname: "/resume-examples",
   image: DEFAULT_OG_IMAGE,
   keywords: ["resume examples", "resume samples", "resume examples by job", "ATS resume examples"],
 });
 
-const GROUPS: ResumeExample["group"][] = ["Tech & product", "Business", "Creative", "People & service"];
+const GROUPS = RESUME_GROUPS;
 const ordered = GROUPS.flatMap((g) => RESUME_EXAMPLES.filter((e) => e.group === g));
 const TILE = ["bg-[#e4dfff]", "bg-[#c9c0ff]", "bg-[#e4dfff]", "bg-[#dcd5ff]"];
 const letterCount = COVER_LETTER_EXAMPLES.filter((c) => getResumeExample(c.slug)).length;

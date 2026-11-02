@@ -20,6 +20,8 @@ const COLUMNS = [
       { href: "/resume-templates", label: "Resume templates" },
       { href: "/resume-examples", label: "Resume examples" },
       { href: "/cover-letter-examples", label: "Cover letter examples" },
+      { href: "/cover-letter-template", label: "Cover letter template" },
+      { href: "/how-to-write-a-resume", label: "How to write a resume" },
       { href: "/resume-format", label: "Resume format guide" },
       { href: "/resume-action-verbs", label: "Resume action verbs" },
       { href: "/resume-keywords", label: "Resume keywords by role" },

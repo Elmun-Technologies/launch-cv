@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SiteShell } from "@/components/site/site-shell";
-import { container, btnPrimary, btnWhite, btnSoft, labelCls, Breadcrumbs, Chip, SectionHead } from "@/components/site/ui";
+import { container, btnPrimary, btnWhite, btnSoft, labelCls, Breadcrumbs, SectionHead } from "@/components/site/ui";
 import { FaqList } from "@/components/site/library/faq-list";
 import { ArrowCard } from "@/components/site/library/arrow-card";
 import { KeywordGroups } from "@/components/site/seo/keyword-groups";
 import { HighlightTerms } from "@/components/site/seo/highlight-terms";
 import { HonestRules } from "@/components/site/seo/honest-rules";
 import { SeoCtaBand } from "@/components/site/seo/seo-cta-band";
+import { RoleNextSteps } from "@/components/site/seo/role-next-steps";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { faqPageLd } from "@/lib/faq-ld";
-import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 import {
   KEYWORD_ROLES,
   KEYWORDS_UPDATED,
@@ -78,7 +78,6 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
   const rows = contextRows(e);
   const faqs = keywordFaqs(e);
   const firstName = e.resume.name.split(" ")[0];
-  const hasLetter = !!getCoverLetterExample(e.slug);
   const related = e.related.map(getKeywordRole).filter((x) => !!x);
   const url = absoluteUrl(`/resume-keywords/${e.slug}`);
   const exampleHref = `/resume-examples/${e.slug}`;
@@ -93,7 +92,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
         headline: `${e.role} resume keywords`,
         description: keywordPageDescription(e),
         url,
-        image: absoluteUrl(e.photo.src),
+        ...(e.photo ? { image: absoluteUrl(e.photo.src) } : {}),
         dateModified: KEYWORDS_UPDATED,
         inLanguage: "en-US",
         isPartOf: { "@id": WEBSITE_ID },
@@ -113,11 +112,6 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
     ],
   };
 
-  const cards = [
-    { badge: "Example", title: `${e.role} resume example`, href: exampleHref },
-    ...(hasLetter ? [{ badge: "Cover letter", title: `${e.role} cover letter example`, href: `/cover-letter-examples/${e.slug}` }] : []),
-    { badge: "Tool", title: `Match your resume to a ${short} job post`, href: "/features/jd-alignment" },
-  ];
 
   return (
     <SiteShell>
@@ -286,28 +280,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
       </section>
 
       {/* NEXT STEPS */}
-      <section aria-labelledby="next-steps" className={`${container} pt-14 lg:pt-[110px]`}>
-        <h2 id="next-steps" className={labelCls}>
-          <span aria-hidden="true">/ </span>Keep going
-        </h2>
-        <ul className={`mt-3.5 grid gap-2 sm:gap-4 lg:mt-5 ${cards.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
-          {cards.map((c) => (
-            <li key={c.href}>
-              <Link href={c.href} className="lc-card lc-rise group flex h-full flex-col rounded-[22px] p-5 text-[#121226] sm:rounded-3xl sm:p-[26px]">
-                <span>
-                  <Chip tone="lilac">{c.badge}</Chip>
-                </span>
-                <span className="mt-4 block flex-1 text-[19px] font-extrabold leading-[25px] tracking-[-0.01em] group-hover:text-[#5440e8] sm:mt-7 sm:text-[21px] sm:leading-[27px]">
-                  {c.title}
-                </span>
-                <span className="mt-3 text-[14px] font-bold text-[#5440e8] sm:mt-3.5">
-                  Open <span aria-hidden="true">→</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <RoleNextSteps e={e} page="keywords" />
 
       {/* FAQ */}
       <section id="faq" className={`${sectionCls} grid items-start gap-[18px] lg:grid-cols-[0.8fr_1.2fr] lg:gap-16`}>

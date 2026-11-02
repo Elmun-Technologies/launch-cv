@@ -6,6 +6,7 @@ import { container, btnPrimary, btnWhite, btnSoft, labelCls, Breadcrumbs, Sectio
 import { FaqList } from "@/components/site/library/faq-list";
 import { CopyPill } from "@/components/site/library/copy-pill";
 import { ArrowCard } from "@/components/site/library/arrow-card";
+import { RoleNextSteps } from "@/components/site/seo/role-next-steps";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { fitTitle, buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
@@ -260,6 +261,8 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
         </div>
         <FaqList faqs={c.faqs} />
       </section>
+
+      <RoleNextSteps e={e} page="letter" />
 
       {/* RELATED */}
       {related.length > 0 ? (

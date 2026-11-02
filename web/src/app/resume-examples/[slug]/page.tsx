@@ -7,6 +7,7 @@ import { container, btnPrimary, btnWhite, labelCls, Breadcrumbs, Chip, SectionHe
 import { FaqList } from "@/components/site/library/faq-list";
 import { CopyPill } from "@/components/site/library/copy-pill";
 import { ArrowCard } from "@/components/site/library/arrow-card";
+import { RoleNextSteps } from "@/components/site/seo/role-next-steps";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
@@ -79,7 +80,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
         headline: `${e.role} resume example`,
         description: e.intro,
         url,
-        image: absoluteUrl(e.photo.src),
+        ...(e.photo ? { image: absoluteUrl(e.photo.src) } : {}),
         dateModified: UPDATED,
         inLanguage: "en-US",
         isPartOf: { "@id": WEBSITE_ID },
@@ -155,9 +156,13 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
               sizes={`(min-width: 1024px) ${Math.round((540 * cutout.w) / cutout.h)}px, (min-width: 640px) ${Math.round((440 * cutout.w) / cutout.h)}px, ${Math.round((320 * cutout.w) / cutout.h)}px`}
               className="absolute bottom-0 left-1/2 h-[320px] w-auto max-w-none -translate-x-1/2 sm:h-[440px] lg:h-[540px]"
             />
-          ) : (
+          ) : e.photo ? (
             <div className="absolute inset-x-4 bottom-4 top-[92px] overflow-hidden rounded-[22px] sm:inset-x-7 sm:bottom-7 sm:top-[140px] lg:rounded-[26px]">
               <Image src={e.photo.src} alt={e.photo.alt} fill priority sizes="(min-width: 1024px) 560px, 100vw" className="object-cover object-[center_30%]" />
+            </div>
+          ) : (
+            <div aria-hidden="true" className="absolute left-1/2 top-[92px] w-[260px] -translate-x-1/2 -rotate-[4deg] shadow-[0_30px_60px_-24px_rgba(10,6,60,.55)] sm:top-[150px] sm:w-[340px] lg:w-[400px]">
+              <ResumePreview content={exampleToContent(e)} template="classic" />
             </div>
           )}
           <div className="lc-float lc-drift absolute right-7 top-9 hidden w-[230px] rounded-[22px] bg-white p-[18px] sm:block">
@@ -355,6 +360,8 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
         </div>
         <FaqList faqs={e.faqs} />
       </section>
+
+      <RoleNextSteps e={e} page="example" />
 
       {/* RELATED */}
       {related.length > 0 ? (
