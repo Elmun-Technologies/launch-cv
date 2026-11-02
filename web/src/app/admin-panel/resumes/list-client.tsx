@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { AdminShell } from "@/components/admin-shell";
+import { useAdminFetch } from "@/components/admin/reauth";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 import {
   AdminPageHeader,
@@ -27,6 +28,7 @@ interface ResumeRow {
 const PER_PAGE = 20;
 
 export function AdminResumesPage() {
+  const adminFetch = useAdminFetch();
   const [resumes, setResumes] = useState<ResumeRow[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -55,7 +57,12 @@ export function AdminResumesPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this resume?")) return;
-    await fetch(`/api/admin-panel/resumes/${id}`, { method: "DELETE" });
+    const r = await adminFetch(`/api/admin-panel/resumes/${id}`, { method: "DELETE" }).catch(() => null);
+    if (!r?.ok) {
+      const j = r ? await r.json().catch(() => ({})) : {};
+      alert((j as { error?: string }).error ?? "Couldn't delete this resume.");
+      return;
+    }
     fetchResumes();
   }
 

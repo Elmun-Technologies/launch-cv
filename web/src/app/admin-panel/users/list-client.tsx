@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { AdminShell } from "@/components/admin-shell";
+import { useAdminFetch } from "@/components/admin/reauth";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 import { StatusBadge, statusToTone } from "@/components/admin/status-badge";
 import {
@@ -33,6 +34,7 @@ interface UserRow {
 const PER_PAGE = 20;
 
 export function AdminUsersPage() {
+  const adminFetch = useAdminFetch();
   const [users, setUsers] = useState<UserRow[]>([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -61,7 +63,12 @@ export function AdminUsersPage() {
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this user permanently?")) return;
-    await fetch(`/api/admin-panel/users/${id}`, { method: "DELETE" });
+    const r = await adminFetch(`/api/admin-panel/users/${id}`, { method: "DELETE" }).catch(() => null);
+    if (!r?.ok) {
+      const j = r ? await r.json().catch(() => ({})) : {};
+      alert((j as { error?: string }).error ?? "Couldn't delete this user.");
+      return;
+    }
     fetchUsers();
   }
 
