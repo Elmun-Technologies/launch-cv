@@ -542,7 +542,7 @@ export default async function Home() {
             Real examples. <span>Not a blank page.</span>
           </h2>
           <p className="mt-5 text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
-            {RESUME_EXAMPLES.length} roles, each with a full resume, the keywords for that job and an annotated cover letter.
+            {RESUME_EXAMPLES.length} roles, from nurses and electricians to engineers, each with a full resume and the keywords for that job.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             {roles.map((r, i) => (

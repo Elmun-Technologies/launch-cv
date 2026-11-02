@@ -16,7 +16,7 @@ import { exampleToContent } from "@/lib/example-to-content";
 export const metadata = buildMarketingMetadata({
   title: "Resume Examples by Job — With Keywords & Bullet Points",
   description:
-    "Resume examples for 16 jobs — engineers, nurses, teachers, accountants and more — each with summary and bullet examples, keywords and ATS tips.",
+    `Resume examples for ${RESUME_EXAMPLES.length} jobs — nurses, electricians, teachers, drivers, accountants and more — with bullet examples, keywords and ATS tips.`,
   pathname: "/resume-examples",
   image: DEFAULT_OG_IMAGE,
   keywords: ["resume examples", "resume samples", "resume examples by job", "ATS resume examples"],

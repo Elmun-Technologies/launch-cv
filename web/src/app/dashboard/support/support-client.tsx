@@ -43,7 +43,7 @@ const FAQ = [
 
 const GUIDES = [
   { href: "/free-ats-check", t: "Check your resume against an ATS", d: "What applicant tracking software can and can't read" },
-  { href: "/resume-examples", t: "Resume examples by role", d: "16 examples with summaries, bullets and keywords" },
+  { href: "/resume-examples", t: "Resume examples by role", d: "Healthcare, trades, retail, tech and more, with bullets and keywords" },
   { href: "/cover-letter-examples", t: "Cover letter examples", d: "Annotated letters you can adapt" },
   { href: "/blog", t: "Resume guides", d: "Keywords, formatting and job search articles" },
 ];
