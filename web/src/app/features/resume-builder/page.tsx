@@ -4,9 +4,9 @@ import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata"
 import { PUBLIC_PLANS } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
-  title: "AI Resume Builder — ATS-Friendly Resume, PDF Export",
+  title: "AI Resume Builder — ATS-Friendly, PDF & Word Export",
   description:
-    "Build or import your resume, rewrite weak bullets with AI, pick one of 4 ATS-friendly templates and download a clean PDF. Check your ATS score free first.",
+    "Build or import your resume, rewrite weak bullets with AI, pick one of 4 ATS-friendly templates and download a PDF or Word file. Check your ATS score free.",
   pathname: "/features/resume-builder",
   image: FEATURES_OG_IMAGE,
   keywords: [
@@ -87,7 +87,7 @@ const f: FeaturePageData = {
     { t: "Start or import", d: "Begin with a blank resume, upload a PDF or DOCX, or paste your LinkedIn profile text." },
     { t: "Fill each section", d: "Contact, summary, experience, education, skills, certifications and achievements — with a live preview." },
     { t: "Rewrite with AI", d: "Turn duty-style bullets into results. You review every suggestion before it's applied." },
-    { t: "Pick a template and export", d: "Choose Classic, Modern, Minimal or Executive and download the PDF." },
+    { t: "Pick a template and export", d: "Choose Classic, Modern, Minimal or Executive and download a PDF, or a Word file when a posting asks for .docx." },
   ],
   gets: [
     { t: "Live preview", d: "The preview is the same layout as the PDF, so what you see is what recruiters get." },
@@ -100,7 +100,7 @@ const f: FeaturePageData = {
   banner: {
     title: "Written for people, readable by software.",
     text: "Clean PDFs with real text — names, dates and skills a parser can pick up, in any language your name is written in.",
-    note: `The editor, all four templates and PDF export are free. AI rewrites come with paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month.`,
+    note: `The editor, all four templates and PDF and Word downloads are free. AI rewrites come with paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month.`,
   },
   faqs: [
     {

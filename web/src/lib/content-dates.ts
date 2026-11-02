@@ -9,7 +9,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/free-ats-check": "2026-10-27",
   "/features": "2026-10-27",
   "/features/jd-alignment": "2026-10-27",
-  "/features/resume-builder": "2026-11-01",
+  "/features/resume-builder": "2026-11-02",
   "/features/cover-letter": "2026-10-27",
   "/features/interview-prep": "2026-11-01",
   "/features/voice-input": "2026-10-27",
