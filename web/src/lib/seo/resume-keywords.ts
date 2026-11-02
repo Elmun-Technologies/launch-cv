@@ -71,7 +71,7 @@ export function sampleResumeText(e: ResumeExample): string {
 }
 
 export function keywordGroups(e: ResumeExample): KeywordGroup[] {
-  const s = SORTING[e.slug] ?? {};
+  const s = SORTING[e.slug] ?? e.keywordSort ?? {};
   const text = sampleResumeText(e);
   const groupOf = (k: string): KeywordGroupId =>
     s.credentials?.includes(k) ? "credentials" : s.tools?.includes(k) ? "tools" : s.soft?.includes(k) ? "soft" : "hard";

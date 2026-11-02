@@ -5,14 +5,18 @@
  * are illustrative.
  */
 
+import { MORE_EXAMPLES_A } from "@/lib/resume-examples-more-a";
+import { MORE_EXAMPLES_B } from "@/lib/resume-examples-more-b";
+
 export type ExampleJob = { title: string; company: string; dates: string; bullets: string[] };
 
 export type ResumeExample = {
   slug: string;
   role: string;
   /** Group shown in the breadcrumb and on the index page. */
-  group: "Tech & product" | "Business" | "Creative" | "People & service";
-  photo: { src: string; alt: string };
+  group: ResumeGroup;
+  /** Stock photo for the hero and cards. Roles without one show their rendered sample resume instead. */
+  photo?: { src: string; alt: string };
   /** One-line level label shown on the photo. */
   level: string;
   intro: string;
@@ -32,11 +36,30 @@ export type ResumeExample = {
   tips: { t: string; d: string }[];
   faqs: { q: string; a: string }[];
   related: string[];
+  /**
+   * How /resume-keywords/[role] sorts this role's keywords. Strings must match
+   * `keywords` exactly; anything not listed is a hard skill.
+   */
+  keywordSort?: { tools?: string[]; credentials?: string[]; soft?: string[] };
 };
+
+/** Display order of the groups on the index pages. */
+export const RESUME_GROUPS = [
+  "Tech & product",
+  "Business",
+  "Finance",
+  "Creative",
+  "Healthcare",
+  "Education",
+  "Trades & logistics",
+  "Retail & hospitality",
+  "People & service",
+] as const;
+export type ResumeGroup = (typeof RESUME_GROUPS)[number];
 
 const photo = (name: string, alt: string) => ({ src: `/images/photos/${name}.webp`, alt });
 
-export const RESUME_EXAMPLES: ResumeExample[] = [
+const CORE_EXAMPLES: ResumeExample[] = [
   {
     slug: "software-engineer",
     role: "Software Engineer",
@@ -324,7 +347,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
   {
     slug: "financial-analyst",
     role: "Financial Analyst",
-    group: "Business",
+    group: "Finance",
     photo: photo("role-finance", "Financial analyst reviewing figures"),
     level: "Mid-level · 5 years experience",
     intro: "A financial analyst resume that shows forecasting accuracy and savings — with the modeling and reporting keywords finance recruiters screen for.",
@@ -596,7 +619,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
   {
     slug: "registered-nurse",
     role: "Registered Nurse",
-    group: "People & service",
+    group: "Healthcare",
     photo: photo("role-nurse", "Nurse in scrubs with a stethoscope"),
     level: "Experienced · 6 years",
     intro: "A registered nurse resume that shows safe, high-quality patient care — with the licensure, certification and clinical keywords hospital recruiters screen for.",
@@ -664,7 +687,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
   {
     slug: "teacher",
     role: "Teacher",
-    group: "People & service",
+    group: "Education",
     photo: photo("role-teacher", "Teacher at the board with students raising their hands"),
     level: "Experienced · 7 years",
     intro: "A teacher resume that shows student growth and classroom impact — with the certification, curriculum and instruction keywords school districts search for.",
@@ -868,7 +891,7 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
   {
     slug: "accountant",
     role: "Accountant",
-    group: "Business",
+    group: "Finance",
     photo: photo("role-accountant", "Tax forms, receipts and a calculator on a desk"),
     level: "Mid-level · 5 years experience",
     intro: "An accountant resume that shows accurate, on-time closes and clean audits — with the CPA, GAAP and ERP keywords finance recruiters look for.",
@@ -1138,6 +1161,8 @@ export const RESUME_EXAMPLES: ResumeExample[] = [
     related: ["customer-service-representative", "hr-generalist", "project-manager"],
   },
 ];
+
+export const RESUME_EXAMPLES: ResumeExample[] = [...CORE_EXAMPLES, ...MORE_EXAMPLES_A, ...MORE_EXAMPLES_B];
 
 export function getResumeExample(slug: string): ResumeExample | undefined {
   return RESUME_EXAMPLES.find((e) => e.slug === slug);

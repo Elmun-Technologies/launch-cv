@@ -93,7 +93,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
         headline: `${e.role} resume keywords`,
         description: keywordPageDescription(e),
         url,
-        image: absoluteUrl(e.photo.src),
+        ...(e.photo ? { image: absoluteUrl(e.photo.src) } : {}),
         dateModified: KEYWORDS_UPDATED,
         inLanguage: "en-US",
         isPartOf: { "@id": WEBSITE_ID },

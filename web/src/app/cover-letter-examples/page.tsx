@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
-import { RESUME_EXAMPLES, type ResumeExample } from "@/lib/resume-examples";
+import { RESUME_EXAMPLES, RESUME_GROUPS, type ResumeExample } from "@/lib/resume-examples";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 
 export const metadata = buildMarketingMetadata({
@@ -19,7 +19,7 @@ export const metadata = buildMarketingMetadata({
   keywords: ["cover letter examples", "cover letter samples", "cover letter examples by job", "how to write a cover letter"],
 });
 
-const GROUPS: ResumeExample["group"][] = ["Tech & product", "Business", "Creative", "People & service"];
+const GROUPS = RESUME_GROUPS;
 const TILE = ["bg-[#c9c0ff]", "bg-[#e4dfff]"];
 
 const items = GROUPS.flatMap((g) => RESUME_EXAMPLES.filter((e) => e.group === g))
