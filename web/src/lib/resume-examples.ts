@@ -9,6 +9,8 @@ import { MORE_EXAMPLES_A } from "@/lib/resume-examples-more-a";
 import { MORE_EXAMPLES_B } from "@/lib/resume-examples-more-b";
 import { MORE_EXAMPLES_C } from "@/lib/resume-examples-more-c";
 import { MORE_EXAMPLES_D } from "@/lib/resume-examples-more-d";
+import { MORE_EXAMPLES_E } from "@/lib/resume-examples-more-e";
+import { MORE_EXAMPLES_F } from "@/lib/resume-examples-more-f";
 
 export type ExampleJob = { title: string; company: string; dates: string; bullets: string[] };
 
@@ -1164,7 +1166,7 @@ const CORE_EXAMPLES: ResumeExample[] = [
   },
 ];
 
-export const RESUME_EXAMPLES: ResumeExample[] = [...CORE_EXAMPLES, ...MORE_EXAMPLES_A, ...MORE_EXAMPLES_B, ...MORE_EXAMPLES_C, ...MORE_EXAMPLES_D];
+export const RESUME_EXAMPLES: ResumeExample[] = [...CORE_EXAMPLES, ...MORE_EXAMPLES_A, ...MORE_EXAMPLES_B, ...MORE_EXAMPLES_C, ...MORE_EXAMPLES_D, ...MORE_EXAMPLES_E, ...MORE_EXAMPLES_F];
 
 export function getResumeExample(slug: string): ResumeExample | undefined {
   return RESUME_EXAMPLES.find((e) => e.slug === slug);

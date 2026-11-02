@@ -7,6 +7,8 @@
 import { MORE_COVER_LETTERS } from "@/lib/cover-letter-examples-more";
 import { MORE_COVER_LETTERS_C } from "@/lib/cover-letter-examples-more-c";
 import { MORE_COVER_LETTERS_D } from "@/lib/cover-letter-examples-more-d";
+import { MORE_COVER_LETTERS_E } from "@/lib/cover-letter-examples-more-e";
+import { MORE_COVER_LETTERS_F } from "@/lib/cover-letter-examples-more-f";
 
 export type CoverLetterExample = {
   /** Same slug as the matching resume example. */
@@ -424,7 +426,7 @@ const CORE_COVER_LETTERS: CoverLetterExample[] = [
   },
 ];
 
-export const COVER_LETTER_EXAMPLES: CoverLetterExample[] = [...CORE_COVER_LETTERS, ...MORE_COVER_LETTERS, ...MORE_COVER_LETTERS_C, ...MORE_COVER_LETTERS_D];
+export const COVER_LETTER_EXAMPLES: CoverLetterExample[] = [...CORE_COVER_LETTERS, ...MORE_COVER_LETTERS, ...MORE_COVER_LETTERS_C, ...MORE_COVER_LETTERS_D, ...MORE_COVER_LETTERS_E, ...MORE_COVER_LETTERS_F];
 
 export function getCoverLetterExample(slug: string): CoverLetterExample | undefined {
   return COVER_LETTER_EXAMPLES.find((c) => c.slug === slug);
