@@ -134,7 +134,7 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
         </div>
         <p className="mt-3 text-[12px] text-[#66647c] sm:mt-4 sm:text-[14px]">
           By{" "}
-          <Link href="/about" className="lc-link hover:text-[#5440e8]">
+          <Link href={SITE_AUTHOR.path} rel="author" className="lc-link hover:text-[#5440e8]">
             {SITE_AUTHOR.name}
           </Link>{" "}
           · Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>

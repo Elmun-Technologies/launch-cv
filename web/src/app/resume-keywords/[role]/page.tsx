@@ -142,7 +142,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
           </div>
           <p className="mt-3 text-center text-[12px] text-[#66647c] sm:mt-4 sm:text-left sm:text-[14px]">
             By{" "}
-            <Link href="/about" className="lc-link hover:text-[#5440e8]">
+            <Link href={SITE_AUTHOR.path} rel="author" className="lc-link hover:text-[#5440e8]">
               {SITE_AUTHOR.name}
             </Link>
             <span className="hidden sm:inline">, {SITE_AUTHOR.role}</span> · Updated <time dateTime={KEYWORDS_UPDATED}>{UPDATED_LABEL}</time>

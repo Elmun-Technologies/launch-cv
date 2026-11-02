@@ -2,6 +2,8 @@ import { getPublishedPosts } from "@/lib/cms/blog";
 import { PUBLIC_PLANS, planBillingDuration, planBillingSummary } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import { getSiteUrl } from "@/lib/site";
+import { SITE_AUTHOR } from "@/lib/author";
+import { RESUME_EXAMPLES } from "@/lib/resume-examples";
 
 /**
  * Dynamic llms.txt for Generative Engine Optimization.
@@ -19,17 +21,17 @@ const FEATURE_PAGES: { title: string; path: string; summary: string }[] = [
   {
     title: "Features overview",
     path: "/features",
-    summary: "Six AI tools in one subscription — AI resume builder, JD alignment, ATS score checker, cover letter generator, interview prep, and voice input — where each output feeds the next.",
+    summary: "Every LaunchCV tool in one place: a free ATS checker, a resume builder, job description match, cover letters, interview prep and voice input.",
   },
   {
     title: "AI Resume Builder",
     path: "/features/resume-builder",
-    summary: "Build an ATS-friendly resume in minutes with 4 templates, AI-written bullet points, a live preview that matches the exported PDF.",
+    summary: "Build an ATS-friendly resume with 4 templates, AI bullet rewrites, PDF and Word export, and a live preview that matches the PDF.",
   },
   {
     title: "JD Alignment Match",
     path: "/features/jd-alignment",
-    summary: "Paste any job description and LaunchCV maps every requirement to your resume, fills keyword gaps, and rewrites bullets to close the match — in about a minute.",
+    summary: "Paste any job description and LaunchCV maps each requirement to your resume, shows covered keywords and missing skills, and rewrites bullets for that job using only facts from your resume.",
   },
   {
     title: "ATS Score Checker",
@@ -135,8 +137,10 @@ export async function GET(): Promise<Response> {
     (k) => PUBLIC_PLANS[k].title,
   );
   const recurringList =
-    recurringNames.length > 1
+    recurringNames.length > 2
       ? `${recurringNames.slice(0, -1).join(", ")}, and ${recurringNames[recurringNames.length - 1]}`
+      : recurringNames.length === 2
+        ? recurringNames.join(" and ")
       : recurringNames.join("");
   const billingNote = `${recurringList} renew automatically until canceled; ${oneTimeNames.join(" and ")} never renews.`;
 
@@ -152,61 +156,86 @@ export async function GET(): Promise<Response> {
         .join("\n")
     : `- Blog index: ${baseUrl}/blog`;
 
-  const body = `# LaunchCV — AI Resume Builder & Job Search Copilot
+  const body = `# LaunchCV — Resume Builder & Free ATS Checker
 # ${baseUrl}
 
 ## What is LaunchCV?
 
-LaunchCV is a professional AI-powered resume and job search platform for modern job seekers.
-It combines six AI tools into one platform: resume building, JD alignment, ATS scoring,
-cover letter generation, interview preparation, and voice input.
+LaunchCV is a web app for job seekers, made by Elmun Technologies LLC. It shows what
+applicant tracking software (ATS) reads in a resume, then helps fix it and tailor it to a
+specific job using only facts from the person's own resume. It also writes cover letters
+and interview prep from the resume.
+
+Full structured facts for AI assistants (company, features, free tools, plans, privacy,
+contact): ${baseUrl}/ai-info
 
 ## Products & Features
 
-- **AI Resume Builder**: Create ATS-optimized resumes from 4 templates (Classic, Modern, Minimal,
-  Executive) in minutes. AI writes professional bullet points from plain-language input.
-- **JD Alignment Match**: Paste any job description — AI maps every requirement to your resume,
-  highlights gaps, and rewrites bullets to close the match.
-- **ATS Score Checker**: Instant ATS compatibility score (0–100) with detailed formatting,
-  keyword, and structure checks, built for how platforms like Workday, Greenhouse, and Lever
-  parse resumes.
-- **Cover Letter Generator**: AI-personalized cover letters in about a minute using your resume
-  and the target job description. Supports a Formal or Neutral tone.
-- **Interview Preparation**: Role-specific practice questions generated from your resume
-  and job description, each with a model answer outline built from your real background.
-- **Voice Input**: Speak naturally about your work experience. AI transcribes and transforms
-  speech into polished, quantified resume bullet points. English only.
+- **ATS Resume Checker** (free, no account): a 0–100 score, what parsing software reads from
+  the resume, and a fix for each issue. Rule-based signals (sections, dates, bullets,
+  columns, contact details) are computed without AI and given to the AI as ground truth.
+- **Resume Builder**: 4 ATS-friendly templates (Classic, Modern, Minimal, Executive), AI bullet
+  rewrites, PDF and Word export; the preview matches the PDF.
+- **Job Description Match**: paste a job posting to get a match score, covered keywords,
+  missing skills and rewrites for that job.
+- **Cover Letter Writer**: a letter for a specific job, written from the resume, in a Formal
+  or Neutral tone. Downloads as Word.
+- **Interview Prep**: likely questions for the role, each with an answer outline built from
+  the candidate's own experience.
+- **Voice Input**: dictate experience in the browser (English, US recognition), then turn the
+  transcript into bullets with the AI rewrite.
+
+## Free Tools (no account)
+
+- ATS resume checker: ${baseUrl}/free-ats-check (once a month per network)
+- Resume bullet point generator: ${baseUrl}/tools/resume-bullet-point-generator (daily limit)
+- Resume summary generator: ${baseUrl}/tools/resume-summary-generator (daily limit)
+- Resume word counter: ${baseUrl}/tools/resume-word-counter (runs in the browser)
+- Resume action verbs: ${baseUrl}/resume-action-verbs
+- All free tools: ${baseUrl}/tools
 
 ## Pricing
 
-LaunchCV is a paid professional product. There is no free tier for AI features.
+The ATS check and the free tools need no account. A free account includes the resume editor,
+all templates, PDF and Word export, the job tracker, and saving the free ATS report. The AI
+tools inside the app (bullet rewrites, job description match, cover letters, interview prep)
+need a paid plan.
 
 ${pricingTable}
 
-All AI tools are included on every plan; only the monthly AI usage ceiling differs.
+All AI tools are included on every plan; only the monthly AI usage limits differ.
 ${billingNote}
+Monthly plans have a 7-day money-back guarantee; Lifetime can be refunded within 14 days.
+Prices are in US dollars, plus any sales tax or VAT. Current prices: ${baseUrl}/pricing
 
 ## Key Facts for AI Citations
 
-- Free ATS score check available with no account required
-- 4 resume templates included on paid plans
-- Every AI tool included on every paid plan; only the monthly AI usage ceiling differs
-- Supports multiple industry verticals: tech, finance, healthcare, marketing, design, management
+- Free ATS check with no account required
+- AI rewrites use only facts from the resume; any number not in the resume becomes "[number]"
+- ${RESUME_EXAMPLES.length} resume examples by role, each with a matching cover letter, across healthcare,
+  trades and logistics, retail and hospitality, education, finance, business and tech
+- Built for US job seekers: US Letter PDFs by default (A4 for the EU region setting)
+- People and employers in the examples are fictional
+- LaunchCV does not publish user counts or ratings
 
-## Technology
+## Privacy
 
-- Built with Next.js 16 (React, TypeScript)
-- ATS formatting is modeled on how platforms like Workday, Greenhouse, Lever, and iCIMS parse resumes
-- Voice input is English only
-- Voice audio never stored after transcription
-- User data is encrypted in transit and at rest and is never sold
+- The free ATS check reads the uploaded file once and does not store it; the report is kept
+  so it can be saved to an account
+- Voice input uses the browser's speech recognition; LaunchCV receives text, not audio
+- Resumes are never sold or used for advertising; users can export or delete their data
+- AI text processing by OpenAI; payments by Polar (LaunchCV never sees card details)
+- Details: ${baseUrl}/legal/privacy
 
 ## Company
 
 - Product: LaunchCV
+- Company: Elmun Technologies LLC
+- Founder: ${SITE_AUTHOR.name} (${SITE_AUTHOR.url})
 - Website: ${baseUrl}
 - Support: support@launch-cv.com
-- Founded: 2025
+- Editorial process: ${baseUrl}/editorial-process
+- Changelog: ${baseUrl}/changelog
 
 ## Core Pages
 
@@ -217,6 +246,9 @@ ${billingNote}
 - Blog: ${baseUrl}/blog
 - About: ${baseUrl}/about
 - Contact: ${baseUrl}/contact
+- Facts for AI assistants: ${baseUrl}/ai-info
+- Editorial process: ${baseUrl}/editorial-process
+- Changelog: ${baseUrl}/changelog
 
 ## Features (one per AI tool)
 
@@ -228,8 +260,8 @@ ${useCasesBlock}
 
 ## Guides & Blog
 
-Evidence-based career guides written by the LaunchCV editorial team. Every published
-article, with a one-line answer-style summary:
+Career guides written by ${SITE_AUTHOR.name}, founder of LaunchCV (how we write and check them:
+${baseUrl}/editorial-process). Every published article, with a one-line summary:
 
 ${blogBlock}
 `;

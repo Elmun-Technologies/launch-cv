@@ -147,7 +147,7 @@ export default function CompareAtsCheckersPage() {
             </p>
             <p className="mt-3 text-[13px] text-[#66647c] sm:text-[14px] lg:mt-[18px]">
               By{" "}
-              <Link href="/about" className="lc-link hover:text-[#5440e8]">
+              <Link href={SITE_AUTHOR.path} rel="author" className="lc-link hover:text-[#5440e8]">
                 {SITE_AUTHOR.name}
               </Link>{" "}
               · Updated <time dateTime={UPDATED}>{UPDATED_LABEL}</time>
