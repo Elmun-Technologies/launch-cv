@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
 import { AdminShell } from "@/components/admin-shell";
 import { SectionCard } from "@/components/admin/section-card";
+import { StatusBadge } from "@/components/admin/status-badge";
+import { adminH1, adminLink } from "@/components/admin/admin-ui";
 import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
 import { planIdFromVariantId } from "@/lib/plans";
 import { productIdForCheckoutPlan } from "@/lib/polar";
@@ -129,16 +130,18 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
 
   return (
     <AdminShell email={admin.email} pageTitle="Overview">
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-5">
+      <div className="mx-auto flex max-w-[1280px] flex-col gap-[18px]">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-[24px] font-semibold tracking-[-0.02em]">Overview</h1>
-          <nav aria-label="Range" className="flex gap-1 rounded-full bg-[#F0F0EE] p-[3px] text-[13px]">
+          <h1 className={adminH1}>Overview</h1>
+          <nav aria-label="Date range" className="flex gap-1 rounded-full bg-white p-1">
             {RANGES.map((r) => (
               <Link
                 key={r}
                 href={`/admin-panel?range=${r}`}
                 aria-current={r === range ? "page" : undefined}
-                className={`rounded-full px-3 py-1.5 ${r === range ? "bg-white shadow-[0_1px_2px_rgba(0,0,0,0.08)]" : "text-[#3F3F3F]"}`}
+                className={`inline-flex min-h-[44px] items-center rounded-full px-3.5 text-[13px] sm:min-h-[36px] font-bold transition-colors ${
+                  r === range ? "bg-[#111118] text-white" : "text-[#4a4862] hover:bg-[#f1eff8] hover:text-[#121226]"
+                }`}
               >
                 {r} days
               </Link>
@@ -147,74 +150,84 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
         </div>
 
         {problems.length > 0 ? (
-          <div role="alert" className="rounded-xl border border-[#F6D3CD] bg-[#FDF2F0] px-4 py-3 text-[14px]">
-            <p className="font-semibold text-[#111111]">Setup issues that block revenue</p>
-            <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-[#3F3F3F]">
-              {problems.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
+          <div role="alert" className="flex flex-col gap-3 rounded-[20px] bg-[#fbe2e3] px-5 py-4 text-[#8f1d22] sm:flex-row sm:items-start">
+            <div className="min-w-0 flex-1">
+              <p className="text-[15px] font-bold">Setup issues that block revenue</p>
+              <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-[14px] leading-[1.5]">
+                {problems.map((p) => (
+                  <li key={p}>{p}</li>
+                ))}
+              </ul>
+            </div>
+            <Link href="/admin-panel/integrations" className="lc-link shrink-0 self-start text-[14px] font-extrabold text-[#8f1d22]">
+              Fix in Integrations →
+            </Link>
           </div>
         ) : null}
 
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-          {kpis.map((k) => (
-            <div key={k.l} className="rounded-[14px] border border-[#E5E5E2] bg-white px-[18px] py-4">
-              <p className="text-[13px] text-[#6B6B6B]">{k.l}</p>
-              <p className="mt-1.5 text-[26px] font-semibold tracking-[-0.02em] [font-feature-settings:'tnum']">{k.v}</p>
-              <p className="mt-0.5 text-[12px] text-[#6B6B6B]">{k.d}</p>
+          {kpis.map((k, i) => (
+            <div
+              key={k.l}
+              className={`min-w-0 rounded-[22px] p-5 ${i === 0 ? "col-span-2 bg-[#5440e8] text-white lg:col-span-1" : "bg-white"}`}
+            >
+              <p className={`text-[13px] ${i === 0 ? "text-[#e4dfff]" : "text-[#4a4862]"}`}>{k.l}</p>
+              <p className="mt-1.5 truncate text-[26px] font-extrabold leading-[1.15] tracking-[-0.03em] tabular-nums sm:text-[34px]">{k.v}</p>
+              <p className={`mt-0.5 text-[12px] font-semibold ${i === 0 ? "text-[#e4dfff]" : "text-[#66647c]"}`}>{k.d}</p>
             </div>
           ))}
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-          <div className="rounded-[14px] border border-[#E5E5E2] bg-white p-5">
-            <div className="flex items-baseline justify-between">
-              <h2 className="text-[16px] font-semibold">Funnel · last {range} days</h2>
-              <span className="text-[13px] text-[#6B6B6B]">Where people drop off</span>
-            </div>
-            <div className="mt-4 flex flex-col gap-3.5 text-[14px]">
-              {funnel.map((f, i) => (
-                <div key={f.l}>
-                  <p className="flex justify-between">
-                    <span>{f.l}</span>
-                    <span className="[font-feature-settings:'tnum']">
-                      {f.n.toLocaleString()}
-                      {f.of !== null && f.n <= f.of ? <span className="text-[#6B6B6B]"> · {pct(f.n, f.of)}</span> : null}
-                    </span>
-                  </p>
-                  <div className="mt-1.5 h-[26px] rounded-md bg-[#F5F5F3]">
-                    <div
-                      className={`h-[26px] rounded-md ${i === funnel.length - 1 ? "bg-[#2563EB]" : ["bg-[#111111]", "bg-[#3F3F3F]", "bg-[#6B6B6B]"][i]}`}
-                      style={{ width: `${Math.max(f.n > 0 ? 2 : 0, (f.n / top) * 100)}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-4 text-[12px] leading-[1.5] text-[#6B6B6B]">
-              Sign-ups include people who didn&apos;t run a check first. AI calls this month: {aiCalls.toLocaleString()}.
-            </p>
+        <section className="lc-card rounded-[24px] p-5 sm:p-6">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h2 className="text-[18px] font-extrabold tracking-[-0.01em]">Where people drop off</h2>
+            <span className="text-[13px] text-[#66647c]">Funnel · last {range} days</span>
           </div>
+          <ol className="mt-3">
+            {funnel.map((f) => (
+              <li
+                key={f.l}
+                className="grid grid-cols-[1fr_auto] items-center gap-x-3.5 gap-y-1.5 py-2.5 sm:grid-cols-[200px_1fr_120px]"
+              >
+                <span className="text-[14px] font-bold">{f.l}</span>
+                <span className="text-right text-[14px] tabular-nums sm:order-last">
+                  <b>{f.n.toLocaleString()}</b>
+                  {f.of !== null && f.n <= f.of ? <span className="text-[#66647c]"> {pct(f.n, f.of)}</span> : null}
+                </span>
+                <div className="col-span-2 h-7 overflow-hidden rounded-lg bg-[#f1eff8] sm:col-span-1" aria-hidden>
+                  <div
+                    className="h-full rounded-lg bg-[#5440e8]"
+                    style={{ width: `${Math.max(f.n > 0 ? 2 : 0, (f.n / top) * 100)}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-3 text-[12px] leading-[1.5] text-[#66647c]">
+            Sign-ups include people who didn&apos;t run a check first. AI calls this month: {aiCalls.toLocaleString()}.
+          </p>
+        </section>
 
-          <SectionCard
-            title="Recent sign-ups"
-            flush
-            action={
-              <Link href="/admin-panel/users" className="inline-flex items-center gap-1 text-[13px] text-[#1D4ED8] underline decoration-[#1D4ED8]/30 underline-offset-2 hover:decoration-[#1D4ED8]">
-                All users <ArrowRight className="h-3 w-3" />
-              </Link>
-            }
-          >
-            {recentUsers.length === 0 ? (
-              <p className="px-5 py-8 text-center text-[13px] text-[#6E6E6A]">No users yet.</p>
-            ) : (
-              <table className="w-full text-[14px]">
+        <SectionCard
+          title="Recent sign-ups"
+          flush
+          action={
+            <Link href="/admin-panel/users" className={`${adminLink} text-[14px]`}>
+              All users →
+            </Link>
+          }
+        >
+          {recentUsers.length === 0 ? (
+            <p className="px-6 py-10 text-center text-[14px] text-[#66647c]">No users yet.</p>
+          ) : (
+            <div className="relative overflow-x-auto">
+              <table className="w-full min-w-[520px] text-[14px]">
                 <thead>
-                  <tr className="text-left text-[#6B6B6B]">
-                    <th className="px-5 py-2.5 font-medium">User</th>
-                    <th className="py-2.5 font-medium">Source</th>
-                    <th className="py-2.5 pr-5 font-medium">Plan</th>
+                  <tr className="text-left text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">
+                    <th scope="col" className="py-3 pl-5 pr-3 font-bold sm:pl-6">User</th>
+                    <th scope="col" className="px-3 py-3 font-bold">Source</th>
+                    <th scope="col" className="px-3 py-3 font-bold">Plan</th>
+                    <th scope="col" className="py-3 pl-3 pr-5 text-right font-bold sm:pr-6">Joined</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -225,25 +238,27 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
                         ? planOf(s.stripePriceId)
                         : "none";
                     return (
-                      <tr key={u.id} className="border-t border-[#EEEEEB]">
-                        <td className="max-w-[220px] px-5 py-2.5">
-                          <Link href={`/admin-panel/users/${u.id}`} className="block truncate hover:text-[#1D4ED8]">
+                      <tr key={u.id} className="border-t border-[#e2e0ea]">
+                        <td className="max-w-[300px] py-3 pl-5 pr-3 sm:pl-6">
+                          <Link href={`/admin-panel/users/${u.id}`} className="block truncate font-bold hover:text-[#5440e8]">
                             {u.email}
                           </Link>
-                          <span className="text-[12px] text-[#6E6E6A]">{dateFmt.format(u.createdAt)}</span>
                         </td>
-                        <td className="py-2.5 text-[#3F3F3F]">{u.googleId ? "Google" : "Email"}</td>
-                        <td className={`py-2.5 pr-5 ${plan === "none" ? "text-[#6B6B6B]" : ""}`}>
-                          {plan === "none" ? "Free" : PUBLIC_PLANS[plan].title}
+                        <td className="px-3 py-3 text-[#4a4862]">{u.googleId ? "Google" : "Email"}</td>
+                        <td className="px-3 py-3">
+                          <StatusBadge tone={plan === "none" ? "default" : "violet"}>
+                            {plan === "none" ? "Free" : PUBLIC_PLANS[plan].title}
+                          </StatusBadge>
                         </td>
+                        <td className="whitespace-nowrap py-3 pl-3 pr-5 text-right text-[#66647c] sm:pr-6">{dateFmt.format(u.createdAt)}</td>
                       </tr>
                     );
                   })}
                 </tbody>
               </table>
-            )}
-          </SectionCard>
-        </div>
+            </div>
+          )}
+        </SectionCard>
       </div>
     </AdminShell>
   );

@@ -37,15 +37,17 @@ export function DataTable<T>({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E5E5E2] bg-white">
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-[13px]">
-          <thead className="bg-[#FAFAF9]">
+    <div className="lc-card min-w-0 overflow-hidden rounded-[24px]">
+      {/* Wide tables scroll inside the card, never the page. */}
+      <div className="relative overflow-x-auto">
+        <table className="w-full border-collapse text-[14px]">
+          <thead>
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
-                  className={`whitespace-nowrap border-b border-[#E5E5E2] px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-[#3F3F3F] ${
+                  scope="col"
+                  className={`whitespace-nowrap px-3 py-3.5 text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c] first:pl-5 last:pr-5 sm:first:pl-6 sm:last:pr-6 ${
                     col.align === "right" ? "text-right" : "text-left"
                   }`}
                 >
@@ -60,9 +62,7 @@ export function DataTable<T>({
               return (
                 <tr
                   key={rowKey(row)}
-                  className={`border-b border-[#E5E5E2] last:border-b-0 ${
-                    href ? "cursor-pointer hover:bg-[#FAFAF9]" : ""
-                  }`}
+                  className={`border-t border-[#e2e0ea] transition-colors ${href ? "cursor-pointer hover:bg-[#f7f6fb]" : ""}`}
                   onClick={
                     href
                       ? () => {
@@ -74,9 +74,9 @@ export function DataTable<T>({
                   {columns.map((col) => (
                     <td
                       key={col.key}
-                      className={`px-4 py-3 text-[#111111] ${col.align === "right" ? "text-right" : ""} ${
-                        col.truncate ? `${col.truncate} truncate` : ""
-                      }`}
+                      className={`px-3 py-3.5 align-middle text-[#121226] first:pl-5 last:pr-5 sm:first:pl-6 sm:last:pr-6 ${
+                        col.align === "right" ? "text-right tabular-nums" : ""
+                      } ${col.truncate ? `${col.truncate} truncate` : ""}`}
                     >
                       {col.render(row)}
                     </td>
@@ -111,33 +111,22 @@ export function Pagination({
   const start = total === 0 ? 0 : (page - 1) * pageSize + 1;
   const end = Math.min(page * pageSize, total);
 
+  const btn = (enabled: boolean) =>
+    `inline-flex min-h-[44px] items-center rounded-full px-4 text-[13px] font-bold transition sm:min-h-[38px] ${
+      enabled ? "bg-white text-[#121226] ring-1 ring-inset ring-[#e2e0ea] hover:bg-[#f1eff8]" : "pointer-events-none bg-transparent text-[#9d9bb3] ring-1 ring-inset ring-[#e2e0ea]"
+    }`;
+
   return (
-    <div className="mt-4 flex items-center justify-between text-[12px] text-[#6B6B6B]">
+    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-[13px] text-[#4a4862]">
       <p>
-        Showing <span className="font-semibold text-[#111111]">{start}–{end}</span> of{" "}
-        <span className="font-semibold text-[#111111]">{total.toLocaleString()}</span>
+        Showing <span className="font-bold text-[#121226]">{start}–{end}</span> of{" "}
+        <span className="font-bold text-[#121226]">{total.toLocaleString()}</span>
       </p>
-      <div className="flex items-center gap-1">
-        <a
-          href={prevHref ?? undefined}
-          aria-disabled={!prevHref}
-          className={`rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold transition ${
-            prevHref
-              ? "text-[#111111] hover:bg-[#FAFAF9]"
-              : "pointer-events-none text-[#D9D9D5]"
-          }`}
-        >
+      <div className="flex items-center gap-2">
+        <a href={prevHref ?? undefined} aria-disabled={!prevHref} className={btn(!!prevHref)}>
           Previous
         </a>
-        <a
-          href={nextHref ?? undefined}
-          aria-disabled={!nextHref}
-          className={`rounded-md border border-[#E5E5E2] bg-white px-3 py-1 font-semibold transition ${
-            nextHref
-              ? "text-[#111111] hover:bg-[#FAFAF9]"
-              : "pointer-events-none text-[#D9D9D5]"
-          }`}
-        >
+        <a href={nextHref ?? undefined} aria-disabled={!nextHref} className={btn(!!nextHref)}>
           Next
         </a>
       </div>
