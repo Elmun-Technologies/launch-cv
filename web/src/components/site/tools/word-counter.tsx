@@ -1,9 +1,38 @@
 "use client";
 
-import { useDeferredValue, useEffect, useId, useMemo, useState } from "react";
-import { analyzeResumeText, formatReading, LONG_BULLET_WORDS, pageVerdict, wordVerdict } from "@/lib/seo/resume-text-stats";
+import { useDeferredValue, useEffect, useId, useMemo, useRef, useState } from "react";
+import { analyzeResumeText, FILLER_PHRASES, formatReading, LONG_BULLET_WORDS, pageVerdict, wordVerdict } from "@/lib/seo/resume-text-stats";
 
 const MAX_CHARS = 30_000;
+
+/**
+ * Shared box metrics for the textarea and the highlight layer behind it: any
+ * difference in font, padding, border or scrollbar width would shift the marks.
+ */
+const boxCls =
+  "rounded-[18px] border-[1.5px] px-4 py-4 text-[16px] leading-[1.6] whitespace-pre-wrap [overflow-wrap:break-word] [scrollbar-gutter:stable] sm:text-[14px] lg:px-[22px] lg:py-5";
+
+/** The text split into plain runs and filler-phrase runs (overlapping matches merged). */
+function fillerSegments(text: string): { text: string; mark: boolean }[] {
+  const ranges: [number, number][] = [];
+  for (const f of FILLER_PHRASES) {
+    for (const m of text.matchAll(new RegExp(f.pattern.source, f.pattern.flags))) {
+      if (m[0]) ranges.push([m.index, m.index + m[0].length]);
+    }
+  }
+  ranges.sort((a, b) => a[0] - b[0]);
+  const out: { text: string; mark: boolean }[] = [];
+  let at = 0;
+  for (const [start, end] of ranges) {
+    if (end <= at) continue;
+    const from = Math.max(start, at);
+    if (from > at) out.push({ text: text.slice(at, from), mark: false });
+    out.push({ text: text.slice(from, end), mark: true });
+    at = end;
+  }
+  if (at < text.length) out.push({ text: text.slice(at), mark: false });
+  return out;
+}
 
 function Tile({ label, value, note }: { label: string; value: string; note: string }) {
   return (
@@ -24,6 +53,11 @@ export function WordCounter() {
   const deferred = useDeferredValue(text);
   const s = useMemo(() => analyzeResumeText(deferred), [deferred]);
   const [announce, setAnnounce] = useState("");
+  const segments = useMemo(() => fillerSegments(text), [text]);
+  const layerRef = useRef<HTMLDivElement>(null);
+  const syncScroll = (el: HTMLTextAreaElement) => {
+    if (layerRef.current) layerRef.current.scrollTop = el.scrollTop;
+  };
 
   // One calm screen-reader summary after typing pauses, not one per keystroke.
   useEffect(() => {
@@ -53,17 +87,41 @@ export function WordCounter() {
             Clear
           </button>
         </div>
-        <textarea
-          id={`${id}-text`}
-          value={text}
-          onChange={(e) => setText(e.target.value.slice(0, MAX_CHARS))}
-          aria-describedby={`${id}-privacy`}
-          spellCheck={false}
-          placeholder={"Paste your resume here — keep the bullets as they are.\n\n• Led a weekly …\n• Cut response time …"}
-          className="mt-1.5 h-[300px] w-full flex-1 resize-y rounded-[18px] border-[1.5px] border-[#e2e0ea] bg-white px-4 py-4 text-[16px] leading-[1.6] text-[#24223a] transition-colors placeholder:text-[#66647c] hover:border-[#c9c0ff] focus:border-[#5440e8] sm:text-[14px] lg:h-[440px] lg:px-[22px] lg:py-5"
-        />
+        {/* Filler phrases are highlighted on a layer behind a transparent textarea with the same box metrics. */}
+        <div className="relative mt-1.5 flex flex-col rounded-[18px] bg-white lg:flex-1">
+          <div
+            ref={layerRef}
+            aria-hidden="true"
+            className={`${boxCls} pointer-events-none absolute inset-0 overflow-hidden border-transparent text-transparent`}
+          >
+            {segments.map((seg, i) =>
+              seg.mark ? (
+                <mark key={i} className="rounded-[3px] bg-[#fdf0d5] text-transparent shadow-[0_0_0_1.5px_#fdf0d5]">
+                  {seg.text}
+                </mark>
+              ) : (
+                <span key={i}>{seg.text}</span>
+              ),
+            )}
+            {/* Keeps the height of a trailing newline, as the textarea does. */}
+            {"​"}
+          </div>
+          <textarea
+            id={`${id}-text`}
+            value={text}
+            onChange={(e) => {
+              setText(e.target.value.slice(0, MAX_CHARS));
+              syncScroll(e.target);
+            }}
+            onScroll={(e) => syncScroll(e.currentTarget)}
+            aria-describedby={`${id}-privacy`}
+            spellCheck={false}
+            placeholder={"Paste your resume here — keep the bullets as they are.\n\n• Led a weekly …\n• Cut response time …"}
+            className={`${boxCls} relative h-[300px] w-full resize-y lg:flex-1 overflow-auto border-[#e2e0ea] bg-transparent text-[#24223a] transition-colors placeholder:text-[#66647c] hover:border-[#c9c0ff] focus:border-[#5440e8] lg:h-[440px]`}
+          />
+        </div>
         <p id={`${id}-privacy`} className="mt-2.5 text-[12px] text-[#66647c]">
-          Counted in your browser — nothing is uploaded or saved.
+          Counted in your browser — nothing is uploaded or saved. Filler phrases are highlighted in the text.
         </p>
       </div>
 

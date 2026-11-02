@@ -27,32 +27,37 @@ export function Spinner() {
 export function CopyButton({ text, label }: { text: string; label: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <button
-      type="button"
-      aria-label={copied ? `${label} copied` : `Copy ${label}`}
-      onClick={async () => {
-        try {
-          await navigator.clipboard.writeText(text);
-          setCopied(true);
-          window.setTimeout(() => setCopied(false), 2000);
-        } catch {
-          setCopied(false);
-        }
-      }}
-      className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-white/10 px-3.5 text-[13px] font-bold text-white transition-colors hover:bg-white/20"
-    >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        {copied ? (
-          <path d="m5 12 5 5 9-10" />
-        ) : (
-          <>
-            <rect x="9" y="9" width="11" height="11" rx="2" />
-            <path d="M5 15V6a2 2 0 0 1 2-2h9" />
-          </>
-        )}
-      </svg>
-      <span aria-hidden="true">{copied ? "Copied" : "Copy"}</span>
-    </button>
+    <>
+      <button
+        type="button"
+        aria-label={copied ? `${label} copied` : `Copy ${label}`}
+        onClick={async () => {
+          try {
+            await navigator.clipboard.writeText(text);
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 2000);
+          } catch {
+            setCopied(false);
+          }
+        }}
+        className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-white/10 px-3.5 text-[13px] font-bold text-white transition-colors hover:bg-white/20"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          {copied ? (
+            <path d="m5 12 5 5 9-10" />
+          ) : (
+            <>
+              <rect x="9" y="9" width="11" height="11" rx="2" />
+              <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+            </>
+          )}
+        </svg>
+        <span aria-hidden="true">{copied ? "Copied" : "Copy"}</span>
+      </button>
+      <span className="sr-only" aria-live="polite">
+        {copied ? `${label} copied` : ""}
+      </span>
+    </>
   );
 }
 

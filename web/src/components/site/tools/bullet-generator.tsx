@@ -61,7 +61,7 @@ export function BulletGenerator({ limit, paused }: { limit: number; paused: bool
     <div className="lc-float mx-auto grid max-w-[1100px] overflow-hidden rounded-[26px] bg-white lg:grid-cols-2 lg:rounded-[36px]">
       <form onSubmit={onSubmit} noValidate className="p-[18px] sm:p-7 lg:p-9" aria-describedby={`${id}-promise`}>
         {paused ? <PausedNote /> : null}
-        <div className="grid gap-2.5 sm:grid-cols-2">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,8.5rem)] gap-2 sm:grid-cols-2 sm:gap-2.5">
           <div>
             <label htmlFor={`${id}-role`} className={fieldLabel}>
               Job title
@@ -72,7 +72,7 @@ export function BulletGenerator({ limit, paused }: { limit: number; paused: bool
               onChange={(e) => setRole(e.target.value)}
               maxLength={BULLET_LIMITS.role}
               autoComplete="organization-title"
-              placeholder="e.g. Customer Service Rep"
+              placeholder="e.g. Support Rep"
               required
               className={fieldCls}
             />
@@ -90,7 +90,7 @@ export function BulletGenerator({ limit, paused }: { limit: number; paused: bool
             </select>
           </div>
         </div>
-        <div className="mt-3.5">
+        <div className="mt-2.5 sm:mt-3.5">
           <label htmlFor={`${id}-duty`} className={fieldLabel}>
             What did you do?
           </label>
@@ -99,20 +99,20 @@ export function BulletGenerator({ limit, paused }: { limit: number; paused: bool
             value={duty}
             onChange={(e) => setDuty(e.target.value)}
             maxLength={BULLET_LIMITS.duty}
-            rows={5}
+            rows={4}
             required
             aria-describedby={`${id}-duty-hint`}
             placeholder="Say it the way you'd tell a friend — one duty or result."
-            className={`${fieldCls} min-h-[132px] resize-y lg:min-h-[150px]`}
+            className={`${fieldCls} min-h-[120px] resize-y sm:min-h-[132px] lg:min-h-[150px]`}
           />
-          <p id={`${id}-duty-hint`} className="mt-1.5 flex justify-between gap-3 text-[12px] text-[#66647c]">
+          <p id={`${id}-duty-hint`} className="mt-1.5 flex justify-between gap-3 text-[12px] text-[#66647c] max-sm:sr-only">
             <span>One duty or accomplishment at a time works best.</span>
             <span aria-hidden="true">
               {duty.length}/{BULLET_LIMITS.duty}
             </span>
           </p>
         </div>
-        <div className="mt-3">
+        <div className="mt-2.5 sm:mt-3">
           <label htmlFor={`${id}-metric`} className={fieldLabel}>
             Number or result <span className="font-medium text-[#66647c]">(optional)</span>
           </label>
@@ -130,15 +130,15 @@ export function BulletGenerator({ limit, paused }: { limit: number; paused: bool
           </p>
         </div>
 
-        <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p id={`${id}-promise`} className="text-center text-[13px] text-[#4a4862] sm:text-left">
+        <div className="mt-3 flex flex-col-reverse gap-2.5 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <p id={`${id}-promise`} className="text-[13px] text-[#4a4862] sm:text-left">
             Free · {limit} a day · no account · uses only what you typed
           </p>
           <button
             type="submit"
             disabled={loading || paused}
             aria-busy={loading}
-            className={`${toolBtn} w-full bg-[#5440e8] text-white hover:bg-[#4430d6] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto`}
+            className={`${toolBtn} w-full shrink-0 whitespace-nowrap bg-[#5440e8] text-white hover:bg-[#4430d6] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto`}
           >
             {loading ? <Spinner /> : <SparkIcon />}
             {loading ? "Writing…" : "Generate bullets"}

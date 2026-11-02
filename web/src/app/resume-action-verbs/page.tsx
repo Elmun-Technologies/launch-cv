@@ -71,7 +71,7 @@ export default function ActionVerbsPage() {
         crumb="Action verbs"
         title={`${VERB_COUNT} resume action verbs.`}
         muted="Grouped by what you did."
-        lead={`Replace “responsible for” with a verb that says what changed. ${GROUP_COUNT} skill areas, an example bullet for every verb — click a verb to copy it.`}
+        lead={`Replace “responsible for” with a verb that says what changed. ${GROUP_COUNT} skill areas. Click any verb to copy it and see an example bullet.`}
       />
 
       <section className={`${container} pt-7 lg:pt-10`}>

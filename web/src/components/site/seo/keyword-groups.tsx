@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { KeywordGroup } from "@/lib/seo/resume-keywords";
 
 /**
@@ -6,11 +7,20 @@ import type { KeywordGroup } from "@/lib/seo/resume-keywords";
  * not the color alone).
  */
 export function KeywordGroups({ groups, sampleOwner }: { groups: KeywordGroup[]; sampleOwner: string }) {
-  const cols = groups.length >= 4 ? "lg:grid-cols-4" : groups.length === 3 ? "lg:grid-cols-3" : "lg:grid-cols-2";
+  /*
+   * One wrapping row instead of equal columns: each card grows in proportion
+   * to its chip count, so a one-chip group sits as a narrow card beside a big
+   * one rather than as a mostly empty column, and cards in a row share a height.
+   */
   return (
-    <div className={`grid items-start gap-2.5 sm:grid-cols-2 sm:gap-3.5 ${cols}`}>
+    <div className="flex flex-wrap gap-2.5 sm:gap-3.5">
       {groups.map((g) => (
-        <section key={g.id} aria-labelledby={`kw-${g.id}`} className="lc-card rounded-[22px] p-[18px] sm:rounded-[26px] sm:p-6">
+        <section
+          key={g.id}
+          aria-labelledby={`kw-${g.id}`}
+          style={{ "--kw-grow": Math.max(g.items.length, 2), "--kw-basis": g.items.length > 6 ? "340px" : "220px" } as CSSProperties}
+          className="lc-card min-w-0 basis-full rounded-[22px] p-[18px] sm:basis-(--kw-basis) sm:grow-(--kw-grow) sm:rounded-[26px] sm:p-6"
+        >
           <h3 id={`kw-${g.id}`} className="text-[13px] font-extrabold uppercase tracking-[0.08em] text-[#66647c]">
             {g.label} <span className="font-semibold normal-case tracking-normal">· {g.items.length}</span>
           </h3>

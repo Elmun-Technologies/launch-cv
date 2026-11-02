@@ -169,7 +169,12 @@ export function SettingsClient({
                     Verified
                   </Badge>
                 ) : (
-                  <Badge tone="amber">Not verified</Badge>
+                  <span className="flex items-center gap-2">
+                    <Badge tone="amber">Not verified</Badge>
+                    <Link href="/auth/verify-email" className={`${inlineLinkCls} text-[13px]`}>
+                      Verify now
+                    </Link>
+                  </span>
                 )}
               </p>
               <p

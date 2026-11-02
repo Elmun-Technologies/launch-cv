@@ -82,7 +82,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
   const related = e.related.map(getKeywordRole).filter((x) => !!x);
   const url = absoluteUrl(`/resume-keywords/${e.slug}`);
   const exampleHref = `/resume-examples/${e.slug}`;
-  const lead = `The ${total} skills, tools${groups.some((g) => g.id === "credentials") ? " and credentials" : ""} that come up in ${role} job posts, sorted by type, and how to put them in bullets a recruiter believes.`;
+  const lead = `The ${total} ${groups.some((g) => g.id === "credentials") ? "skills, tools and credentials" : "skills and tools"} that come up in ${role} job posts, sorted by type, and how to put them in bullets a recruiter believes.`;
 
   const ld = {
     "@context": "https://schema.org",

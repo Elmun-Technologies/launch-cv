@@ -12,17 +12,43 @@ export const toolSectionPad = "pt-[72px] lg:pt-[130px]";
 const ctaBtn = "lc-btn-lift motion-reduce:hover:transform-none inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-[26px] py-[15px] text-[16px] font-semibold";
 
 /** Centered hero: breadcrumb, the page's one H1, and a lead line. */
-export function ToolHero({ crumb, title, muted, lead }: { crumb: string; title: string; muted: string; lead: ReactNode }) {
+export function ToolHero({
+  crumb,
+  title,
+  muted,
+  lead,
+  mobileLead,
+  mobileLeft = false,
+}: {
+  crumb: string;
+  title: string;
+  muted: string;
+  lead: ReactNode;
+  /** Shorter lead below `sm`, so the tool starts higher on a phone. */
+  mobileLead?: ReactNode;
+  /** Left-align the hero below `sm` (the mobile tool canvases). */
+  mobileLeft?: boolean;
+}) {
+  const align = mobileLeft ? "text-left sm:text-center" : "text-center";
   return (
     <section className={`${container} pt-4 lg:pt-8`}>
-      <div className="mx-auto max-w-[1040px] text-center">
-        <div className="flex justify-center [&_ol]:justify-center">
+      <div className={`mx-auto max-w-[1040px] ${align}`}>
+        <div className={`flex ${mobileLeft ? "justify-start sm:justify-center sm:[&_ol]:justify-center" : "justify-center [&_ol]:justify-center"}`}>
           <Breadcrumbs items={[{ href: TOOLS_INDEX_PATH, label: "Free tools" }, { label: crumb }]} />
         </div>
         <h1 className="mt-4 text-[36px] font-extrabold leading-[1.06] tracking-[-0.045em] sm:text-[52px] lg:mt-[22px] lg:text-[64px] lg:leading-[66px]">
           {title} <span className="text-[#7c7a94]">{muted}</span>
         </h1>
-        <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862] lg:mt-[18px] lg:text-[18px] lg:leading-7">{lead}</p>
+        <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862] lg:mt-[18px] lg:text-[18px] lg:leading-7">
+          {mobileLead ? (
+            <>
+              <span className="sm:hidden">{mobileLead}</span>
+              <span className="hidden sm:inline">{lead}</span>
+            </>
+          ) : (
+            lead
+          )}
+        </p>
       </div>
     </section>
   );

@@ -8,6 +8,7 @@ import { FaqList } from "@/components/site/library/faq-list";
 import { CopyPill } from "@/components/site/library/copy-pill";
 import { ArrowCard } from "@/components/site/library/arrow-card";
 import { RoleNextSteps } from "@/components/site/seo/role-next-steps";
+import { ExampleResumeSheet } from "@/components/site/seo/example-resume-sheet";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
@@ -190,8 +191,8 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
         </div>
         <div className="mt-[18px] grid items-start gap-2.5 lg:mt-10 lg:grid-cols-[1.35fr_0.65fr] lg:gap-6">
           <div className="rounded-[24px] bg-[#5440e8] p-3.5 sm:p-8 lg:rounded-[36px] lg:p-10">
-            <div className="shadow-[0_30px_60px_-24px_rgba(10,6,60,.6)]">
-              <ResumePreview content={exampleToContent(e)} template="classic" />
+            <div className="sm:shadow-[0_30px_60px_-24px_rgba(10,6,60,.6)]">
+              <ExampleResumeSheet content={exampleToContent(e)} />
             </div>
           </div>
           <div className="flex flex-col gap-2.5 lg:gap-4">
