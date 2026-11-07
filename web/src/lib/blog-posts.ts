@@ -1087,6 +1087,164 @@ The practical difference is what happens after you pick a layout. Instead of sta
       { q: "What file format should I save my resume as?", a: "Save a text-based PDF unless the job application specifically asks for a Word document (.docx). A text-based PDF preserves your formatting while remaining fully readable by ATS software, as long as the underlying layout is single-column with no tables or embedded images of text." },
     ],
   },
+
+  {
+    slug: "thank-you-email-after-interview",
+    coverImage: "/images/product/interview-prep.svg",
+    coverAlt:
+      "LaunchCV AI interview prep scoring a STAR-method answer to a behavioral question with clarity, relevance, impact, and structure ratings.",
+    title: "Thank-You Email After an Interview: Timing, What to Say, and 3 Templates",
+    seoTitle: "Thank-You Email After an Interview: Timing & Templates",
+    description:
+      "When to send a thank-you email after an interview, what to include, what to avoid, and 3 original templates for a standard, panel, and second-round interview.",
+    date: "2026-11-07",
+    readingTime: 8,
+    category: "Interview Prep",
+    tags: [
+      "thank you email after interview",
+      "interview thank you note",
+      "post-interview email",
+      "interview follow-up email",
+      "job interview tips",
+    ],
+    seoDescription:
+      "A practical guide to the thank-you email after an interview — same-day vs. next-day timing, what to include, what to avoid, and 3 ready-to-adapt templates.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "Should you send a thank-you email after an interview?",
+        body: `Yes — for every interview, at every stage, to every interviewer you spoke with one-on-one. It costs ten minutes and it is the one piece of post-interview follow-up that is genuinely expected in a modern job search. Skipping it rarely sinks a strong candidacy, but sending a thoughtful one removes any doubt about your interest and gives you one more chance to make your case while the conversation is still fresh for everyone involved.
+
+Think of it less as etiquette and more as unfinished business. An interview is a conversation with gaps — a point you phrased badly, a tangent that cut off your strongest answer, a question you answered too generally because you were put on the spot. The thank-you email closes those gaps, not by writing a second interview, but by reinforcing the two or three points that actually matter to whoever writes up the feedback.`,
+      },
+      {
+        heading: "Timing: same day or the next morning?",
+        body: `Send it within 24 hours. Both same-day and next-morning work; which one reads better depends on when the interview happened, not on some fixed rule.
+
+- **Interview finished in the morning or early afternoon:** send it that evening, once you've had a little time to think it through rather than firing something off five minutes after you walk out.
+- **Interview finished late in the day:** it's fine — often better — to send it the next morning. A 9 or 10 a.m. email lands with the rest of that day's messages instead of competing with someone's commute home.
+- **Panel or multi-interview day:** send each person their note within 24 hours of meeting *them*, not 24 hours after the last person you spoke with that week. If you met four people across one Tuesday, four emails go out by Wednesday — not after you're back from the next round.
+
+What matters more than the exact hour is that it lands before a decision gets made. Some teams debrief the same afternoon; others take a week. You can't control that, so write it while the details are sharp and send it within a day so it reads as prompt, not an afterthought.`,
+      },
+      {
+        heading: "What to actually include",
+        body: `A good thank-you email does three things in well under 150 words: references something specific from the conversation, restates your interest in terms grounded in what you just heard, and — if something came up that could read as a concern — addresses it directly instead of hoping it gets forgotten.
+
+### A specific detail from the conversation
+
+Generic gratitude is forgettable. Specific gratitude is proof you were actually in the room and paying attention. Pick one real moment, not the small talk about the weather or the office dog:
+
+- A technical or operational problem they described, and how you'd approach it
+- A detail about the team's roadmap, or a project you'd likely inherit
+- A follow-up thought on something you answered, now that you've had time to think
+- Something the interviewer said about their own work that you want to build on
+
+"It was great meeting you" tells them nothing they didn't already know. "Your point about the backlog of manual QA checks stuck with me — it's close to the testing bottleneck I fixed at my last job, and I'd love to dig into that more if I join" tells them you were listening and already thinking ahead about the work.
+
+### A grounded restatement of interest
+
+Don't just say you're excited — say why, tied to something you learned during the conversation. "After hearing how the team is approaching the Q2 platform migration, I'm even more interested in this role" lands better than "I am very excited about this opportunity," mostly because the second sentence could have been written before the interview ever happened, and it reads that way.
+
+### Address any concern head-on
+
+If the interviewer pushed on a gap — a skill you haven't used recently, a tool you picked up on the job rather than formally, a stretch between your experience level and the role — don't leave it hanging and hope it quietly resolves itself. One or two sentences that acknowledge it and add context are worth far more than silence:
+
+"You asked about my experience leading a team directly rather than cross-functionally — I wanted to add that I ran point on hiring and weekly 1:1s for two contractors during our platform migration, even though 'manager' wasn't part of my title at the time."
+
+A sentence like that can genuinely move a borderline case. Interviewers often raise a concern out loud precisely because they're hoping you'll talk them out of it.`,
+      },
+      {
+        heading: "What to avoid",
+        body: `- **Don't restate your resume.** They already have it. Add new context, don't repeat your bullet points back to them.
+- **Don't write a second cover letter.** A few short paragraphs is plenty. If it takes more than 30–45 seconds to read, cut it down.
+- **Don't make salary, start date, or "next steps" the main point.** A brief, low-pressure offer — "happy to share references or a work sample" — is fine. A direct ask about compensation is not; save that for an actual offer.
+- **Don't send the exact same email to every panel interviewer.** If two of them compare notes and see identical phrasing, it reads as a template and undercuts the specificity that makes the email work.
+- **Don't open with a worn-out line.** "I am writing to express my gratitude for the opportunity to interview" and "thank you for taking time out of your busy schedule" are filler every reader has seen a hundred times. Open with the specific moment instead, and let the thanks follow it rather than lead.
+- **Don't send a second follow-up within 48 hours of your thank-you note if you don't hear back.** One note is enough; status requests follow whatever timeline the recruiter already gave you.`,
+      },
+      {
+        heading: "Template 1: Standard one-on-one interview",
+        body: `Use this after a single-interviewer conversation, first round or otherwise. Swap in one real detail from your conversation and one from your own background — the brackets are there to be replaced, not filled in loosely.
+
+**Subject: Following up on our conversation about [specific project or topic]**
+
+Hi [Name],
+
+Thanks for walking me through how the team's been handling [specific challenge they described] — the part about [one concrete detail, e.g., "splitting the onboarding flow into its own service before touching the rest of the platform"] was the most useful twenty minutes of my week, honestly.
+
+It also reinforced that the problem you're solving is close to what I spent the last year on: [one concrete, one-sentence example, e.g., "cutting our own onboarding drop-off from 34% to 19% by shipping the redesign in two stages instead of one big rewrite"].
+
+One thing I didn't answer as fully as I wanted to: you asked about [specific question]. On reflection, [one or two sentences that answer it better or add context you left out].
+
+Looking forward to hearing what the next step looks like. Happy to send over [a work sample / references / a short write-up] in the meantime if that's useful.
+
+Best,
+[Your name]`,
+      },
+      {
+        heading: "Template 2: After a panel interview",
+        body: `When you meet several people together, you have two reasonable options: one email to the group if they interviewed you jointly and gave you a shared thread, or individual notes if you have separate addresses. A single well-written group email that calls out each person by name beats three generic, identical ones.
+
+**Subject: Thank you — following up after today's conversation**
+
+Hi [Name 1], [Name 2], and [Name 3],
+
+Thanks for spending the afternoon walking me through how the team works day to day — hearing three different perspectives on [specific topic, e.g., "how escalations get triaged between the platform and growth teams"] in one sitting was genuinely useful context I wouldn't have gotten from the job posting alone.
+
+[Name 2], your point about [specific detail they raised] is something I've run into directly — at my last role, I [one concrete sentence tied to that]. [Name 3], I meant to add more to my answer on [specific question] — [one or two sentences of follow-up you wish you'd said].
+
+I came away more interested in the role, especially after hearing how closely [specific team or project] ties into the day-to-day work. Let me know if there's anything else useful I can send over while you're deciding on next steps.
+
+Best,
+[Your name]`,
+      },
+      {
+        heading: "Template 3: After a second-round or final-round interview",
+        body: `By the second or final round, you've usually met more senior people, and the conversation goes deeper into specifics — a case study, team fit, or a concern from round one that's still lingering. Use this email to close a remaining gap, not to restate your overall interest again from scratch.
+
+**Subject: Thank you — a quick follow-up from today**
+
+Hi [Name],
+
+Thanks for digging into [specific scenario or case study discussed] today — walking through how you'd want someone in this role to handle [specific situation, e.g., "a conflicting priority between two stakeholders"] gave me a much clearer picture of what the first ninety days would actually look like.
+
+You asked how I'd approach [specific scenario], and I want to add one thing I didn't say as clearly as I meant to in the room: [a concrete, one- or two-sentence answer tied to a real example].
+
+I also know [earlier interviewer's name] raised [the earlier concern, stated plainly — e.g., "whether I could own vendor relationships, not just the technical side"]. Since then I've thought it through further, and [one or two sentences that genuinely address the concern with reasoning, not just reassurance].
+
+Whatever the timeline looks like from here, I'm ready to move at whatever pace works on your end. Thanks again for such a thorough conversation today.
+
+Best,
+[Your name]`,
+      },
+      {
+        heading: "A quick checklist before you hit send",
+        body: `- Spelled every name correctly, including the one you only caught once
+- Referenced a specific detail per person, not one generic line copied across emails
+- Addressed any concern that came up — directly, not vaguely
+- Kept it under 200 words and readable in under a minute
+- Double-checked the company name and role title (easy to mix up across applications)
+- Sent within 24 hours, from the email address you've used throughout the process
+
+If you prepped your answers with the [STAR method](/blog/how-to-prepare-for-a-job-interview-with-ai) going in, the thank-you email is where that preparation pays off twice — you already know which answer was strongest and which one you want a second shot at. Say the second one better here.`,
+      },
+    ],
+    faqs: [
+      { q: "Do I need to send a thank-you email after every interview round?", a: "Yes — one per interviewer, within 24 hours of meeting them, even if it's your third round with the same company. Each round is a separate data point for whoever interviewed you, and skipping a round makes your follow-up feel incomplete rather than selective." },
+      { q: "Is it better to send a thank-you email the same day or the next morning?", a: "Either works, as long as it goes out within 24 hours. If the interview ended in the morning or early afternoon, send it that evening. If it ran late in the day, a next-morning email often reads better than one sent at 9 p.m. the same night." },
+      { q: "Should I send one email to a panel or a separate note to each interviewer?", a: "Send a separate note to each interviewer when you have their individual addresses — it lets you reference something specific to each person. If you only have a shared thread, one well-written group email that calls out each person by name is the next best option." },
+      { q: "What if I don't have an interviewer's email address?", a: "Ask the recruiter or your point of contact for it before you leave, or email your recruiter and ask them to pass your thanks along if the address genuinely isn't available. A recruiter relaying a thank-you is a reasonable fallback, not a failure." },
+      { q: "How long should a thank-you email be?", a: "Under 200 words, readable in under a minute. Three short parts — a specific callback, a grounded restatement of interest, and anything you want to clarify — is plenty. Longer reads as padding, not enthusiasm." },
+      { q: "What if I forgot to send a thank-you email and it's already been a few days?", a: "Send one anyway, but skip the apology for the delay — it draws attention to something the reader may not have noticed. Lead with the specific detail and your interest, exactly as you would have on day one." },
+      { q: "Can I reuse the same thank-you email template for every interview?", a: "Not word for word. Reuse the structure — a specific callback, restated interest, and any concern addressed — but change the actual details every time. A template that reads as recognizably generic undercuts the whole point of sending one." },
+      { q: "Does a thank-you email actually change a hiring decision?", a: "It can tip a genuinely close call by removing doubt about your interest or reframing a concern that came up in the room, but it won't rescue a weak interview. Treat it as closing gaps in a strong conversation, not as a persuasion tool on its own." },
+    ],
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
