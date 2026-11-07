@@ -9,7 +9,6 @@ import { container, FaqIcon, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, FREE_ATS_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getFaqsFor } from "@/lib/cms/faqs";
-import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 
 export const metadata = buildMarketingMetadata({
   title: "Free ATS Resume Checker — Score in 10 Seconds",
