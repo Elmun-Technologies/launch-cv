@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { lastFour, open, seal, secretBoxReady } from "@/lib/secret-box";
+import { logError } from "@/lib/redact";
 
 /**
  * External-service credentials, managed from Admin → Integrations.
@@ -31,7 +32,11 @@ export type ProviderDef = {
   required: string[];
   fields: FieldDef[];
   docsUrl?: string;
+  /** Tile colors for the provider's initial (v5 palette, picked per brand). */
+  tile: { bg: string; fg: string };
 };
+
+const INK = { bg: "#111118", fg: "#ffffff" };
 
 export const PROVIDERS: ProviderDef[] = [
   {
@@ -41,6 +46,7 @@ export const PROVIDERS: ProviderDef[] = [
     purpose: "Free ATS check, job match, rewrites, packets, role fit, imports",
     required: ["apiKey"],
     docsUrl: "https://platform.openai.com/api-keys",
+    tile: INK,
     fields: [{ key: "apiKey", label: "API key", secret: true, env: "OPENAI_API_KEY", placeholder: "sk-…" }],
   },
   {
@@ -50,6 +56,7 @@ export const PROVIDERS: ProviderDef[] = [
     purpose: "Checkout, subscriptions, billing portal",
     required: ["accessToken", "webhookSecret"],
     docsUrl: "https://polar.sh/dashboard",
+    tile: { bg: "#5440e8", fg: "#ffffff" },
     fields: [
       { key: "accessToken", label: "Access token", secret: true, env: "POLAR_ACCESS_TOKEN", placeholder: "polar_oat_…" },
       { key: "webhookSecret", label: "Webhook secret", secret: true, env: "POLAR_WEBHOOK_SECRET" },
@@ -68,6 +75,7 @@ export const PROVIDERS: ProviderDef[] = [
     purpose: "Verification, password reset and receipts",
     required: ["apiKey", "fromEmail"],
     docsUrl: "https://resend.com/api-keys",
+    tile: INK,
     fields: [
       { key: "apiKey", label: "API key", secret: true, env: "RESEND_API_KEY", placeholder: "re_…" },
       { key: "fromEmail", label: "Sender", secret: false, env: "RESEND_FROM_EMAIL", placeholder: "LaunchCV <hello@launch-cv.com>" },
@@ -80,6 +88,7 @@ export const PROVIDERS: ProviderDef[] = [
     purpose: "“Continue with Google” on login and register",
     required: ["clientId", "clientSecret"],
     docsUrl: "https://console.cloud.google.com/apis/credentials",
+    tile: { bg: "#ff7a33", fg: "#111118" },
     fields: [
       { key: "clientId", label: "Client ID", secret: false, env: "GOOGLE_CLIENT_ID" },
       { key: "clientSecret", label: "Client secret", secret: true, env: "GOOGLE_CLIENT_SECRET" },
@@ -92,6 +101,7 @@ export const PROVIDERS: ProviderDef[] = [
     group: "Analytics",
     purpose: "Traffic and conversions",
     required: ["measurementId"],
+    tile: { bg: "#f2a91f", fg: "#111118" },
     fields: [
       { key: "measurementId", label: "Measurement ID", secret: false, env: "NEXT_PUBLIC_GA_MEASUREMENT_ID", placeholder: "G-…" },
       { key: "apiSecret", label: "Measurement Protocol secret", secret: true, env: "GA_API_SECRET", help: "Only for server-side purchase events." },
@@ -103,6 +113,7 @@ export const PROVIDERS: ProviderDef[] = [
     group: "Analytics",
     purpose: "Product analytics",
     required: ["key"],
+    tile: INK,
     fields: [
       { key: "key", label: "Project API key", secret: false, env: "NEXT_PUBLIC_POSTHOG_KEY", placeholder: "phc_…" },
       { key: "host", label: "Host", secret: false, env: "NEXT_PUBLIC_POSTHOG_HOST", placeholder: "https://us.i.posthog.com" },
@@ -114,6 +125,7 @@ export const PROVIDERS: ProviderDef[] = [
     group: "Analytics",
     purpose: "Product analytics",
     required: ["token"],
+    tile: { bg: "#c9c0ff", fg: "#111118" },
     fields: [
       { key: "token", label: "Project token", secret: false, env: "NEXT_PUBLIC_MIXPANEL_TOKEN" },
       { key: "host", label: "API host", secret: false, env: "NEXT_PUBLIC_MIXPANEL_HOST", placeholder: "https://api.mixpanel.com" },
@@ -125,7 +137,21 @@ export function providerDef(id: string): ProviderDef | undefined {
   return PROVIDERS.find((p) => p.id === id);
 }
 
-type Row = { provider: string; field: string; value: string | null; last4: string; updatedAt: Date; testedAt: Date | null; testOk: boolean | null; testError: string | null };
+type Row = {
+  provider: string;
+  field: string;
+  value: string | null;
+  last4: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdById: string | null;
+  updatedById: string | null;
+  rotatedAt: Date | null;
+  testedAt: Date | null;
+  testOk: boolean | null;
+  testError: string | null;
+  testMs: number | null;
+};
 
 const TTL_MS = 60_000;
 let cache: { at: number; rows: Map<string, Row> } | null = null;
@@ -151,10 +177,15 @@ async function loadRows(): Promise<Map<string, Row>> {
         field: r.field,
         value,
         last4: r.last4,
+        createdAt: r.createdAt,
         updatedAt: r.updatedAt,
+        createdById: r.createdById,
+        updatedById: r.updatedById,
+        rotatedAt: r.rotatedAt,
         testedAt: r.testedAt,
         testOk: r.testOk,
         testError: r.testError,
+        testMs: r.testMs,
       });
     }
   } catch {
@@ -196,9 +227,14 @@ export type ProviderStatus = {
   group: ProviderDef["group"];
   purpose: string;
   docsUrl?: string;
+  tile: ProviderDef["tile"];
   state: "connected" | "missing" | "partial" | "error";
   testedAt: string | null;
   testError: string | null;
+  /** Round-trip of the last test, ms. */
+  testMs: number | null;
+  /** Metadata of the main credential (first secret field, else first required field), when stored in the panel. */
+  key: { field: string; label: string; addedAt: string; addedById: string | null; updatedAt: string; updatedById: string | null; rotatedAt: string | null } | null;
   fields: FieldStatus[];
 };
 
@@ -235,15 +271,30 @@ export async function integrationStatuses(): Promise<ProviderStatus[]> {
         : requiredSet === 0
           ? "missing"
           : "partial";
+    const mainField = p.fields.find((f) => f.secret && p.required.includes(f.key)) ?? p.fields.find((f) => f.key === p.required[0])!;
+    const mainRow = rows.get(k(p.id, mainField.key));
     return {
       id: p.id,
       name: p.name,
       group: p.group,
       purpose: p.purpose,
       docsUrl: p.docsUrl,
+      tile: p.tile,
       state,
       testedAt: testRow?.testedAt?.toISOString() ?? null,
       testError: testRow?.testError ?? null,
+      testMs: testRow?.testMs ?? null,
+      key: mainRow
+        ? {
+            field: mainField.key,
+            label: mainField.label,
+            addedAt: mainRow.createdAt.toISOString(),
+            addedById: mainRow.createdById,
+            updatedAt: mainRow.updatedAt.toISOString(),
+            updatedById: mainRow.updatedById,
+            rotatedAt: mainRow.rotatedAt?.toISOString() ?? null,
+          }
+        : null,
       fields,
     };
   });
@@ -273,13 +324,32 @@ export async function saveIntegrationFields(
     if (f.options && !f.options.includes(v)) throw new Error(`${f.label} must be one of ${f.options.join(", ")}`);
     await prisma.integrationSecret.upsert({
       where: { provider_field: { provider, field: f.key } },
-      create: { provider, field: f.key, ciphertext: seal(v), last4: f.secret ? lastFour(v) : "", updatedById: actorId },
-      update: { ciphertext: seal(v), last4: f.secret ? lastFour(v) : "", updatedById: actorId, testedAt: null, testOk: null, testError: null },
+      create: { provider, field: f.key, ciphertext: seal(v), last4: f.secret ? lastFour(v) : "", createdById: actorId, updatedById: actorId },
+      // Replacing a stored secret is a rotation.
+      update: {
+        ciphertext: seal(v),
+        last4: f.secret ? lastFour(v) : "",
+        updatedById: actorId,
+        ...(f.secret ? { rotatedAt: new Date() } : {}),
+        testedAt: null,
+        testOk: null,
+        testError: null,
+        testMs: null,
+      },
     });
     changed.push(f.key);
   }
   invalidateIntegrationCache();
   return changed;
+}
+
+/** Remove every value stored in the panel for a provider. Hosting env values (if any) apply again. Returns the removed field names. */
+export async function disconnectIntegration(provider: string): Promise<string[]> {
+  if (!providerDef(provider)) throw new Error("Unknown provider");
+  const rows = await prisma.integrationSecret.findMany({ where: { provider }, select: { field: true } });
+  await prisma.integrationSecret.deleteMany({ where: { provider } });
+  invalidateIntegrationCache();
+  return rows.map((r) => r.field);
 }
 
 /** Live check against the provider with the given (or stored) values. Never logs secrets. */
@@ -333,16 +403,17 @@ export async function testIntegration(
         return done(false, "Unknown provider");
     }
   } catch (e) {
+    if (!(e instanceof Error && e.name === "TimeoutError")) logError(`[integrations] ${provider} test failed`, e);
     return done(false, e instanceof Error && e.name === "TimeoutError" ? "Timed out after 10 s" : "Couldn't reach the provider");
   }
 }
 
-export async function recordTestResult(provider: string, ok: boolean, message: string) {
+export async function recordTestResult(provider: string, ok: boolean, message: string, ms?: number) {
   const def = providerDef(provider);
   if (!def) return;
   await prisma.integrationSecret.updateMany({
     where: { provider, field: def.required[0] },
-    data: { testedAt: new Date(), testOk: ok, testError: ok ? null : message.slice(0, 300) },
+    data: { testedAt: new Date(), testOk: ok, testError: ok ? null : message.slice(0, 300), testMs: ms ?? null },
   });
   invalidateIntegrationCache();
 }

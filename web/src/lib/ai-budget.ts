@@ -119,7 +119,8 @@ async function maybeSendBudgetAlert() {
   if (!cap || !to) return;
   const { month } = await currentSpend();
   const pct = (month / cap) * 100;
-  const levels = [50, 80, 100].filter((l) => pct >= l);
+  // Thresholds from Admin → Limits & budgets (default 50/80/100).
+  const levels = s.budget.alertLevels.filter((l) => pct >= l);
   if (!levels.length) return;
   const monthKey = startOfUtcMonth().toISOString().slice(0, 7);
   const row = await prisma.appSetting.findUnique({ where: { key: ALERT_KEY } });
@@ -132,8 +133,9 @@ async function maybeSendBudgetAlert() {
     create: { key: ALERT_KEY, value: { month: monthKey, sent: [...sent, level] } },
     update: { value: { month: monthKey, sent: [...sent, level] } },
   });
+  const capReached = pct >= 100;
   const action =
-    level < 100
+    !capReached
       ? "Nothing is paused yet."
       : s.budget.onCap === "alert_only"
         ? "Calls continue because the cap is set to alert only."
