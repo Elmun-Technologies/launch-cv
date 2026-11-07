@@ -15,6 +15,7 @@ import { SITE_AUTHOR } from "@/lib/author";
 import { getResumeExample } from "@/lib/resume-examples";
 import { COVER_LETTER_EXAMPLES, getCoverLetterExample, type CoverLetterExample } from "@/lib/cover-letter-examples";
 import { withArticle } from "@/lib/article";
+import { relatedRoleSlugs } from "@/lib/related-roles";
 
 type Params = { slug: string };
 
@@ -70,7 +71,7 @@ export default async function CoverLetterExamplePage({ params }: { params: Promi
   const firstName = r.name.split(" ")[0];
   const url = absoluteUrl(`/cover-letter-examples/${slug}`);
   const startHref = `/register?next=${encodeURIComponent(`/resume/new?example=${slug}`)}`;
-  const related = e.related.flatMap((s) => {
+  const related = relatedRoleSlugs(e.slug).flatMap((s) => {
     const re = getResumeExample(s);
     const rc = getCoverLetterExample(s);
     return re && rc ? [{ e: re, c: rc }] : [];

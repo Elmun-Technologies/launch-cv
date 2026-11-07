@@ -64,7 +64,8 @@ export function buildMarketingMetadata(input: {
 }): Metadata {
   const url = absoluteUrl(input.pathname);
   const canonical = input.canonicalUrl?.trim() || url;
-  const ogTitle = `${input.title} | LaunchCV`;
+  // Titles that already name the brand ("LaunchCV — …") don't get it twice.
+  const ogTitle = /launchcv/i.test(input.title) ? input.title : `${input.title} | LaunchCV`;
   // Only include an `images` key when we have one. Passing `images: undefined`
   // would suppress the nearest file-based `opengraph-image` that Next.js would
   // otherwise merge in, breaking social cards on pages without an explicit image.

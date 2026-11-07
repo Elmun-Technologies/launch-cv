@@ -43,6 +43,8 @@ const nextConfig: NextConfig = {
       { source: "/use-cases/software-engineers", destination: "/resume-examples/software-engineer", statusCode: 301 },
       { source: "/use-cases/product-managers", destination: "/resume-examples/product-manager", statusCode: 301 },
       { source: "/use-cases/designers", destination: "/resume-examples/ux-designer", statusCode: 301 },
+      // Removed on 2026-07-01; it was public before that and can still be in Google's index.
+      { source: "/investors", destination: "/about", statusCode: 301 },
       { source: "/dashboard/settings/notifications", destination: "/dashboard/settings", statusCode: 301 },
       { source: "/dashboard/settings/overview", destination: "/dashboard", statusCode: 301 },
       { source: "/dashboard/applications", destination: "/dashboard/job-tracker", statusCode: 301 },

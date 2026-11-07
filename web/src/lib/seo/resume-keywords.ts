@@ -7,7 +7,7 @@
  * keyword not listed under tools, credentials or soft skills is a hard skill.
  * Nothing here invents new keywords or statistics.
  */
-import { RESUME_EXAMPLES, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
+import { RESUME_EXAMPLES, getResumeExample, type ExampleJob, type ResumeExample } from "@/lib/resume-examples";
 import { fitTitle } from "@/lib/build-metadata";
 import { withArticle } from "@/lib/article";
 
@@ -215,15 +215,73 @@ export const HONEST_RULES: { t: string; d: string }[] = [
 ];
 
 /** Role-specific FAQ, built from the role's own data. Rendered on the page and in FAQPage JSON-LD. */
+/** Where this role's keywords sit in its own sample resume: summary terms, and one bullet that uses a term. */
+function sampleUse(e: ResumeExample): { summary: string[]; bullet: { term: string; job: ExampleJob } | null } {
+  const summary = keywordsIn(e, e.resume.summary).slice(0, 3);
+  for (const job of e.resume.jobs) {
+    for (const b of job.bullets) {
+      const term = keywordsIn(e, b).find((k) => !summary.includes(k));
+      if (term) return { summary, bullet: { term, job } };
+    }
+  }
+  return { summary, bullet: null };
+}
+
+/**
+ * HONEST_RULES with this role's own terms in them, so each role page explains
+ * the rules with its own keywords rather than repeating the same paragraph.
+ */
+export function honestRulesFor(e: ResumeExample): { t: string; d: string }[] {
+  const role = roleLower(e.role);
+  const groups = keywordGroups(e);
+  const hard = groups.find((g) => g.id === "hard")?.items.map((i) => i.term) ?? [];
+  const tool = groups.find((g) => g.id === "tools")?.items[0]?.term;
+  // The FAQ on the same page uses keywords[0]; the rule uses the next term so the two don't repeat.
+  const k1 = e.keywords[1] ?? e.keywords[0];
+  const claim = hard.find((h) => h !== k1) ?? hard[0] ?? k1;
+  const { bullet } = sampleUse(e);
+  return [
+    {
+      t: HONEST_RULES[0].t,
+      d: `If ${withArticle(role)} post says "${k1}", write "${k1}", not a near-synonym — as long as it's accurate. Recruiters search for the post's exact term.`,
+    },
+    {
+      t: HONEST_RULES[1].t,
+      d: `Expect to be asked about every term you list. If you couldn't spend two minutes on ${claim} — what you did and what changed — leave it out.`,
+    },
+    {
+      t: HONEST_RULES[2].t,
+      d: bullet
+        ? `A skills list says you know ${bullet.term}. A bullet like the one under ${bullet.job.title} in the example above shows what you did with it.`
+        : tool
+          ? `Listing ${tool} says you've used it; a bullet that says what you did with ${tool} and what changed proves it.`
+          : HONEST_RULES[2].d,
+    },
+    HONEST_RULES[3],
+  ];
+}
+
 export function keywordFaqs(e: ResumeExample): { q: string; a: string }[] {
   const role = roleLower(e.role);
   const groups = keywordGroups(e);
   const tools = groups.find((g) => g.id === "tools")?.items.map((i) => i.term) ?? [];
   const creds = groups.find((g) => g.id === "credentials")?.items.map((i) => i.term) ?? [];
+  const firstName = e.resume.name.split(" ")[0];
+  const inSample = groups.reduce((n, g) => n + g.items.filter((i) => i.inSample).length, 0);
+  const use = sampleUse(e);
+  const whereAnswer = [
+    "In your summary, a short skills section and, above all, the bullets under each job, where you show what you did with the skill.",
+    use.summary.length ? `In ${firstName}'s sample, ${listJoin(use.summary)} ${use.summary.length > 1 ? "are" : "is"} in the summary` : "",
+    use.bullet ? `${use.summary.length ? "and" : `In ${firstName}'s sample,`} ${use.bullet.term} shows up in a bullet under ${use.bullet.job.title}.` : use.summary.length ? "." : "",
+    "Plain text in the body of the page is easiest for applicant tracking systems to read.",
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .replace(" summary .", " summary.");
   const faqs: { q: string; a: string }[] = [
     {
       q: `How many keywords should ${withArticle(role)} resume have?`,
-      a: `There's no magic number. Cover the skills and tools the job post asks for that you can honestly back up, and use each one where it fits: in your skills section and in the bullet that shows it. Repeating a keyword many times doesn't help.`,
+      a: `There's no magic number. ${firstName}'s sample resume uses ${inSample === e.keywords.length ? `all ${inSample} terms on this page, because each one fit that job` : `${inSample} of the ${e.keywords.length} terms on this page — the ones that fit that job`}. Cover what your post asks for that you can back up, each where it fits; repeating a keyword doesn't help.`,
     },
     {
       q: "Should I copy keywords exactly from the job post?",
@@ -231,7 +289,7 @@ export function keywordFaqs(e: ResumeExample): { q: string; a: string }[] {
     },
     {
       q: "Where should keywords go on my resume?",
-      a: "In three places: a short skills section, your summary, and above all the bullets under each job, where you show what you did with the skill. Plain text in the body of the page is easiest for applicant tracking systems to read.",
+      a: whereAnswer,
     },
   ];
   if (tools.length > 0) {
@@ -243,7 +301,7 @@ export function keywordFaqs(e: ResumeExample): { q: string; a: string }[] {
   if (creds.length > 0) {
     faqs.push({
       q: `How should I list ${listJoin(creds.slice(0, 2))} on my resume?`,
-      a: `Spell them the way the job post does, and include both the abbreviation and the full name if you have room. Put licenses and certifications in their own section or next to your education, and only list ones that are current.`,
+      a: `Spell ${creds.length > 1 ? "them" : "it"} the way the job post does, and include both the abbreviation and the full name if you have room. Put licenses and certifications in their own section or next to your education, and only list ones that are current.`,
     });
   }
   return faqs;

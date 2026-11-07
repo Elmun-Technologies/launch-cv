@@ -98,6 +98,8 @@ const rootStructuredData = {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       name: "LaunchCV",
+      // Spellings people type; helps Google pick "LaunchCV" as the site name.
+      alternateName: ["Launch CV", "launch-cv.com"],
       url: siteUrl,
       inLanguage: "en-US",
       description: "Free ATS resume check, resume builder, job-match tailoring, cover letters and interview prep.",

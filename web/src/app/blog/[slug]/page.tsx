@@ -58,6 +58,58 @@ const RELATED_FEATURES: Record<string, FeatureLink[]> = {
   ],
 };
 
+/**
+ * Guides to read next, per post: two-way links between the blog and the guide
+ * pages each post overlaps, so neither competes with the other for the same
+ * search and both are easy for readers and crawlers to reach.
+ */
+const READ_NEXT: Record<string, FeatureLink[]> = {
+  "what-is-an-ats-score": [
+    { href: "/what-is-a-good-ats-score", title: "What's a good ATS score?", desc: "The 80 / 65 bands, what each category checks, and why no score is universal." },
+    { href: "/ats", title: "How each ATS reads a resume", desc: "Workday, Greenhouse, iCIMS, Taleo and more, from their own documentation." },
+  ],
+  "how-to-check-ats-score-of-resume": [
+    { href: "/what-is-a-good-ats-score", title: "What's a good ATS score?", desc: "How to read the number you get, and what to fix first." },
+    { href: "/resume-format", title: "Resume format guide", desc: "The layout and section names parsers read most reliably." },
+  ],
+  "what-is-ats-and-how-does-it-work": [
+    { href: "/ats", title: "ATS guides by vendor", desc: "What Workday, Greenhouse, iCIMS, Taleo and others do with your file." },
+    { href: "/what-is-a-good-ats-score", title: "What's a good ATS score?", desc: "What a resume score measures and where the bands sit." },
+  ],
+  "how-to-write-an-ats-friendly-resume": [
+    { href: "/resume-format", title: "Resume format guide", desc: "Chronological, functional or hybrid — and which ATS handle each." },
+    { href: "/resume-keywords", title: "Resume keywords by role", desc: "The skills and tools that come up in job posts for 88 roles." },
+  ],
+  "resume-keywords-for-software-engineers": [
+    { href: "/resume-keywords/software-engineer", title: "Software engineer resume skills", desc: "The full keyword list, sorted by type, with how to use each honestly." },
+    { href: "/resume-examples/software-engineer", title: "Software engineer resume examples", desc: "Annotated samples from new grad to staff level." },
+  ],
+  "how-to-tailor-your-resume-for-every-job": [
+    { href: "/resume-keywords", title: "Resume keywords by role", desc: "Start from the terms job posts in your field actually use." },
+    { href: "/how-to-write-a-resume", title: "How to write a resume", desc: "The full guide, section by section." },
+  ],
+  "cover-letter-tips-that-actually-work": [
+    { href: "/cover-letter-template", title: "Cover letter template", desc: "A plain template with what goes in each paragraph." },
+    { href: "/cover-letter-examples", title: "Cover letter examples", desc: "Annotated letters for 88 roles." },
+  ],
+  "ai-resume-builder-complete-guide": [
+    { href: "/resume-templates", title: "Resume templates", desc: "Four ATS-safe templates, free to use and download." },
+    { href: "/resume-examples", title: "Resume examples", desc: "Annotated examples for 88 roles." },
+  ],
+  "voice-to-resume": [
+    { href: "/features/voice-input", title: "Voice input", desc: "Speak your experience; the editor turns it into resume bullets." },
+    { href: "/resume-action-verbs", title: "Resume action verbs", desc: "Stronger first words for the bullets you dictate." },
+  ],
+  "how-to-prepare-for-a-job-interview-with-ai": [
+    { href: "/features/interview-prep", title: "Interview prep", desc: "Practice role-specific questions with feedback." },
+    { href: "/blog/thank-you-email-after-interview", title: "Thank-you email after an interview", desc: "When to send it, what to say, three templates." },
+  ],
+  "thank-you-email-after-interview": [
+    { href: "/features/interview-prep", title: "Interview prep", desc: "Practice the questions before the next round." },
+    { href: "/resignation-letter", title: "Resignation letter templates", desc: "Got the offer? Give notice the right way." },
+  ],
+};
+
 const DEFAULT_RELATED_FEATURES: FeatureLink[] = [
   { href: "/features/resume-builder", title: "AI Resume Builder", desc: "Build an ATS-ready resume with AI-written bullets in minutes." },
   { href: "/free-ats-check", title: "ATS Score Checker", desc: "Check your resume's ATS score before you apply." },
@@ -171,6 +223,7 @@ export default async function BlogPostPage({
 
   // Every post links to at least one relevant feature, keyed by category.
   const relatedFeatures = RELATED_FEATURES[post.category] ?? DEFAULT_RELATED_FEATURES;
+  const readNext = READ_NEXT[post.slug] ?? [];
 
   // Prev/next navigation across all posts (newest-first) for deeper crawlability.
   const allPosts = await getPublishedPosts();
@@ -506,16 +559,36 @@ export default async function BlogPostPage({
               ))}
             </ul>
           </div>
+          {readNext.length > 0 ? (
+            <div className="lc-card rounded-[24px] p-5">
+              <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">READ NEXT</p>
+              <ul className="mt-3 flex flex-col gap-2">
+                {readNext.map((f) => (
+                  <li key={f.href}>
+                    <Link href={f.href} className="group block rounded-2xl bg-[#f7f6fb] px-4 py-3 transition-colors hover:bg-[#e4dfff]">
+                      <span className="block text-[15px] font-bold text-[#121226] group-hover:text-[#3a2bb8]">{f.title} →</span>
+                      <span className="mt-0.5 block text-[13px] leading-5 text-[#4a4862]">{f.desc}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {isAtsScorePost ? (
             // The same bands the free ATS check uses to color its score (80 / 65).
             <div className="lc-card rounded-[24px] p-5">
               <p className="text-[12px] font-bold tracking-[0.08em] text-[#66647c]">GOOD SCORE</p>
               <ul className="mt-3 flex flex-col gap-1.5 text-[14px] font-semibold">
-                <li className="rounded-xl bg-[#dcf5ea] px-3 py-2 text-[#0b4f35]">80–100 · strong</li>
-                <li className="rounded-xl bg-[#fdf0d5] px-3 py-2 text-[#7a4600]">65–79 · decent</li>
+                <li className="rounded-xl bg-[#dcf5ea] px-3 py-2 text-[#0b4f35]">80–100 · ready to send</li>
+                <li className="rounded-xl bg-[#fdf0d5] px-3 py-2 text-[#7a4600]">65–79 · readable</li>
                 <li className="rounded-xl bg-[#fbe2e3] px-3 py-2 text-[#8f1d22]">Below 65 · at risk</li>
               </ul>
-              <p className="mt-2.5 text-[12px] leading-[18px] text-[#66647c]">The bands LaunchCV&apos;s free ATS check uses.</p>
+              <p className="mt-2.5 text-[12px] leading-[18px] text-[#66647c]">
+                The bands LaunchCV&apos;s free ATS check uses.{" "}
+                <Link href="/what-is-a-good-ats-score" className="font-semibold text-[#5440e8] underline underline-offset-2">
+                  What each band means
+                </Link>
+              </p>
             </div>
           ) : null}
         </aside>
