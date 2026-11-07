@@ -135,6 +135,18 @@ export const BLOG_HOWTO: Record<string, { name: string; description: string; tot
       { name: "Generate a matching cover letter", text: "Create the cover letter from the same interface so it stays consistent with your resume." },
     ],
   },
+  "harvard-resume-template-vs-google-docs": {
+    name: "How to format a resume in the traditional, ATS-safe style",
+    description: "Build a clean, reverse-chronological resume in the traditional style associated with Harvard's career office, without the ATS risks of a flashy template.",
+    steps: [
+      { name: "Use reverse-chronological order", text: "List your most recent role first in every section, so nobody has to hunt for your current job." },
+      { name: "Switch to a single-column layout", text: "Drop sidebars, text boxes, and tables, and keep every detail in the main body of the document." },
+      { name: "Use standard section headings and a clean font", text: "Use Work Experience, Education, and Skills in a standard font like Calibri or Times New Roman, 10–12pt." },
+      { name: "Remove photos and graphics", text: "Drop headshots, icon skill bars, and color blocks — none of it is read by ATS software or expected in this format." },
+      { name: "Write bullets with an action verb and a result", text: "Lead each bullet with a strong verb and end with a measurable outcome, e.g. 'Cut onboarding time from three weeks to nine days.'" },
+      { name: "Save as a text-based PDF and check it", text: "Export a text-based PDF unless DOCX is requested, then run it through an ATS score checker to confirm it parses cleanly." },
+    ],
+  },
 };
 
 /**
