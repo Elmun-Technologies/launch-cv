@@ -862,6 +862,142 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       { q: "What should I look for in an AI resume builder?", a: "Prioritize ATS-safe templates with no tables or columns, JD alignment that analyzes keyword gaps against a pasted job description, and a real-time preview of the final PDF. Also look for PDF and DOCX export, industry-specific templates, voice input, and strong privacy so your data isn't used to train models without consent." },
     ],
   },
+
+  {
+    slug: "cv-vs-resume",
+    coverImage: "/images/product/resume-templates.svg",
+    coverAlt:
+      "Side-by-side comparison of a short, single-page US-style resume and a long, multi-page academic CV with sections for publications and research.",
+    title: "CV vs. Resume: What's the Actual Difference (and Which One Do You Need)?",
+    description:
+      "“CV” and “resume” get used as if they're interchangeable, but in the US they're genuinely different documents. Here's the real difference in length and purpose, when a US employer actually wants a CV, and how the terms diverge by country.",
+    date: "2026-11-04",
+    readingTime: 9,
+    category: "Resume Tips",
+    tags: ["cv vs resume", "resume vs cv", "what is a cv", "curriculum vitae", "resume format"],
+    seoTitle: "CV vs Resume: What's the Real Difference? (2026 Guide)",
+    seoDescription:
+      "CV vs resume, explained clearly: the real difference in length and purpose, when a US employer actually means a CV, and how the terms differ by country.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "CV vs. resume: the short answer",
+        body: `If you're applying for a job in the United States, you almost always want a **resume** — a tight, one-to-two-page summary of your work experience, tailored to the specific job you're applying for. A **CV** (curriculum vitae, Latin for "course of life") is a different, much longer document that lists your entire academic and professional history — every degree, publication, presentation, and grant — and in the US it's used mainly in academia, scientific research, and medicine, not for a typical job application.
+
+Outside the US, though, "CV" usually doesn't mean that long academic document at all. In the UK, Ireland, and across most of continental Europe, Australia, and New Zealand, "CV" is simply the everyday term for what Americans call a resume — the short document you send for almost any job, not just academic ones. That single naming difference is the real source of the confusion, and it's genuinely worth understanding, especially if you've studied, worked, or applied internationally.`,
+      },
+      {
+        heading: "What a resume actually is (the US standard)",
+        body: `A **resume** is a concise, tailored pitch for one specific job. In the US, that means:
+
+- **Length:** one page for early-career candidates, stretching to two pages for people with roughly 10+ years of experience. It almost never runs longer.
+- **Content:** a short professional summary, your most relevant work experience (reverse-chronological), education, and a skills section — only the parts that support the job you're applying for.
+- **Tailoring:** rewritten or adjusted for each application. The version you send for a product manager role should look different from the one you send for a data analyst role, even if both draw from the same underlying experience.
+- **Purpose:** get you an interview for *this* job, not document your entire career.
+
+This is the format that US recruiters, hiring managers, and Applicant Tracking Systems (ATS) are built around. If you want the formatting details — single-column layout, standard section headings, file format — see our guide on [how to write an ATS-friendly resume](/blog/how-to-write-an-ats-friendly-resume).`,
+      },
+      {
+        heading: "What a true CV actually is",
+        body: `A **true CV**, in the sense Americans use the word, is a comprehensive, chronological record of your entire academic and professional life. It isn't trimmed down for a specific application — it's added to over time as your career grows.
+
+A CV typically includes sections a resume never has:
+
+- **Education**, listed in full detail, often including thesis or dissertation titles.
+- **Publications** — papers, books, and chapters, usually in a formal citation style.
+- **Presentations and talks** given at conferences or institutions.
+- **Research experience**, grants, and fellowships.
+- **Teaching experience**, if applicable.
+- **Professional affiliations, honors, and awards.**
+- Sometimes a **references** section listed directly on the document.
+
+There's no real page limit — a CV for an early-career PhD might run 3–4 pages, and a senior professor's CV can run 15–20 pages or more. It isn't meant to be scanned in seconds; it's meant to be a complete record that a hiring committee can review in depth.
+
+**Who actually uses a CV like this:** academics and faculty candidates, PhD and postdoc applicants, researchers submitting grant or fellowship applications, physicians and other clinical/scientific roles, and people applying to some government, international-organization, or research-adjacent positions where a full career history is the point.`,
+      },
+      {
+        heading: "Why “CV” and “resume” get used interchangeably",
+        body: `Two separate things are going on at once, and they compound.
+
+First, **casual usage**: plenty of US job seekers say "CV" informally when they mean their resume — it's common in speech, on LinkedIn, and on international job boards, even where the document itself is a standard one-to-two-page resume.
+
+Second, **a real international naming difference**: in the UK, Ireland, most of Europe, Australia, New Zealand, and many other countries, "CV" is just the standard name for the short job-application document — not a synonym reserved for academia. There usually isn't a separate word for it; "resume" is rarely used at all. So when someone from one of those countries says "CV," they typically mean exactly what a US resume is, not the long-form academic document.
+
+Add to that generic form labels — job boards and tools that simply say "Resume/CV" as one combined upload field regardless of which you're sending — and it's easy to see why the terms blur together, even though the US distinction is real and matters for how your document should actually look.`,
+      },
+      {
+        heading: "When a US job posting says “CV,” what do they actually want?",
+        body: `Look at the context of the role, not just the word:
+
+1. **Academic, research, scientific, or clinical/medical roles** — including faculty positions, postdocs, lab positions, and most fellowship or grant applications — usually do mean an actual long-form CV. Follow the specific instructions in the posting; academic hiring committees are often precise about what they expect.
+2. **General industry, business, tech, or corporate roles** that happen to say "please submit your CV" usually just mean a resume. Plenty of US job postings, especially at companies with a global presence or international recruiters, use "CV" loosely as a synonym — and the application is still processed through an ATS built around resume-length documents.
+3. **If you genuinely can't tell**, default to the standard resume format for anything outside academia, medicine, or formal research. A one-to-two-page, tailored resume is almost never the wrong call for a non-academic US role; a 10-page document almost always is.
+
+When in doubt and the stakes are high, it's reasonable to ask the recruiter directly which format they expect — that's a normal question, not an awkward one.`,
+      },
+      {
+        heading: "CV vs. resume by country: a naming convention, not a universal format",
+        body: `It helps to separate two different things: what the document is called, and how long and detailed it actually is.
+
+In the **United States**, the words map to two different documents: "resume" is the short, tailored one, and "CV" is reserved for the long academic/research record.
+
+In the **UK, Ireland, and much of continental Europe, Australia, and New Zealand**, "CV" is the everyday word for the short, general job-application document — functionally the same thing as a US resume, usually a similar one-to-two-page length for most roles. "Resume" isn't the common term there.
+
+Beyond that general pattern, conventions vary more than it's useful to generalize about, and they can shift over time and by industry even within a single country. A few honest caveats:
+
+- Academic and research CVs exist internationally too, under the same name — so even outside the US, "CV" can mean either the short general document or a longer academic one, depending on context.
+- Specific formatting customs (for example, whether to include a photo, date of birth, or nationality) differ by country and have been changing, partly due to anti-discrimination and privacy rules. Don't assume a specific country's convention from memory — check a few real, recent job postings or ask someone who hires locally.
+- If you're applying internationally and unsure what's expected, the safest move is to mirror the format used in recent postings for that country and role, or ask directly, rather than guess at a "rule" for an entire country or region.`,
+      },
+      {
+        heading: "The differences at a glance",
+        body: `| | US resume | True CV (academic/research) | CV in the UK/Europe (general use) |
+|---|---|---|---|
+| Typical length | 1 page (2 for senior candidates) | Several pages, grows over a career | 1–2 pages |
+| Purpose | Tailored pitch for one specific job | Complete record of education, research, and publications | Standard job application, equivalent to a US resume |
+| Updated how | Rewritten/adjusted per application | Added to over time, rarely trimmed down | Updated and tailored per application |
+| Used for | Most US jobs | Academia, research, medicine, fellowships/grants | Most jobs outside the US |
+| Typical sections | Summary, experience, education, skills | Education, publications, presentations, grants, teaching, affiliations | Summary, experience, education, skills |`,
+      },
+      {
+        heading: "Which one should you use? A quick decision guide",
+        body: `- **Applying to a standard job in the US** → send a resume. Keep it to one or two pages and tailor it to the posting.
+- **Applying for a faculty, postdoc, research, or grant/fellowship role** (in the US or elsewhere) → send a true, full-length CV.
+- **Applying to a job outside the US where the posting asks for a "CV"** → for most non-academic roles, that's just their word for the short document — send a concise, resume-style document formatted for that market, not a long academic CV.
+- **Applying internationally and genuinely unsure which they mean** → default to the shorter, tailored document. It's what most ATS software and recruiters — in the US and increasingly elsewhere — are built to read quickly, and it's easy to expand later if someone specifically asks for more.
+
+If you need to check that a resume-style document is actually readable by the software that screens it first, our [ATS Score Checker](/free-ats-check) scores yours in about ten seconds and flags anything a parser would struggle with.`,
+      },
+      {
+        heading: "Turning one document into the other",
+        body: `You don't have to start from scratch if you have one and need the other.
+
+**From CV to resume:** pull your two or three most recent and most relevant roles. Cut the publication list down to a handful that are directly relevant (or drop it entirely for a non-research role). Rewrite research-style descriptions as accomplishment statements with concrete outcomes, and add a dedicated skills section pulled from the job description. The goal is compression, not summarization — most of a CV's content simply doesn't belong on a resume at all.
+
+**From resume to CV:** expand each role with full dates and more detail, and add the sections a resume doesn't have — Education (with thesis/dissertation titles), Publications, Presentations, Grants and Fellowships, Teaching Experience, and Professional Affiliations. Length stops being a constraint; completeness becomes the goal instead.
+
+If you're converting a long CV down into a tailored, ATS-ready resume for a US-style job search, that compression step — picking the right experience and rewriting it as tight, quantified bullets — is exactly what the [resume builder](/features/resume-builder) is built to help with, and [JD alignment](/features/jd-alignment) will show you which of the job posting's keywords to prioritize once you're down to resume length.`,
+      },
+      {
+        heading: "Send the right document the first time",
+        body: `The words "CV" and "resume" get tangled because, depending on where you are and what role you're applying for, they can mean genuinely different things — or the exact same thing. For nearly every non-academic job in the US, the answer is simple: write a tailored, one-to-two-page resume, not a long-form CV.
+
+LaunchCV's [resume builder](/features/resume-builder) and [ATS Score Checker](/free-ats-check) are built around that US-style resume — Letter-size pages by default, with ATS scoring calibrated to the short, tailored format US employers and their screening software expect. If your target role genuinely calls for a full academic CV, the structure in this guide is what to build around by hand; the tools here are aimed squarely at getting a resume-style document past the filter and in front of a person.`,
+      },
+    ],
+    faqs: [
+      { q: "Is a CV the same as a resume?", a: "Not in the US. A resume is a short, one-to-two-page document tailored to a specific job, while a true CV is a long, comprehensive record of your entire academic and research history with no real length limit. Outside the US, though, “CV” is often just the standard word for the short document — functionally the same thing as a US resume." },
+      { q: "Does the US use “CV” or “resume”?", a: "The US uses “resume” for the standard job-application document that most employers and ATS software expect. “CV” is reserved for a different, much longer document used mainly in academia, scientific research, and medicine — though some US job seekers also use “CV” casually to mean their resume." },
+      { q: "What does it mean when a US job posting asks for a “CV”?", a: "It depends on the role. For academic, research, scientific, or clinical positions, it usually means an actual full-length CV. For general industry, business, or tech roles, “CV” is often used loosely as a synonym for resume, especially by companies with international recruiters — in that case, a standard one-to-two-page resume is almost always the right call." },
+      { q: "Is a CV longer than a resume?", a: "A true, academic-style CV is longer than a resume, often running several pages and growing throughout your career, since it documents your complete education, publications, and research history. A resume stays short — one page for early-career candidates, up to two for very experienced ones — because it's a tailored pitch for one job, not a full record." },
+      { q: "Do UK employers use resumes or CVs?", a: "UK employers (and most employers in Ireland and much of continental Europe, Australia, and New Zealand) use the word “CV” for what Americans call a resume: a short, one-to-two-page document used for most jobs, not just academic ones. The word “resume” is rarely used there — the length and purpose are what match a US resume, not the long academic CV." },
+      { q: "Should international applicants send a CV or a resume for a US job?", a: "Send a short, tailored, resume-style document — one to two pages, formatted the way US employers and ATS software expect — even if you'd call that same document a “CV” at home. Reserve a long, academic-style CV for US academic, research, or clinical roles that specifically ask for one." },
+    ],
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
