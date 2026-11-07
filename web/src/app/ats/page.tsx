@@ -12,9 +12,9 @@ import { faqPageLd } from "@/lib/faq-ld";
 import { ATS_CHECKED_LABEL, ATS_INDEX_FAQS, ATS_UPDATED, ATS_VENDORS, GENERAL_ATS_TIPS } from "@/lib/seo/ats-vendors";
 
 export const metadata = buildMarketingMetadata({
-  title: "ATS Resume Guides: Workday, Greenhouse, iCIMS & More",
+  title: "ATS Resume Guides: Workday, Greenhouse, Ashby & More",
   description:
-    "How Workday, Greenhouse, iCIMS, Taleo, Lever and SuccessFactors handle your resume, from their own documentation, with tips for applying through each one.",
+    "How Workday, Greenhouse, Ashby, iCIMS, SmartRecruiters and 5 more applicant tracking systems handle your resume, from their own docs, with tips for each one.",
   pathname: "/ats",
   image: DEFAULT_OG_IMAGE,
   keywords: ["ATS resume guide", "applicant tracking system resume", "Workday resume tips", "Greenhouse resume", "Taleo resume", "iCIMS resume"],
@@ -28,7 +28,7 @@ const ld = {
       "@type": "CollectionPage",
       "@id": `${url}#webpage`,
       name: "ATS resume guides",
-      description: "Guides to how six applicant tracking systems handle resumes, based on each vendor's own documentation.",
+      description: `Guides to how ${ATS_VENDORS.length} applicant tracking systems handle resumes, based on each vendor's own documentation.`,
       url,
       dateModified: ATS_UPDATED,
       isPartOf: { "@id": WEBSITE_ID },
