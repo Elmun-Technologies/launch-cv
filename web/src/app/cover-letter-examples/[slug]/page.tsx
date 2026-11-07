@@ -35,7 +35,14 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   if (!c || !e) return {};
   const role = roleLower(e.role);
   return buildMarketingMetadata({
-    title: fitTitle(`${e.role} Cover Letter Example (Annotated)`, `${e.role} Cover Letter Example`),
+    // "{role} cover letter" outsearches the longer "... example" phrasing —
+    // lead with the shorter term, fall back to the more specific ones.
+    title: fitTitle(
+      `${e.role} Cover Letter (Example & Template)`,
+      `${e.role} Cover Letter Example (Annotated)`,
+      `${e.role} Cover Letter Example`,
+      `${e.role} Cover Letter`,
+    ),
     description: `${withArticle(role, true)} cover letter example, paragraph by paragraph: what each part does, tips for your own and how it pairs with ${withArticle(role)} resume.`,
     pathname: `/cover-letter-examples/${slug}`,
     image: DEFAULT_OG_IMAGE,

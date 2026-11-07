@@ -166,8 +166,15 @@ export function listJoin(items: string[]): string {
   return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
+// "{role} resume skills" outsearches "{role} resume keywords" by about 16x
+// (Keyword Planner, Nov 2026) — same page, title retargeted to the bigger term.
 export function keywordPageTitle(e: ResumeExample): string {
-  return fitTitle(`${e.role} Resume Keywords (2026 List)`, `${e.role} Resume Keywords (2026)`, `${e.role} Resume Keywords`);
+  return fitTitle(
+    `${e.role} Resume Skills (2026 List)`,
+    `${e.role} Resume Skills (2026)`,
+    `${e.role} Resume Skills`,
+    `${e.role} Resume Keywords`,
+  );
 }
 
 /** 120–160 characters for every role (checked when the data changes). */

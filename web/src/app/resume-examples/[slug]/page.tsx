@@ -37,10 +37,24 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const n = exampleSampleCount(e);
   return buildMarketingMetadata({
     // With extra samples the count leads, like "6 Registered Nurse Resume Examples (2026)"; n counts every sample on the page.
+    // "resume example" and "template" are both big, separate searches — the
+    // title covers both rather than competing on "example" alone.
     title:
       n > 1
-        ? fitTitle(`${n} ${e.role} Resume Examples (2026)`, `${n} ${e.role} Resume Examples`, `${n} ${e.role} Resumes`)
-        : fitTitle(`${e.role} Resume Example & Keywords (2026)`, `${e.role} Resume Example (2026)`, `${e.role} Resume Example`),
+        ? fitTitle(
+            `${n} ${e.role} Resume Examples & Templates (2026)`,
+            `${n} ${e.role} Resume Examples & Templates`,
+            `${n} ${e.role} Resume Examples (2026)`,
+            `${n} ${e.role} Resume Examples`,
+            `${n} ${e.role} Resumes`,
+          )
+        : fitTitle(
+            `${e.role} Resume Example & Template (2026)`,
+            `${e.role} Resume Example & Template`,
+            `${e.role} Resume Example & Keywords (2026)`,
+            `${e.role} Resume Example (2026)`,
+            `${e.role} Resume Example`,
+          ),
     description:
       n > 1
         ? `${n} ${roleLower(e.role)} resume examples you can copy — ${sampleList(e)} — with keywords and ATS tips.`
@@ -50,6 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     keywords: [
       `${roleLower(e.role)} resume`,
       `${roleLower(e.role)} resume example`,
+      `${roleLower(e.role)} resume template`,
       `${roleLower(e.role)} resume keywords`,
       `${roleLower(e.role)} resume summary`,
       ...(n > 1 ? [`${roleLower(e.role)} resume examples`, `${roleLower(e.role)} resume samples`] : []),
