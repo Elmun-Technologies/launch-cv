@@ -24,12 +24,14 @@ import {
   heroKeywords,
   keywordFaqs,
   keywordPageDescription,
+  honestRulesFor,
   keywordPageTitle,
   keywordStats,
   roleLower,
   roleShort,
 } from "@/lib/seo/resume-keywords";
 import { withArticle } from "@/lib/article";
+import { relatedRoleSlugs } from "@/lib/related-roles";
 
 type Params = { role: string };
 
@@ -79,7 +81,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
   const rows = contextRows(e);
   const faqs = keywordFaqs(e);
   const firstName = e.resume.name.split(" ")[0];
-  const related = e.related.map(getKeywordRole).filter((x) => !!x);
+  const related = relatedRoleSlugs(e.slug).map(getKeywordRole).filter((x) => !!x);
   const url = absoluteUrl(`/resume-keywords/${e.slug}`);
   const exampleHref = `/resume-examples/${e.slug}`;
   const lead = `The ${total} ${groups.some((g) => g.id === "credentials") ? "skills, tools and credentials" : "skills and tools"} that come up in ${role} job posts, sorted by type, and how to put them in bullets a recruiter believes.`;
@@ -260,6 +262,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
       {/* HONEST USE (dark) */}
       <section id="honest" className={sectionCls}>
         <HonestRules
+          rules={honestRulesFor(e)}
           title={
             <>
               Keywords get you found. <span className="!text-[#b3b0c8]">Proof gets you hired.</span>

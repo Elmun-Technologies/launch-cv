@@ -34,6 +34,20 @@ const COLUMNS = [
     ],
   },
   {
+    // The most-searched roles (Keyword Planner, Nov 2026): every page links to them.
+    title: "Popular examples",
+    links: [
+      { href: "/resume-examples/teacher", label: "Teacher resume" },
+      { href: "/resume-examples/registered-nurse", label: "Registered nurse resume" },
+      { href: "/resume-examples/data-analyst", label: "Data analyst resume" },
+      { href: "/resume-examples/software-engineer", label: "Software engineer resume" },
+      { href: "/resume-examples/graphic-designer", label: "Graphic designer resume" },
+      { href: "/resume-examples/accountant", label: "Accountant resume" },
+      { href: "/resume-examples/administrative-assistant", label: "Administrative assistant resume" },
+      { href: "/resume-examples/medical-assistant", label: "Medical assistant resume" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { href: "/about", label: "About" },
@@ -110,7 +124,7 @@ export async function SiteFooter() {
           <p className="mt-3.5 text-[15px] leading-6 text-[#4a4862]">{tagline}</p>
           <p className="mt-5 text-[13px] text-[#66647c]">© {YEAR} Elmun Technologies LLC</p>
         </div>
-        <nav aria-label="Footer" className="grid grid-cols-3 gap-x-10 gap-y-8 text-[15px] lg:gap-x-16">
+        <nav aria-label="Footer" className="grid grid-cols-2 gap-x-10 gap-y-8 text-[15px] lg:gap-x-16 xl:grid-cols-4 xl:gap-x-12">
           {COLUMNS.map((c) => (
             <div key={c.title} className="flex flex-col gap-2.5">
               <p className="font-bold text-[#121226]">{c.title}</p>
