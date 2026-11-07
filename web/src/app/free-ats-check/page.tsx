@@ -13,11 +13,13 @@ import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 export const metadata = buildMarketingMetadata({
   title: "Free ATS Resume Checker — Score in 10 Seconds",
   description:
-    "Check your resume against applicant tracking systems for free. Get a 0–100 ATS score, see what the parser can't read and get a fix for every issue. No sign-up.",
+    "Run a free ATS resume test against applicant tracking systems. This resume scanner gives a 0–100 ATS score, shows what the parser can't read and a fix for every issue. No sign-up.",
   pathname: "/free-ats-check",
   image: FREE_ATS_OG_IMAGE,
   keywords: [
     "ATS resume checker",
+    "ATS resume test",
+    "ATS resume scanner",
     "ATS score checker",
     "free ATS score checker",
     "ATS resume test free",

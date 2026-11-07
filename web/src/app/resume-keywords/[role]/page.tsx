@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     description: keywordPageDescription(e),
     pathname: `/resume-keywords/${e.slug}`,
     image: DEFAULT_OG_IMAGE,
-    keywords: [`${role} resume keywords`, `${role} skills for resume`, `${role} ATS keywords`, `${role} resume skills`],
+    keywords: [`${role} resume skills`, `${role} resume keywords`, `${role} skills for resume`, `${role} ATS keywords`],
   });
 }
 
@@ -90,7 +90,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
       {
         "@type": "Article",
         "@id": `${url}#article`,
-        headline: `${e.role} resume keywords`,
+        headline: `${e.role} resume skills`,
         description: keywordPageDescription(e),
         url,
         ...(e.photo ? { image: absoluteUrl(e.photo.src) } : {}),
@@ -129,7 +129,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
             ]}
           />
           <h1 className="mt-3.5 text-[36px] font-extrabold leading-[1.08] tracking-[-0.045em] sm:mt-6 sm:text-[52px] sm:leading-[1.05] lg:text-[60px] lg:leading-[63px]">
-            {e.role} resume keywords. <span className="text-[#7c7a94]">The words recruiters search for.</span>
+            {e.role} resume skills. <span className="text-[#7c7a94]">The words recruiters search for.</span>
           </h1>
           <p className="mt-4 text-[17px] leading-[1.6] text-[#4a4862] sm:mt-5 sm:text-[18px] sm:leading-7">{lead}</p>
           <div className="mt-[18px] flex flex-col gap-2.5 sm:mt-7 sm:flex-row">
