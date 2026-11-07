@@ -15,25 +15,25 @@ shu repoda parallel ishlayapti: biri xavfsizlik (Next.js CVE, PR #79) ustida, me
 kanvas-sayt taqqoslash va SEO ustida. Ishni boshlashdan oldin shu faylni o'qing —
 boshqa sessiya nima qilganini bilish uchun.
 
-## Joriy / bloklangan
+## Joriy / bloklangan (2026-11-07)
 
-- PR #77, #78, #79, #80 — hammasi `main`ga birlashtirilgan.
-- Admin config/security agent (worktree `agent-ab01390c24dab1377`, branch
-  `worktree-agent-ab01390c24dab1377`) hali ishlayapti: IP allow-list, 2FA
-  recovery codes, Origin check, maintenance banner. Tugagach tekshirib
-  birlashtiriladi.
-- GSC tahlili qilindi: texnik muammo yo'q (robots.txt to'g'ri, 311 sahifa
-  sitemap orqali topilgan, 3.82K crawl so'rovi/90 kun). Past ko'rsatkichlar
-  sababi — yangi kontent + hali backlink yo'qligi.
-- Foydalanuvchiga berilgan: Request Indexing ro'yxati (3 kunga bo'lingan,
-  30 URL) va backlink outreach materiallari (katalog tavsiflari, karyera
-  markazi emaili, jurnalist pitch shabloni) — scratchpad'da, fayl sifatida
-  yuborilgan.
-- **Tekshirish kerak:** Vercel loyihasida Settings → Git → Production
-  Branch `main`ga o'rnatilganini tasdiqlang — bir PR preview izohida
-  bexato ravishda `launch-cv.com` (ishlab chiqarish manzili) ko'rsatildi.
-- Foydalanuvchidan GSC'dagi aniq 404 URL manzili kutilmoqda (Pages →
-  "Not found (404)" qatorini bosib ko'rish kerak) — topilgach tuzatiladi.
+- To'lov tuzatildi (Polar): Professional endi $29/oy (yangi product
+  `2e23dae2-…`), access token yangilandi, webhook Standard Webhooks bilan
+  qayta yaratildi, Admin → Integrations "Connection works". Eski yillik
+  Professional product'ni Polar'da arxivlash — foydalanuvchi ixtiyoriy.
+- SEO paketi (branch `claude/compassionate-dijkstra-oa8wgc`, PR ochildi):
+  related-roles grafi (har rolga 6 ta, 0 inbound qolmadi), footer
+  "Popular examples", blog READ NEXT, keyword sahifalari takrorini kamaytirish,
+  `/investors` → `/about` 301, `/what-is-a-good-ats-score`, 4 yangi ATS vendor,
+  4 yangi blog (cv-vs-resume, harvard template, thank-you email, STAR),
+  asossiz statistikalar (HBR "3×", ResumeGo "2024") manbali raqamlarga
+  almashtirildi — prod DB'da `content-fixes.json` orqali (endi FAQ'larni ham
+  tuzatadi). Tadqiqot: `docs/seo-tadqiqot-2026-11.md`.
+- Keyingi g'oyalar: bepul "job description keyword extractor" vositasi,
+  resume summary examples hub, mock interview / skills postlari.
+- Foydalanuvchi qiladi: GSC Request Indexing, backlink outreach (materiallar
+  oldin berilgan). Link sotib olish / spam backlink — qilinmaydi.
+- **Tekshirish kerak:** Vercel → Settings → Git → Production Branch `main`.
 
 ## Limitni tejash
 
