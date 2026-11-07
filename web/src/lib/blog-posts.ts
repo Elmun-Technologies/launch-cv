@@ -862,6 +862,95 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       { q: "What should I look for in an AI resume builder?", a: "Prioritize ATS-safe templates with no tables or columns, JD alignment that analyzes keyword gaps against a pasted job description, and a real-time preview of the final PDF. Also look for PDF and DOCX export, industry-specific templates, voice input, and strong privacy so your data isn't used to train models without consent." },
     ],
   },
+
+  {
+    slug: "harvard-resume-template-vs-google-docs",
+    coverImage: "/images/product/resume-templates.svg",
+    coverAlt:
+      "Clean, single-column, ATS-safe resume templates in LaunchCV, built around the same reverse-chronological, no-graphics principles as the traditional \"Harvard-style\" resume format.",
+    title: "Harvard Resume Template vs. Google Docs Resume Template (2026)",
+    seoTitle: "Harvard Resume Template vs. Google Docs Template (2026)",
+    description:
+      "Most people searching \"Harvard resume template\" or \"Google Docs resume template\" just want a clean, professional resume that actually gets read. Here's the real format behind both searches, and how to build it for free without hunting down a PDF.",
+    date: "2026-11-04",
+    readingTime: 7,
+    category: "Resume Tips",
+    tags: ["harvard resume template", "google docs resume template", "ats-friendly resume format", "traditional resume format", "resume template"],
+    seoDescription:
+      "What \"Harvard resume template\" and \"Google Docs resume template\" searches are really after: a clean, ATS-safe format — and how to build one for free.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "What you're actually looking for when you search \"Harvard resume template\"",
+        body: `A lot of people search for a "Harvard resume template" every year, but very few of them actually need a PDF from Harvard's Office of Career Services. What they want is something more specific: a resume that looks the way a serious, respected institution would expect a resume to look — plain, confident, and unmistakably professional.
+
+That instinct is correct, even if the search phrase is a bit of a shorthand. "Harvard resume template" has come to stand in for a whole category of resume: reverse-chronological, black text on a white page, no photo, no icon graphics, no colored sidebar or "modern" two-column layout. It's the format career offices at top universities and experienced recruiters alike have recommended for decades, long before applicant tracking software existed — and it still works today, for a slightly different reason.
+
+**To be direct: LaunchCV is not affiliated with Harvard, and this post doesn't link to or distribute Harvard's own resume guide.** What follows is a plain description of the well-established *style* that search is really pointing at, why that style holds up, how it compares to the templates built into Google Docs, and how to build a resume that follows the same principles without tracking down a specific document.`,
+      },
+      {
+        heading: "The resume format Harvard's Office of Career Services is known for",
+        body: `Harvard's Office of Career Services, like most university career centers, publishes its own resume-writing guidance for students. It isn't a secret or a proprietary design — it's standard, widely taught advice that career counselors, outplacement firms, and professional resume writers have converged on for years. That convergence is exactly why "Harvard resume template" gets used as a stand-in for "the correct, traditional resume format," rather than for one specific file.
+
+The principles behind that style are genuinely well established, not obscure:
+
+- **Reverse-chronological order.** Your most recent job comes first, in every section, so nobody has to hunt for your current role.
+- **A plain, single-column layout.** No sidebars, no text boxes, no colored panels — just contact info, then a clean sequence of sections reading top to bottom.
+- **Conventional section headings.** *Education*, *Experience*, *Skills* — not creative relabeling.
+- **Clean, standard fonts.** Times New Roman, Georgia, Calibri, or Arial, usually 10–12pt, with consistent spacing and no decorative flourishes.
+- **No photo, no icons, no graphics.** No headshot, no "skill level" bar charts, no logos.
+- **Bullet points that lead with an action verb and end with a result.** "Led a 4-person team that cut onboarding time from three weeks to nine days" rather than "Responsible for onboarding."
+- **One page for most students and early-career candidates**, extending to two only when the experience genuinely warrants it.
+
+None of this is complicated, and none of it is unique to Harvard — you'll find nearly identical advice from other university career centers and from most professional resume-writing guides. What makes it durable is that it's optimized for how a resume is actually read: a fast skim by a recruiter, not a design showcase.`,
+      },
+      {
+        heading: "Why a plain, ATS-safe format beats a flashy template",
+        body: `Templates with colored sidebars, icon-based skill bars, and infographic-style elements are everywhere, and it's easy to see the appeal — they look modern, and they stand out in a stack of plain text resumes. The problem is *where* they stand out: not with the person deciding whether to interview you, but with the software that decides whether a person ever sees the resume at all.
+
+Most mid-size and large employers run every online application through an Applicant Tracking System (ATS) before a recruiter opens it. We cover exactly how that parsing works in our guide on [writing an ATS-friendly resume](/blog/how-to-write-an-ats-friendly-resume), but the short version is: ATS software reads a resume roughly top to bottom, column by column, cell by cell. A two-column layout with your skills in a sidebar can get read in the wrong order, or dropped entirely. A table used to line up dates can lose content. A headshot or a "proficiency" bar chart contributes nothing, because there's no field for the parser to put it in.
+
+A plain, single-column, traditional resume avoids all of that by construction — there's nothing unusual there to misread. And because the same plainness that helps the software also helps the human, you're not trading one audience for the other. A recruiter can find your most recent title and top skill in a glance, the same way a parser can extract them cleanly. One format serves both readers.`,
+      },
+      {
+        heading: "What about Google Docs resume templates?",
+        body: `Google Docs is the other place a huge number of job seekers start, for understandable reasons: it's free, it's already open in your browser, and the built-in template gallery (Docs → Template gallery → Resumes) gives you something to fill in instead of a blank page.
+
+The tradeoff is the same one described above, just less obvious at a glance. Several of Google Docs' own resume templates — the ones with a shaded sidebar for contact details and skills, or a two-column layout designed to fit more on one page — are built the same way as the flashy templates above: with tables or text boxes used for layout. That's fine for a document a person opens directly, like one you email straight to a hiring manager or print for a portfolio review. It's a real risk for anything you submit through an online application form or job board, where an ATS reads it first.
+
+None of this means avoid Google Docs. It means pick carefully. The plainest, single-column templates in that gallery are genuinely fine, and a blank Google Doc formatted by hand in the style above works just as well as anything else. The ones to be cautious with are the ones that look the most like a "template" — a sidebar, an accent-colored header band, a two-column skills grid — because that visual structure is usually built on exactly the layout tricks an ATS struggles with.`,
+      },
+      {
+        heading: "Getting the same clean result without starting from a blank page",
+        body: `You don't need to track down a specific document or second-guess which Google Docs template is secretly a table in disguise. LaunchCV's resume templates are built around the same principles that style is known for — reverse-chronological order, a single column, standard section headings, no graphics — and every one of them is checked to parse cleanly in major ATS platforms, not just designed to *look* clean.
+
+The practical difference is what happens after you pick a layout. Instead of staring at a blank template wondering how to phrase your experience, you describe what you did in plain language and the [AI resume builder](/features/resume-builder) turns it into the action-verb, quantified-result bullets that format is known for. When you're done, run it through the [free ATS score checker](/free-ats-check) to confirm it reads cleanly before you submit it anywhere — the same quick check whether you built the resume with us or just want to sanity-check a Google Doc you already wrote.`,
+      },
+      {
+        heading: "Quick checklist: is your resume in the traditional, ATS-safe format?",
+        body: `✓ Reverse-chronological work history, most recent role first.
+✓ Single column — no sidebars, text boxes, or tables.
+✓ Standard headings: Work Experience, Education, Skills.
+✓ One clean, standard font throughout, 10–12pt.
+✓ No photo, icons, color blocks, or graphics.
+✓ Every bullet starts with an action verb and includes a measurable result.
+✓ One page if you have under roughly 8 years of experience, two at most beyond that.
+✓ Saved as a text-based PDF unless the application specifically asks for DOCX.`,
+      },
+    ],
+    faqs: [
+      { q: "Can I download Harvard's actual resume template?", a: "We don't host, copy, or distribute Harvard's own resume guide, and LaunchCV isn't affiliated with Harvard. What most people searching for it actually want is the style it's known for — plain, reverse-chronological, no graphics — not one specific file. You can build a resume that follows those same principles with any plain template, including LaunchCV's." },
+      { q: "What makes a resume look like a traditional \"Harvard-style\" resume?", a: "Reverse-chronological work history, a single-column layout, standard section headings like Experience and Education, a clean standard font, no photo or graphics, and bullet points that lead with an action verb and end with a measurable result. It's a well-established, widely taught format, not a proprietary design." },
+      { q: "Are Google Docs resume templates ATS-friendly?", a: "It depends on the specific template. The plain, single-column templates in Google Docs' gallery are fine for ATS. The ones with a shaded sidebar, a two-column skills grid, or an accent-colored header band are usually built with tables or text boxes, which many Applicant Tracking Systems misread or drop entirely." },
+      { q: "Is a plain resume format actually better than a designed one?", a: "For almost any resume submitted through an online application or job board, yes, because an ATS reads it before a person does and plain formatting parses reliably. A more visually designed resume can still make sense for creative portfolio submissions reviewed directly by a person, outside an ATS." },
+      { q: "Is LaunchCV affiliated with Harvard?", a: "No. LaunchCV is an independent resume and job-search tool. We reference the well-known resume style associated with Harvard's career office because it describes a widely taught, traditional format — we don't host, copy, or claim any connection to Harvard's own materials." },
+      { q: "What file format should I save my resume as?", a: "Save a text-based PDF unless the job application specifically asks for a Word document (.docx). A text-based PDF preserves your formatting while remaining fully readable by ATS software, as long as the underlying layout is single-column with no tables or embedded images of text." },
+    ],
+  },
 ];
 
 export function getPostBySlug(slug: string): BlogPost | undefined {
