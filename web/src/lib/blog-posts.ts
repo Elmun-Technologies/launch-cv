@@ -624,7 +624,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     sections: [
       {
         heading: "Why tailoring is non-negotiable",
-        body: "A Harvard Business Review study found that tailored applications receive 3× more interview invitations than generic ones. The reason is simple: hiring managers spend an average of 7 seconds scanning a resume before deciding to read or reject it. If the first thing they see doesn't match the role, they move on. Tailoring ensures that the most relevant experience appears prominently, that the keywords match what recruiters are looking for, and that your professional summary sounds like it was written for this exact position.",
+        body: "Recruiters skim before they read. In a 2018 eye-tracking study by Ladders, recruiters spent about 7.4 seconds on an initial resume screen before deciding whether to keep reading. If the first thing they see doesn't match the role, they move on. Tailoring ensures that the most relevant experience appears prominently, that the keywords match what recruiters are looking for, and that your professional summary sounds like it was written for this exact position.",
       },
       {
         heading: "Step 1 — Deconstruct the job description",
@@ -647,7 +647,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       { q: "How long does tailoring take?", a: "With AI assistance, about 5 to 10 minutes per application. Without AI, doing it properly typically takes 20 to 40 minutes, since you have to deconstruct the job description, rewrite your summary, and update several bullets by hand. The AI mainly speeds up keyword gap analysis and rewrites." },
       { q: "Should I have different resume versions?", a: "Yes. Maintain a master resume that holds all your experience, then create tailored versions for each role or job category from it. Save each version with the company name and date so you can track what you sent where. Tailoring the summary and a few bullets per role is usually enough." },
       { q: "Does tailoring work for career changers?", a: "Yes, especially for career changers. Tailoring helps you emphasize transferable skills and reframe past experience in the language the new industry actually uses. By mirroring the target role's vocabulary and leading with your most relevant achievements, you help both the ATS and the hiring manager see how you fit." },
-      { q: "Why is tailoring my resume to each job worth the effort?", a: "Tailored applications receive roughly three times more interview invitations than generic ones. Hiring managers spend about seven seconds scanning a resume, so if the most relevant experience and keywords aren't immediately visible, they move on. Tailoring puts the right match front and center for both the ATS and the reader." },
+      { q: "Why is tailoring my resume to each job worth the effort?", a: "Recruiters skim first: a 2018 Ladders eye-tracking study measured an initial resume screen at about 7.4 seconds. If the most relevant experience and keywords aren't immediately visible, they move on. Tailoring puts the right match front and center for both the ATS and the reader." },
       { q: "Do I need to rewrite my whole resume for each job?", a: "No. Focus on the highest-impact changes: rewrite your professional summary and update two or three bullet points in your most recent roles. Incorporate missing keywords naturally, reframe experience toward the outcomes the role values, and add metrics. The underlying facts stay the same; only the emphasis and wording shift." },
       { q: "How do I know if my tailored resume matches the job well enough?", a: "Run a JD alignment check: paste the job description and your updated resume, and the tool calculates a match percentage and shows remaining keyword gaps. Aim for roughly 85% or higher, which typically passes most ATS filters and reads as highly relevant to a human reviewer. Close gaps and re-check." },
     ],
@@ -675,7 +675,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     sections: [
       {
         heading: "Do cover letters still matter?",
-        body: "Yes — but differently than most people think. A 2024 survey by ResumeGo found that candidates who submitted cover letters received interview invitations 53% more often than those who did not. However, generic cover letters performed no better than no letter at all. The key is specificity. A cover letter that references the company's actual product, mission, or recent news — and connects it to your specific experience — demonstrates preparation that stands out.",
+        body: "Yes — but differently than most people think. In a ResumeGo field experiment (7,287 applications sent between July 2019 and January 2020), applications with a cover letter tailored to the job got a 16.4% callback rate, against 10.7% with no cover letter, about 53% more. A generic letter landed in between, at 12.5%. The key is specificity. A cover letter that references the company's actual product, mission, or recent news — and connects it to your specific experience — demonstrates preparation that stands out.",
       },
       {
         heading: "Tip 1: Open with the most compelling thing about you",
