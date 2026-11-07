@@ -11,6 +11,7 @@
 | [12-qa-load-beta](./12-qa-load-beta.md) | 12.x — QA, load, beta, launch |
 | [13-polar-payments](./13-polar-payments.md) | Polar checkout / subscriptions |
 | [14-seo-content-plan](./14-seo-content-plan.md) | SEO/GEO content plan + 15 blog outlines (resume/ATS/job search) |
+| [HOLAT](./HOLAT.md) | Joriy holat — yangi sessiya shundan boshlaydi |
 
 **Tashqi:** agar git repozitoriyingiz ildizi `resume builder/` bo‘lsa, `.github/workflows/ci.yml` shu ildizda — ishchi papka `web/`. Agar repozitoriya faqat `web/` bo‘lsa, workflow faylini `web/.github/` ichiga ko‘chirib, `defaults.run.working-directory` qatorini olib tashlang.
 
