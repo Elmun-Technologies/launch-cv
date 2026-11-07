@@ -43,9 +43,11 @@ export const metadata = buildMarketingMetadata({
 
 const RELATED: { href: string; t: string; d: string }[] = [
   { href: "/free-ats-check", t: "Free ATS check", d: "Get your real score and a fix for every issue — no account needed." },
-  { href: "/ats", t: "ATS guides by vendor", d: "Workday, Greenhouse, iCIMS, Taleo, Lever and SuccessFactors." },
+  { href: "/ats", t: "ATS guides by vendor", d: "What Workday, Greenhouse, iCIMS, Ashby and others each parse." },
   { href: "/resume-format", t: "Resume format", d: "Layout, section order and dates that parse cleanly." },
   { href: "/resume-keywords", t: "Resume keywords", d: "The skills and terms recruiters search for, by role." },
+  { href: "/blog/what-is-an-ats-score", t: "What an ATS score measures", d: "Where the number comes from and what it can't tell you." },
+  { href: "/blog/how-to-check-ats-score-of-resume", t: "How to check your ATS score", d: "A step-by-step check you can run before every application." },
 ];
 
 function VendorsFigure() {
