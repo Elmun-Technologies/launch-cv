@@ -7,6 +7,25 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/api/resumes/*/pdf": ["./src/lib/pdf/fonts/**"],
   },
+  async headers() {
+    // Baseline hardening headers only — no Content-Security-Policy yet.
+    // This app loads GA4, PostHog and Mixpanel from admin-configurable hosts
+    // (see src/lib/integrations.ts), so a safe CSP needs a tested, Report-Only
+    // rollout (see docs/SECURITY.md) rather than a blind enforce here, which
+    // could silently break analytics or the Google OAuth / Polar checkout flows.
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+        ],
+      },
+    ];
+  },
   async redirects() {
     // Billing-period tokens (e.g. "$9/month") that crawlers occasionally
     // mis-extract as relative URLs should land on the pricing page, not a 404.
