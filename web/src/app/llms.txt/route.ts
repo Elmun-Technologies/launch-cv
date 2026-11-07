@@ -191,6 +191,8 @@ contact): ${baseUrl}/ai-info
 - Resume bullet point generator: ${baseUrl}/tools/resume-bullet-point-generator (daily limit)
 - Resume summary generator: ${baseUrl}/tools/resume-summary-generator (daily limit)
 - Resume word counter: ${baseUrl}/tools/resume-word-counter (runs in the browser)
+- Job description keyword scanner: ${baseUrl}/tools/job-description-keyword-scanner (runs in the browser; ranks a
+  posting's skills and tools and marks which a pasted resume already uses)
 - Resume action verbs: ${baseUrl}/resume-action-verbs
 - All free tools: ${baseUrl}/tools
 

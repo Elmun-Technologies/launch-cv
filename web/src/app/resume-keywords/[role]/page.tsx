@@ -16,6 +16,7 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { faqPageLd } from "@/lib/faq-ld";
+import { KEYWORD_SCANNER_PATH } from "@/lib/seo/free-tools";
 import {
   KEYWORD_ROLES,
   KEYWORDS_UPDATED,
@@ -274,6 +275,13 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
               <div>
                 <p className="text-[20px] font-extrabold leading-tight tracking-[-0.02em] sm:text-[24px]">Which of these does your resume say?</p>
                 <p className="mt-1.5 text-[15px] text-[#e4dfff]">Free ATS score and missing keywords in about 10 seconds.</p>
+                <p className="mt-1.5 text-[15px] text-[#e4dfff]">
+                  Applying to one post?{" "}
+                  <Link href={KEYWORD_SCANNER_PATH} className="font-semibold text-white underline decoration-white/40 underline-offset-[3px] hover:decoration-white">
+                    Scan its keywords
+                  </Link>{" "}
+                  against your resume.
+                </p>
               </div>
               <CtaLink cta="free_ats_check" location="resume_keywords_mid" href="/free-ats-check" className={`${btnWhite} flex-none`}>
                 Check my resume

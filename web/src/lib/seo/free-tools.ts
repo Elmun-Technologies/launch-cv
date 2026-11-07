@@ -8,14 +8,16 @@ import { absoluteUrl } from "@/lib/site";
  * comes from the verb list itself.
  */
 
-export type FreeToolKey = "ats" | "bullets" | "summary" | "words" | "verbs" | "resignation";
+export type FreeToolKey = "ats" | "keywords" | "bullets" | "summary" | "words" | "verbs" | "resignation";
 export type FreeTool = { key: FreeToolKey; href: string; name: string; blurb: string; kind: "AI" | "Instant" | "Guide" };
 
 export const TOOLS_INDEX_PATH = "/tools";
+export const KEYWORD_SCANNER_PATH = "/tools/job-description-keyword-scanner";
 
 export function freeTools(): FreeTool[] {
   return [
     { key: "ats", href: "/free-ats-check", name: "ATS resume checker", blurb: "A 0–100 score and a fix for each issue", kind: "AI" },
+    { key: "keywords", href: KEYWORD_SCANNER_PATH, name: "Job description keyword scanner", blurb: "A job's keywords, ranked, checked against your resume", kind: "Instant" },
     { key: "bullets", href: "/tools/resume-bullet-point-generator", name: "Bullet point generator", blurb: "Duty in, result-first bullets out", kind: "AI" },
     { key: "summary", href: "/tools/resume-summary-generator", name: "Summary generator", blurb: "Three summaries from your own facts", kind: "AI" },
     { key: "words", href: "/tools/resume-word-counter", name: "Resume word counter", blurb: "Length, bullets and filler words", kind: "Instant" },

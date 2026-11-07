@@ -100,7 +100,7 @@ export default async function AiInfoPage() {
       ? "Free once a month per network, no account"
       : key === "bullets" || key === "summary"
         ? `Free, ${freeLimit} generations a day shared by the two generators, no account`
-        : key === "words"
+        : key === "words" || key === "keywords"
           ? "Free, runs in the browser, no limit"
           : "Free, no limit";
 
