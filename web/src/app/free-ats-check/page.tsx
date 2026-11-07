@@ -250,6 +250,13 @@ export default async function FreeAtsCheckPage() {
             <p className="bg-[#fdf0d5] px-4 py-3 text-[#7a4600] lg:px-6 lg:py-5">65–80 · readable</p>
             <p className="bg-[#dcf5ea] px-4 py-3 text-[#0b4f35] lg:px-6 lg:py-5">80+ · ready to send</p>
           </div>
+          <p className="mt-3.5 text-[14px] text-[#4a4862] lg:mt-4 lg:text-[15px]">
+            There&apos;s no single, universal ATS score — every checker and every applicant tracking system measures something slightly different. See{" "}
+            <Link href="/what-is-a-good-ats-score" className="lc-link font-semibold text-[#5440e8]">
+              what counts as a good ATS score
+            </Link>{" "}
+            and exactly what this one checks.
+          </p>
         </section>
 
         {/* WHAT IT CHECKS (dark) */}

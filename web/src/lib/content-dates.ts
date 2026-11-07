@@ -28,6 +28,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/cover-letter-examples/*": "2026-10-27",
   "/alternatives/jobscan": "2026-11-02",
   "/resume-format": "2026-11-02",
+  "/what-is-a-good-ats-score": "2026-11-07",
   "/how-to-write-a-resume": "2026-11-02",
   "/resume-length": "2026-11-02",
   "/cover-letter-template": "2026-11-02",
