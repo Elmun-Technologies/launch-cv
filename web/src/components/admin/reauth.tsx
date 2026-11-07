@@ -11,22 +11,48 @@ const fieldCls =
  * Sensitive admin calls (keys, limits, roles) answer 401 `reauth_required`
  * unless the admin confirmed password + code in the last 5 minutes.
  * `useAdminFetch()` asks for them in a dialog and retries once.
+ *
+ * Pass `{ action: "save the OpenAI key", keyChange: true }` as the third
+ * argument so the dialog says what is being confirmed, and (when the
+ * "email the owner on every key change" rule is on) that owners are emailed.
  */
 
-type Ask = () => Promise<boolean>;
+export type ReauthIntent = {
+  /** Finishes the sentence "Confirm to …", e.g. "save the OpenAI key". */
+  action?: string;
+  /** An integration key change: owners are emailed when that rule is on. */
+  keyChange?: boolean;
+};
+
+type Ask = (intent?: ReauthIntent) => Promise<boolean>;
 const Ctx = createContext<Ask | null>(null);
 
-export function ReauthProvider({ children, hasPassword, hasTotp }: { children: React.ReactNode; hasPassword: boolean; hasTotp: boolean }) {
+export function ReauthProvider({
+  children,
+  hasPassword,
+  hasTotp,
+  emailOwnerOnKeyChange = false,
+}: {
+  children: React.ReactNode;
+  hasPassword: boolean;
+  hasTotp: boolean;
+  /** Admin → Security rule "Email the owner on every key change" is on. */
+  emailOwnerOnKeyChange?: boolean;
+}) {
   const [open, setOpen] = useState(false);
+  const [intent, setIntent] = useState<ReauthIntent>({});
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const [useRecovery, setUseRecovery] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const resolver = useRef<((ok: boolean) => void) | null>(null);
 
-  const ask = useCallback<Ask>(() => {
+  const ask = useCallback<Ask>((next) => {
+    setIntent(next ?? {});
     setPassword("");
     setCode("");
+    setUseRecovery(false);
     setError(null);
     setOpen(true);
     return new Promise<boolean>((resolve) => {
@@ -55,12 +81,15 @@ export function ReauthProvider({ children, hasPassword, hasTotp }: { children: R
     else setError(j.error ?? "Couldn't confirm. Try again.");
   }
 
+  const owners = !!intent.keyChange && emailOwnerOnKeyChange;
+
   return (
     <Ctx.Provider value={ask}>
       {children}
       {open ? (
+        // z-[70]: above the cookie banner (z-50) and the admin shell's overlays.
         <div
-          className={`lc-site ${siteFontVars} fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#111118]/45 px-4 py-6`}
+          className={`lc-site ${siteFontVars} fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-[#111118]/45 px-4 py-6`}
           onClick={() => close(false)}
         >
           <form
@@ -82,7 +111,15 @@ export function ReauthProvider({ children, hasPassword, hasTotp }: { children: R
               Confirm it&apos;s you
             </h2>
             <p id="reauth-desc" className="mt-1.5 text-[15px] leading-[23px] text-[#4a4862]">
-              This change affects keys, limits or access. It&apos;s written to the audit log.
+              {intent.action ? (
+                <>
+                  Confirm to <b className="font-bold text-[#121226]">{intent.action}</b>.{" "}
+                </>
+              ) : (
+                <>This change affects keys, limits or access. </>
+              )}
+              It&apos;s written to the audit log.
+              {owners ? <span className="mt-1 block">The owner is emailed about this change.</span> : null}
             </p>
             <div className="mt-5 flex flex-col gap-3">
               {hasPassword ? (
@@ -100,19 +137,48 @@ export function ReauthProvider({ children, hasPassword, hasTotp }: { children: R
                 </label>
               ) : null}
               {hasTotp ? (
-                <label className="block text-[13px] font-bold text-[#4a4862]">
-                  6-digit code from your authenticator
-                  <input
-                    inputMode="numeric"
-                    autoComplete="one-time-code"
-                    maxLength={7}
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className={`${fieldCls} font-mono text-[18px]! tracking-[0.25em]`}
-                    required
-                    autoFocus={!hasPassword}
-                  />
-                </label>
+                <div>
+                  <label className="block text-[13px] font-bold text-[#4a4862]">
+                    {useRecovery ? "Recovery code" : "6-digit code from your authenticator"}
+                    {useRecovery ? (
+                      <input
+                        key="recovery"
+                        autoComplete="off"
+                        autoCapitalize="none"
+                        spellCheck={false}
+                        maxLength={16}
+                        placeholder="xxxxx-xxxxx"
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        className={`${fieldCls} font-mono text-[18px]! tracking-[0.12em]`}
+                        required
+                        autoFocus
+                      />
+                    ) : (
+                      <input
+                        key="totp"
+                        inputMode="numeric"
+                        autoComplete="one-time-code"
+                        maxLength={7}
+                        value={code}
+                        onChange={(e) => setCode(e.target.value)}
+                        className={`${fieldCls} font-mono text-[18px]! tracking-[0.25em]`}
+                        required
+                        autoFocus={!hasPassword}
+                      />
+                    )}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUseRecovery((v) => !v);
+                      setCode("");
+                    }}
+                    className="mt-1.5 inline-flex min-h-[44px] items-center text-[13px] font-bold text-[#5440e8] hover:text-[#3a2bb8] sm:min-h-[28px]"
+                  >
+                    {useRecovery ? "Use your authenticator code" : "Use a recovery code instead"}
+                  </button>
+                </div>
               ) : null}
             </div>
             {error ? (
@@ -148,12 +214,12 @@ export function ReauthProvider({ children, hasPassword, hasTotp }: { children: R
 export function useAdminFetch() {
   const ask = useContext(Ctx);
   return useCallback(
-    async (url: string, init?: RequestInit): Promise<Response> => {
+    async (url: string, init?: RequestInit, intent?: ReauthIntent): Promise<Response> => {
       const r = await fetch(url, init);
       if (r.status !== 401 || !ask) return r;
       const j = await r.clone().json().catch(() => ({}));
       if (j.code !== "reauth_required") return r;
-      if (!(await ask())) return r;
+      if (!(await ask(intent))) return r;
       return fetch(url, init);
     },
     [ask],

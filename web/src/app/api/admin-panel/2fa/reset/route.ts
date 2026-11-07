@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { adminApi } from "@/lib/admin-api";
 import { recordAudit } from "@/lib/cms/audit";
 import { getClientIp } from "@/lib/request-ip";
+import { clearRecoveryCodes } from "@/lib/recovery-codes";
 
 const body = z.object({ userId: z.string().min(1).max(64) });
 
@@ -14,6 +15,7 @@ export async function POST(req: Request) {
   const parsed = body.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   await prisma.user.update({ where: { id: parsed.data.userId }, data: { totpSecret: null, totpEnabledAt: null, totpLastStep: null } });
+  await clearRecoveryCodes(parsed.data.userId);
   await recordAudit({ actorId: g.staff.sub, action: "admin.2fa.reset", entity: "User", entityId: parsed.data.userId, ip: getClientIp(req) });
   return NextResponse.json({ ok: true });
 }

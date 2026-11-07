@@ -4,7 +4,7 @@ import { useState } from "react";
 import { resetUser } from "@/lib/analytics-client";
 
 /** Signs out with the POST-only logout route, then returns to the login page. */
-export function SignOutButton({ className }: { className?: string }) {
+export function SignOutButton({ className, label = "Sign out" }: { className?: string; label?: string }) {
   const [busy, setBusy] = useState(false);
   return (
     <button
@@ -18,7 +18,7 @@ export function SignOutButton({ className }: { className?: string }) {
         window.location.assign("/login");
       }}
     >
-      {busy ? "Signing out…" : "Sign out"}
+      {busy ? "Signing out…" : label}
     </button>
   );
 }

@@ -1,5 +1,6 @@
 import { appBaseUrl } from "@/lib/email";
 import { getIntegrationValue } from "@/lib/integrations";
+import { getSettings } from "@/lib/app-settings";
 
 /**
  * Lightweight Google OAuth 2.0 helper (Authorization Code flow).
@@ -28,9 +29,11 @@ async function googleClientSecret(): Promise<string> {
   return getIntegrationValue("google", "clientSecret");
 }
 
-/** True when both the client id and secret are configured. Used to hide the
- *  "Continue with Google" button when the deployment hasn't set up OAuth. */
+/** True when Google sign-in is switched on (Admin → Settings → Product) and
+ *  both the client id and secret are configured. Hides the "Continue with
+ *  Google" button, and the OAuth start and callback routes refuse when false. */
 export async function isGoogleOAuthConfigured(): Promise<boolean> {
+  if (!(await getSettings()).switches.googleSignIn) return false;
   return (await googleClientId()).length > 0 && (await googleClientSecret()).length > 0;
 }
 

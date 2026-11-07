@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { CookieBanner } from "@/components/cookie-banner";
+import { MaintenanceBanner } from "@/components/maintenance-banner";
 import { ToastProvider } from "@/components/toast";
 import { AppProviders } from "@/app/providers";
 import { JsonLd } from "@/components/json-ld";
@@ -172,6 +173,7 @@ export default async function RootLayout({
         <AttributionTracker />
         <JsonLd data={rootStructuredData} />
         <AppProviders>
+          <MaintenanceBanner />
           {children}
           <CookieBanner />
           <ToastProvider />
