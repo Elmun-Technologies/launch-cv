@@ -12,6 +12,7 @@ import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { faqPageLd } from "@/lib/faq-ld";
 import { RESUME_GROUPS, type ResumeExample } from "@/lib/resume-examples";
 import { KEYWORD_ROLES, KEYWORDS_UPDATED, keywordStats } from "@/lib/seo/resume-keywords";
+import { KEYWORD_SCANNER_PATH } from "@/lib/seo/free-tools";
 
 const TOTAL_ROLES = KEYWORD_ROLES.length;
 const TOTAL_KEYWORDS = KEYWORD_ROLES.reduce((n, e) => n + e.keywords.length, 0);
@@ -203,13 +204,27 @@ export default function ResumeKeywordsIndexPage() {
               See our ATS guides
             </Link>
           </p>
+          <p className="mt-3 text-[15px] leading-6 text-[#4a4862] sm:text-[16px] sm:leading-[25px]">
+            Have the job post open?{" "}
+            <Link href={KEYWORD_SCANNER_PATH} className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] hover:decoration-[#5440e8]">
+              Scan it for keywords
+            </Link>{" "}
+            and see which ones your resume is missing.
+          </p>
         </div>
         <FaqList faqs={FAQS} />
       </section>
 
       <section aria-label="More resources" className={`${container} pt-14 lg:pt-[110px]`}>
         <p className={labelCls}>
-          <span aria-hidden="true">/ </span>Full examples
+          <span aria-hidden="true">/ </span>More resources
+        </p>
+        <p className="mt-3 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862]">
+          These lists cover a role in general. For one specific job, paste its posting into the free{" "}
+          <Link href={KEYWORD_SCANNER_PATH} className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] hover:decoration-[#5440e8]">
+            job description keyword scanner
+          </Link>
+          : it ranks the post&apos;s skills and tools and checks them against your resume, in your browser.
         </p>
         <p className="mt-3 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862]">
           Every list comes with a complete sample resume and cover letter.{" "}

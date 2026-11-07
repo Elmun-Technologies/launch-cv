@@ -9,6 +9,7 @@ import { container, FaqIcon, labelCls } from "@/components/site/ui";
 import { buildMarketingMetadata, FREE_ATS_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { getFaqsFor } from "@/lib/cms/faqs";
+import { KEYWORD_SCANNER_PATH } from "@/lib/seo/free-tools";
 
 export const metadata = buildMarketingMetadata({
   title: "Free ATS Resume Checker — Score in 10 Seconds",
@@ -305,6 +306,13 @@ export default async function FreeAtsCheckPage() {
                 </li>
               ))}
             </ol>
+            <p className="mt-3.5 text-[14px] text-[#4a4862] lg:mt-4 lg:text-[15px]">
+              Tailoring to one job? Paste the post into the free{" "}
+              <Link href={KEYWORD_SCANNER_PATH} className="lc-link font-semibold text-[#5440e8]">
+                job description keyword scanner
+              </Link>{" "}
+              to see its keywords ranked and which ones your resume is missing.
+            </p>
           </div>
           <div className="lc-reveal relative h-[360px] overflow-hidden rounded-[28px] bg-[#e4dfff] lg:h-auto lg:min-h-[640px] lg:rounded-[36px]">
             <div aria-hidden="true" className="absolute -bottom-[110px] -right-[70px] h-[320px] w-[320px] rounded-full bg-[#c9c0ff] lg:-bottom-[150px] lg:-right-20 lg:h-[480px] lg:w-[480px]" />

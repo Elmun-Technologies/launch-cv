@@ -13,21 +13,21 @@ import { absoluteUrl } from "@/lib/site";
 export const revalidate = 60;
 
 const DESCRIPTION =
-  "Free resume tools from LaunchCV: an ATS checker, bullet point, summary and resignation letter generators, a word counter and action verbs. No account needed.";
+  "Free resume tools: an ATS checker, a job description keyword scanner, bullet, summary and resignation letter generators, and a word counter. No account.";
 
 export const metadata = buildMarketingMetadata({
   title: "Free Resume Tools — ATS Check, Bullets & Summaries",
   description: DESCRIPTION,
   pathname: TOOLS_INDEX_PATH,
   image: DEFAULT_OG_IMAGE,
-  keywords: ["free resume tools", "resume bullet point generator", "resume summary generator", "resume word counter", "free ATS checker", "resignation letter generator"],
+  keywords: ["free resume tools", "job description keyword scanner", "resume bullet point generator", "resume summary generator", "resume word counter", "free ATS checker", "resignation letter generator"],
 });
 
 function buildFaqs(limit: number): FaqItem[] {
   return [
     {
       q: "Are these resume tools really free?",
-      a: `Yes. The ATS check runs once a month per network. The bullet point, summary and resignation letter generators share ${limit} free generations a day. The word counter and the action verbs list have no limit.`,
+      a: `Yes. The ATS check runs once a month per network. The bullet point, summary and resignation letter generators share ${limit} free generations a day. The keyword scanner, the word counter and the action verbs list have no limit.`,
     },
     {
       q: "Do I need an account?",
@@ -39,7 +39,7 @@ function buildFaqs(limit: number): FaqItem[] {
     },
     {
       q: "Is my text stored?",
-      a: "The word counter runs in your browser and sends nothing. The bullet, summary and resignation letter generators send your text to our AI provider and don't store it. The ATS check keeps your score and fixes, not your file.",
+      a: "The keyword scanner and the word counter run in your browser and send nothing. The bullet, summary and resignation letter generators send your text to our AI provider and don't store it. The ATS check keeps your score and fixes, not your file.",
     },
   ];
 }
@@ -47,8 +47,21 @@ function buildFaqs(limit: number): FaqItem[] {
 function note(key: FreeToolKey, limit: number) {
   if (key === "ats") return "Free · once a month · no account";
   if (key === "bullets" || key === "summary" || key === "resignation") return `Free · ${limit} a day · no account`;
-  if (key === "words") return "Free · runs in your browser";
+  if (key === "words" || key === "keywords") return "Free · runs in your browser";
   return "Free · copy any verb";
+}
+
+/**
+ * Grid spans: the first card is tall on desktop, beside a 2×2 block. The last card widens
+ * to fill its row instead of leaving a gap (2 columns on tablet, 3 on desktop).
+ */
+function cardSpan(i: number, n: number): string {
+  if (i === 0) return "sm:col-span-2 lg:col-span-1 lg:row-span-2";
+  if (i !== n - 1) return "";
+  const sm = (n - 1) % 2 === 1 ? "sm:col-span-2" : "";
+  const rest = n > 5 ? (n - 5) % 3 : 0;
+  const lg = rest === 1 ? "lg:col-span-3" : rest === 2 ? "lg:col-span-2" : sm ? "lg:col-span-1" : "";
+  return [sm, lg].filter(Boolean).join(" ");
 }
 
 export default async function ToolsIndexPage() {
@@ -86,7 +99,8 @@ export default async function ToolsIndexPage() {
             Free resume tools. <span className="text-[#7c7a94]">No account to start.</span>
           </h1>
           <p className="mx-auto mt-3.5 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862] lg:mt-[18px] lg:text-[18px] lg:leading-7">
-            Check your resume against ATS, write stronger bullets and a summary, and get the length right — using only your own facts.
+            Check your resume against ATS, find the keywords a job asks for, write stronger bullets and a summary, and get the length right — using only your
+            own facts.
           </p>
         </div>
       </section>
@@ -94,17 +108,7 @@ export default async function ToolsIndexPage() {
       <section className={`${container} pt-8 lg:pt-12`}>
         <ul className="grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
           {tools.map((t, i) => (
-            <li
-              key={t.key}
-              className={
-                i === 0
-                  ? "sm:col-span-2 lg:col-span-1 lg:row-span-2"
-                  : // An odd tool out after the 2×2 block takes the full row instead of leaving a gap.
-                    i === tools.length - 1 && (tools.length - 1) % 2 === 1
-                    ? "sm:col-span-2 lg:col-span-3"
-                    : ""
-              }
-            >
+            <li key={t.key} className={cardSpan(i, tools.length)}>
               <Link
                 href={t.href}
                 className={`lc-rise motion-reduce:hover:transform-none group flex h-full flex-col rounded-[28px] p-6 lg:p-8 ${i === 0 ? "bg-[#5440e8] text-white lc-float" : "lc-card"}`}
