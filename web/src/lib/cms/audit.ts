@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
+import { redact } from "@/lib/redact";
 
 export type AuditAction =
   // CMS content
@@ -34,7 +35,14 @@ export type AuditAction =
   | "admin.2fa.reset"
   | "admin.2fa.failed"
   | "admin.reauth"
-  | "admin.reauth.failed";
+  | "admin.reauth.failed"
+  | "integration.disconnect"
+  | "admin.denied"
+  | "admin.ip.blocked"
+  | "admin.origin.blocked"
+  | "admin.2fa.recovery.generate"
+  | "admin.2fa.recovery.used"
+  | "admin.notify.key-change";
 
 export type AuditPayload = {
   actorId: string | null;
@@ -57,11 +65,12 @@ export async function recordAudit(payload: AuditPayload): Promise<void> {
         action: payload.action,
         entity: payload.entity,
         entityId: payload.entityId ?? null,
-        diff: payload.diff ?? undefined,
+        // Secrets never reach the audit log, whatever the caller passed.
+        diff: payload.diff == null ? undefined : (redact(payload.diff) as Prisma.InputJsonValue),
         ip: payload.ip ?? null,
       },
     });
   } catch (err) {
-    console.error("[audit] failed to record", payload.action, err);
+    console.error("[audit] failed to record", payload.action, redact(err));
   }
 }

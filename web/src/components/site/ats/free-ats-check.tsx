@@ -58,7 +58,7 @@ function stepsFor(fileName: string | null): string[] {
   return [source, "Finding contact details and sections", "Reading dates and job titles", "Checking keywords for your role", "Ranking fixes by impact"];
 }
 
-export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactNode }) {
+export function FreeAtsCheck({ intro, stage, googleEnabled = false }: { intro: ReactNode; stage: ReactNode; googleEnabled?: boolean }) {
   const [mode, setMode] = useState<Mode>("upload");
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -298,7 +298,7 @@ export function FreeAtsCheck({ intro, stage }: { intro: ReactNode; stage: ReactN
                         <Link href={registerHref} className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
                           Save my report
                         </Link>
-                        <GoogleSignInButton mode="register" next={next} />
+                        {googleEnabled ? <GoogleSignInButton mode="register" next={next} /> : null}
                       </div>
                     </div>
                   </div>

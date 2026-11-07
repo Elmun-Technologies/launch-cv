@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
 import { JsonLd } from "@/components/json-ld";
+import { isGoogleOAuthConfigured } from "@/lib/google-oauth";
 import { CtaLink } from "@/components/cta-link";
 import { FreeAtsCheck } from "@/components/site/ats/free-ats-check";
 import { container, labelCls } from "@/components/site/ui";
@@ -211,7 +212,7 @@ export default async function FreeAtsCheckPage() {
     <SiteShell>
       <JsonLd data={buildLd(faqs)} />
 
-      <FreeAtsCheck intro={<Intro />} stage={<Stage />} />
+      <FreeAtsCheck intro={<Intro />} stage={<Stage />} googleEnabled={await isGoogleOAuthConfigured()} />
 
       {/* SCORE EXPLAINED */}
       <section className={`${container} ${sectionPad}`}>

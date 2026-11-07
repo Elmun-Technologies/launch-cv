@@ -26,6 +26,8 @@ model User {
   totpEnabledAt    DateTime?
   /// Last accepted TOTP time-step, so a code can't be replayed.
   totpLastStep     Int?
+  /// Last time this staff member used the admin panel (throttled, ~5 min).
+  adminLastSeenAt  DateTime?
   emailVerifiedAt  DateTime?
   /// Billing provider customer id (Lemon Squeezy customer id as string).
   stripeCustomerId String?
@@ -46,6 +48,7 @@ model User {
   uploadedMedia    MediaAsset[]     @relation("MediaUploader")
   auditLogs        AuditLog[]       @relation("AuditActor")
   pageCopyEdits    PageCopy[]       @relation("PageCopyEditor")
+  recoveryCodes    AdminRecoveryCode[]
 }
 
 model UsageMonth {
@@ -409,8 +412,29 @@ model IntegrationSecret {
   testedAt    DateTime?
   testOk      Boolean?
   testError   String?
+  /// Round-trip of the last connection test, in milliseconds.
+  testMs      Int?
+  /// Who first stored this value in the panel.
+  createdById String?
+  /// When a stored secret was last replaced with a new value.
+  rotatedAt   DateTime?
 
   @@unique([provider, field])
+}
+
+/// One-time two-factor recovery codes for staff. Only a scrypt hash is stored;
+/// the plain codes are shown once, when they're generated.
+model AdminRecoveryCode {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// scrypt(code, salt) as hex.
+  hash      String
+  salt      String
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
 }
 
 /// Admin-editable runtime configuration (limits, budgets, switches, models).

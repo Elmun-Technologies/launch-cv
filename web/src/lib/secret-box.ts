@@ -14,10 +14,15 @@ import { createCipheriv, createDecipheriv, createHash, randomBytes } from "node:
 
 const VERSION = "v1";
 
+/** Stretch a KEY_ENCRYPTION_KEY value to a 32-byte AES key. Null if it's missing or shorter than 32 characters. */
+export function deriveMasterKey(raw: string | undefined | null): Buffer | null {
+  const v = raw?.trim();
+  if (!v || v.length < 32) return null;
+  return createHash("sha256").update(v, "utf8").digest();
+}
+
 function masterKey(): Buffer | null {
-  const raw = process.env.KEY_ENCRYPTION_KEY?.trim();
-  if (!raw || raw.length < 32) return null;
-  return createHash("sha256").update(raw, "utf8").digest();
+  return deriveMasterKey(process.env.KEY_ENCRYPTION_KEY);
 }
 
 export function secretBoxReady(): boolean {
@@ -29,6 +34,11 @@ export class SecretBoxError extends Error {}
 export function seal(plaintext: string): string {
   const key = masterKey();
   if (!key) throw new SecretBoxError("KEY_ENCRYPTION_KEY is not set (min 32 characters)");
+  return sealWith(key, plaintext);
+}
+
+/** seal() with an explicit key (scripts/rotate-key-encryption-key.ts). */
+export function sealWith(key: Buffer, plaintext: string): string {
   const iv = randomBytes(12);
   const cipher = createCipheriv("aes-256-gcm", key, iv);
   const enc = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
@@ -39,6 +49,11 @@ export function seal(plaintext: string): string {
 export function open(sealed: string): string {
   const key = masterKey();
   if (!key) throw new SecretBoxError("KEY_ENCRYPTION_KEY is not set (min 32 characters)");
+  return openWith(key, sealed);
+}
+
+/** open() with an explicit key (scripts/rotate-key-encryption-key.ts). */
+export function openWith(key: Buffer, sealed: string): string {
   const [v, ivB64, tagB64, encB64] = sealed.split(":");
   if (v !== VERSION || !ivB64 || !tagB64 || encB64 === undefined) {
     throw new SecretBoxError("Unrecognized secret format");

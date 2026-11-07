@@ -1,26 +1,50 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowUpRight, CheckCircle2, Gauge, Lock, Plug, XCircle } from "lucide-react";
-import { requireAdmin } from "@/lib/admin-guard";
+import { can, requireAdmin } from "@/lib/admin-guard";
+import { getSettings } from "@/lib/app-settings";
+import { integrationStatuses, providerDef } from "@/lib/integrations";
 import { secretBoxReady } from "@/lib/secret-box";
 import { AdminShell } from "@/components/admin-shell";
 import { SectionCard } from "@/components/admin/section-card";
 import { StatusBadge } from "@/components/admin/status-badge";
-import { adminH1, adminLead } from "@/components/admin/admin-ui";
+import { adminH1, adminLead, adminLink } from "@/components/admin/admin-ui";
+import { ProductToggles } from "./product-toggles";
 
 export const dynamic = "force-dynamic";
+
+/** Providers the app can't run properly without; the rest are optional. */
+const ESSENTIAL = new Set(["openai", "polar", "resend"]);
 
 export default async function AdminSettingsPage() {
   const admin = await requireAdmin();
   if (!admin) redirect("/admin-panel/access-denied");
+  const [settings, providers] = await Promise.all([getSettings(), integrationStatuses()]);
 
   // The only values that must live in hosting. Everything else is in the panel.
   const bootstrap = [
-    { key: "DATABASE_URL", what: "Database connection", ok: !!process.env.DATABASE_URL },
-    { key: "AUTH_SECRET", what: "Signs sign-in sessions", ok: (process.env.AUTH_SECRET ?? "").trim().length >= 16 },
-    { key: "KEY_ENCRYPTION_KEY", what: "Encrypts API keys saved in the panel", ok: secretBoxReady() },
-    { key: "ADMIN_EMAILS", what: "First owner(s) — optional once the team is set up", ok: !!process.env.ADMIN_EMAILS?.trim() },
+    { key: "DATABASE_URL", what: "Database connection", ok: !!process.env.DATABASE_URL, optional: false },
+    { key: "AUTH_SECRET", what: "Signs sign-in sessions", ok: (process.env.AUTH_SECRET ?? "").trim().length >= 16, optional: false },
+    { key: "KEY_ENCRYPTION_KEY", what: "Encrypts API keys saved in the panel", ok: secretBoxReady(), optional: false },
+    { key: "ADMIN_EMAILS", what: "First owner(s) — optional once the team is set up", ok: !!process.env.ADMIN_EMAILS?.trim(), optional: true },
   ];
+
+  // Required credentials, e.g. "Polar · webhook secret". Sign-in and analytics show as one line each.
+  const lower = (s: string) => (s.startsWith("API") ? s : s.charAt(0).toLowerCase() + s.slice(1));
+  const config = providers.flatMap((p) => {
+    const required = providerDef(p.id)?.required ?? [];
+    const isSet = (key: string) => p.fields.find((f) => f.key === key)?.source !== "none";
+    const essential = ESSENTIAL.has(p.id);
+    if (p.group === "Sign-in" || p.group === "Analytics") {
+      return [{ id: p.id, label: p.id === "ga4" ? "Google Analytics" : p.name, set: required.every(isSet), essential }];
+    }
+    return required.map((key) => ({
+      id: `${p.id}.${key}`,
+      label: `${p.name} · ${lower(p.fields.find((f) => f.key === key)?.label ?? key)}`,
+      set: isSet(key),
+      essential,
+    }));
+  });
 
   const links = [
     { href: "/admin-panel/integrations", icon: Plug, title: "Integrations", text: "OpenAI, Polar, Resend, Google sign-in, analytics keys" },
@@ -37,6 +61,34 @@ export default async function AdminSettingsPage() {
         </div>
 
         <div className="grid items-start gap-[18px] lg:grid-cols-2">
+          <SectionCard
+            title="Configuration"
+            description="Connected in Integrations. Keys are encrypted and never shown again after saving."
+            flush
+            action={
+              <Link href="/admin-panel/integrations" className={`${adminLink} text-[13px]`}>
+                Integrations →
+              </Link>
+            }
+          >
+            <ul>
+              {config.map((c) => (
+                <li key={c.id} className="flex items-center justify-between gap-4 border-t border-[#e2e0ea] px-5 py-3 first:border-t-0 sm:px-6">
+                  <p className="lc-mono min-w-0 truncate text-[13px] text-[#121226]">{c.label}</p>
+                  {c.set ? (
+                    <StatusBadge tone="green">Set</StatusBadge>
+                  ) : c.essential ? (
+                    <StatusBadge tone="red">Missing</StatusBadge>
+                  ) : (
+                    <StatusBadge>Not set</StatusBadge>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </SectionCard>
+
+          <ProductToggles switches={settings.switches} product={settings.product} canEdit={can(admin.role, "limits")} />
+
           <SectionCard title="Hosting environment" description="Set once in your hosting provider. Values are never shown here." flush>
             <ul>
               {bootstrap.map((e) => (
@@ -49,6 +101,8 @@ export default async function AdminSettingsPage() {
                     <StatusBadge tone="green">
                       <CheckCircle2 className="h-3 w-3" aria-hidden /> Set
                     </StatusBadge>
+                  ) : e.optional ? (
+                    <StatusBadge>Not set (optional)</StatusBadge>
                   ) : (
                     <StatusBadge tone="red">
                       <XCircle className="h-3 w-3" aria-hidden /> Missing
