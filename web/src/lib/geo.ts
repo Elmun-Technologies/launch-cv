@@ -123,6 +123,17 @@ export const BLOG_HOWTO: Record<string, { name: string; description: string; tot
       { name: "Day 3 — Simulate a full interview", text: "Answer 5–7 questions without pausing, review the feedback, fix your weakest areas, and prepare five questions to ask." },
     ],
   },
+  "star-method": {
+    name: "How to prepare STAR answers before an interview",
+    description: "Build and rehearse Situation-Task-Action-Result answers before a behavioral interview.",
+    steps: [
+      { name: "Build a story bank, not a script", text: "List 8-10 situations from your last couple of roles covering conflict, failure, leading without authority, a tight deadline, disagreeing with a manager, and going beyond what was asked." },
+      { name: "Write each one as bullet points, not sentences", text: "Jot down the S/T/A/R beats in a few words each so the delivery stays natural and a follow-up question won't derail you." },
+      { name: "Quantify the Result, even roughly", text: "Estimate a number if you don't have an exact one, and check old performance reviews or project notes if you've forgotten the specifics." },
+      { name: "Practice out loud and time yourself", text: "Aim for 60-90 seconds per answer and say your bullet points out loud rather than reading them." },
+      { name: "Map your strongest stories to the job description", text: "Decide in advance which prepared story best demonstrates each competency the posting emphasizes." },
+    ],
+  },
   "ai-resume-builder-complete-guide": {
     name: "How to build a resume with an AI resume builder",
     description: "Build and tailor an ATS-ready resume with an AI resume builder in six steps.",

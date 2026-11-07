@@ -35,7 +35,8 @@ future content does not accidentally re-target an owned query.
 | `how to write ats-friendly resume` (informational how-to) | `/blog/how-to-write-an-ats-friendly-resume` | Informational how-to | `/features/ats-score`, `/features/resume-builder` |
 | `cover letter generator` (commercial) | `/features/cover-letter` | Commercial / tool | `/blog/cover-letter-tips-that-actually-work` |
 | `cover letter tips` (informational) | `/blog/cover-letter-tips-that-actually-work` | Informational | `/features/cover-letter` |
-| `interview prep ai`, `prepare for interview with ai` (commercial) | `/features/interview-prep` | Commercial / tool | `/blog/how-to-prepare-for-a-job-interview-with-ai` |
+| `interview prep ai`, `prepare for interview with ai` (commercial) | `/features/interview-prep` | Commercial / tool | `/blog/how-to-prepare-for-a-job-interview-with-ai`, `/blog/star-method` |
+| `star method`, `star method interview`, `what is the star method` (informational, very high volume) | `/blog/star-method` | Informational | `/features/interview-prep`, `/blog/how-to-prepare-for-a-job-interview-with-ai` |
 | `voice to resume`, `voice input resume` (commercial) | `/features/voice-input` | Commercial / tool | `/blog/voice-to-resume` |
 | `resume keywords for software engineers` (informational) | `/blog/resume-keywords-for-software-engineers` | Informational | `/features/jd-alignment`, `/use-cases/software-engineers` |
 | `software engineer resume`, `developer resume` (commercial, persona) | `/use-cases/software-engineers` | Commercial / persona | `/features/resume-builder`, `/features/jd-alignment` |
