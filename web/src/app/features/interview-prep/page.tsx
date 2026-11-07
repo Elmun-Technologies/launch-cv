@@ -131,6 +131,7 @@ const f: FeaturePageData = {
   related: [
     { kind: "Tool", label: "Cover letter generator", href: "/features/cover-letter" },
     { kind: "Guide", label: "How to prepare for a job interview with AI", href: "/blog/how-to-prepare-for-a-job-interview-with-ai" },
+    { kind: "Guide", label: "The STAR method, explained", href: "/blog/star-method" },
     { kind: "Tool", label: "Track your applications", href: "/register" },
   ],
 };
