@@ -69,6 +69,15 @@ boshqa sessiya nima qilganini bilish uchun.
   TXT `resend._domainkey`, CNAME `send`/`rsend`, TXT `_dmarc`). Sender
   `LaunchCV <info@launch-cv.com>`, test xat Gmail Inbox'ga keldi. Win-back manzili kiritilgan.
 
+## Email dizayni + welcome offer (2026-11-08)
+
+- `src/lib/email-layout.ts` — brendli shablon (v5: #121226 / #5440E8), kupon bloki (`offer`),
+  checklist (`bullets`), eyebrow, footer linklari. Barcha xatlar shundan foydalanadi.
+- **Welcome offer** (`src/lib/welcome-offer.ts`): email tasdiqlangach (Google — darhol) shaxsiy
+  `HELLO…` kodi, default 20% / 48 soat. Admin → Discounts → Welcome offer. Amal qiluvchi welcome
+  kodi bor odamga win-back yuborilmaydi; kod tugagach (ishlatilmasa) win-back mumkin.
+  Checkout `BACK…` va `HELLO…` kodlarni bir xil qo'llaydi. Revenue'da "Welcome codes" guruhi.
+
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 
 - `src/lib/winback.ts` + `/api/cron/winback` (vercel.json cron, har kuni 15:07 UTC):

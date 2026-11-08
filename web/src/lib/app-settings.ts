@@ -117,6 +117,12 @@ export type Settings = {
     winbackDelayHours: number;
     /** Physical postal address shown in the footer. Required by US CAN-SPAM: nothing is sent while empty. */
     postalAddress: string;
+    /** Send a personal welcome code when a new account's email is confirmed (lib/welcome-offer.ts). */
+    welcomeEnabled: boolean;
+    /** Percent off on the welcome code, 5–90. */
+    welcomePercent: number;
+    /** How long the welcome code works after it's sent, in hours (12–336). */
+    welcomeValidHours: number;
   };
   /** Admin → Settings → Weekly report (see lib/weekly-report.ts). */
   reports: {
@@ -164,7 +170,7 @@ export const DEFAULT_SETTINGS: Settings = {
     freeTierModel: "",
   },
   security: { requireAdmin2fa: true, adminIdleMinutes: 30, ipAllowlist: [], emailOwnerOnKeyChange: true },
-  marketing: { winbackEnabled: true, winbackPercent: 30, winbackValidHours: 48, winbackDelayHours: 24, postalAddress: "" },
+  marketing: { winbackEnabled: true, winbackPercent: 30, winbackValidHours: 48, winbackDelayHours: 24, postalAddress: "", welcomeEnabled: true, welcomePercent: 20, welcomeValidHours: 48 },
   reports: { weeklyEnabled: true },
 };
 
@@ -276,6 +282,8 @@ function sanitize<G extends SettingsGroup>(group: G, v: Settings[G]): Settings[G
     m.winbackValidHours = clampInt(m.winbackValidHours, 12, 336);
     m.winbackDelayHours = clampInt(m.winbackDelayHours, 1, 168);
     m.postalAddress = plainText(m.postalAddress, 200);
+    m.welcomePercent = clampInt(m.welcomePercent, 5, 90);
+    m.welcomeValidHours = clampInt(m.welcomeValidHours, 12, 336);
   } else if (group === "reports") {
     const r = v as Settings["reports"];
     // merge() already drops non-booleans; anything else falls back to on.

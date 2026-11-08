@@ -12,7 +12,7 @@ import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel } from "@/lib/moneti
 import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan, isPublicPlan } from "@/lib/plan-config";
 import { checkoutConflict } from "@/lib/entitlement-rules";
 import { buildPricingFaqs, checkoutFaqs } from "@/lib/pricing-faqs";
-import { findWinbackOffer, WINBACK_CODE_RE } from "@/lib/winback";
+import { findWinbackOffer, PERSONAL_CODE_RE } from "@/lib/winback";
 import { CheckoutPanel } from "./checkout-panel";
 
 type Params = { params: Promise<{ plan: string }> };
@@ -40,7 +40,7 @@ export default async function CheckoutPage({ params, searchParams }: PageProps) 
   const { plan } = await params;
   if (!isPublicPlan(plan)) notFound();
   const rawCode = (await searchParams).code;
-  const codeParam = typeof rawCode === "string" && WINBACK_CODE_RE.test(rawCode.trim().toUpperCase()) ? rawCode.trim().toUpperCase() : null;
+  const codeParam = typeof rawCode === "string" && PERSONAL_CODE_RE.test(rawCode.trim().toUpperCase()) ? rawCode.trim().toUpperCase() : null;
 
   const cfg = PUBLIC_PLANS[plan];
   const pass = isPassPlan(plan);

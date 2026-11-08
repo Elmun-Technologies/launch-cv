@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { verifyAuthToken } from "@/lib/verify-auth-token";
 import { trackEvent } from "@/lib/analytics";
+import { sendWelcomeOffer } from "@/lib/welcome-offer";
 
 const schema = z.object({
   token: z.string().min(10),
@@ -34,5 +35,7 @@ export async function POST(req: Request) {
     }),
   ]);
   await trackEvent("email_verified", { userId: row.userId });
+  // Personal welcome code (if on in Admin → Discounts), sent once the response is out.
+  after(() => sendWelcomeOffer(row.userId));
   return NextResponse.json({ ok: true });
 }
