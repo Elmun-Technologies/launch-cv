@@ -8,7 +8,7 @@ import { getClientIp } from "@/lib/request-ip";
 import { logError } from "@/lib/redact";
 
 /**
- * Save one settings group (limits, budget, switches, models, product, security). Re-confirm required.
+ * Save one settings group (limits, budget, switches, models, product, security, marketing, reports). Re-confirm required.
  * Security (team sign-in rules) is owner-only; everything else needs the limits permission.
  *
  * The admin IP allow-list never locks out the person saving it by surprise:

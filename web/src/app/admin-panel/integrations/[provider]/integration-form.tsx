@@ -217,7 +217,7 @@ export function IntegrationForm({
               rel="noreferrer"
               className="inline-flex min-h-[44px] items-center gap-1 text-[13px] font-bold text-[#5440e8] hover:text-[#3a2bb8] sm:min-h-0"
             >
-              Get keys <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+              {status.docsLabel ?? "Get keys"} <ExternalLink className="h-3.5 w-3.5" aria-hidden />
               <span className="sr-only">(opens in a new tab)</span>
             </a>
           ) : null
@@ -290,6 +290,17 @@ export function IntegrationForm({
                   </span>
                 ) : null}
                 {f.help ? <span className="mt-1.5 block text-[12px] leading-[1.5] text-[#66647c]">{f.help}</span> : null}
+                {f.helpUrl ? (
+                  <a
+                    href={f.helpUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-1 inline-flex min-h-[44px] items-center gap-1 text-[12px] font-bold text-[#5440e8] hover:text-[#3a2bb8] sm:min-h-0"
+                  >
+                    Where to find it <ExternalLink className="h-3 w-3" aria-hidden />
+                    <span className="sr-only">(opens in a new tab)</span>
+                  </a>
+                ) : null}
                 {canEdit && f.source === "panel" ? (
                   <button
                     type="button"

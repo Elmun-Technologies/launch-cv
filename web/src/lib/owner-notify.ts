@@ -20,7 +20,8 @@ export async function emailConfigured(): Promise<boolean> {
   return !!key && !!from;
 }
 
-async function ownerEmails(): Promise<string[]> {
+/** Verified owner accounts plus the bootstrap ADMIN_EMAILS, at most 20. Also used by the weekly report. */
+export async function ownerEmails(): Promise<string[]> {
   const owners = await prisma.user.findMany({ where: { role: "owner", emailVerifiedAt: { not: null } }, select: { email: true } });
   return [...new Set([...owners.map((o) => o.email.toLowerCase()), ...bootstrapEmails()])].slice(0, 20);
 }

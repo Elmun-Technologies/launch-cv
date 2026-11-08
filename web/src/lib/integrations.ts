@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { lastFour, open, seal, secretBoxReady } from "@/lib/secret-box";
 import { logError } from "@/lib/redact";
+import { parseSiteTag, PIXELS, VERIFICATIONS, type PixelProvider, type VerificationProvider } from "@/lib/site-tags";
 
 /**
  * External-service credentials, managed from Admin → Integrations.
@@ -21,22 +22,185 @@ export type FieldDef = {
   help?: string;
   /** Allowed values for a choice field. */
   options?: string[];
+  /** "Where to find it" link shown under the field. */
+  helpUrl?: string;
 };
 
 export type ProviderDef = {
   id: string;
   name: string;
-  group: "AI models" | "Payments" | "Email" | "Sign-in" | "Analytics";
+  group: "AI models" | "Payments" | "Email" | "Sign-in" | "Analytics" | "Site verification" | "Pixels & tags";
   purpose: string;
   /** Fields that must be set for the provider to count as connected. */
   required: string[];
   fields: FieldDef[];
   docsUrl?: string;
+  /** Label of the docsUrl link (default "Get keys"). */
+  docsLabel?: string;
   /** Tile colors for the provider's initial (v5 palette, picked per brand). */
   tile: { bg: string; fg: string };
 };
 
 const INK = { bg: "#111118", fg: "#ffffff" };
+
+/** Verification codes: one field each, rendered as <meta> in every page's <head> (components/site-verification-meta.tsx). */
+const VERIFY_INFO: Record<VerificationProvider, { env: string; docsUrl: string; helpUrl: string; help: string; tile: ProviderDef["tile"] }> = {
+  gsc: {
+    env: "GOOGLE_SITE_VERIFICATION",
+    docsUrl: "https://search.google.com/search-console",
+    helpUrl: "https://support.google.com/webmasters/answer/9008080",
+    help: "Search Console → Add property → URL prefix → HTML tag. Paste the code or the whole <meta> tag.",
+    tile: { bg: "#f2a91f", fg: "#111118" },
+  },
+  bing: {
+    env: "BING_SITE_VERIFICATION",
+    docsUrl: "https://www.bing.com/webmasters",
+    helpUrl: "https://www.bing.com/webmasters/help/add-and-verify-site-12184f8b",
+    help: "Bing Webmaster Tools → Add a site → HTML Meta Tag (msvalidate.01). Paste the code or the whole <meta> tag.",
+    tile: { bg: "#c9c0ff", fg: "#111118" },
+  },
+  yandex: {
+    env: "YANDEX_VERIFICATION",
+    docsUrl: "https://webmaster.yandex.com/",
+    helpUrl: "https://yandex.com/support/webmaster/service/rights.html",
+    help: "Yandex Webmaster → Add site → Meta tag. Paste the code or the whole <meta> tag.",
+    tile: { bg: "#ff7a33", fg: "#111118" },
+  },
+  fbdomain: {
+    env: "FACEBOOK_DOMAIN_VERIFICATION",
+    docsUrl: "https://business.facebook.com/settings/owned-domains",
+    helpUrl: "https://www.facebook.com/business/help/321167023127050",
+    help: "Business settings → Brand safety → Domains → Add → Meta-tag verification. Paste the code or the whole <meta> tag.",
+    tile: { bg: "#5440e8", fg: "#ffffff" },
+  },
+  pinterest: {
+    env: "PINTEREST_DOMAIN_VERIFY",
+    docsUrl: "https://www.pinterest.com/settings/claim",
+    helpUrl: "https://help.pinterest.com/en/business/article/claim-your-website",
+    help: "Pinterest settings → Claimed accounts → Websites → Claim → Add HTML tag. Paste the code or the whole <meta> tag.",
+    tile: { bg: "#c42b30", fg: "#ffffff" },
+  },
+};
+
+/** Pixels: loaded in the browser only after the visitor accepts the cookie notice (components/marketing-pixels.tsx). */
+const PIXEL_INFO: Record<
+  PixelProvider,
+  { field: string; label: string; env: string; purpose: string; docsUrl: string; helpUrl: string; help: string; tile: ProviderDef["tile"] }
+> = {
+  gtm: {
+    field: "containerId",
+    label: "Container ID",
+    env: "NEXT_PUBLIC_GTM_ID",
+    purpose: "Loads the tags you manage in Google Tag Manager",
+    docsUrl: "https://tagmanager.google.com/",
+    helpUrl: "https://support.google.com/tagmanager/answer/6103696",
+    help: "Tag Manager → your container: the GTM-XXXXXXX id at the top. Tags you add there also load only after cookie consent.",
+    tile: { bg: "#f2a91f", fg: "#111118" },
+  },
+  metapixel: {
+    field: "pixelId",
+    label: "Pixel ID",
+    env: "NEXT_PUBLIC_META_PIXEL_ID",
+    purpose: "Facebook and Instagram ad conversions and audiences",
+    docsUrl: "https://business.facebook.com/events_manager2",
+    helpUrl: "https://www.facebook.com/business/help/952192354843755",
+    help: "Events Manager → Data sources → your pixel → Settings: the 15–16 digit Pixel ID.",
+    tile: { bg: "#5440e8", fg: "#ffffff" },
+  },
+  tiktok: {
+    field: "pixelId",
+    label: "Pixel ID",
+    env: "NEXT_PUBLIC_TIKTOK_PIXEL_ID",
+    purpose: "TikTok ad conversions and audiences",
+    docsUrl: "https://ads.tiktok.com/i18n/events_manager",
+    helpUrl: "https://ads.tiktok.com/help/article/get-started-pixel",
+    help: "TikTok Ads Manager → Tools → Events → Web events: the pixel's 20-character ID.",
+    tile: INK,
+  },
+  clarity: {
+    field: "projectId",
+    label: "Project ID",
+    env: "NEXT_PUBLIC_CLARITY_PROJECT_ID",
+    purpose: "Free heatmaps and session recordings",
+    docsUrl: "https://clarity.microsoft.com/",
+    helpUrl: "https://learn.microsoft.com/en-us/clarity/setup-and-installation/clarity-setup",
+    help:
+      "Free, unlimited heatmaps and session recordings: the quickest way to see where visitors get stuck. Clarity → Settings → Overview: the Project ID. Keep masking on Balanced or Strict, because the free ATS check and free tools have boxes where people paste resumes.",
+    tile: { bg: "#c9c0ff", fg: "#111118" },
+  },
+  linkedin: {
+    field: "partnerId",
+    label: "Partner ID",
+    env: "NEXT_PUBLIC_LINKEDIN_PARTNER_ID",
+    purpose: "LinkedIn ad conversions and audiences",
+    docsUrl: "https://www.linkedin.com/campaignmanager",
+    helpUrl: "https://business.linkedin.com/marketing-solutions/insight-tag",
+    help: "Campaign Manager → Analyze → Insight Tag → Install my Insight Tag: the number after _linkedin_partner_id.",
+    tile: INK,
+  },
+  reddit: {
+    field: "pixelId",
+    label: "Pixel ID",
+    env: "NEXT_PUBLIC_REDDIT_PIXEL_ID",
+    purpose: "Reddit ad conversions and audiences",
+    docsUrl: "https://ads.reddit.com/",
+    helpUrl: "https://business.reddithelp.com/s/article/Install-the-Reddit-Pixel-on-your-website",
+    help: "Reddit Ads → Events Manager → Reddit Pixel: the id that starts with a2_ or t2_.",
+    tile: { bg: "#ff7a33", fg: "#111118" },
+  },
+};
+
+/** Field that holds a pixel's id ("containerId", "pixelId", …). */
+export function pixelField(id: PixelProvider): string {
+  return PIXEL_INFO[id].field;
+}
+
+/** Field that holds a verification code. */
+export const VERIFICATION_FIELD = "code";
+
+const VERIFY_PROVIDERS: ProviderDef[] = (Object.keys(VERIFY_INFO) as VerificationProvider[]).map((id) => ({
+  id,
+  name: VERIFICATIONS[id].name,
+  group: "Site verification",
+  purpose: `Proves you own the site with a <meta name="${VERIFICATIONS[id].meta}"> tag on every page`,
+  required: [VERIFICATION_FIELD],
+  docsUrl: VERIFY_INFO[id].docsUrl,
+  docsLabel: "Open dashboard",
+  tile: VERIFY_INFO[id].tile,
+  fields: [
+    {
+      key: VERIFICATION_FIELD,
+      label: "Verification code",
+      secret: false,
+      env: VERIFY_INFO[id].env,
+      placeholder: `<meta name="${VERIFICATIONS[id].meta}" content="…"> or just the code`,
+      help: VERIFY_INFO[id].help,
+      helpUrl: VERIFY_INFO[id].helpUrl,
+    },
+  ],
+}));
+
+const PIXEL_PROVIDER_DEFS: ProviderDef[] = (Object.keys(PIXEL_INFO) as PixelProvider[]).map((id) => ({
+  id,
+  name: PIXELS[id].name,
+  group: "Pixels & tags",
+  purpose: `${PIXEL_INFO[id].purpose}; loads only after a visitor accepts cookies`,
+  required: [PIXEL_INFO[id].field],
+  docsUrl: PIXEL_INFO[id].docsUrl,
+  docsLabel: "Open dashboard",
+  tile: PIXEL_INFO[id].tile,
+  fields: [
+    {
+      key: PIXEL_INFO[id].field,
+      label: PIXEL_INFO[id].label,
+      secret: false,
+      env: PIXEL_INFO[id].env,
+      placeholder: PIXELS[id].example,
+      help: PIXEL_INFO[id].help,
+      helpUrl: PIXEL_INFO[id].helpUrl,
+    },
+  ],
+}));
 
 export const PROVIDERS: ProviderDef[] = [
   {
@@ -143,6 +307,8 @@ export const PROVIDERS: ProviderDef[] = [
       { key: "host", label: "API host", secret: false, env: "NEXT_PUBLIC_MIXPANEL_HOST", placeholder: "https://api.mixpanel.com" },
     ],
   },
+  ...VERIFY_PROVIDERS,
+  ...PIXEL_PROVIDER_DEFS,
 ];
 
 export function providerDef(id: string): ProviderDef | undefined {
@@ -172,8 +338,8 @@ function k(provider: string, field: string) {
   return `${provider}.${field}`;
 }
 
-async function loadRows(): Promise<Map<string, Row>> {
-  if (cache && Date.now() - cache.at < TTL_MS) return cache.rows;
+async function loadRows(maxAgeMs = TTL_MS): Promise<Map<string, Row>> {
+  if (cache && Date.now() - cache.at < maxAgeMs) return cache.rows;
   const rows = new Map<string, Row>();
   try {
     const db = await prisma.integrationSecret.findMany();
@@ -212,8 +378,8 @@ export function invalidateIntegrationCache() {
 }
 
 /** The effective value of a field: admin panel first, then the env variable. Server-only. */
-export async function getIntegrationValue(provider: string, field: string): Promise<string> {
-  const rows = await loadRows();
+export async function getIntegrationValue(provider: string, field: string, opts: { maxAgeMs?: number } = {}): Promise<string> {
+  const rows = await loadRows(opts.maxAgeMs);
   const v = rows.get(k(provider, field))?.value;
   if (v) return v;
   const def = providerDef(provider)?.fields.find((f) => f.key === field);
@@ -227,6 +393,7 @@ export type FieldStatus = {
   options?: string[];
   placeholder?: string;
   help?: string;
+  helpUrl?: string;
   source: "panel" | "env" | "none";
   /** Masked for secrets ("••••a91f"), full text for plain fields. */
   display: string;
@@ -239,6 +406,7 @@ export type ProviderStatus = {
   group: ProviderDef["group"];
   purpose: string;
   docsUrl?: string;
+  docsLabel?: string;
   tile: ProviderDef["tile"];
   state: "connected" | "missing" | "partial" | "error";
   testedAt: string | null;
@@ -267,6 +435,7 @@ export async function integrationStatuses(): Promise<ProviderStatus[]> {
         options: f.options,
         placeholder: f.placeholder,
         help: f.help,
+        helpUrl: f.helpUrl,
         source,
         display,
         updatedAt: row?.updatedAt.toISOString() ?? null,
@@ -291,6 +460,7 @@ export async function integrationStatuses(): Promise<ProviderStatus[]> {
       group: p.group,
       purpose: p.purpose,
       docsUrl: p.docsUrl,
+      docsLabel: p.docsLabel,
       tile: p.tile,
       state,
       testedAt: testRow?.testedAt?.toISOString() ?? null,
@@ -330,9 +500,13 @@ export async function saveIntegrationFields(
       changed.push(f.key);
       continue;
     }
-    const v = raw.trim();
+    let v = raw.trim();
     if (!v) continue;
     if (v.length > 4000) throw new Error(`${f.label} is too long`);
+    // Verification codes and pixel ids: store only the parsed id (a pasted <meta> tag or snippet is reduced to it).
+    const tag = parseSiteTag(provider, v);
+    if (tag && !tag.ok) throw new Error(tag.error);
+    if (tag?.ok) v = tag.value;
     if (f.options && !f.options.includes(v)) throw new Error(`${f.label} must be one of ${f.options.join(", ")}`);
     await prisma.integrationSecret.upsert({
       where: { provider_field: { provider, field: f.key } },
@@ -454,8 +628,17 @@ export async function testIntegration(
         return (await get("key")).startsWith("phc_") ? done(true, "Key format OK") : done(false, "Key should start with phc_");
       case "mixpanel":
         return (await get("token")).length >= 16 ? done(true, "Token set") : done(false, "Token looks too short");
-      default:
-        return done(false, "Unknown provider");
+      default: {
+        // Site verification and pixels: public ids, so the test is a format check.
+        const def = providerDef(provider);
+        const field = def?.required[0];
+        const parsed = field ? parseSiteTag(provider, await get(field)) : null;
+        if (!parsed) return done(false, "Unknown provider");
+        if (!parsed.ok) return done(false, parsed.error);
+        return def!.group === "Site verification"
+          ? done(true, `Format OK · ${parsed.value} will be on every page. Then press Verify in ${def!.name}.`)
+          : done(true, `Format OK · ${parsed.value} loads after a visitor accepts cookies`);
+      }
     }
   } catch (e) {
     if (!(e instanceof Error && e.name === "TimeoutError")) logError(`[integrations] ${provider} test failed`, e);

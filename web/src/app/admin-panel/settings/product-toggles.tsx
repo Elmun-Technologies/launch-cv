@@ -12,7 +12,7 @@ type Switches = Settings["switches"];
 type Product = Settings["product"];
 
 /** A labelled switch row (light card). */
-function SwitchRow({
+export function SwitchRow({
   id,
   title,
   hint,
