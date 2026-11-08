@@ -73,6 +73,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/resume-action-verbs", "monthly", 0.7),
     page("/resume-summary-examples", "monthly", 0.8),
     page("/skills-for-resume", "monthly", 0.8),
+    page("/resume-references", "monthly", 0.7),
     page("/how-to-write-a-resume", "monthly", 0.8),
     page("/resume-length", "monthly", 0.7),
     page("/cover-letter-template", "monthly", 0.8),

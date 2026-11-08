@@ -205,6 +205,7 @@ contact): ${baseUrl}/ai-info
 - Resume action verbs: ${baseUrl}/resume-action-verbs
 - Resume summary examples (by job and situation): ${baseUrl}/resume-summary-examples
 - Skills to put on a resume (hard, soft, transferable; lists by field): ${baseUrl}/skills-for-resume
+- References page template (who to ask, how to ask, format): ${baseUrl}/resume-references
 - All free tools: ${baseUrl}/tools
 
 ## Pricing
