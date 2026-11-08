@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ArrowRight, Loader2, Mail, Target, Users } from "lucide-react";
@@ -24,6 +23,16 @@ async function fetchStatus(): Promise<Status | null> {
   };
 }
 
+/** Activate the plan from the returned checkout id (no-op without one). */
+async function syncCheckout(checkoutId: string | null): Promise<void> {
+  if (!checkoutId || checkoutId.includes("{")) return;
+  await fetch("/api/polar/sync", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ checkoutId }),
+  }).catch(() => null);
+}
+
 /**
  * Standalone screen after Polar sends the buyer back (?checkout=success): the
  * logo bar and nothing else from the app. Waits for the payment webhook
@@ -36,10 +45,15 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
 
   useEffect(() => {
     let live = true;
+    const checkoutId = new URLSearchParams(window.location.search).get("checkout_id");
     (async () => {
+      // Ask the server to read the order from Polar and activate the plan now; the
+      // payment webhook does the same, whichever lands first. Then confirm via status.
+      await syncCheckout(checkoutId);
       let s = await fetchStatus();
-      for (let i = 0; i < 10 && live && !s?.paid; i++) {
-        await new Promise((res) => setTimeout(res, 3000));
+      for (let i = 0; i < 20 && live && !s?.paid; i++) {
+        await new Promise((res) => setTimeout(res, i < 5 ? 1500 : 3000));
+        if (i % 2 === 1) await syncCheckout(checkoutId);
         s = await fetchStatus();
       }
       if (!live) return;
@@ -50,6 +64,19 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
       live = false;
     };
   }, []);
+
+  // Once the plan is active, take the buyer straight into the work after a short pause.
+  const firstHref = resumeId ? `/resume/${resumeId}/jd` : "/resume/new";
+  const [countdown, setCountdown] = useState(6);
+  useEffect(() => {
+    if (state !== "confirmed") return;
+    if (countdown <= 0) {
+      window.location.assign(firstHref);
+      return;
+    }
+    const t = setTimeout(() => setCountdown((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  });
 
   const plan = status?.plan && status.plan in PUBLIC_PLANS ? PUBLIC_PLANS[status.plan as CheckoutPlan] : null;
   const oneTime = !!status?.oneTime;
@@ -62,7 +89,7 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
 
   const steps = [
     {
-      href: resumeId ? `/resume/${resumeId}/jd` : "/resume/new",
+      href: firstHref,
       icon: Target,
       t: "Match your resume to a job",
       d: "Paste a posting, get missing skills and rewrites",
@@ -91,7 +118,7 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
         </Link>
       </header>
 
-      <main className="mx-auto grid max-w-[1100px] gap-6 px-4 py-8 sm:px-10 sm:py-[60px] lg:grid-cols-2 lg:items-stretch">
+      <main className="mx-auto max-w-[640px] px-4 py-8 sm:px-10 sm:py-[72px]">
         <div className="flex flex-col justify-center">
           <p role="status" className="sr-only">
             {state === "confirmed" ? "Your plan is active." : state === "waiting" ? "Activating your plan." : "Your plan is still activating."}
@@ -113,7 +140,10 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
                     ? `Your plan renews on ${renews}; cancel anytime in Settings.`
                     : "Manage it anytime in Settings."}
               </p>
-              <ul className="mt-6 flex flex-col gap-2">
+              <p className="mt-4 text-[14px] text-[#4a4862]" aria-live="polite">
+                Taking you to “{steps[0].t.toLowerCase()}” in {Math.max(countdown, 0)}s, or pick a step below.
+              </p>
+              <ul className="mt-4 flex flex-col gap-2">
                 {steps.map((s, i) => {
                   const Icon = s.icon;
                   const first = i === 0;
@@ -173,27 +203,6 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
           )}
         </div>
 
-        <div aria-hidden="true" className="relative hidden min-h-[600px] overflow-hidden rounded-[36px] bg-[#111118] lg:block">
-          <p className="lc-poster absolute left-[30px] top-6 m-0 text-[110px] leading-[104px] text-[#2a2840]">
-            LET&apos;S
-            <br />
-            GO
-          </p>
-          <div className="absolute bottom-[-170px] left-1/2 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-[#5440e8]" />
-          <Image
-            src="/images/people/woman-red-top.webp"
-            alt=""
-            width={747}
-            height={1080}
-            sizes="300px"
-            className="absolute bottom-0 left-1/2 h-[430px] w-auto max-w-none -translate-x-1/2"
-          />
-          {plan && state === "confirmed" ? (
-            <span className="lc-poster absolute right-[30px] top-[250px] -rotate-6 rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[13px] text-[#111118]">
-              {plan.title.toUpperCase()}
-            </span>
-          ) : null}
-        </div>
       </main>
     </div>
   );
