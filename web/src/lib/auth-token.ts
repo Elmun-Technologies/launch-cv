@@ -23,7 +23,12 @@ function getSecret() {
   return new TextEncoder().encode(s);
 }
 
-export type SessionPayload = { sub: string; email: string };
+/** AUTH_SECRET bytes (same rules as session tokens), for HMACs such as unsubscribe links. */
+export function authSecretKey(): Uint8Array {
+  return getSecret();
+}
+
+export type SessionPayload ={ sub: string; email: string };
 
 export async function signSessionToken(payload: SessionPayload) {
   return new SignJWT({ email: payload.email })

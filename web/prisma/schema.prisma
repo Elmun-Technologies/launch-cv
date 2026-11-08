@@ -46,6 +46,9 @@ model User {
   grantedPlan      String?
   /// When the granted plan stops applying. Null = no end date.
   grantedPlanUntil DateTime?
+  /// Set when the user unsubscribes from marketing email (the one-time win-back
+  /// discount email, lib/winback.ts). Account emails still go out.
+  marketingOptOutAt DateTime?
   createdAt        DateTime         @default(now())
   updatedAt        DateTime         @updatedAt
   resumes          Resume[]

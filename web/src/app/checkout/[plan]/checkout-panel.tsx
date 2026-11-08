@@ -29,6 +29,8 @@ export function CheckoutPanel({
   signedIn,
   conflict,
   paused,
+  discountCode = null,
+  returnCode = null,
 }: {
   plan: CheckoutPlan;
   planTitle: string;
@@ -37,6 +39,10 @@ export function CheckoutPanel({
   conflict: string | null;
   /** Admin switch "checkout" is off. */
   paused: string | null;
+  /** The signed-in user's own valid win-back code; the API pre-applies it in Polar. */
+  discountCode?: string | null;
+  /** Signed out with ?code=: kept on the sign-in / sign-up return link. */
+  returnCode?: string | null;
 }) {
   const [busy, setBusy] = useState<"idle" | "creating" | "opening">("idle");
   const [notice, setNotice] = useState<Notice | null>(
@@ -87,7 +93,7 @@ export function CheckoutPanel({
     const res = await fetch("/api/polar/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan, gaClientId: getGaClientId() }),
+      body: JSON.stringify({ plan, gaClientId: getGaClientId(), ...(discountCode ? { discountCode } : {}) }),
     }).catch(() => null);
     const j = (res ? await res.json().catch(() => ({})) : {}) as { url?: unknown; error?: unknown; code?: unknown };
     if (res?.ok && typeof j.url === "string") {
@@ -97,7 +103,7 @@ export function CheckoutPanel({
     }
     setBusy("idle");
     if (res?.status === 401) {
-      window.location.href = checkoutAuthHrefs(plan).login;
+      window.location.href = checkoutAuthHrefs(plan, discountCode ?? returnCode).login;
       return;
     }
     if (res?.status === 409 && typeof j.error === "string") setNotice({ tone: "info", text: j.error, conflict: true });
@@ -120,7 +126,7 @@ export function CheckoutPanel({
   }, [signedIn]);
 
   if (!signedIn) {
-    const { register, login } = checkoutAuthHrefs(plan);
+    const { register, login } = checkoutAuthHrefs(plan, returnCode);
     return (
       <div className="flex flex-col gap-3">
         <CtaLink cta="checkout_sign_up" plan={plan} location="checkout_page" href={register} className={`${btnPrimary} w-full`}>

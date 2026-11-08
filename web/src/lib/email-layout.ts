@@ -11,8 +11,18 @@ export function transactionalEmail(args: {
   paragraphs: string[];
   cta: { label: string; url: string };
   footnote: string;
+  /**
+   * Optional lines under the footnote (marketing mail: why you got it, the
+   * sender and postal address) and an unsubscribe link. Plain text, escaped here.
+   */
+  footer?: { lines: string[]; unsubscribeUrl?: string };
 }): { html: string; text: string } {
-  const { preheader, heading, paragraphs, cta, footnote } = args;
+  const { preheader, heading, paragraphs, cta, footnote, footer } = args;
+  const footerHtml = footer
+    ? `<tr><td style="padding:10px 4px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:12px;line-height:1.6;color:#6B6B6B;">${footer.lines.map(esc).join("<br>")}${
+        footer.unsubscribeUrl ? `<br><a href="${esc(footer.unsubscribeUrl)}" style="color:#6B6B6B;text-decoration:underline;">Unsubscribe</a>` : ""
+      }</td></tr>\n`
+    : "";
   const font = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
   const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(heading)}</title></head>
@@ -31,9 +41,18 @@ ${paragraphs.map((p) => `<p style="margin:0 0 14px;font-size:15px;line-height:1.
 <p style="margin:18px 0 0;font-size:13px;line-height:1.6;color:#6B6B6B;">Button not working? Paste this link into your browser:<br><a href="${esc(cta.url)}" style="color:#1D4ED8;word-break:break-all;">${esc(cta.url)}</a></p>
 </td></tr>
 <tr><td style="padding:16px 4px 0;font-family:${font};font-size:12px;line-height:1.6;color:#6B6B6B;">${esc(footnote)} Questions? Write to support@launch-cv.com.</td></tr>
-</table>
+${footerHtml}</table>
 </td></tr></table>
 </body></html>`;
-  const text = [heading, "", ...paragraphs.flatMap((p) => [p, ""]), `${cta.label}: ${cta.url}`, "", footnote, "Questions? Write to support@launch-cv.com."].join("\n");
+  const text = [
+    heading,
+    "",
+    ...paragraphs.flatMap((p) => [p, ""]),
+    `${cta.label}: ${cta.url}`,
+    "",
+    footnote,
+    "Questions? Write to support@launch-cv.com.",
+    ...(footer ? ["", ...footer.lines, ...(footer.unsubscribeUrl ? [`Unsubscribe: ${footer.unsubscribeUrl}`] : [])] : []),
+  ].join("\n");
   return { html, text };
 }

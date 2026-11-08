@@ -103,6 +103,19 @@ export type Settings = {
     /** Email every owner when an integration key is changed or disconnected. */
     emailOwnerOnKeyChange: boolean;
   };
+  /** Admin → Discounts → Win-back email (see lib/winback.ts). */
+  marketing: {
+    /** Send the one-time win-back email from the daily cron. */
+    winbackEnabled: boolean;
+    /** Percent off on the personal code, 5–90. */
+    winbackPercent: number;
+    /** How long the code works after the email is sent, in hours (12–336). */
+    winbackValidHours: number;
+    /** Hours after the checkout / free-limit event before the email goes out (1–168). */
+    winbackDelayHours: number;
+    /** Physical postal address shown in the footer. Required by US CAN-SPAM: nothing is sent while empty. */
+    postalAddress: string;
+  };
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -144,6 +157,7 @@ export const DEFAULT_SETTINGS: Settings = {
     freeTierModel: "",
   },
   security: { requireAdmin2fa: true, adminIdleMinutes: 30, ipAllowlist: [], emailOwnerOnKeyChange: true },
+  marketing: { winbackEnabled: true, winbackPercent: 30, winbackValidHours: 48, winbackDelayHours: 24, postalAddress: "" },
 };
 
 export type SettingsGroup = keyof Settings;
@@ -203,6 +217,16 @@ function clampMoney(n: number) {
   return Math.min(100_000, Math.max(0, Math.round((Number.isFinite(n) ? n : 0) * 100) / 100));
 }
 
+/** One line of plain text: control characters and markup brackets dropped, spaces collapsed. */
+export function plainText(raw: string, max: number): string {
+  return raw
+    .replace(/[\u0000-\u001f\u007f<>]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, max)
+    .trim();
+}
+
 function sanitize<G extends SettingsGroup>(group: G, v: Settings[G]): Settings[G] {
   if (group === "planLimits") {
     const pl = v as Settings["planLimits"];
@@ -238,6 +262,12 @@ function sanitize<G extends SettingsGroup>(group: G, v: Settings[G]): Settings[G
   } else if (group === "product") {
     const p = v as Settings["product"];
     p.maintenanceMessage = p.maintenanceMessage.replace(/[\u0000-\u001f\u007f]+/g, " ").trim().slice(0, 240);
+  } else if (group === "marketing") {
+    const m = v as Settings["marketing"];
+    m.winbackPercent = clampInt(m.winbackPercent, 5, 90);
+    m.winbackValidHours = clampInt(m.winbackValidHours, 12, 336);
+    m.winbackDelayHours = clampInt(m.winbackDelayHours, 1, 168);
+    m.postalAddress = plainText(m.postalAddress, 200);
   }
   return v;
 }
