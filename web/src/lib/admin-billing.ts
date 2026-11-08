@@ -94,7 +94,17 @@ export function listPrice(plan: PlanId): number {
 }
 
 /**
- * Purchases recorded since a date (pay_success events) valued at list price:
+ * What one purchase earned, in USD: the amount actually paid (net of discounts) when the
+ * event recorded it, else the list price of its plan (older events). */
+export function purchaseValue(meta: unknown, fallbackPlan: PlanId | undefined): number {
+  const paid = (meta as { paidCents?: unknown } | null)?.paidCents;
+  if (typeof paid === "number" && Number.isFinite(paid)) return paid / 100;
+  return fallbackPlan && fallbackPlan !== "none" ? listPrice(fallbackPlan) : 0;
+}
+
+/**
+ * Purchases recorded since a date (pay_success events) valued at what was paid
+ * (list price for older events without an amount):
  * the event's own plan, else the buyer's current paid plan. Same method as the
  * Overview's Revenue tile. `since` null = all time.
  */
@@ -112,7 +122,7 @@ export async function purchaseRevenue(since: Date | null): Promise<{ revenue: nu
   for (const e of events) {
     const metaPlan = (e.meta as { plan?: string } | null)?.plan;
     const plan = (metaPlan && metaPlan in PUBLIC_PLANS ? metaPlan : e.userId ? planOfUser.get(e.userId) : undefined) as PlanId | undefined;
-    if (plan && plan !== "none") revenue += listPrice(plan);
+    revenue += purchaseValue(e.meta, plan);
   }
   return { revenue, purchases: events.length, payingUsers: subs.length };
 }

@@ -14,7 +14,7 @@ import { integrationStatuses } from "@/lib/integrations";
 import { secretBoxReady } from "@/lib/secret-box";
 import { CHECKOUT_PLAN_ORDER, type PlanId } from "@/lib/plan-config";
 import { PUBLIC_PLANS } from "@/lib/monetization";
-import { billingOf, planOfRow, planResolver } from "@/lib/admin-billing";
+import { billingOf, planOfRow, planResolver, purchaseValue } from "@/lib/admin-billing";
 import { dailyCounts, fmtAgo, fmtDateTime, startOfUtcDay, startOfUtcMonth } from "@/lib/admin-dates";
 import { maskEmail, planLabel } from "@/lib/admin-labels";
 
@@ -135,14 +135,15 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
     else if (plan !== "none") mrr += PUBLIC_PLANS[plan].priceAmount;
   }
 
-  // Purchase value at list price: the event's own plan, else the buyer's current plan.
+  // What each purchase earned: the amount paid (after discounts), else the plan's list price.
   const valueOf = (e: { userId: string | null; meta: unknown }) => {
     const metaPlan = (e.meta as { plan?: string } | null)?.plan;
     const plan = (metaPlan && metaPlan in PUBLIC_PLANS ? metaPlan : e.userId ? planOfSub.get(e.userId) : undefined) as
       | keyof typeof PUBLIC_PLANS
       | undefined;
-    return plan && plan in PUBLIC_PLANS ? PUBLIC_PLANS[plan].priceAmount : 0;
+    return purchaseValue(e.meta, plan);
   };
+  const discounted = (e: { meta: unknown }) => typeof (e.meta as { discountCents?: unknown } | null)?.discountCents === "number";
   const curPay = payEvents.filter((e) => !since || e.createdAt >= since);
   const prevPay = since ? payEvents.filter((e) => e.createdAt < since) : [];
   const revenue = curPay.reduce((a, e) => a + valueOf(e), 0);
@@ -160,7 +161,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
 
   const spanDays = days ?? Math.max(1, Math.round((now - chartFrom.getTime()) / DAY) + 1);
   const kpis = [
-    { l: "Revenue", v: usd(revenue), d: `${curPay.length} purchase${curPay.length === 1 ? "" : "s"} · list prices`, delta: delta(revenue, prevRevenue, days) },
+    { l: "Revenue", v: usd(revenue), d: `${curPay.length} purchase${curPay.length === 1 ? "" : "s"}${curPay.some(discounted) ? ` · ${curPay.filter(discounted).length} with a discount` : ""} · after discounts`, delta: delta(revenue, prevRevenue, days) },
     { l: "MRR", v: usd(mrr), d: `${payingUsers - oneTimeUsers} monthly · ${oneTimeUsers} on a pass or Lifetime`, delta: null },
     {
       l: "Paying users",
