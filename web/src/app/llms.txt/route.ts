@@ -1,6 +1,7 @@
 import { getPublishedPosts } from "@/lib/cms/blog";
-import { PUBLIC_PLANS, planBillingDuration, planBillingSummary } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
+import { PUBLIC_PLANS, freeAllowanceSentence, planBillingDuration, planBillingSummary, planPriceLabel } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan } from "@/lib/plan-config";
+import { getSettings } from "@/lib/app-settings";
 import { getSiteUrl } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { RESUME_EXAMPLES } from "@/lib/resume-examples";
@@ -88,11 +89,12 @@ const USE_CASE_PAGES: { title: string; path: string; summary: string }[] = [
   },
 ];
 
-/** Full price string for the pricing table, e.g. "$9/month", "$79 one-time". */
+/** Full price string for the pricing table, e.g. "$29/month", "$9 for 7 days". */
 function fullPrice(plan: (typeof CHECKOUT_PLAN_ORDER)[number]): string {
   const { priceDisplay, periodLabel } = PUBLIC_PLANS[plan];
   if (periodLabel === "/month") return `${priceDisplay}/month`;
   if (periodLabel === "/year") return `${priceDisplay}/year`;
+  if (isPassPlan(plan)) return planPriceLabel(plan);
   return `${priceDisplay} one-time`;
 }
 
@@ -118,7 +120,7 @@ function renderLinkList(
 
 export async function GET(): Promise<Response> {
   const baseUrl = getSiteUrl();
-  const posts = await getPublishedPosts();
+  const [posts, { planLimits }] = await Promise.all([getPublishedPosts(), getSettings()]);
 
   const pricingTable = renderTable(
     ["Plan", "Price", "Billing", "Best for"],
@@ -133,8 +135,8 @@ export async function GET(): Promise<Response> {
   const recurringNames = CHECKOUT_PLAN_ORDER.filter((k) => planBillingDuration(k)).map(
     (k) => PUBLIC_PLANS[k].title,
   );
-  const oneTimeNames = CHECKOUT_PLAN_ORDER.filter((k) => !planBillingDuration(k)).map(
-    (k) => PUBLIC_PLANS[k].title,
+  const oneTimeNames = CHECKOUT_PLAN_ORDER.filter((k) => !planBillingDuration(k)).map((k) =>
+    isPassPlan(k) ? `${PUBLIC_PLANS[k].title} (${PASS_DAYS[k]} days of access)` : PUBLIC_PLANS[k].title,
   );
   const recurringList =
     recurringNames.length > 2
@@ -142,7 +144,9 @@ export async function GET(): Promise<Response> {
       : recurringNames.length === 2
         ? recurringNames.join(" and ")
       : recurringNames.join("");
-  const billingNote = `${recurringList} renew automatically until canceled; ${oneTimeNames.join(" and ")} never renews.`;
+  const billingNote = `${recurringList} ${recurringNames.length === 1 ? "renews" : "renew"} monthly until canceled. ${oneTimeNames.join(" and ")} ${
+    oneTimeNames.length === 1 ? "is a single payment" : "are single payments"
+  } with no auto-renewal.`;
 
   const featuresBlock = renderLinkList(FEATURE_PAGES, baseUrl);
   const useCasesBlock = renderLinkList(USE_CASE_PAGES, baseUrl);
@@ -199,15 +203,17 @@ contact): ${baseUrl}/ai-info
 ## Pricing
 
 The ATS check and the free tools need no account. A free account includes the resume editor,
-all templates, PDF and Word export, the job tracker, and saving the free ATS report. The AI
-tools inside the app (bullet rewrites, job description match, cover letters, interview prep)
-need a paid plan.
+all templates, PDF and Word export, the job tracker, and saving the free ATS report.
+${freeAllowanceSentence(planLimits.free)} Paid plans raise those
+monthly limits and include every AI tool (bullet rewrites, job description match, cover
+letters, interview prep).
 
 ${pricingTable}
 
-All AI tools are included on every plan; only the monthly AI usage limits differ.
+All AI tools are included on every paid plan; plans differ in how long access lasts and in
+monthly AI usage limits.
 ${billingNote}
-Monthly plans have a 7-day money-back guarantee; Lifetime can be refunded within 14 days.
+Monthly plans have a 7-day money-back guarantee.
 Prices are in US dollars, plus any sales tax or VAT. Current prices: ${baseUrl}/pricing
 
 ## Key Facts for AI Citations

@@ -89,15 +89,15 @@ test("cta_click fires with plan from a pricing card", async ({ page }) => {
   await page.addInitScript(INIT);
   await page.goto("/pricing", { waitUntil: "domcontentloaded" });
   await preventNavigation(page);
-  await page.locator("a", { hasText: "Choose Starter" }).first().click();
+  await page.locator("a", { hasText: "Get the Week Pass" }).first().click();
   await waitForEvent(page, "cta_click");
 
   const gtag = (await gtagEvents(page)).filter((e) => e.name === "cta_click");
   const ph = (await phEvents(page)).filter((e) => e.name === "cta_click");
   const mp = (await mpEvents(page)).filter((e) => e.name === "cta_click");
-  expect((gtag[0].params as { plan?: string }).plan).toBe("starter");
-  expect((ph[0].params as { plan?: string }).plan).toBe("starter");
-  expect((mp[0].params as { plan?: string }).plan).toBe("starter");
+  expect((gtag[0].params as { plan?: string }).plan).toBe("week");
+  expect((ph[0].params as { plan?: string }).plan).toBe("week");
+  expect((mp[0].params as { plan?: string }).plan).toBe("week");
 });
 
 test("cta_click fires from a marketing CTA", async ({ page }) => {

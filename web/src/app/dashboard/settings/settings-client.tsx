@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Check, Eye, EyeOff, Loader2 } from "lucide-react";
-import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
 import {
   Badge,
   FormStatus,
@@ -21,7 +20,17 @@ import {
 } from "@/components/app/account/ui";
 import { AccountDataSection } from "./account-data-section";
 
-type Sub = { status: string; currentPeriodEnd: string | null; cancelAtPeriodEnd: boolean; lifetime: boolean } | null;
+type Sub = {
+  status: string;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+  /** One-time purchase (a pass or legacy Lifetime), not a recurring subscription. */
+  oneTime: boolean;
+  /** Legacy Lifetime: a one-time purchase with no end date. */
+  lifetime: boolean;
+  /** Grants paid access right now (computed on the server). */
+  paid: boolean;
+} | null;
 type Msg = { ok: boolean; text: string } | null;
 
 function Card({ title, sub, children, className = "" }: { title: string; sub?: string; children: React.ReactNode; className?: string }) {
@@ -85,12 +94,8 @@ export function SettingsClient({
   userName?: string | null;
   userEmail: string;
 }) {
-  const paid = subscriptionRowGrantsPaid(
-    subscription
-      ? { status: subscription.status, currentPeriodEnd: subscription.currentPeriodEnd ? new Date(subscription.currentPeriodEnd) : null }
-      : null,
-  );
-  const renews = paid && subscription && !subscription.lifetime && !subscription.cancelAtPeriodEnd;
+  const paid = !!subscription?.paid;
+  const renews = paid && subscription && !subscription.oneTime && !subscription.cancelAtPeriodEnd;
 
   const [name, setName] = useState(userName ?? "");
   const [savingName, setSavingName] = useState(false);
@@ -252,12 +257,12 @@ export function SettingsClient({
             <h2 className={cardTitleCls}>Plan</h2>
             <p className={cardLeadCls}>
               {!paid ? (
-                <>No plan yet. Plans start at {PUBLIC_PLANS.starter.priceDisplay}/month.</>
+                <>No plan yet. The {PUBLIC_PLANS.week.title} is {planPriceLabel("week")}, with no auto-renewal.</>
               ) : subscription?.lifetime ? (
                 <>Lifetime access.</>
               ) : subscription?.currentPeriodEnd ? (
                 <>
-                  {renews ? "Renews" : "Active until"} {fmtDate(subscription.currentPeriodEnd)}.
+                  {renews ? "Renews" : subscription.oneTime ? "Pass active until" : "Active until"} {fmtDate(subscription.currentPeriodEnd)}.
                 </>
               ) : (
                 <>Active.</>

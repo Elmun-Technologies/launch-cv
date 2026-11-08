@@ -9,12 +9,11 @@ import { useAdminFetch } from "@/components/admin/reauth";
 import { adminBtnDanger, adminBtnDark, adminBtnSoft } from "@/components/admin/admin-ui";
 import { focusRing, pillBtn } from "@/components/admin/v5/ui";
 import { roleLabel } from "@/lib/admin-labels";
+import { CHECKOUT_PLAN_ORDER, isPublicPlan } from "@/lib/plan-config";
+import { PUBLIC_PLANS } from "@/lib/monetization";
 
-const GRANT_OPTIONS = [
-  { id: "starter", label: "Starter" },
-  { id: "professional", label: "Professional" },
-  { id: "lifetime", label: "Lifetime" },
-] as const;
+/** Staff can grant any plan that is sold today; existing legacy grants still apply until removed. */
+const GRANT_OPTIONS = CHECKOUT_PLAN_ORDER.map((id) => ({ id, label: PUBLIC_PLANS[id].title }));
 
 async function errorOf(r: Response | null, fallback: string): Promise<string> {
   if (!r) return fallback;
@@ -138,7 +137,7 @@ function GrantPlanDialog({
   onClose: (savedMessage: string | null) => void;
 }) {
   const adminFetch = useAdminFetch();
-  const [plan, setPlan] = useState(grantedPlan ?? "professional");
+  const [plan, setPlan] = useState<string>(grantedPlan && isPublicPlan(grantedPlan) ? grantedPlan : "professional");
   const [until, setUntil] = useState(grantedUntil ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Check, Copy, Loader2, Plus, Sparkles, Trash2, X } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
+import { isVerifyEmailResponse } from "@/components/verify-email-notice";
 import {
   Badge,
   PageHeader,
@@ -72,6 +73,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
   const [emailResult, setEmailResult] = useState<{ subject: string; body: string; tips: string[] } | null>(null);
   const [emailErr, setEmailErr] = useState<string | null>(null);
   const [emailUpgrade, setEmailUpgrade] = useState(false);
+  const [emailVerify, setEmailVerify] = useState(false);
 
   const [showTemplateForm, setShowTemplateForm] = useState(false);
   const [tForm, setTForm] = useState({ name: "", subject: "", body: "", category: "general" });
@@ -79,7 +81,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
   const [tErr, setTErr] = useState<string | null>(null);
 
   async function generateEmail() {
-    setEmailLoading(true); setEmailErr(null); setEmailUpgrade(false); setEmailResult(null);
+    setEmailLoading(true); setEmailErr(null); setEmailUpgrade(false); setEmailVerify(false); setEmailResult(null);
     const r = await fetch("/api/ai/generate-email", {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: emailType, tone: emailTone, resumeId: emailResumeId || undefined, recipientName: recipientName || undefined, recipientRole: recipientRole || undefined, company: emailCompany || undefined, context: emailContext || undefined }),
@@ -88,6 +90,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
     setEmailLoading(false);
     if (!r.ok) {
       setEmailUpgrade(j.code === "USAGE_LIMIT" && !!j.upgrade);
+      setEmailVerify(isVerifyEmailResponse(j));
       setEmailErr(typeof j.error === "string" ? j.error : "Couldn't write the email. Please try again.");
       return;
     }
@@ -220,7 +223,7 @@ export function ExtensionsClient({ initial, resumes }: { initial: TemplateRow[];
                   })}
                 </div>
               </fieldset>
-              {emailErr ? <ToolNotice message={emailErr} upgrade={emailUpgrade} location="email_paywall" /> : null}
+              {emailErr ? <ToolNotice message={emailErr} upgrade={emailUpgrade} verifyEmail={emailVerify} location="email_paywall" /> : null}
             </div>
             <button type="button" disabled={emailLoading} onClick={() => void generateEmail()} className={`${btnLgPrimary} mt-[18px] w-full`}>
               {emailLoading ? <Loader2 className="h-[18px] w-[18px] animate-spin" aria-hidden /> : <Sparkles className="h-[18px] w-[18px]" aria-hidden />}

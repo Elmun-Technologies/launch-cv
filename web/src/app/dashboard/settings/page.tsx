@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { DashboardShell } from "@/components/dashboard-shell";
 import { SettingsClient } from "./settings-client";
+import { isLifetimeRow, isOneTimeRow, subscriptionRowGrantsPaid } from "@/lib/entitlements";
 
 export default async function SettingsPage() {
   const session = await getSession();
@@ -23,7 +24,9 @@ export default async function SettingsPage() {
                 status: sub.status,
                 currentPeriodEnd: sub.currentPeriodEnd?.toISOString() ?? null,
                 cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
-                lifetime: sub.stripeSubscriptionId.startsWith("order:"),
+                oneTime: isOneTimeRow(sub),
+                lifetime: isLifetimeRow(sub),
+                paid: subscriptionRowGrantsPaid(sub),
               }
             : null
         }

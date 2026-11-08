@@ -3,6 +3,7 @@
 import { useId, useState } from "react";
 import { ChevronDown, Download, Loader2 } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
+import { isVerifyEmailResponse } from "@/components/verify-email-notice";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
 import { useAiUsage } from "@/hooks/use-ai-usage";
@@ -65,6 +66,7 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [upgrade, setUpgrade] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState(false);
   const [result, setResult] = useState<PacketResult | null>(null);
   const [editJd, setEditJd] = useState(false);
   const [tab, setTab] = useState<Tab>("letter");
@@ -73,6 +75,7 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
     setLoading(true);
     setError(null);
     setUpgrade(false);
+    setVerifyEmail(false);
     const res = await fetch("/api/ai/packet", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -83,6 +86,7 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
     if (!res.ok) {
       setError(j.error ?? "Error");
       if (j.code === "USAGE_LIMIT" && j.upgrade) setUpgrade(true);
+      if (isVerifyEmailResponse(j)) setVerifyEmail(true);
       return;
     }
     setResult(j.result as PacketResult);
@@ -170,7 +174,7 @@ export function PacketClient({ resumeId, planLimits }: { resumeId: string; planL
         </section>
       )}
 
-      {error ? <ToolNotice message={error} upgrade={upgrade} location="packet_paywall" kind="packet" limits={planLimits} autoOpen /> : null}
+      {error ? <ToolNotice message={error} upgrade={upgrade} verifyEmail={verifyEmail} location="packet_paywall" kind="packet" limits={planLimits} autoOpen /> : null}
 
       {loading ? (
         <div aria-busy="true">

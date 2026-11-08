@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FeaturePage, Stage, ExampleTag, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { entryPriceLabel } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
   title: "AI Resume Builder — ATS-Friendly, PDF & Word Export",
@@ -100,7 +100,7 @@ const f: FeaturePageData = {
   banner: {
     title: "Written for people, readable by software.",
     text: "Clean PDFs with real text — names, dates and skills a parser can pick up, in any language your name is written in.",
-    note: `The editor, all four templates and PDF and Word downloads are free. AI rewrites come with paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month.`,
+    note: `The editor, all four templates and PDF and Word downloads are free. AI rewrites come with paid plans from ${entryPriceLabel()}.`,
   },
   faqs: [
     {

@@ -7,7 +7,8 @@ import { ANALYTICS_EVENTS } from "@/lib/analytics-events";
 import { GoogleSignInButton } from "@/components/google-sign-in-button";
 import { CtaLink } from "@/components/cta-link";
 import { scoreVerdict } from "@/components/ats-report-parts";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
+import { FREE_LIMITS } from "@/lib/plan-config";
 import type { FreeAtsFix, FreeAtsResult } from "@/types/ai-results";
 
 /*
@@ -211,7 +212,9 @@ export function FreeAtsCheck({
     const onGate = () => track(ANALYTICS_EVENTS.atsGateClick, { score: result.overall, hidden });
     const high = result.issueCounts.high;
     const ring = 2 * Math.PI * 45;
-    const starter = PUBLIC_PLANS.starter;
+    const week = PUBLIC_PLANS.week;
+    const freeJd = FREE_LIMITS.jd;
+    const freeMatches = `${freeJd} free job ${freeJd === 1 ? "match" : "matches"} a month`;
 
     return wrap(
       <section id="ats-check" ref={sectionRef} className="scroll-mt-24">
@@ -335,9 +338,9 @@ export function FreeAtsCheck({
                 All four LaunchCV templates are one column with plain-text headings — the layout ATS parsers read reliably.
               </p>
               <CtaLink cta="fix_in_editor" location="free_ats_result" href={registerHref} onClick={onGate} className={`${btn} mt-4 w-full bg-white text-[#121226]`}>
-                Fix it in the editor — free
+                Fix these with AI — free
               </CtaLink>
-              <p className="mt-2.5 text-center text-[12px] text-[#e4dfff]">Creates a free account · no credit card</p>
+              <p className="mt-2.5 text-center text-[12px] text-[#e4dfff]">Free account · {freeMatches} · no credit card</p>
             </div>
             <div className="rounded-[26px] bg-[#1d1c2e] p-6 text-[#e9e7f3] lg:rounded-[28px]">
               <p className="text-[13px] font-bold tracking-[0.08em] text-[#c9c0ff]">ISSUES FOUND</p>
@@ -369,8 +372,8 @@ export function FreeAtsCheck({
             <div>
               <p className="text-[24px] font-extrabold leading-[29px] lg:text-[28px] lg:leading-[33px]">Applying to a specific job?</p>
               <p className="mt-1.5 text-[15px] text-[#2b2752] lg:text-[16px]">
-                Paste the post and see which of its keywords your resume is missing. From {starter.priceDisplay}
-                {starter.periodLabel}.
+                Paste the post and see which of its keywords your resume is missing. A free account gets {freeMatches}; the{" "}
+                {week.title} is {planPriceLabel("week")}, with no auto-renewal.
               </p>
             </div>
             <CtaLink cta="see_plans" location="free_ats_result" href="/pricing" className={`${btn} flex-none bg-[#111118] text-white hover:bg-[#2a2940]`}>

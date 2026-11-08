@@ -3,10 +3,17 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { AiUsagePayload } from "@/hooks/use-ai-usage";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
 import { UpgradeDialog, type PlanLimitsMap } from "@/components/app/tools/upgrade-dialog";
+import { VerifyEmailNotice } from "@/components/verify-email-notice";
 
 type Kind = "jd" | "packet" | "roleFit";
+
+const UNIT: Record<Kind, [string, string]> = {
+  jd: ["job match", "job matches"],
+  roleFit: ["role-fit check", "role-fit checks"],
+  packet: ["application packet", "application packets"],
+};
 
 /** Shown above an AI tool when the user has no plan, or is about to run out this month. */
 export function AiUsageBanner({
@@ -25,12 +32,31 @@ export function AiUsageBanner({
   const used = usage.used[key];
   const max = usage.limits[key];
 
+  // Free AI checks need a confirmed email: ask for that instead of pitching plans.
+  if (!usage.pro && usage.emailVerified === false && max > 0) return <VerifyEmailNotice />;
+
   if (!usage.pro) {
+    const left = Math.max(0, max - used);
+    const week = `${PUBLIC_PLANS.week.title} is ${planPriceLabel("week")}, with no auto-renewal`;
     return (
       <div className="flex flex-col gap-3 rounded-[20px] bg-[#e4dfff] px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-[14px] leading-[21px] text-[#121226]">
-          <span className="font-bold">This tool is included in every plan</span>, from {PUBLIC_PLANS.starter.priceDisplay}/month.
-          Plans only differ in monthly limits.
+          {left > 0 ? (
+            <>
+              <span className="font-bold">
+                {left} of {max} free {UNIT[kind][max === 1 ? 0 : 1]} left this month.
+              </span>{" "}
+              For more, the {week}.
+            </>
+          ) : max > 0 ? (
+            <>
+              <span className="font-bold">You&apos;ve used this month&apos;s free AI checks.</span> The {week}. Your work stays saved.
+            </>
+          ) : (
+            <>
+              <span className="font-bold">This tool is included in every paid plan.</span> The {week}.
+            </>
+          )}
         </p>
         <button
           type="button"

@@ -56,9 +56,12 @@ const sections: LegalSection[] = [
     body: (
       <>
         <p>
-          Payments are processed by Polar. Starter and Professional renew monthly until you cancel; you can cancel at
-          any time from the billing portal and keep access until the end of the period you paid for. Lifetime is a
-          single payment that never renews. Prices are in US dollars, plus any sales tax or VAT your country requires.
+          Payments are processed by Polar. Pro renews monthly until you cancel; you can cancel at any time from the
+          billing portal and keep access until the end of the period you paid for. The Week Pass and the 90-Day Pass
+          are single payments that give full access for 7 or 90 days and don&apos;t renew; buying another pass while
+          one is active adds its days to the end of the current pass. Plans bought before these (Starter, Elite and
+          Lifetime) keep working as they did; Lifetime is a single payment that never renews. Prices are in US
+          dollars, plus any sales tax or VAT your country requires.
         </p>
         <p className="mt-3">
           Monthly plans come with a 7-day money-back guarantee, and Lifetime can be refunded within 14 days of purchase.
@@ -116,7 +119,7 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Terms of Service"
-      updated="October 27, 2026"
+      updated="November 8, 2026"
       pathname="/legal/terms"
       intro="The rules for using LaunchCV, including how plans, refunds and cancellations work."
       sections={sections}

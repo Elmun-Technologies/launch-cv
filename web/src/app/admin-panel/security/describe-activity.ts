@@ -80,6 +80,7 @@ function settingsLine(group: string, diff: unknown): string {
   let first: string;
   if (group === "switches" && typeof a === "boolean") first = `${FIELD_LABELS[key] ?? key} turned ${a ? "on" : "off"}`;
   else if (group === "planLimits") first = `${path[0]} plan ${key === "roleFit" ? "role-fit" : key === "jd" ? "job-post" : "packet"} limit ${fmt(key, b)} → ${fmt(key, a)}`;
+  else if (group === "models" && path[0] === "freeTierModel") first = `model for free users → ${String(a) || "same as each tool"}`;
   else if (group === "models") first = `model for ${path[0].replace(/_/g, " ")} → ${String(a)}`;
   else first = `${FIELD_LABELS[key] ?? key} ${fmt(key, b)} → ${fmt(key, a)}`;
   first = first.charAt(0).toUpperCase() + first.slice(1);

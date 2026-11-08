@@ -57,9 +57,9 @@ export const PAGE_COPY = {
     paths: ["/pricing"],
     max: { title: 60, titleMuted: 80, lead: 220 },
     defaults: {
-      title: "Pay monthly or once.",
+      title: "Pay for the weeks you're searching.",
       titleMuted: "Checking your resume is always free.",
-      lead: "Every AI tool is on every paid plan. Plans only differ in how much you can use them each month.",
+      lead: "Every AI tool is on every plan. Buy a pass for the days you need, with no auto-renewal, or stay on Pro month to month.",
     },
   },
   "about.mission": {

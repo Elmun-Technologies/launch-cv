@@ -26,13 +26,13 @@ Polar product id.
 
 1. **Create the organization** (you are here in onboarding).
 2. **Create one product per plan** (Products → New):
-   - Starter — **$9 recurring, monthly**
-   - Professional — **$29 recurring, monthly**
-   - Lifetime — **$79 one-time purchase** (no renewal)
+   - Week Pass — **$9 one-time purchase** (7 days of access, no renewal)
+   - Pro — **$29 recurring, monthly** (the existing Professional product)
+   - 90-Day Pass — **$69 one-time purchase** (90 days of access, no renewal)
 
-   Copy each **Product ID**. (Elite is a legacy plan kept only for webhook/plan
-   mapping of existing customers — it is not offered to new customers. Leave
-   `POLAR_PRODUCT_ELITE` empty unless you still have active Elite subscribers.)
+   Copy each **Product ID**. Starter, Elite and Lifetime are legacy plans kept only
+   for webhook/plan mapping of existing customers — they are never shown or sold.
+   Keep their product ids set while existing customers still hold them.
 3. **Create an Organization Access Token** (Settings → Developers) with the
    `checkouts:write` scope. Copy it once — it is shown only once.
 4. **Create a webhook** (Settings → Webhooks):
@@ -40,7 +40,7 @@ Polar product id.
    - Format: **Raw** (Standard Webhooks)
    - Subscribe to at least: `subscription.created`, `subscription.updated`,
      `subscription.active`, `subscription.canceled`, `subscription.revoked`
-     (recurring Starter / Professional), and `order.paid` (one-time Lifetime).
+     (recurring Pro), and `order.paid` (one-time Week Pass / 90-Day Pass).
    - Copy the signing **secret**.
 
 ## Environment variables
@@ -51,8 +51,10 @@ Set these (see `.env.example`):
 POLAR_ACCESS_TOKEN=...                # org access token, checkouts:write scope
 POLAR_SERVER=production               # or "sandbox" for testing
 POLAR_WEBHOOK_SECRET=...              # webhook signing secret
-POLAR_PRODUCT_STARTER=...             # Polar product IDs
+POLAR_PRODUCT_WEEK=...                # Polar product IDs (sold)
 POLAR_PRODUCT_PROFESSIONAL=...
+POLAR_PRODUCT_QUARTER=...
+POLAR_PRODUCT_STARTER=...             # legacy, not sold
 POLAR_PRODUCT_ELITE=...
 POLAR_PRODUCT_LIFETIME=...
 NEXT_PUBLIC_POLAR_PORTAL_URL=https://polar.sh/<org-slug>/portal
@@ -69,12 +71,16 @@ Set `POLAR_SERVER=sandbox` and use a token + products from
 
 ## How access is granted
 
-- **Recurring (Starter, Professional):** Polar fires `subscription.*` events; the
+- **Recurring (Pro; legacy Starter/Elite):** Polar fires `subscription.*` events; the
   webhook upserts a `Subscription` row with the Polar status and `currentPeriodEnd`
   (the renewal date). Renewals extend it automatically. `subscriptionRowGrantsPaid()`
   grants access while the status is active/trialing/past_due, or while a canceled
   subscription is still within its paid period.
-- **One-time (Lifetime):** Polar fires `order.paid`; the webhook stores an
-  always-active row with no end date, so access never lapses.
+- **Passes (Week Pass, 90-Day Pass):** Polar fires `order.paid`; the webhook stores
+  an `order:<id>` row with `currentPeriodEnd` = now + 7 or 90 days (lengths in
+  `PASS_DAYS`, `lib/plan-config.ts`). Buying a pass while one is still running
+  extends from the current end. Access stops once `currentPeriodEnd` passes.
+  Checkout refuses Pro while a pass is running, and a pass while Pro is renewing.
+- **Legacy Lifetime:** an `order:<id>` row with no end date, so access never lapses.
 
 `getUserPlanId()` maps the stored product id back to a plan tier for usage limits.

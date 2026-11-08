@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { ALERT_LEVEL_CHOICES, type AiTool, type QuotaPlan, type Settings, type SettingsGroup } from "@/lib/app-settings";
-import { PLAN_PRICE_USD } from "@/lib/plan-config";
+import { CHECKOUT_PLAN_ORDER, LEGACY_PLANS } from "@/lib/plan-config";
+import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
 import { useAdminFetch } from "@/components/admin/reauth";
 import { SectionCard } from "@/components/admin/section-card";
 import { AdminInput, AdminSelect } from "@/components/admin/form-field";
@@ -39,12 +40,11 @@ const RATE_LABELS: Record<keyof Settings["rateLimits"], { label: string; unit: s
   pdfPerUserPerHour: { label: "PDF exports per user", unit: "/ hour" },
 };
 
+/** Free, then the plans sold today in pricing order, then legacy plans existing customers still use. */
 const PLAN_ROWS: { plan: QuotaPlan; label: string }[] = [
   { plan: "free", label: "Free (no plan)" },
-  { plan: "starter", label: `Starter · $${PLAN_PRICE_USD.starter}` },
-  { plan: "professional", label: `Professional · $${PLAN_PRICE_USD.professional}` },
-  { plan: "lifetime", label: `Lifetime · $${PLAN_PRICE_USD.lifetime}` },
-  { plan: "elite", label: "Elite (legacy)" },
+  ...CHECKOUT_PLAN_ORDER.map((plan) => ({ plan, label: `${PUBLIC_PLANS[plan].title} · ${planPriceLabel(plan)}` })),
+  ...LEGACY_PLANS.map((plan) => ({ plan, label: `${PUBLIC_PLANS[plan].title} (legacy)` })),
 ];
 
 /** Columns in canvas order. Bullet rewrites and ATS checks have no per-plan quota in the app (see report). */
@@ -229,7 +229,7 @@ export function LimitsForm({ initial, spend, tools, models }: { initial: Setting
             </tbody>
           </table>
         </div>
-        <p className="mt-3 text-[12px] leading-[1.5] text-[#66647c]">Free accounts with 0 see the upgrade prompt. Limits reset on the 1st of each month.</p>
+        <p className="mt-3 text-[12px] leading-[1.5] text-[#66647c]">Free accounts see the upgrade prompt once they reach their free limit (0 = straight away). Legacy plans aren&apos;t sold any more; existing customers keep them. Limits reset on the 1st of each month.</p>
       </SectionCard>
 
       <div className="grid items-start gap-[18px] lg:grid-cols-3">
@@ -373,6 +373,25 @@ export function LimitsForm({ initial, spend, tools, models }: { initial: Setting
       </div>
 
       <SectionCard title="Model per tool" description="Calls and cost this month (UTC), and the model each AI tool uses.">
+        <label htmlFor="free-tier-model" className={labelCls}>
+          Model for free users
+        </label>
+        <AdminSelect
+          id="free-tier-model"
+          value={s.models.freeTierModel}
+          onChange={(e) => set("models", { freeTierModel: e.target.value } as Partial<Settings["models"]>)}
+          className="lc-mono mt-1.5 min-w-[180px] max-w-[320px] sm:text-[13px]!"
+          aria-describedby="free-tier-model-help"
+        >
+          <option value="">Same as each tool</option>
+          {models.map((m) => (
+            <option key={m}>{m}</option>
+          ))}
+        </AdminSelect>
+        <p id="free-tier-model-help" className="mt-1.5 mb-4 text-[12px] leading-[1.5] text-[#66647c]">
+          Used instead of the tool&apos;s model for every AI call without a paid plan: free accounts and the public free tools.
+          Paid plans always use the model below. claude-haiku-5-5 is recommended to keep free usage cheap.
+        </p>
         <div className="relative -mx-5 overflow-x-auto px-5 sm:-mx-6 sm:px-6" tabIndex={0} role="region" aria-label="Model per tool table">
           <table className="w-full min-w-[560px] text-left text-[14px]">
             <thead className="text-[12px] font-bold uppercase tracking-[0.06em] text-[#66647c]">

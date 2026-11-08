@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
+import { isVerifyEmailResponse } from "@/components/verify-email-notice";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
 import { useAiUsage } from "@/hooks/use-ai-usage";
@@ -52,6 +53,7 @@ export function FitClient({ resumeId, planLimits }: { resumeId: string; planLimi
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [upgrade, setUpgrade] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState(false);
   const [result, setResult] = useState<RoleFitResult | null>(null);
   const [withJd, setWithJd] = useState(false);
 
@@ -59,6 +61,7 @@ export function FitClient({ resumeId, planLimits }: { resumeId: string; planLimi
     setLoading(true);
     setError(null);
     setUpgrade(false);
+    setVerifyEmail(false);
     const usedJd = Boolean(jd.trim());
     const res = await fetch("/api/ai/role-fit", {
       method: "POST",
@@ -73,6 +76,7 @@ export function FitClient({ resumeId, planLimits }: { resumeId: string; planLimi
     if (!res.ok) {
       setError(j.error ?? "Error");
       if (j.code === "USAGE_LIMIT" && j.upgrade) setUpgrade(true);
+      if (isVerifyEmailResponse(j)) setVerifyEmail(true);
       return;
     }
     setResult(j.result as RoleFitResult);
@@ -117,7 +121,7 @@ export function FitClient({ resumeId, planLimits }: { resumeId: string; planLimi
 
         {/* Result */}
         <div className="flex min-w-0 flex-col gap-4 lg:col-start-1 lg:row-span-2 lg:row-start-1" aria-busy={loading}>
-          {error ? <ToolNotice message={error} upgrade={upgrade} location="role_fit_paywall" kind="roleFit" limits={planLimits} autoOpen /> : null}
+          {error ? <ToolNotice message={error} upgrade={upgrade} verifyEmail={verifyEmail} location="role_fit_paywall" kind="roleFit" limits={planLimits} autoOpen /> : null}
 
           {loading ? <ToolSkeleton rows={5} className="h-16" /> : null}
 

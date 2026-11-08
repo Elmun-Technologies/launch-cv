@@ -9,7 +9,7 @@ import { siteFontVars } from "@/lib/site-fonts";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 import type { CheckoutPlan } from "@/lib/plan-config";
 
-type Status = { paid: boolean; plan: string | null; currentPeriodEnd: string | null; cancelAtPeriodEnd: boolean };
+type Status = { paid: boolean; plan: string | null; currentPeriodEnd: string | null; cancelAtPeriodEnd: boolean; oneTime: boolean };
 
 async function fetchStatus(): Promise<Status | null> {
   const r = await fetch("/api/subscription/status", { cache: "no-store" }).catch(() => null);
@@ -20,6 +20,7 @@ async function fetchStatus(): Promise<Status | null> {
     plan: j.plan ?? null,
     currentPeriodEnd: j.currentPeriodEnd ?? null,
     cancelAtPeriodEnd: !!j.cancelAtPeriodEnd,
+    oneTime: !!j.oneTime,
   };
 }
 
@@ -51,11 +52,13 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
   }, []);
 
   const plan = status?.plan && status.plan in PUBLIC_PLANS ? PUBLIC_PLANS[status.plan as CheckoutPlan] : null;
-  const lifetime = status?.plan === "lifetime";
-  const renews =
-    status?.currentPeriodEnd && !lifetime && !status.cancelAtPeriodEnd
-      ? new Date(status.currentPeriodEnd).toLocaleDateString("en-US", { month: "short", day: "numeric" })
-      : null;
+  const oneTime = !!status?.oneTime;
+  const lifetime = status?.plan === "lifetime" || (oneTime && !status?.currentPeriodEnd);
+  const endDay = status?.currentPeriodEnd
+    ? new Date(status.currentPeriodEnd).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+    : null;
+  const passEnds = oneTime && !lifetime ? endDay : null;
+  const renews = !oneTime && !lifetime && !status?.cancelAtPeriodEnd ? endDay : null;
 
   const steps = [
     {
@@ -104,7 +107,9 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
                 A receipt is on its way to <span className="break-words">{email}</span>.{" "}
                 {lifetime
                   ? "It's a one-time payment, so it never renews."
-                  : renews
+                  : passEnds
+                    ? `Your pass runs until ${passEnds}. It doesn't renew, so there's nothing to cancel.`
+                    : renews
                     ? `Your plan renews on ${renews}; cancel anytime in Settings.`
                     : "Manage it anytime in Settings."}
               </p>

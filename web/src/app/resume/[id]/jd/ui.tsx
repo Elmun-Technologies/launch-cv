@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Check, Loader2, X } from "lucide-react";
 import { ToolNotice } from "@/components/tool-notice";
+import { isVerifyEmailResponse } from "@/components/verify-email-notice";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { AiUsageBanner } from "@/components/ai-usage-banner";
 import { useAiUsage } from "@/hooks/use-ai-usage";
@@ -63,6 +64,7 @@ export function JdClient({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [upgrade, setUpgrade] = useState(false);
+  const [verifyEmail, setVerifyEmail] = useState(false);
   const [result, setResult] = useState<JdAlignResult | null>(null);
   const [jdRunId, setJdRunId] = useState<string | null>(null);
   const [applyBusy, setApplyBusy] = useState<string | null>(null);
@@ -102,6 +104,7 @@ export function JdClient({
     }
     setError(null);
     setUpgrade(false);
+    setVerifyEmail(false);
     setSaveMsg(null);
     const res = await fetch("/api/ai/jd-align", {
       method: "POST",
@@ -113,6 +116,7 @@ export function JdClient({
     if (!res.ok) {
       setError(j.error ?? "Error");
       if (j.code === "USAGE_LIMIT" && j.upgrade) setUpgrade(true);
+      if (isVerifyEmailResponse(j)) setVerifyEmail(true);
       return;
     }
     setResult(j.result as JdAlignResult);
@@ -238,7 +242,7 @@ export function JdClient({
 
         {/* Results */}
         <div ref={resultsRef} className="flex min-w-0 scroll-mt-4 flex-col gap-4" aria-busy={loading}>
-          {error ? <ToolNotice message={error} upgrade={upgrade} location="jd_paywall" kind="jd" limits={planLimits} autoOpen /> : null}
+          {error ? <ToolNotice message={error} upgrade={upgrade} verifyEmail={verifyEmail} location="jd_paywall" kind="jd" limits={planLimits} autoOpen /> : null}
 
           {loading ? <ToolSkeleton rows={4} className="h-24" /> : null}
 

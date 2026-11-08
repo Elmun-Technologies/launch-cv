@@ -100,9 +100,10 @@ export async function POST(req: Request) {
         if (!userId) break;
         // Capture prior state BEFORE the upsert so we can detect the transition
         // into `active` and stay idempotent across Polar's webhook re-deliveries.
-        const priorStatus = (
-          await prisma.subscription.findUnique({ where: { userId }, select: { status: true } })
-        )?.status;
+        // A one-time order row (a pass, often expired, or Lifetime) is a different
+        // purchase, so its "active" status must not hide this subscription's first activation.
+        const prior = await prisma.subscription.findUnique({ where: { userId }, select: { status: true, stripeSubscriptionId: true } });
+        const priorStatus = prior && !prior.stripeSubscriptionId.startsWith("order:") ? prior.status : undefined;
         await upsertSubscriptionFromPolar(sub, userId);
         // Count the purchase exactly once — on the FIRST transition into `active`.
         // Gating on `priorStatus !== "active"` de-dupes redelivered active events
@@ -127,39 +128,47 @@ export async function POST(req: Request) {
         break;
       }
 
-      // One-time purchases (e.g. Lifetime). Only act on one-time products so recurring
-      // renewals — also delivered as orders — don't overwrite the subscription row that
-      // the subscription.* events manage.
+      // One-time purchases (Week Pass, 90-Day Pass, legacy Lifetime). Only act on one-time
+      // products so recurring renewals — also delivered as orders — don't overwrite the
+      // subscription row that the subscription.* events manage.
       case "order.paid": {
         const order = data as unknown as PolarOrder;
         const plan = await planIdFromPolarProductId(order.product_id ?? null);
         if (!plan || !isOneTimePlan(plan)) break;
         const userId = await resolvePolarUserId(metadataOf(data), null);
         if (!userId) break;
-        // Idempotency: skip the conversion if this order was already recorded
-        // (Polar may redeliver `order.paid`).
-        const alreadyRecorded = !!(await prisma.subscription.findFirst({
-          where: { stripeSubscriptionId: `order:${order.id}` },
-          select: { id: true },
-        }));
-        await upsertOrderFromPolar(order, userId);
-        // Count the one-time purchase exactly once (Polar may redeliver order.paid).
-        if (!alreadyRecorded) {
-          await trackEvent("pay_success", {
-            userId,
-            meta: { provider: "polar", orderId: order.id, plan },
-          });
-          await trackPurchaseCompleted({
-            userId,
-            plan,
-            provider: "polar",
-            orderId: order.id ?? null,
-            gaClientId: gaClientIdOf(metadataOf(data)),
-            value: toMajorUnits(order.total_amount ?? order.amount),
-            currency: order.currency ?? null,
-            attribution: attributionFromRecord(metadataOf(data)),
-          });
+        // Idempotency: Polar may redeliver `order.paid`. A pass extends access, so an
+        // order must be applied once only — even after a later pass replaced its row,
+        // which is why the recorded purchase event is checked as well as the row.
+        const alreadyRecorded =
+          !!(await prisma.subscription.findFirst({
+            where: { stripeSubscriptionId: `order:${order.id}` },
+            select: { id: true },
+          })) ||
+          !!(await prisma.analyticsEvent.findFirst({
+            where: { name: "pay_success", userId, meta: { path: ["orderId"], equals: order.id } },
+            select: { id: true },
+          }));
+        if (alreadyRecorded) break;
+        const applied = await upsertOrderFromPolar(order, userId, plan);
+        if (!applied) {
+          console.warn(`[polar/webhook] order ${order.id} (${plan}) not applied: user ${userId} already has better access`);
         }
+        // Count the one-time purchase exactly once: it was paid even if it didn't change access.
+        await trackEvent("pay_success", {
+          userId,
+          meta: { provider: "polar", orderId: order.id, plan, ...(applied ? {} : { applied: false }) },
+        });
+        await trackPurchaseCompleted({
+          userId,
+          plan,
+          provider: "polar",
+          orderId: order.id ?? null,
+          gaClientId: gaClientIdOf(metadataOf(data)),
+          value: toMajorUnits(order.total_amount ?? order.amount),
+          currency: order.currency ?? null,
+          attribution: attributionFromRecord(metadataOf(data)),
+        });
         break;
       }
 
