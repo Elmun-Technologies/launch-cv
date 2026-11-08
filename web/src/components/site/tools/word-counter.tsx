@@ -106,7 +106,7 @@ export function WordCounter() {
             {/* Keeps the height of a trailing newline, as the textarea does. */}
             {"​"}
           </div>
-          <textarea
+          <textarea data-clarity-mask="True"
             id={`${id}-text`}
             value={text}
             onChange={(e) => {

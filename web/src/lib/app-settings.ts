@@ -81,6 +81,8 @@ export type Settings = {
     freeTools: boolean;
     /** "Continue with Google" on login and register, and the Google OAuth routes. */
     googleSignIn: boolean;
+    /** Free AI checks need a confirmed email (anti-bot). Turn off only while email delivery is broken. */
+    freeAiNeedsVerifiedEmail: boolean;
   };
   /** Product toggles from Admin → Settings that aren't emergency switches. */
   product: {
@@ -144,7 +146,7 @@ export const DEFAULT_SETTINGS: Settings = {
     pdfPerUserPerHour: 60,
     freeToolsPerIpPerDay: 10,
   },
-  switches: { aiTools: true, freeAtsCheck: true, signups: true, checkout: true, freeTools: true, googleSignIn: true },
+  switches: { aiTools: true, freeAtsCheck: true, signups: true, checkout: true, freeTools: true, googleSignIn: true, freeAiNeedsVerifiedEmail: true },
   product: { maintenanceBanner: false, maintenanceMessage: "" },
   models: {
     free_ats: "gpt-4o-mini",

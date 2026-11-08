@@ -521,7 +521,7 @@ export function FreeAtsCheck({
               </div>
             ) : (
               <div className="m-1.5 mt-2.5 lg:m-2 lg:mt-3">
-                <textarea
+                <textarea data-clarity-mask="True"
                   value={pasted}
                   onChange={(e) => setPasted(e.target.value)}
                   aria-label="Paste your resume text"

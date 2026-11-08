@@ -61,6 +61,13 @@ boshqa sessiya nima qilganini bilish uchun.
 - Haftalik hisobot: `/api/cron/weekly-report` (dushanba 13:07 UTC), egalar (owners) ga;
   Admin → Settings → Weekly report (on/off + "Send me this week's report now").
   `src/lib/weekly-report.ts`, tekshiruv `npx tsx src/lib/weekly-report.check.ts`.
+- Admin → Settings → Product: **"Free AI needs a confirmed email"** (default on). Resend
+  domeni tasdiqlanmaguncha (403 "domain is not verified") tasdiqlash xatlari ketmaydi —
+  shu vaqtda o'chirib turish mumkin. Bepul vositalar textarea'lari Clarity'da yashiriladi
+  (`data-clarity-mask`).
+- **Email:** launch-cv.com Resend'da tasdiqlanishi kerak (Namecheap DNS: TXT
+  `resend._domainkey`, CNAME `send`/`rsend`, ixtiyoriy `_dmarc`). Shundan keyin Admin →
+  Integrations → Resend → Test connection.
 
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 
@@ -79,8 +86,8 @@ boshqa sessiya nima qilganini bilish uchun.
   funnel, haftalik kogortalar, AI tool adoption, unit economics. Har jadval CSV
   (`/api/admin-panel/{revenue,product}/export`). Ruxsat: `users` (Subscriptions kabi).
 - Matematika: `src/lib/biz-metrics.ts`, tekshiruv `npx tsx src/lib/biz-metrics.check.ts`.
-- Ochiq: refundlar yozilmaydi (Polar `order.refunded` ishlanmaydi); Pro yangilanish
-  to'lovlari `pay_success` sifatida yozilmaydi — net revenue faqat birinchi to'lovni ko'radi.
+- Refundlar (`order.refunded`) va Pro yangilanish to'lovlari (`renewal: true`) endi yoziladi
+  (`src/lib/polar-apply.ts`).
 
 ## Joriy / bloklangan (2026-11-07)
 
