@@ -74,7 +74,8 @@ export async function POST(req: Request) {
 
   const body = {
     products: [productId],
-    success_url: `${base}/dashboard/settings/subscription?checkout=success`,
+    // Polar fills {CHECKOUT_ID}; the success screen uses it to activate the plan without waiting on the webhook.
+    success_url: `${base}/dashboard/settings/subscription?checkout=success&checkout_id={CHECKOUT_ID}`,
     customer_email: user.email,
     ...(user.name ? { customer_name: user.name } : {}),
     external_customer_id: user.id,

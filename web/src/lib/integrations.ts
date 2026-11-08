@@ -424,7 +424,19 @@ export async function testIntegration(
         const base = (await get("server")) === "sandbox" ? "https://sandbox-api.polar.sh" : "https://api.polar.sh";
         const r = await fetch(`${base}/v1/products/?limit=1`, { headers: { Authorization: `Bearer ${token}` }, signal });
         if (!r.ok) return done(false, `Polar returned ${r.status}`);
-        if (!(await get("webhookSecret"))) return done(false, "Token works, but the webhook secret is missing — paid users won't get access");
+        const whSecret = await get("webhookSecret");
+        if (!whSecret) return done(false, "Token works, but the webhook secret is missing — paid users won't get access");
+        // Compare with the secret of the endpoint that points at this site, when the token may read it.
+        const ep = await fetch(`${base}/v1/webhooks/endpoints?limit=50`, { headers: { Authorization: `Bearer ${token}` }, signal });
+        if (ep.ok) {
+          const items = ((await ep.json().catch(() => null)) as { items?: { url?: string; secret?: string; enabled?: boolean }[] } | null)?.items ?? [];
+          const ours = items.filter((e) => e.url?.endsWith("/api/polar/webhook") && e.enabled !== false);
+          if (!ours.length) return done(false, "Token works, but Polar has no enabled webhook pointing at /api/polar/webhook");
+          if (!ours.some((e) => e.secret?.trim() === whSecret.trim())) {
+            return done(false, "Token works, but the webhook secret doesn't match the Polar endpoint — paid users won't get access. Copy the secret from Polar → Webhooks.");
+          }
+          return done(true, "Token accepted · webhook secret matches");
+        }
         return done(true, "Token accepted");
       }
       case "google": {
