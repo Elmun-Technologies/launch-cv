@@ -6,6 +6,7 @@ import { SAMPLES_DATE_KEY, contentUpdated } from "@/lib/content-dates";
 import { getSiteUrl } from "@/lib/site";
 import { ATS_VENDORS } from "@/lib/seo/ats-vendors";
 import { RESIGNATION_TEMPLATES } from "@/lib/seo/resignation-templates";
+import { COVER_SITUATIONS } from "@/lib/seo/cover-letter-situations";
 
 /** Programmatic SEO pages added by later modules (keywords per role, ATS vendors). */
 const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = [
@@ -15,6 +16,7 @@ const SEO_EXTRA_ROUTES: { path: string; priority: number; dateKey: string }[] = 
   ...ATS_VENDORS.map((v) => ({ path: `/ats/${v.slug}`, priority: 0.7, dateKey: "/ats/*" })),
   { path: "/resignation-letter", priority: 0.8, dateKey: "/resignation-letter" },
   ...RESIGNATION_TEMPLATES.map((t) => ({ path: `/resignation-letter/${t.slug}`, priority: 0.7, dateKey: "/resignation-letter/*" })),
+  ...COVER_SITUATIONS.map((s) => ({ path: `/cover-letter/${s.slug}`, priority: 0.7, dateKey: "/cover-letter/*" })),
 ];
 
 /** Rebuilt hourly so new blog posts appear without a redeploy. */
