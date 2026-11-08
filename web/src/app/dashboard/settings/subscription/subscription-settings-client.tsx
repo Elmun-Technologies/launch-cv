@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { usePortalUrl } from "@/lib/public-config";
 import Link from "next/link";
+import { CtaLink } from "@/components/cta-link";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { PUBLIC_PLANS, freeAllowanceSentence, planPriceLabel } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan, type CheckoutPlan } from "@/lib/plan-config";
-import { trackCheckoutStart, trackCtaClick, trackPlanSelected, getGaClientId } from "@/lib/analytics-client";
 import {
   Badge,
   PageHeader,
@@ -95,11 +96,10 @@ export function SubscriptionSettingsClient({
   limits: Record<CheckoutPlan | "free", { jd: number; packet: number; roleFit: number }>;
 }) {
   const portalUrl = usePortalUrl();
-  const [loadingPlan, setLoadingPlan] = useState<CheckoutPlan | null>(null);
+  const router = useRouter();
   const [statusLoading, setStatusLoading] = useState(true);
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [usage, setUsage] = useState<UsagePayload | null>(null);
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   /** "waiting" while the payment webhook catches up after a successful checkout. */
   const [returned, setReturned] = useState<"waiting" | "confirmed" | "slow" | null>(null);
   const autoStarted = useRef(false);
@@ -147,43 +147,16 @@ export function SubscriptionSettingsClient({
     };
   }, [statusLoading, paid, currentPlan]);
 
-  // Pricing and paywall CTAs link here with ?plan=<plan>: open that checkout
-  // straight away instead of making the visitor pick the plan a second time.
+  // Older pricing and paywall links point here with ?plan=<plan>: forward them to
+  // that plan's checkout page, which opens payment straight away (?start=1).
   useEffect(() => {
     if (statusLoading || paid || autoStarted.current) return;
     const plan = new URLSearchParams(window.location.search).get("plan") as CheckoutPlan | null;
     if (plan && CHECKOUT_PLAN_ORDER.includes(plan)) {
       autoStarted.current = true;
-      void startCheckout(plan);
+      router.replace(`/checkout/${plan}?start=1`);
     }
-  }, [statusLoading, paid]);
-
-  async function startCheckout(plan: CheckoutPlan) {
-    // CTA click on a "Choose <plan>" button, and the funnel's plan-selection step.
-    trackCtaClick({ cta: "choose_plan", plan, location: "subscription_settings" });
-    trackPlanSelected(plan, { location: "subscription_settings" });
-    setLoadingPlan(plan);
-    setCheckoutError(null);
-    const res = await fetch("/api/polar/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      // Pass the GA client id so the webhook-driven purchase event stitches
-      // back to this browser's GA4 session.
-      body: JSON.stringify({ plan, gaClientId: getGaClientId() }),
-    }).catch(() => null);
-    const j = res ? await res.json().catch(() => ({})) : {};
-    setLoadingPlan(null);
-    if (res?.ok && j.url) {
-      // Polar checkout is opening — fire before the redirect leaves the page.
-      trackCheckoutStart(plan);
-      window.location.href = j.url as string;
-      return;
-    }
-    if (res?.status === 409 && typeof j.error === "string") setCheckoutError(j.error);
-    else if (res && res.status >= 500)
-      setCheckoutError("Checkout isn't available right now. Please try again in a few minutes or contact support.");
-    else setCheckoutError(typeof j.error === "string" ? j.error : "Couldn't open checkout. Please try again.");
-  }
+  }, [statusLoading, paid, router]);
 
   const renewDate = status?.currentPeriodEnd
     ? new Date(status.currentPeriodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
@@ -231,21 +204,6 @@ export function SubscriptionSettingsClient({
         <div role="status" aria-live="polite" className={returned ? "" : "sr-only"}>
           {returned ? <CheckoutReturn state={returned} planTitle={currentCfg?.title ?? null} renewLine={returnRenewLine} /> : null}
         </div>
-
-        {checkoutError ? (
-          <div role="alert" className="rounded-[24px] bg-[#fbe2e3] px-5 py-4 sm:px-6">
-            <p className="text-[15px] font-bold text-[#a3262b]">{checkoutError}</p>
-            <p className="mt-1 text-[14px] text-[#24223a]">
-              <a href={portalUrl} target="_blank" rel="noreferrer" className={inlineLinkCls}>
-                Open billing portal
-              </a>{" "}
-              ·{" "}
-              <Link href="/dashboard/support" className={inlineLinkCls}>
-                Contact support
-              </Link>
-            </p>
-          </div>
-        ) : null}
 
         <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-2">
           <section
@@ -341,16 +299,14 @@ export function SubscriptionSettingsClient({
               const canExtend = pass && onPass;
               const blocked = status?.checkoutBlocked[key] ?? null;
               const label =
-                loadingPlan === key
-                  ? "Opening checkout…"
-                  : canExtend
+                canExtend
                     ? `Add ${PASS_DAYS[key]} days`
                     : pass
                       ? `Get the ${cfg.title}`
                       : paid
                         ? `Switch to ${cfg.title}`
                         : `Choose ${cfg.title}`;
-              const shortLabel = loadingPlan === key ? "Opening…" : canExtend ? "Extend" : pass ? "Buy" : paid ? "Switch" : "Choose";
+              const shortLabel = canExtend ? "Extend" : pass ? "Buy" : paid ? "Switch" : "Choose";
               return (
                 <div
                   key={key}
@@ -389,18 +345,31 @@ export function SubscriptionSettingsClient({
                     </p>
                   </div>
                   {isCurrent && !canExtend ? null : (
-                    <button
-                      type="button"
-                      onClick={() => void startCheckout(key)}
-                      disabled={!!loadingPlan || statusLoading || !!blocked}
-                      title={blocked ?? undefined}
-                      aria-label={loadingPlan === key ? undefined : `${label}, ${cfg.priceDisplay} ${period}`}
-                      className={`${isPopular ? btnSmPrimary : paid ? btnSmSoft : btnSmDark} shrink-0 max-sm:px-3.5 md:mt-3.5 md:self-start`}
-                    >
-                      {loadingPlan === key ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-                      <span className="sm:hidden">{shortLabel}</span>
-                      <span className="hidden sm:inline">{label}</span>
-                    </button>
+                    blocked || statusLoading ? (
+                      <button
+                        type="button"
+                        disabled
+                        title={blocked ?? undefined}
+                        aria-label={`${label}, ${cfg.priceDisplay} ${period}`}
+                        className={`${isPopular ? btnSmPrimary : paid ? btnSmSoft : btnSmDark} shrink-0 max-sm:px-3.5 md:mt-3.5 md:self-start`}
+                      >
+                        <span className="sm:hidden">{shortLabel}</span>
+                        <span className="hidden sm:inline">{label}</span>
+                      </button>
+                    ) : (
+                      <CtaLink
+                        cta="choose_plan"
+                        plan={key}
+                        location="subscription_settings"
+                        selectsPlan
+                        href={`/checkout/${key}`}
+                        aria-label={`${label}, ${cfg.priceDisplay} ${period}`}
+                        className={`${isPopular ? btnSmPrimary : paid ? btnSmSoft : btnSmDark} shrink-0 max-sm:px-3.5 md:mt-3.5 md:self-start`}
+                      >
+                        <span className="sm:hidden">{shortLabel}</span>
+                        <span className="hidden sm:inline">{label}</span>
+                      </CtaLink>
+                    )
                   )}
                 </div>
               );

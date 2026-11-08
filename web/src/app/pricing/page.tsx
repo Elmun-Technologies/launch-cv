@@ -12,11 +12,12 @@ import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { getPageCopy } from "@/lib/cms/page-copy";
 import { getFaqsFor } from "@/lib/cms/faqs";
+import { buildPricingFaqs } from "@/lib/pricing-faqs";
 import { MOBILE_PLAN_ORDER, planLimitsLine } from "@/components/site/plan-summary";
 
 const SUB_NEXT = "/dashboard/settings/subscription";
-/** Carries the chosen plan through sign-up so checkout opens right after. */
-const planHref = (plan: string) => `/register?next=${encodeURIComponent(`${SUB_NEXT}?plan=${plan}`)}`;
+/** Each plan opens its own checkout page, which handles sign-in before payment. */
+const planHref = (plan: string) => `/checkout/${plan}`;
 
 export const metadata = buildMarketingMetadata({
   title: "Pricing — Pay for the Weeks You're Searching",
@@ -30,51 +31,7 @@ export const metadata = buildMarketingMetadata({
 /** Limits are edited in the admin panel; refresh the page at most once a minute. */
 export const revalidate = 60;
 
-type Limits = Awaited<ReturnType<typeof getSettings>>["planLimits"];
-
 const n = (v: number) => v.toLocaleString("en-US");
-
-function buildFaqs(limits: Limits) {
-  const week = PUBLIC_PLANS.week;
-  const pro = PUBLIC_PLANS.professional;
-  const quarter = PUBLIC_PLANS.quarter;
-  const perPlan = CHECKOUT_PLAN_ORDER.map((k) => {
-    const L = limits[k];
-    return `${PUBLIC_PLANS[k].title}: ${n(L.jd)} job-description analyses, ${n(L.roleFit)} role-fit checks and ${n(L.packet)} application packets`;
-  }).join("; ");
-  return [
-    {
-      q: "Is there a free plan?",
-      a: `Yes. ${freeAllowanceSentence(limits.free)} The editor, PDF export, templates and job tracker are free too.${
-        limits.free.packet <= 0 ? " Cover letters and interview prep come with a paid plan." : ""
-      }`,
-    },
-    {
-      q: "What's the difference between the passes and Pro?",
-      a: `Every plan includes every AI tool. The ${week.title} (${planPriceLabel("week")}) and the ${quarter.title} (${planPriceLabel("quarter")}) are single payments with no auto-renewal. ${pro.title} (${pro.priceDisplay}/month) renews monthly until you cancel.`,
-    },
-    {
-      q: "What happens when a pass ends?",
-      a: "You aren't charged again. The paid AI limits stop, everything you've written stays saved, and your free monthly checks keep working. Buying another pass while one is active adds its days to the end of the current one.",
-    },
-    {
-      q: "How do I cancel?",
-      a: `Passes don't renew, so there's nothing to cancel. For ${pro.title}, open the billing portal from Settings → Subscription and cancel in one click. You keep access until the end of the period you paid for, and you aren't charged again.`,
-    },
-    {
-      q: "Do you offer refunds?",
-      a: "Monthly plans have a 7-day money-back guarantee — email support within 7 days of paying. Details are in our Terms.",
-    },
-    {
-      q: "How much can I use each plan?",
-      a: `Monthly limits per plan — ${perPlan}. Limits reset on the 1st of each month.`,
-    },
-    {
-      q: "Which payment methods do you accept?",
-      a: "Checkout runs on Polar, which accepts major credit and debit cards. Prices are in US dollars; sales tax or VAT is added where your country requires it.",
-    },
-  ];
-}
 
 const planOffers = CHECKOUT_PLAN_ORDER.map((key) => {
   const plan = PUBLIC_PLANS[key];
@@ -214,7 +171,7 @@ function Badge({ children }: { children: ReactNode }) {
 export default async function PricingPage() {
   const { planLimits: limits } = await getSettings();
   const [copy, cmsFaqs] = await Promise.all([getPageCopy("pricing.hero"), getFaqsFor("pricing")]);
-  const faqs = cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : buildFaqs(limits);
+  const faqs = cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : buildPricingFaqs(limits);
   const ld = buildLd(faqs);
   const F = limits.free;
   const freeAi = [

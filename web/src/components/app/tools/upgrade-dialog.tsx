@@ -57,7 +57,7 @@ const COPY: Record<AiToolKind | "any", Copy> = {
 /**
  * Plan picker shown when an AI tool needs a plan (State-Upgrade mockup): a centered
  * two-column dialog on desktop, a bottom sheet on phones. Continuing opens
- * /dashboard/settings/subscription?plan=<plan>, which starts that plan's checkout.
+ * /checkout/<plan>, the plan's checkout page.
  * Prices come from PUBLIC_PLANS, limits from the admin-configured plan limits.
  */
 export function UpgradeDialog({
@@ -191,7 +191,7 @@ export function UpgradeDialog({
           </fieldset>
 
           <Link
-            href={`/dashboard/settings/subscription?plan=${plan}`}
+            href={`/checkout/${plan}`}
             onClick={() => (location ? trackCtaClick({ cta: "choose_plan", plan, location }) : undefined)}
             className="lc-btn-lift mt-4 inline-flex h-[54px] w-full items-center justify-center rounded-full bg-[#5440e8] px-[26px] text-[16px] font-semibold text-white hover:bg-[#4430d6] motion-reduce:transform-none"
           >
