@@ -15,7 +15,7 @@ const LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
-const GUIDE_ROUTES = ["/resume-format", "/how-to-write-a-resume", "/resume-length", "/cover-letter-template", "/resume-action-verbs", "/resume-summary-examples", "/resume-keywords", "/ats", "/resignation-letter", "/what-is-a-good-ats-score"];
+const GUIDE_ROUTES = ["/resume-format", "/how-to-write-a-resume", "/resume-length", "/cover-letter-template", "/resume-action-verbs", "/resume-summary-examples", "/skills-for-resume", "/resume-keywords", "/ats", "/resignation-letter", "/what-is-a-good-ats-score"];
 
 export function SiteNav() {
   const pathname = usePathname();
