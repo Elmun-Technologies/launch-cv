@@ -44,6 +44,8 @@ export const metadata = buildMarketingMetadata({
 
 const RELATED: { href: string; t: string; d: string }[] = [
   { href: "/cover-letter-examples", t: "Cover letter examples", d: "Annotated letters by role, each paired with a resume." },
+  { href: "/cover-letter/career-change", t: "Career change cover letter", d: "Name the move, prove the new skill, show what transfers." },
+  { href: "/cover-letter/no-experience", t: "Cover letter with no experience", d: "Use school, projects and volunteering as proof." },
   { href: "/features/cover-letter", t: "AI cover letter generator", d: "A draft written from your resume and the job post." },
   { href: "/how-to-write-a-resume", t: "How to write a resume", d: "Eight steps from a blank page to a finished resume." },
   { href: "/resume-examples", t: "Resume examples", d: "Written examples by role, ready to edit with your own experience." },

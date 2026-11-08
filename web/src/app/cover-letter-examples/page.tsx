@@ -10,6 +10,7 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { RESUME_EXAMPLES, RESUME_GROUPS, type ResumeExample } from "@/lib/resume-examples";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
+import { COVER_SITUATIONS, COVER_SITUATION_BASE } from "@/lib/seo/cover-letter-situations";
 
 export const metadata = buildMarketingMetadata({
   title: "Cover Letter Examples by Job — Annotated",
@@ -139,6 +140,33 @@ export default function CoverLetterExamplesPage() {
           }))}
         />
         <p className="mt-3 text-[12px] text-[#66647c] sm:mt-5 sm:text-[13px]">Sample letters. Names, companies and figures are illustrative.</p>
+      </section>
+
+      {/* BY SITUATION */}
+      <section id="situations" className={`${container} scroll-mt-6 pt-14 lg:pt-[110px]`}>
+        <p className={labelCls}>/ By situation</p>
+        <h2 className="mt-3 text-[30px] font-extrabold leading-[34px] tracking-[-0.03em] sm:text-[40px] sm:leading-[44px]">
+          Cover letters for your situation. <span className="text-[#7c7a94]">Fill-in templates with an email version.</span>
+        </h2>
+        <ul className="mt-6 grid gap-2 sm:grid-cols-2 sm:gap-3.5 lg:mt-10 lg:grid-cols-4">
+          {COVER_SITUATIONS.map((s) => (
+            <li key={s.slug} className="flex">
+              <Link
+                href={`${COVER_SITUATION_BASE}/${s.slug}`}
+                className="lc-card lc-rise group flex w-full flex-col rounded-[22px] p-5 text-[#121226] sm:rounded-[26px] sm:p-6"
+              >
+                <span className="text-[17px] font-extrabold group-hover:text-[#5440e8] sm:text-[19px]">
+                  {s.card.t}
+                  <span className="sr-only"> cover letter</span>
+                </span>
+                <span className="mt-1.5 flex-1 text-[14px] leading-[21px] text-[#4a4862]">{s.card.d}</span>
+                <span aria-hidden="true" className="mt-3 text-[14px] font-semibold text-[#5440e8]">
+                  See the template →
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* CTA BAND */}

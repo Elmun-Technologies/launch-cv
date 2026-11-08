@@ -23,7 +23,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/resume-examples/*": "2026-10-27",
   /** The /resume-examples/[slug] pages that also show extra samples (lib/resume-example-variants.ts). */
   "/resume-examples/*#samples": "2026-11-02",
-  "/cover-letter-examples": "2026-10-27",
+  "/cover-letter-examples": "2026-11-08",
   /** All /cover-letter-examples/[slug] pages (data in lib/cover-letter-examples.ts). */
   "/cover-letter-examples/*": "2026-10-27",
   "/alternatives/jobscan": "2026-11-02",
@@ -50,6 +50,9 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/resignation-letter": "2026-11-02",
   /** All /resignation-letter/[slug] pages (data in lib/seo/resignation-templates.ts). */
   "/resignation-letter/*": "2026-11-02",
+  "/resume-summary-examples": "2026-11-08",
+  /** All /cover-letter/[slug] situation pages (data in lib/seo/cover-letter-situations.ts). */
+  "/cover-letter/*": "2026-11-08",
   "/legal/privacy": "2026-10-27",
   "/legal/terms": "2026-10-27",
 };
