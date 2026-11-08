@@ -204,6 +204,7 @@ contact): ${baseUrl}/ai-info
   posting's skills and tools and marks which a pasted resume already uses)
 - Resume action verbs: ${baseUrl}/resume-action-verbs
 - Resume summary examples (by job and situation): ${baseUrl}/resume-summary-examples
+- Skills to put on a resume (hard, soft, transferable; lists by field): ${baseUrl}/skills-for-resume
 - All free tools: ${baseUrl}/tools
 
 ## Pricing

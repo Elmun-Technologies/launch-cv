@@ -227,6 +227,13 @@ export default function ResumeKeywordsIndexPage() {
           : it ranks the post&apos;s skills and tools and checks them against your resume, in your browser.
         </p>
         <p className="mt-3 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862]">
+          New to building a skills list? Read{" "}
+          <Link href="/skills-for-resume" className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] hover:decoration-[#5440e8]">
+            skills to put on a resume
+          </Link>
+          : hard vs. soft skills, where to list them and how to prove soft skills in your bullets.
+        </p>
+        <p className="mt-3 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862]">
           Every list comes with a complete sample resume and cover letter.{" "}
           <Link href="/resume-examples" className="font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] hover:decoration-[#5440e8]">
             Browse resume examples
