@@ -10,7 +10,10 @@ import { PUBLIC_PLANS } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
 import { discountDurationLabel, discountPlanNames, discountValueLabel, redemptionsLabel } from "@/lib/polar-discounts";
 import { listPolarDiscounts, polarConnected, productPlanMap, soldPlanProductIds } from "@/lib/polar-discounts-server";
+import { getSettings } from "@/lib/app-settings";
+import { winbackStats } from "@/lib/winback";
 import { DiscountsClient, type DiscountRow } from "./discounts-client";
+import { WinbackCard } from "./winback-card";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +26,13 @@ export default async function AdminDiscountsPage() {
   const admin = await requireAdmin("limits");
   if (!admin) redirect("/admin-panel/access-denied");
 
-  const [connected, server, productIds] = await Promise.all([polarConnected(), getIntegrationValue("polar", "server"), soldPlanProductIds()]);
+  const [connected, server, productIds, settings, wbStats] = await Promise.all([
+    polarConnected(),
+    getIntegrationValue("polar", "server"),
+    soldPlanProductIds(),
+    getSettings(),
+    winbackStats().catch(() => ({ sent: 0, recent: 0, redeemed: null })),
+  ]);
   const list = connected ? await listPolarDiscounts() : null;
   const discounts = list?.ok ? list.data : [];
   const planOf = await productPlanMap(discounts);
@@ -74,6 +83,8 @@ export default async function AdminDiscountsPage() {
         ) : null}
 
         <DiscountsClient rows={rows} plans={plans} disabled={!connected} />
+
+        <WinbackCard marketing={settings.marketing} stats={wbStats} />
       </div>
     </AdminShell>
   );

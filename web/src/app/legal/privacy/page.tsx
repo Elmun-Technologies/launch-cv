@@ -66,6 +66,15 @@ const sections: LegalSection[] = [
     ),
   },
   {
+    h: "Emails we send",
+    body: (
+      <p>
+        We email you about your account, such as confirming your address or resetting your password. If you started a
+        checkout or used up your free checks, we may send one email with a discount code, with an unsubscribe link in it.
+      </p>
+    ),
+  },
+  {
     h: "Voice input",
     body: (
       <p>

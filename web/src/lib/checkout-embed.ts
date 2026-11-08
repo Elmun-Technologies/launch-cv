@@ -24,9 +24,13 @@ export function successRedirect(successURL: string | null | undefined, origin: s
   }
 }
 
-/** Sign-up / sign-in links that bring the buyer back to this plan's checkout, which then opens payment. */
-export function checkoutAuthHrefs(plan: string): { register: string; login: string } {
-  const next = encodeURIComponent(`/checkout/${plan}?start=1`);
+/**
+ * Sign-up / sign-in links that bring the buyer back to this plan's checkout, which then opens payment.
+ * A discount `code` from a win-back email link (A–Z, 0–9 only) rides along.
+ */
+export function checkoutAuthHrefs(plan: string, code?: string | null): { register: string; login: string } {
+  const keep = code && /^[A-Z0-9]{3,32}$/.test(code) ? `&code=${code}` : "";
+  const next = encodeURIComponent(`/checkout/${plan}?start=1${keep}`);
   return { register: `/register?next=${next}`, login: `/login?next=${next}` };
 }
 

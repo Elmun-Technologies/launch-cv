@@ -12,6 +12,7 @@ import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel } from "@/lib/moneti
 import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan, isPublicPlan } from "@/lib/plan-config";
 import { checkoutConflict } from "@/lib/entitlement-rules";
 import { buildPricingFaqs, checkoutFaqs } from "@/lib/pricing-faqs";
+import { findWinbackOffer, WINBACK_CODE_RE } from "@/lib/winback";
 import { CheckoutPanel } from "./checkout-panel";
 
 type Params = { params: Promise<{ plan: string }> };
@@ -33,9 +34,13 @@ function Tick() {
   );
 }
 
-export default async function CheckoutPage({ params }: Params) {
+type PageProps = Params & { searchParams: Promise<Record<string, string | string[] | undefined>> };
+
+export default async function CheckoutPage({ params, searchParams }: PageProps) {
   const { plan } = await params;
   if (!isPublicPlan(plan)) notFound();
+  const rawCode = (await searchParams).code;
+  const codeParam = typeof rawCode === "string" && WINBACK_CODE_RE.test(rawCode.trim().toUpperCase()) ? rawCode.trim().toUpperCase() : null;
 
   const cfg = PUBLIC_PLANS[plan];
   const pass = isPassPlan(plan);
@@ -50,6 +55,8 @@ export default async function CheckoutPage({ params }: Params) {
       })
     : null;
   const conflict = session ? checkoutConflict(existing, plan) : null;
+  // A win-back code from the email: applied only if it's this user's own and still valid.
+  const offer = session && codeParam ? await findWinbackOffer(session.sub, codeParam) : null;
   const paused = settings.switches.checkout ? null : "Checkout is paused for a few minutes. Please try again shortly.";
 
   const faqs = checkoutFaqs(cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : buildPricingFaqs(limits));
@@ -102,11 +109,26 @@ export default async function CheckoutPage({ params }: Params) {
                 {pass ? `One payment, ${PASS_DAYS[plan]} days of access.` : "Billed monthly until you cancel."} Prices in USD, tax added where required.
               </p>
               <div className="mt-5">
-                <CheckoutPanel plan={plan} planTitle={cfg.title} signedIn={!!session} conflict={conflict} paused={paused} />
+                <CheckoutPanel
+                  plan={plan}
+                  planTitle={cfg.title}
+                  signedIn={!!session}
+                  conflict={conflict}
+                  paused={paused}
+                  discountCode={offer ? offer.code : null}
+                  returnCode={session ? null : codeParam}
+                />
               </div>
-              <p className="mt-4 rounded-2xl bg-[#f1eff8] px-4 py-3 text-[14px] leading-[20px] text-[#4a4862]">
-                <b className="text-[#121226]">Have a discount code?</b> Enter it on the next step.
-              </p>
+              {offer ? (
+                <p role="status" className="mt-4 rounded-2xl bg-[#dcf5ea] px-4 py-3 text-[14px] leading-[20px] text-[#0b4f35]">
+                  <b>{offer.percent ? `${offer.percent}% off applied` : "Discount applied"}</b> with your code <span className="lc-mono font-semibold">{offer.code}</span>.
+                  You&apos;ll see the lower price on the next step.
+                </p>
+              ) : (
+                <p className="mt-4 rounded-2xl bg-[#f1eff8] px-4 py-3 text-[14px] leading-[20px] text-[#4a4862]">
+                  <b className="text-[#121226]">Have a discount code?</b> Enter it on the next step.
+                </p>
+              )}
               <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-[13px] text-[#66647c]">
                 <Lock className="h-3.5 w-3.5" aria-hidden="true" />
                 Secure checkout by Polar · Cards accepted

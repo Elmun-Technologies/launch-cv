@@ -36,12 +36,16 @@ export async function polarConnected(): Promise<boolean> {
   return !!(await getIntegrationValue("polar", "accessToken"));
 }
 
-/** Every discount in the organization (Polar paginates; at most 10 pages of 100). */
-export async function listPolarDiscounts(): Promise<Result<PolarDiscount[]>> {
+/**
+ * Every discount in the organization (Polar paginates; at most 10 pages of 100).
+ * `query` narrows by name (Polar's `query` filter), e.g. "Win-back".
+ */
+export async function listPolarDiscounts(query?: string): Promise<Result<PolarDiscount[]>> {
   const all: PolarDiscount[] = [];
+  const q = query ? `&query=${encodeURIComponent(query)}` : "";
   for (let page = 1; page <= 10; page++) {
     const r = await polarRequest<{ items?: PolarDiscount[]; pagination?: { max_page?: number } }>(
-      `/v1/discounts/?limit=100&page=${page}`,
+      `/v1/discounts/?limit=100&page=${page}${q}`,
     );
     if (!r.ok) return r;
     all.push(...(r.data.items ?? []));
