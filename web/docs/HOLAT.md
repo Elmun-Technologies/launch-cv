@@ -65,9 +65,9 @@ boshqa sessiya nima qilganini bilish uchun.
   domeni tasdiqlanmaguncha (403 "domain is not verified") tasdiqlash xatlari ketmaydi —
   shu vaqtda o'chirib turish mumkin. Bepul vositalar textarea'lari Clarity'da yashiriladi
   (`data-clarity-mask`).
-- **Email:** launch-cv.com Resend'da tasdiqlanishi kerak (Namecheap DNS: TXT
-  `resend._domainkey`, CNAME `send`/`rsend`, ixtiyoriy `_dmarc`). Shundan keyin Admin →
-  Integrations → Resend → Test connection.
+- **Email ishlaydi (2026-11-08):** launch-cv.com Resend'da Verified (us-east-1, Namecheap DNS:
+  TXT `resend._domainkey`, CNAME `send`/`rsend`, TXT `_dmarc`). Sender
+  `LaunchCV <info@launch-cv.com>`, test xat Gmail Inbox'ga keldi. Win-back manzili kiritilgan.
 
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 
