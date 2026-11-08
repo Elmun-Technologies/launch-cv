@@ -36,6 +36,8 @@ export type AuditAction =
   | "resume.delete"
   | "subscription.cancel"
   | "subscription.refund"
+  | "discount.create"
+  | "discount.delete"
   | "ai-usage.limit.override"
   // Platform configuration and admin security
   | "integration.update"

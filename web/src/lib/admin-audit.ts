@@ -11,7 +11,7 @@ import { planLabel, roleLabel } from "@/lib/admin-labels";
 export const AUDIT_GROUPS = [
   { id: "all", label: "All", prefixes: [] },
   { id: "content", label: "Content", prefixes: ["blog.", "testimonial.", "faq.", "page-copy.", "media."] },
-  { id: "users", label: "Users", prefixes: ["user.plan.", "user.usage.", "user.suspend", "user.unsuspend", "user.delete", "resume.", "subscription."] },
+  { id: "users", label: "Users", prefixes: ["user.plan.", "user.usage.", "user.suspend", "user.unsuspend", "user.delete", "resume.", "subscription.", "discount."] },
   { id: "roles", label: "Roles", prefixes: ["user.role."] },
   { id: "secrets", label: "Secrets", prefixes: ["integration."] },
   { id: "settings", label: "Settings", prefixes: ["settings.", "ai-usage."] },
