@@ -46,6 +46,17 @@ boshqa sessiya nima qilganini bilish uchun.
   deploydan keyin admin manzilni kiritishi kerak. `CRON_SECRET` env tavsiya etiladi.
 - `User.marketingOptOutAt`, `/api/email/unsubscribe`. Tekshiruv: `npx tsx src/lib/winback.check.ts`.
 
+## Biznes analitika (2026-11-08, branch `biz-analytics`, lokal commit)
+
+- Admin → **Revenue** (`/admin-panel/revenue`) va **Product** (`/admin-panel/product`):
+  daromad KPI (gross/discount/net, ARPPU, MRR/ARR, passlar), reja ulushi, chegirma
+  kodlari (win-back guruhlangan), pass yangilash, Pro churn, mijozlar; aktivatsiya
+  funnel, haftalik kogortalar, AI tool adoption, unit economics. Har jadval CSV
+  (`/api/admin-panel/{revenue,product}/export`). Ruxsat: `users` (Subscriptions kabi).
+- Matematika: `src/lib/biz-metrics.ts`, tekshiruv `npx tsx src/lib/biz-metrics.check.ts`.
+- Ochiq: refundlar yozilmaydi (Polar `order.refunded` ishlanmaydi); Pro yangilanish
+  to'lovlari `pay_success` sifatida yozilmaydi — net revenue faqat birinchi to'lovni ko'radi.
+
 ## Joriy / bloklangan (2026-11-07)
 
 - To'lov tuzatildi (Polar): Professional endi $29/oy (yangi product
