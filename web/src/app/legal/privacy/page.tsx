@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage, type LegalSection } from "@/components/marketing/legal-page";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
+import { CookieChoiceButton } from "@/components/cookie-choice-button";
 
 export const metadata: Metadata = buildMarketingMetadata({
   title: "Privacy Policy",
@@ -36,6 +37,14 @@ const sections: LegalSection[] = [
           signed in, visits are linked to your account ID. If your browser sends Do Not Track or Global Privacy Control,
           we don&apos;t record anything. Visit records are deleted after 13 months.
         </p>
+        <p className="mt-3">
+          Advertising and session-recording tags load only if you press <span className="font-semibold text-[#121226]">Accept</span>{" "}
+          in the cookie notice, and only the ones we have switched on. They can be Google Tag Manager, the Meta (Facebook) Pixel,
+          the TikTok Pixel, Microsoft Clarity (heatmaps and recordings of how our pages are scrolled and clicked), the
+          LinkedIn Insight Tag and the Reddit Pixel. They set their own cookies and tell those companies that a browser visited
+          our pages, so we can measure our ads. They never load inside the app (your resumes, job tracker and settings) or if
+          you press Decline. <CookieChoiceButton />.
+        </p>
       </>
     ),
   },
@@ -67,6 +76,10 @@ const sections: LegalSection[] = [
         <li>
           <span className="font-semibold text-[#121226]">Google Analytics, PostHog, Mixpanel</span>{" "}— usage analytics, as
           described above.
+        </li>
+        <li>
+          <span className="font-semibold text-[#121226]">If enabled, and only after you accept: Google Tag Manager, Meta Pixel, TikTok Pixel, Microsoft Clarity, LinkedIn Insight Tag, Reddit Pixel</span>
+          {" "}— ad measurement and, for Clarity, heatmaps and session recordings, as described above.
         </li>
         <li>
           <span className="font-semibold text-[#121226]">Google</span>{" "}— only if you choose &ldquo;Continue with

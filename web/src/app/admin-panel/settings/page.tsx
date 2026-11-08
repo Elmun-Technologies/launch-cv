@@ -10,6 +10,22 @@ import { SectionCard } from "@/components/admin/section-card";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { adminH1, adminLead, adminLink } from "@/components/admin/admin-ui";
 import { ProductToggles } from "./product-toggles";
+import { WeeklyReportCard } from "./weekly-report-card";
+import { prisma } from "@/lib/prisma";
+import { emailConfigured, ownerEmails } from "@/lib/owner-notify";
+import { WEEKLY_REPORT_LAST_RUN_KEY } from "@/lib/weekly-report";
+import { fmtDateTime } from "@/lib/admin-dates";
+
+/** "Nov 9, 13:07 UTC · sent to 2 of 2", from the cron's last-run row. */
+async function weeklyLastRun(): Promise<string | null> {
+  const row = await prisma.appSetting.findUnique({ where: { key: WEEKLY_REPORT_LAST_RUN_KEY } }).catch(() => null);
+  const v = row?.value && typeof row.value === "object" ? (row.value as { at?: unknown; result?: { sent?: unknown; recipients?: unknown; skipped?: unknown } }) : null;
+  if (typeof v?.at !== "string") return null;
+  const r = v.result ?? {};
+  const outcome =
+    typeof r.skipped === "string" ? `skipped (${r.skipped})` : typeof r.sent === "number" ? `sent to ${r.sent} of ${String(r.recipients ?? r.sent)}` : "didn't finish";
+  return `${fmtDateTime(new Date(v.at))} · ${outcome}`;
+}
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +35,13 @@ const ESSENTIAL = new Set(["openai", "polar", "resend"]);
 export default async function AdminSettingsPage() {
   const admin = await requireAdmin();
   if (!admin) redirect("/admin-panel/access-denied");
-  const [settings, providers] = await Promise.all([getSettings(), integrationStatuses()]);
+  const [settings, providers, emailReady, owners, lastRun] = await Promise.all([
+    getSettings(),
+    integrationStatuses(),
+    emailConfigured(),
+    ownerEmails(),
+    weeklyLastRun(),
+  ]);
 
   // The only values that must live in hosting. Everything else is in the panel.
   const bootstrap = [
@@ -31,7 +53,14 @@ export default async function AdminSettingsPage() {
 
   // Required credentials, e.g. "Polar · webhook secret". Sign-in and analytics show as one line each.
   const lower = (s: string) => (s.startsWith("API") ? s : s.charAt(0).toLowerCase() + s.slice(1));
+  // Optional site verification codes and pixels: one summary line per group.
+  const optionalGroups = (["Site verification", "Pixels & tags"] as const).map((group) => {
+    const list = providers.filter((p) => p.group === group);
+    const set = list.filter((p) => p.state === "connected").length;
+    return { id: group, label: `${group} · ${set} of ${list.length} set`, set: set > 0, essential: false };
+  });
   const config = providers.flatMap((p) => {
+    if (p.group === "Site verification" || p.group === "Pixels & tags") return [];
     const required = providerDef(p.id)?.required ?? [];
     const isSet = (key: string) => p.fields.find((f) => f.key === key)?.source !== "none";
     const essential = ESSENTIAL.has(p.id);
@@ -44,10 +73,10 @@ export default async function AdminSettingsPage() {
       set: isSet(key),
       essential,
     }));
-  });
+  }).concat(optionalGroups);
 
   const links = [
-    { href: "/admin-panel/integrations", icon: Plug, title: "Integrations", text: "OpenAI, Polar, Resend, Google sign-in, analytics keys" },
+    { href: "/admin-panel/integrations", icon: Plug, title: "Integrations", text: "OpenAI, Polar, Resend, Google sign-in, analytics, site verification, pixels" },
     { href: "/admin-panel/limits", icon: Gauge, title: "Limits & budgets", text: "AI spend caps, plan quotas, rate limits, models, switches" },
     { href: "/admin-panel/security", icon: Lock, title: "Security", text: "Team, roles, two-factor sign-in, sensitive activity" },
   ];
@@ -88,6 +117,8 @@ export default async function AdminSettingsPage() {
           </SectionCard>
 
           <ProductToggles switches={settings.switches} product={settings.product} canEdit={can(admin.role, "limits")} />
+
+          <WeeklyReportCard reports={settings.reports} canEdit={can(admin.role, "limits")} emailReady={emailReady} owners={owners.length} lastRun={lastRun} />
 
           <SectionCard title="Hosting environment" description="Set once in your hosting provider. Values are never shown here." flush>
             <ul>

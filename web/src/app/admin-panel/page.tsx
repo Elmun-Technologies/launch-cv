@@ -1,4 +1,3 @@
-import { getSettings } from "@/lib/app-settings";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -9,10 +8,8 @@ import { StatusBadge } from "@/components/admin/status-badge";
 import { DailyLineChart } from "@/components/admin/charts";
 import { adminH1, adminLink } from "@/components/admin/admin-ui";
 import { isOneTimeRow, subscriptionRowGrantsPaid } from "@/lib/entitlements";
-import { productIdForCheckoutPlan } from "@/lib/polar";
-import { integrationStatuses } from "@/lib/integrations";
-import { secretBoxReady } from "@/lib/secret-box";
-import { CHECKOUT_PLAN_ORDER, type PlanId } from "@/lib/plan-config";
+import { configProblems } from "@/lib/admin-config-problems";
+import { type PlanId } from "@/lib/plan-config";
 import { PUBLIC_PLANS } from "@/lib/monetization";
 import { billingOf, planOfRow, planResolver, purchaseValue } from "@/lib/admin-billing";
 import { dailyCounts, fmtAgo, fmtDateTime, startOfUtcDay, startOfUtcMonth } from "@/lib/admin-dates";
@@ -32,25 +29,6 @@ function delta(cur: number, prev: number | null, days: number | null): { text: s
   if (prev === null || days === null || prev <= 0) return null;
   const change = Math.round(((cur - prev) / prev) * 100);
   return { text: `${change > 0 ? "+" : change < 0 ? "−" : "±"}${Math.abs(change)}% vs prior ${days} days`, up: change >= 0 };
-}
-
-/** Settings checkout and AI need to work; a missing one silently loses sales. */
-async function configProblems(): Promise<string[]> {
-  const out: string[] = [];
-  const st = await integrationStatuses();
-  const field = (p: string, f: string) => st.find((x) => x.id === p)?.fields.find((x) => x.key === f)?.source !== "none";
-  if (!field("polar", "accessToken")) out.push("Polar access token is missing — nobody can open checkout.");
-  if (!field("polar", "webhookSecret")) out.push("Polar webhook secret is missing — paid users won't get access.");
-  for (const p of CHECKOUT_PLAN_ORDER) {
-    if (!(await productIdForCheckoutPlan(p))) out.push(`No Polar product id for ${PUBLIC_PLANS[p].title} — its checkout fails.`);
-  }
-  // Only the providers the chosen models actually use need a key.
-  const models = Object.values((await getSettings()).models).filter(Boolean);
-  if (models.some((m) => !m.startsWith("claude-")) && !field("openai", "apiKey")) out.push("OpenAI key is missing — AI tools set to an OpenAI model fail.");
-  if (models.some((m) => m.startsWith("claude-")) && !field("anthropic", "apiKey")) out.push("Claude API key is missing — AI tools set to a Claude model fail.");
-  if (!secretBoxReady()) out.push("KEY_ENCRYPTION_KEY is not set in hosting — keys can't be saved from Integrations.");
-  if (!process.env.NEXT_PUBLIC_APP_URL) out.push("NEXT_PUBLIC_APP_URL is not set — checkout return links and sitemap use a fallback host.");
-  return out;
 }
 
 /** Request time, read once (outside render for the purity lint). */
