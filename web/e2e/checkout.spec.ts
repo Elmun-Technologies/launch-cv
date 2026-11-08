@@ -29,3 +29,11 @@ test("plans that aren't sold have no checkout page", async ({ page }) => {
   const res = await page.goto("/checkout/lifetime", { waitUntil: "domcontentloaded" });
   expect(res?.status()).toBe(404);
 });
+
+test("signed out, there is no personal offer and no countdown banner", async ({ page, request }) => {
+  const r = await request.get("/api/offer");
+  expect(r.status()).toBe(200);
+  expect(await r.json()).toEqual({ offer: null });
+  await page.goto("/pricing", { waitUntil: "networkidle" });
+  await expect(page.getByRole("timer")).toHaveCount(0);
+});
