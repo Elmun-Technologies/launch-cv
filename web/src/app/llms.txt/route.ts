@@ -198,6 +198,7 @@ contact): ${baseUrl}/ai-info
 - Job description keyword scanner: ${baseUrl}/tools/job-description-keyword-scanner (runs in the browser; ranks a
   posting's skills and tools and marks which a pasted resume already uses)
 - Resume action verbs: ${baseUrl}/resume-action-verbs
+- Resume summary examples (by job and situation): ${baseUrl}/resume-summary-examples
 - All free tools: ${baseUrl}/tools
 
 ## Pricing

@@ -361,6 +361,13 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             </li>
           ))}
         </ul>
+        <p className="mt-4 px-2 text-[14px] text-[#4a4862]">
+          More for other jobs and situations (no experience, career change, senior):{" "}
+          <Link href="/resume-summary-examples" className="font-semibold text-[#5440e8] underline underline-offset-[3px]">
+            resume summary examples
+          </Link>
+          .
+        </p>
       </section>
 
       {/* BULLETS */}
