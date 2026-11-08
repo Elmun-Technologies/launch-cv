@@ -206,6 +206,7 @@ contact): ${baseUrl}/ai-info
 - Resume summary examples (by job and situation): ${baseUrl}/resume-summary-examples
 - Skills to put on a resume (hard, soft, transferable; lists by field): ${baseUrl}/skills-for-resume
 - References page template (who to ask, how to ask, format): ${baseUrl}/resume-references
+- Follow-up email after applying or interviewing (3 templates, timing, etiquette): ${baseUrl}/follow-up-email-after-applying
 - All free tools: ${baseUrl}/tools
 
 ## Pricing

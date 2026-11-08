@@ -1337,7 +1337,9 @@ Best,
 - Double-checked the company name and role title (easy to mix up across applications)
 - Sent within 24 hours, from the email address you've used throughout the process
 
-If you prepped your answers with the [STAR method](/blog/how-to-prepare-for-a-job-interview-with-ai) going in, the thank-you email is where that preparation pays off twice — you already know which answer was strongest and which one you want a second shot at. Say the second one better here.`,
+If you prepped your answers with the [STAR method](/blog/how-to-prepare-for-a-job-interview-with-ai) going in, the thank-you email is where that preparation pays off twice — you already know which answer was strongest and which one you want a second shot at. Say the second one better here.
+
+If a week or more passes after this with no response, that calls for a different message — a shorter check-in, not another thank-you. See our [follow-up email templates](/follow-up-email-after-applying) for when and how to send one.`,
       },
     ],
     faqs: [

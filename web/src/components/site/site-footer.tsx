@@ -28,6 +28,7 @@ const COLUMNS = [
       { href: "/resume-summary-examples", label: "Resume summary examples" },
       { href: "/skills-for-resume", label: "Skills to put on a resume" },
       { href: "/resume-references", label: "Resume references page" },
+      { href: "/follow-up-email-after-applying", label: "Follow-up email templates" },
       { href: "/resume-keywords", label: "Resume keywords by role" },
       { href: "/ats", label: "ATS guides (Workday, Greenhouse…)" },
       { href: "/what-is-a-good-ats-score", label: "What's a good ATS score?" },
