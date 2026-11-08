@@ -301,7 +301,7 @@ export default async function PricingPage() {
                   className={`${MOBILE_PLAN_ORDER[key]} lc-rise relative mt-3 flex flex-col gap-[18px] rounded-3xl bg-[#5440e8] px-[22px] pb-[22px] pt-[26px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:mt-0 md:p-7 md:pt-[46px] lg:-my-[18px]`}
                 >
                   <span className="lc-poster absolute -top-3 left-5 -rotate-[4deg] rounded-full bg-[#ff7a33] px-[11px] py-1.5 text-[11px] text-[#111118] md:-top-3.5 md:left-7 md:px-3.5 md:py-2 md:text-[12px]">
-                    MOST PICKED
+                    RECOMMENDED
                   </span>
                   <div>
                     <p className="text-[15px] font-semibold text-[#e4dfff] md:text-[16px]">{cfg.title}</p>

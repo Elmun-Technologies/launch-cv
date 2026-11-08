@@ -256,7 +256,7 @@ export default async function AiInfoPage() {
           <li>The free ATS check reads the uploaded file once and doesn&apos;t store it. The report is kept so it can be saved to an account.</li>
           <li>The free bullet and summary generators send text to the AI provider and LaunchCV doesn&apos;t store it. The word counter runs in the browser and sends nothing.</li>
           <li>Resumes are never sold or used for advertising. Users can download all their data as JSON or delete their account from Settings.</li>
-          <li>Text sent to an AI tool is processed by OpenAI. Payments go through Polar; LaunchCV never sees card details.</li>
+          <li>Text sent to an AI tool is processed by OpenAI or Anthropic (Claude), depending on the model set for that tool. Payments go through Polar; LaunchCV never sees card details.</li>
           <li>Voice input uses the browser&apos;s speech recognition. LaunchCV receives the text, not the audio, and stores no recordings.</li>
           <li>
             Site analytics run on Google Analytics, PostHog and Mixpanel. In the app they record page views and named events, not what users type.

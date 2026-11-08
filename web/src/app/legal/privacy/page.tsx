@@ -46,8 +46,9 @@ const sections: LegalSection[] = [
     body: (
       <ul className="list-disc space-y-2 pl-5 marker:text-[#5440e8]">
         <li>
-          <span className="font-semibold text-[#121226]">OpenAI</span>{" "}— resume and job-description text you send to an
-          AI tool, to generate rewrites, analyses, cover letters and interview questions.
+          <span className="font-semibold text-[#121226]">OpenAI and Anthropic</span>{" "}— resume and job-description text you
+          send to an AI tool, to generate rewrites, analyses, cover letters and interview questions. Each request goes to one
+          of them, depending on the model set for that tool.
         </li>
         <li>
           <span className="font-semibold text-[#121226]">Polar</span>{" "}— checkout and billing. We never see or store card
@@ -97,7 +98,7 @@ const sections: LegalSection[] = [
     body: (
       <p>
         If we change this policy in a material way, we&apos;ll tell signed-in users by email. Last updated:{" "}
-        <span className="font-semibold text-[#121226]">October 27, 2026</span>.
+        <span className="font-semibold text-[#121226]">November 8, 2026</span>.
       </p>
     ),
   },

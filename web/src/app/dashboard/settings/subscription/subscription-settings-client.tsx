@@ -362,7 +362,7 @@ export function SubscriptionSettingsClient({
                   <div className="min-w-0 sm:hidden">
                     <p className="text-[16px] font-bold">
                       {cfg.title} · {planPriceLabel(key)}
-                      {isPopular ? <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-[#e4dfff] px-2 py-0.5 align-[2px] text-[11px] font-bold text-[#3a2bb8]">Most picked</span> : null}
+                      {isPopular ? <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-[#e4dfff] px-2 py-0.5 align-[2px] text-[11px] font-bold text-[#3a2bb8]">Recommended</span> : null}
                     </p>
                     <p className="mt-0.5 text-[12px] leading-[17px] text-[#66647c]">
                       {pass ? "No auto-renewal · " : ""}
@@ -375,7 +375,7 @@ export function SubscriptionSettingsClient({
                       {isCurrent ? (
                         <Badge tone="primary">Current</Badge>
                       ) : isPopular ? (
-                        <Badge tone="lilac">Most picked</Badge>
+                        <Badge tone="lilac">Recommended</Badge>
                       ) : cfg.badge ? (
                         <Badge tone="lilac">{cfg.badge}</Badge>
                       ) : null}

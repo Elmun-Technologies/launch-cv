@@ -171,7 +171,7 @@ export function UpgradeDialog({
                     <b className="text-[16px]">{PUBLIC_PLANS[p].title}</b>{" "}
                     {PUBLIC_PLANS[p].popular ? (
                       <span className="ml-1 hidden rounded-full bg-[#ff7a33] px-2.5 py-[5px] text-[12px] font-bold text-[#111118] sm:inline-block">
-                        Most picked
+                        Recommended
                       </span>
                     ) : null}
                     <span className="block text-[12px] text-[#4a4862] sm:text-[13px]">{line(p)}</span>

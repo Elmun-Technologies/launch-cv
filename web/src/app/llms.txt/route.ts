@@ -232,7 +232,7 @@ Prices are in US dollars, plus any sales tax or VAT. Current prices: ${baseUrl}/
   so it can be saved to an account
 - Voice input uses the browser's speech recognition; LaunchCV receives text, not audio
 - Resumes are never sold or used for advertising; users can export or delete their data
-- AI text processing by OpenAI; payments by Polar (LaunchCV never sees card details)
+- AI text processing by OpenAI or Anthropic (Claude); payments by Polar (LaunchCV never sees card details)
 - Details: ${baseUrl}/legal/privacy
 
 ## Company

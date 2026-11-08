@@ -658,7 +658,7 @@ export default async function Home() {
                 key={id}
                 className={`${MOBILE_PLAN_ORDER[id]} lc-reveal lc-rise relative flex flex-col gap-4 rounded-[22px] bg-[#5440e8] p-[22px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:gap-5 md:rounded-3xl md:p-[30px]`}
               >
-                <span className="absolute right-[18px] top-5 rounded-full bg-[#ff7a33] px-2.5 py-1.5 text-[11px] font-bold text-[#111118] md:right-6 md:top-[26px] md:px-3 md:py-[7px] md:text-[12px]">Most picked</span>
+                <span className="absolute right-[18px] top-5 rounded-full bg-[#ff7a33] px-2.5 py-1.5 text-[11px] font-bold text-[#111118] md:right-6 md:top-[26px] md:px-3 md:py-[7px] md:text-[12px]">Recommended</span>
                 <div>
                   <p className="text-[15px] font-semibold text-[#e4dfff] md:text-[16px]">{p.title}</p>
                   <p className="mt-1 text-[44px] font-bold leading-[48px] tracking-[-0.04em] md:mt-2 md:text-[54px] md:leading-[58px]">
