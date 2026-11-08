@@ -252,17 +252,17 @@ export function LimitsForm({ initial, spend, tools, models }: { initial: Setting
         <SectionCard title="Spend caps" description="0 means no cap. Days and months are UTC.">
           <div>
             <div className="flex items-baseline justify-between gap-3 text-[14px]">
-              <b className="text-[#121226]">OpenAI · this month</b>
+              <b className="text-[#121226]">AI spend · this month</b>
               <span className="tabular-nums text-[#4a4862]">
                 {money(spend.month)} / {cap > 0 ? money(cap) : "no cap"}
               </span>
             </div>
-            <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#efedf7]" role="progressbar" aria-label="OpenAI monthly cap used" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#efedf7]" role="progressbar" aria-label="AI monthly cap used" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
               <div className={`h-full rounded-full ${barColor}`} style={{ width: `${cap > 0 ? pct : 0}%` }} />
             </div>
             <p className="mt-1.5 text-[12px] text-[#66647c]">
               Today {money(spend.day)}
-              {s.budget.dailyCapUsd > 0 ? ` / ${money(s.budget.dailyCapUsd)}` : ""}. OpenAI is the only provider that bills per call.
+              {s.budget.dailyCapUsd > 0 ? ` / ${money(s.budget.dailyCapUsd)}` : ""}. Counts every billed AI call, OpenAI and Claude together.
             </p>
           </div>
           <div className="mt-4 grid grid-cols-2 gap-3">
