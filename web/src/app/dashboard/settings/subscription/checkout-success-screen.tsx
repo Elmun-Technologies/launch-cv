@@ -123,7 +123,17 @@ export function CheckoutSuccessScreen({ email, resumeId }: { email: string; resu
           <p role="status" className="sr-only">
             {state === "confirmed" ? "Your plan is active." : state === "waiting" ? "Activating your plan." : "Your plan is still activating."}
           </p>
-          <span className="self-start rounded-full bg-[#dcf5ea] px-3 py-[7px] text-[13px] font-bold text-[#0b4f35]">Payment received</span>
+          {/* Only say the payment landed once the plan is active; until then we genuinely don't know yet. */}
+          {state === "confirmed" ? (
+            <span className="self-start rounded-full bg-[#dcf5ea] px-3 py-[7px] text-[13px] font-bold text-[#0b4f35]">Payment received</span>
+          ) : state === "waiting" ? (
+            <span className="inline-flex items-center gap-1.5 self-start rounded-full bg-[#e4dfff] px-3 py-[7px] text-[13px] font-bold text-[#3a2bb8]">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
+              Checking your payment…
+            </span>
+          ) : (
+            <span className="self-start rounded-full bg-[#fdf0d5] px-3 py-[7px] text-[13px] font-bold text-[#7a4600]">Still checking your payment</span>
+          )}
           {state === "confirmed" ? (
             <>
               <h1 className="mt-[18px] text-[36px] font-extrabold leading-[40px] tracking-[-0.045em] sm:text-[56px] sm:leading-[60px]">

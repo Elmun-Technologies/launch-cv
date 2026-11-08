@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { FeaturePage, Stage, ExampleTag, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { entryPriceLabel } from "@/lib/monetization";
@@ -26,17 +26,10 @@ const BARS = [12, 26, 18, 34, 22, 30, 14, 28, 20, 10, 24, 16];
 
 const stage = (
   <Stage bg="#c9c0ff" poster="SPEAK" posterColor="#b8adff">
-    <div className="absolute bottom-[19px] right-[19px] h-[180px] w-[180px] overflow-hidden rounded-full bg-[#ff7a33] sm:h-[220px] sm:w-[220px] lg:bottom-8 lg:right-8 lg:h-[300px] lg:w-[300px]">
-      <Image
-        src="/images/people/man-white-tee.webp"
-        alt="Smiling man in a white t-shirt"
-        width={739}
-        height={1080}
-        priority
-        sizes="(min-width: 1024px) 274px, 199px"
-        className="absolute left-1/2 top-2 h-[240px] w-auto max-w-none -translate-x-1/2 sm:h-[290px] lg:top-3.5 lg:h-[400px]"
-      />
-    </div>
+    <ResumeSheet
+      example="customer-service-representative"
+      className="absolute bottom-0 right-4 h-[150px] w-[140px] rotate-3 [--peek:0.172] sm:h-[220px] sm:w-[200px] sm:[--peek:0.245] lg:right-8 lg:h-[330px] lg:w-[260px] lg:[--peek:0.319]"
+    />
     <div className="lc-float lc-drift absolute left-4 top-[86px] rounded-[18px] bg-white p-3 lg:left-8 lg:top-[150px] lg:rounded-[22px] lg:p-[18px]">
       <div className="flex items-center gap-2.5 lg:gap-3">
         <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#c42b30] lg:h-11 lg:w-11">

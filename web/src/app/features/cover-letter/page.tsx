@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { FeaturePage, Stage, ExampleTag, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 
@@ -24,14 +24,9 @@ const P2 =
 const stage = (
   <Stage bg="#111118" poster="LETTER" posterColor="#2a2840">
     <div aria-hidden="true" className="absolute bottom-[-102px] right-[-48px] h-[288px] w-[288px] rounded-full bg-[#5440e8] lg:bottom-[-170px] lg:right-[-80px] lg:h-[480px] lg:w-[480px]" />
-    <Image
-      src="/images/people/woman-blazer-laptop.webp"
-      alt="Smiling woman in a grey blazer"
-      width={620}
-      height={1080}
-      priority
-      sizes="(min-width: 1024px) 270px, 185px"
-      className="absolute bottom-0 right-0 h-[290px] w-auto max-w-none sm:h-[320px] lg:h-[470px]"
+    <ResumeSheet
+      example="product-manager"
+      className="absolute bottom-0 right-4 h-[220px] w-[170px] rotate-3 [--peek:0.208] sm:h-[280px] sm:w-[220px] sm:[--peek:0.27] lg:right-8 lg:h-[400px] lg:w-[290px] lg:[--peek:0.355]"
     />
     {/* Same example text as the panel below, so it's hidden from screen readers here. */}
     <div

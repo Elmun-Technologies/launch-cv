@@ -26,6 +26,17 @@ boshqa sessiya nima qilganini bilish uchun.
   Integrations → Polar) ga yozish. Prod'da saqlangan `planLimits.free` (0/0/0) bo'lsa,
   Admin → Limits'da free qatorini 2/1/0 ga o'zgartirish kerak.
 
+## "Soxta" tuyg'u olib tashlandi (2026-11-08, branch `ux-trust`, lokal commit)
+
+- `public/images/people/*` (fon olib tashlangan 6 portret) va ishlatilmagan
+  `photos/avatar-*`, `colleagues-celebrate` va h.k. o'chirildi. O'rniga haqiqiy UI:
+  `components/site/resume-sheet.tsx` (namunaviy rezyume sahifasi), auth sahifalarida
+  ATS hisobot kartasi, /about'da ikonli kartalar. Odam rasmi qaytarilmasin.
+- Cookie banner — pastki ingichka bar; ko'rinib turganda `--lc-cookie-bar` bilan
+  sahifaga pastdan padding beriladi (globals.css), StickyCta uning ustida turadi.
+- /pricing: "7-day refund on Pro", pass'lar kafolatga kirmaydi (Terms bo'yicha); limitlar
+  kalendar oyi bo'yicha (Week Pass'da "/month" yo'q). Bepul ATS check: 30 kunda 1 marta / tarmoq.
+
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 
 - `src/lib/winback.ts` + `/api/cron/winback` (vercel.json cron, har kuni 15:07 UTC):

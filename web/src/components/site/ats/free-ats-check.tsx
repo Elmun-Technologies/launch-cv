@@ -559,7 +559,7 @@ export function FreeAtsCheck({
             {[
               { short: "No account", long: "No account needed" },
               { short: "File isn't stored", long: "Your file isn't stored" },
-              { short: "One free check a month", long: "One free check a month" },
+              { short: "1 free check per 30 days", long: "One free check every 30 days per network" },
             ].map((t) => (
               <li key={t.long}>
                 <span aria-hidden="true" className="font-bold text-[#0b7a4f]">

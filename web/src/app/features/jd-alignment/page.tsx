@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { FeaturePage, Stage, ExampleTag, DarkTile, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { Chip } from "@/components/site/ui";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
@@ -41,14 +41,9 @@ const STATUS = {
 const stage = (
   <Stage bg="#e4dfff" poster="MATCH" posterColor="#d3cbff">
     <div aria-hidden="true" className="absolute bottom-[-120px] left-1/2 h-[288px] w-[288px] -translate-x-1/2 rounded-full bg-[#c9c0ff] lg:bottom-[-200px] lg:h-[480px] lg:w-[480px]" />
-    <Image
-      src="/images/people/woman-hoodie.webp"
-      alt="Young woman in a denim jacket and hoodie, smiling"
-      width={856}
-      height={1080}
-      priority
-      sizes="(min-width: 1024px) 373px, 270px"
-      className="absolute bottom-0 left-1/2 h-[298px] w-auto max-w-none -translate-x-1/2 sm:h-[340px] lg:h-[470px]"
+    <ResumeSheet
+      example="product-manager"
+      className="absolute bottom-0 left-1/2 h-[230px] w-[210px] -translate-x-1/2 [--peek:0.257] sm:h-[280px] sm:w-[250px] sm:[--peek:0.306] lg:h-[420px] lg:w-[360px] lg:[--peek:0.441]"
     />
     <div className="lc-float lc-drift absolute right-4 top-[96px] w-[150px] rounded-[18px] bg-white p-3.5 lg:right-7 lg:top-[170px] lg:w-[220px] lg:rounded-[22px] lg:p-[18px]">
       <p className="flex justify-between text-[12px] text-[#4a4862] lg:text-[13px]">
