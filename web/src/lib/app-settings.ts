@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { normalizeAllowlist } from "@/lib/ip-allowlist";
-import { NONE_LIMITS, PLAN_MONTHLY_LIMITS, type CheckoutPlan, type PlanId } from "@/lib/plan-config";
+import { FREE_LIMITS, PLAN_MONTHLY_LIMITS, type CheckoutPlan, type PlanId } from "@/lib/plan-config";
 
 /**
  * Admin-editable runtime settings (Admin → Limits & budgets, Integrations).
@@ -88,7 +88,13 @@ export type Settings = {
     /** Shown in the site-wide banner while it's on. Plain text. */
     maintenanceMessage: string;
   };
-  models: Record<AiTool, string>;
+  models: Record<AiTool, string> & {
+    /**
+     * Model used for every AI call made without a paid plan (free accounts and
+     * the public free tools). "" = use each tool's own model.
+     */
+    freeTierModel: string;
+  };
   security: {
     requireAdmin2fa: boolean;
     adminIdleMinutes: number;
@@ -101,9 +107,11 @@ export type Settings = {
 
 export const DEFAULT_SETTINGS: Settings = {
   planLimits: {
-    free: { ...NONE_LIMITS },
-    starter: { ...PLAN_MONTHLY_LIMITS.starter },
+    free: { ...FREE_LIMITS },
+    week: { ...PLAN_MONTHLY_LIMITS.week },
     professional: { ...PLAN_MONTHLY_LIMITS.professional },
+    quarter: { ...PLAN_MONTHLY_LIMITS.quarter },
+    starter: { ...PLAN_MONTHLY_LIMITS.starter },
     elite: { ...PLAN_MONTHLY_LIMITS.elite },
     lifetime: { ...PLAN_MONTHLY_LIMITS.lifetime },
   },
@@ -133,6 +141,7 @@ export const DEFAULT_SETTINGS: Settings = {
     free_bullets: "gpt-4o-mini",
     free_summary: "gpt-4o-mini",
     free_resignation: "gpt-4o-mini",
+    freeTierModel: "",
   },
   security: { requireAdmin2fa: true, adminIdleMinutes: 30, ipAllowlist: [], emailOwnerOnKeyChange: true },
 };
@@ -217,7 +226,11 @@ function sanitize<G extends SettingsGroup>(group: G, v: Settings[G]): Settings[G
     r.freeToolsPerIpPerDay = clampInt(r.freeToolsPerIpPerDay, 1, 1_000);
   } else if (group === "models") {
     const m = v as Record<string, string>;
-    for (const key of Object.keys(m)) if (!(AI_MODELS as readonly string[]).includes(m[key])) m[key] = "gpt-4o-mini";
+    for (const key of Object.keys(m)) {
+      if ((AI_MODELS as readonly string[]).includes(m[key])) continue;
+      // The free-tier override may be empty ("use each tool's own model").
+      m[key] = key === "freeTierModel" ? "" : "gpt-4o-mini";
+    }
   } else if (group === "security") {
     const s = v as Settings["security"];
     s.adminIdleMinutes = clampInt(s.adminIdleMinutes, 5, 720);

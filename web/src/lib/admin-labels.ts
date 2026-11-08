@@ -58,10 +58,12 @@ export function regionLabel(mode: string): string {
 
 const PLAN_LABELS: Record<PlanId, string> = {
   none: "Free",
-  starter: "Starter",
-  professional: "Professional",
-  elite: "Elite",
-  lifetime: "Lifetime",
+  week: "Week Pass",
+  professional: "Pro",
+  quarter: "90-Day Pass",
+  starter: "Starter (legacy)",
+  elite: "Elite (legacy)",
+  lifetime: "Lifetime (legacy)",
 };
 export function planLabel(plan: PlanId | string | null | undefined): string {
   return PLAN_LABELS[(plan ?? "none") as PlanId] ?? String(plan);
@@ -76,6 +78,7 @@ const BILLING_STATUS: Record<string, { label: string; tone: Tone }> = {
   cancelling: { label: "Cancelling", tone: "amber" },
   past_due: { label: "Past due", tone: "red" },
   cancelled: { label: "Cancelled", tone: "default" },
+  expired: { label: "Pass expired", tone: "default" },
   granted: { label: "Granted", tone: "violet" },
   none: { label: "—", tone: "default" },
 };

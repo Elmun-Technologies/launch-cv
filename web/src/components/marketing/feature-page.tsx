@@ -5,7 +5,7 @@ import { Breadcrumbs, btn, btnPrimary, btnWhite, container, FaqIcon, labelCls } 
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { absoluteUrl } from "@/lib/site";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, entryPlan, entryPriceLabel } from "@/lib/monetization";
 import { getFaqsFor } from "@/lib/cms/faqs";
 import { getTestimonialsFor } from "@/lib/cms/testimonials";
 import { Testimonials } from "@/components/site/testimonials";
@@ -61,7 +61,7 @@ export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
         description: f.lead,
         offers: {
           "@type": "Offer",
-          price: String(PUBLIC_PLANS.starter.priceAmount),
+          price: String(PUBLIC_PLANS[entryPlan()].priceAmount),
           priceCurrency: "USD",
           url: absoluteUrl("/pricing"),
         },
@@ -84,7 +84,7 @@ export async function FeaturePage({ f: base }: { f: FeaturePageData }) {
       },
     ],
   };
-  const note = f.banner.note ?? `Included in every paid plan, from ${PUBLIC_PLANS.starter.priceDisplay}/month.`;
+  const note = f.banner.note ?? `Included in every paid plan, from ${entryPriceLabel()}.`;
   // Rendered once per layout so the reading order matches what's on screen.
   const band = (
     <div className="lc-reveal flex flex-col gap-4 rounded-[26px] bg-[#5440e8] px-5 pb-5 pt-[26px] text-white sm:p-10 lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:rounded-[36px] lg:bg-[#c9c0ff] lg:px-14 lg:py-12 lg:text-[#121226]">

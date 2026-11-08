@@ -1,3 +1,4 @@
+import { payingSubscriptionWhere } from "@/lib/admin-billing";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
@@ -23,7 +24,8 @@ export async function GET() {
     prisma.jobApplication.count(),
     prisma.contact.count(),
     prisma.company.count(),
-    prisma.subscription.count({ where: { status: "active" } }),
+    // Same access rule as the app: excludes ended passes (lib/admin-billing.ts).
+    prisma.subscription.count({ where: payingSubscriptionWhere() }),
     prisma.analyticsEvent.count({ where: { createdAt: { gte: thirtyDaysAgo } } }),
     prisma.usageMonth.count({ where: { month: { gte: thirtyDaysAgo.toISOString().slice(0, 7) } } }),
   ]);

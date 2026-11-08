@@ -21,8 +21,11 @@ export async function polarApiBase(): Promise<string> {
 }
 
 const PRODUCT_FIELD: Record<CheckoutPlan, string> = {
-  starter: "productStarter",
+  week: "productWeek",
   professional: "productProfessional",
+  quarter: "productQuarter",
+  // Legacy products: never sold, still mapped so existing customers keep access.
+  starter: "productStarter",
   elite: "productElite",
   lifetime: "productLifetime",
 };
@@ -45,11 +48,5 @@ export async function planIdFromPolarProductId(productId: string | null | undefi
   return null;
 }
 
-/**
- * Plans paid as a one-time purchase rather than a recurring subscription.
- * Starter and Professional are monthly recurring; Lifetime is one-time. (Elite is a
- * legacy monthly plan retained only for existing subscribers, never offered publicly.)
- */
-export function isOneTimePlan(plan: CheckoutPlan): boolean {
-  return plan === "lifetime";
-}
+/** One-time vs recurring lives in plan-config (pure) so client code can use it too. */
+export { isOneTimePlan } from "@/lib/plan-config";

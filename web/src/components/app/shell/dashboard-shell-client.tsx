@@ -11,7 +11,7 @@ import {
 import { AccountMenu } from "@/components/site-header";
 import { SiteMark } from "@/components/site/brand";
 import { siteFontVars } from "@/lib/site-fonts";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
 
 type NavItem = {
   href: string;
@@ -55,12 +55,10 @@ type Usage = {
   isAdmin?: boolean;
 };
 
-const PLAN_TITLES: Record<string, string> = {
-  starter: PUBLIC_PLANS.starter.title,
-  professional: PUBLIC_PLANS.professional.title,
-  elite: PUBLIC_PLANS.elite.title,
-  lifetime: PUBLIC_PLANS.lifetime.title,
-};
+/** Every plan a user can hold, sold today or legacy. */
+const PLAN_TITLES: Record<string, string> = Object.fromEntries(
+  Object.entries(PUBLIC_PLANS).map(([id, p]) => [id, p.title]),
+);
 
 function resetLabel(month?: string): string {
   const m = month?.match(/^(\d{4})-(\d{2})$/);
@@ -89,11 +87,18 @@ function Meter({ label, used, limit }: { label: string; used: number; limit: num
 
 function PlanCard({ usage, onNavigate }: { usage: Usage; onNavigate?: () => void }) {
   if (!usage.paid) {
+    const hasFreeAi = usage.limits.jd > 0 || usage.limits.roleFit > 0;
     return (
       <div className="rounded-[18px] bg-[#f1eff8] p-4">
-        <p className="text-[13px] font-extrabold text-[#121226]">No plan yet</p>
-        <p className="mt-1 text-[12px] leading-[18px] text-[#4a4862]">
-          Unlock AI rewrites, job matching and cover letters from {PUBLIC_PLANS.starter.priceDisplay}/month.
+        <p className="text-[13px] font-extrabold text-[#121226]">Free account</p>
+        {hasFreeAi ? (
+          <div className="mt-3 flex flex-col gap-2.5">
+            <Meter label="Free job matches" used={usage.used.jd} limit={usage.limits.jd} />
+            <Meter label="Free role-fit checks" used={usage.used.roleFit} limit={usage.limits.roleFit} />
+          </div>
+        ) : null}
+        <p className="mt-2.5 text-[12px] leading-[18px] text-[#4a4862]">
+          More AI checks and cover letters with the {PUBLIC_PLANS.week.title}: {planPriceLabel("week")}, no auto-renewal.
         </p>
         <Link
           href="/dashboard/settings/subscription"
@@ -336,9 +341,11 @@ export function DashboardShellClient({
               className="flex shrink-0 items-center justify-between gap-3 border-b border-[#c9c0ff] bg-[#e4dfff] px-4 py-2 text-[13px] sm:px-8 sm:text-[14px] lg:hidden print:hidden"
             >
               <p className="min-w-0 font-medium text-[#121226]">
-                <span className="sm:hidden">AI tools from {PUBLIC_PLANS.starter.priceDisplay}/mo</span>
+                <span className="sm:hidden">
+                  {PUBLIC_PLANS.week.title}: {planPriceLabel("week")}
+                </span>
                 <span className="hidden sm:inline">
-                  AI tools unlock on a plan — from {PUBLIC_PLANS.starter.priceDisplay}/month or {PUBLIC_PLANS.lifetime.priceDisplay} once.
+                  More AI checks with the {PUBLIC_PLANS.week.title} — {planPriceLabel("week")}, no auto-renewal.
                 </span>
               </p>
               <Link

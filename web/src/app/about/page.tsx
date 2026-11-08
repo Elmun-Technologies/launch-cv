@@ -7,6 +7,7 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
 import { SITE_AUTHOR, SITE_AUTHOR_ID } from "@/lib/author";
 import { getPageCopy } from "@/lib/cms/page-copy";
+import { planNameList } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
   title: "About LaunchCV — Who We Are and Why We Built It",
@@ -51,7 +52,7 @@ const principles = [
   },
   {
     t: "Plain prices",
-    d: "A free ATS check, two monthly plans and Lifetime. 7-day refund on monthly plans.",
+    d: `A free ATS check, plus the ${planNameList("and")}. 7-day refund on monthly plans.`,
     card: "lc-card",
     num: "text-[#5440e8]",
     body: "text-[#4a4862]",

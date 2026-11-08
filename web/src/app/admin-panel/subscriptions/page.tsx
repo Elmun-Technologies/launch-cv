@@ -7,9 +7,9 @@ import { AdminShell } from "@/components/admin-shell";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { DataTable, type DataTableColumn } from "@/components/admin/data-table";
 import { AdminPageHeader, SearchField, StatTile, cellMain, cellMuted, cellSub, cellText, chipCls, pillBtn, rowLink } from "@/components/admin/v5/ui";
-import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
+import { isLifetimeRow, isOneTimeRow, subscriptionRowGrantsPaid } from "@/lib/entitlements";
 import { getIntegrationValue } from "@/lib/integrations";
-import { listPrice, planResolver } from "@/lib/admin-billing";
+import { listPrice, planOfRow, planResolver } from "@/lib/admin-billing";
 import { planLabel, subscriptionStatusLabel } from "@/lib/admin-labels";
 import { fmtDate } from "@/lib/admin-dates";
 import type { PlanId } from "@/lib/plan-config";
@@ -21,7 +21,7 @@ const FILTERS = [
   { id: "active", label: "Active" },
   { id: "cancelling", label: "Cancelling" },
   { id: "past_due", label: "Past due" },
-  { id: "lifetime", label: "Lifetime" },
+  { id: "one_time", label: "Passes & Lifetime" },
 ] as const;
 type Filter = (typeof FILTERS)[number]["id"];
 
@@ -31,6 +31,8 @@ type Row = {
   email: string;
   name: string | null;
   plan: PlanId;
+  /** One-time order: a pass (has an end date) or legacy Lifetime (no end date). */
+  oneTime: boolean;
   lifetime: boolean;
   status: string;
   paying: boolean;
@@ -42,10 +44,10 @@ type Row = {
 const ACTIVE = new Set(["active", "trialing", "on_trial"]);
 
 function matches(r: Row, f: Filter): boolean {
-  if (f === "active") return ACTIVE.has(r.status) && !r.cancelAtPeriodEnd;
-  if (f === "cancelling") return r.paying && r.cancelAtPeriodEnd && !r.lifetime;
+  if (f === "active") return r.paying && ACTIVE.has(r.status) && !r.cancelAtPeriodEnd;
+  if (f === "cancelling") return r.paying && r.cancelAtPeriodEnd && !r.oneTime;
   if (f === "past_due") return r.status === "past_due";
-  if (f === "lifetime") return r.lifetime;
+  if (f === "one_time") return r.oneTime;
   return true;
 }
 
@@ -81,17 +83,17 @@ export default async function AdminSubscriptionsPage({ searchParams }: { searchP
   const planOf = await planResolver(subs.map((s) => s.stripePriceId));
 
   const all: Row[] = subs.map((s) => {
-    // One-time orders ("order:<id>") are only stored for one-time products, i.e. Lifetime.
-    const plan: PlanId = s.stripeSubscriptionId.startsWith("order:") ? "lifetime" : planOf(s.stripePriceId);
+    const plan: PlanId = planOfRow(s, planOf);
     return {
       id: s.id,
       userId: s.userId,
       email: s.user.email,
       name: s.user.name,
       plan,
-      lifetime: plan === "lifetime" || s.stripeSubscriptionId.startsWith("order:"),
+      oneTime: isOneTimeRow(s),
+      lifetime: isLifetimeRow(s),
       status: s.status.toLowerCase(),
-      paying: subscriptionRowGrantsPaid({ status: s.status, currentPeriodEnd: s.currentPeriodEnd }),
+      paying: subscriptionRowGrantsPaid(s, now),
       cancelAtPeriodEnd: s.cancelAtPeriodEnd,
       currentPeriodEnd: s.currentPeriodEnd,
       stripeSubscriptionId: s.stripeSubscriptionId,
@@ -99,14 +101,14 @@ export default async function AdminSubscriptionsPage({ searchParams }: { searchP
   });
 
   // KPIs from the same access rules the app uses, at public list prices.
-  const recurringPaying = all.filter((r) => r.paying && !r.lifetime && r.status !== "past_due");
+  const recurringPaying = all.filter((r) => r.paying && !r.oneTime && r.status !== "past_due");
   const mrr = recurringPaying.filter((r) => !r.cancelAtPeriodEnd).reduce((a, r) => a + listPrice(r.plan), 0);
   const activeCount = all.filter((r) => matches(r, "active")).length;
   const cancellingCount = all.filter((r) => matches(r, "cancelling")).length;
-  const lifetimeRows = all.filter((r) => r.lifetime && r.paying);
-  const lifetimeTotal = lifetimeRows.reduce((a, r) => a + listPrice(r.plan === "none" ? "lifetime" : r.plan), 0);
+  const oneTimeRows = all.filter((r) => r.oneTime && r.paying);
+  const oneTimeTotal = oneTimeRows.reduce((a, r) => a + listPrice(r.plan), 0);
   const pastDue = all.filter((r) => r.status === "past_due");
-  const pastDueMrr = pastDue.filter((r) => !r.lifetime).reduce((a, r) => a + listPrice(r.plan), 0);
+  const pastDueMrr = pastDue.filter((r) => !r.oneTime).reduce((a, r) => a + listPrice(r.plan), 0);
 
   const needle = q.toLowerCase();
   const rows = all.filter(
@@ -141,7 +143,11 @@ export default async function AdminSubscriptionsPage({ searchParams }: { searchP
       key: "status",
       header: "Status",
       render: (r) => {
-        const s = r.lifetime && ACTIVE.has(r.status) ? { label: "Active", tone: "green" as const } : subscriptionStatusLabel(r.status, r.cancelAtPeriodEnd);
+        const s = r.oneTime
+          ? r.paying
+            ? { label: "Active", tone: "green" as const }
+            : { label: "Expired", tone: "default" as const }
+          : subscriptionStatusLabel(r.status, r.cancelAtPeriodEnd);
         return <StatusBadge tone={s.tone}>{s.label}</StatusBadge>;
       },
     },
@@ -154,7 +160,7 @@ export default async function AdminSubscriptionsPage({ searchParams }: { searchP
       key: "cancel_at_end",
       header: "Cancel at end",
       render: (r) =>
-        r.lifetime ? (
+        r.oneTime ? (
           <span className={cellMuted}>—</span>
         ) : r.cancelAtPeriodEnd ? (
           <span className="text-[14px] font-bold text-[#a15c00]">Yes</span>
@@ -192,7 +198,7 @@ export default async function AdminSubscriptionsPage({ searchParams }: { searchP
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
           <StatTile featured label="MRR" value={usd(mrr)} hint={`${recurringPaying.length - cancellingCount} renewing monthly`} />
           <StatTile label="Active" value={activeCount} hint={cancellingCount ? `${cancellingCount} cancelling` : "None cancelling"} />
-          <StatTile label="Lifetime" value={lifetimeRows.length} hint={`${usd(lifetimeTotal)} total`} />
+          <StatTile label="Passes & Lifetime" value={oneTimeRows.length} hint={`${usd(oneTimeTotal)} at list price`} />
           <StatTile label="Past due" value={pastDue.length} hint={pastDue.length ? `${usd(pastDueMrr)}/mo at risk` : "No failed renewals"} />
         </div>
 

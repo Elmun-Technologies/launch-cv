@@ -42,7 +42,11 @@ export async function chatJson<T>(args: {
   maxTokens?: number;
 }): Promise<T> {
   await assertAiAllowed({ tool: args.tool, userId: args.userId, paid: args.paid });
-  const model = args.model ?? (await getSettings()).models[args.tool] ?? "gpt-4o-mini";
+  const models = (await getSettings()).models;
+  // Calls without a paid plan (free accounts, public free tools) use the cheaper
+  // free-tier model when the admin has set one (Admin → Limits & budgets → Models).
+  const freeModel = args.paid !== true && models.freeTierModel ? models.freeTierModel : undefined;
+  const model = freeModel ?? args.model ?? models[args.tool] ?? "gpt-4o-mini";
   if (isClaudeModel(model)) return claudeChatJson<T>({ ...args, model });
   const openai = await getOpenAI();
   if (!openai) {

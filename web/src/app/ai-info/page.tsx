@@ -7,8 +7,8 @@ import { contentUpdated, contentUpdatedLabel } from "@/lib/content-dates";
 import { absoluteUrl, getSiteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { getSettings } from "@/lib/app-settings";
-import { PUBLIC_PLANS, planBillingSummary } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
+import { PUBLIC_PLANS, freeAllowanceSentence, planBillingSummary } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS } from "@/lib/plan-config";
 import { freeToolsPageState } from "@/lib/seo/free-ai-tools";
 import { freeTools } from "@/lib/seo/free-tools";
 import { RESUME_EXAMPLES, RESUME_GROUPS } from "@/lib/resume-examples";
@@ -191,11 +191,11 @@ export default async function AiInfoPage() {
           </li>
           <li>
             <span className="font-semibold text-[#121226]">Free account:</span> the resume editor, all templates, PDF and Word
-            export, the job tracker, and saving the free ATS report.
+            export, the job tracker, and saving the free ATS report. {freeAllowanceSentence(planLimits.free)}
           </li>
           <li>
-            <span className="font-semibold text-[#121226]">Paid plan:</span> the AI tools inside the app — bullet rewrites, job
-            description match, cover letters and interview prep.
+            <span className="font-semibold text-[#121226]">Paid plan:</span> higher monthly limits on every AI tool inside the app —
+            bullet rewrites, job description match, cover letters and interview prep.
           </li>
         </ul>
       ),
@@ -221,9 +221,12 @@ export default async function AiInfoPage() {
             })}
           </ul>
           <ul className={`${docListCls} mt-4`}>
-            <li>Every AI tool and template is on every plan; only the monthly limits differ. Limits reset each calendar month.</li>
-            <li>Starter and Professional renew monthly until canceled. Lifetime is one payment and never renews.</li>
-            <li>Monthly plans have a 7-day money-back guarantee; Lifetime can be refunded within 14 days of purchase.</li>
+            <li>Every AI tool and template is on every paid plan; plans differ in how long access lasts and in monthly limits. Limits reset each calendar month.</li>
+            <li>
+              {PUBLIC_PLANS.professional.title} renews monthly until canceled. The {PUBLIC_PLANS.week.title} ({PASS_DAYS.week} days) and the{" "}
+              {PUBLIC_PLANS.quarter.title} ({PASS_DAYS.quarter} days) are single payments with no auto-renewal.
+            </li>
+            <li>Monthly plans have a 7-day money-back guarantee.</li>
             <li>Prices are in US dollars, plus any sales tax or VAT the buyer&apos;s country requires.</li>
           </ul>
           <p className="mt-3">

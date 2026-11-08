@@ -9,6 +9,8 @@ export type AiUsagePayload = {
   month: string;
   limits: { jd: number; packet: number; roleFit: number };
   used: { jd: number; packet: number; roleFit: number };
+  /** False for an account that hasn't confirmed its email (free AI checks need it). */
+  emailVerified?: boolean;
 };
 
 export function useAiUsage() {

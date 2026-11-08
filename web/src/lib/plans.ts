@@ -6,7 +6,7 @@ import { planLimits } from "@/lib/app-settings";
 
 // Re-export pure config so other modules can import from here
 export type { CheckoutPlan, PlanId } from "@/lib/plan-config";
-export { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, NONE_LIMITS } from "@/lib/plan-config";
+export { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, NONE_LIMITS, FREE_LIMITS } from "@/lib/plan-config";
 
 function envVariant(...keys: (string | undefined)[]): string | undefined {
   for (const k of keys) {
@@ -27,6 +27,7 @@ export async function planIdFromVariantId(variantId: string | null | undefined):
   const professional = envVariant(process.env.LEMON_VARIANT_PROFESSIONAL, process.env.LEMON_SQUEEZY_VARIANT_ID);
   const elite = envVariant(process.env.LEMON_VARIANT_ELITE);
   const lifetime = envVariant(process.env.LEMON_VARIANT_LIFETIME);
+  // Lemon Squeezy is legacy-only: the Week Pass / 90-Day Pass are sold through Polar.
   if (starter && v === starter) return "starter";
   if (professional && v === professional) return "professional";
   if (elite && v === elite) return "elite";
@@ -45,13 +46,15 @@ export function variantIdForCheckoutPlan(plan: CheckoutPlan): string | undefined
       return envVariant(process.env.LEMON_VARIANT_ELITE);
     case "lifetime":
       return envVariant(process.env.LEMON_VARIANT_LIFETIME);
+    // Passes are Polar-only products.
     default:
       return undefined;
   }
 }
 
-const PLAN_RANK: Record<PlanId, number> = { none: 0, starter: 1, professional: 2, elite: 3, lifetime: 4 };
-const GRANTABLE = new Set<string>(["starter", "professional", "elite", "lifetime"]);
+/** Ordered by monthly AI allowance; ties keep the plan the user pays for. */
+const PLAN_RANK: Record<PlanId, number> = { none: 0, starter: 1, week: 2, professional: 3, quarter: 3, elite: 4, lifetime: 5 };
+const GRANTABLE = new Set<string>(Object.keys(PLAN_RANK).filter((p) => p !== "none"));
 
 /** A staff-granted plan (User.grantedPlan) while it applies, else "none". */
 export function activeGrantedPlan(
@@ -72,12 +75,12 @@ export async function getUserPlanId(userId: string): Promise<PlanId> {
   const [sub, user] = await Promise.all([
     prisma.subscription.findUnique({
       where: { userId },
-      select: { status: true, currentPeriodEnd: true, stripePriceId: true },
+      select: { status: true, currentPeriodEnd: true, stripePriceId: true, stripeSubscriptionId: true },
     }),
     prisma.user.findUnique({ where: { id: userId }, select: { grantedPlan: true, grantedPlanUntil: true } }),
   ]);
   const granted = activeGrantedPlan(user);
-  if (!sub || !subscriptionRowGrantsPaid({ status: sub.status, currentPeriodEnd: sub.currentPeriodEnd })) {
+  if (!sub || !subscriptionRowGrantsPaid(sub)) {
     return granted;
   }
   return higherPlan(await planIdFromVariantId(sub.stripePriceId), granted);

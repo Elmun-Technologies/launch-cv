@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { VerifyEmailNotice, isVerifyEmailResponse } from "@/components/verify-email-notice";
 import { AlertCircle, Loader2 } from "lucide-react";
 import { AiDisclaimer } from "@/components/ai-disclaimer";
 import { UpgradeDialog } from "@/components/app/tools/upgrade-dialog";
@@ -19,7 +20,7 @@ const SEVERITY: Record<Issue["severity"], { label: string; tone: "red" | "amber"
 
 export function EvidenceClient({ resumeId }: { resumeId: string }) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<{ text: string; upgrade: boolean } | null>(null);
+  const [error, setError] = useState<{ text: string; upgrade: boolean; verifyEmail?: boolean } | null>(null);
   const [result, setResult] = useState<Result | null>(null);
   const [plansOpen, setPlansOpen] = useState(false);
 
@@ -35,10 +36,12 @@ export function EvidenceClient({ resumeId }: { resumeId: string }) {
     const j = res ? await res.json().catch(() => ({})) : {};
     setLoading(false);
     if (!res?.ok) {
-      const upgrade = res?.status === 402 || res?.status === 403;
+      const verifyEmail = isVerifyEmailResponse(j);
+      const upgrade = !verifyEmail && (res?.status === 402 || res?.status === 403);
       setError({
         text: typeof j.error === "string" ? j.error : "Couldn't run the check. Please try again.",
         upgrade,
+        verifyEmail,
       });
       if (upgrade) setPlansOpen(true);
       return;
@@ -54,7 +57,8 @@ export function EvidenceClient({ resumeId }: { resumeId: string }) {
 
   return (
     <div className="flex flex-col gap-4">
-      {error ? (
+      {error?.verifyEmail ? <VerifyEmailNotice message={error.text} /> : null}
+      {error && !error.verifyEmail ? (
         <div role="alert" className="flex flex-col gap-3 rounded-2xl bg-[#fbe2e3] px-4 py-3.5 text-[14px] leading-[21px] text-[#a3222a] sm:flex-row sm:items-center sm:justify-between">
           <p className="flex min-w-0 items-start gap-3">
             <AlertCircle className="mt-0.5 h-[18px] w-[18px] shrink-0" aria-hidden="true" />

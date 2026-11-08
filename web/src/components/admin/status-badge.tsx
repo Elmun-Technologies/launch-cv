@@ -48,6 +48,6 @@ export function statusToTone(status: string | null | undefined): Tone {
   if (["draft", "pending", "scheduled", "incomplete"].includes(s)) return "amber";
   if (["archived", "cancelled", "canceled", "failed", "error", "rejected", "deleted", "expired"].includes(s)) return "red";
   if (["admin", "elite", "lifetime"].includes(s)) return "violet";
-  if (["professional", "starter", "trial"].includes(s)) return "blue";
+  if (["professional", "week", "quarter", "starter", "trial"].includes(s)) return "blue";
   return "default";
 }
