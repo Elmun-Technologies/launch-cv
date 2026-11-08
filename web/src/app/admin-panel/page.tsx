@@ -246,6 +246,9 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
               <h2 className="text-[18px] font-extrabold tracking-[-0.01em]">Sign-ups per day</h2>
               <span className="text-[13px] text-[#66647c]">UTC days · {rangeText}</span>
             </div>
+            <Link href="/admin-panel/analytics" className={`${adminLink} mt-1 inline-block text-[13px]`}>
+              Visitors, pages and sources → Analytics
+            </Link>
             <div className="mt-4">
               <DailyLineChart points={points} noun="sign-ups" />
             </div>

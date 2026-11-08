@@ -26,6 +26,8 @@ import {
   Gauge,
   Lock,
   TicketPercent,
+  DollarSign,
+  Activity,
 } from "lucide-react";
 import { SiteMark } from "@/components/site/brand";
 import { siteFontVars } from "@/lib/site-fonts";
@@ -63,6 +65,7 @@ const groups: NavGroup[] = [
     items: [
       { href: "/admin-panel/users", label: "Users", icon: Users },
       { href: "/admin-panel/subscriptions", label: "Subscriptions", icon: CreditCard },
+      { href: "/admin-panel/revenue", label: "Revenue", icon: DollarSign },
       { href: "/admin-panel/discounts", label: "Discounts", icon: TicketPercent },
     ],
   },
@@ -73,6 +76,7 @@ const groups: NavGroup[] = [
       { href: "/admin-panel/applications", label: "Applications", icon: Briefcase },
       { href: "/admin-panel/analytics", label: "Analytics", icon: BarChart3 },
       { href: "/admin-panel/ai-usage", label: "AI usage", icon: Cpu },
+      { href: "/admin-panel/product", label: "Product", icon: Activity },
       { href: "/admin-panel/content", label: "User CRM", icon: Database },
     ],
   },

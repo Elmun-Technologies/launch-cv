@@ -8,6 +8,7 @@ import { analyzeAtsSignals } from "@/lib/ats-signals";
 import { hashClientIp } from "@/lib/request-ip";
 import { allowFreeAtsBurst } from "@/lib/rate-limit-presets";
 import { trackEvent } from "@/lib/analytics";
+import { eventVisitorId } from "@/lib/traffic/collect";
 import type { FreeAtsFix, FreeAtsReport, FreeAtsResult } from "@/types/ai-results";
 import { parseResumeForReport } from "./parsed";
 
@@ -252,12 +253,15 @@ ${resumeText.slice(0, 12000)}`;
       .catch(() => null);
     if (saved) claimToken = token;
   }
+  // The day's anonymous visitor hash links the check to page analytics (Admin → Analytics funnel).
+  const visitorId = await eventVisitorId(req);
   await trackEvent("free_ats_check", {
     meta: {
       score: result.overall,
       totalFixes: result.totalFixes,
       columnOrTableHint: signals.columnOrTableHint,
       wordCount: signals.wordCount,
+      ...(visitorId ? { visitorId } : {}),
     },
   });
 

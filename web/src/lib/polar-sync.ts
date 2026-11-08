@@ -30,6 +30,9 @@ export type PolarOrder = {
   discount_amount?: number | null; // cents taken off by a discount code
   net_amount?: number | null; // after discount, before tax (cents) — what we earn
   discount?: { code?: string | null; name?: string | null } | null;
+  subscription_id?: string | null;
+  billing_reason?: string | null; // purchase | subscription_create | subscription_cycle | subscription_update
+  refunded_amount?: number | null; // cents refunded so far
   currency?: string | null;
   metadata?: Record<string, unknown> | null;
   customer?: { id?: string | null; email?: string | null } | null;

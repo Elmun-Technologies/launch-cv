@@ -4,9 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { cronAuth } from "@/lib/cron-auth";
 import { runWinback } from "@/lib/winback";
 import { logError } from "@/lib/redact";
+import { purgeOldPageViews, RETENTION_MONTHS } from "@/lib/traffic/collect";
 
 /**
  * Daily win-back email run (vercel.json → crons). See lib/winback.ts.
+ * The same daily run deletes page analytics (PageView rows) older than 13 months.
  * Auth: lib/cron-auth.ts (CRON_SECRET bearer, or vercel-cron user-agent at most every 20 h).
  */
 
@@ -41,7 +43,12 @@ export async function GET(req: Request) {
   try {
     // Claim the run first, so an overlapping call is refused by the 20 h guard.
     await saveLastRun(now, { running: true });
-    const result = await runWinback(now);
+    // Retention first and on its own: a failure here must not stop the emails.
+    const pageViewsPurged = await purgeOldPageViews(now).catch((e) => {
+      logError(`[cron/winback] page views older than ${RETENTION_MONTHS} months not purged`, e);
+      return null;
+    });
+    const result = { ...(await runWinback(now)), pageViewsPurged };
     await saveLastRun(now, result);
     return NextResponse.json({ ok: true, ...result });
   } catch (e) {

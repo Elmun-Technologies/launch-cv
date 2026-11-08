@@ -1,7 +1,7 @@
 import crypto from "node:crypto";
 import { NextResponse } from "next/server";
 import { getIntegrationValue } from "@/lib/integrations";
-import { applyPolarPaidOrder, applyPolarSubscription } from "@/lib/polar-apply";
+import { applyPolarPaidOrder, applyPolarRefund, applyPolarSubscription } from "@/lib/polar-apply";
 
 export const runtime = "nodejs";
 
@@ -88,6 +88,9 @@ export async function POST(req: Request) {
         break;
       case "order.paid":
         await applyPolarPaidOrder(data);
+        break;
+      case "order.refunded":
+        await applyPolarRefund(data);
         break;
       default:
         break;

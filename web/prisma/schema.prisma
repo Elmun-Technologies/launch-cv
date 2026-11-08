@@ -67,6 +67,7 @@ model User {
   auditLogs        AuditLog[]       @relation("AuditActor")
   pageCopyEdits    PageCopy[]       @relation("PageCopyEditor")
   recoveryCodes    AdminRecoveryCode[]
+  pageViews        PageView[]
 }
 
 model UsageMonth {
@@ -517,4 +518,58 @@ model RateLimitBucket {
   resetAt DateTime
 
   @@index([resetAt])
+}
+
+/// First-party, cookie-less page analytics (POST /api/t, Admin → Analytics).
+/// No raw IP is stored: `visitorId` is a truncated SHA-256 of a salt that
+/// rotates daily (AppSetting "trafficSalt") + IP + user-agent + site, so the
+/// same person gets a new id every day. `sessionId` comes from the browser's
+/// sessionStorage and resets after 30 minutes of inactivity. Acquisition
+/// fields (referrer, UTM, channel) describe the session: they are copied from
+/// its entry view onto every view in it, so filters are plain WHEREs.
+/// Rows older than 13 months are deleted by the daily cron.
+model PageView {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+  visitorId    String
+  sessionId    String
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// Path only: no query string (UTM tags go to the utm* columns), ids collapsed to ":id".
+  path         String
+  title        String?
+  /// Host of the session's external referrer ("google.com"), without "www.".
+  referrerHost String?
+  utmSource    String?
+  utmMedium    String?
+  utmCampaign  String?
+  utmTerm      String?
+  utmContent   String?
+  /// "Direct" | "Organic search" | "AI assistants" | "Social" | "Email" | "Paid" | "Referral" (lib/traffic/channel.ts).
+  channel      String   @default("Direct")
+  /// ISO 3166-1 alpha-2, from the hosting edge's geo headers.
+  country      String?
+  /// ISO 3166-2 subdivision code without the country ("CA" for California).
+  region       String?
+  city         String?
+  /// "mobile" | "tablet" | "desktop"
+  device       String   @default("desktop")
+  browser      String?
+  os           String?
+  /// Browser language, e.g. "en-US".
+  lang         String?
+  /// Time on the page: visible time reported by the browser, else the gap to the next view (max 30 min).
+  durationMs   Int      @default(0)
+  /// First view of its session.
+  isEntry      Boolean  @default(false)
+  /// Set on the entry view while its session has a single view.
+  isBounce     Boolean  @default(false)
+  /// Entry views only: this browser visited before (a boolean in localStorage, no identifier).
+  isReturning  Boolean  @default(false)
+
+  @@index([createdAt])
+  @@index([sessionId, createdAt])
+  @@index([path, createdAt])
+  @@index([visitorId, createdAt])
+  @@index([userId, createdAt])
 }

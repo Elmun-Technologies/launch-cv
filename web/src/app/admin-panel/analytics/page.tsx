@@ -1,210 +1,174 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/admin-guard";
-import { AdminShell } from "@/components/admin-shell";
 import { SectionCard } from "@/components/admin/section-card";
-import { DailyBarChart } from "@/components/admin/charts";
-import { AdminPageHeader, Meter } from "@/components/admin/v5/ui";
-import { dailyCounts, fmtAgo, fmtDateTime } from "@/lib/admin-dates";
-import { maskEmail } from "@/lib/admin-labels";
+import { AnalyticsFrame, exportHref } from "@/components/admin/traffic/frame";
+import { LabeledBarChart, WeekHourHeatmap } from "@/components/admin/traffic/charts";
+import { TrendChart } from "@/components/admin/traffic/trend-chart";
+import { ATTRIBUTION_NOTE, ExportLink, InfoTip, KpiTile, NoData, VISITOR_NOTE } from "@/components/admin/traffic/ui";
+import { parseTrafficQuery } from "@/lib/traffic/filters";
+import { WEEKDAYS, fmtDuration, fmtInt, fmtPct, fmtUsd, hourLabel } from "@/lib/traffic/labels";
+import { conversions, filtered, funnel, heatmap, liveVisitors, series, summarize, topEvents, totals } from "@/lib/traffic/queries";
 
 export const dynamic = "force-dynamic";
-
-const RANGES = [7, 30, 90] as const;
-const DAY = 86_400_000;
-
-type Attribution = Partial<Record<"utm_source" | "utm_medium" | "gclid" | "fbclid" | "msclkid", string>>;
-
-/** Channel name for a first-touch attribution record (UTM source, else the ad click id). */
-function channelOf(a: Attribution | undefined): string | null {
-  if (!a) return null;
-  if (a.utm_source) {
-    const s = a.utm_source.trim();
-    return s ? s.charAt(0).toUpperCase() + s.slice(1) : null;
-  }
-  if (a.gclid) return "Google Ads";
-  if (a.fbclid) return "Meta ads";
-  if (a.msclkid) return "Microsoft Ads";
-  return null;
-}
 
 function requestNow() {
   return Date.now();
 }
 
-export default async function AdminAnalyticsPage({ searchParams }: { searchParams: Promise<{ range?: string }> }) {
-  const admin = await requireAdmin();
+export default async function AnalyticsTrafficPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const admin = await requireAdmin("view");
   if (!admin) redirect("/admin-panel/access-denied");
+  const q = parseTrafficQuery(await searchParams, requestNow());
+  const prevRange = { from: q.prevFrom, to: q.prevTo };
 
-  const { range: rangeParam } = await searchParams;
-  const range = RANGES.find((r) => String(r) === rangeParam) ?? 7;
-  const now = requestNow();
-  // Whole UTC days: today plus the previous range-1 days.
-  const from = new Date(now - (range - 1) * DAY);
-  const since = new Date(Date.UTC(from.getUTCFullYear(), from.getUTCMonth(), from.getUTCDate()));
-
-  const [signupDates, topEvents, recentEvents, signupEvents] = await Promise.all([
-    prisma.user.findMany({ where: { createdAt: { gte: since } }, select: { createdAt: true } }),
-    prisma.analyticsEvent.groupBy({
-      by: ["name"],
-      where: { createdAt: { gte: since } },
-      _count: { name: true },
-      orderBy: { _count: { name: "desc" } },
-      take: 8,
-    }),
-    prisma.analyticsEvent.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 20,
-      select: { id: true, name: true, userId: true, createdAt: true, user: { select: { email: true } } },
-    }),
-    prisma.analyticsEvent.findMany({
-      where: { name: "signup", createdAt: { gte: since }, userId: { not: null } },
-      select: { userId: true, meta: true },
-    }),
+  const [cur, prev, liveNow, conv, prevConv, grid, events] = await Promise.all([
+    totals(q, q),
+    totals(prevRange, q),
+    liveVisitors(q, q.now),
+    conversions(q),
+    conversions(prevRange),
+    heatmap(q),
+    topEvents(q),
+  ]);
+  const [sum, prevSum, points, steps] = await Promise.all([
+    summarize(conv, q),
+    summarize(prevConv, q),
+    series(q, filtered(conv, q)),
+    funnel(q, conv, cur.visitors),
   ]);
 
-  const points = dailyCounts(
-    signupDates.map((u) => u.createdAt),
-    since,
-    now,
-  );
-  const maxCount = topEvents[0]?._count.name ?? 1;
+  const ratio = (a: number, b: number) => (b > 0 ? a / b : 0);
+  const pagesPer = ratio(cur.pageviews, cur.sessions);
+  const prevPagesPer = prev.sessions ? ratio(prev.pageviews, prev.sessions) : null;
+  const bounce = ratio(cur.bounces, cur.entries);
+  const prevBounce = prev.entries ? ratio(prev.bounces, prev.entries) : null;
+  const rpv = ratio(sum.revenue, cur.visitors);
+  const prevRpv = prev.visitors ? ratio(prevSum.revenue, prev.visitors) : null;
 
-  // Traffic sources → paid: first-touch attribution recorded on the sign-up event.
-  const bySource = new Map<string, { signups: number; users: string[] }>();
-  let attributed = 0;
-  for (const e of signupEvents) {
-    const ch = channelOf((e.meta as { attribution?: Attribution } | null)?.attribution);
-    if (ch) attributed += 1;
-    const key = ch ?? "No campaign tag";
-    const row = bySource.get(key) ?? { signups: 0, users: [] };
-    row.signups += 1;
-    row.users.push(e.userId!);
-    bySource.set(key, row);
-  }
-  const paidUsers = attributed
-    ? new Set(
-        (
-          await prisma.analyticsEvent.findMany({
-            where: { name: "pay_success", userId: { in: signupEvents.map((e) => e.userId!) } },
-            select: { userId: true },
-          })
-        ).map((e) => e.userId),
-      )
-    : new Set<string | null>();
-  const sources = [...bySource.entries()]
-    .map(([name, r]) => ({ name, signups: r.signups, paid: r.users.filter((u) => paidUsers.has(u)).length }))
-    .sort((a, b) => (a.name === "No campaign tag" ? 1 : b.name === "No campaign tag" ? -1 : b.signups - a.signups));
-  const maxSource = Math.max(1, ...sources.map((s) => s.signups));
+  const hours = Array.from({ length: 24 }, (_, h) => grid.reduce((a, row) => a + row[h], 0));
+  const weekdays = grid.map((row) => row.reduce((a, b) => a + b, 0));
+  const anyTraffic = cur.pageviews > 0;
+  const topStep = Math.max(1, ...steps.map((s) => s.n));
 
   return (
-    <AdminShell email={admin.email} pageTitle="Analytics">
-      <div className="space-y-5">
-        <AdminPageHeader
-          title="Analytics"
-          description={`Sign-ups, tracked events and where paying users came from — last ${range} days, UTC.`}
-          actions={
-            <nav aria-label="Date range" className="flex gap-1 rounded-full bg-white p-1">
-              {RANGES.map((r) => (
-                <Link
-                  key={r}
-                  href={r === 7 ? "/admin-panel/analytics" : `/admin-panel/analytics?range=${r}`}
-                  aria-current={r === range ? "page" : undefined}
-                  className={`inline-flex min-h-[44px] items-center rounded-full px-3.5 text-[13px] font-bold transition-colors sm:min-h-[36px] ${
-                    r === range ? "bg-[#111118] text-white" : "text-[#4a4862] hover:bg-[#f1eff8] hover:text-[#121226]"
-                  }`}
-                >
-                  {r} days
-                </Link>
-              ))}
-            </nav>
-          }
+    <AnalyticsFrame email={admin.email} q={q} tab="traffic">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <KpiTile featured label="Visitors" value={fmtInt(cur.visitors)} cur={cur.visitors} prev={prev.visitors} info={VISITOR_NOTE} />
+        <KpiTile label="Sessions" value={fmtInt(cur.sessions)} cur={cur.sessions} prev={prev.sessions} info="Visits: a new one starts after 30 minutes without activity, or in a new tab." />
+        <KpiTile label="Pageviews" value={fmtInt(cur.pageviews)} cur={cur.pageviews} prev={prev.pageviews} />
+        <KpiTile label="Pages / session" value={pagesPer ? pagesPer.toFixed(2) : "—"} cur={pagesPer} prev={prevPagesPer} />
+        <KpiTile
+          label="Avg. session"
+          value={fmtDuration(cur.avgSessionMs)}
+          cur={cur.avgSessionMs}
+          prev={prev.sessions ? prev.avgSessionMs : null}
+          info="From the first page view to the end of the last one. Time on a page is the visible time the browser reports, else the gap to the next page (max 30 minutes)."
         />
+        <KpiTile
+          label="Bounce rate"
+          value={cur.entries ? fmtPct(cur.bounces, cur.entries) : "—"}
+          cur={bounce}
+          prev={prevBounce}
+          invert
+          info="Sessions with a single page view."
+        />
+        <Link href="/admin-panel/analytics/live" className="block rounded-[22px] focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-[#5440e8]">
+          <KpiTile label="Live now" value={fmtInt(liveNow)} hint="Last 5 minutes →" />
+        </Link>
+        <KpiTile
+          label="Sign-ups"
+          value={fmtInt(sum.signups)}
+          cur={sum.signups}
+          prev={prevSum.signups}
+          info={`New accounts in the range. With a filter on, only sign-ups attributed to matching traffic. ${ATTRIBUTION_NOTE}`}
+        />
+        <KpiTile label="Sign-up conversion" value={fmtPct(sum.signups, cur.visitors, 2)} cur={ratio(sum.signups, cur.visitors)} prev={prev.visitors ? ratio(prevSum.signups, prev.visitors) : null} info="Sign-ups ÷ visitors." />
+        <KpiTile
+          label="Paid conversion"
+          value={fmtPct(sum.payers, cur.visitors, 2)}
+          cur={ratio(sum.payers, cur.visitors)}
+          prev={prev.visitors ? ratio(prevSum.payers, prev.visitors) : null}
+          info="People with a payment in the range ÷ visitors."
+        />
+        <KpiTile
+          label="Revenue / visitor"
+          value={cur.visitors ? fmtUsd(rpv, true) : "—"}
+          cur={rpv}
+          prev={prevRpv}
+          info={`${fmtUsd(sum.revenue)} from ${sum.purchases} purchase${sum.purchases === 1 ? "" : "s"} ÷ visitors. Amount paid after discounts; list price for older events without an amount.`}
+        />
+        <KpiTile label="Revenue" value={fmtUsd(sum.revenue)} cur={sum.revenue} prev={prevSum.revenue} />
+      </div>
 
-        <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
-          <SectionCard title="Daily sign-ups" description="New accounts per UTC day">
-            <DailyBarChart points={points} noun="sign-ups" />
-          </SectionCard>
+      <SectionCard
+        title="Dynamics"
+        description={q.granularity === "hour" ? "Per hour" : "Per day"}
+        action={<ExportLink href={exportHref(q, "dynamics")} />}
+      >
+        {anyTraffic || sum.signups ? <TrendChart points={points} hourly={q.granularity === "hour"} /> : <NoData />}
+      </SectionCard>
 
-          <SectionCard title="Top events" description={`Most tracked event names · last ${range} days`}>
-            {topEvents.length === 0 ? (
-              <p className="py-8 text-center text-[14px] text-[#66647c]">No events in the last {range} days.</p>
-            ) : (
-              <ul>
-                {topEvents.map((e) => (
-                  <li key={e.name} className="border-t border-[#e2e0ea] py-2.5 first:border-t-0">
-                    <div className="flex items-center justify-between gap-3 text-[13px]">
-                      <span className="lc-mono min-w-0 break-all text-[#121226]">{e.name}</span>
-                      <b className="shrink-0 tabular-nums text-[#121226]">{e._count.name.toLocaleString("en-US")}</b>
-                    </div>
-                    <div className="mt-1.5">
-                      <Meter pct={Math.round((e._count.name / maxCount) * 100)} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </SectionCard>
-        </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <SectionCard title="By hour of day" description="Sessions started" action={<ExportLink href={exportHref(q, "hours")} />}>
+          {anyTraffic ? <LabeledBarChart noun="sessions" labelEvery={3} bars={hours.map((n, h) => ({ label: hourLabel(h).replace(" ", "").toLowerCase(), value: n, title: `${hourLabel(h)}: ${n.toLocaleString("en-US")}` }))} /> : <NoData />}
+        </SectionCard>
+        <SectionCard title="By weekday" description="Sessions started" action={<ExportLink href={exportHref(q, "weekdays")} />}>
+          {anyTraffic ? <LabeledBarChart noun="sessions" bars={weekdays.map((n, d) => ({ label: WEEKDAYS[d], value: n }))} /> : <NoData />}
+        </SectionCard>
+      </div>
 
-        <SectionCard title="Traffic sources → paid" description={`First-touch campaign of people who signed up in the last ${range} days`}>
-          {attributed === 0 ? (
-            <div className="py-6 text-center">
-              <p className="text-[15px] font-bold text-[#121226]">No attributed sign-ups yet</p>
-              <p className="mx-auto mt-1.5 max-w-[560px] text-[14px] leading-[1.55] text-[#4a4862]">
-                Attribution starts collecting from sign-up: each new account records the UTM tags or ad click id it first
-                arrived with. Visits, organic search and referrers are in GA4 and PostHog, not here.
-              </p>
-            </div>
+      <SectionCard title="Hour × weekday" description="When sessions start; darker is busier">
+        {anyTraffic ? <WeekHourHeatmap grid={grid} /> : <NoData />}
+      </SectionCard>
+
+      <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+        <SectionCard
+          title="Funnel"
+          description="Visit → free ATS check → sign-up, then what the people who signed up in this range did next"
+          action={<ExportLink href={exportHref(q, "funnel")} />}
+        >
+          {steps[0].n === 0 && steps[2].n === 0 ? (
+            <NoData />
           ) : (
-            <ul>
-              {sources.map((s) => (
-                <li
-                  key={s.name}
-                  className="grid grid-cols-[1fr_auto] items-center gap-x-4 gap-y-1.5 border-t border-[#e2e0ea] py-2.5 text-[14px] first:border-t-0 sm:grid-cols-[180px_1fr_150px]"
-                >
-                  <b className={`min-w-0 break-words ${s.name === "No campaign tag" ? "font-semibold text-[#66647c]" : "text-[#121226]"}`}>{s.name}</b>
-                  <span className="text-right text-[13px] tabular-nums text-[#4a4862] sm:order-last">
-                    {s.signups.toLocaleString("en-US")} sign-up{s.signups === 1 ? "" : "s"} · <b className="text-[#121226]">{s.paid}</b> paid
+            <ol>
+              {steps.map((s, i) => (
+                <li key={s.id} className="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-1.5 border-t border-[#e2e0ea] py-2.5 first:border-t-0 sm:grid-cols-[190px_1fr_120px]">
+                  <span className="flex items-center gap-1 text-[14px] font-bold text-[#121226]">
+                    {s.label}
+                    <InfoTip text={s.hint} label={s.label} />
                   </span>
-                  <div className="col-span-2 sm:col-span-1">
-                    <Meter pct={(s.signups / maxSource) * 100} />
+                  <span className="text-right text-[14px] tabular-nums sm:order-last">
+                    <b>{fmtInt(s.n)}</b>
+                    {i > 0 && s.n <= steps[i - 1].n ? <span className="text-[#66647c]"> · {fmtPct(s.n, steps[i - 1].n, 0)}</span> : null}
+                  </span>
+                  <div className="col-span-2 h-6 overflow-hidden rounded-lg bg-[#f1eff8] sm:col-span-1" aria-hidden>
+                    <div className="h-full rounded-lg bg-[#5440e8]" style={{ width: `${Math.max(s.n > 0 ? 1.5 : 0, (s.n / topStep) * 100)}%` }} />
                   </div>
                 </li>
               ))}
-            </ul>
+            </ol>
           )}
+          <p className="mt-3 text-[12px] leading-[1.5] text-[#66647c]">Percent is conversion from the step above. Sign-ups include people who never ran a check, so that step can be larger than the one above it.</p>
         </SectionCard>
 
-        <SectionCard title="Recent events" description="Latest 20 tracked events" flush>
-          {recentEvents.length === 0 ? (
-            <p className="py-8 text-center text-[14px] text-[#66647c]">No events yet.</p>
+        <SectionCard title="Events" description="Server-side product events in the range (filters don't apply)" action={<ExportLink href={exportHref(q, "events")} />}>
+          {events.length === 0 ? (
+            <NoData />
           ) : (
-            <ul className="max-h-[420px] overflow-y-auto" tabIndex={0} aria-label="Recent events">
-              {recentEvents.map((e) => (
-                <li key={e.id} className="flex items-center justify-between gap-4 border-t border-[#e2e0ea] px-5 py-3 first:border-t-0 sm:px-6">
-                  <div className="min-w-0">
-                    <p className="lc-mono truncate text-[13px] text-[#121226]">{e.name}</p>
-                    <p className="truncate text-[12px] text-[#66647c]">
-                      {e.userId ? (
-                        <Link href={`/admin-panel/users/${e.userId}`} className="hover:text-[#5440e8]">
-                          {e.user ? maskEmail(e.user.email) : "deleted user"}
-                        </Link>
-                      ) : (
-                        "anonymous"
-                      )}
-                    </p>
-                  </div>
-                  <time dateTime={e.createdAt.toISOString()} title={`${fmtDateTime(e.createdAt, now)} UTC`} className="shrink-0 text-[12px] text-[#66647c]">
-                    {fmtAgo(e.createdAt, now)}
-                  </time>
+            <ul>
+              {events.slice(0, 15).map((e) => (
+                <li key={e.name} className="flex items-center justify-between gap-3 border-t border-[#e2e0ea] py-2 text-[13px] first:border-t-0">
+                  <span className="lc-mono min-w-0 break-all text-[#121226]">{e.name}</span>
+                  <span className="shrink-0 tabular-nums text-[#4a4862]">
+                    <b className="text-[#121226]">{fmtInt(e.count)}</b> · {fmtInt(e.users)} user{e.users === 1 ? "" : "s"}
+                  </span>
                 </li>
               ))}
             </ul>
           )}
         </SectionCard>
       </div>
-    </AdminShell>
+    </AnalyticsFrame>
   );
 }
