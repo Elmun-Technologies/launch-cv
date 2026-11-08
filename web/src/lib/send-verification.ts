@@ -27,6 +27,7 @@ export async function sendEmailVerification(userId: string, email: string) {
     preheader: offer
       ? `Confirm your email to unlock ${offer}% off any LaunchCV plan.`
       : "One click to confirm your email and finish setting up LaunchCV.",
+    hero: "verify",
     eyebrow: "One last step",
     heading: offer ? `Confirm your email and unlock ${offer}% off` : "Confirm your email",
     paragraphs: [

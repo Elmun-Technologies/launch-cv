@@ -9,6 +9,17 @@ const esc = (s: string) =>
 export type EmailRow = { label: string; value: string; note?: string; tone?: "good" | "bad" | "neutral" };
 export type EmailSection = { title: string; rows: EmailRow[]; /** Shown when there are no rows. */ empty?: string };
 
+/** Banner art in public/email (render with scripts/render-email-heroes.cjs). */
+export type EmailHero = "welcome" | "verify" | "winback" | "reset";
+const HERO: Record<EmailHero, { alt: string; bg: string; fg: string }> = {
+  welcome: { alt: "GET HIRED: your ATS score, job-post keywords and AI bullet rewrites in LaunchCV", bg: "#5440E8", fg: "#FFFFFF" },
+  verify: { alt: "ONE CLICK: confirm your email to unlock your free ATS check", bg: "#5440E8", fg: "#FFFFFF" },
+  winback: { alt: "NEXT JOB: raise your match score from 72 to 86", bg: "#121226", fg: "#FFFFFF" },
+  reset: { alt: "BACK IN: choose a new password", bg: "#EEEBFF", fg: "#121226" },
+};
+/** Bump when the PNGs change, so mail clients' image caches refresh. */
+const HERO_VERSION = 1;
+
 /** A personal discount shown as a coupon. Plain text, escaped here. */
 export type EmailOffer = {
   /** Small caps line above the amount, e.g. "Your welcome offer". */
@@ -78,6 +89,8 @@ function bulletsHtml(items: string[]): string {
 
 export function transactionalEmail(args: {
   preheader: string;
+  /** Optional banner image at the top of the card (falls back to its brand color when images are off). */
+  hero?: EmailHero;
   /** Optional small pill above the heading, e.g. "Welcome" or "Ends in 48 hours". */
   eyebrow?: string;
   heading: string;
@@ -104,7 +117,7 @@ export function transactionalEmail(args: {
   /** Site address for the footer links; defaults to https://launch-cv.com. */
   siteUrl?: string;
 }): { html: string; text: string } {
-  const { preheader, eyebrow, heading, paragraphs, offer, bullets = [], cta, after = [], footnote, footer, sections = [] } = args;
+  const { hero, preheader, eyebrow, heading, paragraphs, offer, bullets = [], cta, after = [], footnote, footer, sections = [] } = args;
   const site = (args.siteUrl ?? "https://launch-cv.com").replace(/\/$/, "");
   const link = (href: string, label: string) => `<a href="${esc(href)}" style="color:${C.muted};text-decoration:underline;">${esc(label)}</a>`;
   const footerHtml = footer
@@ -127,7 +140,11 @@ export function transactionalEmail(args: {
 </tr></table>
 </td></tr>
 <tr><td bgcolor="${C.card}" style="background:${C.card};border:1px solid ${C.line};border-radius:22px;overflow:hidden;font-family:${FONT};">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td height="6" bgcolor="${C.violet}" style="border-radius:22px 22px 0 0;height:6px;line-height:6px;font-size:0;background:${C.violet};background-image:linear-gradient(90deg,${C.violet},#8B7CFF,#FF9F7A);">&nbsp;</td></tr></table>
+${
+  hero
+    ? `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td bgcolor="${HERO[hero].bg}" style="background:${HERO[hero].bg};border-radius:22px 22px 0 0;line-height:0;font-size:0;"><img src="${esc(`${site}/email/${hero}.png?v=${HERO_VERSION}`)}" width="560" alt="${esc(HERO[hero].alt)}" style="display:block;width:100%;max-width:560px;height:auto;border:0;border-radius:22px 22px 0 0;font-family:${FONT};font-size:16px;line-height:1.4;font-weight:800;color:${HERO[hero].fg};"></td></tr></table>`
+    : `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td height="6" bgcolor="${C.violet}" style="border-radius:22px 22px 0 0;height:6px;line-height:6px;font-size:0;background:${C.violet};background-image:linear-gradient(90deg,${C.violet},#8B7CFF,#FF9F7A);">&nbsp;</td></tr></table>`
+}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding:34px 32px 32px;">
 ${eyebrow ? `<p style="margin:0 0 14px;"><span style="display:inline-block;padding:5px 12px;border-radius:999px;background:${C.violetSoft};color:${C.violet};font-size:12px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;">${esc(eyebrow)}</span></p>` : ""}
 <h1 style="margin:0 0 16px;font-size:28px;line-height:1.2;font-weight:800;letter-spacing:-0.02em;color:${C.ink};">${esc(heading)}</h1>

@@ -18,6 +18,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ provide
   if (provider === "resend" && result.ok) {
     const mail = transactionalEmail({
       preheader: "Email delivery from LaunchCV works.",
+      hero: "welcome",
       eyebrow: "Test",
       heading: "Email delivery works",
       paragraphs: [

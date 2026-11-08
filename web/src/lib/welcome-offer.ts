@@ -56,6 +56,7 @@ export function welcomeOfferEmail(args: {
   const week = PUBLIC_PLANS[PLAN];
   const { html, text } = transactionalEmail({
     preheader: `Your personal code takes ${args.percent}% off any plan until ${formatEastern(args.endsAt)}.`,
+    hero: "welcome",
     eyebrow: "Welcome to LaunchCV",
     heading: `You're in. Here's ${args.percent}% off, just for you.`,
     paragraphs: [

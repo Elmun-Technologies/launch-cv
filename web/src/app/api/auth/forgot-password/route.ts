@@ -47,6 +47,7 @@ export async function POST(req: Request) {
   const link = `${appBaseUrl()}/auth/reset-password?token=${encodeURIComponent(raw)}`;
   const { html, text } = transactionalEmail({
     preheader: "Choose a new password for your LaunchCV account. The link works for 1 hour.",
+    hero: "reset",
     eyebrow: "Account security",
     heading: "Let's get you back in",
     paragraphs: [

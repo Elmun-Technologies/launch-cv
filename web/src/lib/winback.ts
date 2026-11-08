@@ -192,6 +192,7 @@ export function winbackEmail(args: {
       : `Keep going: ${args.percent}% off LaunchCV for ${args.validHours} hours`;
   const { html, text } = transactionalEmail({
     preheader: `A personal code just for you: ${args.percent}% off any plan until ${formatEastern(args.endsAt)}.`,
+    hero: "winback",
     eyebrow: `Ends in ${args.validHours} hours`,
     heading: args.reason === "checkout" ? "Still want that interview?" : "Don't stop at the free limit",
     paragraphs: [
