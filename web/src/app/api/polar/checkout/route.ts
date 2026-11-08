@@ -9,6 +9,7 @@ import { getSettings } from "@/lib/app-settings";
 import { isPublicPlan, type CheckoutPlan } from "@/lib/plan-config";
 import { checkoutConflict } from "@/lib/entitlement-rules";
 import { attributionFromCookieHeader, attributionToMetadata } from "@/lib/utm";
+import { findWinbackOffer } from "@/lib/winback";
 
 /**
  * Plan requested at checkout. Only plans sold today (CHECKOUT_PLAN_ORDER) are
@@ -29,6 +30,13 @@ function parseGaClientId(body: unknown): string | undefined {
   return typeof v === "string" && /^\d+\.\d+$/.test(v) ? v : undefined;
 }
 
+/** Personal win-back code from the email link (`/checkout/<plan>?code=`), if any. */
+function parseDiscountCode(body: unknown): string | null {
+  if (!body || typeof body !== "object") return null;
+  const v = (body as { discountCode?: unknown }).discountCode;
+  return typeof v === "string" && v.length <= 32 ? v : null;
+}
+
 export async function POST(req: Request) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -39,6 +47,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "That plan is no longer offered. Pick one of the plans on the pricing page." }, { status: 400 });
   }
   const gaClientId = parseGaClientId(rawBody);
+  const discountCode = parseDiscountCode(rawBody);
 
   if (!(await getSettings()).switches.checkout) {
     return NextResponse.json({ error: "Checkout is paused for a few minutes. Please try again shortly." }, { status: 503 });
@@ -90,15 +99,24 @@ export async function POST(req: Request) {
     },
   };
 
-  const res = await fetch(`${(await polarApiBase())}/v1/checkouts/`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
-    body: JSON.stringify(body),
-  });
+  // Only the caller's own win-back code, and only while it's valid, is pre-applied.
+  const offer = discountCode ? await findWinbackOffer(user.id, discountCode) : null;
+
+  const apiBase = await polarApiBase();
+  const createCheckout = (payload: object) =>
+    fetch(`${apiBase}/v1/checkouts/`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+  let res = await createCheckout(offer ? { ...body, discount_id: offer.discountId } : body);
+  // A code Polar no longer accepts (used up, deleted) must not block the purchase: retry at full price.
+  if (offer && !res.ok && res.status >= 400 && res.status < 500) res = await createCheckout(body);
 
   const json = (await res.json().catch(() => null)) as
     | { url?: string; detail?: unknown; error?: string }
@@ -118,6 +136,6 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: msg }, { status: 502 });
   }
 
-  await trackEvent("checkout_started", { userId: user.id, meta: { provider: "polar", plan } });
+  await trackEvent("checkout_started", { userId: user.id, meta: { provider: "polar", plan, ...(offer ? { winbackCode: offer.code } : {}) } });
   return NextResponse.json({ url: json.url });
 }

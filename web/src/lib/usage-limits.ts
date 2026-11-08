@@ -1,5 +1,6 @@
 import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
 import { prisma } from "@/lib/prisma";
+import { trackEvent } from "@/lib/analytics";
 import { getUserPlanId, limitsForPlan, type PlanId } from "@/lib/plans";
 import { EMAIL_UNVERIFIED_CODE, USAGE_LIMIT_CODE, VERIFY_EMAIL_MESSAGE, usageBlock } from "@/lib/usage-rules";
 
@@ -24,6 +25,25 @@ export async function getUsageRow(userId: string) {
   return prisma.usageMonth.create({
     data: { userId, month, jdCount: 0, packetCount: 0, roleFitCount: 0 },
   });
+}
+
+/**
+ * `free_limit_reached` analytics event (read by the win-back email, lib/winback.ts):
+ * a free account was refused because its monthly allowance is used up.
+ * At most once per user per UTC day; never throws.
+ */
+async function recordFreeLimitReached(userId: string, kind: UsageKind) {
+  try {
+    const now = new Date();
+    const dayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    const seen = await prisma.analyticsEvent.findFirst({
+      where: { userId, name: "free_limit_reached", createdAt: { gte: dayStart } },
+      select: { id: true },
+    });
+    if (!seen) await trackEvent("free_limit_reached", { userId, meta: { kind } });
+  } catch {
+    // Analytics must never block the response.
+  }
 }
 
 export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
@@ -53,6 +73,7 @@ export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
     };
   }
   if (block === "limit") {
+    if (!paid) await recordFreeLimitReached(userId, kind);
     return {
       ok: false as const,
       code: USAGE_LIMIT_CODE,

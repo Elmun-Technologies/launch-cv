@@ -26,6 +26,15 @@ boshqa sessiya nima qilganini bilish uchun.
   Integrations → Polar) ga yozish. Prod'da saqlangan `planLimits.free` (0/0/0) bo'lsa,
   Admin → Limits'da free qatorini 2/1/0 ga o'zgartirish kerak.
 
+## Win-back email (2026-11-08, branch `winback`, lokal commit)
+
+- `src/lib/winback.ts` + `/api/cron/winback` (vercel.json cron, har kuni 15:07 UTC):
+  checkout boshlagan yoki bepul AI limitiga yetgan, to'lamagan foydalanuvchiga 24 soatdan
+  keyin BIR marta 30% / 48 soatlik shaxsiy Polar kodi bilan email. Admin → Discounts →
+  "Win-back email". **Postal address bo'sh bo'lsa hech narsa yuborilmaydi** (CAN-SPAM) —
+  deploydan keyin admin manzilni kiritishi kerak. `CRON_SECRET` env tavsiya etiladi.
+- `User.marketingOptOutAt`, `/api/email/unsubscribe`. Tekshiruv: `npx tsx src/lib/winback.check.ts`.
+
 ## Joriy / bloklangan (2026-11-07)
 
 - To'lov tuzatildi (Polar): Professional endi $29/oy (yangi product

@@ -5,6 +5,8 @@ export async function sendTransactionalEmail(args: {
   subject: string;
   html: string;
   text?: string;
+  /** Extra MIME headers, e.g. List-Unsubscribe (Resend's `headers` field). */
+  headers?: Record<string, string>;
 }): Promise<{ ok: true } | { ok: false; error: string }> {
   const { getIntegrationValue } = await import("@/lib/integrations");
   const key = await getIntegrationValue("resend", "apiKey");
@@ -24,6 +26,7 @@ export async function sendTransactionalEmail(args: {
       subject: args.subject,
       html: args.html,
       ...(args.text ? { text: args.text } : {}),
+      ...(args.headers && Object.keys(args.headers).length ? { headers: args.headers } : {}),
     }),
   });
   if (!res.ok) {

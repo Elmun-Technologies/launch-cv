@@ -28,6 +28,7 @@ const GROUP_LABELS: Record<string, string> = {
   models: "Models",
   product: "Product settings",
   security: "Sign-in rules",
+  marketing: "Win-back email",
 };
 
 const FIELD_LABELS: Record<string, string> = {
@@ -49,6 +50,11 @@ const FIELD_LABELS: Record<string, string> = {
   adminIdleMinutes: "admin idle timeout",
   ipAllowlist: "IP allow-list",
   emailOwnerOnKeyChange: "owner emails on key changes",
+  winbackEnabled: "win-back email",
+  winbackPercent: "win-back percent off",
+  winbackValidHours: "win-back code hours",
+  winbackDelayHours: "win-back delay hours",
+  postalAddress: "postal address",
 };
 
 const MONEY = new Set(["monthlyCapUsd", "dailyCapUsd", "perUserDailyUsd"]);
