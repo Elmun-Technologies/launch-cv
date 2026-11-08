@@ -20,6 +20,7 @@ import { CONTENT_UPDATED, SAMPLES_DATE_KEY } from "@/lib/content-dates";
 import { getCoverLetterExample } from "@/lib/cover-letter-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 import { withArticle } from "@/lib/article";
+import { relatedRoleSlugs } from "@/lib/related-roles";
 
 type Params = { slug: string };
 
@@ -96,7 +97,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
   const role = roleLower(e.role);
   const startHref = `/register?next=${encodeURIComponent(`/resume/new?example=${e.slug}`)}`;
   const url = absoluteUrl(`/resume-examples/${e.slug}`);
-  const related = e.related.map(getResumeExample).filter((x) => !!x);
+  const related = relatedRoleSlugs(e.slug).map(getResumeExample).filter((x) => !!x);
   const hasLetter = !!getCoverLetterExample(e.slug);
   const cutout = CUTOUTS[e.slug];
   const firstName = r.name.split(" ")[0];

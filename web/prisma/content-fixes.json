@@ -43,5 +43,17 @@
     "onlyIf": [
       null
     ]
+  },
+  {
+    "from": "A Harvard Business Review study found that tailored applications receive 3× more interview invitations than generic ones. The reason is simple: hiring managers spend an average of 7 seconds scanning a resume before deciding to read or reject it.",
+    "to": "Recruiters skim before they read. In a 2018 eye-tracking study by Ladders, recruiters spent about 7.4 seconds on an initial resume screen before deciding whether to keep reading."
+  },
+  {
+    "from": "Tailored applications receive roughly three times more interview invitations than generic ones. Hiring managers spend about seven seconds scanning a resume, so if",
+    "to": "Recruiters skim first: a 2018 Ladders eye-tracking study measured an initial resume screen at about 7.4 seconds. If"
+  },
+  {
+    "from": "A 2024 survey by ResumeGo found that candidates who submitted cover letters received interview invitations 53% more often than those who did not. However, generic cover letters performed no better than no letter at all.",
+    "to": "In a ResumeGo field experiment (7,287 applications sent between July 2019 and January 2020), applications with a cover letter tailored to the job got a 16.4% callback rate, against 10.7% with no cover letter, about 53% more. A generic letter landed in between, at 12.5%."
   }
 ]

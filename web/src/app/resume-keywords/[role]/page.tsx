@@ -16,6 +16,7 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { faqPageLd } from "@/lib/faq-ld";
+import { KEYWORD_SCANNER_PATH } from "@/lib/seo/free-tools";
 import {
   KEYWORD_ROLES,
   KEYWORDS_UPDATED,
@@ -24,12 +25,14 @@ import {
   heroKeywords,
   keywordFaqs,
   keywordPageDescription,
+  honestRulesFor,
   keywordPageTitle,
   keywordStats,
   roleLower,
   roleShort,
 } from "@/lib/seo/resume-keywords";
 import { withArticle } from "@/lib/article";
+import { relatedRoleSlugs } from "@/lib/related-roles";
 
 type Params = { role: string };
 
@@ -79,7 +82,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
   const rows = contextRows(e);
   const faqs = keywordFaqs(e);
   const firstName = e.resume.name.split(" ")[0];
-  const related = e.related.map(getKeywordRole).filter((x) => !!x);
+  const related = relatedRoleSlugs(e.slug).map(getKeywordRole).filter((x) => !!x);
   const url = absoluteUrl(`/resume-keywords/${e.slug}`);
   const exampleHref = `/resume-examples/${e.slug}`;
   const lead = `The ${total} ${groups.some((g) => g.id === "credentials") ? "skills, tools and credentials" : "skills and tools"} that come up in ${role} job posts, sorted by type, and how to put them in bullets a recruiter believes.`;
@@ -260,6 +263,7 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
       {/* HONEST USE (dark) */}
       <section id="honest" className={sectionCls}>
         <HonestRules
+          rules={honestRulesFor(e)}
           title={
             <>
               Keywords get you found. <span className="!text-[#b3b0c8]">Proof gets you hired.</span>
@@ -271,6 +275,13 @@ export default async function ResumeKeywordsRolePage({ params }: { params: Promi
               <div>
                 <p className="text-[20px] font-extrabold leading-tight tracking-[-0.02em] sm:text-[24px]">Which of these does your resume say?</p>
                 <p className="mt-1.5 text-[15px] text-[#e4dfff]">Free ATS score and missing keywords in about 10 seconds.</p>
+                <p className="mt-1.5 text-[15px] text-[#e4dfff]">
+                  Applying to one post?{" "}
+                  <Link href={KEYWORD_SCANNER_PATH} className="font-semibold text-white underline decoration-white/40 underline-offset-[3px] hover:decoration-white">
+                    Scan its keywords
+                  </Link>{" "}
+                  against your resume.
+                </p>
               </div>
               <CtaLink cta="free_ats_check" location="resume_keywords_mid" href="/free-ats-check" className={`${btnWhite} flex-none`}>
                 Check my resume

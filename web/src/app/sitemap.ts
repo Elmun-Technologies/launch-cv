@@ -67,6 +67,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/cover-letter-examples", "monthly", 0.8),
     ...COVER_LETTER_EXAMPLES.map((c) => page(`/cover-letter-examples/${c.slug}`, "monthly", 0.7, "/cover-letter-examples/*")),
     page("/resume-format", "monthly", 0.8),
+    page("/what-is-a-good-ats-score", "monthly", 0.8),
     page("/resume-action-verbs", "monthly", 0.7),
     page("/how-to-write-a-resume", "monthly", 0.8),
     page("/resume-length", "monthly", 0.7),
@@ -76,6 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     page("/tools/resume-bullet-point-generator", "monthly", 0.8),
     page("/tools/resume-summary-generator", "monthly", 0.8),
     page("/tools/resume-word-counter", "monthly", 0.7),
+    page("/tools/job-description-keyword-scanner", "monthly", 0.8),
     page("/tools/resignation-letter-generator", "monthly", 0.8),
     ...SEO_EXTRA_ROUTES.map((r) => page(r.path, "monthly", r.priority, r.dateKey)),
     // login/register are utility pages (noindex) — intentionally kept out of the sitemap.

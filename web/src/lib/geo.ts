@@ -123,6 +123,17 @@ export const BLOG_HOWTO: Record<string, { name: string; description: string; tot
       { name: "Day 3 — Simulate a full interview", text: "Answer 5–7 questions without pausing, review the feedback, fix your weakest areas, and prepare five questions to ask." },
     ],
   },
+  "star-method": {
+    name: "How to prepare STAR answers before an interview",
+    description: "Build and rehearse Situation-Task-Action-Result answers before a behavioral interview.",
+    steps: [
+      { name: "Build a story bank, not a script", text: "List 8-10 situations from your last couple of roles covering conflict, failure, leading without authority, a tight deadline, disagreeing with a manager, and going beyond what was asked." },
+      { name: "Write each one as bullet points, not sentences", text: "Jot down the S/T/A/R beats in a few words each so the delivery stays natural and a follow-up question won't derail you." },
+      { name: "Quantify the Result, even roughly", text: "Estimate a number if you don't have an exact one, and check old performance reviews or project notes if you've forgotten the specifics." },
+      { name: "Practice out loud and time yourself", text: "Aim for 60-90 seconds per answer and say your bullet points out loud rather than reading them." },
+      { name: "Map your strongest stories to the job description", text: "Decide in advance which prepared story best demonstrates each competency the posting emphasizes." },
+    ],
+  },
   "ai-resume-builder-complete-guide": {
     name: "How to build a resume with an AI resume builder",
     description: "Build and tailor an ATS-ready resume with an AI resume builder in six steps.",
@@ -133,6 +144,18 @@ export const BLOG_HOWTO: Record<string, { name: string; description: string; tot
       { name: "Align to the job description", text: "Paste the target job description, check your keyword match score, and accept recommended improvements." },
       { name: "Export and run an ATS check", text: "Export as PDF, run the ATS score checker, and aim for 80 or above." },
       { name: "Generate a matching cover letter", text: "Create the cover letter from the same interface so it stays consistent with your resume." },
+    ],
+  },
+  "harvard-resume-template-vs-google-docs": {
+    name: "How to format a resume in the traditional, ATS-safe style",
+    description: "Build a clean, reverse-chronological resume in the traditional style associated with Harvard's career office, without the ATS risks of a flashy template.",
+    steps: [
+      { name: "Use reverse-chronological order", text: "List your most recent role first in every section, so nobody has to hunt for your current job." },
+      { name: "Switch to a single-column layout", text: "Drop sidebars, text boxes, and tables, and keep every detail in the main body of the document." },
+      { name: "Use standard section headings and a clean font", text: "Use Work Experience, Education, and Skills in a standard font like Calibri or Times New Roman, 10–12pt." },
+      { name: "Remove photos and graphics", text: "Drop headshots, icon skill bars, and color blocks — none of it is read by ATS software or expected in this format." },
+      { name: "Write bullets with an action verb and a result", text: "Lead each bullet with a strong verb and end with a measurable outcome, e.g. 'Cut onboarding time from three weeks to nine days.'" },
+      { name: "Save as a text-based PDF and check it", text: "Export a text-based PDF unless DOCX is requested, then run it through an ATS score checker to confirm it parses cleanly." },
     ],
   },
 };

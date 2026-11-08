@@ -624,7 +624,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     sections: [
       {
         heading: "Why tailoring is non-negotiable",
-        body: "A Harvard Business Review study found that tailored applications receive 3× more interview invitations than generic ones. The reason is simple: hiring managers spend an average of 7 seconds scanning a resume before deciding to read or reject it. If the first thing they see doesn't match the role, they move on. Tailoring ensures that the most relevant experience appears prominently, that the keywords match what recruiters are looking for, and that your professional summary sounds like it was written for this exact position.",
+        body: "Recruiters skim before they read. In a 2018 eye-tracking study by Ladders, recruiters spent about 7.4 seconds on an initial resume screen before deciding whether to keep reading. If the first thing they see doesn't match the role, they move on. Tailoring ensures that the most relevant experience appears prominently, that the keywords match what recruiters are looking for, and that your professional summary sounds like it was written for this exact position.",
       },
       {
         heading: "Step 1 — Deconstruct the job description",
@@ -647,7 +647,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       { q: "How long does tailoring take?", a: "With AI assistance, about 5 to 10 minutes per application. Without AI, doing it properly typically takes 20 to 40 minutes, since you have to deconstruct the job description, rewrite your summary, and update several bullets by hand. The AI mainly speeds up keyword gap analysis and rewrites." },
       { q: "Should I have different resume versions?", a: "Yes. Maintain a master resume that holds all your experience, then create tailored versions for each role or job category from it. Save each version with the company name and date so you can track what you sent where. Tailoring the summary and a few bullets per role is usually enough." },
       { q: "Does tailoring work for career changers?", a: "Yes, especially for career changers. Tailoring helps you emphasize transferable skills and reframe past experience in the language the new industry actually uses. By mirroring the target role's vocabulary and leading with your most relevant achievements, you help both the ATS and the hiring manager see how you fit." },
-      { q: "Why is tailoring my resume to each job worth the effort?", a: "Tailored applications receive roughly three times more interview invitations than generic ones. Hiring managers spend about seven seconds scanning a resume, so if the most relevant experience and keywords aren't immediately visible, they move on. Tailoring puts the right match front and center for both the ATS and the reader." },
+      { q: "Why is tailoring my resume to each job worth the effort?", a: "Recruiters skim first: a 2018 Ladders eye-tracking study measured an initial resume screen at about 7.4 seconds. If the most relevant experience and keywords aren't immediately visible, they move on. Tailoring puts the right match front and center for both the ATS and the reader." },
       { q: "Do I need to rewrite my whole resume for each job?", a: "No. Focus on the highest-impact changes: rewrite your professional summary and update two or three bullet points in your most recent roles. Incorporate missing keywords naturally, reframe experience toward the outcomes the role values, and add metrics. The underlying facts stay the same; only the emphasis and wording shift." },
       { q: "How do I know if my tailored resume matches the job well enough?", a: "Run a JD alignment check: paste the job description and your updated resume, and the tool calculates a match percentage and shows remaining keyword gaps. Aim for roughly 85% or higher, which typically passes most ATS filters and reads as highly relevant to a human reviewer. Close gaps and re-check." },
     ],
@@ -675,7 +675,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
     sections: [
       {
         heading: "Do cover letters still matter?",
-        body: "Yes — but differently than most people think. A 2024 survey by ResumeGo found that candidates who submitted cover letters received interview invitations 53% more often than those who did not. However, generic cover letters performed no better than no letter at all. The key is specificity. A cover letter that references the company's actual product, mission, or recent news — and connects it to your specific experience — demonstrates preparation that stands out.",
+        body: "Yes — but differently than most people think. In a ResumeGo field experiment (7,287 applications sent between July 2019 and January 2020), applications with a cover letter tailored to the job got a 16.4% callback rate, against 10.7% with no cover letter, about 53% more. A generic letter landed in between, at 12.5%. The key is specificity. A cover letter that references the company's actual product, mission, or recent news — and connects it to your specific experience — demonstrates preparation that stands out.",
       },
       {
         heading: "Tip 1: Open with the most compelling thing about you",
@@ -734,7 +734,7 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       },
       {
         heading: "The STAR method: your answer framework",
-        body: "Every behavioral interview question should be answered using the STAR framework: Situation (briefly set the context), Task (describe your specific responsibility), Action (explain what you did and why), Result (quantify the outcome). Example question: 'Tell me about a time you managed a project under a tight deadline.' Poor answer: 'I worked hard and we got it done.' STAR answer: 'In Q3 2023 (Situation), I was tasked with leading a product launch after our lead engineer left unexpectedly (Task). I rebuilt the sprint plan, reduced scope to core features, and coordinated daily standups with 3 teams (Action). We shipped 2 days before the deadline and acquired 500 customers in the first week (Result).' Practice until STAR becomes automatic.",
+        body: "Every behavioral interview question should be answered using the STAR framework: Situation (briefly set the context), Task (describe your specific responsibility), Action (explain what you did and why), Result (quantify the outcome). Example question: 'Tell me about a time you managed a project under a tight deadline.' Poor answer: 'I worked hard and we got it done.' STAR answer: 'In Q3 2023 (Situation), I was tasked with leading a product launch after our lead engineer left unexpectedly (Task). I rebuilt the sprint plan, reduced scope to core features, and coordinated daily standups with 3 teams (Action). We shipped 2 days before the deadline and acquired 500 customers in the first week (Result).' Practice until STAR becomes automatic. For a deeper walkthrough — the full framework, a worked example, common mistakes, and how to build your story bank in advance — see our guide to the [STAR method](/blog/star-method).",
       },
       {
         heading: "How AI generates role-specific questions",
@@ -756,6 +756,112 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       { q: "How does AI generate interview questions from my resume?", a: "AI interview prep reads your resume and the target job description, then generates questions across five categories: behavioral, technical or role-specific, company and culture, situational, and curveballs. When you answer, it scores you on clarity, relevance, impact, and STAR structure, and provides a model answer so you can benchmark your response." },
       { q: "What questions should I ask the interviewer?", a: "Ask questions that signal preparation and can't be answered by ten minutes of research. Strong choices include what success looks like in the first 90 days, the biggest challenges the team is navigating, and what the most successful people in the role have in common. Avoid asking what the company does." },
       { q: "How many days do I need to prepare for an interview?", a: "Three focused days is usually enough. Spend day one researching the company and noting things you genuinely find interesting, day two practicing 10 to 15 AI-generated questions and improving your STAR answers, and day three running a full mock interview, reviewing feedback, and preparing five thoughtful questions to ask the interviewer." },
+    ],
+  },
+
+  {
+    slug: "star-method",
+    coverImage: "/images/product/interview-prep.svg",
+    coverAlt:
+      "LaunchCV AI interview prep screen showing a behavioral interview answer labeled with the STAR method's Situation, Task, Action, and Result parts.",
+    title: "The STAR Method: A Complete Guide to Behavioral Interviews",
+    seoTitle: "STAR Method for Interview Answers (With Examples)",
+    description:
+      "The STAR method turns \"tell me about a time...\" into a clear, specific story: Situation, Task, Action, Result. Here's how to structure an answer, a full worked example, and the mistakes that sink good ones.",
+    date: "2026-11-07",
+    readingTime: 9,
+    category: "Interview Prep",
+    tags: ["STAR method", "behavioral interview questions", "STAR interview examples", "interview answer framework", "situation task action result"],
+    seoDescription:
+      "What the STAR method is, how to structure Situation-Task-Action-Result answers, a worked example, and how to prepare yours in advance.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "What is the STAR method?",
+        body: `The **STAR method** is a structured way to answer behavioral interview questions — the ones that start with "Tell me about a time when…" or "Give me an example of…". STAR stands for **Situation, Task, Action, Result**, and it works by turning a vague memory into a short, specific story with a clear outcome.
+
+Instead of answering in generalities — "I'm a strong communicator," "I handle pressure well" — STAR forces you to walk the interviewer through one real example: what was happening, what you were responsible for, exactly what you did, and what changed because of it. That structure is what interviewers are actually listening for. Not a personality trait you claim to have, but evidence that you have it.`,
+      },
+      {
+        heading: "Why interviewers ask behavioral questions in the first place",
+        body: `Behavioral interviewing rests on a simple premise: how you've handled a situation in the past predicts how you'll handle it again better than how you *say* you'd handle it hypothetically. That's why "Tell me about a time you disagreed with your manager" gets asked instead of "How would you handle disagreeing with your manager?" — the first requires a real memory; the second just invites a rehearsed opinion.
+
+This is also why vague self-descriptions fall flat in an interview. Saying you're "detail-oriented" or "a team player" is an unverified claim — anyone can say it. A STAR story about the time you caught a billing error before it reached hundreds of customers, or the time you reorganized a project after two teammates left mid-sprint, *demonstrates* the trait instead of asserting it. Interviewers remember specific stories. They forget adjectives.`,
+      },
+      {
+        heading: "The STAR framework, broken down",
+        body: `Each letter plays a different role in the story, and skipping one is the most common reason a STAR answer falls flat.
+
+### Situation
+
+Set the scene in one or two sentences: where you were working, what the context was, and why it mattered. Keep it brief — the interviewer needs just enough background to follow the story, not your full job history. "In my second year leading a support team, our response times had crept up after we launched a second product line" is enough. Fifteen seconds, not ninety.
+
+### Task
+
+State what you specifically were responsible for or what needed to happen — not what your team or company needed, but what fell to you. This is the step people skip most often, and skipping it is what makes the next part sound like something that happened *to* you rather than something you drove. "I needed to get our average response time back under four hours without adding headcount" is a Task. "Our response times were too slow" is still Situation.
+
+### Action
+
+This is the core of the answer and should take up roughly half your speaking time. Describe the specific steps *you* took — not what "we" did as a vague group, but what you personally decided, proposed, built, or changed. Use concrete verbs: redesigned, negotiated, escalated, rebuilt. If other people were involved, say so, but keep the spotlight on your own decisions and reasoning. This is what interviewers are actually scoring: your judgment, not just your effort.
+
+### Result
+
+Close with what happened — ideally something you can measure or point to concretely. A number is best ("cut average response time from 11 hours to 3.5"), but a concrete outcome works too ("the client renewed the contract the following quarter"). Where it's honest to do so, add a short reflection: what you learned, or what you'd do differently. A result with a touch of self-awareness reads as more credible than one that sounds like a highlight reel.`,
+      },
+      {
+        heading: "A full STAR answer, worked example",
+        body: `Here's a complete answer to a common prompt: *"Tell me about a time you had to resolve a conflict within your team."* The candidate, Priya Nandakumar, is a fictional operations manager interviewing for a role at a fictional company, Northwind Freight — this is an illustrative example, not a real case.
+
+**Situation:** "At my last job, I managed a six-person warehouse scheduling team. Two of my senior schedulers kept disagreeing, in front of the rest of the team, about a recurring weekend staffing shortfall — one wanted mandatory overtime, the other wanted temp hires, and it had been simmering for a few weeks."
+
+**Task:** "As their manager, it was on me to resolve the disagreement before it hurt morale or the schedule itself, and to do it without making either person feel overruled in front of the team."
+
+**Action:** "I pulled both of them into a separate meeting and asked each to walk me through the actual cost and risk of their approach, not just their preference. It turned out the overtime option was cheaper short-term but had caused burnout complaints the previous quarter — something neither had framed out loud. I proposed a middle option: temp staff for the two highest-shortfall weekends each month, overtime only as backup, and asked them to co-own a one-month trial and report back on both the numbers and the team's reaction."
+
+**Result:** "The hybrid approach cut the weekend shortfall by about 80%, overtime complaints stopped coming up in our monthly check-ins, and the two schedulers started co-presenting changes to the team instead of debating them in front of it. It became our standard process for the next two years. Looking back, I should have set up that joint problem-solving conversation earlier, before the disagreement became visible to the whole team."
+
+Notice what this answer does. It's specific — named roles, an actual trial period, an approximate number. It keeps the spotlight on Priya's own decisions and reasoning instead of a vague "we worked it out." And it ends with both a measurable result and a genuine reflection, not a flawless-hero narrative — which is exactly what makes it believable.`,
+      },
+      {
+        heading: "Common STAR mistakes (and how to fix them)",
+        body: `A few patterns show up again and again in weak STAR answers. Watch for these in your own practice.
+
+- **Rambling through the Situation.** Spending two minutes on backstory nobody asked for pushes your actual Action and Result into the final ten seconds, where they get rushed or cut off. Cap the Situation and Task combined at about 20–30 seconds.
+- **Skipping the Task.** Jumping straight from Situation to Action makes it unclear what you were actually responsible for versus what simply happened around you. Name your specific responsibility in one sentence before describing what you did about it.
+- **Describing the team's actions, not yours.** "We decided," "we fixed it," "we pulled together" — with no clarity on what *you* specifically contributed. Interviewers are evaluating you, not your former team. Say "I proposed" and "I asked" where it's true.
+- **No measurable Result.** Ending on "and it worked out well" instead of a concrete outcome leaves the interviewer to assume the impact was small. Even an approximate number or a specific before/after beats a vague summary.
+- **Picking an example with no real difficulty.** If there was no decision to make, no tension to navigate, and no risk of it going wrong, the Action section has nothing to show. Choose stories where the easy option wasn't obviously correct.
+- **Memorizing word-for-word.** A fully scripted answer sounds stiff, and it falls apart the moment an interviewer asks a follow-up you didn't rehearse for. Memorize the shape of the story — the S/T/A/R beats — not the sentences.
+- **Reusing one story for every question.** Forcing your best anecdote to answer a question it doesn't really fit reads as evasive. Build more than one story so you can match the example to the question actually asked.`,
+      },
+      {
+        heading: "How to prepare STAR answers before the interview",
+        body: `You shouldn't be building STAR answers for the first time while the interviewer is looking at you. Prepare in five steps.
+
+1. **Build a story bank, not a script.** List 8–10 situations from your last couple of roles that cover the categories interviewers come back to again and again: a conflict, a mistake or failure, leading without formal authority, a tight deadline, disagreeing with a manager, and a time you went beyond what was asked.
+2. **Write each one as bullet points, not sentences.** For each story, jot down the S/T/A/R beats in a few words each — not full sentences you'd memorize. This keeps the delivery natural and means a follow-up question won't derail you, because you know the shape of the story, not a script.
+3. **Quantify the Result, even roughly.** If you don't have an exact number, estimate: "roughly a third fewer tickets" beats "things got better." Check old performance reviews, project notes, or emails if you genuinely don't remember — the numbers are often still there.
+4. **Practice out loud and time yourself.** Aim for 60–90 seconds per answer. Say your bullet points out loud rather than reading them, and record yourself once if you can — most people are surprised by how much longer the Situation runs than they think.
+5. **Map your strongest stories to the job description.** Behavioral questions are usually written to probe for the specific competencies a role needs — ownership, cross-functional work, operating with ambiguity. Before the interview, decide which of your prepared stories best demonstrates each competency the posting emphasizes, so you're not searching for one on the spot.`,
+      },
+      {
+        heading: "Preparing with LaunchCV",
+        body: `If writing a full story bank from scratch feels like a lot to do alone, [LaunchCV's AI Interview Prep](/features/interview-prep) reads your resume and the job description and writes the questions you're most likely to be asked for that specific role, along with an outline pointing to which of your own experiences answers each one — so you're not starting the story-bank step from a blank page. For the fuller preparation timeline around the interview itself, see our guide on [how to prepare for a job interview with AI](/blog/how-to-prepare-for-a-job-interview-with-ai), which walks through research, practice, and a final mock-interview day.
+
+Either way, the STAR method itself doesn't require any tool — a notebook and the five steps above are enough. What it requires is doing the preparation *before* you're in the chair, so that on the day, you're recalling a story you've already shaped instead of building one from nothing while the interviewer waits.`,
+      },
+    ],
+    faqs: [
+      { q: "What does STAR stand for in an interview?", a: "STAR stands for Situation, Task, Action, and Result — a four-part structure for answering behavioral interview questions. You briefly set the scene (Situation), state what you were specifically responsible for (Task), describe what you actually did (Action), and close with a measurable outcome (Result)." },
+      { q: "When should I use the STAR method?", a: "Use it for behavioral questions — ones that ask about a past experience, usually starting with 'Tell me about a time...' or 'Give me an example of...'. It's less suited to purely technical questions or straightforward 'how would you approach X' hypotheticals, which call for a clear process rather than a story." },
+      { q: "How long should a STAR answer be?", a: "Aim for roughly 60 to 90 seconds, closer to two minutes for a complex example. Keep Situation and Task brief — about 20 to 30 seconds combined — so Action and Result, the parts interviewers are actually evaluating, get the most airtime." },
+      { q: "What if I don't have a good example for the question asked?", a: "Pick the closest match from your story bank and adapt it honestly, or briefly say so and pivot to the nearest relevant situation, for example from a different team if you haven't managed direct reports yet. Don't invent a story: a thin but true answer is more credible than a fabricated impressive one, and it holds up better under follow-up questions." },
+      { q: "Is the STAR method only for job interviews?", a: "It's most associated with job interviews, but the same structure works for performance review self-assessments, promotion cases, and any time you need to describe your impact concisely. The underlying discipline, a specific situation, clear ownership, concrete action, and a measurable result, is useful anywhere you're asked to prove impact rather than claim it." },
+      { q: "Can I bring notes into the interview to remember my STAR stories?", a: "Yes. Brief, glanceable notes, a short list of story titles and their key numbers, read as prepared rather than unprepared. Avoid full sentences you might be tempted to read verbatim; the goal is a prompt to jog your memory, not a script to recite." },
     ],
   },
 
@@ -860,6 +966,389 @@ Keywords aren't about gaming the system — they're about making sure a recruite
       { q: "How does an AI resume builder write bullet points?", a: "You describe your work in plain language, like I managed social media for a startup, and the AI adds a strong action verb, layers in specifics from context you provide, quantifies outcomes where data exists, and aligns the language to your target role. The rough input becomes a polished, professional bullet." },
       { q: "Are AI resume builders better than hiring a professional writer?", a: "For most job seekers, yes. Professional writers charge $200 to $700 and bring human judgment, but AI builders cost far less, produce results in minutes, and can be re-tailored for every application. Human writers still add value for very senior executives and unusual career pivots where personal branding is the main differentiator." },
       { q: "What should I look for in an AI resume builder?", a: "Prioritize ATS-safe templates with no tables or columns, JD alignment that analyzes keyword gaps against a pasted job description, and a real-time preview of the final PDF. Also look for PDF and DOCX export, industry-specific templates, voice input, and strong privacy so your data isn't used to train models without consent." },
+    ],
+  },
+
+  {
+    slug: "cv-vs-resume",
+    coverImage: "/images/product/resume-templates.svg",
+    coverAlt:
+      "Side-by-side comparison of a short, single-page US-style resume and a long, multi-page academic CV with sections for publications and research.",
+    title: "CV vs. Resume: What's the Actual Difference (and Which One Do You Need)?",
+    description:
+      "“CV” and “resume” get used as if they're interchangeable, but in the US they're genuinely different documents. Here's the real difference in length and purpose, when a US employer actually wants a CV, and how the terms diverge by country.",
+    date: "2026-11-04",
+    readingTime: 9,
+    category: "Resume Tips",
+    tags: ["cv vs resume", "resume vs cv", "what is a cv", "curriculum vitae", "resume format"],
+    seoTitle: "CV vs Resume: What's the Real Difference? (2026 Guide)",
+    seoDescription:
+      "CV vs resume, explained clearly: the real difference in length and purpose, when a US employer actually means a CV, and how the terms differ by country.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "CV vs. resume: the short answer",
+        body: `If you're applying for a job in the United States, you almost always want a **resume** — a tight, one-to-two-page summary of your work experience, tailored to the specific job you're applying for. A **CV** (curriculum vitae, Latin for "course of life") is a different, much longer document that lists your entire academic and professional history — every degree, publication, presentation, and grant — and in the US it's used mainly in academia, scientific research, and medicine, not for a typical job application.
+
+Outside the US, though, "CV" usually doesn't mean that long academic document at all. In the UK, Ireland, and across most of continental Europe, Australia, and New Zealand, "CV" is simply the everyday term for what Americans call a resume — the short document you send for almost any job, not just academic ones. That single naming difference is the real source of the confusion, and it's genuinely worth understanding, especially if you've studied, worked, or applied internationally.`,
+      },
+      {
+        heading: "What a resume actually is (the US standard)",
+        body: `A **resume** is a concise, tailored pitch for one specific job. In the US, that means:
+
+- **Length:** one page for early-career candidates, stretching to two pages for people with roughly 10+ years of experience. It almost never runs longer.
+- **Content:** a short professional summary, your most relevant work experience (reverse-chronological), education, and a skills section — only the parts that support the job you're applying for.
+- **Tailoring:** rewritten or adjusted for each application. The version you send for a product manager role should look different from the one you send for a data analyst role, even if both draw from the same underlying experience.
+- **Purpose:** get you an interview for *this* job, not document your entire career.
+
+This is the format that US recruiters, hiring managers, and Applicant Tracking Systems (ATS) are built around. If you want the formatting details — single-column layout, standard section headings, file format — see our guide on [how to write an ATS-friendly resume](/blog/how-to-write-an-ats-friendly-resume).`,
+      },
+      {
+        heading: "What a true CV actually is",
+        body: `A **true CV**, in the sense Americans use the word, is a comprehensive, chronological record of your entire academic and professional life. It isn't trimmed down for a specific application — it's added to over time as your career grows.
+
+A CV typically includes sections a resume never has:
+
+- **Education**, listed in full detail, often including thesis or dissertation titles.
+- **Publications** — papers, books, and chapters, usually in a formal citation style.
+- **Presentations and talks** given at conferences or institutions.
+- **Research experience**, grants, and fellowships.
+- **Teaching experience**, if applicable.
+- **Professional affiliations, honors, and awards.**
+- Sometimes a **references** section listed directly on the document.
+
+There's no real page limit — a CV for an early-career PhD might run 3–4 pages, and a senior professor's CV can run 15–20 pages or more. It isn't meant to be scanned in seconds; it's meant to be a complete record that a hiring committee can review in depth.
+
+**Who actually uses a CV like this:** academics and faculty candidates, PhD and postdoc applicants, researchers submitting grant or fellowship applications, physicians and other clinical/scientific roles, and people applying to some government, international-organization, or research-adjacent positions where a full career history is the point.`,
+      },
+      {
+        heading: "Why “CV” and “resume” get used interchangeably",
+        body: `Two separate things are going on at once, and they compound.
+
+First, **casual usage**: plenty of US job seekers say "CV" informally when they mean their resume — it's common in speech, on LinkedIn, and on international job boards, even where the document itself is a standard one-to-two-page resume.
+
+Second, **a real international naming difference**: in the UK, Ireland, most of Europe, Australia, New Zealand, and many other countries, "CV" is just the standard name for the short job-application document — not a synonym reserved for academia. There usually isn't a separate word for it; "resume" is rarely used at all. So when someone from one of those countries says "CV," they typically mean exactly what a US resume is, not the long-form academic document.
+
+Add to that generic form labels — job boards and tools that simply say "Resume/CV" as one combined upload field regardless of which you're sending — and it's easy to see why the terms blur together, even though the US distinction is real and matters for how your document should actually look.`,
+      },
+      {
+        heading: "When a US job posting says “CV,” what do they actually want?",
+        body: `Look at the context of the role, not just the word:
+
+1. **Academic, research, scientific, or clinical/medical roles** — including faculty positions, postdocs, lab positions, and most fellowship or grant applications — usually do mean an actual long-form CV. Follow the specific instructions in the posting; academic hiring committees are often precise about what they expect.
+2. **General industry, business, tech, or corporate roles** that happen to say "please submit your CV" usually just mean a resume. Plenty of US job postings, especially at companies with a global presence or international recruiters, use "CV" loosely as a synonym — and the application is still processed through an ATS built around resume-length documents.
+3. **If you genuinely can't tell**, default to the standard resume format for anything outside academia, medicine, or formal research. A one-to-two-page, tailored resume is almost never the wrong call for a non-academic US role; a 10-page document almost always is.
+
+When in doubt and the stakes are high, it's reasonable to ask the recruiter directly which format they expect — that's a normal question, not an awkward one.`,
+      },
+      {
+        heading: "CV vs. resume by country: a naming convention, not a universal format",
+        body: `It helps to separate two different things: what the document is called, and how long and detailed it actually is.
+
+In the **United States**, the words map to two different documents: "resume" is the short, tailored one, and "CV" is reserved for the long academic/research record.
+
+In the **UK, Ireland, and much of continental Europe, Australia, and New Zealand**, "CV" is the everyday word for the short, general job-application document — functionally the same thing as a US resume, usually a similar one-to-two-page length for most roles. "Resume" isn't the common term there.
+
+Beyond that general pattern, conventions vary more than it's useful to generalize about, and they can shift over time and by industry even within a single country. A few honest caveats:
+
+- Academic and research CVs exist internationally too, under the same name — so even outside the US, "CV" can mean either the short general document or a longer academic one, depending on context.
+- Specific formatting customs (for example, whether to include a photo, date of birth, or nationality) differ by country and have been changing, partly due to anti-discrimination and privacy rules. Don't assume a specific country's convention from memory — check a few real, recent job postings or ask someone who hires locally.
+- If you're applying internationally and unsure what's expected, the safest move is to mirror the format used in recent postings for that country and role, or ask directly, rather than guess at a "rule" for an entire country or region.`,
+      },
+      {
+        heading: "The differences at a glance",
+        body: `| | US resume | True CV (academic/research) | CV in the UK/Europe (general use) |
+|---|---|---|---|
+| Typical length | 1 page (2 for senior candidates) | Several pages, grows over a career | 1–2 pages |
+| Purpose | Tailored pitch for one specific job | Complete record of education, research, and publications | Standard job application, equivalent to a US resume |
+| Updated how | Rewritten/adjusted per application | Added to over time, rarely trimmed down | Updated and tailored per application |
+| Used for | Most US jobs | Academia, research, medicine, fellowships/grants | Most jobs outside the US |
+| Typical sections | Summary, experience, education, skills | Education, publications, presentations, grants, teaching, affiliations | Summary, experience, education, skills |`,
+      },
+      {
+        heading: "Which one should you use? A quick decision guide",
+        body: `- **Applying to a standard job in the US** → send a resume. Keep it to one or two pages and tailor it to the posting.
+- **Applying for a faculty, postdoc, research, or grant/fellowship role** (in the US or elsewhere) → send a true, full-length CV.
+- **Applying to a job outside the US where the posting asks for a "CV"** → for most non-academic roles, that's just their word for the short document — send a concise, resume-style document formatted for that market, not a long academic CV.
+- **Applying internationally and genuinely unsure which they mean** → default to the shorter, tailored document. It's what most ATS software and recruiters — in the US and increasingly elsewhere — are built to read quickly, and it's easy to expand later if someone specifically asks for more.
+
+If you need to check that a resume-style document is actually readable by the software that screens it first, our [ATS Score Checker](/free-ats-check) scores yours in about ten seconds and flags anything a parser would struggle with.`,
+      },
+      {
+        heading: "Turning one document into the other",
+        body: `You don't have to start from scratch if you have one and need the other.
+
+**From CV to resume:** pull your two or three most recent and most relevant roles. Cut the publication list down to a handful that are directly relevant (or drop it entirely for a non-research role). Rewrite research-style descriptions as accomplishment statements with concrete outcomes, and add a dedicated skills section pulled from the job description. The goal is compression, not summarization — most of a CV's content simply doesn't belong on a resume at all.
+
+**From resume to CV:** expand each role with full dates and more detail, and add the sections a resume doesn't have — Education (with thesis/dissertation titles), Publications, Presentations, Grants and Fellowships, Teaching Experience, and Professional Affiliations. Length stops being a constraint; completeness becomes the goal instead.
+
+If you're converting a long CV down into a tailored, ATS-ready resume for a US-style job search, that compression step — picking the right experience and rewriting it as tight, quantified bullets — is exactly what the [resume builder](/features/resume-builder) is built to help with, and [JD alignment](/features/jd-alignment) will show you which of the job posting's keywords to prioritize once you're down to resume length.`,
+      },
+      {
+        heading: "Send the right document the first time",
+        body: `The words "CV" and "resume" get tangled because, depending on where you are and what role you're applying for, they can mean genuinely different things — or the exact same thing. For nearly every non-academic job in the US, the answer is simple: write a tailored, one-to-two-page resume, not a long-form CV.
+
+LaunchCV's [resume builder](/features/resume-builder) and [ATS Score Checker](/free-ats-check) are built around that US-style resume — Letter-size pages by default, with ATS scoring calibrated to the short, tailored format US employers and their screening software expect. If your target role genuinely calls for a full academic CV, the structure in this guide is what to build around by hand; the tools here are aimed squarely at getting a resume-style document past the filter and in front of a person.`,
+      },
+    ],
+    faqs: [
+      { q: "Is a CV the same as a resume?", a: "Not in the US. A resume is a short, one-to-two-page document tailored to a specific job, while a true CV is a long, comprehensive record of your entire academic and research history with no real length limit. Outside the US, though, “CV” is often just the standard word for the short document — functionally the same thing as a US resume." },
+      { q: "Does the US use “CV” or “resume”?", a: "The US uses “resume” for the standard job-application document that most employers and ATS software expect. “CV” is reserved for a different, much longer document used mainly in academia, scientific research, and medicine — though some US job seekers also use “CV” casually to mean their resume." },
+      { q: "What does it mean when a US job posting asks for a “CV”?", a: "It depends on the role. For academic, research, scientific, or clinical positions, it usually means an actual full-length CV. For general industry, business, or tech roles, “CV” is often used loosely as a synonym for resume, especially by companies with international recruiters — in that case, a standard one-to-two-page resume is almost always the right call." },
+      { q: "Is a CV longer than a resume?", a: "A true, academic-style CV is longer than a resume, often running several pages and growing throughout your career, since it documents your complete education, publications, and research history. A resume stays short — one page for early-career candidates, up to two for very experienced ones — because it's a tailored pitch for one job, not a full record." },
+      { q: "Do UK employers use resumes or CVs?", a: "UK employers (and most employers in Ireland and much of continental Europe, Australia, and New Zealand) use the word “CV” for what Americans call a resume: a short, one-to-two-page document used for most jobs, not just academic ones. The word “resume” is rarely used there — the length and purpose are what match a US resume, not the long academic CV." },
+      { q: "Should international applicants send a CV or a resume for a US job?", a: "Send a short, tailored, resume-style document — one to two pages, formatted the way US employers and ATS software expect — even if you'd call that same document a “CV” at home. Reserve a long, academic-style CV for US academic, research, or clinical roles that specifically ask for one." },
+    ],
+  },
+
+  {
+    slug: "harvard-resume-template-vs-google-docs",
+    coverImage: "/images/product/resume-templates.svg",
+    coverAlt:
+      "Clean, single-column, ATS-safe resume templates in LaunchCV, built around the same reverse-chronological, no-graphics principles as the traditional \"Harvard-style\" resume format.",
+    title: "Harvard Resume Template vs. Google Docs Resume Template (2026)",
+    seoTitle: "Harvard Resume Template vs. Google Docs Template (2026)",
+    description:
+      "Most people searching \"Harvard resume template\" or \"Google Docs resume template\" just want a clean, professional resume that actually gets read. Here's the real format behind both searches, and how to build it for free without hunting down a PDF.",
+    date: "2026-11-04",
+    readingTime: 7,
+    category: "Resume Tips",
+    tags: ["harvard resume template", "google docs resume template", "ats-friendly resume format", "traditional resume format", "resume template"],
+    seoDescription:
+      "What \"Harvard resume template\" and \"Google Docs resume template\" searches are really after: a clean, ATS-safe format — and how to build one for free.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "What you're actually looking for when you search \"Harvard resume template\"",
+        body: `A lot of people search for a "Harvard resume template" every year, but very few of them actually need a PDF from Harvard's Office of Career Services. What they want is something more specific: a resume that looks the way a serious, respected institution would expect a resume to look — plain, confident, and unmistakably professional.
+
+That instinct is correct, even if the search phrase is a bit of a shorthand. "Harvard resume template" has come to stand in for a whole category of resume: reverse-chronological, black text on a white page, no photo, no icon graphics, no colored sidebar or "modern" two-column layout. It's the format career offices at top universities and experienced recruiters alike have recommended for decades, long before applicant tracking software existed — and it still works today, for a slightly different reason.
+
+**To be direct: LaunchCV is not affiliated with Harvard, and this post doesn't link to or distribute Harvard's own resume guide.** What follows is a plain description of the well-established *style* that search is really pointing at, why that style holds up, how it compares to the templates built into Google Docs, and how to build a resume that follows the same principles without tracking down a specific document.`,
+      },
+      {
+        heading: "The resume format Harvard's Office of Career Services is known for",
+        body: `Harvard's Office of Career Services, like most university career centers, publishes its own resume-writing guidance for students. It isn't a secret or a proprietary design — it's standard, widely taught advice that career counselors, outplacement firms, and professional resume writers have converged on for years. That convergence is exactly why "Harvard resume template" gets used as a stand-in for "the correct, traditional resume format," rather than for one specific file.
+
+The principles behind that style are genuinely well established, not obscure:
+
+- **Reverse-chronological order.** Your most recent job comes first, in every section, so nobody has to hunt for your current role.
+- **A plain, single-column layout.** No sidebars, no text boxes, no colored panels — just contact info, then a clean sequence of sections reading top to bottom.
+- **Conventional section headings.** *Education*, *Experience*, *Skills* — not creative relabeling.
+- **Clean, standard fonts.** Times New Roman, Georgia, Calibri, or Arial, usually 10–12pt, with consistent spacing and no decorative flourishes.
+- **No photo, no icons, no graphics.** No headshot, no "skill level" bar charts, no logos.
+- **Bullet points that lead with an action verb and end with a result.** "Led a 4-person team that cut onboarding time from three weeks to nine days" rather than "Responsible for onboarding."
+- **One page for most students and early-career candidates**, extending to two only when the experience genuinely warrants it.
+
+None of this is complicated, and none of it is unique to Harvard — you'll find nearly identical advice from other university career centers and from most professional resume-writing guides. What makes it durable is that it's optimized for how a resume is actually read: a fast skim by a recruiter, not a design showcase.`,
+      },
+      {
+        heading: "Why a plain, ATS-safe format beats a flashy template",
+        body: `Templates with colored sidebars, icon-based skill bars, and infographic-style elements are everywhere, and it's easy to see the appeal — they look modern, and they stand out in a stack of plain text resumes. The problem is *where* they stand out: not with the person deciding whether to interview you, but with the software that decides whether a person ever sees the resume at all.
+
+Most mid-size and large employers run every online application through an Applicant Tracking System (ATS) before a recruiter opens it. We cover exactly how that parsing works in our guide on [writing an ATS-friendly resume](/blog/how-to-write-an-ats-friendly-resume), but the short version is: ATS software reads a resume roughly top to bottom, column by column, cell by cell. A two-column layout with your skills in a sidebar can get read in the wrong order, or dropped entirely. A table used to line up dates can lose content. A headshot or a "proficiency" bar chart contributes nothing, because there's no field for the parser to put it in.
+
+A plain, single-column, traditional resume avoids all of that by construction — there's nothing unusual there to misread. And because the same plainness that helps the software also helps the human, you're not trading one audience for the other. A recruiter can find your most recent title and top skill in a glance, the same way a parser can extract them cleanly. One format serves both readers.`,
+      },
+      {
+        heading: "What about Google Docs resume templates?",
+        body: `Google Docs is the other place a huge number of job seekers start, for understandable reasons: it's free, it's already open in your browser, and the built-in template gallery (Docs → Template gallery → Resumes) gives you something to fill in instead of a blank page.
+
+The tradeoff is the same one described above, just less obvious at a glance. Several of Google Docs' own resume templates — the ones with a shaded sidebar for contact details and skills, or a two-column layout designed to fit more on one page — are built the same way as the flashy templates above: with tables or text boxes used for layout. That's fine for a document a person opens directly, like one you email straight to a hiring manager or print for a portfolio review. It's a real risk for anything you submit through an online application form or job board, where an ATS reads it first.
+
+None of this means avoid Google Docs. It means pick carefully. The plainest, single-column templates in that gallery are genuinely fine, and a blank Google Doc formatted by hand in the style above works just as well as anything else. The ones to be cautious with are the ones that look the most like a "template" — a sidebar, an accent-colored header band, a two-column skills grid — because that visual structure is usually built on exactly the layout tricks an ATS struggles with.`,
+      },
+      {
+        heading: "Getting the same clean result without starting from a blank page",
+        body: `You don't need to track down a specific document or second-guess which Google Docs template is secretly a table in disguise. LaunchCV's resume templates are built around the same principles that style is known for — reverse-chronological order, a single column, standard section headings, no graphics — and every one of them is checked to parse cleanly in major ATS platforms, not just designed to *look* clean.
+
+The practical difference is what happens after you pick a layout. Instead of staring at a blank template wondering how to phrase your experience, you describe what you did in plain language and the [AI resume builder](/features/resume-builder) turns it into the action-verb, quantified-result bullets that format is known for. When you're done, run it through the [free ATS score checker](/free-ats-check) to confirm it reads cleanly before you submit it anywhere — the same quick check whether you built the resume with us or just want to sanity-check a Google Doc you already wrote.`,
+      },
+      {
+        heading: "Quick checklist: is your resume in the traditional, ATS-safe format?",
+        body: `✓ Reverse-chronological work history, most recent role first.
+✓ Single column — no sidebars, text boxes, or tables.
+✓ Standard headings: Work Experience, Education, Skills.
+✓ One clean, standard font throughout, 10–12pt.
+✓ No photo, icons, color blocks, or graphics.
+✓ Every bullet starts with an action verb and includes a measurable result.
+✓ One page if you have under roughly 8 years of experience, two at most beyond that.
+✓ Saved as a text-based PDF unless the application specifically asks for DOCX.`,
+      },
+    ],
+    faqs: [
+      { q: "Can I download Harvard's actual resume template?", a: "We don't host, copy, or distribute Harvard's own resume guide, and LaunchCV isn't affiliated with Harvard. What most people searching for it actually want is the style it's known for — plain, reverse-chronological, no graphics — not one specific file. You can build a resume that follows those same principles with any plain template, including LaunchCV's." },
+      { q: "What makes a resume look like a traditional \"Harvard-style\" resume?", a: "Reverse-chronological work history, a single-column layout, standard section headings like Experience and Education, a clean standard font, no photo or graphics, and bullet points that lead with an action verb and end with a measurable result. It's a well-established, widely taught format, not a proprietary design." },
+      { q: "Are Google Docs resume templates ATS-friendly?", a: "It depends on the specific template. The plain, single-column templates in Google Docs' gallery are fine for ATS. The ones with a shaded sidebar, a two-column skills grid, or an accent-colored header band are usually built with tables or text boxes, which many Applicant Tracking Systems misread or drop entirely." },
+      { q: "Is a plain resume format actually better than a designed one?", a: "For almost any resume submitted through an online application or job board, yes, because an ATS reads it before a person does and plain formatting parses reliably. A more visually designed resume can still make sense for creative portfolio submissions reviewed directly by a person, outside an ATS." },
+      { q: "Is LaunchCV affiliated with Harvard?", a: "No. LaunchCV is an independent resume and job-search tool. We reference the well-known resume style associated with Harvard's career office because it describes a widely taught, traditional format — we don't host, copy, or claim any connection to Harvard's own materials." },
+      { q: "What file format should I save my resume as?", a: "Save a text-based PDF unless the job application specifically asks for a Word document (.docx). A text-based PDF preserves your formatting while remaining fully readable by ATS software, as long as the underlying layout is single-column with no tables or embedded images of text." },
+    ],
+  },
+
+  {
+    slug: "thank-you-email-after-interview",
+    coverImage: "/images/product/interview-prep.svg",
+    coverAlt:
+      "LaunchCV AI interview prep scoring a STAR-method answer to a behavioral question with clarity, relevance, impact, and structure ratings.",
+    title: "Thank-You Email After an Interview: Timing, What to Say, and 3 Templates",
+    seoTitle: "Thank-You Email After an Interview: Timing & Templates",
+    description:
+      "When to send a thank-you email after an interview, what to include, what to avoid, and 3 original templates for a standard, panel, and second-round interview.",
+    date: "2026-11-07",
+    readingTime: 8,
+    category: "Interview Prep",
+    tags: [
+      "thank you email after interview",
+      "interview thank you note",
+      "post-interview email",
+      "interview follow-up email",
+      "job interview tips",
+    ],
+    seoDescription:
+      "A practical guide to the thank-you email after an interview — same-day vs. next-day timing, what to include, what to avoid, and 3 ready-to-adapt templates.",
+    author: {
+      name: "Nazir Elmurodov",
+      role: "Founder, LaunchCV",
+      bio: "Nazir founded LaunchCV after watching qualified candidates get filtered out by applicant tracking systems. He writes about resume optimization, ATS parsing, and running a modern job search.",
+    },
+    sections: [
+      {
+        heading: "Should you send a thank-you email after an interview?",
+        body: `Yes — for every interview, at every stage, to every interviewer you spoke with one-on-one. It costs ten minutes and it is the one piece of post-interview follow-up that is genuinely expected in a modern job search. Skipping it rarely sinks a strong candidacy, but sending a thoughtful one removes any doubt about your interest and gives you one more chance to make your case while the conversation is still fresh for everyone involved.
+
+Think of it less as etiquette and more as unfinished business. An interview is a conversation with gaps — a point you phrased badly, a tangent that cut off your strongest answer, a question you answered too generally because you were put on the spot. The thank-you email closes those gaps, not by writing a second interview, but by reinforcing the two or three points that actually matter to whoever writes up the feedback.`,
+      },
+      {
+        heading: "Timing: same day or the next morning?",
+        body: `Send it within 24 hours. Both same-day and next-morning work; which one reads better depends on when the interview happened, not on some fixed rule.
+
+- **Interview finished in the morning or early afternoon:** send it that evening, once you've had a little time to think it through rather than firing something off five minutes after you walk out.
+- **Interview finished late in the day:** it's fine — often better — to send it the next morning. A 9 or 10 a.m. email lands with the rest of that day's messages instead of competing with someone's commute home.
+- **Panel or multi-interview day:** send each person their note within 24 hours of meeting *them*, not 24 hours after the last person you spoke with that week. If you met four people across one Tuesday, four emails go out by Wednesday — not after you're back from the next round.
+
+What matters more than the exact hour is that it lands before a decision gets made. Some teams debrief the same afternoon; others take a week. You can't control that, so write it while the details are sharp and send it within a day so it reads as prompt, not an afterthought.`,
+      },
+      {
+        heading: "What to actually include",
+        body: `A good thank-you email does three things in well under 150 words: references something specific from the conversation, restates your interest in terms grounded in what you just heard, and — if something came up that could read as a concern — addresses it directly instead of hoping it gets forgotten.
+
+### A specific detail from the conversation
+
+Generic gratitude is forgettable. Specific gratitude is proof you were actually in the room and paying attention. Pick one real moment, not the small talk about the weather or the office dog:
+
+- A technical or operational problem they described, and how you'd approach it
+- A detail about the team's roadmap, or a project you'd likely inherit
+- A follow-up thought on something you answered, now that you've had time to think
+- Something the interviewer said about their own work that you want to build on
+
+"It was great meeting you" tells them nothing they didn't already know. "Your point about the backlog of manual QA checks stuck with me — it's close to the testing bottleneck I fixed at my last job, and I'd love to dig into that more if I join" tells them you were listening and already thinking ahead about the work.
+
+### A grounded restatement of interest
+
+Don't just say you're excited — say why, tied to something you learned during the conversation. "After hearing how the team is approaching the Q2 platform migration, I'm even more interested in this role" lands better than "I am very excited about this opportunity," mostly because the second sentence could have been written before the interview ever happened, and it reads that way.
+
+### Address any concern head-on
+
+If the interviewer pushed on a gap — a skill you haven't used recently, a tool you picked up on the job rather than formally, a stretch between your experience level and the role — don't leave it hanging and hope it quietly resolves itself. One or two sentences that acknowledge it and add context are worth far more than silence:
+
+"You asked about my experience leading a team directly rather than cross-functionally — I wanted to add that I ran point on hiring and weekly 1:1s for two contractors during our platform migration, even though 'manager' wasn't part of my title at the time."
+
+A sentence like that can genuinely move a borderline case. Interviewers often raise a concern out loud precisely because they're hoping you'll talk them out of it.`,
+      },
+      {
+        heading: "What to avoid",
+        body: `- **Don't restate your resume.** They already have it. Add new context, don't repeat your bullet points back to them.
+- **Don't write a second cover letter.** A few short paragraphs is plenty. If it takes more than 30–45 seconds to read, cut it down.
+- **Don't make salary, start date, or "next steps" the main point.** A brief, low-pressure offer — "happy to share references or a work sample" — is fine. A direct ask about compensation is not; save that for an actual offer.
+- **Don't send the exact same email to every panel interviewer.** If two of them compare notes and see identical phrasing, it reads as a template and undercuts the specificity that makes the email work.
+- **Don't open with a worn-out line.** "I am writing to express my gratitude for the opportunity to interview" and "thank you for taking time out of your busy schedule" are filler every reader has seen a hundred times. Open with the specific moment instead, and let the thanks follow it rather than lead.
+- **Don't send a second follow-up within 48 hours of your thank-you note if you don't hear back.** One note is enough; status requests follow whatever timeline the recruiter already gave you.`,
+      },
+      {
+        heading: "Template 1: Standard one-on-one interview",
+        body: `Use this after a single-interviewer conversation, first round or otherwise. Swap in one real detail from your conversation and one from your own background — the brackets are there to be replaced, not filled in loosely.
+
+**Subject: Following up on our conversation about [specific project or topic]**
+
+Hi [Name],
+
+Thanks for walking me through how the team's been handling [specific challenge they described] — the part about [one concrete detail, e.g., "splitting the onboarding flow into its own service before touching the rest of the platform"] was the most useful twenty minutes of my week, honestly.
+
+It also reinforced that the problem you're solving is close to what I spent the last year on: [one concrete, one-sentence example, e.g., "cutting our own onboarding drop-off from 34% to 19% by shipping the redesign in two stages instead of one big rewrite"].
+
+One thing I didn't answer as fully as I wanted to: you asked about [specific question]. On reflection, [one or two sentences that answer it better or add context you left out].
+
+Looking forward to hearing what the next step looks like. Happy to send over [a work sample / references / a short write-up] in the meantime if that's useful.
+
+Best,
+[Your name]`,
+      },
+      {
+        heading: "Template 2: After a panel interview",
+        body: `When you meet several people together, you have two reasonable options: one email to the group if they interviewed you jointly and gave you a shared thread, or individual notes if you have separate addresses. A single well-written group email that calls out each person by name beats three generic, identical ones.
+
+**Subject: Thank you — following up after today's conversation**
+
+Hi [Name 1], [Name 2], and [Name 3],
+
+Thanks for spending the afternoon walking me through how the team works day to day — hearing three different perspectives on [specific topic, e.g., "how escalations get triaged between the platform and growth teams"] in one sitting was genuinely useful context I wouldn't have gotten from the job posting alone.
+
+[Name 2], your point about [specific detail they raised] is something I've run into directly — at my last role, I [one concrete sentence tied to that]. [Name 3], I meant to add more to my answer on [specific question] — [one or two sentences of follow-up you wish you'd said].
+
+I came away more interested in the role, especially after hearing how closely [specific team or project] ties into the day-to-day work. Let me know if there's anything else useful I can send over while you're deciding on next steps.
+
+Best,
+[Your name]`,
+      },
+      {
+        heading: "Template 3: After a second-round or final-round interview",
+        body: `By the second or final round, you've usually met more senior people, and the conversation goes deeper into specifics — a case study, team fit, or a concern from round one that's still lingering. Use this email to close a remaining gap, not to restate your overall interest again from scratch.
+
+**Subject: Thank you — a quick follow-up from today**
+
+Hi [Name],
+
+Thanks for digging into [specific scenario or case study discussed] today — walking through how you'd want someone in this role to handle [specific situation, e.g., "a conflicting priority between two stakeholders"] gave me a much clearer picture of what the first ninety days would actually look like.
+
+You asked how I'd approach [specific scenario], and I want to add one thing I didn't say as clearly as I meant to in the room: [a concrete, one- or two-sentence answer tied to a real example].
+
+I also know [earlier interviewer's name] raised [the earlier concern, stated plainly — e.g., "whether I could own vendor relationships, not just the technical side"]. Since then I've thought it through further, and [one or two sentences that genuinely address the concern with reasoning, not just reassurance].
+
+Whatever the timeline looks like from here, I'm ready to move at whatever pace works on your end. Thanks again for such a thorough conversation today.
+
+Best,
+[Your name]`,
+      },
+      {
+        heading: "A quick checklist before you hit send",
+        body: `- Spelled every name correctly, including the one you only caught once
+- Referenced a specific detail per person, not one generic line copied across emails
+- Addressed any concern that came up — directly, not vaguely
+- Kept it under 200 words and readable in under a minute
+- Double-checked the company name and role title (easy to mix up across applications)
+- Sent within 24 hours, from the email address you've used throughout the process
+
+If you prepped your answers with the [STAR method](/blog/how-to-prepare-for-a-job-interview-with-ai) going in, the thank-you email is where that preparation pays off twice — you already know which answer was strongest and which one you want a second shot at. Say the second one better here.`,
+      },
+    ],
+    faqs: [
+      { q: "Do I need to send a thank-you email after every interview round?", a: "Yes — one per interviewer, within 24 hours of meeting them, even if it's your third round with the same company. Each round is a separate data point for whoever interviewed you, and skipping a round makes your follow-up feel incomplete rather than selective." },
+      { q: "Is it better to send a thank-you email the same day or the next morning?", a: "Either works, as long as it goes out within 24 hours. If the interview ended in the morning or early afternoon, send it that evening. If it ran late in the day, a next-morning email often reads better than one sent at 9 p.m. the same night." },
+      { q: "Should I send one email to a panel or a separate note to each interviewer?", a: "Send a separate note to each interviewer when you have their individual addresses — it lets you reference something specific to each person. If you only have a shared thread, one well-written group email that calls out each person by name is the next best option." },
+      { q: "What if I don't have an interviewer's email address?", a: "Ask the recruiter or your point of contact for it before you leave, or email your recruiter and ask them to pass your thanks along if the address genuinely isn't available. A recruiter relaying a thank-you is a reasonable fallback, not a failure." },
+      { q: "How long should a thank-you email be?", a: "Under 200 words, readable in under a minute. Three short parts — a specific callback, a grounded restatement of interest, and anything you want to clarify — is plenty. Longer reads as padding, not enthusiasm." },
+      { q: "What if I forgot to send a thank-you email and it's already been a few days?", a: "Send one anyway, but skip the apology for the delay — it draws attention to something the reader may not have noticed. Lead with the specific detail and your interest, exactly as you would have on day one." },
+      { q: "Can I reuse the same thank-you email template for every interview?", a: "Not word for word. Reuse the structure — a specific callback, restated interest, and any concern addressed — but change the actual details every time. A template that reads as recognizably generic undercuts the whole point of sending one." },
+      { q: "Does a thank-you email actually change a hiring decision?", a: "It can tip a genuinely close call by removing doubt about your interest or reframing a concern that came up in the room, but it won't rescue a weak interview. Treat it as closing gaps in a strong conversation, not as a persuasion tool on its own." },
     ],
   },
 ];

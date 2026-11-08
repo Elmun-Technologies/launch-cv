@@ -734,6 +734,459 @@ export const ATS_VENDORS: AtsVendor[] = [
       },
     ],
   },
+  {
+    slug: "ashby",
+    name: "Ashby",
+    fullName: "Ashby",
+    tagline: "A resume field recruiters can turn off.",
+    summary: "A single resume-upload field that employers can make optional, a 50 MB cap that drops to 16 MB for search and autofill, and an opt-in AI review of what's on the page.",
+    metaDescription: "How Ashby handles your resume: upload and parsing size limits, accepted file types, the optional resume field, and how AI-Assisted Application Review reads it.",
+    intro:
+      "Ashby's application form can include a Resume Upload question that, where the employer keeps it, maps straight to your candidate profile. Ashby's own documentation sets limits on that upload and lets employers make it optional or run resumes through an AI reviewer. Here's what that means for your file.",
+    poster: "CRITERIA",
+    heroExample: "data-scientist",
+    facts: [
+      {
+        label: "One resume field, used once",
+        text: "Ashby's application-forms documentation describes the Resume Upload question as a single-file upload that sets the candidate's resume field, and says this question type can only be added once to a form.",
+        src: [0],
+      },
+      {
+        label: "Resumes can be optional",
+        text: "Ashby's product updates say admins can make the Resume field on an application form optional, or remove it entirely, but Ashby notes this is only supported on newly created forms.",
+        src: [1],
+      },
+      {
+        label: "Two different size limits",
+        text: "Ashby's application-forms documentation lists 50 MB as the maximum file size for a resume upload, but says a resume needs to be 16 MB or smaller for Ashby to process it for full-text search and for autofilling application fields.",
+        src: [0],
+      },
+      {
+        label: "File types accepted",
+        text: "Ashby's docs say file-upload questions take standard document, image and video formats, such as PDF, DOC, DOCX, JPG, JPEG, PNG and common video formats; a later product update added plain-text (.txt) and Markdown (.md), so those no longer need converting to PDF first.",
+        src: [0, 2],
+      },
+      {
+        label: "Application resume vs. profile resume",
+        text: "Ashby's release notes on resume display say the resume on an application and the resume on your overall candidate profile are tracked separately: updating the application's resume updates both, but deleting it leaves the candidate profile's resume in place and in use for that application.",
+        src: [3],
+      },
+      {
+        label: "AI-Assisted Application Review",
+        text: "Where an employer turns it on, Ashby's AI-Assisted Application Review checks an applicant's resume against criteria the employer defines and returns a per-criterion result, with citations recruiters can check. Ashby says the tool doesn't make the hiring decision.",
+        src: [4, 5],
+      },
+    ],
+    tips: [
+      {
+        t: "Keep the file under 16 MB",
+        d: "Ashby's upload cap is higher, but a file over 16 MB may miss out on full-text search and autofill. A text-based resume is almost always far smaller than that anyway.",
+      },
+      {
+        t: "Don't rely on the resume field alone",
+        d: "Some employers make Ashby's resume field optional. If the form also asks for a LinkedIn URL or portfolio link, fill those in too, so there's more than one way to confirm your background.",
+      },
+      {
+        t: "Write to specific criteria",
+        d: "Where AI-Assisted Application Review is on, it checks a resume against criteria the employer wrote, not a general impression. Name the skills and results from the job post directly, in similar words.",
+      },
+      {
+        t: "Stick to plain formats",
+        d: "PDF, DOC or DOCX parse the most predictably. If you only have a .txt or .md file, Ashby's file-upload fields can now take those directly.",
+      },
+    ],
+    checklist: [
+      "PDF, DOC or DOCX, not a photo or scan",
+      "File under 16 MB, well under the 50 MB cap",
+      "Resume uploaded even where the field is marked optional",
+      "LinkedIn URL or portfolio added if the form asks for one",
+      "Skills and results worded to match the post's own language",
+      "Right resume showing on the application after upload",
+    ],
+    faqs: [
+      {
+        q: "Do I have to upload a resume on Ashby?",
+        a: "It depends on the employer. Ashby lets companies make the resume field optional or remove it on newly created application forms, so some job posts may not require one. Where a resume field is shown, Ashby's docs describe it as a single-file upload.",
+      },
+      {
+        q: "What's the biggest file I can upload to an Ashby application?",
+        a: "Ashby's documentation lists 50 MB as the hard cap, but says files need to be 16 MB or smaller for Ashby to run full-text search on them and use them to autofill the application. Keep it well under 16 MB if you can.",
+      },
+      {
+        q: "Does Ashby use AI to screen resumes?",
+        a: "Only where the employer turns it on. Ashby's AI-Assisted Application Review checks resumes against criteria the employer sets and gives recruiters a per-criterion result with citations; Ashby says people still make the decision.",
+      },
+      {
+        q: "Why does my application show an old resume?",
+        a: "Ashby keeps the resume on your overall candidate profile separate from the one on a specific application. Ashby's release notes say deleting an application's resume leaves the candidate profile's resume in place and in use for that application, so check which one is attached before you submit.",
+      },
+    ],
+    sources: [
+      {
+        title: "Application Forms",
+        publisher: "Ashby Help Center",
+        url: "https://docs.ashbyhq.com/application-forms",
+        checked: C,
+      },
+      {
+        title: "Make Resume Optional for Applicants",
+        publisher: "Ashby Product Updates",
+        url: "https://www.ashbyhq.com/product-updates/make-resume-optional-for-applicants",
+        checked: C,
+      },
+      {
+        title: "Accept .txt and .md Files in Application Form File Fields",
+        publisher: "Ashby Product Updates",
+        url: "https://www.ashbyhq.com/product-updates/txt-md-application-file-field",
+        checked: C,
+      },
+      {
+        title: "Resume Display on Applications and Candidate Profiles",
+        publisher: "Ashby Product Updates",
+        url: "https://www.ashbyhq.com/product-updates/resume-display",
+        checked: C,
+      },
+      {
+        title: "AI-Assisted Application Review",
+        publisher: "Ashby Help Center",
+        url: "https://docs.ashbyhq.com/ai-assisted-application-review",
+        checked: C,
+      },
+      {
+        title: "AI-Assisted Application Review",
+        publisher: "Ashby Blog, Product",
+        url: "https://www.ashbyhq.com/blog/product/ai-assisted-application-review",
+        checked: C,
+      },
+    ],
+  },
+  {
+    slug: "smartrecruiters",
+    name: "SmartRecruiters",
+    fullName: "SmartRecruiters",
+    tagline: "A portal that signs you in with a code, not a password.",
+    summary: "A one-time passcode portal that replaced the old Smartr candidate account, what that portal shows you, and why a recruiter-entered application won't appear in it.",
+    metaDescription: "How SmartRecruiters' candidate portal works: the one-time passcode sign-in that replaced Smartr, what you can see there, and what to check before you apply.",
+    intro:
+      "SmartRecruiters moved candidates off its old Smartr account system and onto an Applicant Tracking Portal that signs you in with a one-time passcode instead of a password. Here's what changed, what the portal shows, and what to watch for.",
+    poster: "PASSCODE",
+    heroExample: "sales-representative",
+    facts: [
+      {
+        label: "Smartr is gone",
+        text: "SmartRecruiters' Smartr transition announcement says it replaced the Smartr candidate portal with a new Applicant Tracking Portal (ATP) in its April 2024 quarterly release, and that access to existing Smartr accounts ended that July.",
+        src: [0],
+      },
+      {
+        label: "No account, just a code",
+        text: "On the Applicant Tracking Portal, SmartRecruiters says candidates sign in with a one-time passcode sent to the email address they applied with, and that creating an account is no longer part of applying.",
+        src: [0],
+      },
+      {
+        label: "Not every application shows up",
+        text: "SmartRecruiters' Smartr FAQ says an application a recruiter entered by hand, or one an agency submitted on a candidate's behalf, won't appear on the Applicant Tracking Portal.",
+        src: [1],
+      },
+      {
+        label: "What the portal lets you do",
+        text: "SmartRecruiters' job-seeker resource page says a SmartRecruiters account lets you apply to roles, see whether your profile has been viewed, message the hiring team directly, and build a SmartProfile.",
+        src: [2],
+      },
+      {
+        label: "Withdrawing an application",
+        text: "To withdraw an application or remove a profile from a specific company, SmartRecruiters' help pages say to sign in with the same email used to apply, open the job, and use the withdraw option.",
+        src: [0],
+      },
+      {
+        label: "What happens if you delete your profile",
+        text: "SmartRecruiters' candidate privacy policy says a deletion request is passed on to every company you applied to, and that a company may keep some application data where its own legal obligations require it.",
+        src: [3],
+      },
+    ],
+    tips: [
+      {
+        t: "Use the email you applied with",
+        d: "The one-time passcode goes to the address on your application, not whichever inbox you check most. Keep a note of which email you used for each employer.",
+      },
+      {
+        t: "Don't expect a recruiter-entered application to show up",
+        d: "If a recruiter or agency added you to a job rather than you applying directly, SmartRecruiters says it won't appear in your portal. Contact them directly if you need to check its status.",
+      },
+      {
+        t: "Keep one SmartProfile current",
+        d: "Since your profile can be seen across more than one application, keep its summary and most recent role up to date, not just the resume file you upload for a specific job.",
+      },
+      {
+        t: "Answer custom questions as closely as the resume",
+        d: "Most applicant tracking systems add their own screening questions. Answer them specifically, using the job post's own words.",
+      },
+    ],
+    checklist: [
+      "Applied with an email address you check regularly",
+      "Noted which email goes with which employer's application",
+      "Resume saved as a clean, text-based file",
+      "SmartProfile summary and most recent role kept current",
+      "Custom screening questions answered in full",
+      "Used the portal to withdraw or update, rather than reapplying blind",
+    ],
+    faqs: [
+      {
+        q: "Why can't I log in to SmartRecruiters with my old password?",
+        a: "SmartRecruiters retired its password-based Smartr candidate account. Its own transition announcement says sign-in now works through a one-time passcode sent to the email you applied with, and access to the old Smartr portal ended in mid-2024.",
+      },
+      {
+        q: "Why don't I see an application I know I submitted?",
+        a: "SmartRecruiters says the Applicant Tracking Portal doesn't show applications a recruiter entered manually or that an agency submitted on your behalf. Contact whoever submitted it to check its status.",
+      },
+      {
+        q: "What does a SmartRecruiters account do for me?",
+        a: "Per SmartRecruiters' job-seeker resource page, it lets you apply to postings, see whether your profile was viewed, message the hiring team, and keep a SmartProfile that employers can see across applications.",
+      },
+      {
+        q: "Can I get my data removed from SmartRecruiters?",
+        a: "You can ask to delete your profile. SmartRecruiters' candidate privacy policy says the request is passed to every company you applied to, and that a company may keep some data where it has its own legal reason to.",
+      },
+    ],
+    sources: [
+      {
+        title: "Smartr Transition Announcement",
+        publisher: "SmartRecruiters Customer Community",
+        url: "https://customers.smartrecruiters.com/kb/articles/5362-smartr-transition-announcement",
+        checked: C,
+      },
+      {
+        title: "Smartr Frequently Asked Questions (FAQ)",
+        publisher: "SmartRecruiters Customer Community",
+        url: "https://customers.smartrecruiters.com/kb/categories/198-smartr-frequently-asked-questions-faq",
+        checked: C,
+      },
+      {
+        title: "SmartRecruiters for Job Seekers",
+        publisher: "SmartRecruiters",
+        url: "https://prod-syd.smartrecruiters.com/resources/job-seekers",
+        checked: C,
+      },
+      {
+        title: "Candidate Privacy Policy",
+        publisher: "SmartRecruiters",
+        url: "https://www.smartrecruiters.com/legal/candidate-privacy-policy/",
+        checked: C,
+      },
+    ],
+  },
+  {
+    slug: "jobvite",
+    name: "Jobvite",
+    fullName: "Jobvite",
+    tagline: "A short form, unless LinkedIn covers it.",
+    summary: "A Standard Career Site with only a few required fields, a resume-first tip for the fields it parses, and a LinkedIn Apply option that can waive the resume.",
+    metaDescription: "How Jobvite applications work: the Standard Career Site's required fields, why to upload your resume first, and when a LinkedIn profile can replace it.",
+    intro:
+      "Jobvite's Standard Career Site keeps its required fields short, and Jobvite's own help center tells candidates to upload a resume before filling in anything else so parsing can fill in the rest. Here's what that means, and when you can skip the upload.",
+    poster: "ORDER",
+    heroExample: "marketing-manager",
+    facts: [
+      {
+        label: "Only three required fields by default",
+        text: "Jobvite's help center says the Standard Career Site's default required fields are first name, last name and email; employers add their own custom fields and questions on top of that.",
+        src: [0],
+      },
+      {
+        label: "Upload the resume first",
+        text: "Jobvite's help center recommends uploading a resume first on a candidate record, so the system can parse details into the right fields before you fill in anything else by hand.",
+        src: [1],
+      },
+      {
+        label: "LinkedIn can stand in for a resume",
+        text: "Where an employer turns on Apply with LinkedIn, Jobvite's help center says candidates who attach a LinkedIn profile aren't required to also upload a resume.",
+        src: [0],
+      },
+      {
+        label: "Resume, cover letter and LinkedIn sit together",
+        text: "Jobvite's help center describes a Resume tab on each candidate record that holds the resume, cover letter and LinkedIn profile in one place.",
+        src: [1, 2],
+      },
+      {
+        label: "Resume-database search is a separate add-on",
+        text: "Jobvite's help center describes resume-database integrations, such as its Broadbean Search option, as a feature that needs its own partner subscription, separate from the parsing on a standard career-site application.",
+        src: [3],
+      },
+    ],
+    tips: [
+      {
+        t: "Upload before you type",
+        d: "Jobvite's own help center tells candidates to upload their resume first. Do that before touching any other field, so parsing has a clean pass at your details.",
+      },
+      {
+        t: "Don't assume LinkedIn covers everything",
+        d: "Attaching LinkedIn can waive the resume requirement, but a LinkedIn profile is rarely as detailed as a tailored resume. Upload one anyway where the option exists.",
+      },
+      {
+        t: "Keep contact details obvious",
+        d: "With only a few required fields, Jobvite leans on what parsing pulls from your resume. Put your name, email and phone in plain text at the top, not in a header or graphic.",
+      },
+      {
+        t: "Check the Resume tab's contents",
+        d: "If you can see your own record, confirm the resume, cover letter and LinkedIn link are the versions you meant to send, since Jobvite keeps all three together.",
+      },
+    ],
+    checklist: [
+      "Resume uploaded before any other field",
+      "Name, email and phone in the body, not a header",
+      "Standard section headings: Experience, Education, Skills",
+      "LinkedIn profile added, with a resume uploaded too",
+      "Cover letter attached where the form allows it",
+      "Every custom question the employer added, answered in full",
+    ],
+    faqs: [
+      {
+        q: "Do I have to upload a resume for Jobvite?",
+        a: "It depends on the employer's setup. Jobvite's help center says attaching a LinkedIn profile through Apply with LinkedIn can remove the resume requirement; outside of that, the Standard Career Site's own required fields are just first name, last name and email, so individual employers decide whether to require a resume on top.",
+      },
+      {
+        q: "Why does Jobvite ask me to upload my resume before anything else?",
+        a: "Jobvite's help center recommends uploading first so parsing can fill your details into the right fields. Filling in fields first and uploading after can leave the parsed and typed data out of sync.",
+      },
+      {
+        q: "What's in my Jobvite Resume tab?",
+        a: "Jobvite's help center describes a Resume tab on each candidate record that holds your resume, cover letter and LinkedIn profile together, so recruiters see all three in one place.",
+      },
+    ],
+    sources: [
+      {
+        title: "Standard Career Site",
+        publisher: "Jobvite Help Center",
+        url: "https://help.jobvite.com/hc/en-us/articles/13518145486365",
+        checked: C,
+      },
+      {
+        title: "Candidates Tab",
+        publisher: "Jobvite Help Center",
+        url: "https://help.jobvite.com/hc/en-us/articles/18293340437405",
+        checked: C,
+      },
+      {
+        title: "Candidate Profile Overview",
+        publisher: "Jobvite Help Center",
+        url: "https://help.jobvite.com/hc/en-us/articles/29566902803741-Candidate-Profile-Overview",
+        checked: C,
+      },
+      {
+        title: "Resume Database Integrations",
+        publisher: "Jobvite Help Center",
+        url: "https://help.jobvite.com/hc/en-us/articles/18596124778397",
+        checked: C,
+      },
+    ],
+  },
+  {
+    slug: "bamboohr",
+    name: "BambooHR",
+    fullName: "BambooHR",
+    tagline: "No built-in parsing, so the form is what gets read.",
+    summary: "No native resume parsing, a per-opening cap on repeat applications, and help pages that don't quite agree on where that cap kicks in.",
+    metaDescription: "BambooHR applicant tracking: why there's no native resume parsing, how candidates apply, the repeat-application cap, and what to check before you submit.",
+    intro:
+      "BambooHR's own hiring help pages say it doesn't parse resumes natively, so what you type into the application form carries more weight than it would on a system that reads the file for you. Here's what BambooHR's documentation says about applying, repeat applications and resumes.",
+    poster: "MANUAL",
+    heroExample: "administrative-assistant",
+    facts: [
+      {
+        label: "No built-in resume parsing",
+        text: "BambooHR's Hiring FAQ says BambooHR doesn't offer resume parsing itself, and points candidates and employers to partner integrations listed in the BambooHR Marketplace for that feature.",
+        src: [0],
+      },
+      {
+        label: "You apply through the company's own career page",
+        text: "BambooHR's help center describes candidates applying either on the company's hosted careers page or on the company's own website, through an embedded version of that same form.",
+        src: [1],
+      },
+      {
+        label: "A cap on repeat applications",
+        text: "BambooHR's Hiring FAQ says a job opening stops accepting applications once there are more than five applicants with the same phone number, or more than five with the same name plus either the same phone number or email.",
+        src: [0],
+      },
+      {
+        label: "A different number elsewhere",
+        text: "A separate BambooHR help article gives a different rule: a job opening stops accepting applications from someone who applies with the same name and phone number five times within a six-month period. The two pages don't agree on the exact threshold or window, so treat either as approximate.",
+        src: [0, 1],
+      },
+      {
+        label: "Manually added candidates are labeled differently",
+        text: "BambooHR's help center says a candidate a recruiter adds by hand, rather than one who applied directly, shows as \"Added\" instead of \"Applied,\" and notifies the job's creator and hiring lead.",
+        src: [1],
+      },
+      {
+        label: "Recruiters can update your profile after that",
+        text: "BambooHR's help center says a candidate's profile page is where recruiters update applicant details such as name, email, phone and address, and can replace an uploaded resume.",
+        src: [2],
+      },
+    ],
+    tips: [
+      {
+        t: "Fill in every field yourself",
+        d: "Since BambooHR doesn't parse resumes by default, nothing autofills your work history or education from the file you upload. Type the application form as carefully as you'd write the resume itself.",
+      },
+      {
+        t: "Attach a resume anyway",
+        d: "Even without native parsing, most BambooHR career pages still take a resume or cover letter upload. A recruiter opens and reads it directly, so it still needs to look right.",
+      },
+      {
+        t: "Keep your details consistent for this employer",
+        d: "Each company's BambooHR careers page is its own application. Use the same name, phone number and email you'd want matched to a prior application with that company.",
+      },
+      {
+        t: "Don't resubmit the same application repeatedly",
+        d: "BambooHR's help pages describe a cap on repeat applications with the same name, phone number or email on one opening. If you need to change something, look for an edit or withdraw option instead of applying again.",
+      },
+    ],
+    checklist: [
+      "Every field in the form filled in by hand, not left for parsing",
+      "Resume or cover letter attached where the form allows it",
+      "Consistent name, phone number and email used for this employer",
+      "Dates and job titles typed exactly as on your resume",
+      "No more than one application sent for the same opening",
+      "Status checked before reapplying to the same job",
+    ],
+    faqs: [
+      {
+        q: "Does BambooHR parse my resume into the application?",
+        a: "Not by default. BambooHR's own Hiring FAQ says it doesn't offer resume parsing, and that some employers add it through a Marketplace partner integration instead. Fill in the application form yourself rather than relying on the resume to do it.",
+      },
+      {
+        q: "Why was my application blocked after I tried to resend it?",
+        a: "BambooHR's help pages describe a cap on repeat applications to the same opening, based on matching name, phone number or email, though the two pages give slightly different thresholds. If you think you've hit that limit, contact the employer instead of reapplying again.",
+      },
+      {
+        q: "Can I apply on a company's own website instead of its careers page?",
+        a: "If the employer embeds BambooHR's application form on its own site, yes. BambooHR's help center describes both the hosted careers page and an embedded version as the same underlying form.",
+      },
+      {
+        q: "What does it mean if I'm marked \"Added\" instead of \"Applied\"?",
+        a: "BambooHR's help center says that label means a recruiter entered you into the pipeline by hand rather than you submitting an application yourself.",
+      },
+    ],
+    sources: [
+      {
+        title: "Hiring FAQ",
+        publisher: "BambooHR Help Center",
+        url: "https://bamboohr.screenstepslive.com/m/53914/l/1487007-hiring-faq",
+        checked: C,
+      },
+      {
+        title: "How Does a Candidate Apply for a Job Opening?",
+        publisher: "BambooHR Help Center",
+        url: "https://bamboohr.screenstepslive.com/m/53914/l/587666-how-does-a-candidate-apply-for-a-job-opening",
+        checked: C,
+      },
+      {
+        title: "Candidate's Profile",
+        publisher: "BambooHR Help Center",
+        url: "https://bamboohr.screenstepslive.com/m/53914/l/587645-candidate-s-profile",
+        checked: C,
+      },
+    ],
+  },
 ];
 
 export function getAtsVendor(slug: string): AtsVendor | undefined {

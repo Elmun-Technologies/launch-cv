@@ -4,7 +4,7 @@
  * idempotent and never touches text an editor has since rewritten.
  * Runs during `npm run build`; never fails a deploy.
  */
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import fixes from "./content-fixes.json";
 
 const FIELDS = ["title", "description", "bodyMd", "seoTitle", "seoDescription"] as const;
@@ -38,6 +38,16 @@ async function main() {
           await prisma.blogPost.update({ where: { id: row.id }, data: { [field]: value.split(fix.from).join(fix.to) } });
           changed++;
         }
+      }
+      // FAQ answers live in a JSON column; replace inside the serialized JSON so the shape is kept.
+      const from = JSON.stringify(fix.from).slice(1, -1);
+      const to = JSON.stringify(fix.to).slice(1, -1);
+      const withFaqs = await prisma.blogPost.findMany({ where: { NOT: { faqs: { equals: Prisma.DbNull } } }, select: { id: true, faqs: true } });
+      for (const row of withFaqs) {
+        const json = JSON.stringify(row.faqs);
+        if (!json.includes(from)) continue;
+        await prisma.blogPost.update({ where: { id: row.id }, data: { faqs: JSON.parse(json.split(from).join(to)) } });
+        changed++;
       }
     }
     console.log(`[content-fixes] ${changed} field(s) updated`);

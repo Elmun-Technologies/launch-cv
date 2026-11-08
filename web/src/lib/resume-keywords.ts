@@ -32,7 +32,7 @@ export type JobTerm = {
   /** Normalized key (unique within one extraction). */
   key: string;
   kind: SkillKind;
-  /** dictionary: a skills-dictionary keyword · phrase: repeated capitalized term · tool: tool-shaped or repeated name. */
+  /** dictionary: a skills-dictionary keyword · phrase: repeated capitalized term (or, in the scanner, a repeated lower-case phrase) · tool: tool-shaped or repeated name. */
   source: "dictionary" | "phrase" | "tool";
   /** Times it appears in the job description. */
   count: number;
@@ -254,8 +254,13 @@ function toolShaped(w: string): boolean {
   return false;
 }
 
-/** The terms a job description asks for, most-mentioned first. */
+/** The terms a job description asks for, most-mentioned first (at most 30). */
 export function extractJobTerms(jobDescription: string): JobTerm[] {
+  return allJobTerms(jobDescription).slice(0, MAX_TERMS);
+}
+
+/** Every term found, most-mentioned first, uncapped. */
+function allJobTerms(jobDescription: string): JobTerm[] {
   const raw = jobDescription.slice(0, MAX_JD_CHARS);
   if (raw.trim().length < 20) return [];
   const padded = ` ${tokenize(raw).join(" ")} `;
@@ -322,8 +327,7 @@ export function extractJobTerms(jobDescription: string): JobTerm[] {
       void alternatives;
       return rest;
     })
-    .sort((a, b) => b.count - a.count || (a.source === "dictionary" ? -1 : 0) - (b.source === "dictionary" ? -1 : 0) || a.term.localeCompare(b.term))
-    .slice(0, MAX_TERMS);
+    .sort((a, b) => b.count - a.count || (a.source === "dictionary" ? -1 : 0) - (b.source === "dictionary" ? -1 : 0) || a.term.localeCompare(b.term));
 }
 
 /* ── Matching against the resume ─────────────────────────────────── */
@@ -425,4 +429,238 @@ export function matchKeywords(c: ResumeContent, jobDescription: string): Keyword
   });
   const found = matches.filter((m) => m.present).length;
   return { terms: matches, found, total: matches.length, share: matches.length ? found / matches.length : 0 };
+}
+
+/* ── Job description scanner (the free /tools page) ──────────────── */
+
+/*
+ * The free keyword scanner ranks the same terms by where they appear, not only how often:
+ * a term under "Requirements" outweighs one under "Benefits", and a term in the job title
+ * outweighs both. It also picks up repeated lower-case phrases ("data pipelines" twice) that
+ * the dictionary and the capitalized-name pass miss. The editor's panel is unchanged.
+ */
+
+/** What part of the posting a line belongs to. */
+export type JdSection = "required" | "preferred" | "duties" | "general" | "company";
+
+export type ScannedTerm = JobTerm & {
+  /** required: in a requirements section or a "must" line · preferred: only in "nice to have" lines (and the company blurb) · mentioned: anywhere else. */
+  priority: "required" | "preferred" | "mentioned";
+  /** In the posting's first line (usually the job title). */
+  inTitle: boolean;
+  /** Ranking weight: mentions weighted by section, plus the title bonus. */
+  score: number;
+  /** Only set when resume text was given. */
+  present?: boolean;
+};
+
+export type JdScan = {
+  terms: ScannedTerm[];
+  /** True when headings such as "Requirements" or "Nice to have" were recognized. */
+  hasSections: boolean;
+  /** Only when resume text was given. */
+  resume: { found: number; total: number } | null;
+};
+
+/** Most terms the scanner lists. */
+const MAX_SCAN_TERMS = 40;
+/** Most repeated lower-case phrases added on top of the extracted terms. */
+const MAX_PHRASES = 10;
+
+const SECTION_WEIGHT: Record<JdSection, number> = { required: 3, duties: 2, general: 2, preferred: 1.5, company: 0.5 };
+const TITLE_BONUS = 4;
+
+const HEADING_PREFERRED = /\b(preferred|nice[\s-]to[\s-]haves?|bonus points?|pluses|a plus|desired|good to have|ideally|extra credit)\b/i;
+const HEADING_REQUIRED = /\b(requirements?|required|must[\s-]haves?|minimum|basic qualifications|qualifications|what you['’]?ll need|what you need|what you bring|what we['’]?re looking for|who you are|about you|you have|skills|competencies)\b/i;
+const HEADING_DUTIES = /\b(responsibilit(y|ies)|what you['’]?ll do|what you will do|duties|day[\s-]to[\s-]day|in this role|the role|your role|you will|the job|key tasks|the opportunity)\b/i;
+const HEADING_COMPANY = /\b(about|who we are|benefits|perks|compensation|salary|pay range|why (join|work)|equal (opportunity|employment)|eeo|our (culture|mission|values|story)|location|how to apply|what we offer)\b/i;
+
+const LINE_PREFERRED = /\b(preferred|nice[\s-]to[\s-]have|(is|are|would be) a (big )?plus|bonus|desired|ideally)\b/i;
+const LINE_REQUIRED = /\b(required|must|mandatory|minimum of|at least)\b/i;
+
+function headingSection(h: string): JdSection | null {
+  if (HEADING_PREFERRED.test(h)) return "preferred";
+  if (HEADING_REQUIRED.test(h)) return "required";
+  if (HEADING_DUTIES.test(h)) return "duties";
+  if (HEADING_COMPANY.test(h)) return "company";
+  return null;
+}
+
+/** A heading's text if the line is one ("Requirements:", "## What you'll do", "Nice to have"), else null. */
+function headingText(line: string): { heading: string; rest: string } | null {
+  const t = line.replace(/^[#*_\s]+|[*_\s]+$/g, "");
+  if (!t || /^[-•·▪●◦*–]|^\d+[.)]\s/.test(line.trim())) return null;
+  const colon = t.match(/^([^:]{2,60}):\s*(.*)$/);
+  if (colon && colon[1].split(/\s+/).length <= 6) return { heading: colon[1], rest: colon[2] };
+  if (t.split(/\s+/).length <= 6 && !/[.!?,]$/.test(t) && headingSection(t)) return { heading: t, rest: "" };
+  return null;
+}
+
+type JdLine = { text: string; section: JdSection; title: boolean };
+
+/** The posting split into lines, each tagged with its section. */
+function jdLines(raw: string): { lines: JdLine[]; hasSections: boolean } {
+  const lines: JdLine[] = [];
+  let section: JdSection = "general";
+  let hasSections = false;
+  let seenText = false;
+  for (const line of raw.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    const h = headingText(line);
+    const hs = h ? headingSection(h.heading) : null;
+    if (h && hs) {
+      section = hs;
+      hasSections = true;
+      seenText = true;
+      if (h.rest) lines.push({ text: h.rest, section: lineSection(h.rest, section), title: false });
+      continue;
+    }
+    // The first line is the job title when it's short and reads like one.
+    const title = !seenText && line.trim().split(/\s+/).length <= 12 && !/[.!?]$/.test(line.trim());
+    seenText = true;
+    // Sentence by sentence, so "ACLS is preferred" in a paragraph doesn't make the whole paragraph preferred.
+    for (const sentence of line.split(/(?<=[.!?;])\s+/)) lines.push({ text: sentence, section: lineSection(sentence, section), title });
+  }
+  return { lines, hasSections };
+}
+
+/** "Senior Data Analyst" from a first line like "Senior Data Analyst – Remote (US)", if it names a job. */
+function titleTerm(raw: string, taken: Set<string>): JobTerm | null {
+  const first = raw.split(/\r?\n/).find((l) => l.trim())?.trim() ?? "";
+  if (!first || first.split(/\s+/).length > 12 || /[.!?]$/.test(first) || headingText(first)) return null;
+  const name = first.split(/\s[-–—|]\s|[,(]/)[0].replace(/^[#*_\s]+|[*_\s]+$/g, "").trim();
+  const key = normalizeTerm(name);
+  if (!key || !TITLE_WORDS.test(name) || name.split(/\s+/).length > 6 || taken.has(key)) return null;
+  return { term: name, key, kind: "hard", source: "phrase", count: 1, forms: [key], title: true };
+}
+
+/** "Python is a plus" is preferred and "must have SQL" required, whatever the heading says. */
+function lineSection(line: string, section: JdSection): JdSection {
+  if (section === "company") return section;
+  if (LINE_PREFERRED.test(line)) return "preferred";
+  if (LINE_REQUIRED.test(line)) return "required";
+  return section;
+}
+
+/** Times a term appears: normalized forms by whole token, case-sensitive spellings as written. */
+function countTerm(t: Pick<JobTerm, "forms" | "exact">, raw: string, padded: string, sentenceAware: boolean): number {
+  let n = 0;
+  for (const f of t.forms) n += countIn(padded, f);
+  for (const e of t.exact ?? []) n += countExact(raw, e, sentenceAware && NOT_SENTENCE_START.has(normalizeTerm(e)));
+  return n;
+}
+
+/** Whether free text (a pasted resume) uses a term. */
+export function termInText(t: Pick<JobTerm, "forms" | "exact">, text: string): boolean {
+  return countTerm(t, text, ` ${tokenize(text).join(" ")} `, false) > 0;
+}
+
+/** Everyday words that don't make a phrase a skill ("strong communication", "work closely"). */
+const PHRASE_GENERIC = new Set(
+  "ability abilities strong excellent good great proven demonstrated solid deep high highly well related relevant similar including include includes using use used other others various multiple ensure help helps make makes made build builds building drive drives driving own owns owning work works worked closely support supports supporting manage manages managing lead leads leading partner partners partnering develop develops developing create creates creating provide provides providing maintain maintains maintaining identify identifies improve improves improving deliver delivers delivering based level levels fast paced environment environments best least degree field equivalent written verbal one two three four five first every need needs needed like looking want wants ideal plus preferred required strongly comfortable familiar familiarity understanding knowledge proficiency proficient hands passion passionate love eager self motivated starter detail oriented attention ownership take takes get gets keep keeps grow grows growing growth quickly amazing exciting world class top join remote hybrid onsite people person things thing way ways part along around through over under just only really much many lot lots".split(" "),
+);
+
+/** Lower-case two- and three-word phrases that repeat ("data pipelines", "customer onboarding flows"). */
+function repeatedPhrases(raw: string, taken: string[]): JobTerm[] {
+  const ok = (w: string) => {
+    const l = w.toLowerCase();
+    return /^[a-z][a-z-]{2,}$/i.test(w) && !STOP_WORDS.has(l) && !BOILERPLATE.has(l) && !PHRASE_GENERIC.has(l) && !MONTHS_DAYS.test(w);
+  };
+  const by = new Map<string, { display: string; n: number; len: number }>();
+  for (const seg of raw.split(/[\n.!?;:,()[\]{}"“”•·|/]+|\s[-–—]\s/)) {
+    const words = seg.split(/\s+/).map((w) => w.replace(/^[^A-Za-z]+|[^A-Za-z]+$/g, "").replace(/['’]s$/, "")).filter(Boolean);
+    for (let i = 0; i < words.length; i += 1) {
+      for (const len of [3, 2]) {
+        const gram = words.slice(i, i + len);
+        if (gram.length < len || !gram.every(ok)) continue;
+        // Lower case only (a sentence may start with a capital): capitalized names are the other pass's job.
+        if (gram.some((w, k) => /[A-Z]/.test(k === 0 && i === 0 ? w.slice(1) : w))) continue;
+        const key = normalizeTerm(gram.join(" "));
+        const cur = by.get(key);
+        if (cur) cur.n += 1;
+        else by.set(key, { display: gram.join(" "), n: 1, len });
+      }
+    }
+  }
+  const overlaps = (a: string, b: string) => ` ${a} `.includes(` ${b} `) || ` ${b} `.includes(` ${a} `);
+  const kept: JobTerm[] = [];
+  // Three-word phrases first; a two-word phrase inside one only counts for its extra mentions.
+  const candidates = [...by.entries()].filter(([, v]) => v.n >= 2).sort((a, b) => b[1].len - a[1].len || b[1].n - a[1].n);
+  for (const [key, v] of candidates) {
+    if (taken.some((k) => overlaps(k, key))) continue;
+    const inside = kept.filter((k) => ` ${k.key} `.includes(` ${key} `)).reduce((n, k) => n + k.count, 0);
+    if (v.n - inside < 2) continue;
+    const term = /[A-Z]/.test(v.display.slice(1)) ? v.display : v.display.charAt(0).toUpperCase() + v.display.slice(1).toLowerCase();
+    kept.push({ term, key, kind: "hard", source: "phrase", count: v.n, forms: [key] });
+  }
+  return kept.sort((a, b) => b.count - a.count).slice(0, MAX_PHRASES);
+}
+
+/**
+ * Capitalized names written once, mid-sentence, in a requirements or nice-to-have line
+ * ("HubSpot or Marketo experience"): in those lists a lone proper noun is nearly always a
+ * tool. Skipped when the word is also written in lower case, or appears in the company blurb.
+ */
+function listedNames(lines: JdLine[], raw: string, taken: Set<string>): JobTerm[] {
+  const spaced = ` ${raw.replace(/[^A-Za-z0-9+#]+/g, " ")} `;
+  const companyText = lines.filter((l) => l.section === "company").map((l) => l.text).join(" ");
+  const out = new Map<string, JobTerm>();
+  for (const l of lines) {
+    if (l.section !== "required" && l.section !== "preferred") continue;
+    for (const o of capitalizedRuns(l.text).singles) {
+      const w = o.words[0];
+      const key = normalizeTerm(w);
+      if (!key || key.length < 3 || taken.has(key) || out.has(key) || looksLikeName(o)) continue;
+      if (ACRONYM_STOP.has(w.toUpperCase()) || MONTHS_DAYS.test(w) || STOP_WORDS.has(key) || BOILERPLATE.has(key) || PHRASE_GENERIC.has(key) || TITLE_WORDS.test(w)) continue;
+      if (spaced.includes(` ${w.toLowerCase()} `) || companyText.includes(w)) continue;
+      out.set(key, { term: w, key, kind: "tool", source: "tool", count: 1, forms: [key] });
+    }
+  }
+  return [...out.values()];
+}
+
+/**
+ * Scans a pasted job description: every term it asks for, ranked by mentions weighted by
+ * section (requirements > duties > nice-to-have > company blurb) plus the job title. With
+ * resume text, each term is marked present or missing. Pure; runs in the browser.
+ */
+export function scanJobDescription(jobDescription: string, resume?: string): JdScan {
+  const raw = jobDescription.slice(0, MAX_JD_CHARS);
+  const base = allJobTerms(raw);
+  if (!base.length) return { terms: [], hasSections: false, resume: null };
+  const { lines, hasSections } = jdLines(raw);
+  const title = titleTerm(raw, new Set(base.map((t) => t.key)));
+  const named = [...(title ? [title] : []), ...base];
+  const withNames = [...named, ...listedNames(lines, raw, new Set(named.map((t) => t.key)))];
+  const terms = [...withNames, ...repeatedPhrases(raw, withNames.map((t) => t.key))]
+    // "Strong, Strong" written capitalized twice is still not a skill.
+    .filter((t) => t.source === "dictionary" || !t.key.split(" ").every((w) => PHRASE_GENERIC.has(w)));
+  const padded = lines.map((l) => ` ${tokenize(l.text).join(" ")} `);
+  const resumeRaw = resume?.trim() ? resume.slice(0, MAX_JD_CHARS) : "";
+  const resumePadded = ` ${tokenize(resumeRaw).join(" ")} `;
+
+  const scanned = terms.map((t): ScannedTerm => {
+    let score = 0;
+    let mentions = 0;
+    let inTitle = false;
+    const seen = new Set<JdSection>();
+    lines.forEach((l, i) => {
+      const n = countTerm(t, l.text, padded[i], true);
+      if (!n) return;
+      mentions += n;
+      score += n * SECTION_WEIGHT[l.section];
+      seen.add(l.section);
+      if (l.title) inTitle = true;
+    });
+    // Mentions the line pass can't see (a phrase split over a line break) count at the neutral weight.
+    if (mentions < t.count) score += (t.count - mentions) * SECTION_WEIGHT.general;
+    if (inTitle) score += TITLE_BONUS;
+    const priority = seen.has("required") ? "required" : seen.has("preferred") && !seen.has("duties") && !seen.has("general") ? "preferred" : "mentioned";
+    const out: ScannedTerm = { ...t, count: Math.max(mentions, t.count), priority, inTitle, score };
+    if (resumeRaw) out.present = countTerm(t, resumeRaw, resumePadded, false) > 0;
+    return out;
+  });
+
+  const ranked = scanned.sort((a, b) => b.score - a.score || b.count - a.count || a.term.localeCompare(b.term)).slice(0, MAX_SCAN_TERMS);
+  return { terms: ranked, hasSections, resume: resumeRaw ? { found: ranked.filter((t) => t.present).length, total: ranked.length } : null };
 }
