@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { FeaturePage, Stage, ExampleTag, DarkTile, LilacTile, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 
@@ -30,17 +30,11 @@ const QUESTIONS = [
 
 const stage = (
   <Stage bg="#e4dfff" poster="PREP" posterColor="#d3cbff">
-    <div className="absolute bottom-[19px] right-[19px] h-[180px] w-[180px] overflow-hidden rounded-full bg-[#c9c0ff] sm:h-[220px] sm:w-[220px] lg:bottom-8 lg:right-8 lg:h-[300px] lg:w-[300px]">
-      <Image
-        src="/images/people/man-blazer-glasses.webp"
-        alt="Man in glasses and a dark blazer"
-        width={767}
-        height={1080}
-        priority
-        sizes="(min-width: 1024px) 282px, 205px"
-        className="absolute left-1/2 top-2.5 h-[240px] w-auto max-w-none -translate-x-1/2 sm:h-[290px] lg:top-[18px] lg:h-[400px]"
-      />
-    </div>
+    <ResumeSheet
+      example="product-manager"
+      template="classic"
+      className="absolute bottom-0 right-4 h-[160px] w-[150px] rotate-3 [--peek:0.184] sm:h-[220px] sm:w-[200px] sm:[--peek:0.245] lg:right-8 lg:h-[330px] lg:w-[260px] lg:[--peek:0.319]"
+    />
     <div className="lc-float lc-drift absolute left-4 top-[88px] w-[200px] rounded-[18px] bg-[#111118] p-3.5 text-white sm:w-[260px] lg:left-8 lg:top-[150px] lg:w-[300px] lg:rounded-[22px] lg:p-[18px]">
       <p className="lc-mono flex justify-between text-[11px] text-[#c9c0ff]">
         Q1 <ExampleTag dark />

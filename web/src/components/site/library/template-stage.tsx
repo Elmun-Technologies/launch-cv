@@ -14,8 +14,11 @@ export function TemplateStage({ items, initial, children }: { items: Item[]; ini
   const current = items.find((t) => t.key === active) ?? items[0];
   return (
     <>
-      <div className="absolute left-[22px] top-20 w-[280px] -rotate-3 overflow-hidden rounded-lg shadow-[0_30px_60px_-24px_rgba(10,6,60,.6)] sm:left-10 sm:top-[120px] sm:w-[360px] lg:left-14 lg:top-[150px] lg:w-[420px]">
+      <div className="absolute left-[22px] top-20 w-[calc(100%-44px)] max-w-[300px] -rotate-3 overflow-hidden rounded-lg shadow-[0_30px_60px_-24px_rgba(10,6,60,.6)] sm:left-10 sm:top-[120px] sm:w-[400px] sm:max-w-none lg:left-14 lg:top-[150px] lg:w-[460px]">
         {current?.node}
+        <span className="absolute right-2.5 top-2.5 rounded-full bg-[#f1eff8] px-2 py-[3px] text-[10px] font-semibold text-[#66647c] sm:text-[11px]">
+          Sample resume — names are illustrative
+        </span>
       </div>
       {children}
       <div

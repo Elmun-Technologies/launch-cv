@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
 import { CtaLink } from "@/components/cta-link";
 import { JsonLd } from "@/components/json-ld";
 import { ResumePreview } from "@/components/resume-preview";
 import { TemplateFan } from "@/components/site/template-fan";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { getResumeExample, RESUME_EXAMPLES } from "@/lib/resume-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 import { TEMPLATE_SPECS, type TemplateStyle } from "@/lib/resume-templates";
@@ -146,7 +146,7 @@ export default async function Home() {
               {hero.secondaryCta}
             </CtaLink>
           </div>
-          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">{hero.note}</p>
+          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">{hero.note} · one free check every 30 days</p>
         </div>
       </section>
 
@@ -158,14 +158,9 @@ export default async function Home() {
             HIRED
           </p>
           <div aria-hidden="true" className="absolute bottom-[-150px] left-1/2 h-[340px] w-[340px] -translate-x-1/2 rounded-full bg-[#4430d6] lg:bottom-[-210px] lg:h-[560px] lg:w-[560px]" />
-          <Image
-            src="/images/people/woman-red-top.webp"
-            alt="Laughing woman in a red top"
-            width={747}
-            height={1080}
-            priority
-            sizes="(min-width: 1024px) 333px, 222px"
-            className="absolute bottom-0 left-1/2 h-[320px] w-auto -translate-x-1/2 sm:h-[400px] lg:h-[480px]"
+          <ResumeSheet
+            example="product-manager"
+            className="absolute bottom-0 left-1/2 h-[270px] w-[220px] -translate-x-1/2 [--peek:0.27] sm:h-[360px] sm:w-[290px] sm:[--peek:0.355] lg:h-[420px] lg:w-[360px] lg:[--peek:0.44]"
           />
 
           {/* ATS score */}
@@ -335,7 +330,8 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <div className="mt-2.5 flex flex-col gap-3.5 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
+          <p className="mt-2.5 text-[12px] text-[#9a97b3] sm:mt-4 sm:text-center sm:text-[13px]">Sample resume — names are illustrative.</p>
+          <div className="mt-2.5 flex flex-col gap-3.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
             <span className="inline-flex items-center gap-2.5 rounded-[18px] bg-white py-2.5 pl-2.5 pr-3.5 text-[14px] font-semibold text-[#121226] sm:rounded-full sm:pr-[18px] sm:text-[15px]">
               <span className="inline-flex h-[30px] w-[30px] flex-none items-center justify-center rounded-full bg-[#fbe2e3] font-extrabold text-[#c42b30]">!</span>
               Two-column layout hides your contact details
@@ -359,9 +355,9 @@ export default async function Home() {
             fixes; a free account saves the full report.
           </p>
         </div>
-        <div className="lc-reveal relative mt-7 pt-10 sm:pt-14 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-center">
-          <div className="lc-card rounded-[22px] p-5 sm:rounded-3xl sm:p-8 lg:mr-24">
-            <div className="flex items-center gap-3.5 pr-[90px] sm:gap-5 sm:pr-[120px] lg:pr-0">
+        <div className="lc-reveal relative mt-7 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:self-center">
+          <div className="lc-card rounded-[22px] p-5 sm:rounded-3xl sm:p-8 lg:mr-10 lg:mt-12">
+            <div className="flex items-center gap-3.5 sm:gap-5">
               <svg width="108" height="108" viewBox="0 0 112 112" role="img" aria-label="Example score 54 out of 100" className="h-[72px] w-[72px] shrink-0 sm:h-[108px] sm:w-[108px]">
                 <circle cx="56" cy="56" r="46" fill="none" stroke="#f1eff8" strokeWidth="12" />
                 <circle cx="56" cy="56" r="46" fill="none" stroke="#f2a91f" strokeWidth="12" strokeLinecap="round" strokeDasharray="156 289" transform="rotate(-90 56 56)" />
@@ -386,17 +382,7 @@ export default async function Home() {
               <span className="text-[26px] font-bold tracking-[-0.03em]">91</span>
             </div>
           </div>
-          <div className="absolute right-2.5 top-0 h-[110px] w-[110px] overflow-hidden rounded-full border-[5px] border-[#eeecf4] bg-[#c9c0ff] sm:h-[150px] sm:w-[150px] lg:right-0 lg:h-[220px] lg:w-[220px] lg:border-[6px]">
-            <Image
-              src="/images/people/man-white-tee.webp"
-              alt="Smiling man in a white t-shirt"
-              width={739}
-              height={1080}
-              sizes="(min-width: 1024px) 206px, 103px"
-              className="absolute left-1/2 top-2 h-[150px] w-auto max-w-none -translate-x-1/2 sm:h-[205px] lg:top-3.5 lg:h-[300px]"
-            />
-          </div>
-          <span className="lc-float lc-drift absolute right-[170px] top-1.5 hidden max-w-[200px] rounded-[22px_22px_6px_22px] bg-[#111118] px-4 py-[11px] text-[15px] font-medium text-white lg:block">
+          <span className="lc-float lc-drift absolute right-0 top-0 hidden max-w-[220px] rounded-[22px_22px_6px_22px] bg-[#111118] px-4 py-[11px] text-[15px] font-medium text-white lg:block">
             Which fix matters most?
           </span>
         </div>
@@ -476,13 +462,10 @@ export default async function Home() {
             </div>
           </div>
           <div className="absolute inset-x-0 bottom-0 mx-auto h-[330px] sm:relative sm:mt-4 sm:h-[360px] lg:absolute lg:mt-0 lg:h-[540px]">
-            <Image
-              src="/images/people/woman-hoodie.webp"
-              alt="Young woman in a denim jacket and hoodie, smiling"
-              width={856}
-              height={1080}
-              sizes="(min-width: 1024px) 428px, 285px"
-              className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2"
+            <ResumeSheet
+              example="product-manager"
+              template="classic"
+              className="absolute bottom-0 left-1/2 h-full w-[250px] -translate-x-1/2 [--peek:0.306] sm:w-[300px] sm:[--peek:0.368] lg:w-[400px] lg:[--peek:0.49]"
             />
           </div>
           <CtaLink
@@ -557,13 +540,9 @@ export default async function Home() {
         </div>
         <div className="lc-reveal relative min-h-[400px] overflow-hidden rounded-[28px] bg-[#e4dfff] sm:min-h-[460px] lg:order-first lg:min-h-[580px] lg:rounded-[36px]">
           <div aria-hidden="true" className="absolute bottom-[-160px] left-1/2 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-[#c9c0ff]" />
-          <Image
-            src="/images/people/nurse-arms-crossed.webp"
-            alt="Smiling nurse in blue scrubs with a stethoscope, arms crossed"
-            width={759}
-            height={1080}
-            sizes="(min-width: 1024px) 337px, 270px"
-            className="absolute bottom-0 left-1/2 h-[380px] w-auto max-w-none -translate-x-1/2 lg:h-[480px]"
+          <ResumeSheet
+            example="registered-nurse"
+            className="absolute bottom-0 left-1/2 h-[250px] w-[250px] -translate-x-1/2 [--peek:0.306] sm:h-[340px] sm:w-[290px] sm:[--peek:0.355] lg:h-[440px] lg:w-[380px] lg:[--peek:0.466]"
           />
           <div className="lc-float lc-drift absolute left-4 top-4 w-[220px] rounded-3xl bg-white p-[18px] lg:left-7 lg:top-7">
             <p className="text-[13px] text-[#66647c]">Example</p>
@@ -717,13 +696,10 @@ export default async function Home() {
             <br className="sm:hidden" /> JOB
           </p>
           <div aria-hidden="true" className="absolute -bottom-[180px] -right-[60px] h-[360px] w-[360px] rounded-full bg-[#5440e8] sm:h-[420px] sm:w-[420px] lg:h-[560px] lg:w-[560px]" />
-          <Image
-            src="/images/people/woman-blazer-laptop.webp"
-            alt="Smiling woman in a grey blazer"
-            width={620}
-            height={1080}
-            sizes="(min-width: 1024px) 270px, 200px"
-            className="relative order-last ml-auto mt-4 h-[280px] w-auto sm:absolute sm:bottom-0 sm:right-0 sm:mt-0 sm:h-[400px] lg:h-[470px]"
+          <ResumeSheet
+            example="software-engineer"
+            template="classic"
+            className="relative order-last ml-auto mr-[22px] mt-6 h-[200px] w-[230px] [--peek:0.282] sm:hidden lg:absolute lg:bottom-0 lg:right-12 lg:mr-0 lg:mt-0 lg:block lg:h-[420px] lg:w-[320px] lg:[--peek:0.392]"
           />
           <div className="relative z-10 px-[22px] pt-8 sm:absolute sm:bottom-16 sm:left-16 sm:max-w-[500px] sm:p-0">
             <h2 className="text-[28px] font-extrabold leading-[33px] tracking-[-0.03em] sm:text-[40px] sm:leading-[1.15]">{cta.title}</h2>
@@ -736,6 +712,7 @@ export default async function Home() {
                 {cta.secondaryCta}
               </CtaLink>
             </div>
+            <p className="mt-3 text-[13px] text-[#9a97b3] sm:text-[14px]">No sign-up · one free check every 30 days per network</p>
           </div>
           <span aria-hidden="true" className="lc-poster absolute bottom-10 left-[22px] z-10 -rotate-6 rounded-full bg-[#ff7a33] px-3 py-[7px] text-[12px] text-[#111118] sm:bottom-auto sm:left-auto sm:right-6 sm:top-[120px] sm:-rotate-[8deg] sm:px-[15px] sm:py-[9px] sm:text-[14px] lg:left-[600px] lg:right-auto lg:top-[210px]">
             NO SIGN-UP

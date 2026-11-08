@@ -21,7 +21,6 @@ import {
   cardTitleCls,
   inlineLinkCls,
 } from "@/components/app/account/ui";
-import { CheckoutReturn } from "./checkout-return";
 
 type StatusPayload = {
   pro: boolean;
@@ -100,29 +99,15 @@ export function SubscriptionSettingsClient({
   const [statusLoading, setStatusLoading] = useState(true);
   const [status, setStatus] = useState<StatusPayload | null>(null);
   const [usage, setUsage] = useState<UsagePayload | null>(null);
-  /** "waiting" while the payment webhook catches up after a successful checkout. */
-  const [returned, setReturned] = useState<"waiting" | "confirmed" | "slow" | null>(null);
   const autoStarted = useRef(false);
 
   useEffect(() => {
     let c = true;
-    const qs = new URLSearchParams(window.location.search);
-    const fromCheckout = qs.get("checkout") === "success";
+    // Back from checkout (?checkout=success) the page renders CheckoutSuccessScreen instead of this client.
     (async () => {
       try {
-        let s = await fetchStatus();
+        const s = await fetchStatus();
         if (c) setStatus(s);
-        if (fromCheckout) {
-          if (c) setReturned(isPaid(s) ? "confirmed" : "waiting");
-          // The webhook usually lands within a few seconds; poll briefly so the
-          // buyer doesn't see "No active plan" right after paying.
-          for (let i = 0; i < 10 && c && !isPaid(s); i++) {
-            await new Promise((res) => setTimeout(res, 3000));
-            s = await fetchStatus();
-            if (c) setStatus(s);
-          }
-          if (c) setReturned(isPaid(s) ? "confirmed" : "slow");
-        }
       } finally {
         if (c) setStatusLoading(false);
       }
@@ -178,13 +163,6 @@ export function SubscriptionSettingsClient({
           : "Active.";
   const priceLine = currentCfg && currentPlan !== "none" ? planPriceLabel(currentPlan) : null;
 
-  const returnRenewLine = isLifetime
-    ? "One payment — it never renews."
-    : onPass
-      ? `Your pass runs until ${renewDate}. It doesn't renew, so there's nothing to cancel.`
-      : renewing
-        ? `Your plan renews on ${renewDate}; cancel anytime in the billing portal.`
-        : null;
   const blockedNotes = [...new Set(CHECKOUT_PLAN_ORDER.map((k) => status?.checkoutBlocked[k]).filter((x): x is string => !!x))];
 
   // Highest usage share, for the "running low" note under the meters.
@@ -201,10 +179,6 @@ export function SubscriptionSettingsClient({
       <SettingsTabs current="/dashboard/settings/subscription" />
 
       <div className="mt-5 flex flex-col gap-4 sm:gap-5">
-        <div role="status" aria-live="polite" className={returned ? "" : "sr-only"}>
-          {returned ? <CheckoutReturn state={returned} planTitle={currentCfg?.title ?? null} renewLine={returnRenewLine} /> : null}
-        </div>
-
         <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-2">
           <section
             aria-labelledby="current-plan-label"

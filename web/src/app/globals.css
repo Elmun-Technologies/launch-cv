@@ -30,6 +30,12 @@ body {
   color: #111827;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Room for the cookie bar while it's showing (set by CookieBanner), so it never sits on the last button. */
+  padding-bottom: var(--lc-cookie-bar, 0px);
+}
+
+html {
+  scroll-padding-bottom: var(--lc-cookie-bar, 0px);
 }
 
 ::selection {

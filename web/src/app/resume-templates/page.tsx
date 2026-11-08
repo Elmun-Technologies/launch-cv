@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
 import { container, btnPrimary, btnWhite, btnDark, labelCls, SectionHead } from "@/components/site/ui";
@@ -171,16 +170,7 @@ export default function ResumeTemplatesPage() {
           </p>
           {stageItems.length ? (
             <TemplateStage items={stageItems} initial="modern">
-              <Image
-                src="/images/people/woman-red-top.webp"
-                alt="Laughing woman in a red top"
-                width={747}
-                height={1080}
-                priority
-                sizes="(min-width: 1024px) 277px, 173px"
-                className="absolute -right-10 bottom-0 h-[250px] w-auto max-w-none sm:-right-5 sm:h-[360px] lg:h-[400px]"
-              />
-              <span className="lc-float absolute bottom-[22px] left-[22px] z-10 inline-flex items-center gap-2 rounded-full bg-[#111118] px-3.5 py-[9px] text-[13px] font-bold text-white sm:bottom-[120px] sm:left-[260px] sm:px-4 sm:py-2.5 sm:text-[14px] lg:left-[300px]">
+              <span className="lc-float absolute bottom-[22px] right-[22px] z-10 inline-flex items-center gap-2 rounded-full bg-[#111118] px-3.5 py-[9px] text-[13px] font-bold text-white sm:bottom-10 sm:right-8 sm:px-4 sm:py-2.5 sm:text-[14px]">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c9c0ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 3v12" />
                   <path d="m7 10 5 5 5-5" />

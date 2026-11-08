@@ -22,5 +22,7 @@ const n = (v: number) => v.toLocaleString("en-US");
 /** "40 job matches · 40 role-fit checks · 20 packets a month. 7 days, no auto-renewal." */
 export function planLimitsLine(plan: CheckoutPlan, l: { jd: number; roleFit: number; packet: number }): string {
   const tail = isPassPlan(plan) ? ` ${PASS_DAYS[plan]} days, no auto-renewal.` : plan === "lifetime" ? " Never renews." : "";
-  return `${n(l.jd)} job matches · ${n(l.roleFit)} role-fit checks · ${n(l.packet)} packets a month.${tail}`;
+  // Limits are counted per calendar month; a 7-day pass gets one allowance, so it shows no period.
+  const per = plan === "week" ? "" : plan === "quarter" ? " a calendar month" : " a month";
+  return `${n(l.jd)} job matches · ${n(l.roleFit)} role-fit checks · ${n(l.packet)} packets${per}.${tail}`;
 }

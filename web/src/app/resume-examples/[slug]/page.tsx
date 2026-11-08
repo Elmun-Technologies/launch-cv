@@ -81,12 +81,8 @@ const sectionCls = `${container} scroll-mt-6 pt-16 lg:pt-[130px]`;
 const inlineLink = "font-semibold text-[#5440e8] underline decoration-[#5440e8]/30 underline-offset-[3px] transition-colors hover:decoration-[#5440e8]";
 const NUM = ["Zero", "One", "Two", "Three", "Four", "Five", "Six"];
 
-/** Cut-out portraits for the roles the design pairs with one; every other role uses its own photo. */
-const CUTOUTS: Record<string, { src: string; w: number; h: number; alt: string }> = {
-  "registered-nurse": { src: "/images/people/nurse-arms-crossed.webp", w: 759, h: 1080, alt: "Smiling nurse in blue scrubs with a stethoscope, arms crossed" },
-  "ux-designer": { src: "/images/people/woman-hoodie.webp", w: 856, h: 1080, alt: "Young woman in a denim jacket and hoodie, smiling" },
-  "marketing-manager": { src: "/images/people/woman-red-top.webp", w: 747, h: 1080, alt: "Laughing woman in a red top" },
-};
+/** Roles whose hero shows the sample resume itself rather than the role photo. */
+const PREVIEW_HERO = new Set(["registered-nurse", "ux-designer", "marketing-manager"]);
 
 export default async function ResumeExamplePage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
@@ -99,7 +95,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
   const url = absoluteUrl(`/resume-examples/${e.slug}`);
   const related = relatedRoleSlugs(e.slug).map(getResumeExample).filter((x) => !!x);
   const hasLetter = !!getCoverLetterExample(e.slug);
-  const cutout = CUTOUTS[e.slug];
+  const previewHero = PREVIEW_HERO.has(e.slug);
   const firstName = r.name.split(" ")[0];
   const variants = e.variants ?? [];
   const n = exampleSampleCount(e);
@@ -199,11 +195,10 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             </CtaLink>
           </div>
           <p className="mt-3 text-center text-[12px] text-[#66647c] sm:mt-[18px] sm:text-left sm:text-[14px]">
-            By{" "}
-            <Link href={SITE_AUTHOR.path} rel="author" className="lc-link hover:text-[#5440e8]">
-              {SITE_AUTHOR.name}
-            </Link>
-            <span className="hidden sm:inline">, {SITE_AUTHOR.role}</span> · Updated <time dateTime={updated}>{dateLabel(updated)}</time>
+            <Link href="/editorial-process" className="lc-link hover:text-[#5440e8]">
+              Reviewed by {SITE_AUTHOR.name}
+            </Link>{" "}
+            · Updated <time dateTime={updated}>{dateLabel(updated)}</time>
           </p>
         </div>
 
@@ -212,23 +207,16 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
             {monogram(e.role)}
           </p>
           <div aria-hidden="true" className="absolute bottom-[-120px] left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-[#c9c0ff] sm:bottom-[-190px] sm:h-[520px] sm:w-[520px]" />
-          {cutout ? (
-            <Image
-              src={cutout.src}
-              alt={cutout.alt}
-              width={cutout.w}
-              height={cutout.h}
-              priority
-              sizes={`(min-width: 1024px) ${Math.round((540 * cutout.w) / cutout.h)}px, (min-width: 640px) ${Math.round((440 * cutout.w) / cutout.h)}px, ${Math.round((320 * cutout.w) / cutout.h)}px`}
-              className="absolute bottom-0 left-1/2 h-[320px] w-auto max-w-none -translate-x-1/2 sm:h-[440px] lg:h-[540px]"
-            />
-          ) : e.photo ? (
-            <div className="absolute inset-x-4 bottom-4 top-[92px] overflow-hidden rounded-[22px] sm:inset-x-7 sm:bottom-7 sm:top-[140px] lg:rounded-[26px]">
-              <Image src={e.photo.src} alt={e.photo.alt} fill priority sizes="(min-width: 1024px) 560px, 100vw" className="object-cover object-[center_30%]" />
+          {previewHero || !e.photo ? (
+            <div aria-hidden="true" className="absolute left-1/2 top-[92px] w-[260px] -translate-x-1/2 -rotate-[4deg] shadow-[0_30px_60px_-24px_rgba(10,6,60,.55)] sm:left-8 sm:top-[150px] sm:w-[340px] sm:translate-x-0">
+              <ResumePreview content={exampleToContent(e)} template="classic" />
+              <span className="absolute right-2.5 top-2.5 rounded-full bg-[#f1eff8] px-2 py-[3px] text-[10px] font-semibold text-[#66647c] sm:text-[11px]">
+                Sample resume<span className="hidden sm:inline"> — names are illustrative</span>
+              </span>
             </div>
           ) : (
-            <div aria-hidden="true" className="absolute left-1/2 top-[92px] w-[260px] -translate-x-1/2 -rotate-[4deg] shadow-[0_30px_60px_-24px_rgba(10,6,60,.55)] sm:top-[150px] sm:w-[340px] lg:w-[400px]">
-              <ResumePreview content={exampleToContent(e)} template="classic" />
+            <div className="absolute inset-x-4 bottom-4 top-[92px] overflow-hidden rounded-[22px] sm:inset-x-7 sm:bottom-7 sm:top-[140px] lg:rounded-[26px]">
+              <Image src={e.photo.src} alt={e.photo.alt} fill priority sizes="(min-width: 1024px) 560px, 100vw" className="object-cover object-[center_30%]" />
             </div>
           )}
           <div className="lc-float lc-drift absolute right-7 top-9 hidden w-[230px] rounded-[22px] bg-white p-[18px] sm:block">
@@ -514,7 +502,7 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
           </div>
           <div className="mt-3.5 grid gap-2 sm:grid-cols-3 sm:gap-4 lg:mt-5">
             {related.map((x) => (
-              <ArrowCard key={x.slug} href={`/resume-examples/${x.slug}`} title={x.role} sub={x.level} />
+              <ArrowCard key={x.slug} href={`/resume-examples/${x.slug}`} title={x.role} sub={levelLabel(x.level)} />
             ))}
           </div>
         </section>
@@ -527,6 +515,17 @@ export default async function ResumeExamplePage({ params }: { params: Promise<Pa
 function sampleList(e: ResumeExample): string {
   const labels = (e.variants ?? []).map((v) => roleLower(v.label));
   return labels.length > 1 ? `${labels.slice(0, -1).join(", ")} and ${labels[labels.length - 1]}` : (labels[0] ?? "");
+}
+
+/**
+ * One format for level lines written in different styles:
+ * "Mid-level · 5 years experience" and "Experienced · 5 years on the line" → "Mid-level · 5 years", "Experienced · 5 years".
+ */
+function levelLabel(level: string): string {
+  const [raw, rest] = level.split(" · ");
+  const stage = raw.replace(/^Entry level$/i, "Entry-level");
+  const years = rest?.match(/^(\d+)\s+years?\b/);
+  return years ? `${stage} · ${years[1]} years` : stage;
 }
 
 /** "HR Generalist" → "HR generalist": lowercases words but keeps acronyms. */

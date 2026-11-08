@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
 import { JsonLd } from "@/components/json-ld";
@@ -33,7 +33,7 @@ export const metadata = buildMarketingMetadata({
 const FAQS = [
   {
     q: "Is this ATS checker really free?",
-    a: "Yes. You get your score, the four category scores and your top fixes without an account. Create a free account to save the report and see every fix. The free check runs once a month per network.",
+    a: "Yes. You get your score, the four category scores and your top fixes without an account. Create a free account to save the report and see every fix. The free check runs once every 30 days per network.",
   },
   {
     q: "What is an ATS score?",
@@ -132,7 +132,7 @@ function Intro() {
     <>
       <p className="inline-flex items-center gap-2 rounded-full bg-[#e4dfff] py-1.5 pl-1.5 pr-3 text-[13px] font-semibold text-[#3a2bb8] lg:pr-3.5 lg:text-[14px]">
         <span className="rounded-full bg-[#5440e8] px-2 py-0.5 text-[11px] text-white lg:text-[12px]">Free</span>
-        No sign-up · about 10 seconds
+        No sign-up · one free check every 30 days
       </p>
       <h1 className="mt-4 text-[40px] font-extrabold leading-[1.05] tracking-[-0.045em] sm:text-[52px] lg:mt-[22px] lg:text-[64px] lg:leading-[66px]">
         Free ATS resume checker. <span className="text-[#7c7a94]">Score and fixes, in seconds.</span>
@@ -155,17 +155,10 @@ function Stage() {
         <br />
         CHECK
       </p>
-      <div className="absolute left-[18px] top-[22px] h-[220px] w-[220px] overflow-hidden rounded-full bg-[#c9c0ff] lg:left-8 lg:top-10 lg:h-[380px] lg:w-[380px]">
-        <Image
-          src="/images/people/man-white-tee.webp"
-          alt="Smiling man in a white t-shirt"
-          width={739}
-          height={1080}
-          priority
-          sizes="(min-width: 1024px) 370px, 212px"
-          className="absolute left-1/2 top-3.5 h-[310px] w-auto max-w-none -translate-x-1/2 lg:top-6 lg:h-[540px]"
-        />
-      </div>
+      <ResumeSheet
+        example="data-analyst"
+        className="absolute left-[18px] top-[22px] h-[250px] w-[210px] -rotate-3 [--peek:0.257] lg:left-8 lg:top-10 lg:h-[470px] lg:w-[380px] lg:[--peek:0.466]"
+      />
       <div className="lc-float lc-drift absolute right-3.5 top-[196px] z-[2] w-[220px] rounded-[20px] bg-white p-4 lg:right-8 lg:top-[362px] lg:w-[290px] lg:rounded-3xl lg:p-[22px]">
         <div className="flex items-center gap-3.5">
           <svg viewBox="0 0 64 64" aria-hidden="true" className="hidden h-16 w-16 lg:block">
@@ -316,13 +309,10 @@ export default async function FreeAtsCheckPage() {
           </div>
           <div className="lc-reveal relative h-[360px] overflow-hidden rounded-[28px] bg-[#e4dfff] lg:h-auto lg:min-h-[640px] lg:rounded-[36px]">
             <div aria-hidden="true" className="absolute -bottom-[110px] -right-[70px] h-[320px] w-[320px] rounded-full bg-[#c9c0ff] lg:-bottom-[150px] lg:-right-20 lg:h-[480px] lg:w-[480px]" />
-            <Image
-              src="/images/people/woman-blazer-laptop.webp"
-              alt="Smiling woman in a grey blazer"
-              width={620}
-              height={1080}
-              sizes="(min-width: 1024px) 299px, 184px"
-              className="absolute bottom-0 right-0 h-[320px] w-auto max-w-none lg:h-[520px]"
+            <ResumeSheet
+              example="customer-service-representative"
+              template="classic"
+              className="absolute bottom-0 left-1/2 h-[270px] w-[260px] -translate-x-1/2 [--peek:0.319] lg:left-auto lg:right-10 lg:translate-x-0 lg:h-[350px] lg:w-[400px] lg:[--peek:0.49]"
             />
             <div className="lc-float lc-drift absolute left-8 top-10 hidden w-[300px] rounded-3xl bg-white p-5 lg:block">
               <p className="text-[13px] text-[#66647c]">Fix list · example</p>

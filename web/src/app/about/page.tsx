@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { BarChart3, Code2, Headphones, PenTool, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { SiteShell } from "@/components/site/site-shell";
@@ -59,12 +59,40 @@ const principles = [
   },
 ];
 
-/** Who we build for — cut-out portraits stand in for each kind of job seeker. */
-const roles = [
-  { label: "Software engineers", src: "/images/people/man-blazer-glasses.webp", w: 767, alt: "Man in glasses and a blazer", bg: "bg-[#c9c0ff]" },
-  { label: "Designers", src: "/images/people/woman-hoodie.webp", w: 856, alt: "Woman in a denim jacket", bg: "bg-[#ff7a33]" },
-  { label: "Customer service", src: "/images/people/man-white-tee.webp", w: 739, alt: "Man in a white t-shirt", bg: "bg-[#5440e8]" },
-  { label: "Data analysts", src: "/images/people/woman-blazer-laptop.webp", w: 620, alt: "Woman in a grey blazer", bg: "bg-[#e4dfff]" },
+/** Who we build for — one card per kind of job seeker, with what the tools do for them. */
+const roles: { label: string; d: string; Icon: LucideIcon; card: string; icon: string; body: string }[] = [
+  {
+    label: "Software engineers",
+    d: "A skills section that names the stack the job post asks for.",
+    Icon: Code2,
+    card: "bg-[#c9c0ff] text-[#121226]",
+    icon: "bg-white text-[#5440e8]",
+    body: "text-[#2b2752]",
+  },
+  {
+    label: "Designers",
+    d: "A one-column layout the software can read, with the portfolio link kept.",
+    Icon: PenTool,
+    card: "bg-[#ff7a33] text-[#111118]",
+    icon: "bg-white text-[#111118]",
+    body: "text-[#2a1405]",
+  },
+  {
+    label: "Customer service",
+    d: "Bullets that turn daily duties into results a recruiter can scan.",
+    Icon: Headphones,
+    card: "bg-[#5440e8] text-white",
+    icon: "bg-white text-[#5440e8]",
+    body: "text-[#e4dfff]",
+  },
+  {
+    label: "Data analysts",
+    d: "Tools, methods and numbers matched to the words in each job post.",
+    Icon: BarChart3,
+    card: "bg-[#e4dfff] text-[#121226]",
+    icon: "bg-white text-[#5440e8]",
+    body: "text-[#4a4862]",
+  },
 ];
 
 export const revalidate = 300;
@@ -140,22 +168,16 @@ export default async function AboutPage() {
             Anyone applying through a form. <span className="hidden sm:inline">Which is almost everyone.</span>
           </h2>
         </div>
-        <ul className="mt-6 grid grid-cols-2 gap-x-3.5 gap-y-[18px] sm:mt-12 sm:gap-8 lg:grid-cols-4">
+        <ul className="mt-6 grid grid-cols-2 gap-2.5 sm:mt-12 sm:gap-4 lg:grid-cols-4">
           {roles.map((r) => (
             <li key={r.label} className="lc-reveal">
-              <figure className="group">
-                <div className={`relative aspect-square w-full overflow-hidden rounded-full ${r.bg}`}>
-                  <Image
-                    src={r.src}
-                    alt={r.alt}
-                    width={r.w}
-                    height={1080}
-                    sizes="(min-width: 1024px) 280px, 45vw"
-                    className="absolute left-1/2 top-[6%] h-[140%] w-auto max-w-none -translate-x-1/2 transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transition-none"
-                  />
-                </div>
-                <figcaption className="mt-2 text-center text-[14px] font-bold sm:mt-3.5 sm:text-[17px]">{r.label}</figcaption>
-              </figure>
+              <div className={`flex h-full flex-col rounded-[22px] p-4 sm:rounded-3xl sm:p-6 ${r.card}`}>
+                <span className={`inline-flex h-10 w-10 items-center justify-center rounded-full sm:h-12 sm:w-12 ${r.icon}`}>
+                  <r.Icon className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
+                </span>
+                <h3 className="mt-6 text-[16px] font-bold leading-5 sm:mt-10 sm:text-[20px] sm:leading-6 sm:tracking-[-0.01em]">{r.label}</h3>
+                <p className={`mt-1.5 text-[13px] leading-[19px] sm:text-[15px] sm:leading-[23px] ${r.body}`}>{r.d}</p>
+              </div>
             </li>
           ))}
         </ul>

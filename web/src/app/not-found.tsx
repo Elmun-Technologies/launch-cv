@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { CtaLink } from "@/components/cta-link";
 import { SiteShell } from "@/components/site/site-shell";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { btnPrimary, btnWhite, labelCls } from "@/components/site/ui";
 
 // Next.js adds <meta name="robots" content="noindex"> to every 404 response.
@@ -23,14 +23,9 @@ export default function NotFound() {
             404
           </p>
           <div aria-hidden="true" className="absolute -right-[70px] top-[60px] h-[260px] w-[260px] rounded-full bg-[#5440e8] sm:-right-16 sm:top-10 sm:h-[340px] sm:w-[340px] lg:-bottom-[170px] lg:-right-10 lg:top-auto lg:h-[480px] lg:w-[480px]" />
-          <Image
-            src="/images/people/woman-hoodie.webp"
-            alt=""
-            width={856}
-            height={1080}
-            priority
-            sizes="(min-width: 1280px) 373px, (min-width: 1024px) 341px, (min-width: 640px) 222px, 178px"
-            className="absolute -right-2.5 top-[50px] h-[225px] w-auto max-w-none sm:right-4 sm:top-10 sm:h-[280px] lg:bottom-0 lg:right-[30px] lg:top-auto lg:h-[430px] xl:h-[470px]"
+          <ResumeSheet
+            example="software-engineer"
+            className="absolute right-4 top-[60px] h-[230px] w-[180px] rotate-6 [--peek:0.22] sm:right-10 sm:top-12 sm:h-[300px] sm:w-[230px] sm:[--peek:0.282] lg:bottom-0 lg:right-16 lg:top-auto lg:h-[440px] lg:w-[340px] lg:rotate-3 lg:[--peek:0.417]"
           />
           <div className="relative z-10 px-5 pb-[22px] sm:max-w-[600px] sm:px-10 sm:pb-10 lg:max-w-[680px] lg:px-16 lg:pb-16">
             <p className="text-[14px] text-[#9a97b3]">Error 404</p>
