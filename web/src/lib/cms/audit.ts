@@ -33,6 +33,7 @@ export type AuditAction =
   | "user.unsuspend"
   | "user.export"
   | "audit.export"
+  | "analytics.export"
   | "resume.delete"
   | "subscription.cancel"
   | "subscription.refund"
