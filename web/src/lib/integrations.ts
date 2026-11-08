@@ -88,7 +88,7 @@ export const PROVIDERS: ProviderDef[] = [
     tile: INK,
     fields: [
       { key: "apiKey", label: "API key", secret: true, env: "RESEND_API_KEY", placeholder: "re_…" },
-      { key: "fromEmail", label: "Sender", secret: false, env: "RESEND_FROM_EMAIL", placeholder: "LaunchCV <hello@launch-cv.com>" },
+      { key: "fromEmail", label: "Sender", secret: false, env: "RESEND_FROM_EMAIL", placeholder: "LaunchCV <info@launch-cv.com>", help: "Use a name and an address on a domain verified in Resend, e.g. LaunchCV <info@launch-cv.com>." },
     ],
   },
   {
@@ -362,6 +362,15 @@ export async function disconnectIntegration(provider: string): Promise<string[]>
   return rows.map((r) => r.field);
 }
 
+/** "LaunchCV <info@launch-cv.com>" or "info@launch-cv.com" → "launch-cv.com". */
+export function senderDomain(from: string): string | null {
+  const m = from.match(/<([^>]+)>/);
+  const addr = (m ? m[1] : from).trim();
+  const at = addr.lastIndexOf("@");
+  if (at < 1 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(addr)) return null;
+  return addr.slice(at + 1).toLowerCase();
+}
+
 /** Live check against the provider with the given (or stored) values. Never logs secrets. */
 export async function testIntegration(
   provider: string,
@@ -389,8 +398,23 @@ export async function testIntegration(
       case "resend": {
         const key = await get("apiKey");
         if (!key) return done(false, "No API key");
+        const from = await get("fromEmail");
+        if (!from) return done(false, "Sender is empty — set it, e.g. LaunchCV <info@launch-cv.com>");
+        const domain = senderDomain(from);
+        if (!domain) return done(false, "Sender should be an address like LaunchCV <info@launch-cv.com>");
         const r = await fetch("https://api.resend.com/domains", { headers: { Authorization: `Bearer ${key}` }, signal });
-        return r.ok ? done(true, "Key accepted") : done(false, `Resend returned ${r.status}`);
+        // A sending-only key can't list domains; it can still send, so accept it but say what wasn't checked.
+        if (r.status === 401 || r.status === 403) {
+          const body = (await r.text().catch(() => "")).toLowerCase();
+          if (body.includes("restricted")) return done(true, `Sending-only key accepted — couldn't check that ${domain} is verified`);
+          return done(false, `Key rejected (${r.status})`);
+        }
+        if (!r.ok) return done(false, `Resend returned ${r.status}`);
+        const list = ((await r.json().catch(() => null)) as { data?: { name?: string; status?: string }[] } | null)?.data ?? [];
+        const match = list.find((d) => d.name?.toLowerCase() === domain);
+        if (!match) return done(false, `${domain} isn't added in Resend → Domains, so mail from it is rejected`);
+        if (match.status !== "verified") return done(false, `${domain} is "${match.status}" in Resend — finish the DNS records until it shows Verified`);
+        return done(true, `Key accepted · ${domain} verified`);
       }
       case "polar": {
         const token = await get("accessToken");
