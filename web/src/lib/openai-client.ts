@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { getIntegrationValue } from "@/lib/integrations";
 import { getSettings, type AiTool } from "@/lib/app-settings";
 import { AiUnavailableError, assertAiAllowed, recordAiCall } from "@/lib/ai-budget";
+import { claudeJsonText, extractJsonObject, getClaude, isClaudeModel } from "@/lib/claude-client";
 
 export { AiUnavailableError } from "@/lib/ai-budget";
 
@@ -41,11 +42,12 @@ export async function chatJson<T>(args: {
   maxTokens?: number;
 }): Promise<T> {
   await assertAiAllowed({ tool: args.tool, userId: args.userId, paid: args.paid });
+  const model = args.model ?? (await getSettings()).models[args.tool] ?? "gpt-4o-mini";
+  if (isClaudeModel(model)) return claudeChatJson<T>({ ...args, model });
   const openai = await getOpenAI();
   if (!openai) {
     throw new AiUnavailableError("AI tools aren't configured yet. Please try again later.");
   }
-  const model = args.model ?? (await getSettings()).models[args.tool] ?? "gpt-4o-mini";
   let res: OpenAI.Chat.Completions.ChatCompletion;
   try {
     res = await openai.chat.completions.create({
@@ -73,6 +75,21 @@ export async function chatJson<T>(args: {
   const text = res.choices[0]?.message?.content;
   if (!text) throw new Error("Empty response");
   return JSON.parse(text) as T;
+}
+
+/** Same contract as the OpenAI path, served by a Claude model (Admin → Limits & budgets → Models). */
+async function claudeChatJson<T>(args: { system: string; user: string; tool: AiTool; userId?: string | null; model: string; maxTokens?: number }): Promise<T> {
+  const claude = await getClaude();
+  if (!claude) throw new AiUnavailableError("AI tools aren't configured yet. Please try again later.");
+  let out: Awaited<ReturnType<typeof claudeJsonText>>;
+  try {
+    out = await claudeJsonText(claude, args);
+  } catch (e) {
+    await recordAiCall({ tool: args.tool, userId: args.userId, model: args.model, inputTokens: 0, outputTokens: 0, ok: false });
+    throw e;
+  }
+  await recordAiCall({ tool: args.tool, userId: args.userId, model: args.model, inputTokens: out.inputTokens, outputTokens: out.outputTokens, ok: true });
+  return JSON.parse(extractJsonObject(out.text)) as T;
 }
 
 /** Route helper: friendly 503 for paused/capped AI, otherwise a generic 502. */

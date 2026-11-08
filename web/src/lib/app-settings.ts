@@ -39,7 +39,7 @@ export const AI_TOOL_LABELS: Record<AiTool, string> = {
   free_resignation: "Free resignation letter generator",
 };
 
-export const AI_MODELS = ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1"] as const;
+export const AI_MODELS = ["gpt-4o-mini", "gpt-4o", "gpt-4.1-mini", "gpt-4.1", "claude-haiku-5-5", "claude-sonnet-5-5", "claude-opus-5-5"] as const;
 
 /** Plans with editable monthly quotas: every checkout plan plus "free" (no paid plan). */
 export type QuotaPlan = CheckoutPlan | "free";

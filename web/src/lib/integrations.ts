@@ -50,6 +50,16 @@ export const PROVIDERS: ProviderDef[] = [
     fields: [{ key: "apiKey", label: "API key", secret: true, env: "OPENAI_API_KEY", placeholder: "sk-…" }],
   },
   {
+    id: "anthropic",
+    name: "Claude (Anthropic)",
+    group: "AI models",
+    purpose: "Runs any AI tool set to a Claude model in Limits & budgets → Models",
+    required: ["apiKey"],
+    docsUrl: "https://console.anthropic.com/settings/keys",
+    tile: INK,
+    fields: [{ key: "apiKey", label: "API key", secret: true, env: "ANTHROPIC_API_KEY", placeholder: "sk-ant-…" }],
+  },
+  {
     id: "polar",
     name: "Polar",
     group: "Payments",
@@ -368,6 +378,13 @@ export async function testIntegration(
         if (!key) return done(false, "No API key");
         const r = await fetch("https://api.openai.com/v1/models", { headers: { Authorization: `Bearer ${key}` }, signal });
         return r.ok ? done(true, "Key accepted") : done(false, r.status === 401 ? "Key rejected (401)" : `OpenAI returned ${r.status}`);
+      }
+      case "anthropic": {
+        const key = await get("apiKey");
+        if (!key) return done(false, "No API key");
+        const { testClaudeKey } = await import("@/lib/claude-client");
+        const r = await testClaudeKey(key);
+        return done(r.ok, r.message);
       }
       case "resend": {
         const key = await get("apiKey");

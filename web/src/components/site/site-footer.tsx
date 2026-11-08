@@ -28,8 +28,6 @@ const COLUMNS = [
       { href: "/resume-keywords", label: "Resume keywords by role" },
       { href: "/ats", label: "ATS guides (Workday, Greenhouse…)" },
       { href: "/what-is-a-good-ats-score", label: "What's a good ATS score?" },
-      { href: "/compare/ats-resume-checkers", label: "ATS checkers compared" },
-      { href: "/alternatives/jobscan", label: "Jobscan alternative" },
       { href: "/blog", label: "Blog" },
     ],
   },
@@ -52,7 +50,6 @@ const COLUMNS = [
     links: [
       { href: "/about", label: "About" },
       { href: "/editorial-process", label: "Editorial process" },
-      { href: "/changelog", label: "Changelog" },
       { href: "/pricing", label: "Pricing" },
       { href: "/contact", label: "Contact" },
       { href: "/legal/privacy", label: "Privacy" },

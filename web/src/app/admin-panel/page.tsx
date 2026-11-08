@@ -1,3 +1,4 @@
+import { getSettings } from "@/lib/app-settings";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
@@ -43,7 +44,10 @@ async function configProblems(): Promise<string[]> {
   for (const p of CHECKOUT_PLAN_ORDER) {
     if (!(await productIdForCheckoutPlan(p))) out.push(`No Polar product id for ${PUBLIC_PLANS[p].title} — its checkout fails.`);
   }
-  if (!field("openai", "apiKey")) out.push("OpenAI key is missing — the free ATS check and AI tools fail.");
+  // Only the providers the chosen models actually use need a key.
+  const models = Object.values((await getSettings()).models);
+  if (models.some((m) => !m.startsWith("claude-")) && !field("openai", "apiKey")) out.push("OpenAI key is missing — AI tools set to an OpenAI model fail.");
+  if (models.some((m) => m.startsWith("claude-")) && !field("anthropic", "apiKey")) out.push("Claude API key is missing — AI tools set to a Claude model fail.");
   if (!secretBoxReady()) out.push("KEY_ENCRYPTION_KEY is not set in hosting — keys can't be saved from Integrations.");
   if (!process.env.NEXT_PUBLIC_APP_URL) out.push("NEXT_PUBLIC_APP_URL is not set — checkout return links and sitemap use a fallback host.");
   return out;
