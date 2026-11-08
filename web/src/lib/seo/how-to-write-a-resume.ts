@@ -183,6 +183,7 @@ export const HOW_TO_SECTIONS: GuideSection[] = [
     title: "Next: the cover letter",
     body: [
       "Many applications still ask for a cover letter, and a short, specific one helps when you're changing careers or writing to a hiring manager directly. Start from the copyable [cover letter template](/cover-letter-template), which explains each paragraph and includes a filled-in example.",
+      "Keep \"References available upon request\" off the resume itself. Prepare a separate [references page](/resume-references) instead, and send it only when it's asked for.",
     ],
   },
 ];

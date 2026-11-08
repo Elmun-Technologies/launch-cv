@@ -52,6 +52,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/resignation-letter/*": "2026-11-02",
   "/resume-summary-examples": "2026-11-08",
   "/skills-for-resume": "2026-11-08",
+  "/resume-references": "2026-11-08",
   /** All /cover-letter/[slug] situation pages (data in lib/seo/cover-letter-situations.ts). */
   "/cover-letter/*": "2026-11-08",
   "/legal/privacy": "2026-10-27",
