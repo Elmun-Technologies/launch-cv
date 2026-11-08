@@ -26,6 +26,10 @@ export type PolarOrder = {
   product_id?: string | null;
   amount?: number | null; // minor units (cents)
   total_amount?: number | null; // minor units (cents), incl. tax
+  subtotal_amount?: number | null; // list price before discount (cents)
+  discount_amount?: number | null; // cents taken off by a discount code
+  net_amount?: number | null; // after discount, before tax (cents) — what we earn
+  discount?: { code?: string | null; name?: string | null } | null;
   currency?: string | null;
   metadata?: Record<string, unknown> | null;
   customer?: { id?: string | null; email?: string | null } | null;

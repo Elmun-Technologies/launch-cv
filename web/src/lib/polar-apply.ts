@@ -32,6 +32,22 @@ function toMajorUnits(minor: number | null | undefined): number | null {
   return typeof minor === "number" && Number.isFinite(minor) ? minor / 100 : null;
 }
 
+/**
+ * What the buyer actually paid, for the admin's revenue: net of discounts and before
+ * tax (tax isn't ours). The list price and discount are kept so a 90%-off test sale
+ * shows as $0.90 of a $9 plan, not as $9.
+ */
+function orderAmounts(order: PolarOrder): Record<string, number | string> {
+  const out: Record<string, number | string> = {};
+  const paid = order.net_amount ?? order.total_amount ?? order.amount;
+  if (typeof paid === "number") out.paidCents = paid;
+  if (typeof order.subtotal_amount === "number") out.listCents = order.subtotal_amount;
+  if (typeof order.discount_amount === "number" && order.discount_amount > 0) out.discountCents = order.discount_amount;
+  if (order.discount?.code) out.discountCode = order.discount.code;
+  if (order.currency) out.currency = order.currency;
+  return out;
+}
+
 export type SubscriptionEvent =
   | "subscription.created"
   | "subscription.updated"
@@ -54,7 +70,10 @@ export async function applyPolarSubscription(data: Record<string, unknown>, even
   await upsertSubscriptionFromPolar(sub, userId);
   // Count the purchase exactly once — on the FIRST transition into `active`.
   if (eventType === "subscription.active" && priorStatus !== "active") {
-    await trackEvent("pay_success", { userId, meta: { provider: "polar", subscriptionId: sub.id } });
+    await trackEvent("pay_success", {
+      userId,
+      meta: { provider: "polar", subscriptionId: sub.id, ...(typeof sub.amount === "number" ? { paidCents: sub.amount } : {}) },
+    });
     await trackPurchaseCompleted({
       userId,
       plan: await planIdFromPolarProductId(sub.product_id ?? null),
@@ -91,14 +110,17 @@ export async function applyPolarPaidOrder(data: Record<string, unknown>): Promis
   const applied = await upsertOrderFromPolar(order, userId, plan);
   if (!applied) console.warn(`[polar] order ${order.id} (${plan}) not applied: user ${userId} already has better access`);
   // Count the one-time purchase exactly once: it was paid even if it didn't change access.
-  await trackEvent("pay_success", { userId, meta: { provider: "polar", orderId: order.id, plan, ...(applied ? {} : { applied: false }) } });
+  await trackEvent("pay_success", {
+    userId,
+    meta: { provider: "polar", orderId: order.id, plan, ...orderAmounts(order), ...(applied ? {} : { applied: false }) },
+  });
   await trackPurchaseCompleted({
     userId,
     plan,
     provider: "polar",
     orderId: order.id ?? null,
     gaClientId: gaClientIdOf(metadataOf(data)),
-    value: toMajorUnits(order.total_amount ?? order.amount),
+    value: toMajorUnits(order.net_amount ?? order.total_amount ?? order.amount),
     currency: order.currency ?? null,
     attribution: attributionFromRecord(metadataOf(data)),
   });

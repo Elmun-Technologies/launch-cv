@@ -27,7 +27,6 @@ const ld = {
     name: "LaunchCV",
     legalName: "Elmun Technologies LLC",
     email: EMAIL,
-    address: { "@type": "PostalAddress", addressLocality: "Tashkent", addressCountry: "UZ" },
   },
 };
 
@@ -125,7 +124,7 @@ export default function ContactPage() {
           <div>
             <p className="text-[13px] font-bold tracking-[0.08em] text-[#66647c]">COMPANY</p>
             <p className="mt-2 text-[20px] font-extrabold sm:text-[22px]">Elmun Technologies LLC</p>
-            <p className="mt-0.5 text-[15px] text-[#4a4862]">Tashkent, Uzbekistan</p>
+            <p className="mt-0.5 text-[15px] text-[#4a4862]">{EMAIL}</p>
           </div>
           <ul className="flex flex-wrap gap-x-6 text-[15px] font-semibold">
             {companyLinks.map((l) => (

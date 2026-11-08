@@ -55,6 +55,27 @@ async function main() {
       }
     }
 
+    // 3. Purchases recorded before amounts were stored: add what was actually paid, from Polar's
+    //    order records, so revenue isn't counted at list price. Only orders we looked up.
+    if (!done.has("order-amounts-2026-11")) {
+      const KNOWN: Record<string, Json> = {
+        // Owner's test Week Pass with OWNERTEST90: $9 list, $8.10 off, $0.90 paid.
+        "efda474e-53d9-4bf1-a7d8-effefc568a44": { paidCents: 90, listCents: 900, discountCents: 810, discountCode: "OWNERTEST90", currency: "usd" },
+      };
+      for (const [orderId, amounts] of Object.entries(KNOWN)) {
+        const events = await prisma.analyticsEvent.findMany({
+          where: { name: "pay_success", meta: { path: ["orderId"], equals: orderId } },
+          select: { id: true, meta: true },
+        });
+        for (const e of events) {
+          const meta = (e.meta as Json | null) ?? {};
+          if (typeof meta.paidCents === "number") continue;
+          await prisma.analyticsEvent.update({ where: { id: e.id }, data: { meta: { ...meta, ...amounts } as Prisma.InputJsonValue } });
+        }
+      }
+      applied.push("order-amounts-2026-11");
+    }
+
     if (applied.length) await write(MARKER_KEY, { done: [...done, ...applied] });
     console.log(`[settings-fixes] applied: ${applied.join(", ") || "none"}`);
   } catch (e) {
