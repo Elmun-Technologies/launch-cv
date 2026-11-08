@@ -37,6 +37,17 @@ boshqa sessiya nima qilganini bilish uchun.
 - /pricing: "7-day refund on Pro", pass'lar kafolatga kirmaydi (Terms bo'yicha); limitlar
   kalendar oyi bo'yicha (Week Pass'da "/month" yo'q). Bepul ATS check: 30 kunda 1 marta / tarmoq.
 
+## O'z trafik analitikasi (2026-11-08, branch `traffic-analytics`, lokal commit)
+
+- Cookie'siz, birinchi tomon analitika: `components/traffic-tracker.tsx` → `POST /api/t` →
+  yangi `PageView` jadvali. IP saqlanmaydi: visitorId = SHA-256(kunlik salt + IP + UA + sayt),
+  salt `AppSetting "trafficSalt"`da har UTC kuni almashadi. DNT/GPC, botlar, /admin-panel,
+  /api va *.vercel.app preview yozilmaydi. 13 oydan eski qatorlar winback cron ichida o'chadi.
+- Admin → Analytics qayta yozildi: Traffic / Pages / Sources / Audience / Journeys / Live,
+  sana presetlari, New York/UTC, mamlakat/qurilma/manba filtrlari, oldingi davr bilan delta,
+  funnel, har jadval CSV (`/api/admin-panel/analytics/export?table=…`).
+- Tekshiruv: `npx tsx src/lib/traffic/traffic.check.ts`, e2e `e2e/traffic.spec.ts`.
+
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 
 - `src/lib/winback.ts` + `/api/cron/winback` (vercel.json cron, har kuni 15:07 UTC):

@@ -26,6 +26,16 @@ const sections: LegalSection[] = [
           and named events such as &ldquo;resume created&rdquo;, never what you type. You can block these tools with your
           browser&apos;s privacy settings or a content blocker; the product keeps working.
         </p>
+        <p className="mt-3">
+          We also count page visits ourselves, on our own servers, without cookies. For each visit we record the page,
+          the referring site and campaign tags, your country and region (from the network, not GPS), and your device,
+          browser, operating system and language. We never store your IP address: it is combined with your browser&apos;s
+          user-agent and a random salt that is replaced every day, then irreversibly hashed, so we can count unique
+          visitors for a day but can&apos;t recognise you the next day or identify you. A random session id lives in your
+          tab&apos;s session storage and a &ldquo;visited before&rdquo; flag in local storage; neither identifies you. If you are
+          signed in, visits are linked to your account ID. If your browser sends Do Not Track or Global Privacy Control,
+          we don&apos;t record anything. Visit records are deleted after 13 months.
+        </p>
       </>
     ),
   },

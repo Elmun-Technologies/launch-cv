@@ -16,7 +16,7 @@ export const AUDIT_GROUPS = [
   { id: "secrets", label: "Secrets", prefixes: ["integration."] },
   { id: "settings", label: "Settings", prefixes: ["settings.", "ai-usage."] },
   { id: "security", label: "Security", prefixes: ["admin."] },
-  { id: "data", label: "Exports", prefixes: ["user.export", "audit.export", "revenue.export", "product.export"] },
+  { id: "data", label: "Exports", prefixes: ["user.export", "audit.export", "revenue.export", "product.export", "analytics.export"] },
 ] as const;
 export type AuditGroup = (typeof AUDIT_GROUPS)[number]["id"];
 

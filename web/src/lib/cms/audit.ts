@@ -35,6 +35,7 @@ export type AuditAction =
   | "audit.export"
   | "revenue.export"
   | "product.export"
+  | "analytics.export"
   | "resume.delete"
   | "subscription.cancel"
   | "subscription.refund"
