@@ -46,11 +46,17 @@ export async function POST(req: Request) {
 
   const link = `${appBaseUrl()}/auth/reset-password?token=${encodeURIComponent(raw)}`;
   const { html, text } = transactionalEmail({
-    preheader: "Choose a new password for your LaunchCV account.",
-    heading: "Reset your password",
-    paragraphs: ["Someone asked to reset the password for this LaunchCV account. If it was you, choose a new one below."],
+    preheader: "Choose a new password for your LaunchCV account. The link works for 1 hour.",
+    hero: "reset",
+    eyebrow: "Account security",
+    heading: "Let's get you back in",
+    paragraphs: [
+      "Someone asked to reset the password for this LaunchCV account. If it was you, choose a new one below. Your resumes and applications are right where you left them.",
+      "If it wasn't you, you can ignore this email. Your password stays the same and nobody can change it without this link.",
+    ],
     cta: { label: "Choose a new password", url: link },
-    footnote: "This link works for 1 hour and can be used once. If you didn't ask for this, ignore this email — your password stays the same.",
+    footnote: "This link works for 1 hour and can be used once.",
+    siteUrl: appBaseUrl(),
   });
   const sent = await sendTransactionalEmail({
     to: user.email,

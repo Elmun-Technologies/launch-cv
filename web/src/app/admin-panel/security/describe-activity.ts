@@ -55,6 +55,9 @@ const FIELD_LABELS: Record<string, string> = {
   winbackValidHours: "win-back code hours",
   winbackDelayHours: "win-back delay hours",
   postalAddress: "postal address",
+  welcomeEnabled: "welcome offer",
+  welcomePercent: "welcome percent off",
+  welcomeValidHours: "welcome code hours",
 };
 
 const MONEY = new Set(["monthlyCapUsd", "dailyCapUsd", "perUserDailyUsd"]);

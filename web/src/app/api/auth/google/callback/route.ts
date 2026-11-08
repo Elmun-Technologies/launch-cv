@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { getSettings } from "@/lib/app-settings";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { COOKIE_NAME, sessionCookieBase, signSessionToken } from "@/lib/auth-token";
 import { trackEvent } from "@/lib/analytics";
+import { sendWelcomeOffer } from "@/lib/welcome-offer";
 import { attributionFromCookieHeader } from "@/lib/utm";
 import { SIGNUP_FLAG_COOKIE } from "@/lib/analytics-enabled";
 import { isAdminUser } from "@/lib/admin-guard";
@@ -179,6 +180,11 @@ export async function GET(req: Request) {
   }
 
   await trackEvent(isNewUser ? "google_signup_success" : "login_success", { userId });
+  // A Google address is already confirmed, so a new account gets the welcome code now.
+  if (isNewUser) {
+    const id = userId;
+    after(() => sendWelcomeOffer(id));
+  }
 
   // Google only lets us this far for verified addresses (checked above).
   const admin = isAdminUser({ role: userRole, email: userEmail, emailVerifiedAt: new Date() });

@@ -193,7 +193,7 @@ export default async function AdminRevenuePage({ searchParams }: { searchParams:
                         <td className={tdCls}>
                           {c.winback ? (
                             <span className="inline-flex items-center gap-1.5">
-                              <StatusBadge tone="violet">Win-back</StatusBadge>
+                              <StatusBadge tone="violet">{c.code.startsWith("Welcome") ? "Welcome" : "Win-back"}</StatusBadge>
                               <span className={cellMuted}>
                                 {c.codes} personal code{c.codes === 1 ? "" : "s"}
                               </span>

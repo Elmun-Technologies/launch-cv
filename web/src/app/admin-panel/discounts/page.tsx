@@ -14,6 +14,8 @@ import { getSettings } from "@/lib/app-settings";
 import { winbackStats } from "@/lib/winback";
 import { DiscountsClient, type DiscountRow } from "./discounts-client";
 import { WinbackCard } from "./winback-card";
+import { WelcomeCard } from "./welcome-card";
+import { welcomeStats } from "@/lib/welcome-offer";
 
 export const dynamic = "force-dynamic";
 
@@ -26,12 +28,13 @@ export default async function AdminDiscountsPage() {
   const admin = await requireAdmin("limits");
   if (!admin) redirect("/admin-panel/access-denied");
 
-  const [connected, server, productIds, settings, wbStats] = await Promise.all([
+  const [connected, server, productIds, settings, wbStats, wlStats] = await Promise.all([
     polarConnected(),
     getIntegrationValue("polar", "server"),
     soldPlanProductIds(),
     getSettings(),
     winbackStats().catch(() => ({ sent: 0, recent: 0, redeemed: null })),
+    welcomeStats().catch(() => ({ sent: 0, recent: 0, redeemed: null })),
   ]);
   const list = connected ? await listPolarDiscounts() : null;
   const discounts = list?.ok ? list.data : [];
@@ -84,6 +87,7 @@ export default async function AdminDiscountsPage() {
 
         <DiscountsClient rows={rows} plans={plans} disabled={!connected} />
 
+        <WelcomeCard marketing={settings.marketing} stats={wlStats} />
         <WinbackCard marketing={settings.marketing} stats={wbStats} />
       </div>
     </AdminShell>

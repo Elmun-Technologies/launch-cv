@@ -23,6 +23,8 @@ import type { PolarDiscountBody } from "@/lib/polar-discounts";
 import { createPolarDiscount, deletePolarDiscount, listPolarDiscounts, soldPlanProductIds } from "@/lib/polar-discounts-server";
 
 export const WINBACK_SENT_EVENT = "winback_sent";
+/** Recorded when the welcome offer is sent (lib/welcome-offer.ts); same meta shape as win-back. */
+export const WELCOME_SENT_EVENT = "welcome_offer_sent";
 export const CHECKOUT_STARTED_EVENT = "checkout_started";
 export const FREE_LIMIT_EVENT = "free_limit_reached";
 /** How far back past the delay a trigger event still counts. */
@@ -110,6 +112,9 @@ export function randomWinbackCode(): string {
 }
 
 export const WINBACK_CODE_RE = /^BACK[A-Z0-9]{6}$/;
+export const WELCOME_CODE_RE = /^HELLO[A-Z0-9]{6}$/;
+/** Any personal code we email (win-back or welcome). */
+export const PERSONAL_CODE_RE = /^(BACK|HELLO)[A-Z0-9]{6}$/;
 
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -134,8 +139,30 @@ export function winbackDiscountBody(args: { userId: string; code: string; percen
   };
 }
 
+const ET = new Intl.DateTimeFormat("en-US", {
+  timeZone: "America/New_York",
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+  hour: "numeric",
+  minute: "2-digit",
+  timeZoneName: "short",
+});
+
+/** e.g. "Tuesday, November 10 at 3:07 PM EST" (US Eastern, where most buyers are). */
+export function formatEastern(d: Date): string {
+  const parts = Object.fromEntries(ET.formatToParts(d).map((p) => [p.type, p.value]));
+  return `${parts.weekday}, ${parts.month} ${parts.day} at ${parts.hour}:${parts.minute} ${parts.dayPeriod} ${parts.timeZoneName}`;
+}
+
+/** "$7.20": a plan's price after `percent` off. */
+export function discountedPrice(plan: CheckoutPlan, percent: number): string {
+  const cents = Math.round(PUBLIC_PLANS[plan].priceAmount * 100 * (1 - percent / 100));
+  return `$${(cents / 100).toFixed(2)}`;
+}
+
 /** "Week Pass, Pro or 90-Day Pass" from the plans on sale. */
-function soldPlanTitles(): string {
+export function soldPlanTitles(): string {
   const t = CHECKOUT_PLAN_ORDER.map((p) => PUBLIC_PLANS[p].title);
   return t.length > 1 ? `${t.slice(0, -1).join(", ")} or ${t[t.length - 1]}` : t.join("");
 }
@@ -151,27 +178,47 @@ export function winbackEmail(args: {
   checkoutUrl: string;
   unsubscribeUrl: string;
   postalAddress: string;
+  siteUrl?: string;
 }): { subject: string; html: string; text: string } {
   const planTitle = PUBLIC_PLANS[args.plan].title;
-  const what =
+  const price = PUBLIC_PLANS[args.plan].priceDisplay;
+  const opener =
     args.reason === "checkout"
-      ? `You started a checkout for the LaunchCV ${planTitle} but didn't finish it.`
-      : "You reached the free plan's monthly AI limit on LaunchCV.";
-  const subject = `${args.percent}% off LaunchCV for the next ${args.validHours} hours`;
+      ? `You were one step away from the ${planTitle}. Then life happened. We get it: job hunting is a lot.`
+      : "You've used this month's free AI checks. That usually means you're applying seriously, so here's a push to finish strong.";
+  const subject =
+    args.reason === "checkout"
+      ? `Your ${planTitle} is waiting: ${args.percent}% off for ${args.validHours} hours`
+      : `Keep going: ${args.percent}% off LaunchCV for ${args.validHours} hours`;
   const { html, text } = transactionalEmail({
-    preheader: `Your code ${args.code} takes ${args.percent}% off any LaunchCV plan until ${formatUtc(args.endsAt)}.`,
-    heading: `${args.percent}% off LaunchCV, for ${args.validHours} hours`,
+    preheader: `A personal code just for you: ${args.percent}% off any plan until ${formatEastern(args.endsAt)}.`,
+    hero: "winback",
+    eyebrow: `Ends in ${args.validHours} hours`,
+    heading: args.reason === "checkout" ? "Still want that interview?" : "Don't stop at the free limit",
     paragraphs: [
-      what,
-      `Here's a personal code for ${args.percent}% off: ${args.code}. It works once, on the ${soldPlanTitles()}, until ${formatUtc(args.endsAt)}.`,
-      `The button opens checkout for the ${planTitle} with the code already applied. You can also enter it yourself on the payment step.`,
+      opener,
+      `So here's ${args.percent}% off, just for you. The ${planTitle} drops from ${price} to ${discountedPrice(args.plan, args.percent)}. The button below opens checkout with your code already applied.`,
     ],
-    cta: { label: `Use my ${args.percent}% off`, url: args.checkoutUrl },
+    offer: {
+      label: "Your personal code",
+      headline: `${args.percent}% off`,
+      sub: `${soldPlanTitles()} · one use`,
+      code: args.code,
+      expires: `Ends ${formatEastern(args.endsAt)}`,
+    },
+    bullets: [
+      "Match your resume to any job post and see the missing keywords",
+      "Rewrite weak bullets into results recruiters notice",
+      "A cover letter and application packet in minutes",
+    ],
+    cta: { label: `Claim my ${args.percent}% off`, url: args.checkoutUrl },
+    after: ["Good luck out there. You've got this.", "The LaunchCV team"],
     footnote:
       args.reason === "checkout"
-        ? "You're getting this email because you started a checkout on LaunchCV. It's the only discount email we send."
-        : "You're getting this email because you reached the free plan's AI limit on LaunchCV. It's the only discount email we send.",
+        ? "You're getting this because you started a checkout on LaunchCV. We send at most one email like this."
+        : "You're getting this because you reached the free plan's AI limit on LaunchCV. We send at most one email like this.",
     footer: { lines: [COMPANY_NAME, args.postalAddress || "(Postal address not set)"], unsubscribeUrl: args.unsubscribeUrl },
+    siteUrl: args.siteUrl,
   });
   return { subject, html, text };
 }
@@ -187,6 +234,8 @@ export type WinbackDeps = {
   findTriggerEvents(from: Date, to: Date): Promise<TriggerEvent[]>;
   findUsers(ids: string[]): Promise<CandidateUser[]>;
   findAlreadySent(ids: string[]): Promise<Set<string>>;
+  /** Users whose welcome code is still valid at `now`: they already hold an offer, so no win-back yet. */
+  findActiveWelcome?(ids: string[], now: Date): Promise<Set<string>>;
   planOf(userId: string): Promise<PlanId>;
   productIds(): Promise<string[]>;
   createDiscount(body: PolarDiscountBody): Promise<{ ok: true; id: string } | { ok: false; error: string }>;
@@ -233,6 +282,15 @@ export const defaultWinbackDeps: WinbackDeps = {
     const rows = await prisma.analyticsEvent.findMany({ where: { name: WINBACK_SENT_EVENT, userId: { in: ids } }, select: { userId: true } });
     return new Set(rows.map((r) => r.userId).filter((x): x is string => !!x));
   },
+  findActiveWelcome: async (ids, now) => {
+    const rows = await prisma.analyticsEvent.findMany({ where: { name: WELCOME_SENT_EVENT, userId: { in: ids } }, select: { userId: true, meta: true } });
+    const out = new Set<string>();
+    for (const r of rows) {
+      const end = r.meta && typeof r.meta === "object" ? (r.meta as { endsAt?: unknown }).endsAt : null;
+      if (r.userId && typeof end === "string" && new Date(end).getTime() > now.getTime()) out.add(r.userId);
+    }
+    return out;
+  },
   planOf: (userId) => getUserPlanId(userId),
   productIds: async () => Object.values(await soldPlanProductIds()).filter((x): x is string => !!x),
   createDiscount: async (body) => {
@@ -264,7 +322,9 @@ export async function runWinback(now: Date = new Date(), deps: WinbackDeps = def
   const ids = [...new Set(events.map((e) => e.userId).filter(Boolean))];
   if (!ids.length) return { candidates: 0, attempted: 0, sent: 0, failed: 0, paid: 0, deferred: 0, errors: [] };
   const [users, alreadySent] = await Promise.all([deps.findUsers(ids), deps.findAlreadySent(ids)]);
-  const candidates = pickCandidates({ events, users, alreadySent, window });
+  const activeWelcome = deps.findActiveWelcome ? await deps.findActiveWelcome(ids, now) : new Set<string>();
+  // Someone still holding a valid welcome code isn't sent a second offer; once it lapses unused, they can be.
+  const candidates = pickCandidates({ events, users, alreadySent, window }).filter((c) => !activeWelcome.has(c.userId));
 
   const productIds = candidates.length ? await deps.productIds() : [];
   if (candidates.length && !productIds.length) return { skipped: "no_products" };
@@ -306,6 +366,7 @@ export async function runWinback(now: Date = new Date(), deps: WinbackDeps = def
       checkoutUrl: `${deps.baseUrl()}/checkout/${c.plan}?code=${code}`,
       unsubscribeUrl: deps.unsubscribeUrl(c.userId),
       postalAddress: m.postalAddress,
+      siteUrl: deps.baseUrl(),
     });
     const r = await deps.sendEmail({ to: c.email, ...email, headers: listUnsubscribeHeaders(deps.unsubscribeUrl(c.userId)) });
     if (!r.ok) {
@@ -344,12 +405,13 @@ export function parseWinbackOffer(meta: unknown, code: string, now: Date): Winba
   return { code, discountId: m.discountId, percent, endsAt, plan: metaPlan(m) };
 }
 
-/** The win-back offer sent to this user with this code, if it hasn't expired. */
+/** The personal offer (win-back or welcome) sent to this user with this code, if it hasn't expired. */
 export async function findWinbackOffer(userId: string, rawCode: string | null | undefined, now = new Date()): Promise<WinbackOffer | null> {
   const code = (rawCode ?? "").trim().toUpperCase();
-  if (!WINBACK_CODE_RE.test(code)) return null;
+  if (!PERSONAL_CODE_RE.test(code)) return null;
+  const name = WELCOME_CODE_RE.test(code) ? WELCOME_SENT_EVENT : WINBACK_SENT_EVENT;
   const ev = await prisma.analyticsEvent
-    .findFirst({ where: { userId, name: WINBACK_SENT_EVENT, meta: { path: ["code"], equals: code } }, orderBy: { createdAt: "desc" }, select: { meta: true } })
+    .findFirst({ where: { userId, name, meta: { path: ["code"], equals: code } }, orderBy: { createdAt: "desc" }, select: { meta: true } })
     .catch(() => null);
   return ev ? parseWinbackOffer(ev.meta, code, now) : null;
 }
@@ -357,11 +419,16 @@ export async function findWinbackOffer(userId: string, rawCode: string | null | 
 /* ── Admin ── */
 
 /** Emails sent, and how many codes from the last 90 days were redeemed (null when Polar can't be read). */
-export async function winbackStats(now = new Date()): Promise<{ sent: number; recent: number; redeemed: number | null }> {
+export function winbackStats(now = new Date()) {
+  return personalCodeStats(WINBACK_SENT_EVENT, "Win-back", now);
+}
+
+/** The same counts for any personal-code email (event name, Polar discount name prefix). */
+export async function personalCodeStats(event: string, polarName: string, now = new Date()): Promise<{ sent: number; recent: number; redeemed: number | null }> {
   const since = new Date(now.getTime() - 90 * 24 * HOUR);
   const [sent, recentRows] = await Promise.all([
-    prisma.analyticsEvent.count({ where: { name: WINBACK_SENT_EVENT } }),
-    prisma.analyticsEvent.findMany({ where: { name: WINBACK_SENT_EVENT, createdAt: { gte: since } }, select: { meta: true } }),
+    prisma.analyticsEvent.count({ where: { name: event } }),
+    prisma.analyticsEvent.findMany({ where: { name: event, createdAt: { gte: since } }, select: { meta: true } }),
   ]);
   const ids = new Set(
     recentRows
@@ -369,7 +436,7 @@ export async function winbackStats(now = new Date()): Promise<{ sent: number; re
       .filter((x): x is string => typeof x === "string"),
   );
   if (!ids.size) return { sent, recent: 0, redeemed: 0 };
-  const list = await listPolarDiscounts("Win-back");
+  const list = await listPolarDiscounts(polarName);
   if (!list.ok) return { sent, recent: ids.size, redeemed: null };
   const redeemed = list.data.filter((d) => ids.has(d.id) && d.redemptions_count > 0).length;
   return { sent, recent: ids.size, redeemed };
@@ -391,6 +458,7 @@ export async function sendWinbackTest(args: { to: string; userId: string; market
     checkoutUrl: `${appBaseUrl()}/checkout/week?code=${code}`,
     unsubscribeUrl: unsub,
     postalAddress: m.postalAddress,
+    siteUrl: appBaseUrl(),
   });
   return sendTransactionalEmail({ to: args.to, ...email, subject: `[Test] ${email.subject}`, headers: listUnsubscribeHeaders(unsub) });
 }

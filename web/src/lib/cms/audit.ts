@@ -42,6 +42,7 @@ export type AuditAction =
   | "discount.create"
   | "discount.delete"
   | "winback.test"
+  | "welcome.test"
   | "report.weekly.send-now"
   | "ai-usage.limit.override"
   // Platform configuration and admin security

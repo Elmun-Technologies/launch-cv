@@ -65,9 +65,18 @@ boshqa sessiya nima qilganini bilish uchun.
   domeni tasdiqlanmaguncha (403 "domain is not verified") tasdiqlash xatlari ketmaydi —
   shu vaqtda o'chirib turish mumkin. Bepul vositalar textarea'lari Clarity'da yashiriladi
   (`data-clarity-mask`).
-- **Email:** launch-cv.com Resend'da tasdiqlanishi kerak (Namecheap DNS: TXT
-  `resend._domainkey`, CNAME `send`/`rsend`, ixtiyoriy `_dmarc`). Shundan keyin Admin →
-  Integrations → Resend → Test connection.
+- **Email ishlaydi (2026-11-08):** launch-cv.com Resend'da Verified (us-east-1, Namecheap DNS:
+  TXT `resend._domainkey`, CNAME `send`/`rsend`, TXT `_dmarc`). Sender
+  `LaunchCV <info@launch-cv.com>`, test xat Gmail Inbox'ga keldi. Win-back manzili kiritilgan.
+
+## Email dizayni + welcome offer (2026-11-08)
+
+- `src/lib/email-layout.ts` — brendli shablon (v5: #121226 / #5440E8), kupon bloki (`offer`),
+  checklist (`bullets`), eyebrow, footer linklari. Barcha xatlar shundan foydalanadi.
+- **Welcome offer** (`src/lib/welcome-offer.ts`): email tasdiqlangach (Google — darhol) shaxsiy
+  `HELLO…` kodi, default 20% / 48 soat. Admin → Discounts → Welcome offer. Amal qiluvchi welcome
+  kodi bor odamga win-back yuborilmaydi; kod tugagach (ishlatilmasa) win-back mumkin.
+  Checkout `BACK…` va `HELLO…` kodlarni bir xil qo'llaydi. Revenue'da "Welcome codes" guruhi.
 
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 

@@ -9,6 +9,10 @@ process.env.ADMIN_EMAILS = "boss@example.com";
 import {
   WINBACK_CODE_RE,
   WINBACK_MAX_PER_RUN,
+  PERSONAL_CODE_RE,
+  WELCOME_CODE_RE,
+  discountedPrice,
+  formatEastern,
   formatUtc,
   parseWinbackOffer,
   pickCandidates,
@@ -25,6 +29,7 @@ import {
 } from "@/lib/winback";
 import { unsubscribeToken, unsubscribeUrl, verifyUnsubscribeToken } from "@/lib/unsubscribe-token";
 import { cronAuth } from "@/lib/cron-auth";
+import { randomWelcomeCode, welcomeOfferEmail } from "@/lib/welcome-offer";
 import type { PlanId } from "@/lib/plan-config";
 import type { PolarDiscountBody } from "@/lib/polar-discounts";
 
@@ -143,10 +148,13 @@ const freeLimit = (userId: string, h: number): TriggerEvent => ({ userId, name: 
     unsubscribeUrl: "https://launch-cv.com/api/email/unsubscribe?u=u1&t=x",
     postalAddress: "1 Main St, Sheridan, WY 82801, USA",
   });
-  expect(e.subject === "30% off LaunchCV for the next 48 hours", `subject: ${e.subject}`);
+  expect(e.subject === "Your Pro is waiting: 30% off for 48 hours", `subject: ${e.subject}`);
   expect(e.text.includes("BACKABC123") && e.html.includes("BACKABC123"), "email shows the code");
-  expect(e.text.includes("15:07 UTC"), "email shows the expiry in UTC");
-  expect(e.text.includes("started a checkout for the LaunchCV Pro"), "email says what they started");
+  expect(formatEastern(endsAt) === "Tuesday, November 10 at 10:07 AM EST", `formatEastern: ${formatEastern(endsAt)}`);
+  expect(e.text.includes("Ends Tuesday, November 10 at 10:07 AM EST"), "email shows the expiry in US Eastern");
+  expect(e.text.includes("one step away from the Pro") && e.subject.includes("Your Pro is waiting"), "email says what they started");
+  expect(e.text.includes("from $29 to $20.30"), "email shows the discounted price");
+  expect(e.text.includes("Code: BACKABC123"), "text version carries the code");
   expect(e.html.includes("/checkout/professional?code=BACKABC123"), "button links to checkout with the code");
   expect(e.text.includes("Elmun Technologies LLC") && e.text.includes("1 Main St, Sheridan"), "footer has company and postal address");
   expect(e.html.includes("api/email/unsubscribe?u=u1&amp;t=x"), "footer has the unsubscribe link");
@@ -203,14 +211,16 @@ function stub(opts: {
   plans?: Record<string, PlanId>;
   polarFails?: boolean;
   emailFailsFor?: string[];
+  activeWelcome?: string[];
 }): Stub {
   const s: Stub = { sent: [], emails: [], discounts: [], deleted: [], deps: null as unknown as WinbackDeps };
   let n = 0;
   s.deps = {
-    marketing: async () => ({ winbackEnabled: true, winbackPercent: 30, winbackValidHours: 48, winbackDelayHours: 24, postalAddress: "1 Main St, Sheridan, WY", ...opts.marketing }),
+    marketing: async () => ({ winbackEnabled: true, winbackPercent: 30, winbackValidHours: 48, winbackDelayHours: 24, postalAddress: "1 Main St, Sheridan, WY", welcomeEnabled: true, welcomePercent: 20, welcomeValidHours: 48, ...opts.marketing }),
     findTriggerEvents: async (from, to) => opts.events.filter((e) => e.createdAt >= from && e.createdAt <= to),
     findUsers: async (ids) => opts.users.filter((u) => ids.includes(u.id)),
     findAlreadySent: async (ids) => new Set((opts.alreadySent ?? []).filter((id) => ids.includes(id))),
+    findActiveWelcome: async (ids) => new Set((opts.activeWelcome ?? []).filter((id) => ids.includes(id))),
     planOf: async (id) => opts.plans?.[id] ?? "none",
     productIds: async () => ["p1", "p2", "p3"],
     createDiscount: async (body) => {
@@ -298,6 +308,35 @@ async function runChecks() {
     const r = await runWinback(NOW, s.deps);
     expect(!("skipped" in r) && r.candidates === 0, "no events → nothing to do");
   }
+  {
+    const s = stub({ events, users, activeWelcome: ["a"] });
+    await runWinback(NOW, s.deps);
+    expect(!s.sent.some((x) => x.userId === "a") && s.sent.some((x) => x.userId === "b"), "valid welcome code → no win-back yet; others still get theirs");
+  }
+
+  // Welcome offer
+  for (let i = 0; i < 50; i++) {
+    const c = randomWelcomeCode();
+    expect(WELCOME_CODE_RE.test(c) && PERSONAL_CODE_RE.test(c) && !WINBACK_CODE_RE.test(c), `welcome code format: ${c}`);
+  }
+  expect(PERSONAL_CODE_RE.test("BACKABC123") && !PERSONAL_CODE_RE.test("SAVE20"), "personal code regex covers win-back only among the others");
+  expect(discountedPrice("week", 20) === "$7.20" && discountedPrice("quarter", 30) === "$48.30", "discounted prices");
+  const w = welcomeOfferEmail({
+    percent: 20,
+    validHours: 48,
+    code: "HELLOABC123",
+    endsAt: new Date("2026-11-10T15:07:00Z"),
+    checkoutUrl: "https://launch-cv.com/checkout/week?code=HELLOABC123",
+    unsubscribeUrl: "https://launch-cv.com/api/email/unsubscribe?u=u1&t=x",
+    postalAddress: "1 Main St, Sheridan, WY",
+  });
+  expect(w.subject.includes("20% off") && w.subject.includes("48 hours"), "welcome subject");
+  expect(w.text.includes("Code: HELLOABC123") && w.html.includes("HELLOABC123"), "welcome carries the code");
+  expect(w.text.includes("from $9 to $7.20"), "welcome shows the discounted Week Pass price");
+  expect(w.text.includes("Ends Tuesday, November 10 at 10:07 AM EST"), "welcome shows the expiry in US Eastern");
+  expect(w.html.includes("/checkout/week?code=HELLOABC123"), "welcome button opens checkout with the code");
+  expect(w.text.includes("Elmun Technologies LLC") && w.text.includes("1 Main St, Sheridan") && w.html.includes("unsubscribe?u=u1&amp;t=x"), "welcome footer: company, address, unsubscribe");
+  expect(!/[<>]/.test(w.text), "welcome text version has no markup");
 }
 
 runChecks()

@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { billingOf, planOfRow, planResolver } from "@/lib/admin-billing";
 import { isOneTimeRow } from "@/lib/entitlement-rules";
-import { WINBACK_CODE_RE, WINBACK_SENT_EVENT } from "@/lib/winback";
+import { WELCOME_CODE_RE, WELCOME_SENT_EVENT, WINBACK_CODE_RE, WINBACK_SENT_EVENT } from "@/lib/winback";
 import type { PlanId } from "@/lib/plan-config";
 import {
   DAY_MS,
@@ -284,18 +284,21 @@ export async function loadRevenue(range: BizRange, now: number): Promise<Revenue
   // Discount codes; personal win-back codes collapse into one group.
   const usedCodes = [...new Set(cur.map((p) => p.code).filter((c): c is string => !!c))];
   const winbackCodes = new Set<string>(usedCodes.filter((c) => WINBACK_CODE_RE.test(c)));
+  const welcomeCodes = new Set<string>(usedCodes.filter((c) => WELCOME_CODE_RE.test(c)));
   if (usedCodes.length) {
-    const sent = await prisma.$queryRaw<{ code: string }[]>`
-      SELECT DISTINCT upper(e."meta"->>'code') AS code FROM "AnalyticsEvent" e
-      WHERE e."name" = ${WINBACK_SENT_EVENT} AND upper(e."meta"->>'code') IN (${Prisma.join(usedCodes)})`;
-    for (const s of sent) winbackCodes.add(s.code);
+    const sent = await prisma.$queryRaw<{ code: string; name: string }[]>`
+      SELECT DISTINCT upper(e."meta"->>'code') AS code, e."name" AS name FROM "AnalyticsEvent" e
+      WHERE e."name" IN (${WINBACK_SENT_EVENT}, ${WELCOME_SENT_EVENT}) AND upper(e."meta"->>'code') IN (${Prisma.join(usedCodes)})`;
+    for (const s of sent) (s.name === WELCOME_SENT_EVENT ? welcomeCodes : winbackCodes).add(s.code);
   }
   const codeMap = new Map<string, CodeRow & { set: Set<string> }>();
   for (const p of cur) {
     if (!p.code) continue;
-    const wb = winbackCodes.has(p.code);
-    const key = wb ? "__winback" : p.code;
-    const r = codeMap.get(key) ?? { code: wb ? "Win-back codes" : p.code, winback: wb, codes: 0, uses: 0, netUsd: 0, discountUsd: 0, grossUsd: 0, set: new Set<string>() };
+    const welcome = welcomeCodes.has(p.code);
+    const wb = !welcome && winbackCodes.has(p.code);
+    const key = welcome ? "__welcome" : wb ? "__winback" : p.code;
+    const label = welcome ? "Welcome codes" : wb ? "Win-back codes" : p.code;
+    const r = codeMap.get(key) ?? { code: label, winback: wb || welcome, codes: 0, uses: 0, netUsd: 0, discountUsd: 0, grossUsd: 0, set: new Set<string>() };
     r.set.add(p.code);
     r.codes = r.set.size;
     r.uses += 1;

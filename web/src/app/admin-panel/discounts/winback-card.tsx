@@ -65,9 +65,13 @@ export function WinbackCard({ marketing, stats }: { marketing: Marketing; stats:
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Start from the latest saved settings (props refresh after a save) so the
+    // welcome-offer fields saved by the card above aren't overwritten.
     void save(
       {
-        ...m,
+        ...marketing,
+        winbackEnabled: m.winbackEnabled,
+        postalAddress: m.postalAddress,
         winbackPercent: Number(num.winbackPercent),
         winbackValidHours: Number(num.winbackValidHours),
         winbackDelayHours: Number(num.winbackDelayHours),
