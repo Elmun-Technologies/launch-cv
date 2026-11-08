@@ -31,10 +31,24 @@ const PRODUCT_FIELD: Record<CheckoutPlan, string> = {
 };
 
 /** Polar product id configured for a checkout plan. */
+/**
+ * Production product ids for the plans on sale (organization "elmun-technologies").
+ * Used only when Admin → Integrations → Polar and the env leave the field empty
+ * and the server is production; a value set in the panel always wins.
+ */
+const PRODUCTION_PRODUCT_IDS: Partial<Record<CheckoutPlan, string>> = {
+  week: "d3080455-4ba7-4a57-b3d9-093e749d73df",
+  professional: "2e23dae2-5d0a-40c2-9b1f-37b8ac0e1629",
+  quarter: "040fec38-32f8-4921-bc9c-0c5f93f73115",
+};
+
 export async function productIdForCheckoutPlan(plan: CheckoutPlan): Promise<string | undefined> {
   const field = PRODUCT_FIELD[plan];
   if (!field) return undefined;
-  return (await getIntegrationValue("polar", field)) || undefined;
+  const set = await getIntegrationValue("polar", field);
+  if (set) return set;
+  const server = (await getIntegrationValue("polar", "server")).toLowerCase() || "production";
+  return server === "production" ? PRODUCTION_PRODUCT_IDS[plan] : undefined;
 }
 
 /** Reverse map: Polar product id → internal plan tier. Returns null if unknown. */
@@ -42,7 +56,7 @@ export async function planIdFromPolarProductId(productId: string | null | undefi
   if (!productId) return null;
   const id = productId.trim();
   for (const plan of Object.keys(PRODUCT_FIELD) as CheckoutPlan[]) {
-    const pid = await getIntegrationValue("polar", PRODUCT_FIELD[plan]);
+    const pid = await productIdForCheckoutPlan(plan);
     if (pid && pid === id) return plan;
   }
   return null;

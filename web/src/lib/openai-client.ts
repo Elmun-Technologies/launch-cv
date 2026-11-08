@@ -47,7 +47,24 @@ export async function chatJson<T>(args: {
   // free-tier model when the admin has set one (Admin → Limits & budgets → Models).
   const freeModel = args.paid !== true && models.freeTierModel ? models.freeTierModel : undefined;
   const model = freeModel ?? args.model ?? models[args.tool] ?? "gpt-4o-mini";
-  if (isClaudeModel(model)) return claudeChatJson<T>({ ...args, model });
+  if (isClaudeModel(model)) {
+    try {
+      return await claudeChatJson<T>({ ...args, model });
+    } catch (e) {
+      // Keep the tool working if Claude is down, misconfigured or declines: retry once on
+      // OpenAI when its key is set. The failed Claude call is already in the spend ledger.
+      if (!(await getOpenAI())) throw e;
+      console.warn(`[ai] ${model} failed for ${args.tool}; retrying on ${OPENAI_FALLBACK_MODEL}:`, e instanceof Error ? e.name : "error");
+      return openAiChatJson<T>(args, OPENAI_FALLBACK_MODEL);
+    }
+  }
+  return openAiChatJson<T>(args, model);
+}
+
+/** Used when a Claude call fails and an OpenAI key is configured. */
+const OPENAI_FALLBACK_MODEL = "gpt-4o-mini";
+
+async function openAiChatJson<T>(args: { system: string; user: string; tool: AiTool; userId?: string | null; maxTokens?: number }, model: string): Promise<T> {
   const openai = await getOpenAI();
   if (!openai) {
     throw new AiUnavailableError("AI tools aren't configured yet. Please try again later.");
