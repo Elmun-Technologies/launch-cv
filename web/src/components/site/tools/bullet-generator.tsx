@@ -94,7 +94,7 @@ export function BulletGenerator({ limit, paused }: { limit: number; paused: bool
           <label htmlFor={`${id}-duty`} className={fieldLabel}>
             What did you do?
           </label>
-          <textarea
+          <textarea data-clarity-mask="True"
             id={`${id}-duty`}
             value={duty}
             onChange={(e) => setDuty(e.target.value)}

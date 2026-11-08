@@ -1,5 +1,6 @@
 import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
 import { prisma } from "@/lib/prisma";
+import { getSettings } from "@/lib/app-settings";
 import { trackEvent } from "@/lib/analytics";
 import { getUserPlanId, limitsForPlan, type PlanId } from "@/lib/plans";
 import { EMAIL_UNVERIFIED_CODE, USAGE_LIMIT_CODE, VERIFY_EMAIL_MESSAGE, usageBlock } from "@/lib/usage-rules";
@@ -59,7 +60,9 @@ export async function assertAiUsageAllowed(userId: string, kind: UsageKind) {
   const max = kind === "jd" ? limits.jd : kind === "packet" ? limits.packet : limits.roleFit;
   // Staff-granted plans resolve to a plan id too, so they count as paid here.
   const paid = plan !== "none";
-  const block = usageBlock({ paid, emailVerified: !!user?.emailVerifiedAt, used, max });
+  // The admin can lift the confirmed-email rule while email delivery is broken (Settings → Product).
+  const needsEmail = (await getSettings()).switches.freeAiNeedsVerifiedEmail;
+  const block = usageBlock({ paid, emailVerified: !needsEmail || !!user?.emailVerifiedAt, used, max });
   if (block === "email_unverified") {
     return {
       ok: false as const,

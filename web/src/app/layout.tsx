@@ -9,6 +9,8 @@ import { JsonLd } from "@/components/json-ld";
 import { GoogleAnalytics } from "@/components/google-analytics";
 import { AttributionTracker } from "@/components/attribution-tracker";
 import { TrafficTracker } from "@/components/traffic-tracker";
+import { MarketingPixels } from "@/components/marketing-pixels";
+import { SiteVerificationMeta, BUILT_IN_GOOGLE_VERIFICATION } from "@/components/site-verification-meta";
 import { getSiteUrl } from "@/lib/site";
 import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
 import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
@@ -67,8 +69,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // More codes (Bing, Yandex, Meta, Pinterest, another Google one) come from Admin → Integrations via <SiteVerificationMeta />.
   verification: {
-    google: "dz90Yv149kX83SmMMEE6jz4_gegmV8_owlAFe1MzOMw",
+    google: BUILT_IN_GOOGLE_VERIFICATION,
   },
 };
 
@@ -171,8 +174,12 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en-US" className={`${siteFontVars} ${geistMono.variable} ${sora.variable} h-full`}>
+      <head>
+        <SiteVerificationMeta />
+      </head>
       <body className="flex min-h-full flex-col font-sans">
         <GoogleAnalytics />
+        <MarketingPixels />
         <AttributionTracker />
         <TrafficTracker />
         <JsonLd data={rootStructuredData} />

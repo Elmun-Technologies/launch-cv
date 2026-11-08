@@ -81,6 +81,8 @@ export type Settings = {
     freeTools: boolean;
     /** "Continue with Google" on login and register, and the Google OAuth routes. */
     googleSignIn: boolean;
+    /** Free AI checks need a confirmed email (anti-bot). Turn off only while email delivery is broken. */
+    freeAiNeedsVerifiedEmail: boolean;
   };
   /** Product toggles from Admin → Settings that aren't emergency switches. */
   product: {
@@ -116,6 +118,11 @@ export type Settings = {
     /** Physical postal address shown in the footer. Required by US CAN-SPAM: nothing is sent while empty. */
     postalAddress: string;
   };
+  /** Admin → Settings → Weekly report (see lib/weekly-report.ts). */
+  reports: {
+    /** Email owners last week's numbers every Monday (cron/weekly-report). */
+    weeklyEnabled: boolean;
+  };
 };
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -139,7 +146,7 @@ export const DEFAULT_SETTINGS: Settings = {
     pdfPerUserPerHour: 60,
     freeToolsPerIpPerDay: 10,
   },
-  switches: { aiTools: true, freeAtsCheck: true, signups: true, checkout: true, freeTools: true, googleSignIn: true },
+  switches: { aiTools: true, freeAtsCheck: true, signups: true, checkout: true, freeTools: true, googleSignIn: true, freeAiNeedsVerifiedEmail: true },
   product: { maintenanceBanner: false, maintenanceMessage: "" },
   models: {
     free_ats: "gpt-4o-mini",
@@ -158,6 +165,7 @@ export const DEFAULT_SETTINGS: Settings = {
   },
   security: { requireAdmin2fa: true, adminIdleMinutes: 30, ipAllowlist: [], emailOwnerOnKeyChange: true },
   marketing: { winbackEnabled: true, winbackPercent: 30, winbackValidHours: 48, winbackDelayHours: 24, postalAddress: "" },
+  reports: { weeklyEnabled: true },
 };
 
 export type SettingsGroup = keyof Settings;
@@ -268,6 +276,10 @@ function sanitize<G extends SettingsGroup>(group: G, v: Settings[G]): Settings[G
     m.winbackValidHours = clampInt(m.winbackValidHours, 12, 336);
     m.winbackDelayHours = clampInt(m.winbackDelayHours, 1, 168);
     m.postalAddress = plainText(m.postalAddress, 200);
+  } else if (group === "reports") {
+    const r = v as Settings["reports"];
+    // merge() already drops non-booleans; anything else falls back to on.
+    r.weeklyEnabled = r.weeklyEnabled !== false;
   }
   return v;
 }

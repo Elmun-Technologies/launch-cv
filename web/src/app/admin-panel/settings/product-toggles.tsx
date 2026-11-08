@@ -12,7 +12,7 @@ type Switches = Settings["switches"];
 type Product = Settings["product"];
 
 /** A labelled switch row (light card). */
-function SwitchRow({
+export function SwitchRow({
   id,
   title,
   hint,
@@ -93,7 +93,7 @@ export function ProductToggles({ switches, product, canEdit }: { switches: Switc
     }
   }
 
-  const toggle = (key: "freeAtsCheck" | "googleSignIn" | "signups", label: string) =>
+  const toggle = (key: "freeAtsCheck" | "googleSignIn" | "signups" | "freeAiNeedsVerifiedEmail", label: string) =>
     void put("switches", { ...sw, [key]: !sw[key] }, `${sw[key] ? "turn off" : "turn on"} ${label}`);
 
   const disabled = !canEdit || busy !== null;
@@ -104,6 +104,14 @@ export function ProductToggles({ switches, product, canEdit }: { switches: Switc
       <ul>
         <SwitchRow id="pt-ats" title="Free ATS check" hint="One per network per month" on={sw.freeAtsCheck} disabled={disabled} onToggle={() => toggle("freeAtsCheck", "the free ATS check")} />
         <SwitchRow id="pt-google" title="Google sign-in" hint="Shown on login and register" on={sw.googleSignIn} disabled={disabled} onToggle={() => toggle("googleSignIn", "Google sign-in")} />
+        <SwitchRow
+          id="pt-verify"
+          title="Free AI needs a confirmed email"
+          hint="Keeps bots off free AI. Turn off only while confirmation emails can't be delivered"
+          on={sw.freeAiNeedsVerifiedEmail}
+          disabled={disabled}
+          onToggle={() => toggle("freeAiNeedsVerifiedEmail", "the confirmed-email rule for free AI")}
+        />
         <SwitchRow
           id="pt-maint"
           title="Maintenance banner"

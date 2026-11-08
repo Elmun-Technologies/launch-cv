@@ -120,7 +120,7 @@ export function KeywordScanner() {
             </button>
           </span>
         </div>
-        <textarea
+        <textarea data-clarity-mask="True"
           id={`${id}-jd`}
           value={jd}
           onChange={(e) => setJd(e.target.value.slice(0, MAX_CHARS))}
@@ -133,7 +133,7 @@ export function KeywordScanner() {
         <label htmlFor={`${id}-resume`} className="mt-5 text-[13px] font-bold text-[#4a4862]">
           Your resume <span className="font-semibold text-[#66647c]">(optional)</span>
         </label>
-        <textarea
+        <textarea data-clarity-mask="True"
           id={`${id}-resume`}
           value={resume}
           onChange={(e) => setResume(e.target.value.slice(0, MAX_CHARS))}

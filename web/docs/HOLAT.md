@@ -48,6 +48,27 @@ boshqa sessiya nima qilganini bilish uchun.
   funnel, har jadval CSV (`/api/admin-panel/analytics/export?table=…`).
 - Tekshiruv: `npx tsx src/lib/traffic/traffic.check.ts`, e2e `e2e/traffic.spec.ts`.
 
+## Sayt tasdiqlash, piksellar, haftalik hisobot (2026-11-08, branch `integrations-reports`, lokal commit)
+
+- Admin → Integrations: **Site verification** (Search Console, Bing, Yandex, Meta domain,
+  Pinterest — kod yoki butun `<meta>` teg qabul qilinadi, `<head>`da serverda chiqadi;
+  saqlanganda `revalidatePath("/", "layout")`) va **Pixels & tags** (GTM, Meta Pixel, TikTok,
+  Microsoft Clarity, LinkedIn Insight, Reddit). Parser/validator: `src/lib/site-tags.ts`,
+  tekshiruv `npx tsx src/lib/site-tags.check.ts`.
+- Piksellar faqat cookie bannerda **Accept** bosilgandan keyin yuklanadi (`launchcv_consent`
+  = all; eski "Got it" rozilik hisoblanmaydi), hech qachon /admin-panel, /dashboard, /resume'da,
+  preview/localhost'da emas. Privacy sahifasida ro'yxat va "Change your cookie choice".
+- Haftalik hisobot: `/api/cron/weekly-report` (dushanba 13:07 UTC), egalar (owners) ga;
+  Admin → Settings → Weekly report (on/off + "Send me this week's report now").
+  `src/lib/weekly-report.ts`, tekshiruv `npx tsx src/lib/weekly-report.check.ts`.
+- Admin → Settings → Product: **"Free AI needs a confirmed email"** (default on). Resend
+  domeni tasdiqlanmaguncha (403 "domain is not verified") tasdiqlash xatlari ketmaydi —
+  shu vaqtda o'chirib turish mumkin. Bepul vositalar textarea'lari Clarity'da yashiriladi
+  (`data-clarity-mask`).
+- **Email:** launch-cv.com Resend'da tasdiqlanishi kerak (Namecheap DNS: TXT
+  `resend._domainkey`, CNAME `send`/`rsend`, ixtiyoriy `_dmarc`). Shundan keyin Admin →
+  Integrations → Resend → Test connection.
+
 ## Win-back email (2026-11-08, branch `winback`, lokal commit)
 
 - `src/lib/winback.ts` + `/api/cron/winback` (vercel.json cron, har kuni 15:07 UTC):
@@ -65,8 +86,8 @@ boshqa sessiya nima qilganini bilish uchun.
   funnel, haftalik kogortalar, AI tool adoption, unit economics. Har jadval CSV
   (`/api/admin-panel/{revenue,product}/export`). Ruxsat: `users` (Subscriptions kabi).
 - Matematika: `src/lib/biz-metrics.ts`, tekshiruv `npx tsx src/lib/biz-metrics.check.ts`.
-- Ochiq: refundlar yozilmaydi (Polar `order.refunded` ishlanmaydi); Pro yangilanish
-  to'lovlari `pay_success` sifatida yozilmaydi — net revenue faqat birinchi to'lovni ko'radi.
+- Refundlar (`order.refunded`) va Pro yangilanish to'lovlari (`renewal: true`) endi yoziladi
+  (`src/lib/polar-apply.ts`).
 
 ## Joriy / bloklangan (2026-11-07)
 

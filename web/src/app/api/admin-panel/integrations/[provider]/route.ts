@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { isVerificationProvider } from "@/lib/site-tags";
 import { adminApi } from "@/lib/admin-api";
 import { disconnectIntegration, providerDef, recordTestResult, saveIntegrationFields, testIntegration } from "@/lib/integrations";
 import { recordAudit } from "@/lib/cms/audit";
@@ -40,6 +42,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ provide
   try {
     const changed = await saveIntegrationFields(provider, values, g.staff.sub);
     if (test) await recordTestResult(provider, test.ok, test.message, test.ms);
+    // Verification <meta> tags are baked into static pages: re-render them all on their next visit.
+    if (changed.length && isVerificationProvider(provider)) revalidatePath("/", "layout");
     const ip = getClientIp(req);
     await recordAudit({
       actorId: g.staff.sub,
@@ -68,6 +72,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ provi
   if (!providerDef(provider)) return NextResponse.json({ error: "Unknown provider" }, { status: 404 });
   try {
     const removed = await disconnectIntegration(provider);
+    if (removed.length && isVerificationProvider(provider)) revalidatePath("/", "layout");
     const ip = getClientIp(req);
     await recordAudit({ actorId: g.staff.sub, action: "integration.disconnect", entity: "Integration", entityId: provider, diff: { fields: removed }, ip });
     const notified = removed.length
