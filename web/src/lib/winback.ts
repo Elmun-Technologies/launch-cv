@@ -462,3 +462,33 @@ export async function sendWinbackTest(args: { to: string; userId: string; market
   });
   return sendTransactionalEmail({ to: args.to, ...email, subject: `[Test] ${email.subject}`, headers: listUnsubscribeHeaders(unsub) });
 }
+
+/* ── Active offer: the newest unexpired personal code, for banners and checkout ── */
+
+export type ActiveOffer = WinbackOffer & { kind: "welcome" | "winback" };
+
+/**
+ * The user's newest personal code (welcome or win-back) that hasn't expired, or
+ * null. Doesn't check paid access; callers that show a banner do. A code that
+ * was already redeemed leaves the user on a paid plan, so it isn't shown either.
+ */
+export async function findActiveOffer(userId: string, now = new Date()): Promise<ActiveOffer | null> {
+  const ev = await prisma.analyticsEvent
+    .findFirst({
+      where: { userId, name: { in: [WELCOME_SENT_EVENT, WINBACK_SENT_EVENT] }, createdAt: { gte: new Date(now.getTime() - 15 * 24 * HOUR) } },
+      orderBy: { createdAt: "desc" },
+      select: { name: true, meta: true },
+    })
+    .catch(() => null);
+  const code = ev?.meta && typeof ev.meta === "object" ? (ev.meta as { code?: unknown }).code : null;
+  if (!ev || typeof code !== "string") return null;
+  const offer = parseWinbackOffer(ev.meta, code, now);
+  return offer ? { ...offer, kind: ev.name === WELCOME_SENT_EVENT ? "welcome" : "winback" } : null;
+}
+
+/** The offer to show this user right now: active and they don't have paid access. */
+export async function offerForBanner(userId: string, now = new Date()): Promise<ActiveOffer | null> {
+  const offer = await findActiveOffer(userId, now);
+  if (!offer) return null;
+  return (await getUserPlanId(userId).catch(() => "none")) === "none" ? offer : null;
+}

@@ -12,7 +12,7 @@ import { PUBLIC_PLANS, planMarketingBullets, planPriceLabel } from "@/lib/moneti
 import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan, isPublicPlan } from "@/lib/plan-config";
 import { checkoutConflict } from "@/lib/entitlement-rules";
 import { buildPricingFaqs, checkoutFaqs } from "@/lib/pricing-faqs";
-import { findWinbackOffer, PERSONAL_CODE_RE } from "@/lib/winback";
+import { findActiveOffer, findWinbackOffer, PERSONAL_CODE_RE } from "@/lib/winback";
 import { CheckoutPanel } from "./checkout-panel";
 
 type Params = { params: Promise<{ plan: string }> };
@@ -56,7 +56,8 @@ export default async function CheckoutPage({ params, searchParams }: PageProps) 
     : null;
   const conflict = session ? checkoutConflict(existing, plan) : null;
   // A win-back code from the email: applied only if it's this user's own and still valid.
-  const offer = session && codeParam ? await findWinbackOffer(session.sub, codeParam) : null;
+  // Without a code in the link, the user's own running personal code (welcome or win-back) still applies.
+  const offer = session ? (codeParam ? await findWinbackOffer(session.sub, codeParam) : await findActiveOffer(session.sub)) : null;
   const paused = settings.switches.checkout ? null : "Checkout is paused for a few minutes. Please try again shortly.";
 
   const faqs = checkoutFaqs(cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : buildPricingFaqs(limits));

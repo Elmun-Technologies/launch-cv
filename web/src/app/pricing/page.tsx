@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteShell } from "@/components/site/site-shell";
+import { OfferBanner } from "@/components/offer-banner";
 import { ResumeSheet } from "@/components/site/resume-sheet";
 import { CtaLink } from "@/components/cta-link";
 import { JsonLd } from "@/components/json-ld";
@@ -199,6 +200,8 @@ export default async function PricingPage() {
 
       {/* PLANS */}
       <section className={`${container} pt-[34px] lg:pt-12`}>
+        {/* Signed-in users with a running personal code see its countdown (fetched client-side; the page stays static). */}
+        <OfferBanner where="pricing" />
         <div className="grid items-stretch gap-2.5 md:grid-cols-2 md:gap-3.5 lg:grid-cols-[0.9fr_1fr_1.1fr_1fr]">
           {/* Free */}
           <div className="order-4 flex flex-col gap-[18px] rounded-3xl border-2 border-dashed border-[#c9c0ff] px-[22px] py-5 md:order-none md:p-7">
