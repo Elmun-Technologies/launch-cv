@@ -25,7 +25,7 @@ const MONTH_FMT = new Intl.DateTimeFormat("en-US", { month: "short", year: "nume
 
 export default async function AdminRevenuePage({ searchParams }: { searchParams: Promise<{ range?: string; from?: string; to?: string }> }) {
   // Revenue is billing data: the same permission as Subscriptions (owner, admin, support).
-  const admin = await requireAdmin("users");
+  const admin = await requireAdmin("limits");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const sp = await searchParams;

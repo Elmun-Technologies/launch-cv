@@ -33,7 +33,7 @@ export async function GET(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Unknown table or range." }, { status: 400 });
   const { table, ...sp } = parsed.data;
 
-  const { staff, error } = await adminApi("users", { reauth: table === "customers" });
+  const { staff, error } = await adminApi("limits", { reauth: table === "customers" });
   if (error) return error;
 
   const now = Date.now();

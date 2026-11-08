@@ -24,7 +24,7 @@ const marginTone = (m: number | null) => (m === null ? "text-[#66647c]" : m < 0 
 
 export default async function AdminProductPage({ searchParams }: { searchParams: Promise<{ range?: string; from?: string; to?: string }> }) {
   // Shows revenue, margins and user emails: the billing permission, like Revenue and Subscriptions.
-  const admin = await requireAdmin("users");
+  const admin = await requireAdmin("limits");
   if (!admin) redirect("/admin-panel/access-denied");
 
   const sp = await searchParams;

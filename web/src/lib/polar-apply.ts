@@ -48,6 +48,53 @@ function orderAmounts(order: PolarOrder): Record<string, number | string> {
   return out;
 }
 
+/**
+ * A subscription's later monthly payment. The first payment is counted when the
+ * subscription turns active, so only renewal cycles are recorded here — as their own
+ * pay_success event (renewal: true) so revenue includes every month a subscriber pays.
+ */
+async function recordRenewal(order: PolarOrder, plan: string): Promise<"applied" | "duplicate" | "ignored"> {
+  if (order.billing_reason !== "subscription_cycle" || !order.subscription_id) return "ignored";
+  const userId = await resolvePolarUserId(metadataOf(order as unknown as Record<string, unknown>), order.subscription_id);
+  if (!userId) return "ignored";
+  const seen = await prisma.analyticsEvent.findFirst({
+    where: { name: "pay_success", meta: { path: ["orderId"], equals: order.id } },
+    select: { id: true },
+  });
+  if (seen) return "duplicate";
+  await trackEvent("pay_success", {
+    userId,
+    meta: { provider: "polar", orderId: order.id, subscriptionId: order.subscription_id, plan, renewal: true, ...orderAmounts(order) },
+  });
+  return "applied";
+}
+
+/**
+ * A refund on a Polar order. Recorded once per order as `order_refunded` (the Revenue
+ * page counts these). A fully refunded pass or Lifetime order also stops granting access.
+ */
+export async function applyPolarRefund(data: Record<string, unknown>): Promise<"recorded" | "duplicate" | "ignored"> {
+  const order = data as unknown as PolarOrder;
+  const refunded = order.refunded_amount ?? 0;
+  if (!order.id || refunded <= 0) return "ignored";
+  const userId = await resolvePolarUserId(metadataOf(data), order.subscription_id ?? null);
+  const seen = await prisma.analyticsEvent.findFirst({
+    where: { name: "order_refunded", meta: { path: ["orderId"], equals: order.id } },
+    select: { id: true, meta: true },
+  });
+  const prevCents = (seen?.meta as { refundedCents?: number } | null)?.refundedCents ?? 0;
+  if (seen && prevCents >= refunded) return "duplicate";
+  const plan = await planIdFromPolarProductId(order.product_id ?? null);
+  const meta = { provider: "polar", orderId: order.id, plan, refundedCents: refunded, paidCents: order.total_amount ?? order.amount ?? null, currency: order.currency ?? null };
+  if (seen) await prisma.analyticsEvent.update({ where: { id: seen.id }, data: { meta } });
+  else await trackEvent("order_refunded", { userId: userId ?? undefined, meta });
+  const full = typeof order.total_amount === "number" && refunded >= order.total_amount;
+  if (full) {
+    await prisma.subscription.updateMany({ where: { stripeSubscriptionId: `order:${order.id}` }, data: { status: "refunded" } });
+  }
+  return "recorded";
+}
+
 export type SubscriptionEvent =
   | "subscription.created"
   | "subscription.updated"
@@ -95,7 +142,8 @@ export async function applyPolarSubscription(data: Record<string, unknown>, even
 export async function applyPolarPaidOrder(data: Record<string, unknown>): Promise<"applied" | "not_applied" | "duplicate" | "ignored"> {
   const order = data as unknown as PolarOrder;
   const plan = await planIdFromPolarProductId(order.product_id ?? null);
-  if (!plan || !isOneTimePlan(plan)) return "ignored";
+  if (!plan) return "ignored";
+  if (!isOneTimePlan(plan)) return recordRenewal(order, plan);
   const userId = await resolvePolarUserId(metadataOf(data), null);
   if (!userId) return "ignored";
   // Idempotency: an order must be applied once only — even after a later pass replaced

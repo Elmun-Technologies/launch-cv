@@ -39,20 +39,20 @@ import {
  */
 
 /** Events that would mark a refund. None is recorded yet: the Polar webhook doesn't handle order.refunded. */
-export const REFUND_EVENT_NAMES = ["refund", "pay_refund", "order_refunded", "refund_issued"] as const;
+export const REFUND_EVENT_NAMES = ["order_refunded", "refund", "pay_refund", "refund_issued"] as const;
 
 /** One-line definitions shown as tooltips (and in the KPI CSV). */
 export const REVENUE_DEFS = {
   gross: "Sum of list prices of everything bought in the range (the order's subtotal when recorded, else the plan's public price).",
   discounts: "Discount codes applied to those purchases: the recorded discount, else list price minus amount paid.",
   net: "What buyers actually paid in the range, after discounts and before tax. Older events without an amount count at list price.",
-  purchases: "pay_success events in the range: each paid pass or Lifetime order and the first payment of each subscription. Pro renewals aren't recorded as events.",
+  purchases: "pay_success events in the range: each paid pass or Lifetime order, the first payment of each subscription, and each later monthly renewal (recorded from Polar renewal orders).",
   newCustomers: "Buyers whose first-ever purchase falls in the range.",
   arppu: "Average revenue per paying user: net revenue ÷ distinct buyers in the range.",
   mrr: "Monthly recurring revenue at the range end (or now): active, non-cancelling, not past-due monthly subscriptions × list price. Passes never count. Past values are rebuilt from each subscription's first payment and end date.",
   arr: "Annual run-rate: MRR × 12.",
   activePasses: "Users with a Week or 90-Day Pass running at the range end (or now), from pass purchases, stacked the way checkout extends them.",
-  refunds: "Refund events in the range. Refunds aren't recorded yet (the Polar webhook ignores order.refunded), so no number is shown.",
+  refunds: "Orders refunded in the range (from Polar's order.refunded webhook). Shown once a refund has been recorded.",
 } as const;
 
 /** Plan groups for charts: sold plans, then legacy and unknown. */
