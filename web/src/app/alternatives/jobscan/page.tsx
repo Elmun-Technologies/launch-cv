@@ -9,7 +9,8 @@ import { buildMarketingMetadata, DEFAULT_OG_IMAGE, fitTitle } from "@/lib/build-
 import { faqPageLd, type FaqItem } from "@/lib/faq-ld";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
-import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
+import { PUBLIC_PLANS, freeAllowanceSentence, planPriceLabel } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, isPassPlan } from "@/lib/plan-config";
 import { getSettings } from "@/lib/app-settings";
 import {
   COMPARE_ROWS,
@@ -39,20 +40,23 @@ export const metadata = buildMarketingMetadata({
 export const revalidate = 60;
 
 const n = (v: number) => v.toLocaleString("en-US");
-const PRICE_LINE = `${planPriceLabel("starter")}, ${planPriceLabel("professional")} or ${planPriceLabel("lifetime")}`;
+const PRICE_LINE = CHECKOUT_PLAN_ORDER.map((k) => `${PUBLIC_PLANS[k].title} ${planPriceLabel(k)}`)
+  .join(", ")
+  .replace(/, ([^,]*)$/, " or $1");
+const PASS_NAMES = CHECKOUT_PLAN_ORDER.filter(isPassPlan).map((k) => PUBLIC_PLANS[k].title).join(" and ");
 
-const FAQS: FaqItem[] = [
+const buildFaqs = (free: { jd: number; roleFit: number }): FaqItem[] => [
   {
     q: "Can I bring my resume over to LaunchCV?",
     a: "Yes. Upload your resume as a PDF or Word (.docx) file, or paste your LinkedIn profile text, and LaunchCV fills in each section for you to review before you edit or export it.",
   },
   {
     q: "Is LaunchCV's ATS check really free?",
-    a: "Yes. It needs no account and returns a 0–100 score with a prioritized list of fixes. Comparing your resume with a specific job post, bullet rewrites, cover letters and interview prep are on the paid plans. Jobscan's free plan, by contrast, includes job-post matching for 5 scans a month.",
+    a: `Yes. It needs no account and returns a 0–100 score with a prioritized list of fixes. ${freeAllowanceSentence(free)} Cover letters and interview prep are on the paid plans. Jobscan's free plan, by contrast, includes job-post matching for 5 scans a month.`,
   },
   {
     q: "Is LaunchCV cheaper than Jobscan?",
-    a: `LaunchCV costs ${PRICE_LINE}. Jobscan lists its current prices on its plan page, so compare them there. If you'd rather not subscribe, LaunchCV's ${PUBLIC_PLANS.lifetime.title} plan is a single payment that never renews.`,
+    a: `LaunchCV costs ${PRICE_LINE}. Jobscan lists its current prices on its plan page, so compare them there. If you'd rather not subscribe, LaunchCV's ${PASS_NAMES} are single payments with no auto-renewal.`,
   },
   {
     q: "Does LaunchCV optimize LinkedIn profiles?",
@@ -64,7 +68,7 @@ const FAQS: FaqItem[] = [
   },
   {
     q: "How do refunds compare?",
-    a: "LaunchCV's monthly plans have a 7-day money-back guarantee and Lifetime can be refunded within 14 days. Jobscan's cancellation policy considers refunds case by case when you ask within 2 calendar days of a billing period starting and haven't used the service in that period.",
+    a: "LaunchCV's monthly plan has a 7-day money-back guarantee, and its passes never renew. Jobscan's cancellation policy considers refunds case by case when you ask within 2 calendar days of a billing period starting and haven't used the service in that period.",
   },
   {
     q: "Can I use both?",
@@ -87,7 +91,9 @@ function Refs({ ids, dark = false }: { ids: JobscanSourceId[]; dark?: boolean })
 
 export default async function JobscanAlternativePage() {
   const { planLimits: L } = await getSettings();
-  const matchLine = `Paid plans — ${n(L.starter.jd)}, ${n(L.professional.jd)} or ${n(L.lifetime.jd)} job matches a month (${PUBLIC_PLANS.starter.title}, ${PUBLIC_PLANS.professional.title}, ${PUBLIC_PLANS.lifetime.title})`;
+  const FAQS = buildFaqs(L.free);
+  const paidJd = CHECKOUT_PLAN_ORDER.map((k) => n(L[k].jd)).join(", ").replace(/, ([^,]*)$/, " or $1");
+  const matchLine = `${L.free.jd > 0 ? `Free account — ${n(L.free.jd)} a month. ` : ""}Paid plans — ${paidJd} job matches a month (${CHECKOUT_PLAN_ORDER.map((k) => PUBLIC_PLANS[k].title).join(", ")})`;
 
   const rows = COMPARE_ROWS.map((r) => ({
     ...r,
@@ -159,7 +165,9 @@ export default async function JobscanAlternativePage() {
             <ul className="relative mt-4 flex list-disc flex-col gap-1.5 pl-5 text-[16px] leading-[26px] marker:text-[#c9c0ff]">
               <li>you want an ATS check with no account, before anything else</li>
               <li>you want the builder, all 4 templates, PDF export and job tracker free with an account</li>
-              <li>you&apos;d rather pay once ({planPriceLabel("lifetime")}) than subscribe</li>
+              <li>
+                you&apos;d rather buy a {PUBLIC_PLANS.week.title} ({planPriceLabel("week")}, no auto-renewal) than subscribe
+              </li>
               <li>you want cover letters and interview prep on every paid plan</li>
               <li>you want a 7-day money-back window on monthly plans</li>
             </ul>

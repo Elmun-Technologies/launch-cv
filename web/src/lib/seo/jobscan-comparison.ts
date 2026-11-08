@@ -169,7 +169,7 @@ export const COMPARE_ROWS: CompareRow[] = [
   { label: "Price", launchcv: null, jobscan: "See Jobscan's plan page", src: ["plan"], link: true },
   {
     label: "Cancelling and refunds",
-    launchcv: "Cancel anytime; money back within 7 days on monthly plans, 14 days on Lifetime",
+    launchcv: "Passes never renew; cancel the monthly plan anytime, with money back within 7 days",
     jobscan: "Cancel from your Account page; refunds case by case, if asked within 2 days of a billing period starting and unused",
     src: ["cancel"],
   },

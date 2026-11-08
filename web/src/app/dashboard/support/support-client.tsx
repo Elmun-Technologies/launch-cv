@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowRight, Mail, Minus, Plus, Search } from "lucide-react";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, freeAllowanceSentence, planPriceLabel } from "@/lib/monetization";
 import { PageHeader, btnSmWhite, cardCls, inlineLinkCls } from "@/components/app/account/ui";
 
 const FAQ = [
@@ -21,11 +21,11 @@ const FAQ = [
   },
   {
     q: "Which features need a plan?",
-    a: `The ATS check, the resume editor, PDF export, templates and the job tracker are free. The AI tools — job matching, role-fit checks, bullet rewrites, cover letters and interview packets — are on paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month or ${PUBLIC_PLANS.lifetime.priceDisplay} once.`,
+    a: `The ATS check, the resume editor, PDF export, templates and the job tracker are free. ${freeAllowanceSentence()} Paid plans raise those limits and add cover letters and interview packets: the ${PUBLIC_PLANS.week.title} (${planPriceLabel("week")}) and the ${PUBLIC_PLANS.quarter.title} (${planPriceLabel("quarter")}) with no auto-renewal, or ${PUBLIC_PLANS.professional.title} at ${planPriceLabel("professional")}.`,
   },
   {
     q: "How do I cancel or get a refund?",
-    a: "Open Settings → Plan & billing and use the billing portal to cancel; you keep access until the end of the period you paid for. For a refund, email support within 7 days of paying for a monthly plan or 14 days for Lifetime.",
+    a: "Passes never renew, so there's nothing to cancel. For a monthly plan, open Settings → Plan & billing and use the billing portal to cancel; you keep access until the end of the period you paid for. For a refund, email support within 7 days of paying for a monthly plan.",
   },
   {
     q: "How do I track my applications?",

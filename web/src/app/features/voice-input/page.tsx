@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { FeaturePage, Stage, ExampleTag, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { entryPriceLabel } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
   title: "Voice Input Resume Builder — Speak Your Experience",
@@ -100,7 +100,7 @@ const f: FeaturePageData = {
   banner: {
     title: "The hardest part is the blank page.",
     text: "Talking gets the raw material out. The editor and AI rewrite turn it into a resume.",
-    note: `Voice input is free in the editor. The AI rewrite comes with paid plans from ${PUBLIC_PLANS.starter.priceDisplay}/month.`,
+    note: `Voice input is free in the editor. The AI rewrite comes with paid plans from ${entryPriceLabel()}.`,
   },
   faqs: [
     {

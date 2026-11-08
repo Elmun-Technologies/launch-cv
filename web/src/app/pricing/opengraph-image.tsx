@@ -13,7 +13,7 @@ const pills = CHECKOUT_PLAN_ORDER.map((key) => `${PUBLIC_PLANS[key].title} ${pla
 export default function Image() {
   return new ImageResponse(
     <OgImage
-      title="Pay monthly, yearly, or once."
+      title="Pay for the weeks you're searching."
       subtitle={`Every AI tool on every plan — ${pills.join(", ")}.`}
       pills={pills}
     />,

@@ -112,6 +112,11 @@ export async function GET(req: Request) {
   try {
     // 1. Returning Google user — matched by the stable subject id.
     let user = await prisma.user.findUnique({ where: { googleId: profile.sub } });
+    // Google verified this address, so a returning Google user whose row predates that
+    // rule (or was never marked) counts as confirmed; free AI checks require it.
+    if (user && !user.emailVerifiedAt && user.email.toLowerCase() === profile.email.toLowerCase()) {
+      user = await prisma.user.update({ where: { id: user.id }, data: { emailVerifiedAt: new Date() } });
+    }
 
     // 2. Existing email/password account — link Google to it so the user can
     //    use either method from now on.

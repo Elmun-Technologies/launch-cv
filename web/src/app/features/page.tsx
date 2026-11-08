@@ -7,7 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl } from "@/lib/site";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { entryPriceLabel } from "@/lib/monetization";
 
 export const metadata = buildMarketingMetadata({
   title: "Resume Tools — ATS Checker, Builder, JD Match, Cover Letters",
@@ -158,8 +158,8 @@ export default function FeaturesPage() {
           Everything between your resume <span className="text-[#7c7a94]">and the interview.</span>
         </h1>
         <p className="mt-3.5 max-w-[640px] text-[16px] leading-[25px] text-[#4a4862] sm:text-[18px] sm:leading-7 lg:mt-[22px]">
-          Start with the free ATS check. The AI tools are included in each paid plan, from {PUBLIC_PLANS.starter.priceDisplay}/month — plans only
-          differ in monthly limits.
+          Start with the free ATS check; a free account also gets a few AI job matches each month. Every AI tool is included
+          in each paid plan, from {entryPriceLabel()} with no auto-renewal.
         </p>
       </section>
 

@@ -15,6 +15,17 @@ shu repoda parallel ishlayapti: biri xavfsizlik (Next.js CVE, PR #79) ustida, me
 kanvas-sayt taqqoslash va SEO ustida. Ishni boshlashdan oldin shu faylni o'qing —
 boshqa sessiya nima qilganini bilish uchun.
 
+## Narx qayta ishlandi (2026-11-08, lokal commit)
+
+- Sotiladigan rejalar: Week Pass $9 (7 kun), Pro $29/oy, 90-Day Pass $69 (90 kun);
+  pass'lar bir martalik, avto-yangilanmaydi. Starter/Elite/Lifetime — legacy (eski
+  mijozlar uchun ishlaydi, sotilmaydi). Bepul akkaunt: oyiga 2 JD match + 1 role-fit,
+  faqat email tasdiqlangan bo'lsa. Admin → Limits → "Model for free users".
+- **Deploydan oldin:** Polar'da Week Pass ($9) va 90-Day Pass ($69) one-time
+  product yaratish, `POLAR_PRODUCT_WEEK` / `POLAR_PRODUCT_QUARTER` (yoki Admin →
+  Integrations → Polar) ga yozish. Prod'da saqlangan `planLimits.free` (0/0/0) bo'lsa,
+  Admin → Limits'da free qatorini 2/1/0 ga o'zgartirish kerak.
+
 ## Joriy / bloklangan (2026-11-07)
 
 - To'lov tuzatildi (Polar): Professional endi $29/oy (yangi product

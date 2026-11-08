@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { VerifyEmailNotice, isVerifyEmailResponse } from "@/components/verify-email-notice";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Search, ExternalLink, RotateCcw, Check, X, AlertTriangle, Plus, Building2, Target } from "lucide-react";
 import { CopyButton } from "@/components/copy-button";
@@ -86,7 +87,7 @@ function toMatchResult(r: ApiResult): MatchResult {
   };
 }
 
-async function requestMatch(body: unknown): Promise<{ data: MatchResult } | { error: string; upgrade: boolean }> {
+async function requestMatch(body: unknown): Promise<{ data: MatchResult } | { error: string; upgrade: boolean; verifyEmail: boolean }> {
   const res = await fetch("/api/ai/company-match", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -96,7 +97,8 @@ async function requestMatch(body: unknown): Promise<{ data: MatchResult } | { er
   if (res?.ok && j.result) return { data: toMatchResult(j.result as ApiResult) };
   return {
     error: typeof j.error === "string" ? j.error : "Couldn't run the analysis. Please try again.",
-    upgrade: res?.status === 402 || res?.status === 403,
+    upgrade: !isVerifyEmailResponse(j) && (res?.status === 402 || res?.status === 403),
+    verifyEmail: isVerifyEmailResponse(j),
   };
 }
 
@@ -220,7 +222,7 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
   const [customIndustry, setCustomIndustry] = useState("");
   const [customJD, setCustomJD] = useState("");
   const [bulletRewrites, setBulletRewrites] = useState<BulletRewrite[]>([]);
-  const [error, setError] = useState<{ error: string; upgrade: boolean } | null>(null);
+  const [error, setError] = useState<{ error: string; upgrade: boolean; verifyEmail: boolean } | null>(null);
 
   const filtered = useMemo(() => {
     let list: CompanyRequirement[] = COMPANIES;
@@ -312,7 +314,8 @@ export function MatcherClient({ resumes }: { resumes: Resume[] }) {
         }
       />
 
-      {error ? (
+      {error?.verifyEmail ? <VerifyEmailNotice message={error.error} /> : null}
+      {error && !error.verifyEmail ? (
         <ErrorNote>
           {error.error}{" "}
           {error.upgrade ? (

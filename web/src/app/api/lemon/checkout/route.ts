@@ -3,11 +3,12 @@ import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { trackEvent } from "@/lib/analytics";
 import { appBaseUrl } from "@/lib/email";
-import { variantIdForCheckoutPlan, type CheckoutPlan } from "@/lib/plans";
+import { CHECKOUT_PLAN_ORDER, variantIdForCheckoutPlan, type CheckoutPlan } from "@/lib/plans";
 
 const LS_API = "https://api.lemonsqueezy.com/v1/checkouts";
 
-const CHECKOUT_PLANS: CheckoutPlan[] = ["starter", "professional", "elite", "lifetime"];
+// Lemon Squeezy is legacy: it never sells the legacy plans (Starter, Elite, Lifetime).
+const CHECKOUT_PLANS: readonly CheckoutPlan[] = CHECKOUT_PLAN_ORDER;
 
 function parsePlan(body: unknown): CheckoutPlan {
   if (!body || typeof body !== "object" || !("plan" in body)) return "professional";

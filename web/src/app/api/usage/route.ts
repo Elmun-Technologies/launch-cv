@@ -28,5 +28,7 @@ export async function GET() {
     used: { jd: row.jdCount, packet: row.packetCount, roleFit: row.roleFitCount },
     // Lets the app shell show a link to the admin panel; access is still checked there.
     isAdmin: user ? isAdminUser(user) : false,
+    /** Free accounts must confirm their email before free AI checks (lib/usage-rules.ts). */
+    emailVerified: !!user?.emailVerifiedAt,
   });
 }

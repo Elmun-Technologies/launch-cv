@@ -148,7 +148,9 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
   let planHint = "No paid plan";
   if (billing.granted) {
     planHint = user.grantedPlanUntil ? `Granted until ${fmtDateLong(user.grantedPlanUntil)}` : "Granted · no end date";
-  } else if (billing.lifetime && billing.paying) planHint = "One-time purchase";
+  } else if (billing.oneTime && billing.paying) {
+    planHint = sub?.currentPeriodEnd ? `Pass · ends ${fmtDate(sub.currentPeriodEnd, now)}` : "One-time purchase · no end date";
+  } else if (billing.status === "expired" && sub?.currentPeriodEnd) planHint = `Pass ended ${fmtDate(sub.currentPeriodEnd, now)}`;
   else if (billing.status === "past_due") planHint = "Payment past due";
   else if (billing.paying && sub?.currentPeriodEnd) {
     planHint = `${sub.cancelAtPeriodEnd ? "Ends" : "Renews"} ${fmtDate(sub.currentPeriodEnd, now)}`;

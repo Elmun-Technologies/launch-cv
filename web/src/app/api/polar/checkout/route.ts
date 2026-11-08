@@ -6,16 +6,20 @@ import { appBaseUrl } from "@/lib/email";
 import { polarApiBase, productIdForCheckoutPlan } from "@/lib/polar";
 import { getIntegrationValue } from "@/lib/integrations";
 import { getSettings } from "@/lib/app-settings";
-import type { CheckoutPlan } from "@/lib/plan-config";
+import { isPublicPlan, type CheckoutPlan } from "@/lib/plan-config";
+import { checkoutConflict } from "@/lib/entitlement-rules";
 import { attributionFromCookieHeader, attributionToMetadata } from "@/lib/utm";
 
-const CHECKOUT_PLANS: CheckoutPlan[] = ["starter", "professional", "elite", "lifetime"];
-
-function parsePlan(body: unknown): CheckoutPlan {
+/**
+ * Plan requested at checkout. Only plans sold today (CHECKOUT_PLAN_ORDER) are
+ * accepted; legacy plans (Starter, Elite, Lifetime) and unknown ids are rejected
+ * with null. A body without a plan keeps the old default, Pro.
+ */
+function parsePlan(body: unknown): CheckoutPlan | null {
   if (!body || typeof body !== "object" || !("plan" in body)) return "professional";
-  const p = (body as { plan?: string }).plan;
-  if (typeof p === "string" && CHECKOUT_PLANS.includes(p as CheckoutPlan)) return p as CheckoutPlan;
-  return "professional";
+  const p = (body as { plan?: unknown }).plan;
+  if (p === undefined || p === null || p === "") return "professional";
+  return typeof p === "string" && isPublicPlan(p) ? p : null;
 }
 
 /** GA4 client id (`<digits>.<digits>`) forwarded by the browser at checkout. */
@@ -31,6 +35,9 @@ export async function POST(req: Request) {
 
   const rawBody = await req.json().catch(() => ({}));
   const plan = parsePlan(rawBody);
+  if (!plan) {
+    return NextResponse.json({ error: "That plan is no longer offered. Pick one of the plans on the pricing page." }, { status: 400 });
+  }
   const gaClientId = parseGaClientId(rawBody);
 
   if (!(await getSettings()).switches.checkout) {
@@ -50,25 +57,13 @@ export async function POST(req: Request) {
   const user = await prisma.user.findUnique({ where: { id: session.sub } });
   if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  // A second checkout would start a second, parallel subscription and bill twice.
+  // One billing row per user, so check what they already have before opening checkout.
   const existing = await prisma.subscription.findUnique({
     where: { userId: user.id },
-    select: { stripeSubscriptionId: true, status: true },
+    select: { stripeSubscriptionId: true, status: true, currentPeriodEnd: true, cancelAtPeriodEnd: true },
   });
-  if (existing && (existing.status === "active" || existing.status === "trialing")) {
-    const isLifetime = existing.stripeSubscriptionId.startsWith("order:");
-    if (isLifetime || plan !== "lifetime") {
-      return NextResponse.json(
-        {
-          error: isLifetime
-            ? "You already have Lifetime access."
-            : "You already have an active subscription. Change or cancel it in the billing portal.",
-          code: "HAS_SUBSCRIPTION",
-        },
-        { status: 409 },
-      );
-    }
-  }
+  const blocked = checkoutConflict(existing, plan);
+  if (blocked) return NextResponse.json({ error: blocked, code: "HAS_SUBSCRIPTION" }, { status: 409 });
 
   const base = appBaseUrl();
 

@@ -13,7 +13,7 @@ import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { getResumeExample } from "@/lib/resume-examples";
 import { exampleToContent } from "@/lib/example-to-content";
 import { TEMPLATE_SPECS, TEMPLATE_STYLES, type TemplateStyle } from "@/lib/resume-templates";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { entryPriceLabel } from "@/lib/monetization";
 import type { ResumeContent } from "@/types/resume";
 
 export const metadata = buildMarketingMetadata({
@@ -293,7 +293,7 @@ export default function ResumeTemplatesPage() {
         <div className="lc-reveal">
           <SectionHead label="Questions" title="Templates," muted="answered." />
           <p className="mt-4 text-[15px] leading-6 text-[#4a4862] sm:mt-5 sm:text-[16px] sm:leading-[25px]">
-            Plans with AI help start at {PUBLIC_PLANS.starter.priceDisplay}/month.{" "}
+            Plans with AI help start at {entryPriceLabel()}, with no auto-renewal.{" "}
             <Link href="/pricing" className={inlineLink}>
               See pricing
             </Link>

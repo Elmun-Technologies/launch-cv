@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { usePortalUrl } from "@/lib/public-config";
 import Link from "next/link";
 import { ExternalLink, Loader2 } from "lucide-react";
-import { PUBLIC_PLANS } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
+import { PUBLIC_PLANS, freeAllowanceSentence, planPriceLabel } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan, type CheckoutPlan } from "@/lib/plan-config";
 import { trackCheckoutStart, trackCtaClick, trackPlanSelected, getGaClientId } from "@/lib/analytics-client";
 import {
   Badge,
@@ -29,6 +29,10 @@ type StatusPayload = {
   status: string | null;
   currentPeriodEnd: string | null;
   cancelAtPeriodEnd: boolean;
+  /** One-time purchase (a pass or legacy Lifetime): it never renews. */
+  oneTime: boolean;
+  /** Per sold plan: why checkout would be refused right now, or null. */
+  checkoutBlocked: Partial<Record<CheckoutPlan, string | null>>;
 };
 
 type Counts = { jd: number; packet: number; roleFit: number };
@@ -53,6 +57,8 @@ async function fetchStatus(): Promise<StatusPayload | null> {
     status: j.status ?? null,
     currentPeriodEnd: j.currentPeriodEnd ?? null,
     cancelAtPeriodEnd: !!j.cancelAtPeriodEnd,
+    oneTime: !!j.oneTime,
+    checkoutBlocked: j.checkoutBlocked && typeof j.checkoutBlocked === "object" ? j.checkoutBlocked : {},
   };
 }
 
@@ -83,7 +89,11 @@ const METERS = [
   { k: "packet", l: "Application packets" },
 ] as const;
 
-export function SubscriptionSettingsClient({ limits }: { limits: Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }> }) {
+export function SubscriptionSettingsClient({
+  limits,
+}: {
+  limits: Record<CheckoutPlan | "free", { jd: number; packet: number; roleFit: number }>;
+}) {
   const portalUrl = usePortalUrl();
   const [loadingPlan, setLoadingPlan] = useState<CheckoutPlan | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
@@ -125,9 +135,9 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
   const paid = isPaid(status);
   const currentPlan = (status?.plan as CheckoutPlan | "none" | undefined) ?? "none";
 
-  // Usage meters only mean something on a plan; load them once the plan is active.
+  // Usage meters: the plan's limits, or the free monthly allowance without a plan.
   useEffect(() => {
-    if (!paid) return;
+    if (statusLoading) return;
     let c = true;
     void fetchUsage().then((u) => {
       if (c) setUsage(u);
@@ -135,7 +145,7 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
     return () => {
       c = false;
     };
-  }, [paid, currentPlan]);
+  }, [statusLoading, paid, currentPlan]);
 
   // Pricing and paywall CTAs link here with ?plan=<plan>: open that checkout
   // straight away instead of making the visitor pick the plan a second time.
@@ -178,24 +188,31 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
   const renewDate = status?.currentPeriodEnd
     ? new Date(status.currentPeriodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : null;
-  const isLifetime = currentPlan === "lifetime";
-  const renewing = paid && !isLifetime && !!renewDate && !status?.cancelAtPeriodEnd;
+  const oneTime = paid && !!status?.oneTime;
+  const isLifetime = oneTime && !renewDate;
+  const onPass = oneTime && !!renewDate;
+  const renewing = paid && !oneTime && !!renewDate && !status?.cancelAtPeriodEnd;
   const currentCfg = paid && currentPlan !== "none" ? PUBLIC_PLANS[currentPlan] : undefined;
 
   const planLine = !paid
-    ? "The ATS check stays free. Pick a plan below to unlock the AI tools."
+    ? `The ATS check stays free. ${freeAllowanceSentence(limits.free)}`
     : isLifetime
       ? "One-time purchase — no renewals."
-      : renewDate
-        ? `${status?.cancelAtPeriodEnd ? "Cancelled — access until" : "Renews on"} ${renewDate}.`
-        : "Active.";
-  const priceLine = currentCfg ? `${currentCfg.priceDisplay}${isLifetime ? " once" : currentCfg.periodLabel}` : null;
+      : onPass
+        ? `Pass active until ${renewDate}. It doesn't renew.`
+        : renewDate
+          ? `${status?.cancelAtPeriodEnd ? "Cancelled — access until" : "Renews on"} ${renewDate}.`
+          : "Active.";
+  const priceLine = currentCfg && currentPlan !== "none" ? planPriceLabel(currentPlan) : null;
 
   const returnRenewLine = isLifetime
     ? "One payment — it never renews."
-    : renewing
-      ? `Your plan renews on ${renewDate}; cancel anytime in the billing portal.`
-      : null;
+    : onPass
+      ? `Your pass runs until ${renewDate}. It doesn't renew, so there's nothing to cancel.`
+      : renewing
+        ? `Your plan renews on ${renewDate}; cancel anytime in the billing portal.`
+        : null;
+  const blockedNotes = [...new Set(CHECKOUT_PLAN_ORDER.map((k) => status?.checkoutBlocked[k]).filter((x): x is string => !!x))];
 
   // Highest usage share, for the "running low" note under the meters.
   const fullest = usage
@@ -233,7 +250,7 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
         <div className="grid items-start gap-4 sm:gap-5 lg:grid-cols-2">
           <section
             aria-labelledby="current-plan-label"
-            className={`rounded-[24px] bg-[#5440e8] p-[22px] text-white sm:rounded-[28px] sm:p-7 ${paid && usage ? "" : "lg:col-span-2"}`}
+            className={`rounded-[24px] bg-[#5440e8] p-[22px] text-white sm:rounded-[28px] sm:p-7 ${usage ? "" : "lg:col-span-2"}`}
           >
             <p id="current-plan-label" className="text-[12px] font-bold tracking-[0.08em] text-[#e4dfff] sm:text-[13px]">
               CURRENT PLAN
@@ -245,7 +262,7 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
             ) : (
               <>
                 <p className="mt-1.5 text-[30px] font-extrabold leading-[36px] tracking-[-0.03em] sm:mt-2 sm:text-[36px] sm:leading-[42px]">
-                  {paid ? planLabel(status?.plan ?? null) : "No plan yet"}
+                  {paid ? planLabel(status?.plan ?? null) : "Free account"}
                 </p>
                 <p className="mt-1 text-[14px] leading-[21px] text-[#e4dfff] sm:text-[15px]">
                   {priceLine ? `${priceLine} · ` : ""}
@@ -273,9 +290,9 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
             ) : null}
           </section>
 
-          {paid && usage ? (
+          {usage ? (
             <section className={cardCls}>
-              <h2 className={cardTitleCls}>This month</h2>
+              <h2 className={cardTitleCls}>{paid ? "This month" : "Free AI checks this month"}</h2>
               {resets ? (
                 <p className="mt-0.5 text-[13px] text-[#66647c]">
                   Usage resets on the 1st of each month, next on {resets}
@@ -283,7 +300,7 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
                 </p>
               ) : null}
               <div className="mt-4 flex flex-col gap-3.5">
-                {METERS.map((m) => (
+                {METERS.filter((m) => paid || usage.limits[m.k] > 0).map((m) => (
                   <UsageMeter key={m.k} label={m.l} used={usage.used[m.k]} limit={usage.limits[m.k]} />
                 ))}
               </div>
@@ -303,46 +320,65 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
             Plans
           </h2>
           <p className="mb-2.5 text-[14px] leading-[21px] text-[#4a4862]">
-            Every tool is on every plan. Plans differ only in monthly limits. Cancel anytime from the billing portal.
+            Every AI tool is on every plan. The passes give full access for {PASS_DAYS.week} or {PASS_DAYS.quarter} days and never
+            auto-renew; buying another pass while one is active adds its days to the end. {PUBLIC_PLANS.professional.title} renews
+            monthly; cancel anytime from the billing portal.
           </p>
+          {blockedNotes.map((note) => (
+            <p key={note} className="mb-2.5 rounded-2xl bg-[#f1eff8] px-4 py-3 text-[13px] leading-[19px] text-[#4a4862]">
+              {note}
+            </p>
+          ))}
           <div className="grid gap-2.5 md:grid-cols-3 md:gap-3">
             {CHECKOUT_PLAN_ORDER.map((key) => {
               const cfg = PUBLIC_PLANS[key];
               const L = limits[key];
               const isCurrent = paid && currentPlan === key;
               const isPopular = !!cfg.popular && !paid;
-              const period = key === "lifetime" ? "once" : cfg.periodLabel;
+              const period = cfg.periodLabel;
+              const pass = isPassPlan(key);
+              // A pass can be bought again while it runs: it extends the current one.
+              const canExtend = pass && onPass;
+              const blocked = status?.checkoutBlocked[key] ?? null;
               const label =
                 loadingPlan === key
                   ? "Opening checkout…"
-                  : key === "lifetime"
-                    ? "Buy Lifetime"
-                    : paid
-                      ? `Switch to ${cfg.title}`
-                      : `Choose ${cfg.title}`;
+                  : canExtend
+                    ? `Add ${PASS_DAYS[key]} days`
+                    : pass
+                      ? `Get the ${cfg.title}`
+                      : paid
+                        ? `Switch to ${cfg.title}`
+                        : `Choose ${cfg.title}`;
+              const shortLabel = loadingPlan === key ? "Opening…" : canExtend ? "Extend" : pass ? "Buy" : paid ? "Switch" : "Choose";
               return (
                 <div
                   key={key}
                   className={`flex items-center justify-between gap-3 rounded-[20px] px-[18px] py-4 sm:gap-4 sm:px-5 md:flex-col md:items-stretch md:justify-start md:gap-0 md:rounded-[22px] md:p-[22px] ${
-                    isCurrent ? "bg-[#111118] text-white max-sm:hidden" : isPopular ? "bg-white ring-2 ring-[#5440e8]" : "lc-card"
+                    isCurrent && !canExtend ? "bg-[#111118] text-white max-sm:hidden" : isCurrent ? "bg-[#111118] text-white" : isPopular ? "bg-white ring-2 ring-[#5440e8]" : "lc-card"
                   }`}
                 >
                   {/* Phones: one line per plan (the current plan is already in the card above). */}
                   <div className="min-w-0 sm:hidden">
                     <p className="text-[16px] font-bold">
-                      {cfg.title} · {cfg.priceDisplay}
-                      {key === "lifetime" ? "" : "/mo"}
-                      {isPopular ? <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-[#e4dfff] px-2 py-0.5 align-[2px] text-[11px] font-bold text-[#3a2bb8]">Most picked</span> : null}
+                      {cfg.title} · {planPriceLabel(key)}
+                      {isPopular ? <span className="ml-1.5 inline-block whitespace-nowrap rounded-full bg-[#e4dfff] px-2 py-0.5 align-[2px] text-[11px] font-bold text-[#3a2bb8]">Recommended</span> : null}
                     </p>
                     <p className="mt-0.5 text-[12px] leading-[17px] text-[#66647c]">
-                      {key === "lifetime" ? "Pay once · " : ""}
+                      {pass ? "No auto-renewal · " : ""}
                       {n(L.jd)} analyses · {n(L.roleFit)} role-fit · {n(L.packet)} packets a month
                     </p>
                   </div>
                   <div className="hidden min-w-0 sm:block">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <h3 className="text-[16px] font-bold">{cfg.title}</h3>
-                      {isCurrent ? <Badge tone="primary">Current</Badge> : isPopular ? <Badge tone="lilac">Most picked</Badge> : null}
+                      {isCurrent ? (
+                        <Badge tone="primary">Current</Badge>
+                      ) : isPopular ? (
+                        <Badge tone="lilac">Recommended</Badge>
+                      ) : cfg.badge ? (
+                        <Badge tone="lilac">{cfg.badge}</Badge>
+                      ) : null}
                     </div>
                     <p className="mt-0.5 text-[22px] font-extrabold tracking-[-0.03em] md:mt-2 md:text-[30px] md:leading-[36px]">
                       {cfg.priceDisplay}
@@ -352,16 +388,17 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
                       {n(L.jd)} analyses · {n(L.roleFit)} role-fit checks · {n(L.packet)} packets a month
                     </p>
                   </div>
-                  {isCurrent ? null : (
+                  {isCurrent && !canExtend ? null : (
                     <button
                       type="button"
                       onClick={() => void startCheckout(key)}
-                      disabled={!!loadingPlan || statusLoading}
+                      disabled={!!loadingPlan || statusLoading || !!blocked}
+                      title={blocked ?? undefined}
                       aria-label={loadingPlan === key ? undefined : `${label}, ${cfg.priceDisplay} ${period}`}
                       className={`${isPopular ? btnSmPrimary : paid ? btnSmSoft : btnSmDark} shrink-0 max-sm:px-3.5 md:mt-3.5 md:self-start`}
                     >
                       {loadingPlan === key ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : null}
-                      <span className="sm:hidden">{loadingPlan === key ? "Opening…" : key === "lifetime" ? "Buy" : paid ? "Switch" : "Choose"}</span>
+                      <span className="sm:hidden">{shortLabel}</span>
                       <span className="hidden sm:inline">{label}</span>
                     </button>
                   )}
@@ -384,7 +421,7 @@ export function SubscriptionSettingsClient({ limits }: { limits: Record<Checkout
 
         <div className="flex flex-col gap-1 text-center text-[13px] leading-[20px] text-[#66647c]">
           <p>
-            Secure checkout by Polar. 7-day money-back guarantee on monthly plans, 14 days on Lifetime.{" "}
+            Secure checkout by Polar. Passes never auto-renew. 7-day money-back guarantee on monthly plans.{" "}
             <Link href="/legal/terms" className="lc-link font-semibold text-[#4a4862] hover:text-[#5440e8]">
               Terms
             </Link>

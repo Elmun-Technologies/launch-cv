@@ -11,7 +11,8 @@ import { exampleToContent } from "@/lib/example-to-content";
 import { TEMPLATE_SPECS, type TemplateStyle } from "@/lib/resume-templates";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
-import { PUBLIC_PLANS } from "@/lib/monetization";
+import { PUBLIC_PLANS, freeAllowanceSentence, planMarketingBullets } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan } from "@/lib/plan-config";
 import { getSettings } from "@/lib/app-settings";
 import { getPageCopy } from "@/lib/cms/page-copy";
 import { getFaqsFor } from "@/lib/cms/faqs";
@@ -49,7 +50,7 @@ const FAQS = [
   },
   {
     q: "Can I cancel or get a refund?",
-    a: "Monthly plans can be canceled anytime from the billing portal, and you keep access until the end of the period you paid for. Monthly plans have a 7-day money-back guarantee; Lifetime can be refunded within 14 days.",
+    a: "Passes are a single payment and never renew, so there's nothing to cancel. Pro can be canceled anytime from the billing portal, and you keep access until the end of the period you paid for. Monthly plans have a 7-day money-back guarantee.",
   },
 ];
 
@@ -93,11 +94,11 @@ export default async function Home() {
     const e = getResumeExample(t.example);
     return e ? [{ key: t.template, label: TEMPLATE_SPECS[t.template].label, node: <ResumePreview content={exampleToContent(e)} template={t.template} /> }] : [];
   });
-  const plans = [
-    { id: "starter" as const, cta: "Choose Starter" },
-    { id: "professional" as const, cta: "Choose Professional" },
-    { id: "lifetime" as const, cta: "Buy Lifetime" },
-  ];
+  const plans = CHECKOUT_PLAN_ORDER.map((id) => ({
+    id,
+    cta: isPassPlan(id) ? `Get the ${PUBLIC_PLANS[id].title}` : `Choose ${PUBLIC_PLANS[id].title}`,
+  }));
+  const freeJd = planLimits.free.jd;
 
   const ld = {
     "@context": "https://schema.org",
@@ -403,7 +404,7 @@ export default async function Home() {
           <div className="lc-rise rounded-[22px] bg-[#c9c0ff] p-5 text-[#111118] sm:rounded-3xl sm:px-6 sm:py-[22px]">
             <div className="flex items-center justify-between gap-3">
               <p className="text-[12px] font-bold tracking-[0.08em]">BULLET REWRITE</p>
-              <span className="rounded-full bg-[#111118] px-2.5 py-[5px] text-[12px] font-semibold text-white">Paid plans</span>
+              <span className="rounded-full bg-[#111118] px-2.5 py-[5px] text-[12px] font-semibold text-white">{freeJd > 0 ? "Free account" : "Paid plans"}</span>
             </div>
             <p className="mt-3 text-[15px] text-[#3d3a5c] line-through">Responsible for the onboarding project</p>
             <p className="mt-1.5 text-[17px] font-semibold leading-6 sm:text-[19px] sm:leading-[27px]">Redesigned onboarding; week-1 activation rose from 38% to 57%.</p>
@@ -493,7 +494,7 @@ export default async function Home() {
             Match my resume to a job
           </CtaLink>
           <span className="absolute bottom-4 left-4 z-10 hidden rounded-full bg-white px-3.5 py-[9px] text-[13px] font-semibold text-[#4a4862] sm:block lg:bottom-12 lg:left-12">
-            Starter plan and up
+            {freeJd > 0 ? `${freeJd} free ${freeJd === 1 ? "match" : "matches"} a month with an account` : "Paid plans"}
           </span>
         </div>
         <div className="sm:hidden">
@@ -598,11 +599,11 @@ export default async function Home() {
         <div className="lc-reveal mx-auto max-w-[980px] sm:text-center">
           <p className={label}>/ Pricing</p>
           <h2 className="lc-h2 mt-3.5 sm:mt-5">
-            The check is free. <span>AI tools from {PUBLIC_PLANS.starter.priceDisplay} a month.</span>
+            The check is free. <span>Passes from {PUBLIC_PLANS.week.priceDisplay} for {PASS_DAYS.week} days.</span>
           </h2>
           <p className="mx-auto mt-5 max-w-[620px] text-[17px] leading-7 text-[#4a4862] sm:text-[18px]">
-            The ATS check, editor, PDF export and all four templates are free on every account. Paid plans add the AI tools
-            and differ only in monthly limits.
+            {freeAllowanceSentence(planLimits.free)} Pay for the weeks you&apos;re searching with a pass that never auto-renews,
+            or stay on {PUBLIC_PLANS.professional.title} month to month.
           </p>
         </div>
         <div className="mt-[22px] grid items-stretch gap-2.5 md:mt-10 md:grid-cols-3 md:gap-4 lg:mt-12">
@@ -610,7 +611,7 @@ export default async function Home() {
             const p = PUBLIC_PLANS[id];
             const l = planLimits[id];
             const hot = !!p.popular;
-            const n = (x: number) => x.toLocaleString("en-US");
+            const bullets = planMarketingBullets(id, planLimits);
             const button = (
               <CtaLink
                 cta="choose_plan"
@@ -629,20 +630,24 @@ export default async function Home() {
                 <div key={id} className={`${MOBILE_PLAN_ORDER[id]} lc-reveal lc-rise lc-card flex flex-col gap-3.5 rounded-[22px] px-[22px] py-5 md:order-none md:gap-5 md:rounded-3xl md:p-[30px]`}>
                   <div>
                     <div className="flex items-baseline justify-between md:block">
-                      <p className="text-[15px] font-semibold text-[#4a4862] md:text-[16px]">{p.title}</p>
-                      <p className="text-[30px] font-bold tracking-[-0.03em] md:mt-2 md:text-[54px] md:leading-[58px] md:tracking-[-0.04em]">
+                      <p className="flex flex-wrap items-center gap-2 text-[15px] font-semibold text-[#4a4862] md:text-[16px]">
+                        {p.title}
+                        {p.badge ? (
+                          <span className="hidden rounded-full bg-[#e4dfff] px-2.5 py-[5px] text-[12px] font-bold text-[#3a2bb8] md:inline">{p.badge}</span>
+                        ) : null}
+                      </p>
+                      <p className="shrink-0 whitespace-nowrap text-[30px] font-bold tracking-[-0.03em] md:mt-2 md:text-[54px] md:leading-[58px] md:tracking-[-0.04em]">
                         {p.priceDisplay}
-                        <span className="text-[13px] font-medium tracking-normal text-[#66647c] md:text-[16px]"> {p.periodLabel}</span>
+                        <span className="whitespace-nowrap text-[13px] font-medium tracking-normal text-[#66647c] md:text-[16px]"> {p.periodLabel}</span>
                       </p>
                     </div>
                     <p className="mt-1.5 text-[14px] leading-[22px] text-[#4a4862] md:hidden">{planLimitsLine(id, l)}</p>
                     <p className="mt-1.5 hidden text-[14px] text-[#66647c] md:block">{p.valueLine}</p>
                   </div>
                   <ul className="hidden flex-col gap-2.5 border-t border-[#e2e0ea] pt-5 text-[15px] md:flex">
-                    <li>✓ {n(l.jd)} job matches a month</li>
-                    <li>✓ {n(l.roleFit)} role-fit checks a month</li>
-                    <li>✓ {n(l.packet)} cover letter &amp; interview packets{id === "lifetime" ? " a month" : ""}</li>
-                    <li>✓ {id === "lifetime" ? "No renewals" : "Cancel anytime"}</li>
+                    {bullets.map((b) => (
+                      <li key={b}>✓ {b}</li>
+                    ))}
                   </ul>
                   {button}
                 </div>
@@ -653,7 +658,7 @@ export default async function Home() {
                 key={id}
                 className={`${MOBILE_PLAN_ORDER[id]} lc-reveal lc-rise relative flex flex-col gap-4 rounded-[22px] bg-[#5440e8] p-[22px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:gap-5 md:rounded-3xl md:p-[30px]`}
               >
-                <span className="absolute right-[18px] top-5 rounded-full bg-[#ff7a33] px-2.5 py-1.5 text-[11px] font-bold text-[#111118] md:right-6 md:top-[26px] md:px-3 md:py-[7px] md:text-[12px]">Most picked</span>
+                <span className="absolute right-[18px] top-5 rounded-full bg-[#ff7a33] px-2.5 py-1.5 text-[11px] font-bold text-[#111118] md:right-6 md:top-[26px] md:px-3 md:py-[7px] md:text-[12px]">Recommended</span>
                 <div>
                   <p className="text-[15px] font-semibold text-[#e4dfff] md:text-[16px]">{p.title}</p>
                   <p className="mt-1 text-[44px] font-bold leading-[48px] tracking-[-0.04em] md:mt-2 md:text-[54px] md:leading-[58px]">
@@ -663,10 +668,9 @@ export default async function Home() {
                   <p className="mt-1.5 text-[14px] text-[#e4dfff]">{p.valueLine}</p>
                 </div>
                 <ul className="flex flex-col gap-2 border-t border-white/25 pt-4 text-[14px] md:gap-2.5 md:pt-5 md:text-[15px]">
-                  <li>✓ {n(l.jd)} job matches a month</li>
-                  <li>✓ {n(l.roleFit)} role-fit checks a month</li>
-                  <li>✓ {n(l.packet)} cover letter &amp; interview packets</li>
-                  <li>✓ Cancel anytime</li>
+                  {bullets.map((b) => (
+                    <li key={b}>✓ {b}</li>
+                  ))}
                 </ul>
                 {button}
               </div>
@@ -674,7 +678,7 @@ export default async function Home() {
           })}
         </div>
         <p className="mt-3.5 text-center text-[12px] leading-[18px] text-[#66647c] sm:mt-5 sm:text-[14px]">
-          Secure checkout by Polar · 7-day refund on monthly plans, 14 days on Lifetime · Prices in USD
+          Secure checkout by Polar · Passes never auto-renew · 7-day refund on monthly plans · Prices in USD
         </p>
       </section>
 

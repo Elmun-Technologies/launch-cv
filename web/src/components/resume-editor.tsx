@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode, type TextareaHTMLAttributes } from "react";
+import { ResendVerifyButton, VerifyEmailNotice, isVerifyEmailResponse } from "@/components/verify-email-notice";
 import Link from "next/link";
 import type { ResumeContent } from "@/types/resume";
 import { ResumePreview, type TemplateStyle } from "@/components/resume-preview";
@@ -209,7 +210,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   /** Experience entry shown expanded; undefined = the first one, null = all collapsed. */
   const [openExpId, setOpenExpId] = useState<string | null | undefined>(undefined);
   const [enhancing, setEnhancing] = useState(false);
-  const [enhanceError, setEnhanceError] = useState<{ message: string; upgrade: boolean } | null>(null);
+  const [enhanceError, setEnhanceError] = useState<{ message: string; upgrade: boolean; verifyEmail?: boolean } | null>(null);
   const [enhanceResult, setEnhanceResult] = useState<Array<{ experienceId: string; bulletId: string; original: string; improved: string; change_summary: string }> | null>(null);
   const [showOverwrite, setShowOverwrite] = useState(false);
   const [importing, setImporting] = useState(false);
@@ -224,7 +225,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
   const [dismissed, setDismissed] = useState<Set<string>>(() => new Set());
   /** Bullet whose suggestion is being re-requested ("Try another"). */
   const [retrying, setRetrying] = useState<string | null>(null);
-  const [retryNote, setRetryNote] = useState<{ bulletId: string; message: string; upgrade: boolean } | null>(null);
+  const [retryNote, setRetryNote] = useState<{ bulletId: string; message: string; upgrade: boolean; verifyEmail?: boolean } | null>(null);
   /** Polite announcements: bullet moves, voice additions. */
   const [liveMsg, setLiveMsg] = useState("");
   const [moreOpen, setMoreOpen] = useState(false);
@@ -503,7 +504,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     const j = r ? await r.json().catch(() => ({})) : {};
     setRetrying(null);
     if (!r?.ok || !Array.isArray(j.result?.rewrites)) {
-      setRetryNote({ bulletId: rw.bulletId, message: j.error ?? "Couldn't get another suggestion. Please try again.", upgrade: Boolean(j.upgrade) });
+      setRetryNote({ bulletId: rw.bulletId, message: j.error ?? "Couldn't get another suggestion. Please try again.", upgrade: Boolean(j.upgrade), verifyEmail: isVerifyEmailResponse(j) });
       return;
     }
     const fresh = (j.result.rewrites as Rewrite[]).find((x) => x.bulletId === rw.bulletId);
@@ -556,7 +557,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
     const j = r ? await r.json().catch(() => ({})) : {};
     setEnhancing(false);
     if (r?.ok && j.result?.rewrites) setEnhanceResult(j.result.rewrites);
-    else setEnhanceError({ message: j.error ?? "Couldn't enhance your bullets. Please try again.", upgrade: Boolean(j.upgrade) });
+    else setEnhanceError({ message: j.error ?? "Couldn't enhance your bullets. Please try again.", upgrade: Boolean(j.upgrade), verifyEmail: isVerifyEmailResponse(j) });
   }
 
   /* ── Shared pieces ─────────────────────────────────────────────── */
@@ -907,6 +908,7 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
                                 {note.upgrade ? (
                                   <Link href="/dashboard/settings/subscription" className="font-bold underline underline-offset-2">See plans</Link>
                                 ) : null}
+                                {note.verifyEmail ? <ResendVerifyButton tone="light" className="mt-2 sm:items-start" /> : null}
                               </p>
                             ) : null}
                           </div>
@@ -950,7 +952,8 @@ export function ResumeEditor({ resumeId, initialTitle, initialVertical, initialR
           </p>
         ) : null}
 
-        {enhanceError ? (
+        {enhanceError?.verifyEmail ? <VerifyEmailNotice message={enhanceError.message} /> : null}
+        {enhanceError && !enhanceError.verifyEmail ? (
           <div
             role={enhanceError.upgrade ? "status" : "alert"}
             className={`flex flex-col gap-3 rounded-2xl px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between ${

@@ -5,7 +5,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { trackCtaClick } from "@/lib/analytics-client";
 import { PUBLIC_PLANS, planPriceLabel } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, PLAN_MONTHLY_LIMITS, type CheckoutPlan } from "@/lib/plan-config";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS, PLAN_MONTHLY_LIMITS, isPassPlan, type CheckoutPlan } from "@/lib/plan-config";
 
 export type AiToolKind = "jd" | "packet" | "roleFit";
 export type PlanLimitsMap = Record<CheckoutPlan, { jd: number; packet: number; roleFit: number }>;
@@ -50,7 +50,7 @@ const COPY: Record<AiToolKind | "any", Copy> = {
     title: "Every AI tool is included in every plan.",
     action: "Unlock the AI tools",
     lead: "Job match, role fit, cover letters and interview prep.",
-    points: ["Job match and role fit", "Cover letters and interview prep", "Plans only differ in monthly limits"],
+    points: ["Job match and role fit", "Cover letters and interview prep", "Passes never auto-renew"],
   },
 };
 
@@ -91,9 +91,9 @@ export function UpgradeDialog({
   }, [open]);
 
   function line(p: CheckoutPlan) {
-    if (PUBLIC_PLANS[p].periodLabel === "once") return "Pay once, never renews";
-    if (!kind || !copy.unit) return PUBLIC_PLANS[p].valueLine;
-    return `${limits[p][kind].toLocaleString("en-US")} ${copy.unit} a month`;
+    const usage = kind && copy.unit ? `${limits[p][kind].toLocaleString("en-US")} ${copy.unit} a month` : null;
+    if (isPassPlan(p)) return [`${PASS_DAYS[p]} days`, usage, "no auto-renewal"].filter(Boolean).join(" · ");
+    return [usage ?? PUBLIC_PLANS[p].valueLine, "cancel anytime"].join(" · ");
   }
 
   return (
@@ -171,12 +171,20 @@ export function UpgradeDialog({
                     <b className="text-[16px]">{PUBLIC_PLANS[p].title}</b>{" "}
                     {PUBLIC_PLANS[p].popular ? (
                       <span className="ml-1 hidden rounded-full bg-[#ff7a33] px-2.5 py-[5px] text-[12px] font-bold text-[#111118] sm:inline-block">
-                        Most picked
+                        Recommended
                       </span>
                     ) : null}
                     <span className="block text-[12px] text-[#4a4862] sm:text-[13px]">{line(p)}</span>
                   </span>
-                  <b className="text-[16px] sm:text-[20px]">{planPriceLabel(p)}</b>
+                  <span className="shrink-0 text-right">
+                    <span className="sr-only">{planPriceLabel(p)}</span>
+                    <b aria-hidden="true" className="block text-[16px] leading-tight sm:text-[20px]">
+                      {PUBLIC_PLANS[p].priceDisplay}
+                    </b>
+                    <span aria-hidden="true" className="block text-[11px] text-[#66647c] sm:text-[12px]">
+                      {PUBLIC_PLANS[p].periodLabel}
+                    </span>
+                  </span>
                 </label>
               );
             })}
@@ -190,7 +198,7 @@ export function UpgradeDialog({
             Continue to checkout
           </Link>
           <p className="mt-2.5 text-center text-[12px] text-[#66647c]">
-            Secure checkout by Polar · 7-day refund on monthly plans ·{" "}
+            Secure checkout by Polar · Passes never auto-renew · 7-day refund on monthly plans ·{" "}
             <Link
               href="/dashboard/settings/subscription"
               onClick={() => (location ? trackCtaClick({ cta: "choose_plan", location }) : undefined)}

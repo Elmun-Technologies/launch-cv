@@ -7,8 +7,8 @@ import { contentUpdated, contentUpdatedLabel } from "@/lib/content-dates";
 import { absoluteUrl, getSiteUrl, orgRef, WEBSITE_ID } from "@/lib/site";
 import { SITE_AUTHOR } from "@/lib/author";
 import { getSettings } from "@/lib/app-settings";
-import { PUBLIC_PLANS, planBillingSummary } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER } from "@/lib/plan-config";
+import { PUBLIC_PLANS, freeAllowanceSentence, planBillingSummary } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS } from "@/lib/plan-config";
 import { freeToolsPageState } from "@/lib/seo/free-ai-tools";
 import { freeTools } from "@/lib/seo/free-tools";
 import { RESUME_EXAMPLES, RESUME_GROUPS } from "@/lib/resume-examples";
@@ -191,11 +191,11 @@ export default async function AiInfoPage() {
           </li>
           <li>
             <span className="font-semibold text-[#121226]">Free account:</span> the resume editor, all templates, PDF and Word
-            export, the job tracker, and saving the free ATS report.
+            export, the job tracker, and saving the free ATS report. {freeAllowanceSentence(planLimits.free)}
           </li>
           <li>
-            <span className="font-semibold text-[#121226]">Paid plan:</span> the AI tools inside the app — bullet rewrites, job
-            description match, cover letters and interview prep.
+            <span className="font-semibold text-[#121226]">Paid plan:</span> higher monthly limits on every AI tool inside the app —
+            bullet rewrites, job description match, cover letters and interview prep.
           </li>
         </ul>
       ),
@@ -221,9 +221,12 @@ export default async function AiInfoPage() {
             })}
           </ul>
           <ul className={`${docListCls} mt-4`}>
-            <li>Every AI tool and template is on every plan; only the monthly limits differ. Limits reset each calendar month.</li>
-            <li>Starter and Professional renew monthly until canceled. Lifetime is one payment and never renews.</li>
-            <li>Monthly plans have a 7-day money-back guarantee; Lifetime can be refunded within 14 days of purchase.</li>
+            <li>Every AI tool and template is on every paid plan; plans differ in how long access lasts and in monthly limits. Limits reset each calendar month.</li>
+            <li>
+              {PUBLIC_PLANS.professional.title} renews monthly until canceled. The {PUBLIC_PLANS.week.title} ({PASS_DAYS.week} days) and the{" "}
+              {PUBLIC_PLANS.quarter.title} ({PASS_DAYS.quarter} days) are single payments with no auto-renewal.
+            </li>
+            <li>Monthly plans have a 7-day money-back guarantee.</li>
             <li>Prices are in US dollars, plus any sales tax or VAT the buyer&apos;s country requires.</li>
           </ul>
           <p className="mt-3">
@@ -253,7 +256,7 @@ export default async function AiInfoPage() {
           <li>The free ATS check reads the uploaded file once and doesn&apos;t store it. The report is kept so it can be saved to an account.</li>
           <li>The free bullet and summary generators send text to the AI provider and LaunchCV doesn&apos;t store it. The word counter runs in the browser and sends nothing.</li>
           <li>Resumes are never sold or used for advertising. Users can download all their data as JSON or delete their account from Settings.</li>
-          <li>Text sent to an AI tool is processed by OpenAI. Payments go through Polar; LaunchCV never sees card details.</li>
+          <li>Text sent to an AI tool is processed by OpenAI or Anthropic (Claude), depending on the model set for that tool. Payments go through Polar; LaunchCV never sees card details.</li>
           <li>Voice input uses the browser&apos;s speech recognition. LaunchCV receives the text, not the audio, and stores no recordings.</li>
           <li>
             Site analytics run on Google Analytics, PostHog and Mixpanel. In the app they record page views and named events, not what users type.

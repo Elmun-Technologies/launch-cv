@@ -8,13 +8,13 @@ import { SectionCard } from "@/components/admin/section-card";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { DailyLineChart } from "@/components/admin/charts";
 import { adminH1, adminLink } from "@/components/admin/admin-ui";
-import { subscriptionRowGrantsPaid } from "@/lib/entitlements";
+import { isOneTimeRow, subscriptionRowGrantsPaid } from "@/lib/entitlements";
 import { productIdForCheckoutPlan } from "@/lib/polar";
 import { integrationStatuses } from "@/lib/integrations";
 import { secretBoxReady } from "@/lib/secret-box";
 import { CHECKOUT_PLAN_ORDER, type PlanId } from "@/lib/plan-config";
 import { PUBLIC_PLANS } from "@/lib/monetization";
-import { billingOf, planResolver } from "@/lib/admin-billing";
+import { billingOf, planOfRow, planResolver } from "@/lib/admin-billing";
 import { dailyCounts, fmtAgo, fmtDateTime, startOfUtcDay, startOfUtcMonth } from "@/lib/admin-dates";
 import { maskEmail, planLabel } from "@/lib/admin-labels";
 
@@ -45,7 +45,7 @@ async function configProblems(): Promise<string[]> {
     if (!(await productIdForCheckoutPlan(p))) out.push(`No Polar product id for ${PUBLIC_PLANS[p].title} — its checkout fails.`);
   }
   // Only the providers the chosen models actually use need a key.
-  const models = Object.values((await getSettings()).models);
+  const models = Object.values((await getSettings()).models).filter(Boolean);
   if (models.some((m) => !m.startsWith("claude-")) && !field("openai", "apiKey")) out.push("OpenAI key is missing — AI tools set to an OpenAI model fail.");
   if (models.some((m) => m.startsWith("claude-")) && !field("anthropic", "apiKey")) out.push("Claude API key is missing — AI tools set to a Claude model fail.");
   if (!secretBoxReady()) out.push("KEY_ENCRYPTION_KEY is not set in hosting — keys can't be saved from Integrations.");
@@ -124,13 +124,14 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
   const planOfSub = new Map<string, PlanId>();
   let mrr = 0;
   let payingUsers = 0;
-  let lifetimeUsers = 0;
+  let oneTimeUsers = 0;
   for (const s of subs) {
-    if (!subscriptionRowGrantsPaid({ status: s.status, currentPeriodEnd: s.currentPeriodEnd })) continue;
-    const plan: PlanId = s.stripeSubscriptionId.startsWith("order:") ? "lifetime" : planOf(s.stripePriceId);
+    if (!subscriptionRowGrantsPaid(s, now)) continue;
+    const plan = planOfRow(s, planOf);
     planOfSub.set(s.userId, plan);
     payingUsers += 1;
-    if (plan === "lifetime" || s.stripeSubscriptionId.startsWith("order:")) lifetimeUsers += 1;
+    // Passes and legacy Lifetime are one-time payments: they add no recurring revenue.
+    if (isOneTimeRow(s)) oneTimeUsers += 1;
     else if (plan !== "none") mrr += PUBLIC_PLANS[plan].priceAmount;
   }
 
@@ -160,7 +161,7 @@ export default async function AdminOverviewPage({ searchParams }: { searchParams
   const spanDays = days ?? Math.max(1, Math.round((now - chartFrom.getTime()) / DAY) + 1);
   const kpis = [
     { l: "Revenue", v: usd(revenue), d: `${curPay.length} purchase${curPay.length === 1 ? "" : "s"} · list prices`, delta: delta(revenue, prevRevenue, days) },
-    { l: "MRR", v: usd(mrr), d: `${payingUsers - lifetimeUsers} monthly · ${lifetimeUsers} lifetime`, delta: null },
+    { l: "MRR", v: usd(mrr), d: `${payingUsers - oneTimeUsers} monthly · ${oneTimeUsers} on a pass or Lifetime`, delta: null },
     {
       l: "Paying users",
       v: payingUsers.toLocaleString("en-US"),

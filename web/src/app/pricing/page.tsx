@@ -5,8 +5,8 @@ import { SiteShell } from "@/components/site/site-shell";
 import { CtaLink } from "@/components/cta-link";
 import { JsonLd } from "@/components/json-ld";
 import { container, FaqIcon, labelCls } from "@/components/site/ui";
-import { PUBLIC_PLANS, planPriceLabel, planBillingDuration } from "@/lib/monetization";
-import { CHECKOUT_PLAN_ORDER, type CheckoutPlan } from "@/lib/plan-config";
+import { PUBLIC_PLANS, freeAllowanceSentence, planBillingDuration, planMarketingBullets, planPriceLabel } from "@/lib/monetization";
+import { CHECKOUT_PLAN_ORDER, PASS_DAYS, isPassPlan, type CheckoutPlan } from "@/lib/plan-config";
 import { getSettings } from "@/lib/app-settings";
 import { buildMarketingMetadata } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
@@ -19,12 +19,12 @@ const SUB_NEXT = "/dashboard/settings/subscription";
 const planHref = (plan: string) => `/register?next=${encodeURIComponent(`${SUB_NEXT}?plan=${plan}`)}`;
 
 export const metadata = buildMarketingMetadata({
-  title: "Pricing — Pay Monthly or Once",
+  title: "Pricing — Pay for the Weeks You're Searching",
   description: `LaunchCV pricing: ${CHECKOUT_PLAN_ORDER.map(
     (key) => `${PUBLIC_PLANS[key].title} ${planPriceLabel(key)}`,
-  ).join(", ")}. Every AI tool on every plan; the ATS check is free.`,
+  ).join(", ")}. Passes don't auto-renew. Every AI tool on every plan; the ATS check is free.`,
   pathname: "/pricing",
-  keywords: ["LaunchCV pricing", "resume builder cost", "Lifetime resume", "ATS resume subscription", "AI resume pricing"],
+  keywords: ["LaunchCV pricing", "resume builder cost", "resume builder no subscription", "ATS resume subscription", "AI resume pricing"],
 });
 
 /** Limits are edited in the admin panel; refresh the page at most once a minute. */
@@ -35,27 +35,39 @@ type Limits = Awaited<ReturnType<typeof getSettings>>["planLimits"];
 const n = (v: number) => v.toLocaleString("en-US");
 
 function buildFaqs(limits: Limits) {
-  const L = limits.lifetime;
+  const week = PUBLIC_PLANS.week;
+  const pro = PUBLIC_PLANS.professional;
+  const quarter = PUBLIC_PLANS.quarter;
+  const perPlan = CHECKOUT_PLAN_ORDER.map((k) => {
+    const L = limits[k];
+    return `${PUBLIC_PLANS[k].title}: ${n(L.jd)} job-description analyses, ${n(L.roleFit)} role-fit checks and ${n(L.packet)} application packets`;
+  }).join("; ");
   return [
     {
       q: "Is there a free plan?",
-      a: "The ATS check is free and needs no account. The editor, PDF export, templates and job tracker are free with an account. The AI tools — rewriting bullets, matching your resume to a job, cover letters and interview prep — unlock on a paid plan.",
+      a: `Yes. ${freeAllowanceSentence(limits.free)} The editor, PDF export, templates and job tracker are free too.${
+        limits.free.packet <= 0 ? " Cover letters and interview prep come with a paid plan." : ""
+      }`,
+    },
+    {
+      q: "What's the difference between the passes and Pro?",
+      a: `Every plan includes every AI tool. The ${week.title} (${planPriceLabel("week")}) and the ${quarter.title} (${planPriceLabel("quarter")}) are single payments with no auto-renewal. ${pro.title} (${pro.priceDisplay}/month) renews monthly until you cancel.`,
+    },
+    {
+      q: "What happens when a pass ends?",
+      a: "You aren't charged again. The paid AI limits stop, everything you've written stays saved, and your free monthly checks keep working. Buying another pass while one is active adds its days to the end of the current one.",
     },
     {
       q: "How do I cancel?",
-      a: "Open the billing portal from Settings → Subscription and cancel in one click. You keep access until the end of the period you paid for, and you aren't charged again.",
-    },
-    {
-      q: "Can I switch plans?",
-      a: "Yes. Change your plan from the billing portal at any time. Starter and Professional renew monthly; Lifetime is a single payment that never renews.",
+      a: `Passes don't renew, so there's nothing to cancel. For ${pro.title}, open the billing portal from Settings → Subscription and cancel in one click. You keep access until the end of the period you paid for, and you aren't charged again.`,
     },
     {
       q: "Do you offer refunds?",
-      a: "Monthly plans have a 7-day money-back guarantee — email support within 7 days of paying. Lifetime can be refunded within 14 days. Details are in our Terms.",
+      a: "Monthly plans have a 7-day money-back guarantee — email support within 7 days of paying. Details are in our Terms.",
     },
     {
-      q: "What does fair use mean on Lifetime?",
-      a: `Lifetime comes with the highest monthly limits we offer: ${n(L.jd)} job-description analyses, ${n(L.packet)} application packets and ${n(L.roleFit)} role-fit checks every month. Limits reset monthly.`,
+      q: "How much can I use each plan?",
+      a: `Monthly limits per plan — ${perPlan}. Limits reset on the 1st of each month.`,
     },
     {
       q: "Which payment methods do you accept?",
@@ -129,7 +141,7 @@ function buildLd(faqs: { q: string; a: string }[]) {
 }
 
 function planCtaLabel(key: CheckoutPlan): string {
-  return key === "lifetime" ? "Buy Lifetime" : `Choose ${PUBLIC_PLANS[key].title}`;
+  return isPassPlan(key) ? `Get the ${PUBLIC_PLANS[key].title}` : `Choose ${PUBLIC_PLANS[key].title}`;
 }
 
 const limitRows = [
@@ -138,15 +150,18 @@ const limitRows = [
   { l: "Application packets", k: "packet" },
 ] as const;
 
-/** `free`: available without a plan. The AI tools are the paid part. */
-const toolRows = [
+/**
+ * `free`: true = included without a plan; "limit" = usable on a free account within
+ * its monthly AI allowance (bullet rewrites count as job matches); false = paid only.
+ */
+const toolRows: { l: string; free: boolean | "limit" }[] = [
   { l: "ATS check and score", free: true },
   { l: "Resume editor and PDF export", free: true },
   { l: "All 4 resume templates", free: true },
   { l: "Job tracker, contacts and companies", free: true },
-  { l: "Bullet rewrites and summary writer", free: false },
+  { l: "Bullet rewrites", free: "limit" },
   { l: "Cover letters and interview prep", free: false },
-  { l: "Company matcher and email drafts", free: false },
+  { l: "Email drafts", free: false },
 ];
 
 const FREE_BULLETS = ["ATS check and score", "Resume editor & PDF", "All 4 templates", "Job tracker"];
@@ -201,6 +216,12 @@ export default async function PricingPage() {
   const [copy, cmsFaqs] = await Promise.all([getPageCopy("pricing.hero"), getFaqsFor("pricing")]);
   const faqs = cmsFaqs.length ? cmsFaqs.map((f) => ({ q: f.question, a: f.answer })) : buildFaqs(limits);
   const ld = buildLd(faqs);
+  const F = limits.free;
+  const freeAi = [
+    F.jd > 0 ? `${n(F.jd)} job ${F.jd === 1 ? "match" : "matches"} / mo` : null,
+    F.roleFit > 0 ? `${n(F.roleFit)} role-fit ${F.roleFit === 1 ? "check" : "checks"} / mo` : null,
+  ].filter((x): x is string => !!x);
+  const freeLine = freeAllowanceSentence(F);
 
   return (
     <SiteShell>
@@ -230,12 +251,12 @@ export default async function PricingPage() {
                 <p className="text-[32px] font-bold tracking-[-0.03em] md:mt-2 md:text-[50px] md:leading-[54px] md:tracking-[-0.04em]">$0</p>
               </div>
               <p className="mt-1.5 text-[14px] leading-[22px] text-[#4a4862] md:hidden">
-                ATS check, editor, PDF export, all 4 templates and the job tracker.
+                {freeLine}
               </p>
-              <p className="mt-1.5 hidden text-[15px] text-[#4a4862] md:block">Check, build and download.</p>
+              <p className="mt-1.5 hidden text-[15px] text-[#4a4862] md:block">Check, build and try the AI.</p>
             </div>
             <ul className="hidden flex-col gap-2.5 border-t border-[#d9d4f2] pt-[18px] text-[15px] md:flex">
-              {FREE_BULLETS.map((b) => (
+              {[...freeAi, ...FREE_BULLETS].map((b) => (
                 <li key={b}>
                   <Tick />
                   {b}
@@ -256,14 +277,8 @@ export default async function PricingPage() {
             const cfg = PUBLIC_PLANS[key];
             const L = limits[key];
             const hot = !!cfg.popular;
-            const period = key === "lifetime" ? "once" : cfg.periodLabel;
-            const bullets = [
-              `${n(L.jd)} job-post analyses / mo`,
-              `${n(L.roleFit)} role-fit checks / mo`,
-              `${n(L.packet)} application packets / mo`,
-              "Every AI tool",
-              key === "lifetime" ? "Never renews" : "Cancel anytime",
-            ];
+            const period = cfg.periodLabel;
+            const bullets = planMarketingBullets(key, limits);
             const cta = (
               <CtaLink
                 cta="choose_plan"
@@ -286,7 +301,7 @@ export default async function PricingPage() {
                   className={`${MOBILE_PLAN_ORDER[key]} lc-rise relative mt-3 flex flex-col gap-[18px] rounded-3xl bg-[#5440e8] px-[22px] pb-[22px] pt-[26px] text-white shadow-[0_24px_48px_-20px_rgba(36,24,120,.45)] md:order-none md:mt-0 md:p-7 md:pt-[46px] lg:-my-[18px]`}
                 >
                   <span className="lc-poster absolute -top-3 left-5 -rotate-[4deg] rounded-full bg-[#ff7a33] px-[11px] py-1.5 text-[11px] text-[#111118] md:-top-3.5 md:left-7 md:px-3.5 md:py-2 md:text-[12px]">
-                    MOST PICKED
+                    RECOMMENDED
                   </span>
                   <div>
                     <p className="text-[15px] font-semibold text-[#e4dfff] md:text-[16px]">{cfg.title}</p>
@@ -316,10 +331,17 @@ export default async function PricingPage() {
               >
                 <div>
                   <div className="flex items-baseline justify-between md:block">
-                    <p className="text-[15px] font-semibold text-[#4a4862] md:text-[16px]">{cfg.title}</p>
-                    <p className="text-[32px] font-bold tracking-[-0.03em] md:mt-2 md:text-[50px] md:leading-[54px] md:tracking-[-0.04em]">
+                    <p className="flex flex-wrap items-center gap-2 text-[15px] font-semibold text-[#4a4862] md:text-[16px]">
+                      {cfg.title}
+                      {cfg.badge ? (
+                        <span className="hidden md:inline">
+                          <Badge>{cfg.badge}</Badge>
+                        </span>
+                      ) : null}
+                    </p>
+                    <p className="shrink-0 whitespace-nowrap text-[32px] font-bold tracking-[-0.03em] md:mt-2 md:text-[50px] md:leading-[54px] md:tracking-[-0.04em]">
                       {cfg.priceDisplay}
-                      <span className="text-[13px] font-medium tracking-normal text-[#66647c] md:text-[16px]"> {period}</span>
+                      <span className="whitespace-nowrap text-[13px] font-medium tracking-normal text-[#66647c] md:text-[16px]"> {period}</span>
                     </p>
                   </div>
                   <p className="mt-1.5 text-[14px] leading-[22px] text-[#4a4862] md:hidden">
@@ -452,7 +474,7 @@ export default async function PricingPage() {
         <div className="lc-reveal">
           <p className={labelCls}>/ Compare</p>
           <h2 className="lc-h2 mt-5">
-            Same tools. <span>Different monthly limits.</span>
+            Same tools. <span>Pick how long you need them.</span>
           </h2>
         </div>
         <div role="region" aria-label="Plan comparison table" tabIndex={0} className="lc-card relative mt-6 overflow-x-auto rounded-3xl px-4 pb-4 pt-2 sm:px-7 lg:mt-10">
@@ -479,9 +501,7 @@ export default async function PricingPage() {
                   <th scope="row" className="py-[15px] text-left font-semibold">
                     {r.l}
                   </th>
-                  <td className="py-[15px] text-center">
-                    <No />
-                  </td>
+                  <td className="py-[15px] text-center">{F[r.k] > 0 ? n(F[r.k]) : <No />}</td>
                   {CHECKOUT_PLAN_ORDER.map((key) => (
                     <td key={key} className={`py-[15px] text-center ${PUBLIC_PLANS[key].popular ? "font-bold text-[#5440e8]" : ""}`}>
                       {n(limits[key][r.k])}
@@ -494,7 +514,9 @@ export default async function PricingPage() {
                   <th scope="row" className="py-[15px] text-left font-normal">
                     {r.l}
                   </th>
-                  <td className="py-[15px] text-center">{r.free ? <Yes /> : <No />}</td>
+                  <td className="py-[15px] text-center">
+                    {r.free === "limit" ? <span className="text-[14px] text-[#4a4862]">Counts as a job match</span> : r.free ? <Yes /> : <No />}
+                  </td>
                   {CHECKOUT_PLAN_ORDER.map((key) => (
                     <td key={key} className="py-[15px] text-center">
                       <Yes />
@@ -511,7 +533,7 @@ export default async function PricingPage() {
                 </td>
                 {CHECKOUT_PLAN_ORDER.map((key) => (
                   <td key={key} className="py-[15px] text-center">
-                    {key === "lifetime" ? "One-time" : "Monthly"}
+                    {isPassPlan(key) ? `Once · ${PASS_DAYS[key]} days` : "Monthly"}
                   </td>
                 ))}
               </tr>
@@ -532,14 +554,14 @@ export default async function PricingPage() {
           <div className="mt-[22px] lg:absolute lg:bottom-16 lg:left-16 lg:mt-0 lg:max-w-[420px] xl:max-w-[460px]">
             <h2 className="text-[26px] font-extrabold leading-[31px] tracking-[-0.03em] lg:text-[40px] lg:leading-[46px]">Not for you? Get your money back.</h2>
             <p className="mt-2.5 text-[15px] leading-[23px] text-[#c9c7d8] lg:mt-3.5 lg:text-[17px] lg:leading-[26px]">
-              Email support within 7 days of paying for a monthly plan, or 14 days for Lifetime. Cancel any time from Settings in one click.
+              Email support within 7 days of paying for a monthly plan. Cancel any time from Settings in one click. Passes never renew, so there&apos;s nothing to cancel.
             </p>
             <Link href="/legal/terms" className="lc-link mt-3 inline-block py-2 text-[15px] font-semibold text-[#c9c0ff] hover:text-white">
               Read the refund terms
             </Link>
           </div>
           <span aria-hidden="true" className="lc-poster absolute bottom-14 right-16 hidden -rotate-[5deg] rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[13px] text-[#111118] lg:block">
-            LIFETIME: 14 DAYS
+            PASSES: NO AUTO-RENEWAL
           </span>
         </div>
       </section>
