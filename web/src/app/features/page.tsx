@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteShell } from "@/components/site/site-shell";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { btn, container, labelCls } from "@/components/site/ui";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
@@ -198,19 +198,15 @@ export default function FeaturesPage() {
             START HERE
           </p>
           <div aria-hidden="true" className="absolute bottom-[-160px] right-[60px] hidden h-[440px] w-[440px] rounded-full bg-[#5440e8] lg:block" />
-          <Image
-            src="/images/people/nurse-arms-crossed.webp"
-            alt="Smiling nurse in blue scrubs, arms crossed"
-            width={759}
-            height={1080}
-            sizes="267px"
-            className="absolute bottom-0 right-[60px] hidden h-[380px] w-auto lg:block"
+          <ResumeSheet
+            example="registered-nurse"
+            className="absolute bottom-0 right-[110px] hidden h-[330px] w-[320px] [--peek:0.392] lg:block"
           />
           <div className="relative z-10 max-w-[520px]">
             <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] lg:text-[42px] lg:leading-[48px]">
               Not sure where to start? <span className="text-[#e4dfff] lg:text-[#9a97b3]">Check your resume.</span>
             </h2>
-            <p className="mt-2 text-[15px] text-[#e4dfff] lg:mt-3 lg:text-[17px] lg:text-[#c9c7d8]">Free, no sign-up, about 10 seconds.</p>
+            <p className="mt-2 text-[15px] text-[#e4dfff] lg:mt-3 lg:text-[17px] lg:text-[#c9c7d8]">Free, no sign-up, about 10 seconds. One free check every 30 days.</p>
             <CtaLink
               cta="free_ats_check"
               location="features_index"

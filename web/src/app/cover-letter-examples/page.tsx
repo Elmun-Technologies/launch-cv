@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { SiteShell } from "@/components/site/site-shell";
 import { container, btnWhite, labelCls } from "@/components/site/ui";
 import { LetterMini } from "@/components/site/library/letter-mini";
@@ -72,14 +72,9 @@ export default function CoverLetterExamplesPage() {
               DEAR…
             </p>
             <div aria-hidden="true" className="absolute -bottom-[170px] -right-[60px] hidden h-[460px] w-[460px] rounded-full bg-[#4430d6] sm:block" />
-            <Image
-              src="/images/people/woman-blazer-laptop.webp"
-              alt="Smiling woman in a grey blazer"
-              width={620}
-              height={1080}
-              priority
-              sizes="(min-width: 1024px) 218px, (min-width: 640px) 184px, 126px"
-              className="absolute bottom-0 right-0 h-[220px] w-auto sm:h-[320px] lg:h-[380px]"
+            <ResumeSheet
+              example={featured.e.slug}
+              className="absolute -right-4 bottom-0 h-[170px] w-[140px] rotate-6 [--peek:0.172] sm:right-8 sm:h-[260px] sm:w-[210px] sm:rotate-3 sm:[--peek:0.257] lg:right-14 lg:h-[330px] lg:w-[260px] lg:[--peek:0.319]"
             />
             <Link
               href={`/cover-letter-examples/${featured.e.slug}`}

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { SiteShell } from "@/components/site/site-shell";
 import { container, btnPrimary, labelCls } from "@/components/site/ui";
@@ -7,6 +6,7 @@ import { LetterMini } from "@/components/site/library/letter-mini";
 import { JsonLd } from "@/components/json-ld";
 import { CtaLink } from "@/components/cta-link";
 import { ResumePreview } from "@/components/resume-preview";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { buildMarketingMetadata, DEFAULT_OG_IMAGE } from "@/lib/build-metadata";
 import { absoluteUrl, WEBSITE_ID } from "@/lib/site";
 import { RESUME_EXAMPLES, RESUME_GROUPS, getResumeExample, type ResumeExample } from "@/lib/resume-examples";
@@ -132,32 +132,21 @@ export default function ResumeExamplesPage() {
           <div aria-hidden="true" className="absolute bottom-[-150px] left-[16%] hidden h-[360px] w-[360px] rounded-full bg-[#5440e8] lg:block" />
           <div aria-hidden="true" className="absolute bottom-[-110px] left-1/2 h-[280px] w-[280px] -translate-x-1/2 rounded-full bg-[#c9c0ff] lg:bottom-[-170px] lg:h-[400px] lg:w-[400px]" />
           <div aria-hidden="true" className="absolute bottom-[-150px] right-[16%] hidden h-[360px] w-[360px] rounded-full bg-[#ff7a33] lg:block" />
-          <Image
-            src="/images/people/woman-hoodie.webp"
-            alt="Young woman in a denim jacket and hoodie, smiling"
-            width={856}
-            height={1080}
-            priority
-            sizes="(min-width: 1024px) 309px, (min-width: 640px) 238px, 182px"
-            className="absolute -left-2.5 bottom-0 h-[230px] w-auto max-w-none sm:left-[6%] sm:h-[300px] lg:left-[19%] lg:h-[390px]"
+          <ResumeSheet
+            example="ux-designer"
+            template="minimal"
+            tag={false}
+            className="absolute -left-6 bottom-0 h-[170px] w-[160px] -rotate-6 [--peek:0.196] sm:left-[6%] sm:h-[230px] sm:w-[210px] sm:[--peek:0.257] lg:left-[17%] lg:h-[300px] lg:w-[270px] lg:[--peek:0.331]"
           />
-          <Image
-            src="/images/people/woman-red-top.webp"
-            alt="Laughing woman in a red top"
-            width={747}
-            height={1080}
-            priority
-            sizes="(min-width: 1024px) 270px, (min-width: 640px) 208px, 159px"
-            className="absolute -right-3.5 bottom-0 h-[230px] w-auto max-w-none sm:right-[6%] sm:h-[300px] lg:right-[19%] lg:h-[390px]"
+          <ResumeSheet
+            example="marketing-manager"
+            template="classic"
+            tag={false}
+            className="absolute -right-6 bottom-0 h-[170px] w-[160px] rotate-6 [--peek:0.196] sm:right-[6%] sm:h-[230px] sm:w-[210px] sm:[--peek:0.257] lg:right-[17%] lg:h-[300px] lg:w-[270px] lg:[--peek:0.331]"
           />
-          <Image
-            src="/images/people/nurse-arms-crossed.webp"
-            alt="Smiling nurse in blue scrubs with a stethoscope, arms crossed"
-            width={759}
-            height={1080}
-            priority
-            sizes="(min-width: 1024px) 302px, (min-width: 640px) 239px, 183px"
-            className="absolute bottom-0 left-1/2 h-[260px] w-auto max-w-none -translate-x-1/2 sm:h-[340px] lg:h-[430px]"
+          <ResumeSheet
+            example="registered-nurse"
+            className="absolute bottom-0 left-1/2 h-[200px] w-[190px] -translate-x-1/2 [--peek:0.233] sm:h-[270px] sm:w-[250px] sm:[--peek:0.306] lg:h-[340px] lg:w-[310px] lg:[--peek:0.38]"
           />
           <RoleTag slug="ux-designer" className="left-[12%] top-[230px] hidden lg:inline-flex" />
           <RoleTag slug="registered-nurse" className="left-1/2 top-[84px] -translate-x-1/2 sm:top-[120px] lg:top-[168px]" />

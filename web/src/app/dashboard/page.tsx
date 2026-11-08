@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { ArrowRight, Briefcase, FileSearch, Lightbulb, Plus, Upload } from "lucide-react";
+import { ArrowRight, Briefcase, FileSearch, Lightbulb, MessagesSquare, Plus, Upload } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { getUserPlanId } from "@/lib/plans";
@@ -271,15 +270,8 @@ export default async function DashboardHomePage() {
               aria-labelledby="home-packet"
               className="relative hidden min-h-[220px] overflow-hidden rounded-[24px] bg-[#111118] p-6 text-white sm:block sm:rounded-[28px]"
             >
-              <div aria-hidden="true" className="absolute -bottom-10 -right-[30px] h-[170px] w-[170px] overflow-hidden rounded-full bg-[#ff7a33] sm:h-[200px] sm:w-[200px]">
-                <Image
-                  src="/images/people/man-blazer-glasses.webp"
-                  alt=""
-                  width={767}
-                  height={1080}
-                  sizes="200px"
-                  className="absolute left-1/2 top-2.5 h-[220px] w-auto max-w-none -translate-x-1/2 sm:h-[260px]"
-                />
+              <div aria-hidden="true" className="absolute -bottom-10 -right-[30px] h-[170px] w-[170px] rounded-full bg-[#ff7a33] sm:h-[200px] sm:w-[200px]">
+                <MessagesSquare className="absolute left-[46px] top-[38px] h-14 w-14 text-[#111118] sm:left-[52px] sm:top-[44px] sm:h-16 sm:w-16" strokeWidth={1.6} />
               </div>
               <div className="relative max-w-[58%] sm:max-w-[240px]">
                 <h2 id="home-packet" className="text-[19px] font-extrabold leading-[25px] sm:text-[20px]">

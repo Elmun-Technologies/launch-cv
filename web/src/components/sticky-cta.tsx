@@ -81,7 +81,7 @@ export function StickyCta({
   return (
     <div
       aria-hidden={!visible}
-      className={`fixed inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-3 transition-all duration-300 motion-reduce:transition-none ${
+      className={`fixed inset-x-0 bottom-[var(--lc-cookie-bar,0px)] z-40 flex justify-center px-3 pb-3 transition-all duration-300 motion-reduce:transition-none ${
         visible ? "visible translate-y-0 opacity-100" : "invisible pointer-events-none translate-y-6 opacity-0"
       }`}
     >

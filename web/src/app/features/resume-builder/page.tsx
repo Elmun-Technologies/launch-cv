@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { FeaturePage, Stage, ExampleTag, BeforeAfter, type FeaturePageData } from "@/components/marketing/feature-page";
 import { buildMarketingMetadata, FEATURES_OG_IMAGE } from "@/lib/build-metadata";
 import { entryPriceLabel } from "@/lib/monetization";
@@ -22,14 +22,9 @@ const TEMPLATES = ["Classic", "Modern", "Minimal", "Executive"];
 
 const stage = (
   <Stage bg="#5440e8" poster="BUILD" posterColor="#6a58ee">
-    <Image
-      src="/images/people/woman-red-top.webp"
-      alt="Laughing woman in a red top"
-      width={747}
-      height={1080}
-      priority
-      sizes="(min-width: 1024px) 298px, 220px"
-      className="absolute bottom-0 right-[-12px] h-[270px] w-auto max-w-none sm:h-[320px] lg:right-[-20px] lg:h-[430px]"
+    <ResumeSheet
+      example="product-manager"
+      className="absolute bottom-0 right-4 h-[230px] w-[190px] [--peek:0.233] sm:h-[300px] sm:w-[240px] sm:[--peek:0.294] lg:right-6 lg:h-[420px] lg:w-[300px] lg:[--peek:0.368]"
     />
     <div className="lc-float lc-drift absolute left-4 top-[88px] w-[220px] rounded-[18px] bg-white p-3.5 text-[#121226] sm:w-[280px] lg:left-8 lg:top-[150px] lg:w-[290px] xl:w-[330px] lg:rounded-[22px] lg:p-[18px]">
       <p className="flex justify-between gap-2 text-[11px] font-bold tracking-[0.06em] text-[#66647c] lg:text-[12px]">

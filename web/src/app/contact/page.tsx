@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/json-ld";
 import { SiteShell } from "@/components/site/site-shell";
@@ -72,19 +71,26 @@ export default function ContactPage() {
             HELLO
           </p>
           <div aria-hidden="true" className="absolute bottom-[-180px] left-1/2 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-[#5440e8]" />
-          <Image
-            src="/images/people/man-white-tee.webp"
-            alt="Smiling man in a white t-shirt"
-            width={739}
-            height={1080}
-            sizes="(min-width: 1024px) 274px, 240px"
-            className="absolute bottom-0 left-1/2 h-[340px] w-auto max-w-none -translate-x-1/2 lg:h-[400px]"
-          />
+          {/* An email to support, drafted: what the "put the topic in the subject" advice looks like. */}
+          <div aria-hidden="true" className="absolute bottom-0 left-1/2 w-[340px] -translate-x-1/2 rounded-t-3xl bg-white px-5 pb-8 pt-5 text-[14px] text-[#121226] shadow-[0_24px_48px_-20px_rgba(10,6,60,.45)] lg:w-[400px] lg:px-6">
+            <p className="text-[12px] font-bold tracking-[0.06em] text-[#66647c]">NEW EMAIL</p>
+            <p className="mt-3 border-b border-[#e2e0ea] pb-2">
+              <span className="text-[#66647c]">To</span> <span className="font-semibold">{EMAIL}</span>
+            </p>
+            <p className="mt-2 border-b border-[#e2e0ea] pb-2">
+              <span className="text-[#66647c]">Subject</span> <span className="font-semibold">Refund · monthly plan</span>
+            </p>
+            <div className="mt-3 flex flex-col gap-2">
+              <span className="h-2 w-[92%] rounded-full bg-[#efedf7]" />
+              <span className="h-2 w-[78%] rounded-full bg-[#efedf7]" />
+              <span className="h-2 w-[55%] rounded-full bg-[#efedf7]" />
+            </div>
+          </div>
           <div aria-hidden="true">
-            <span className="lc-float lc-drift absolute left-8 top-[160px] max-w-[220px] rounded-[22px_22px_22px_6px] bg-white px-4 py-3 text-[15px] font-medium lg:top-[190px]">
+            <span className="lc-float lc-drift absolute left-8 top-[140px] z-10 max-w-[220px] rounded-[22px_22px_22px_6px] bg-white px-4 py-3 text-[15px] font-medium lg:top-[150px]">
               Can I get a refund on a monthly plan?
             </span>
-            <span className="lc-float lc-drift-2 absolute right-8 top-[240px] max-w-[220px] rounded-[22px_22px_6px_22px] bg-[#111118] px-4 py-3 text-[15px] font-medium text-white lg:top-[270px]">
+            <span className="lc-float lc-drift-2 absolute right-8 top-[200px] z-10 max-w-[220px] rounded-[22px_22px_6px_22px] bg-[#111118] px-4 py-3 text-[15px] font-medium text-white lg:top-[220px]">
               Yes — within 7 days. Here&apos;s how.
             </span>
           </div>

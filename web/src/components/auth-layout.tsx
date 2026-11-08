@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
 import { siteFontVars } from "@/lib/site-fonts";
@@ -7,23 +6,16 @@ import { SiteLogo } from "@/components/site/brand";
 
 /**
  * Split layout for the sign-in / sign-up / account-recovery pages (design v5):
- * the form on the lilac ground, a purple poster stage with a cut-out photo on
- * the right. Below `lg` the stage collapses into a short banner above the form.
+ * the form on the lilac ground, a purple poster stage with an example ATS
+ * report card on the right. Below `lg` the stage collapses into a short banner
+ * above the form.
  */
 
 type AuthMode = "login" | "register" | "recover" | "verify";
 
 type Stage = {
   poster: [string, string];
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
-  /** Desktop image height (px) and horizontal anchoring. */
-  imgCls: string;
-  /** Phone banner image classes. */
-  mobileImgCls: string;
-  /** Login/register banners are taller and carry the poster line. */
+  /** Login/register banners are taller. */
   tallBanner: boolean;
   note: ReactNode;
   sticker?: string;
@@ -32,12 +24,6 @@ type Stage = {
 const STAGES: Record<AuthMode, Stage> = {
   login: {
     poster: ["WELCOME", "BACK"],
-    src: "/images/people/woman-blazer-laptop.webp",
-    alt: "Smiling woman in a grey blazer",
-    width: 620,
-    height: 1080,
-    imgCls: "right-0 h-[520px]",
-    mobileImgCls: "-right-1.5 h-[170px] sm:h-[220px]",
     tallBanner: true,
     note: (
       <p className="text-[16px] font-semibold leading-6">Your resumes, reports and applications are where you left them.</p>
@@ -45,12 +31,6 @@ const STAGES: Record<AuthMode, Stage> = {
   },
   register: {
     poster: ["GET", "HIRED"],
-    src: "/images/people/woman-red-top.webp",
-    alt: "Laughing woman in a red top",
-    width: 747,
-    height: 1080,
-    imgCls: "left-1/2 h-[500px] -translate-x-1/2",
-    mobileImgCls: "-right-5 h-[170px] sm:right-4 sm:h-[220px]",
     tallBanner: true,
     sticker: "NO CREDIT CARD",
     note: (
@@ -68,23 +48,11 @@ const STAGES: Record<AuthMode, Stage> = {
   },
   recover: {
     poster: ["FRESH", "START"],
-    src: "/images/people/man-white-tee.webp",
-    alt: "Smiling man in a white t-shirt",
-    width: 739,
-    height: 1080,
-    imgCls: "left-1/2 h-[470px] -translate-x-1/2",
-    mobileImgCls: "-right-2.5 h-[160px] sm:right-4 sm:h-[200px]",
     tallBanner: false,
     note: <p className="text-[15px] font-semibold leading-[23px]">Your resumes and reports stay exactly where you left them.</p>,
   },
   verify: {
     poster: ["ALMOST", "THERE"],
-    src: "/images/people/woman-red-top.webp",
-    alt: "Laughing woman in a red top",
-    width: 747,
-    height: 1080,
-    imgCls: "left-1/2 h-[480px] -translate-x-1/2",
-    mobileImgCls: "-right-2.5 h-[160px] sm:right-4 sm:h-[200px]",
     tallBanner: false,
     note: <p className="text-[15px] font-semibold leading-[23px]">One click in that email and your account is verified.</p>,
   },
@@ -114,25 +82,17 @@ export function AuthLayout({ children, mode, stageNote }: AuthLayoutProps) {
         <div className="absolute left-[18px] top-[18px] z-10">
           <SiteLogo size={30} tone="light" />
         </div>
-        {s.tallBanner ? (
-          <p
-            aria-hidden="true"
-            className="lc-poster absolute bottom-3.5 left-[18px] m-0 text-[38px] leading-[38px] text-[#6a58ee] sm:text-[56px] sm:leading-[54px]"
-          >
-            {s.poster[0]}
-            <br />
-            {s.poster[1]}
-          </p>
-        ) : null}
-        <Image
-          src={s.src}
-          alt=""
-          width={s.width}
-          height={s.height}
-          fetchPriority="high"
-          sizes="(min-width: 640px) 160px, 120px"
-          className={`absolute bottom-0 w-auto max-w-none ${s.mobileImgCls}`}
-        />
+        <p
+          aria-hidden="true"
+          className={`lc-poster absolute bottom-3.5 left-[18px] m-0 text-[#6a58ee] ${
+            s.tallBanner ? "text-[38px] leading-[38px] sm:text-[56px] sm:leading-[54px]" : "text-[34px] leading-[34px] sm:text-[50px] sm:leading-[48px]"
+          }`}
+        >
+          {s.poster[0]}
+          <br />
+          {s.poster[1]}
+        </p>
+        <ScoreChip className="absolute right-4 top-4 sm:right-6 sm:top-6" />
       </header>
 
       {/* FORM */}
@@ -171,19 +131,11 @@ export function AuthLayout({ children, mode, stageNote }: AuthLayoutProps) {
             {s.poster[1]}
           </p>
           <div aria-hidden="true" className="absolute bottom-[-200px] left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-[#4430d6]" />
-          <Image
-            src={s.src}
-            alt={s.alt}
-            width={s.width}
-            height={s.height}
-            fetchPriority="high"
-            sizes="360px"
-            className={`absolute bottom-0 w-auto max-w-none ${s.imgCls}`}
-          />
+          <ReportMock className="absolute left-1/2 top-[230px] w-[min(400px,calc(100%-80px))] -translate-x-1/2 xl:top-[260px]" />
           {s.sticker ? (
             <span
               aria-hidden="true"
-              className="lc-poster absolute right-11 top-[320px] -rotate-6 rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[13px] text-[#111118]"
+              className="lc-poster absolute right-11 top-[190px] z-10 -rotate-6 xl:top-[214px] rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[13px] text-[#111118]"
             >
               {s.sticker}
             </span>
@@ -191,6 +143,65 @@ export function AuthLayout({ children, mode, stageNote }: AuthLayoutProps) {
           <div className="lc-float absolute inset-x-10 bottom-10 rounded-3xl bg-white px-6 py-[22px] text-[#121226]">{note}</div>
         </div>
       </aside>
+    </div>
+  );
+}
+
+/** Example score ring (illustrative, labelled as an example wherever it shows). */
+function Ring({ score, size }: { score: number; size: number }) {
+  const r = 27;
+  const c = 2 * Math.PI * r;
+  return (
+    <svg viewBox="0 0 64 64" width={size} height={size} aria-hidden="true" className="flex-none">
+      <circle cx="32" cy="32" r={r} fill="none" stroke="#efedf7" strokeWidth="7" />
+      <circle cx="32" cy="32" r={r} fill="none" stroke="#22b07d" strokeWidth="7" strokeLinecap="round" strokeDasharray={`${(c * score) / 100} ${c}`} transform="rotate(-90 32 32)" />
+    </svg>
+  );
+}
+
+/** Phone banner: a small example score card. */
+function ScoreChip({ className = "" }: { className?: string }) {
+  return (
+    <div aria-hidden="true" className={`flex items-center gap-2.5 rounded-[18px] bg-white px-3 py-2.5 text-[#121226] ${className}`}>
+      <Ring score={91} size={36} />
+      <div>
+        <p className="text-[11px] font-medium text-[#66647c]">ATS score · example</p>
+        <p className="text-[20px] font-bold leading-[22px] tracking-[-0.03em]">
+          91<span className="text-[11px] font-medium tracking-normal text-[#66647c]">/100</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/** Desktop stage: the free check's report card, filled with example values. */
+function ReportMock({ className = "" }: { className?: string }) {
+  const rows: [string, boolean][] = [
+    ["Contact details found", true],
+    ["Standard section headings", true],
+    ["One date format", true],
+    ["Keywords from the job post", false],
+  ];
+  return (
+    <div aria-hidden="true" className={`lc-float rounded-3xl bg-white p-6 text-[#121226] shadow-[0_30px_60px_-24px_rgba(10,6,60,.55)] ${className}`}>
+      <div className="flex items-center gap-4">
+        <Ring score={91} size={72} />
+        <div>
+          <p className="text-[13px] text-[#66647c]">ATS score · example</p>
+          <p className="text-[34px] font-bold leading-[38px] tracking-[-0.03em]">
+            91<span className="text-[14px] font-medium tracking-normal text-[#66647c]">/100</span>
+          </p>
+          <p className="text-[13px] font-semibold text-[#0b7a4f]">Ready to send</p>
+        </div>
+      </div>
+      <ul className="mt-5 flex flex-col gap-2">
+        {rows.map(([t, ok]) => (
+          <li key={t} className="flex items-center justify-between rounded-2xl bg-[#f7f6fb] px-4 py-3 text-[14px] font-semibold">
+            <span>{t}</span>
+            {ok ? <span className="font-bold text-[#0b7a4f]">✓</span> : <span className="text-[12px] font-bold text-[#a15c00]">2 to add</span>}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

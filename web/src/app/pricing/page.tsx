@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteShell } from "@/components/site/site-shell";
+import { ResumeSheet } from "@/components/site/resume-sheet";
 import { CtaLink } from "@/components/cta-link";
 import { JsonLd } from "@/components/json-ld";
 import { container, FaqIcon, labelCls } from "@/components/site/ui";
@@ -340,7 +340,7 @@ export default async function PricingPage() {
             <span aria-hidden="true" className="hidden sm:inline">
               ·
             </span>
-            <span>7-day money-back guarantee on monthly plans</span>
+            <span>7-day money-back guarantee on Pro (monthly)</span>
           </p>
           <p>
             Already have an account?{" "}
@@ -361,13 +361,9 @@ export default async function PricingPage() {
         </div>
         <div className="lc-reveal relative mt-[22px] h-[400px] overflow-hidden rounded-[28px] bg-[#e4dfff] lg:mt-12 lg:h-[620px] lg:rounded-[36px]">
           <div aria-hidden="true" className="absolute bottom-[-130px] left-1/2 h-[320px] w-[320px] -translate-x-1/2 rounded-full bg-[#c9c0ff] lg:bottom-[-220px] lg:h-[560px] lg:w-[560px]" />
-          <Image
-            src="/images/people/woman-hoodie.webp"
-            alt="Young woman in a denim jacket and hoodie, smiling"
-            width={856}
-            height={1080}
-            sizes="(min-width: 1024px) 444px, 270px"
-            className="absolute bottom-0 left-1/2 h-[340px] w-auto max-w-none -translate-x-1/2 lg:h-[560px]"
+          <ResumeSheet
+            example="product-manager"
+            className="absolute bottom-0 left-1/2 h-[300px] w-[250px] -translate-x-1/2 [--peek:0.306] lg:h-[500px] lg:w-[420px] lg:[--peek:0.515]"
           />
 
           {/* Phone: one compact example card */}
@@ -436,11 +432,11 @@ export default async function PricingPage() {
         </div>
         <div role="region" aria-label="Plan comparison table" tabIndex={0} className="lc-card relative mt-6 overflow-x-auto rounded-3xl px-4 pb-4 pt-2 sm:px-7 lg:mt-10">
           <table className="w-full min-w-[620px] border-collapse text-[15px] [font-feature-settings:'tnum']">
-            <caption className="sr-only">Plan comparison: monthly limits and included tools</caption>
+            <caption className="sr-only">Plan comparison: AI limits per calendar month and included tools</caption>
             <thead>
               <tr className="border-b-2 border-[#121226]">
                 <th scope="col" className="w-[36%] py-[18px] text-left font-semibold text-[#66647c]">
-                  Each month
+                  AI limits · reset on the 1st
                 </th>
                 <th scope="col" className="py-[18px] text-center font-bold">
                   Free
@@ -503,22 +499,23 @@ export default async function PricingPage() {
       <section className={`${container} ${sectionPad}`}>
         <div className="lc-reveal relative overflow-hidden rounded-[28px] bg-[#111118] px-[22px] py-7 text-white lg:h-[440px] lg:rounded-[36px] lg:p-0">
           <p aria-hidden="true" className="lc-poster text-[62px] leading-[58px] text-[#5440e8] sm:text-[96px] sm:leading-[90px] lg:absolute lg:right-12 lg:top-10 lg:text-right lg:text-[120px] lg:leading-[110px] xl:text-[150px] xl:leading-[136px]">
-            7 DAYS
+            7-DAY
           </p>
           <p aria-hidden="true" className="lc-poster mt-1 text-[28px] leading-[30px] text-[#c9c0ff] sm:text-[44px] sm:leading-[46px] lg:absolute lg:right-12 lg:top-[150px] lg:mt-0 lg:text-right lg:text-[52px] lg:leading-[52px] xl:top-[176px] xl:text-[64px] xl:leading-[64px]">
-            MONEY BACK
+            REFUND ON PRO
           </p>
           <div className="mt-[22px] lg:absolute lg:bottom-16 lg:left-16 lg:mt-0 lg:max-w-[420px] xl:max-w-[460px]">
-            <h2 className="text-[26px] font-extrabold leading-[31px] tracking-[-0.03em] lg:text-[40px] lg:leading-[46px]">Not for you? Get your money back.</h2>
+            <h2 className="text-[26px] font-extrabold leading-[31px] tracking-[-0.03em] lg:text-[40px] lg:leading-[46px]">7-day refund on Pro.</h2>
             <p className="mt-2.5 text-[15px] leading-[23px] text-[#c9c7d8] lg:mt-3.5 lg:text-[17px] lg:leading-[26px]">
-              Email support within 7 days of paying for a monthly plan. Cancel any time from Settings in one click. Passes never renew, so there&apos;s nothing to cancel.
+              Pro is our monthly plan and comes with a 7-day money-back guarantee: email support from your account email within 7 days of paying. Cancel any time from Settings in one click.
+              The money-back guarantee doesn&apos;t cover the Week Pass or the 90-Day Pass; they&apos;re single payments that never renew, so there&apos;s nothing to cancel.
             </p>
             <Link href="/legal/terms" className="lc-link mt-3 inline-block py-2 text-[15px] font-semibold text-[#c9c0ff] hover:text-white">
               Read the refund terms
             </Link>
           </div>
           <span aria-hidden="true" className="lc-poster absolute bottom-14 right-16 hidden -rotate-[5deg] rounded-full bg-[#ff7a33] px-[15px] py-[9px] text-[13px] text-[#111118] lg:block">
-            PASSES: NO AUTO-RENEWAL
+            GUARANTEE: PRO ONLY
           </span>
         </div>
       </section>

@@ -166,10 +166,13 @@ export function planMarketingBullets(
 ): string[] {
   const L = limits[plan];
   const n = (v: number) => v.toLocaleString("en-US");
+  // Usage is counted per calendar month (lib/usage-limits, reset on the 1st). A 7-day pass gets one
+  // allowance, so it shows no period; the 90-day pass spans several months, so it says which kind.
+  const per = plan === "week" ? "" : plan === "quarter" ? " / calendar month" : " / month";
   const usage = [
-    `${n(L.jd)} job-description analyses / month`,
-    `${n(L.roleFit)} role-fit checks / month`,
-    `${n(L.packet)} application packets / month`,
+    `${n(L.jd)} job-description analyses${per}`,
+    `${n(L.roleFit)} role-fit checks${per}`,
+    `${n(L.packet)} application packets${per}`,
   ];
   // Every tool ships on every plan; plans differ by how long access lasts and the monthly limits.
   if (plan === "week") {
