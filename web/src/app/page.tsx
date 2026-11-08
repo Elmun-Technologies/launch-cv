@@ -618,7 +618,7 @@ export default async function Home() {
                 plan={id}
                 selectsPlan
                 location="home_pricing"
-                href={`/register?next=${encodeURIComponent(`/dashboard/settings/subscription?plan=${id}`)}`}
+                href={`/checkout/${id}`}
                 className={`lc-btn-lift mt-auto rounded-full text-center text-[15px] font-semibold ${hot ? "bg-white p-4 text-[#121226]" : "bg-[#f1eff8] p-[13px] text-[#121226] hover:bg-[#e4dfff] md:p-4"}`}
               >
                 {cta}

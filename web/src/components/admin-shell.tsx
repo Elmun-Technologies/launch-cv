@@ -25,6 +25,7 @@ import {
   Plug,
   Gauge,
   Lock,
+  TicketPercent,
 } from "lucide-react";
 import { SiteMark } from "@/components/site/brand";
 import { siteFontVars } from "@/lib/site-fonts";
@@ -62,6 +63,7 @@ const groups: NavGroup[] = [
     items: [
       { href: "/admin-panel/users", label: "Users", icon: Users },
       { href: "/admin-panel/subscriptions", label: "Subscriptions", icon: CreditCard },
+      { href: "/admin-panel/discounts", label: "Discounts", icon: TicketPercent },
     ],
   },
   {
