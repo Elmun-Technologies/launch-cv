@@ -8,12 +8,16 @@ import { sendTransactionalEmail } from "@/lib/email";
  *  - after a call: its cost is recorded in AiCall and budget alerts are sent.
  */
 
-/** USD per 1M tokens (input, output). OpenAI list prices; check them when adding a model. */
+/** USD per 1M tokens (input, output). Provider list prices; check them when adding a model. */
 export const MODEL_PRICES: Record<string, { input: number; output: number }> = {
   "gpt-4o-mini": { input: 0.15, output: 0.6 },
   "gpt-4o": { input: 2.5, output: 10 },
   "gpt-4.1-mini": { input: 0.4, output: 1.6 },
   "gpt-4.1": { input: 2, output: 8 },
+  // Claude list prices. Thinking is billed as output, so Claude calls run more output tokens per answer.
+  "claude-haiku-5-5": { input: 0.1, output: 0.5 },
+  "claude-sonnet-5-5": { input: 2, output: 10 },
+  "claude-opus-5-5": { input: 4, output: 20 },
 };
 
 export function costMicros(model: string, inputTokens: number, outputTokens: number): number {
@@ -92,7 +96,7 @@ export async function recordAiCall(args: {
       data: {
         userId: args.userId ?? null,
         tool: args.tool,
-        provider: "openai",
+        provider: args.model.startsWith("claude-") ? "anthropic" : "openai",
         model: args.model,
         inputTokens: args.inputTokens,
         outputTokens: args.outputTokens,

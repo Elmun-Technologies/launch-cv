@@ -19,6 +19,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0",
     "@prisma/client": "6.19.0",
     "@react-pdf/renderer": "^4.4.1",
     "bcryptjs": "^3.0.3",

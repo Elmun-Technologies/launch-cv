@@ -144,7 +144,7 @@ export default async function IntegrationPage({ params }: { params: Promise<{ pr
           />
         </div>
         <div className="mt-5">
-          <IntegrationForm status={status} canEdit={canEdit} keyMeta={meta} aside={status.id === "openai" ? <BudgetAndModels /> : null} />
+          <IntegrationForm status={status} canEdit={canEdit} keyMeta={meta} aside={status.id === "openai" || status.id === "anthropic" ? <BudgetAndModels /> : null} />
         </div>
       </div>
     </AdminShell>
