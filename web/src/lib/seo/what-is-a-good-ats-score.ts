@@ -62,6 +62,14 @@ export const VENDOR_LINKS = ATS_VENDORS.map((v) => ({ slug: v.slug, name: v.full
 
 export const ATS_SCORE_GUIDE_SECTIONS: GuideSection[] = [
   {
+    id: "what-is",
+    title: "What is an ATS score?",
+    body: [
+      "An **ATS score** is a number, usually from 0 to 100, that estimates how well applicant tracking software can read your resume and how well it matches a job. **ATS stands for applicant tracking system**: the recruiting software employers use to collect, store, search and rank applications, such as Workday, Greenhouse, iCIMS, Lever and Taleo.",
+      "The score doesn't come from the employer. Resume checkers like LaunchCV's [free ATS score checker](/free-ats-check) calculate it by simulating how a parser reads your file, so you can find and fix problems before you apply.",
+    ],
+  },
+  {
     id: "good-score",
     title: "What's a good ATS score?",
     body: [
@@ -100,6 +108,13 @@ export const ATS_SCORE_GUIDE_SECTIONS: GuideSection[] = [
     ],
   },
   {
+    id: "myths",
+    title: "Common myths about ATS scores",
+    body: [
+      "- **\"The ATS rejects resumes automatically.\"** Most systems rank and filter; recruiters choose the search terms and requirements. The goal is to be readable and findable, not to beat a robot.\n- **\"Hidden keywords in white text raise your score.\"** Parsers read hidden text too, and a recruiter who spots it will likely discard the application.\n- **\"PDFs are always risky.\"** Text-based PDFs generally parse well. The real risk is a scanned or image-based PDF, or a design with columns and text boxes.\n- **\"One perfect resume works everywhere.\"** Keyword match depends on each job description, so the same file scores differently for different roles. Tailoring beats polishing one generic version.",
+    ],
+  },
+  {
     id: "raise-your-score",
     title: "How to raise your score",
     body: ["Work through these in order — each one maps to a category above:"],
@@ -108,6 +123,14 @@ export const ATS_SCORE_GUIDE_SECTIONS: GuideSection[] = [
 ];
 
 export const ATS_SCORE_GUIDE_FAQS: { q: string; a: string }[] = [
+  {
+    q: "What is an ATS score?",
+    a: "A 0–100 estimate of how cleanly applicant tracking software can read your resume and how well it matches a job description. It's calculated by resume checkers, not by employers, so you can fix problems before you apply.",
+  },
+  {
+    q: "What is the full form of ATS?",
+    a: "Applicant tracking system: the software employers use to collect, store, search and rank job applications.",
+  },
   {
     q: "What is a good ATS score?",
     a: `On LaunchCV, ${RESUME_SCORE_BANDS.ready} or higher is "ready to send." ${RESUME_SCORE_BANDS.readable}–${RESUME_SCORE_BANDS.ready - 1} is "readable" — it'll parse, but it's leaving points on the table. Below ${RESUME_SCORE_BANDS.readable} is "at risk."`,
@@ -134,4 +157,4 @@ export const ATS_SCORE_GUIDE_FAQS: { q: string; a: string }[] = [
   },
 ];
 
-export const ATS_SCORE_GUIDE_READING: string[] = ["what-is-an-ats-score", "how-to-write-an-ats-friendly-resume"];
+export const ATS_SCORE_GUIDE_READING: string[] = ["how-to-write-an-ats-friendly-resume", "how-to-tailor-your-resume-for-every-job"];

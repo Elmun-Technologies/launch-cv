@@ -50,29 +50,6 @@ export function howToLd(input: {
  * are intentionally omitted.
  */
 export const BLOG_HOWTO: Record<string, { name: string; description: string; totalTime?: string; steps: HowToStep[] }> = {
-  "what-is-an-ats-score": {
-    name: "How to improve your ATS score",
-    description: "Raise your resume's ATS score so it reaches a human recruiter, in order of impact.",
-    steps: [
-      { name: "Switch to a single-column layout", text: "Remove tables, sidebars, and text boxes, and keep every important detail in the main body of the document." },
-      { name: "Mirror the job description's language", text: "Pull the exact skills and tools from the posting and weave them naturally into your summary, experience bullets, and skills section." },
-      { name: "Use standard section headings", text: "Use Work Experience, Education, and Skills — not clever alternatives the parser may not recognize." },
-      { name: "Fix your file format", text: "Export a text-based PDF (not a scanned image), unless the application explicitly asks for a Word document." },
-      { name: "Lead bullets with action verbs and numbers", text: "Write 'Increased signups 32%' rather than 'Responsible for growth' so bullets parse and read better." },
-      { name: "Remove graphics and icon skill bars", text: "Images and rating graphics tell the ATS nothing, so replace them with plain text." },
-      { name: "Re-check and iterate", text: "Score, fix the top flags, and re-score until you are comfortably above 80." },
-    ],
-  },
-  "how-to-check-ats-score-of-resume": {
-    name: "How to check the ATS score of your resume",
-    description: "Check your resume's ATS score against a specific job in four steps.",
-    steps: [
-      { name: "Have your resume and a target job ready", text: "ATS scoring is only meaningful against a specific role, so pick the exact posting and have your resume as a PDF or DOCX." },
-      { name: "Upload both to an ATS checker", text: "Paste the job description and upload your resume into a resume ATS score checker that parses it the way real ATS platforms do." },
-      { name: "Read your score and the breakdown", text: "Review the 0–100 score split into formatting, keywords, structure, and readability, with the highest-impact issues first." },
-      { name: "Fix the top flags and re-check", text: "Apply the fixes, re-run the check, and repeat until you are comfortably above 80." },
-    ],
-  },
   "voice-to-resume": {
     name: "How to build a resume with your voice",
     description: "Turn spoken experience into an ATS-ready resume in four steps.",

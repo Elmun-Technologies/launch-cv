@@ -55,5 +55,21 @@
   {
     "from": "A 2024 survey by ResumeGo found that candidates who submitted cover letters received interview invitations 53% more often than those who did not. However, generic cover letters performed no better than no letter at all.",
     "to": "In a ResumeGo field experiment (7,287 applications sent between July 2019 and January 2020), applications with a cover letter tailored to the job got a 16.4% callback rate, against 10.7% with no cover letter, about 53% more. A generic letter landed in between, at 12.5%."
+  },
+  {
+    "slug": "what-is-an-ats-score",
+    "field": "status",
+    "set": "archived",
+    "onlyIf": [
+      "published"
+    ]
+  },
+  {
+    "slug": "how-to-check-ats-score-of-resume",
+    "field": "status",
+    "set": "archived",
+    "onlyIf": [
+      "published"
+    ]
   }
 ]

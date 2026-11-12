@@ -284,7 +284,7 @@ export default function CompareAtsCheckersPage() {
             <h2 className="text-[26px] font-extrabold leading-[30px] tracking-[-0.03em] lg:text-[42px] lg:leading-[46px]">Try a full check — it&apos;s free.</h2>
             <p className="mt-2 text-[15px] leading-[23px] text-[#e4dfff] lg:mt-3 lg:text-[18px]">
               No account. Score and fixes in about 10 seconds.{" "}
-              <Link href="/blog/what-is-an-ats-score" className="font-semibold text-white underline decoration-white/40 underline-offset-2 hover:decoration-white">
+              <Link href="/what-is-a-good-ats-score" className="font-semibold text-white underline decoration-white/40 underline-offset-2 hover:decoration-white">
                 What the score means
               </Link>
             </p>

@@ -235,5 +235,4 @@ export const RESUME_FORMAT_READING: string[] = [
   "how-to-write-an-ats-friendly-resume",
   "what-is-ats-and-how-does-it-work",
   "how-to-tailor-your-resume-for-every-job",
-  "how-to-check-ats-score-of-resume",
 ];

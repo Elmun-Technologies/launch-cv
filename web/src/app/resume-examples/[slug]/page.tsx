@@ -58,7 +58,9 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
           ),
     description:
       n > 1
-        ? `${n} ${roleLower(e.role)} resume examples you can copy — ${sampleList(e)} — with keywords and ATS tips.`
+        ? // Google cuts descriptions at ~160 characters; drop the sample list when it would overflow.
+          [`${n} ${roleLower(e.role)} resume examples you can copy — ${sampleList(e)} — with keywords and ATS tips.`, `${n} ${roleLower(e.role)} resume examples you can copy, with summary and bullet examples, keywords and ATS tips.`].find((d) => d.length <= 158) ??
+          `${n} ${roleLower(e.role)} resume examples you can copy, with keywords and ATS tips.`
         : `${withArticle(roleLower(e.role), true)} resume example you can copy, with summary and bullet examples, the keywords recruiters search for and ATS tips.`,
     pathname: `/resume-examples/${e.slug}`,
     image: DEFAULT_OG_IMAGE,

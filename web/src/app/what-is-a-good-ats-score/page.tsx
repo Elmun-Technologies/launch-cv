@@ -17,11 +17,11 @@ import {
 } from "@/lib/seo/what-is-a-good-ats-score";
 
 const PATH = "/what-is-a-good-ats-score";
-const CRUMB = "Good ATS score";
-const TITLE = fitTitle("What Is a Good ATS Score? (2026 Guide)", "What's a Good ATS Score?");
-const HEADLINE = "What's a good resume ATS score?";
+const CRUMB = "ATS score";
+const TITLE = fitTitle("What Is an ATS Score? Meaning & What a Good Score Is (2026)", "What Is an ATS Score? (2026 Guide)");
+const HEADLINE = "What is an ATS score, and what's a good one?";
 const DESCRIPTION =
-  "What counts as a good resume ATS score, why there's no single universal number across Workday, Greenhouse, iCIMS and others, and the five things LaunchCV's score checks.";
+  "ATS score meaning, what a good resume ATS score is, why there's no universal number across Workday, Greenhouse and iCIMS, and how to raise yours.";
 
 export const metadata = buildMarketingMetadata({
   title: TITLE,
@@ -31,6 +31,9 @@ export const metadata = buildMarketingMetadata({
   type: "article",
   article: { publishedTime: ATS_SCORE_GUIDE_PUBLISHED, modifiedTime: ATS_SCORE_GUIDE_UPDATED, authors: [SITE_AUTHOR.name], section: "Job Search" },
   keywords: [
+    "ats score",
+    "what is an ats score",
+    "ats full form",
     "resume ats score",
     "good ats score",
     "what is a good ats score",
@@ -46,8 +49,6 @@ const RELATED: { href: string; t: string; d: string }[] = [
   { href: "/ats", t: "ATS guides by vendor", d: "What Workday, Greenhouse, iCIMS, Ashby and others each parse." },
   { href: "/resume-format", t: "Resume format", d: "Layout, section order and dates that parse cleanly." },
   { href: "/resume-keywords", t: "Resume keywords", d: "The skills and terms recruiters search for, by role." },
-  { href: "/blog/what-is-an-ats-score", t: "What an ATS score measures", d: "Where the number comes from and what it can't tell you." },
-  { href: "/blog/how-to-check-ats-score-of-resume", t: "How to check your ATS score", d: "A step-by-step check you can run before every application." },
 ];
 
 function VendorsFigure() {
@@ -88,9 +89,9 @@ export default function WhatIsAGoodAtsScorePage() {
       ld={ld}
       path={PATH}
       crumb={CRUMB}
-      title="What's a good"
-      muted="resume ATS score?"
-      lead="There's no single, universal ATS score — Workday, Greenhouse, iCIMS, Taleo, Lever and SuccessFactors each parse resumes with their own software. Here's how LaunchCV's own 0–100 score works, the five things it checks, and what to do with the result."
+      title="What is an ATS score,"
+      muted="and what's a good one?"
+      lead="An ATS score estimates how well applicant tracking software reads your resume. There's no single, universal one — Workday, Greenhouse, iCIMS, Taleo, Lever and SuccessFactors each parse resumes with their own software. Here's how LaunchCV's own 0–100 score works, the five things it checks, and what to do with the result."
       updated={ATS_SCORE_GUIDE_UPDATED}
       words={words}
       sections={ATS_SCORE_GUIDE_SECTIONS}
