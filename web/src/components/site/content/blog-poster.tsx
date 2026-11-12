@@ -21,8 +21,6 @@ type Widget = "keywords" | "voice" | "upload" | "score" | "doc" | "tailor" | "le
 const ART_BY_SLUG: Record<string, Art> = {
   "resume-keywords-for-software-engineers": { tone: "purple", word: "KEYWORDS", widget: "keywords" },
   "voice-to-resume": { tone: "purple", word: "SPEAK IT", widget: "voice" },
-  "how-to-check-ats-score-of-resume": { tone: "purple", word: "CHECK IT", widget: "upload" },
-  "what-is-an-ats-score": { tone: "dark", word: "ATS SCORE", widget: "score" },
   "how-to-write-an-ats-friendly-resume": { tone: "purple", word: "1 COLUMN", widget: "doc" },
   "how-to-tailor-your-resume-for-every-job": { tone: "purple", word: "TAILOR", widget: "tailor" },
   "cover-letter-tips-that-actually-work": { tone: "lilac", word: "7 TIPS", widget: "letter" },

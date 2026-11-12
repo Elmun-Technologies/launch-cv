@@ -69,6 +69,17 @@ boshqa sessiya nima qilganini bilish uchun.
   TXT `resend._domainkey`, CNAME `send`/`rsend`, TXT `_dmarc`). Sender
   `LaunchCV <info@launch-cv.com>`, test xat Gmail Inbox'ga keldi. Win-back manzili kiritilgan.
 
+## SEO audit (2026-11-12)
+
+- GSC: 110 indexed / 217 not (207 "Discovered – not indexed"), 3 oyda 80 click / 6.09K impression,
+  o'rtacha pozitsiya 25.7, **tashqi havolalar: 0**. Asosiy to'siq — backlink yo'qligi, kod emas.
+- Jonli sayt texnik jihatdan toza (351 URL: 404/noindex/canonical xatosi yo'q, depth ≤3, mobil LH 81–85).
+- Tuzatildi: "ATS score" to'dasida 4 sahifa raqobat qilardi → `/blog/what-is-an-ats-score` →
+  `/what-is-a-good-ats-score`, `/blog/how-to-check-ats-score-of-resume` → `/free-ats-check` (301,
+  DB'da `archived` content-fixes orqali). Bosh sahifa title → "ATS-friendly resume builder".
+- IndexNow: `public/<key>.txt` + `/api/cron/indexnow` (kunlik, oxirgi 3 kun o'zgargan URL'lar).
+- Foydalanuvchi qiladi: `www` DNS + Vercel redirect; Bing Webmaster (GSC'dan import); backlinklar.
+
 ## Email dizayni + welcome offer (2026-11-08)
 
 - `src/lib/email-layout.ts` — brendli shablon (v5: #121226 / #5440E8), kupon bloki (`offer`),

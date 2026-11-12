@@ -5,8 +5,8 @@
  * learn to ignore lastmod that always says "now").
  */
 export const CONTENT_UPDATED: Record<string, string> = {
-  "/": "2026-11-01",
-  "/free-ats-check": "2026-11-07",
+  "/": "2026-11-12",
+  "/free-ats-check": "2026-11-12",
   "/features": "2026-10-27",
   "/features/jd-alignment": "2026-10-27",
   "/features/resume-builder": "2026-11-02",
@@ -28,7 +28,7 @@ export const CONTENT_UPDATED: Record<string, string> = {
   "/cover-letter-examples/*": "2026-10-27",
   "/alternatives/jobscan": "2026-11-02",
   "/resume-format": "2026-11-02",
-  "/what-is-a-good-ats-score": "2026-11-07",
+  "/what-is-a-good-ats-score": "2026-11-12",
   "/how-to-write-a-resume": "2026-11-02",
   "/resume-length": "2026-11-02",
   "/cover-letter-template": "2026-11-02",

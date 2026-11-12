@@ -12,12 +12,15 @@ import { getFaqsFor } from "@/lib/cms/faqs";
 import { KEYWORD_SCANNER_PATH } from "@/lib/seo/free-tools";
 
 export const metadata = buildMarketingMetadata({
-  title: "Free ATS Resume Checker — Score in 10 Seconds",
+  title: "Free ATS Score Checker — Test Your Resume in 10 Seconds",
   description:
-    "Run a free ATS resume test against applicant tracking systems. This resume scanner gives a 0–100 ATS score, shows what the parser can't read and a fix for every issue. No sign-up.",
+    "Free ATS resume checker: get a 0–100 ATS score in 10 seconds, see what applicant tracking software can't read, and a fix for every issue. No sign-up.",
   pathname: "/free-ats-check",
   image: FREE_ATS_OG_IMAGE,
   keywords: [
+    "ATS score",
+    "ATS checker",
+    "ATS test",
     "ATS resume checker",
     "ATS resume test",
     "ATS resume scanner",
@@ -50,6 +53,14 @@ const FAQS = [
   {
     q: "Why is my resume failing ATS?",
     a: "The usual causes are two-column layouts, text inside tables or text boxes, contact details in the page header, icons instead of words, and mixed date formats. Your report names the ones it finds in your resume.",
+  },
+  {
+    q: "How do I check my resume's ATS score?",
+    a: "Upload your resume as a PDF or Word file, or paste the text. In about ten seconds you get a 0–100 score, the issues behind it and a fix for each. Fix the high-priority issues first, then add a job description to check keyword match for that role.",
+  },
+  {
+    q: "How often should I check my ATS score?",
+    a: "Before every application you tailor, and after any big edit such as a new job, a new layout or a rewritten summary. Keyword match changes with each job description, so the same resume can score differently for different roles.",
   },
   {
     q: "Is my resume stored?",
@@ -111,7 +122,7 @@ const steps = [
 ];
 
 const related = [
-  { kind: "Guide", t: "What is an ATS score, and how is it calculated?", href: "/blog/what-is-an-ats-score" },
+  { kind: "Guide", t: "What is an ATS score, and what's a good one?", href: "/what-is-a-good-ats-score" },
   { kind: "Guide", t: "How to write an ATS-friendly resume", href: "/blog/how-to-write-an-ats-friendly-resume" },
   { kind: "Guide", t: "How to tailor your resume for every job", href: "/blog/how-to-tailor-your-resume-for-every-job" },
 ];
@@ -135,7 +146,7 @@ function Intro() {
         No sign-up · one free check every 30 days
       </p>
       <h1 className="mt-4 text-[40px] font-extrabold leading-[1.05] tracking-[-0.045em] sm:text-[52px] lg:mt-[22px] lg:text-[64px] lg:leading-[66px]">
-        Free ATS resume checker. <span className="text-[#7c7a94]">Score and fixes, in seconds.</span>
+        Free ATS score checker. <span className="text-[#7c7a94]">Test your resume in seconds.</span>
       </h1>
       <p className="mt-3.5 max-w-[520px] text-[16px] leading-[25px] text-[#4a4862] lg:mt-5 lg:text-[18px] lg:leading-7">
         <span className="hidden sm:inline">Upload your resume and see </span>

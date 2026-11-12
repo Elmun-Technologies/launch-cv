@@ -3,7 +3,17 @@
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "crons": [
-    { "path": "/api/cron/winback", "schedule": "7 15 * * *" },
-    { "path": "/api/cron/weekly-report", "schedule": "7 13 * * 1" }
+    {
+      "path": "/api/cron/winback",
+      "schedule": "7 15 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-report",
+      "schedule": "7 13 * * 1"
+    },
+    {
+      "path": "/api/cron/indexnow",
+      "schedule": "23 6 * * *"
+    }
   ]
 }

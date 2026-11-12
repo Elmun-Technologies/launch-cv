@@ -58,7 +58,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Cover letter with no experience:",
     muted: "a template that still shows proof.",
     description:
-      "A cover letter template for your first job with no work experience: what to write instead, a fill-in letter and email version, and tips to make school, clubs and projects count.",
+      "Cover letter template for your first job with no work experience: what to write instead, a fill-in letter, an email version and tips.",
     lead: "No job history doesn't mean no evidence. This template uses classes, projects, clubs and volunteering as proof, and keeps the letter short and specific.",
     keywords: ["cover letter with no experience", "cover letter no experience", "first job cover letter", "cover letter for teenager first job", "entry level cover letter no experience"],
     whenToUse: [
@@ -116,7 +116,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Career change cover letter:",
     muted: "show the move makes sense.",
     description:
-      "A career change cover letter template that explains the switch in one line, proves the new skills and shows what transfers from your old field. Fill-in letter plus email version.",
+      "Career change cover letter template: explain the switch in one line, prove the new skills and show what transfers. Letter and email versions.",
     lead: "A career-change letter has one job: make the switch look like a smart next step instead of a gamble. Name the move, prove the new skill, then show what you bring from before.",
     keywords: ["career change cover letter", "cover letter for career change", "career changer cover letter", "career transition cover letter", "changing careers cover letter"],
     whenToUse: [
@@ -174,7 +174,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Cover letter for an internal position:",
     muted: "for a promotion or transfer.",
     description:
-      "A cover letter template for an internal job or promotion at your current company: what to include, how to mention your manager, a fill-in letter and a short email version.",
+      "Cover letter template for an internal job or promotion: what to include, how to mention your manager, plus a short email version.",
     lead: "The hiring manager may already know you, so skip the introduction and show you're already doing part of the next job.",
     keywords: ["internal position cover letter", "cover letter for promotion", "internal job cover letter", "cover letter for internal transfer", "cover letter for internal promotion"],
     whenToUse: [
@@ -235,7 +235,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Entry-level cover letter:",
     muted: "make your first years count.",
     description:
-      "An entry-level cover letter template for your first full-time role or with up to two years of experience: what to include, a fill-in letter, an email version and tips.",
+      "Entry-level cover letter template for your first full-time job or up to two years of experience, with an email version and tips.",
     lead: "With a year or two behind you, your letter can point to real work: the volume you handled, a result and how fast you learned.",
     keywords: ["entry level cover letter", "entry-level cover letter", "cover letter for entry level job", "junior cover letter", "cover letter for first full time job"],
     whenToUse: [
@@ -293,7 +293,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Internship cover letter:",
     muted: "a template for students.",
     description:
-      "An internship cover letter template for college students: how to use coursework and projects as proof, what to say about learning, a fill-in letter and an email version.",
+      "Internship cover letter template for college students: use coursework and projects as proof. Fill-in letter, email version and tips.",
     lead: "Internship letters are read for potential. Show one project that proves you can do the work, why this company, and what you'll learn and contribute.",
     keywords: ["internship cover letter", "cover letter for internship", "internship cover letter example", "college student cover letter", "summer internship cover letter"],
     whenToUse: [
@@ -351,7 +351,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Return to work cover letter:",
     muted: "address the gap, then move on.",
     description:
-      "A cover letter template for returning to work after a career gap (caregiving, health, study, layoff): how much to say about the gap, a fill-in letter, an email version and tips.",
+      "Cover letter template for returning to work after a career gap: how much to say about the gap, a fill-in letter and an email version.",
     lead: "A gap needs a sentence, not a paragraph. Say what it was in a few words, show your skills are current, and spend the rest of the letter on what you can do now.",
     keywords: ["return to work cover letter", "cover letter after career break", "cover letter employment gap", "cover letter after being a stay at home parent", "cover letter after time off"],
     whenToUse: [
@@ -467,7 +467,7 @@ export const COVER_SITUATIONS: CoverSituation[] = [
     h1: "Letter of interest:",
     muted: "when no job is posted yet.",
     description:
-      "A letter of interest (prospecting letter) template for a company with no open role: how it differs from a cover letter, who to send it to, a fill-in letter, an email version and tips.",
+      "Letter of interest template for a company with no open role: how it differs from a cover letter, who to send it to, letter and email.",
     lead: "A letter of interest asks about roles that aren't posted. It's shorter than a cover letter, focused on the company's needs, and ends by asking for a conversation, not a job.",
     keywords: ["letter of interest", "letter of interest for a job", "letter of intent for job", "prospecting letter", "letter of interest template"],
     whenToUse: [

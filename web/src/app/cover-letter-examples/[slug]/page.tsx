@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       `${e.role} Cover Letter Example`,
       `${e.role} Cover Letter`,
     ),
-    description: `${withArticle(role, true)} cover letter example, paragraph by paragraph: what each part does, tips for your own and how it pairs with ${withArticle(role)} resume.`,
+    description: `${withArticle(role, true)} cover letter example explained paragraph by paragraph, with tips for writing yours and the matching resume.`,
     pathname: `/cover-letter-examples/${slug}`,
     image: DEFAULT_OG_IMAGE,
     keywords: [`${role} cover letter`, `${role} cover letter example`, `cover letter for ${role}`, `${role} cover letter sample`],

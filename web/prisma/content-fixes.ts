@@ -15,7 +15,8 @@ async function main() {
   try {
     let changed = 0;
     type Replace = { from: string; to: string };
-    type SetField = { slug: string; field: (typeof FIELDS)[number]; set: string; onlyIf: (string | null)[] };
+    // `status` lets a fix retire a post (published → archived) once it has been merged into another page and redirected.
+    type SetField = { slug: string; field: (typeof FIELDS)[number] | "status"; set: string; onlyIf: (string | null)[] };
     for (const fix of fixes as (Replace | SetField)[]) {
       if ("set" in fix) {
         // Set a field on one post, but only while it still holds a value we expect (never over an editor's change).

@@ -64,14 +64,6 @@ const RELATED_FEATURES: Record<string, FeatureLink[]> = {
  * search and both are easy for readers and crawlers to reach.
  */
 const READ_NEXT: Record<string, FeatureLink[]> = {
-  "what-is-an-ats-score": [
-    { href: "/what-is-a-good-ats-score", title: "What's a good ATS score?", desc: "The 80 / 65 bands, what each category checks, and why no score is universal." },
-    { href: "/ats", title: "How each ATS reads a resume", desc: "Workday, Greenhouse, iCIMS, Taleo and more, from their own documentation." },
-  ],
-  "how-to-check-ats-score-of-resume": [
-    { href: "/what-is-a-good-ats-score", title: "What's a good ATS score?", desc: "How to read the number you get, and what to fix first." },
-    { href: "/resume-format", title: "Resume format guide", desc: "The layout and section names parsers read most reliably." },
-  ],
   "what-is-ats-and-how-does-it-work": [
     { href: "/ats", title: "ATS guides by vendor", desc: "What Workday, Greenhouse, iCIMS, Taleo and others do with your file." },
     { href: "/what-is-a-good-ats-score", title: "What's a good ATS score?", desc: "What a resume score measures and where the bands sit." },

@@ -22,9 +22,9 @@ import { FaqIcon } from "@/components/site/ui";
 import { MOBILE_PLAN_ORDER, planLimitsLine } from "@/components/site/plan-summary";
 
 export const metadata: Metadata = buildMarketingMetadata({
-  title: "LaunchCV — Get Your Resume Past the ATS",
+  title: "LaunchCV — ATS-Friendly Resume Builder & Free ATS Check",
   description:
-    "See what applicant tracking software reads from your resume, fix every issue in plain English, and tailor it to each job. The ATS check is free, no sign-up.",
+    "Build an ATS-friendly resume, see what applicant tracking software reads, fix every issue in plain English and tailor it to each job. The ATS check is free.",
   pathname: "/",
 });
 

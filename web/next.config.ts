@@ -38,6 +38,10 @@ const nextConfig: NextConfig = {
       { source: "/annual", destination: "/pricing", statusCode: 301 },
       // The feature page and the free tool targeted the same queries; one page ranks better than two.
       { source: "/features/ats-score", destination: "/free-ats-check", statusCode: 301 },
+      // 2026-11-12: four pages competed for "ATS score". The explainer merged into the
+      // pillar guide; the how-to-check post merged into the checker itself.
+      { source: "/blog/what-is-an-ats-score", destination: "/what-is-a-good-ats-score", statusCode: 301 },
+      { source: "/blog/how-to-check-ats-score-of-resume", destination: "/free-ats-check", statusCode: 301 },
       // Role pages now live under /resume-examples (one page per intent).
       { source: "/use-cases", destination: "/resume-examples", statusCode: 301 },
       { source: "/use-cases/software-engineers", destination: "/resume-examples/software-engineer", statusCode: 301 },
