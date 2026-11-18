@@ -10,10 +10,9 @@ qisqa yangilang (3–10 qator yetarli).
 
 ## Branch
 
-`main` — oxirgi birlashtirilgan holat `0b736a2`da (PR #80 bilan). Ikkita sessiya
-shu repoda parallel ishlayapti: biri xavfsizlik (Next.js CVE, PR #79) ustida, men esa
-kanvas-sayt taqqoslash va SEO ustida. Ishni boshlashdan oldin shu faylni o'qing —
-boshqa sessiya nima qilganini bilish uchun.
+`main` — PR #102 gacha hammasi birlashtirilgan (2026-11-15). Ish branch'i:
+`claude/compassionate-dijkstra-oa8wgc`, har merge'dan keyin `origin/main`ga tenglanadi.
+Umumiy xarita, qoidalar va keyingi ishlar — [HANDOFF.md](./HANDOFF.md).
 
 ## Narx qayta ishlandi (2026-11-08, lokal commit)
 
