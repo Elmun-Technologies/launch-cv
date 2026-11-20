@@ -47,8 +47,8 @@ barcha AI vositalar bor. Limitlar Admin → Limits'da (`AppSetting "planLimits"`
   izohlari, commit xabarlari — inglizcha. `docs/` ichidagi hujjatlar — o'zbekcha.
 - **Branch:** har bir ish alohida branch'da, PR orqali. Egasi PR'ni o'zi merge qiladi.
   PR'ni faqat so'ralganda oching. Merge'dan keyin branch'ni `origin/main`ga fast-forward qiling.
-- **Deploy:** Vercel. `main`ga merge = production deploy (2026-11-12 da tekshirilgan).
-  Build skripti DB'ni ham yangilaydi (pastda, 4-bo'lim).
+- **Deploy:** Hetzner + Coolify (Dockerfile). `main`ga merge = Coolify auto-deploy. Vercel ishlatilmaydi — `docs/HETZNER.md`.
+  Sxema/kontent tuzatishlari `npm run release` orqali konteyner startida ishlaydi (pastda, 4-bo'lim).
 - **HOLAT.md:** katta ish tugagach 3–10 qator qo'shing.
 - **Next.js 16:** `web/AGENTS.md` ni o'qing — API'lar odatdagidan farq qiladi, kod yozishdan
   oldin `node_modules/next/dist/docs/` dagi tegishli qo'llanmani o'qing.
@@ -70,7 +70,7 @@ barcha AI vositalar bor. Limitlar Admin → Limits'da (`AppSetting "planLimits"`
 ## 3. Texnik stek va repo xaritasi
 
 - **Next.js 16** (App Router, React 19), **TypeScript**, **Tailwind**, **Prisma 6 + PostgreSQL**,
-  Vercel (hosting + cron), **Polar** (to'lov), **Resend** (email), **Anthropic Claude** va
+  Hetzner/Coolify (hosting; cron — Coolify Scheduled Tasks), **Polar** (to'lov), **Resend** (email), **Anthropic Claude** va
   **OpenAI** (AI; model Admin → Limits'da tanlanadi, `src/lib/claude-client.ts`,
   `src/lib/openai-client.ts`, xarajat nazorati `src/lib/ai-budget.ts`).
 - Analitika: o'z cookie'siz trafik tizimi (`PageView`), PostHog/Mixpanel/GA ixtiyoriy,
@@ -169,7 +169,7 @@ kill-switch'lar Admin → Limits'da.
 - Faol kod bo'lsa dashboard va pricing'da countdown banner (`offer-banner.tsx`, `/api/offer`).
 - Unsubscribe: `User.marketingOptOutAt`, `/api/email/unsubscribe`.
 
-**Cron'lar** (`vercel.json`, auth: `src/lib/cron-auth.ts`, `CRON_SECRET`):
+**Cron'lar** (Coolify Scheduled Tasks, `docs/HETZNER.md`; auth: `src/lib/cron-auth.ts`, `CRON_SECRET`):
 - `/api/cron/winback` — har kuni 15:07 UTC (eski PageView'larni ham tozalaydi).
 - `/api/cron/weekly-report` — dushanba 13:07 UTC, owner'larga haftalik hisobot.
 - `/api/cron/indexnow` — har kuni 06:23 UTC, oxirgi 3 kunda o'zgargan URL'larni Bing/Yandex'ga

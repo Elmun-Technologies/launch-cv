@@ -47,7 +47,7 @@ ones**, so admin-panel edits are safe. The step is also non-fatal — a seeding
 error logs a warning and the deploy continues.
 
 ```bash
-# enable auto-seed on deploy (e.g. a Vercel env var)
+# enable auto-seed on deploy (e.g. a Coolify env var)
 BLOG_SEED_ON_BUILD=1
 ```
 
@@ -64,8 +64,6 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Production runs on Hetzner via Coolify (see `docs/HETZNER.md`).

@@ -1,5 +1,8 @@
 # Holat (har ishdan keyin yangilanadi)
 
+## Hetzner'ga ko'chish (2026-11-20, branch `hetzner-migration`)
+Vercel akkaunti suspended bo'ldi (sayt "Deployment Paused"), qaror: Vercel'dan to'liq chiqish, hammasi Hetzner/Coolify'da. Tayyor: `web/Dockerfile` (build bazasiz), `npm run release` (db push `--accept-data-loss`siz + seed + fixes, konteyner startida), `vercel.json` o'chirildi, runbook — `docs/HETZNER.md`. Qolgan: bazani Vercel Postgres'dan dump qilib Coolify Postgres'ga tiklash, env'larni Coolify'ga kiritish (egasi), DNS A → 2.29.137.243, cron'larni Scheduled Tasks'ga qo'yish, Polar webhook eventlarini qayta yuborish, X-Forwarded-For tekshiruvi.
+
 Bu fayl — yangi chat/sessiya uchun **joriy holat**: "hozir nima qilindi, nima qolgan,
 qaysi branch'da ishlanmoqda". Boshqa docs/ fayllari reja va spetsifikatsiyani biladi,
 bu fayl holatni biladi. Yangi sessiya boshida shuni o'qing, eski chat tarixini qayta
