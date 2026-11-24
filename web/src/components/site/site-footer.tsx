@@ -24,6 +24,7 @@ const COLUMNS = [
       { href: "/cover-letter-template", label: "Cover letter template" },
       { href: "/how-to-write-a-resume", label: "How to write a resume" },
       { href: "/resume-format", label: "Resume format guide" },
+      { href: "/hybrid-resume", label: "Hybrid resume template" },
       { href: "/resume-action-verbs", label: "Resume action verbs" },
       { href: "/resume-summary-examples", label: "Resume summary examples" },
       { href: "/skills-for-resume", label: "Skills to put on a resume" },

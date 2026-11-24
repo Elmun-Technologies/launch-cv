@@ -126,7 +126,7 @@ export const FORMAT_SECTIONS: FormatSection[] = [
       "### Chronological (reverse-chronological)",
       "Contact details, a two- or three-line summary, then **Experience** with your current or latest job first. Under each job: title, employer, location, start and end dates, and three to six bullets that show results. Education and skills follow. Choose it whenever your recent jobs are relevant to the one you want.",
       "### Hybrid (combination)",
-      "The same structure with a short **Skills** or **Core skills** block near the top, so a reader sees your strongest qualifications first. Your experience is still listed in reverse-chronological order with dates. It suits career changers, people returning after a break, and roles like engineering or data where a recruiter first checks for specific tools.",
+      "The same structure with a short **Skills** or **Core skills** block near the top, so a reader sees your strongest qualifications first. Your experience is still listed in reverse-chronological order with dates. It suits career changers, people returning after a break, and roles like engineering or data where a recruiter first checks for specific tools. See the [hybrid resume guide](/hybrid-resume) for a template and three examples.",
       "### Functional (skills-based)",
       "Experience is grouped by skill theme (\"Project management\", \"Client relations\") and jobs appear as a bare list, or not at all. It's meant to hide gaps, and readers know it. ATS parsers also expect each accomplishment to sit under a job with dates; without that, your history can come out empty. If you're tempted by a functional resume, a hybrid usually does the job better.",
     ],
