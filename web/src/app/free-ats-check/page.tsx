@@ -30,6 +30,9 @@ export const metadata = buildMarketingMetadata({
     "check ATS score",
     "resume scanner free",
     "ATS checker no sign up",
+    "ATS rating",
+    "score my resume",
+    "resume parser test",
   ],
 });
 
@@ -53,6 +56,14 @@ const FAQS = [
   {
     q: "Why is my resume failing ATS?",
     a: "The usual causes are two-column layouts, text inside tables or text boxes, contact details in the page header, icons instead of words, and mixed date formats. Your report names the ones it finds in your resume.",
+  },
+  {
+    q: "Is this an ATS resume test?",
+    a: "Yes. It's an ATS test for your resume: the checker parses your file the way applicant tracking software does, then shows what came through, what was lost and how that affects your score. It's the same idea as a resume parser test, with a fix for each problem it finds.",
+  },
+  {
+    q: "What's the difference between an ATS score and an ATS rating?",
+    a: "They mean the same thing. Some tools call it a rating, a resume score or a match rate. Here it's a 0–100 score built from four checks, so you can see which part of your resume is pulling the number down.",
   },
   {
     q: "How do I check my resume's ATS score?",

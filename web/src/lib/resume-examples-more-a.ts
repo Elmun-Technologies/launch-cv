@@ -89,6 +89,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
   {
     slug: "licensed-practical-nurse",
     role: "Licensed Practical Nurse",
+    titleRole: "LPN/LVN",
     group: "Healthcare",
     photo: { src: "/images/photos/role-licensed-practical-nurse.webp", alt: "Nurse in blue gloves giving a patient an injection in the upper arm" },
     level: "Experienced · 5 years",
@@ -341,6 +342,7 @@ export const MORE_EXAMPLES_A: ResumeExample[] = [
   {
     slug: "certified-nursing-assistant",
     role: "Certified Nursing Assistant",
+    titleRole: "CNA",
     group: "Healthcare",
     photo: { src: "/images/photos/role-certified-nursing-assistant.webp", alt: "Nursing assistant in scrubs taking an older man's blood pressure" },
     level: "Early career · 3 years",

@@ -40,8 +40,13 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     // With extra samples the count leads, like "6 Registered Nurse Resume Examples (2026)"; n counts every sample on the page.
     // "resume example" and "template" are both big, separate searches — the
     // title covers both rather than competing on "example" alone.
-    title:
-      n > 1
+    title: e.titleRole
+      ? fitTitle(
+          `${e.titleRole} Resume Example${n > 1 ? "s" : ""} & Template${n > 1 ? "s" : ""} (2026)`,
+          `${e.titleRole} Resume Example${n > 1 ? "s" : ""} (2026)`,
+          `${e.titleRole} Resume Example${n > 1 ? "s" : ""}`,
+        )
+      : n > 1
         ? fitTitle(
             `${n} ${e.role} Resume Examples & Templates (2026)`,
             `${n} ${e.role} Resume Examples & Templates`,

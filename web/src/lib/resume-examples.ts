@@ -30,6 +30,11 @@ export type ResumeVariant = {
 export type ResumeExample = {
   slug: string;
   role: string;
+  /**
+   * How people search for the role, when it differs from `role` (e.g. "LPN/LVN"
+   * for Licensed Practical Nurse). Used in the <title> only; the page keeps `role`.
+   */
+  titleRole?: string;
   /** Group shown in the breadcrumb and on the index page. */
   group: ResumeGroup;
   /** Stock photo for the hero and cards. Roles without one show their rendered sample resume instead. */
