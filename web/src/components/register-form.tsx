@@ -42,7 +42,9 @@ const GOOGLE_ERRORS: Record<string, string> = {
 export function RegisterForm({ googleEnabled = false }: { googleEnabled?: boolean }) {
   const sp = useSearchParams();
   const referralCode = sp.get("ref")?.trim() || "";
-  const next = safeNextPath(sp.get("next")) || "/dashboard";
+  // A new account goes straight to creating its first resume: on the dashboard, new users
+  // wandered into side tools and never started one (PostHog replays, Nov 2026).
+  const next = safeNextPath(sp.get("next")) || "/resume/new";
   const fromReport = next.startsWith("/dashboard/ats-report/");
   const atsRaw = Number(sp.get("ats"));
   const atsScore = Number.isFinite(atsRaw) && atsRaw > 0 && atsRaw <= 100 ? Math.round(atsRaw) : null;

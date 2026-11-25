@@ -19,26 +19,17 @@ const QUICK_ROLES = [
   "ux-designer",
 ];
 
-type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
-
-export default async function NewResumePage({ searchParams }: Props) {
-  const params = await searchParams;
+export default async function NewResumePage() {
   const session = await getSession();
   if (!session) redirect("/login?next=/resume/new");
 
   const user = await prisma.user.findUnique({
     where: { id: session.sub },
-    select: { targetRole: true, onboardedAt: true, _count: { select: { resumes: true } } },
+    select: { targetRole: true },
   });
 
-  // First resume and no answer yet: ask for the target role once (Skip also counts as an answer).
-  // Arriving from an example page (?example=) already names a role, so that skips the question.
-  if (user && !user.onboardedAt && !user.targetRole && user._count.resumes === 0 && !params.example) {
-    const qs = new URLSearchParams();
-    for (const [k, v] of Object.entries(params)) if (typeof v === "string") qs.set(k, v);
-    const next = `/resume/new${qs.size ? `?${qs}` : ""}`;
-    redirect(`/onboarding?next=${encodeURIComponent(next)}`);
-  }
+  // No forced "which role?" step before the first resume: replays showed new users leaving on it.
+  // This page already offers role examples; /onboarding stays reachable for anyone who opens it.
 
   // Only slugs, role names, verticals and sample labels reach the client, not the full example texts.
   const examples = RESUME_EXAMPLES.map((e) => ({

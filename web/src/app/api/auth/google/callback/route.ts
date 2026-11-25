@@ -189,7 +189,8 @@ export async function GET(req: Request) {
   // Google only lets us this far for verified addresses (checked above).
   const admin = isAdminUser({ role: userRole, email: userEmail, emailVerifiedAt: new Date() });
   const next = safeNextPath(stateCookie.next);
-  const destination = next || (admin ? "/admin-panel" : "/dashboard");
+  // A brand-new account starts its first resume rather than landing on an empty dashboard.
+  const destination = next || (admin ? "/admin-panel" : isNewUser ? "/resume/new" : "/dashboard");
 
   const res = NextResponse.redirect(new URL(destination, req.url));
   const cookieBase = sessionCookieBase();

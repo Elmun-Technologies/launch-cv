@@ -138,15 +138,18 @@ export default async function Home() {
           <p className="text-[17px] leading-[1.55] sm:text-[19px]">
             {hero.lead}
           </p>
+          {/* One main action: the free check is what visitors pick (PostHog, Nov 2026). Building is a quiet link. */}
           <div className="mt-6 flex flex-col gap-2.5 sm:flex-row">
             <CtaLink cta="check_resume" location="home_hero" href="/free-ats-check" className={`${btn} bg-[#5440e8] text-white hover:bg-[#4430d6]`}>
               {hero.primaryCta}
             </CtaLink>
-            <CtaLink cta="build_resume" location="home_hero" href={BUILD_HREF} className={`${btn} bg-white text-[#121226]`}>
-              {hero.secondaryCta}
-            </CtaLink>
           </div>
-          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">{hero.note} · one free check every 30 days</p>
+          <p className="mt-3.5 text-center text-[13px] text-[#66647c] sm:text-left sm:text-[14px]">
+            {hero.note} · one free check every 30 days ·{" "}
+            <CtaLink cta="build_resume" location="home_hero" href={BUILD_HREF} className="font-semibold text-[#3a2bb8] underline underline-offset-2 hover:text-[#5440e8]">
+              {hero.secondaryCta} →
+            </CtaLink>
+          </p>
         </div>
       </section>
 
@@ -708,11 +711,13 @@ export default async function Home() {
               <CtaLink cta="check_resume" location="home_final" href="/free-ats-check" className={`${btn} w-full bg-[#5440e8] !py-4 text-white hover:bg-[#4430d6] sm:w-auto sm:!py-[17px]`}>
                 {cta.primaryCta}
               </CtaLink>
-              <CtaLink cta="build_resume" location="home_final" href={BUILD_HREF} className={`${btn} bg-white text-[#111118] max-sm:hidden`}>
-                {cta.secondaryCta}
-              </CtaLink>
             </div>
-            <p className="mt-3 text-[13px] text-[#9a97b3] sm:text-[14px]">No sign-up · one free check every 30 days per network</p>
+            <p className="mt-3 text-[13px] text-[#9a97b3] sm:text-[14px]">
+              No sign-up · one free check every 30 days per network ·{" "}
+              <CtaLink cta="build_resume" location="home_final" href={BUILD_HREF} className="font-semibold text-white underline underline-offset-2 hover:text-[#e4dfff]">
+                {cta.secondaryCta} →
+              </CtaLink>
+            </p>
           </div>
           <span aria-hidden="true" className="lc-poster absolute bottom-10 left-[22px] z-10 -rotate-6 rounded-full bg-[#ff7a33] px-3 py-[7px] text-[12px] text-[#111118] sm:bottom-auto sm:left-auto sm:right-6 sm:top-[120px] sm:-rotate-[8deg] sm:px-[15px] sm:py-[9px] sm:text-[14px] lg:left-[600px] lg:right-auto lg:top-[210px]">
             NO SIGN-UP

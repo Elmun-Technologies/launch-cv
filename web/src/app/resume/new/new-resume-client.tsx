@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Check, Clock, FileText, ClipboardPaste, Loader2, Upload, UploadCloud } from "lucide-react";
 import { ExperienceReviewModal } from "@/components/experience-review-modal";
@@ -96,6 +96,8 @@ export function NewResumeClient({
   /** One of the example's extra samples (?variant=<id>, from a "Start from this sample" link); null for the main one. */
   const [variantId, setVariantId] = useState<string | null>(null);
   const [template, setTemplate] = useState<TemplateStyle | null>(null);
+  /** Arrived from an example page for the first time: create that resume without a second click. */
+  const [autoStart, setAutoStart] = useState<{ slug: string; variant: string | null } | null>(null);
 
   useEffect(() => {
     const slug = readParam("example");
@@ -103,8 +105,21 @@ export function NewResumeClient({
     const t = readParam("template");
     queueMicrotask(() => {
       if (slug && /^[a-z0-9-]{2,80}$/.test(slug)) {
+        const v = variant && /^[a-z0-9-]{1,40}$/.test(variant) ? variant : null;
         setExampleSlug(slug);
-        if (variant && /^[a-z0-9-]{1,40}$/.test(variant)) setVariantId(variant);
+        if (v) setVariantId(v);
+        // The user already chose "Start from this example", so don't ask a second time:
+        // create it right away. Once per example per tab, so Back or a reload never makes duplicates;
+        // after that the banner's "Use this example" button is the way in.
+        const key = `lcv_example_auto:${slug}:${v ?? ""}`;
+        let seen = true;
+        try {
+          seen = window.sessionStorage.getItem(key) !== null;
+          if (!seen) window.sessionStorage.setItem(key, "1");
+        } catch {
+          // Storage blocked: fall back to the manual button.
+        }
+        if (!seen) setAutoStart({ slug, variant: v });
       }
       if (t && TEMPLATE_STYLES.includes(t as TemplateStyle)) setTemplate(t as TemplateStyle);
     });
@@ -156,6 +171,13 @@ export function NewResumeClient({
     setCreating(false);
     setCreateErr(typeof j.error === "string" ? j.error : "Couldn't create the resume. Please try again.");
   }
+
+  const startExample = useEffectEvent((slug: string, variant: string | null) => {
+    void handleCreate(slug, variant);
+  });
+  useEffect(() => {
+    if (autoStart) startExample(autoStart.slug, autoStart.variant);
+  }, [autoStart]);
 
   /** Shared pipeline for both sources: parse, then show the review. Saving waits for the user's confirmation. */
   async function runImport(opts: {
