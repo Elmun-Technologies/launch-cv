@@ -1,5 +1,18 @@
 # Holat (har ishdan keyin yangilanadi)
 
+## Aktivatsiya: ro'yxatdan o'tgandan keyingi yo'l (2026-11-25, `hetzner-migration`, b66830c)
+- Sabab: PostHog sessiya yozuvlari. 9 ta signupdan 4 tasi editorga yetmagan: dashboarddagi yon vositalarga
+  chalg'ishgan, majburiy "qaysi rol?" qadamida chiqib ketishgan, namunadan boshlashda ikkinchi klik kerak bo'lgan.
+- Qarorlar:
+  - Ro'yxatdan o'tgach `next` bo'lmasa `/resume/new` ochiladi (email ham, yangi Google akkaunt ham).
+  - `/resume/new` endi `/onboarding` ga majburan yubormaydi. `/onboarding` sahifasi saqlangan.
+  - `?example=` bilan kelganda resume avtomatik yaratiladi: har bir tabda bir marta, sessionStorage kaliti
+    `lcv_example_auto:*`.
+  - Bosh sahifada bitta tugma bor — free ATS check (hero va final). "Build a resume" — matnli link,
+    `cta=build_resume` tracking saqlangan.
+- Kuzatish: 4-noyabrda (Vercel) PDF import 4 marta 422 qaytargan. Hetznerda free check PDF bilan ishlaydi;
+  import jonli tekshirilsin.
+
 ## Hetzner'ga ko'chish (2026-11-20, branch `hetzner-migration`)
 Vercel akkaunti suspended bo'ldi (sayt "Deployment Paused"), qaror: Vercel'dan to'liq chiqish, hammasi Hetzner/Coolify'da. Tayyor: `web/Dockerfile` (build bazasiz), `npm run release` (db push `--accept-data-loss`siz + seed + fixes, konteyner startida), `vercel.json` o'chirildi, runbook — `docs/HETZNER.md`. Qolgan: bazani Vercel Postgres'dan dump qilib Coolify Postgres'ga tiklash, env'larni Coolify'ga kiritish (egasi), DNS A → 2.29.137.243, cron'larni Scheduled Tasks'ga qo'yish, Polar webhook eventlarini qayta yuborish, X-Forwarded-For tekshiruvi.
 
